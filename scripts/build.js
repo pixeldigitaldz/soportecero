@@ -443,6 +443,40 @@ function build() {
   // Write compiled home page to output
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexHtml, 'utf-8');
   console.log('[INDEX] Compilado: index.html');
+
+  // 8. Generate sitemap.xml
+  const todayStr = new Date().toISOString().split('T')[0];
+  let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://soportecero.com/index.html</loc>
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/contacto.html</loc>
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+`;
+
+  for (let post of posts) {
+    const postDate = post.date || todayStr;
+    sitemapXml += `  <url>
+    <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
+    <lastmod>${postDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+  }
+
+  sitemapXml += `</urlset>`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXml, 'utf-8');
+  console.log('[SITEMAP] Compilado: sitemap.xml');
   console.log('--- Compilación Completada con Éxito ---');
 }
 

@@ -262,6 +262,9 @@ function build() {
   copyDirSync(path.join(SRC_DIR, 'legal'), path.join(DIST_DIR, 'legal'));
   fs.copyFileSync(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'));
   fs.copyFileSync(path.join(SRC_DIR, 'robots.txt'), path.join(DIST_DIR, 'robots.txt'));
+  if (fs.existsSync(path.join(SRC_DIR, 'ads.txt'))) {
+    fs.copyFileSync(path.join(SRC_DIR, 'ads.txt'), path.join(DIST_DIR, 'ads.txt'));
+  }
   if (fs.existsSync(path.join(SRC_DIR, 'favicon.svg'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'favicon.svg'), path.join(DIST_DIR, 'favicon.svg'));
   }

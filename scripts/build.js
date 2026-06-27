@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const SRC_DIR = path.join(PROJECT_ROOT, 'src');
 const CONTENT_DIR = path.join(PROJECT_ROOT, 'content', 'posts');
-const DIST_DIR = path.join(PROJECT_ROOT, 'dist');
+const DIST_DIR = PROJECT_ROOT;
 
 // Category mapping helper for index card filtering
 const CATEGORY_MAP = {
@@ -250,11 +250,11 @@ function build() {
   console.log('--- Iniciando Compilación SoporteCero SSG ---');
 
   // 1. Clean and initialize build directories
-  if (fs.existsSync(DIST_DIR)) {
-    fs.rmSync(DIST_DIR, { recursive: true, force: true });
+  const articulosDir = path.join(DIST_DIR, 'articulos');
+  if (fs.existsSync(articulosDir)) {
+    fs.rmSync(articulosDir, { recursive: true, force: true });
   }
-  fs.mkdirSync(DIST_DIR);
-  fs.mkdirSync(path.join(DIST_DIR, 'articulos'));
+  fs.mkdirSync(articulosDir, { recursive: true });
 
   // 2. Copy static and asset folders
   copyDirSync(path.join(SRC_DIR, 'css'), path.join(DIST_DIR, 'css'));

@@ -77,25 +77,31 @@
   margin-right: 0.15rem;
 }
 
-/* Theme Switcher Button */
-.theme-toggle-btn {
-  background: none;
+/* Floating Theme Switcher Button */
+.floating-theme-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transition: all var(--transition-speed) ease;
 }
 
-.theme-toggle-btn:hover {
+.floating-theme-toggle:hover {
+  transform: translateY(-2px) scale(1.05);
   border-color: var(--accent-color);
   color: var(--text-primary);
-  background-color: var(--border-color);
+  background-color: var(--card-hover-bg);
 }
 
 .moon-icon {
@@ -1151,9 +1157,11 @@ footer {
     height: 20px !important;
   }
 
-  .theme-toggle-btn {
-    width: 36px !important;
-    height: 36px !important;
+  .floating-theme-toggle {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 40px;
+    height: 40px;
   }
 
   nav {

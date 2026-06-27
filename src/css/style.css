@@ -852,7 +852,7 @@ footer {
   header {
     flex-direction: column;
     height: auto;
-    padding: 1.25rem 1.5rem;
+    padding: 1rem;
     gap: 1rem;
   }
   
@@ -861,7 +861,7 @@ footer {
   }
   
   .hero {
-    padding: 2.5rem 1.5rem 1.5rem;
+    padding: 2rem 1rem 1.5rem;
   }
   
   .category-filters {
@@ -869,7 +869,11 @@ footer {
   }
   
   .post-article {
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .main-content {
+    padding: 0 1rem 2rem;
   }
 }
 
@@ -1016,12 +1020,65 @@ footer {
   }
   
   .post-article {
-    padding: 1.5rem;
+    padding: 1rem;
     width: 100%;
   }
   
   .post-sidebar {
     width: 100%;
+    margin-top: 2rem;
+  }
+
+  /* Typography Scales */
+  .post-header h1, h1 {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  h2, .post-article h2, .section-title {
+    font-size: 1.3rem !important;
+  }
+  
+  h3, .post-article h3, .diagnostic-box h3 {
+    font-size: 1.1rem !important;
+  }
+
+  /* The Diagnostics Table Fix */
+  .diagnostic-table,
+  .diagnostic-table tbody,
+  .diagnostic-table tr,
+  .diagnostic-table td {
+    display: block;
+    width: 100%;
+  }
+  
+  .diagnostic-table tr {
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    padding-bottom: 0.5rem;
+  }
+  
+  .diagnostic-table tr:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .diagnostic-table td {
+    border-bottom: none;
+    padding: 0.25rem 0;
+  }
+  
+  .diagnostic-table td:first-child {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text-secondary);
+  }
+
+  /* List Alignment */
+  .post-article ul, .post-article ol {
+    padding-left: 1.25rem;
+    margin-left: 0;
   }
 
   /* Prevent CLS (Cumulative Layout Shift) on ad containers */
@@ -1035,6 +1092,7 @@ footer {
 
   /* Safe touchscreen scrolling for code blocks */
   .code-container pre {
+    width: 100%;
     max-width: 100%;
     overflow-x: auto;
     padding: 1rem;

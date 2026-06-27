@@ -506,24 +506,22 @@ nav a:hover::after, nav a.active::after {
   gap: 0.5rem;
 }
 
-.post-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
+.post-container {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-@media (min-width: 1024px) {
-  .post-layout {
-    grid-template-columns: 2fr 1fr;
-    align-items: start;
-  }
+.post-layout {
+  width: 100%;
 }
 
 .post-article {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 2.5rem; /* increased padding */
+  padding: 2.5rem;
+  width: 100%;
 }
 
 /* Headings Inside Content */
@@ -729,9 +727,7 @@ nav a:hover::after, nav a.active::after {
 
 /* Sidebar & Prevention Card */
 .post-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+  display: none !important;
 }
 
 .prevention-callout-card {
@@ -1044,18 +1040,17 @@ footer {
 @media (max-width: 768px) {
   /* Layout Stacking */
   .post-layout {
-    grid-template-columns: 1fr !important;
-    gap: 2rem;
+    width: 100% !important;
+    margin: 0 auto !important;
   }
   
   .post-article {
-    padding: 1rem;
-    width: 100%;
+    padding: 1.25rem 1rem !important;
+    width: 100% !important;
   }
   
   .post-sidebar {
-    width: 100%;
-    margin-top: 2rem;
+    display: none !important;
   }
 
   .prevention-callout-card {

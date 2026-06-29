@@ -4,26 +4,25 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 1. Search & Category Filtering ---
+  // --- 1. Search, Category Filtering & Pagination ---
   const searchInput = document.getElementById('search-input');
   const filterButtons = document.querySelectorAll('.filter-btn');
-  const articleCards = document.querySelectorAll('.article-card');
+  const articleCards = Array.from(document.querySelectorAll('.article-card'));
   const articlesGrid = document.querySelector('.articles-grid');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  const pageIndicator = document.getElementById('page-indicator');
+  const articlesSection = document.getElementById('section-title');
 
   let currentCategory = 'all';
   let searchQuery = '';
+  let currentPage = 1;
+  const itemsPerPage = 20;
+  let matchingCards = [];
 
-  // Filter main controller
-  function filterArticles() {
-    let matchCount = 0;
-
-    // Check if we already have a 'no-results' element in the grid
-    let noResultsEl = document.getElementById('no-results-msg');
-    if (noResultsEl) {
-      noResultsEl.remove();
-    }
-
-    articleCards.forEach(card => {
+  function updatePagination() {
+    // 1. Filter cards by search and category
+    matchingCards = articleCards.filter(card => {
       const cardCategory = card.getAttribute('data-category');
       const cardTitle = card.getAttribute('data-title').toLowerCase();
       const cardTags = card.getAttribute('data-tags').toLowerCase();
@@ -34,49 +33,135 @@ document.addEventListener('DOMContentLoaded', () => {
                             cardTags.includes(searchQuery) || 
                             cardSummary.includes(searchQuery);
 
-      if (matchesCategory && matchesSearch) {
-        card.style.display = '';
-        matchCount++;
+      const isMatch = matchesCategory && matchesSearch;
+      
+      if (!isMatch) {
+        card.classList.add('hidden');
       } else {
-        card.style.display = 'none';
+        card.classList.remove('hidden');
+      }
+
+      return isMatch;
+    });
+
+    // 2. Remove any previous "no results" message
+    let noResultsEl = document.getElementById('no-results-msg');
+    if (noResultsEl) {
+      noResultsEl.remove();
+    }
+
+    const totalItems = matchingCards.length;
+    const paginationControls = document.querySelector('.pagination-controls');
+
+    if (totalItems === 0) {
+      if (articlesGrid) {
+        const msgDiv = document.createElement('div');
+        msgDiv.id = 'no-results-msg';
+        msgDiv.className = 'no-results';
+        msgDiv.innerHTML = `
+          <h3>No se encontraron resultados</h3>
+          <p>Intenta buscar con otros términos o cambia la categoría seleccionada.</p>
+        `;
+        articlesGrid.appendChild(msgDiv);
+      }
+      if (paginationControls) {
+        paginationControls.style.display = 'none';
+      }
+      return;
+    }
+
+    if (paginationControls) {
+      paginationControls.style.display = 'flex';
+    }
+
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    // Adjust page bounds
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+    if (currentPage < 1) {
+      currentPage = 1;
+    }
+
+    // 3. Toggle visibility based on page slice
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    matchingCards.forEach((card, index) => {
+      if (index >= startIndex && index < endIndex) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
       }
     });
 
-    // If no articles match, display a helpful message
-    if (matchCount === 0 && articlesGrid) {
-      const msgDiv = document.createElement('div');
-      msgDiv.id = 'no-results-msg';
-      msgDiv.className = 'no-results';
-      msgDiv.innerHTML = `
-        <h3>No se encontraron resultados</h3>
-        <p>Intenta buscar con otros términos o cambia la categoría seleccionada.</p>
-      `;
-      articlesGrid.appendChild(msgDiv);
+    // 4. Update controls
+    if (pageIndicator) {
+      pageIndicator.textContent = `Página ${currentPage} de ${totalPages}`;
+    }
+
+    if (btnPrev) {
+      btnPrev.disabled = currentPage === 1;
+    }
+    if (btnNext) {
+      btnNext.disabled = currentPage === totalPages;
     }
   }
 
-  // Bind Search Input Event
+  // Bind Search Input (keyup & input)
   if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
+    const handleSearch = (e) => {
       searchQuery = e.target.value.toLowerCase().trim();
-      filterArticles();
-    });
+      currentPage = 1;
+      updatePagination();
+    };
+    searchInput.addEventListener('input', handleSearch);
+    searchInput.addEventListener('keyup', handleSearch);
   }
 
   // Bind Category Buttons
   if (filterButtons.length > 0) {
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Toggle active class
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
-        // Update current category and filter
         currentCategory = btn.getAttribute('data-filter');
-        filterArticles();
+        currentPage = 1;
+        updatePagination();
       });
     });
   }
+
+  // Bind Pagination Navigation Buttons
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePagination();
+        if (articlesSection) {
+          articlesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  }
+
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(matchingCards.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        updatePagination();
+        if (articlesSection) {
+          articlesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  }
+
+  // Initial call on page load
+  updatePagination();
 
   // --- 2. Copy Code to Clipboard ---
   const copyButtons = document.querySelectorAll('.copy-btn');

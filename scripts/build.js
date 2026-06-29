@@ -412,6 +412,7 @@ function build() {
     const categorySlug = CATEGORY_MAP[post.category] || 'all';
     const tagsList = post.tags || [];
     const firstThreeTags = tagsList.slice(0, 3).map(tag => `<span class="card-tag">${tag}</span>`).join('\n');
+    const excerpt = post.description.length > 150 ? post.description.substring(0, 147) + '...' : post.description;
 
     return `
     <!-- Card: ${post.title} -->
@@ -426,7 +427,7 @@ function build() {
           <a href="${post.url}">${post.title}</a>
         </h3>
         <p class="card-excerpt">
-          ${post.description}
+          ${excerpt}
         </p>
         <div class="card-footer">
           <div class="card-tags">

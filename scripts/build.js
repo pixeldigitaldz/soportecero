@@ -286,6 +286,15 @@ function build() {
     // Parse Front Matter and Body
     const { data: frontMatter, content: markdownBody } = matter(fileContent);
 
+    // Skip compilation of future-dated scheduled posts
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const postDate = new Date(frontMatter.date + 'T00:00:00');
+    if (postDate > today) {
+      console.log(`[SKIPPED] ${filename} (Fecha de publicación programada: ${frontMatter.date})`);
+      continue;
+    }
+
     // Compile Markdown to HTML
     const rawHtml = marked.parse(markdownBody);
 

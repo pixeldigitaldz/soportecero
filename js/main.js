@@ -205,7 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Highlight active static page link (e.g. posts, legal)
   navLinks.forEach(link => {
     const linkHref = link.getAttribute('href');
-    if (linkHref && currentPath.includes(linkHref) && !linkHref.startsWith('index.html') && linkHref !== '/' && !linkHref.startsWith('../index.html')) {
+    if (!linkHref) return;
+    
+    // Ignore home links for generic highlight
+    const isHomeLink = linkHref === './' || linkHref === '../' || linkHref === 'index.html' || linkHref === '../index.html' || linkHref.includes('?cat=');
+    
+    if (!isHomeLink && currentPath.includes(linkHref) && linkHref !== '/') {
       link.classList.add('active');
     }
   });
@@ -231,8 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // If no category param, highlight standard "Inicio" if we are on the home page
     navLinks.forEach(link => {
       const linkHref = link.getAttribute('href');
-      const isHome = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '' || currentPath.includes('index.html');
-      if (isHome && (linkHref === 'index.html' || linkHref === '../index.html')) {
+      const isHome = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '' || currentPath.endsWith('./') || currentPath.endsWith('../');
+      const isHomeLink = linkHref === './' || linkHref === '../' || linkHref === 'index.html' || linkHref === '../index.html';
+      if (isHome && isHomeLink) {
         link.classList.add('active');
       }
     });

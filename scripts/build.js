@@ -261,6 +261,7 @@ function build() {
   copyDirSync(path.join(SRC_DIR, 'js'), path.join(DIST_DIR, 'js'));
   copyDirSync(path.join(SRC_DIR, 'legal'), path.join(DIST_DIR, 'legal'));
   fs.copyFileSync(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'));
+  fs.copyFileSync(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'));
   fs.copyFileSync(path.join(SRC_DIR, 'robots.txt'), path.join(DIST_DIR, 'robots.txt'));
   if (fs.existsSync(path.join(SRC_DIR, 'ads.txt'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'ads.txt'), path.join(DIST_DIR, 'ads.txt'));
@@ -472,6 +473,12 @@ function build() {
     <lastmod>${todayStr}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/servicios.html</loc>
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 `;
 

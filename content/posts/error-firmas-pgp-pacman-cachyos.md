@@ -4,7 +4,7 @@ description: "Aprende a restablecer y actualizar las claves del llavero de Pacma
 category: "Sistemas y Servidores"
 tags: ["CachyOS", "Arch Linux", "Pacman"]
 readTime: "4 min"
-date: "2026-07-20"
+date: "2026-07-13"
 ---
 
 El error crítico de Pacman `error: key "..." could not be looked up remotely` o `error: signature from "..." is invalid` en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado o corrupto, impidiendo la instalación segura de cualquier actualización de software.

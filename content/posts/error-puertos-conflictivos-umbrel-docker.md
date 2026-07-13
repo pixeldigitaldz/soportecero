@@ -4,7 +4,7 @@ description: "Aprende a resolver el error de puerto ocupado al instalar contened
 category: "Sistemas y Servidores"
 tags: ["Docker", "Umbrel", "Sysadmin"]
 readTime: "4 min"
-date: "2026-07-27"
+date: "2026-08-01"
 ---
 
 El error de puerto ya asignado (`bind: address already in use` o `port already allocated`) al intentar levantar un contenedor personalizado en Umbrel OS ocurre porque el proxy web interno de la plataforma (basado en Nginx o Traefik) ya tiene reservado el puerto 80 y 443 para gestionar la tienda de aplicaciones y el acceso seguro a su panel.

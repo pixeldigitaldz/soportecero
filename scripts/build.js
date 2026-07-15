@@ -42,8 +42,8 @@ function copyDirSync(src, dest) {
   }
 }
 
-// Helper to inject hreflang into static files
-function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn) {
+// Helper to inject hreflang and lang_selector into static files
+function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn, lang = 'es') {
   let content = fs.readFileSync(srcPath, 'utf-8');
   const hreflang = `
   <link rel="alternate" hreflang="es" href="https://soportecero.com/${urlPathEs}" />
@@ -51,6 +51,29 @@ function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn) {
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/${urlPathEs}" />
   `;
   content = content.replace('{{hreflang}}', hreflang);
+
+  let langSelector = '';
+  if (lang === 'es') {
+    const prefix = urlPathEs.includes('legal/') ? '../en/' : 'en/';
+    langSelector = `
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="${prefix}${urlPathEn}" class="lang-inactive">EN</a>
+    </div>
+    `;
+  } else {
+    const prefix = urlPathEs.includes('legal/') ? '../../' : '../';
+    langSelector = `
+    <div class="lang-selector">
+      <a href="${prefix}${urlPathEs}" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    `;
+  }
+  content = content.replace('{{lang_selector}}', langSelector);
+
   fs.writeFileSync(destPath, content, 'utf-8');
 }
 
@@ -310,21 +333,21 @@ function build() {
   }
 
   // 3. Compile static pages with Hreflang support
-  compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contacto.html');
-  compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html');
+  compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contacto.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html', 'es');
   
   fs.mkdirSync(path.join(DIST_DIR, 'legal'), { recursive: true });
-  compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html');
-  compileStaticPage(path.join(SRC_DIR, 'legal', 'privacidad.html'), path.join(DIST_DIR, 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html');
-  compileStaticPage(path.join(SRC_DIR, 'legal', 'terminos.html'), path.join(DIST_DIR, 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html');
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'privacidad.html'), path.join(DIST_DIR, 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'terminos.html'), path.join(DIST_DIR, 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html', 'es');
 
   // English static pages
   fs.mkdirSync(path.join(DIST_DIR, 'en', 'legal'), { recursive: true });
-  compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contacto.html');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contacto.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html', 'en');
 
   // 4. Read templates
   const postTemplateEs = fs.readFileSync(path.join(SRC_DIR, 'post-template.html'), 'utf-8');
@@ -471,6 +494,17 @@ function build() {
   </script>
     `;
 
+    const langSelectorLink = hasEnTranslation 
+      ? `../en/articulos/${post.filename}.html`
+      : `../en/`;
+    const langSelector = `
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="${langSelectorLink}" class="lang-inactive">EN</a>
+    </div>
+    `;
+
     const postHtml = postTemplateEs
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
@@ -482,7 +516,8 @@ function build() {
       .replace(/\{\{prevention\}\}/g, preventionHtml)
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
       .replace(/\{\{schema\}\}/g, schemaScriptHtml)
-      .replace(/\{\{hreflang\}\}/g, hreflang);
+      .replace(/\{\{hreflang\}\}/g, hreflang)
+      .replace(/\{\{lang_selector\}\}/g, langSelector);
 
     fs.writeFileSync(path.join(DIST_DIR, 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
     console.log(`[POST ES] Compilado: articulos/${post.filename}.html`);
@@ -567,6 +602,17 @@ function build() {
   </script>
     `;
 
+    const langSelectorLink = hasEsCounterpart
+      ? `../../articulos/${post.filename}.html`
+      : `../../`;
+    const langSelector = `
+    <div class="lang-selector">
+      <a href="${langSelectorLink}" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    `;
+
     const postHtml = postTemplateEn
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
@@ -578,7 +624,8 @@ function build() {
       .replace(/\{\{prevention\}\}/g, preventionHtml)
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
       .replace(/\{\{schema\}\}/g, schemaScriptHtml)
-      .replace(/\{\{hreflang\}\}/g, hreflang);
+      .replace(/\{\{hreflang\}\}/g, hreflang)
+      .replace(/\{\{lang_selector\}\}/g, langSelector);
 
     fs.writeFileSync(path.join(DIST_DIR, 'en', 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
     console.log(`[POST EN] Compilado: en/articulos/${post.filename}.html`);
@@ -623,9 +670,17 @@ function build() {
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
   `;
+  const indexLangSelectorEs = `
+  <div class="lang-selector">
+    <span class="lang-active">ES</span>
+    <span class="lang-separator">|</span>
+    <a href="en/" class="lang-inactive">EN</a>
+  </div>
+  `;
   const indexHtmlEs = indexTemplateEs
     .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEs)
-    .replace('{{hreflang}}', indexHreflangEs);
+    .replace('{{hreflang}}', indexHreflangEs)
+    .replace('{{lang_selector}}', indexLangSelectorEs);
 
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexHtmlEs, 'utf-8');
   console.log('[INDEX ES] Compilado: index.html');
@@ -664,9 +719,17 @@ function build() {
   }).join('\n');
 
   const indexTemplateEn = fs.readFileSync(path.join(SRC_DIR, 'en', 'index-template.html'), 'utf-8');
+  const indexLangSelectorEn = `
+  <div class="lang-selector">
+    <a href="../" class="lang-inactive">ES</a>
+    <span class="lang-separator">|</span>
+    <span class="lang-active">EN</span>
+  </div>
+  `;
   const indexHtmlEn = indexTemplateEn
     .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEn)
-    .replace('{{hreflang}}', indexHreflangEs); // Reuse the same hreflang links
+    .replace('{{hreflang}}', indexHreflangEs) // Reuse the same hreflang links
+    .replace('{{lang_selector}}', indexLangSelectorEn);
 
   fs.writeFileSync(path.join(DIST_DIR, 'en', 'index.html'), indexHtmlEn, 'utf-8');
   console.log('[INDEX EN] Compilado: en/index.html');

@@ -4,25 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo configurar y optimizar el uso de memoria Swap en servidores Linux - SoporteCero</title>
+  <title>Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
   <meta name="description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html">
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/optimizar-memoria-swap-linux.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html" />
+  
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo configurar y optimizar el uso de memoria Swap en servidores Linux - SoporteCero">
+  <meta property="og:title" content="Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero">
   <meta property="og:description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo configurar y optimizar el uso de memoria Swap en servidores Linux - SoporteCero">
+  <meta name="twitter:title" content="Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero">
   <meta name="twitter:description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
@@ -43,7 +48,7 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Cómo configurar y optimizar el uso de memoria Swap en servidores Linux",
+  "headline": "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap",
   "description": "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.",
   "category": "Sistemas y Servidores",
   "datePublished": "2026-06-27",
@@ -66,7 +71,7 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Cómo configurar y optimizar el uso de memoria Swap en servidores Linux",
+  "name": "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap",
   "description": "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.",
   "step": []
 }
@@ -114,12 +119,12 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
-        <span style="color: var(--text-secondary);">Cómo configurar y optimizar el uso de memoria Swap en servidores Linux</span>
+        <span style="color: var(--text-secondary);">Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Sistemas y Servidores</span>
-        <h1 id="post-title">Cómo configurar y optimizar el uso de memoria Swap en servidores Linux</h1>
+        <h1 id="post-title">Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -169,14 +174,14 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
+        <li class="toc-item"><a href="#como-configurar-la-memoria-virtual-en-linux-paso-a-paso">Cómo configurar la memoria virtual en Linux paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-crear-e-inicializar-un-archivo-swap-seguro-swapfile">Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)</a></li>
         <li class="toc-subitem"><a href="#paso-2-configurar-la-persistencia-del-montaje">Paso 2: Configurar la persistencia del montaje</a></li>
         <li class="toc-subitem"><a href="#paso-3-optimizar-el-umbral-de-activacion-swappiness">Paso 3: Optimizar el umbral de activación (Swappiness)</a></li>
       </ol>
     </nav>
     
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+        <h2 id="como-configurar-la-memoria-virtual-en-linux-paso-a-paso">🚀 Cómo configurar la memoria virtual en Linux paso a paso</h2>
 <h3 id="paso-1-crear-e-inicializar-un-archivo-swap-seguro-swapfile">Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)</h3>
 <p>Si tu servidor VPS no cuenta con memoria de intercambio asignada, puedes generar un archivo dinámico de 4GB para mitigar picos de consumo:</p>
 

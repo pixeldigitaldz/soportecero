@@ -13,10 +13,16 @@ const CONTENT_DIR = path.join(PROJECT_ROOT, 'content', 'posts');
 const DIST_DIR = PROJECT_ROOT;
 
 // Category mapping helper for index card filtering
-const CATEGORY_MAP = {
+const CATEGORY_MAP_ES = {
   'Sistemas y Servidores': 'sistemas',
   'Gaming Tech': 'gaming',
   'Web y Código': 'web'
+};
+
+const CATEGORY_MAP_EN = {
+  'Systems & Servers': 'sistemas',
+  'Gaming Tech': 'gaming',
+  'Web & Code': 'web'
 };
 
 // Helper function to copy directories recursively
@@ -36,20 +42,33 @@ function copyDirSync(src, dest) {
   }
 }
 
+// Helper to inject hreflang into static files
+function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn) {
+  let content = fs.readFileSync(srcPath, 'utf-8');
+  const hreflang = `
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/${urlPathEs}" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/${urlPathEn}" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/${urlPathEs}" />
+  `;
+  content = content.replace('{{hreflang}}', hreflang);
+  fs.writeFileSync(destPath, content, 'utf-8');
+}
+
 // Custom post-processor for HTML content to inject SoporteCero layouts
-function postProcessHtml(rawHtml) {
+function postProcessHtml(rawHtml, lang = 'es') {
   let html = rawHtml;
   let parsedSteps = [];
+  const isEn = lang === 'en';
 
   // 1. Code blocks wrapping in custom containers with copy buttons
-  // Match code blocks with or without a language class in a single unified regex to prevent duplicate wrapping
-  html = html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (match, lang, code) => {
-    const displayLang = lang ? lang.toUpperCase() : 'CÓDIGO';
+  html = html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (match, langClass, code) => {
+    const displayLang = langClass ? langClass.toUpperCase() : (isEn ? 'CODE' : 'CÓDIGO');
+    const copyLabel = isEn ? 'Copy' : 'Copiar';
     return `
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">${displayLang}</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <button class="copy-btn" aria-label="${isEn ? 'Copy code to clipboard' : 'Copiar código al portapapeles'}">${copyLabel}</button>
       </div>
       <pre class="formatted-pre"><code>${code}</code></pre>
     </div>
@@ -58,7 +77,12 @@ function postProcessHtml(rawHtml) {
 
   // 2. Diagnostic Box layout wrapping
   let diagBoxHtml = '';
-  const diagMatch = html.match(/<h2[^>]*>(?:El Diagnóstico Rápido|Diagnóstico del Problema|Diagnóstico)<\/h2>([\s\S]*?)(?=<h2)/i);
+  const diagTitle = isEn ? 'Quick Diagnostics' : 'El Diagnóstico Rápido';
+  const diagRegex = isEn 
+    ? /<h2[^>]*>(?:Quick Diagnostics|Diagnostics|Diagnostic)<\/h2>([\s\S]*?)(?=<h2)/i 
+    : /<h2[^>]*>(?:El Diagnóstico Rápido|Diagnóstico del Problema|Diagnóstico)<\/h2>([\s\S]*?)(?=<h2)/i;
+  
+  const diagMatch = html.match(diagRegex);
   if (diagMatch) {
     const diagContent = diagMatch[1];
     let formattedDiag = diagContent.replace(/<table>/g, '<table class="diagnostic-table">');
@@ -68,12 +92,12 @@ function postProcessHtml(rawHtml) {
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
         </svg>
-        El Diagnóstico Rápido
+        ${diagTitle}
       </h3>
       ${formattedDiag}
     </section>
     `;
-    html = html.replace(/<h2[^>]*>(?:El Diagnóstico Rápido|Diagnóstico del Problema|Diagnóstico)<\/h2>[\s\S]*?(?=<h2)/i, diagBoxHtml);
+    html = html.replace(diagRegex, diagBoxHtml);
   } else {
     const firstH2Match = html.match(/<h2/i);
     if (firstH2Match) {
@@ -87,7 +111,7 @@ function postProcessHtml(rawHtml) {
             <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
             </svg>
-            El Diagnóstico Rápido
+            ${diagTitle}
           </h3>
           ${formattedDiag}
         </section>
@@ -99,7 +123,11 @@ function postProcessHtml(rawHtml) {
 
   // 3. Extraction of the Prevention Tips section to populate the Sidebar
   let preventionListHtml = '';
-  const preventionMatch = html.match(/<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion)[^<]*<\/h2>([\s\S]*)$/i);
+  const prevRegex = isEn
+    ? /<h2[^>]*>[^<]*(?:Prevention Advice|Prevention|Prevention Tips)[^<]*<\/h2>([\s\S]*)$/i
+    : /<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion)[^<]*<\/h2>([\s\S]*)$/i;
+
+  const preventionMatch = html.match(prevRegex);
   if (preventionMatch) {
     const sectionContent = preventionMatch[1];
     const liMatches = sectionContent.match(/<li>([\s\S]*?)<\/li>/g);
@@ -109,11 +137,16 @@ function postProcessHtml(rawHtml) {
     } else {
       preventionListHtml = sectionContent;
     }
-    html = html.replace(/<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion)[^<]*<\/h2>([\s\S]*)$/i, '');
+    html = html.replace(prevRegex, '');
   }
 
   // 4. Solution Steps list formatting
-  const solutionMatch = html.match(/<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*)$/i);
+  const solTitle = isEn ? 'Step-by-Step Solution' : 'La Solución Paso a Paso';
+  const solRegex = isEn
+    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix)[^<]*<\/h2>([\s\S]*)$/i
+    : /<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*)$/i;
+
+  const solutionMatch = html.match(solRegex);
   if (solutionMatch) {
     let solutionContent = solutionMatch[1];
     const olMatch = solutionContent.match(/<ol[^>]*>([\s\S]*?)<\/ol>/i);
@@ -133,7 +166,7 @@ function postProcessHtml(rawHtml) {
           stepTitle = boldMatch[1];
           stepBody = liContent.substring(boldMatch[0].length);
         } else {
-          stepTitle = `Paso ${stepIndex}`;
+          stepTitle = isEn ? `Step ${stepIndex}` : `Paso ${stepIndex}`;
         }
 
         parsedSteps.push({
@@ -157,8 +190,8 @@ function postProcessHtml(rawHtml) {
       if (formattedLis.length >= 2) {
         formattedLis.splice(2, 0, `
         <div class="adsense-placeholder" id="ad-in-feed">
-          Anuncio Google AdSense (En medio del artículo)
-          <span>Anuncio de Contenido / In-Article Ad</span>
+          ${isEn ? 'Google AdSense Ad (In-Article)' : 'Anuncio Google AdSense (En medio del artículo)'}
+          <span>${isEn ? 'In-Article Ad' : 'Anuncio de Contenido / In-Article Ad'}</span>
         </div>
         `);
       }
@@ -166,12 +199,12 @@ function postProcessHtml(rawHtml) {
       const newOl = `<ol class="steps-list">\n${formattedLis.join('\n')}\n</ol>`;
       const newSolutionContent = solutionContent.replace(/<ol[^>]*>[\s\S]*?<\/ol>/i, newOl);
       
-      html = html.replace(/<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>[\s\S]*$/i, 
+      html = html.replace(solRegex, 
         `<h2 style="display: flex; align-items: center; gap: 0.5rem;">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
           </svg>
-          La Solución Paso a Paso
+          ${solTitle}
         </h2>\n${newSolutionContent}`);
     }
   }
@@ -187,7 +220,9 @@ function postProcessHtml(rawHtml) {
       .trim();
 
     if (cleanText.toLowerCase().includes('diagnostico') || 
+        cleanText.toLowerCase().includes('diagnostics') || 
         cleanText.toLowerCase().includes('prevencion') || 
+        cleanText.toLowerCase().includes('prevention') || 
         cleanText.toLowerCase().includes('prevención')) {
       return match;
     }
@@ -205,8 +240,8 @@ function postProcessHtml(rawHtml) {
   let tocHtml = '';
   if (tocItems.length > 0) {
     tocHtml = `
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
+    <nav class="toc-container" aria-label="${isEn ? 'Table of contents' : 'Tabla de contenidos'}">
+      <div class="toc-title">${isEn ? '📌 Guide Contents' : '📌 Contenido de esta guía'}</div>
       <ol class="toc-list">
     `;
     tocItems.forEach(item => {
@@ -256,12 +291,16 @@ function build() {
   }
   fs.mkdirSync(articulosDir, { recursive: true });
 
-  // 2. Copy static and asset folders
+  const enArticulosDir = path.join(DIST_DIR, 'en', 'articulos');
+  if (fs.existsSync(path.dirname(enArticulosDir))) {
+    fs.rmSync(path.dirname(enArticulosDir), { recursive: true, force: true });
+  }
+  fs.mkdirSync(enArticulosDir, { recursive: true });
+
+  // 2. Copy asset folders directly
   copyDirSync(path.join(SRC_DIR, 'css'), path.join(DIST_DIR, 'css'));
   copyDirSync(path.join(SRC_DIR, 'js'), path.join(DIST_DIR, 'js'));
-  copyDirSync(path.join(SRC_DIR, 'legal'), path.join(DIST_DIR, 'legal'));
-  fs.copyFileSync(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'));
-  fs.copyFileSync(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'));
+
   fs.copyFileSync(path.join(SRC_DIR, 'robots.txt'), path.join(DIST_DIR, 'robots.txt'));
   if (fs.existsSync(path.join(SRC_DIR, 'ads.txt'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'ads.txt'), path.join(DIST_DIR, 'ads.txt'));
@@ -270,36 +309,49 @@ function build() {
     fs.copyFileSync(path.join(SRC_DIR, 'favicon.svg'), path.join(DIST_DIR, 'favicon.svg'));
   }
 
-  // 3. Read post-template
-  const postTemplate = fs.readFileSync(path.join(SRC_DIR, 'post-template.html'), 'utf-8');
+  // 3. Compile static pages with Hreflang support
+  compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contacto.html');
+  compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html');
+  
+  fs.mkdirSync(path.join(DIST_DIR, 'legal'), { recursive: true });
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html');
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'privacidad.html'), path.join(DIST_DIR, 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html');
+  compileStaticPage(path.join(SRC_DIR, 'legal', 'terminos.html'), path.join(DIST_DIR, 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html');
 
-  // 4. Parse markdown articles (Pass 1: Collect metadata and raw HTML content)
-  const posts = [];
-  const files = fs.readdirSync(CONTENT_DIR);
+  // English static pages
+  fs.mkdirSync(path.join(DIST_DIR, 'en', 'legal'), { recursive: true });
+  compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contacto.html');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html');
 
-  for (let file of files) {
+  // 4. Read templates
+  const postTemplateEs = fs.readFileSync(path.join(SRC_DIR, 'post-template.html'), 'utf-8');
+  const postTemplateEn = fs.readFileSync(path.join(SRC_DIR, 'en', 'post-template.html'), 'utf-8');
+
+  // 5. Parse Spanish articles
+  const postsEs = [];
+  const filesEs = fs.readdirSync(CONTENT_DIR);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (let file of filesEs) {
     if (!file.endsWith('.md')) continue;
 
     const filePath = path.join(CONTENT_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const filename = path.basename(file, '.md');
-
-    // Parse Front Matter and Body
     const { data: frontMatter, content: markdownBody } = matter(fileContent);
 
-    // Skip compilation of future-dated scheduled posts
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
     const postDate = new Date(frontMatter.date + 'T00:00:00');
     if (postDate > today) {
-      console.log(`[SKIPPED] ${filename} (Fecha de publicación programada: ${frontMatter.date})`);
+      console.log(`[SKIPPED ES] ${filename} (Fecha de publicación programada: ${frontMatter.date})`);
       continue;
     }
 
-    // Compile Markdown to HTML
     const rawHtml = marked.parse(markdownBody);
-
-    posts.push({
+    postsEs.push({
       ...frontMatter,
       filename,
       url: `articulos/${filename}.html`,
@@ -307,29 +359,59 @@ function build() {
     });
   }
 
+  // 6. Parse English articles
+  const postsEn = [];
+  const contentDirEn = path.join(CONTENT_DIR, 'en');
+  if (fs.existsSync(contentDirEn)) {
+    const filesEn = fs.readdirSync(contentDirEn);
+    for (let file of filesEn) {
+      if (!file.endsWith('.md')) continue;
+
+      const filePath = path.join(contentDirEn, file);
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      const filename = path.basename(file, '.md');
+      const { data: frontMatter, content: markdownBody } = matter(fileContent);
+
+      const postDate = new Date(frontMatter.date + 'T00:00:00');
+      if (postDate > today) {
+        console.log(`[SKIPPED EN] ${filename} (Fecha de publicación programada: ${frontMatter.date})`);
+        continue;
+      }
+
+      const rawHtml = marked.parse(markdownBody);
+      postsEn.push({
+        ...frontMatter,
+        filename,
+        url: `en/articulos/${filename}.html`,
+        rawHtml
+      });
+    }
+  }
+
   // Sort posts by date (newest first)
-  posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  postsEs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  postsEn.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // 5. Generate compiled HTML pages for each post (Pass 2)
-  for (let post of posts) {
-    // Post-process HTML for custom styling elements
-    const { contentHtml, preventionHtml, steps } = postProcessHtml(post.rawHtml);
-
-    // Get related articles
-    let relatedPosts = posts.filter(p => p.filename !== post.filename);
+  // 7. Compile Spanish article pages (with Hreflang)
+  for (let post of postsEs) {
+    const { contentHtml, preventionHtml, steps } = postProcessHtml(post.rawHtml, 'es');
     
-    // Sort related posts prioritizing the same category
+    // Check if English translation exists
+    const hasEnTranslation = postsEn.some(p => p.filename === post.filename);
+    const hreflang = hasEnTranslation ? `
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />
+  ` : '';
+
+    let relatedPosts = postsEs.filter(p => p.filename !== post.filename);
     relatedPosts.sort((a, b) => {
       if (a.category === post.category && b.category !== post.category) return -1;
       if (a.category !== post.category && b.category === post.category) return 1;
       return new Date(b.date) - new Date(a.date);
     });
 
-    // Take top 3 related solutions
-    const topRelated = relatedPosts.slice(0, 3);
-
-    // Format related posts as smaller cards
-    const relatedCardsHtml = topRelated.map(rp => {
+    const relatedCardsHtml = relatedPosts.slice(0, 3).map(rp => {
       const firstTag = rp.tags && rp.tags.length > 0 ? `<span class="card-tag">${rp.tags[0]}</span>` : '';
       return `
       <!-- Related Card: ${rp.title} -->
@@ -350,7 +432,7 @@ function build() {
       `;
     }).join('\n');
 
-    // Generate JSON-LD schemas
+    // JSON-LD Schemas
     const techArticleSchema = {
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -359,14 +441,8 @@ function build() {
       "category": post.category,
       "datePublished": post.date,
       "dateModified": post.date,
-      "author": {
-        "@type": "Organization",
-        "name": "SoporteCero"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "SoporteCero"
-      },
+      "author": { "@type": "Organization", "name": "SoporteCero" },
+      "publisher": { "@type": "Organization", "name": "SoporteCero" },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": `https://soportecero.com/articulos/${post.filename}.html`
@@ -378,14 +454,11 @@ function build() {
       "@type": "HowTo",
       "name": post.title,
       "description": post.description,
-      "step": steps.map((s, idx) => ({
+      "step": steps.map(s => ({
         "@type": "HowToStep",
         "url": `https://soportecero.com/articulos/${post.filename}.html#${slugify(s.title)}`,
         "name": s.title,
-        "itemListElement": [{
-          "@type": "HowToDirection",
-          "text": s.body.replace(/<[^>]*>/g, '').trim()
-        }]
+        "itemListElement": [{ "@type": "HowToDirection", "text": s.body.replace(/<[^>]*>/g, '').trim() }]
       }))
     };
 
@@ -398,8 +471,7 @@ function build() {
   </script>
     `;
 
-    // Inject into post-template
-    let postHtml = postTemplate
+    const postHtml = postTemplateEs
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
       .replace(/\{\{category\}\}/g, post.category)
@@ -409,17 +481,112 @@ function build() {
       .replace(/\{\{content\}\}/g, contentHtml)
       .replace(/\{\{prevention\}\}/g, preventionHtml)
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
-      .replace(/\{\{schema\}\}/g, schemaScriptHtml);
+      .replace(/\{\{schema\}\}/g, schemaScriptHtml)
+      .replace(/\{\{hreflang\}\}/g, hreflang);
 
-    // Write compiled article to output
-    const outputFilePath = path.join(DIST_DIR, 'articulos', `${post.filename}.html`);
-    fs.writeFileSync(outputFilePath, postHtml, 'utf-8');
-    console.log(`[POST] Compilado: articulos/${post.filename}.html`);
+    fs.writeFileSync(path.join(DIST_DIR, 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
+    console.log(`[POST ES] Compilado: articulos/${post.filename}.html`);
   }
 
-  // 6. Generate card grid HTML list for index homepage
-  const cardsHtml = posts.map(post => {
-    const categorySlug = CATEGORY_MAP[post.category] || 'all';
+  // 8. Compile English article pages (with Hreflang)
+  for (let post of postsEn) {
+    const { contentHtml, preventionHtml, steps } = postProcessHtml(post.rawHtml, 'en');
+    
+    // Check if Spanish counterpart exists
+    const hasEsCounterpart = postsEs.some(p => p.filename === post.filename);
+    const hreflang = hasEsCounterpart ? `
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />
+  ` : '';
+
+    let relatedPosts = postsEn.filter(p => p.filename !== post.filename);
+    relatedPosts.sort((a, b) => {
+      if (a.category === post.category && b.category !== post.category) return -1;
+      if (a.category !== post.category && b.category === post.category) return 1;
+      return new Date(b.date) - new Date(a.date);
+    });
+
+    const relatedCardsHtml = relatedPosts.slice(0, 3).map(rp => {
+      const firstTag = rp.tags && rp.tags.length > 0 ? `<span class="card-tag">${rp.tags[0]}</span>` : '';
+      return `
+      <!-- Related Card: ${rp.title} -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">${rp.category}</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/${rp.filename}.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">${rp.title}</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            ${firstTag}
+            <span>Read Time: ${rp.readTime}</span>
+          </div>
+        </div>
+      </article>
+      `;
+    }).join('\n');
+
+    // JSON-LD Schemas
+    const techArticleSchema = {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": post.title,
+      "description": post.description,
+      "category": post.category,
+      "datePublished": post.date,
+      "dateModified": post.date,
+      "author": { "@type": "Organization", "name": "SoporteCero" },
+      "publisher": { "@type": "Organization", "name": "SoporteCero" },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `https://soportecero.com/en/articulos/${post.filename}.html`
+      }
+    };
+
+    const howToSchema = {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": post.title,
+      "description": post.description,
+      "step": steps.map(s => ({
+        "@type": "HowToStep",
+        "url": `https://soportecero.com/en/articulos/${post.filename}.html#${slugify(s.title)}`,
+        "name": s.title,
+        "itemListElement": [{ "@type": "HowToDirection", "text": s.body.replace(/<[^>]*>/g, '').trim() }]
+      }))
+    };
+
+    const schemaScriptHtml = `
+  <script type="application/ld+json">
+  ${JSON.stringify(techArticleSchema, null, 2)}
+  </script>
+  <script type="application/ld+json">
+  ${JSON.stringify(howToSchema, null, 2)}
+  </script>
+    `;
+
+    const postHtml = postTemplateEn
+      .replace(/\{\{title\}\}/g, post.title)
+      .replace(/\{\{description\}\}/g, post.description)
+      .replace(/\{\{category\}\}/g, post.category)
+      .replace(/\{\{readTime\}\}/g, post.readTime)
+      .replace(/\{\{date\}\}/g, post.date)
+      .replace(/\{\{filename\}\}/g, post.filename)
+      .replace(/\{\{content\}\}/g, contentHtml)
+      .replace(/\{\{prevention\}\}/g, preventionHtml)
+      .replace(/\{\{related\}\}/g, relatedCardsHtml)
+      .replace(/\{\{schema\}\}/g, schemaScriptHtml)
+      .replace(/\{\{hreflang\}\}/g, hreflang);
+
+    fs.writeFileSync(path.join(DIST_DIR, 'en', 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
+    console.log(`[POST EN] Compilado: en/articulos/${post.filename}.html`);
+  }
+
+  // 9. Generate Spanish Home Page
+  const cardsHtmlEs = postsEs.map(post => {
+    const categorySlug = CATEGORY_MAP_ES[post.category] || 'all';
     const tagsList = post.tags || [];
     const firstThreeTags = tagsList.slice(0, 3).map(tag => `<span class="card-tag">${tag}</span>`).join('\n');
     const excerpt = post.description.length > 150 ? post.description.substring(0, 147) + '...' : post.description;
@@ -450,42 +617,146 @@ function build() {
     `;
   }).join('\n');
 
-  // 7. Inject cards into index-template
-  const indexTemplate = fs.readFileSync(path.join(SRC_DIR, 'index-template.html'), 'utf-8');
-  const indexHtml = indexTemplate.replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtml);
+  const indexTemplateEs = fs.readFileSync(path.join(SRC_DIR, 'index-template.html'), 'utf-8');
+  const indexHreflangEs = `
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
+  `;
+  const indexHtmlEs = indexTemplateEs
+    .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEs)
+    .replace('{{hreflang}}', indexHreflangEs);
 
-  // Write compiled home page to output
-  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexHtml, 'utf-8');
-  console.log('[INDEX] Compilado: index.html');
+  fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexHtmlEs, 'utf-8');
+  console.log('[INDEX ES] Compilado: index.html');
 
-  // 8. Generate sitemap.xml
+  // 10. Generate English Home Page
+  const cardsHtmlEn = postsEn.map(post => {
+    const categorySlug = CATEGORY_MAP_EN[post.category] || 'all';
+    const tagsList = post.tags || [];
+    const firstThreeTags = tagsList.slice(0, 3).map(tag => `<span class="card-tag">${tag}</span>`).join('\n');
+    const excerpt = post.description.length > 150 ? post.description.substring(0, 147) + '...' : post.description;
+
+    return `
+    <!-- Card: ${post.title} -->
+    <article class="article-card" 
+             data-category="${categorySlug}" 
+             data-title="${post.title.replace(/"/g, '&quot;')}" 
+             data-tags="${tagsList.join(', ').toLowerCase()}" 
+             data-summary="${post.description.replace(/"/g, '&quot;')}">
+      <div class="card-content">
+        <span class="card-category">${post.category}</span>
+        <h3 class="card-title">
+          <a href="articulos/${post.filename}.html">${post.title}</a>
+        </h3>
+        <p class="card-excerpt">
+          ${excerpt}
+        </p>
+        <div class="card-footer">
+          <div class="card-tags">
+            ${firstThreeTags}
+          </div>
+          <span>Read Time: ${post.readTime}</span>
+        </div>
+      </div>
+    </article>
+    `;
+  }).join('\n');
+
+  const indexTemplateEn = fs.readFileSync(path.join(SRC_DIR, 'en', 'index-template.html'), 'utf-8');
+  const indexHtmlEn = indexTemplateEn
+    .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEn)
+    .replace('{{hreflang}}', indexHreflangEs); // Reuse the same hreflang links
+
+  fs.writeFileSync(path.join(DIST_DIR, 'en', 'index.html'), indexHtmlEn, 'utf-8');
+  console.log('[INDEX EN] Compilado: en/index.html');
+
+  // 11. Generate Multilingual sitemap.xml
   const todayStr = new Date().toISOString().split('T')[0];
   let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://soportecero.com/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
     <lastmod>${todayStr}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://soportecero.com/contacto.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/contacto.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
     <lastmod>${todayStr}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://soportecero.com/servicios.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/servicios.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
     <lastmod>${todayStr}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 `;
 
-  for (let post of posts) {
+  // Add Spanish posts to sitemap
+  for (let post of postsEs) {
     const postDate = post.date || todayStr;
+    const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
+    ${hasEn ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
+    <lastmod>${postDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+  }
+
+  // Add English posts to sitemap
+  for (let post of postsEn) {
+    const postDate = post.date || todayStr;
+    const hasEs = postsEs.some(p => p.filename === post.filename);
+    sitemapXml += `  <url>
+    <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>
+    ${hasEs ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
     <lastmod>${postDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

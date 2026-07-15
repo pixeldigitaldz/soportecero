@@ -1,13 +1,13 @@
 ---
 title: "Cómo solucionar el error Connection Timeout en conexiones SSH por reglas de firewall"
-description: "Aprende a diagnosticar bloqueos de conexión SSH y configura correctamente las reglas de IPTables o UFW para permitir el acceso remoto seguro."
+description: "Aprende a diagnosticar bloqueos de conexión en el puerto 22 y configura correctamente las reglas de IPTables o UFW para permitir el acceso remoto seguro."
 category: "Sistemas y Servidores"
 tags: ["SSH", "Sysadmin", "Firewall"]
 readTime: "4 min"
 date: "2026-07-25"
 ---
 
-El error de tiempo de espera agotado (`ssh: connect to host ... port 22: Connection timed out`) ocurre cuando el cortafuegos del servidor destino (generalmente IPTables o UFW en Ubuntu/Debian) bloquea o descarta silenciosamente los paquetes de red entrantes en el puerto 22, impidiendo la autenticación del cliente.
+El error de tiempo de espera agotado en el **puerto 22** (`ssh: connect to host ... port 22: Connection timed out`) ocurre cuando el cortafuegos del servidor destino (generalmente IPTables o UFW en Ubuntu/Debian) bloquea o descarta silenciosamente los paquetes de red entrantes en el puerto 22, impidiendo la autenticación del cliente.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

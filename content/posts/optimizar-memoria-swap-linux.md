@@ -1,5 +1,5 @@
 ---
-title: "Cómo configurar y optimizar el uso de memoria Swap en servidores Linux"
+title: "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap"
 description: "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness."
 category: "Sistemas y Servidores"
 tags: ["Linux", "Sysadmin", "Swap"]
@@ -9,7 +9,7 @@ date: "2026-06-27"
 
 El desbordamiento de memoria RAM en servidores en la nube sin particiones de intercambio (Swap) provoca que el kernel de Linux active el proceso asesino `OOM Killer` (Out of Memory Killer), deteniendo de inmediato aplicaciones críticas como bases de datos MySQL, servidores web Nginx o procesos de Node.js.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Cómo configurar la memoria virtual en Linux paso a paso
 
 ### Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)
 Si tu servidor VPS no cuenta con memoria de intercambio asignada, puedes generar un archivo dinámico de 4GB para mitigar picos de consumo:
@@ -43,7 +43,7 @@ sudo sysctl vm.swappiness=10
 echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevención y buenas prácticas para la memoria virtual en Linux
 
 Prácticas de seguridad recomendadas:
 - Evita ubicar archivos de memoria Swap en almacenamiento SSD secundario de baja calidad o discos externos compartidos. El ciclo constante de lecturas y escrituras intensivas puede desgastar físicamente las celdas de almacenamiento SSD de grado de consumo antes de tiempo, degradando de forma irreversible las tasas de transferencia de datos de tu disco duro principal.

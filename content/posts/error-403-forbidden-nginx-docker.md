@@ -7,7 +7,7 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
-El error `403 Forbidden` en un contenedor de Nginx suele ocurrir cuando el servidor web no tiene permisos de lectura para acceder a los archivos del volumen local montado, o cuando no encuentra un archivo de inicio indexado válido en el directorio raíz de la ruta de servicio.
+El error **403 forbidden nginx** en un contenedor de Docker suele ocurrir cuando el servidor web no tiene permisos de lectura para acceder a los archivos del volumen local montado, o cuando no encuentra un archivo de inicio indexado válido en el directorio raíz de la ruta de servicio.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

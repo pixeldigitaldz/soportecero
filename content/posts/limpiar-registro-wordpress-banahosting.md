@@ -1,13 +1,13 @@
 ---
 title: "Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting"
-description: "Aprende a eliminar revisiones de entradas obsoletas y transients acumulados para acelerar la velocidad de carga de tu sitio web y reducir el uso de CPU en tu hosting."
+description: "Aprende cómo limpiar wordpress y optimizar la base de datos de tu sitio web para acelerar la velocidad de carga y reducir el uso de CPU en BanaHosting."
 category: "Web y Código"
 tags: ["WordPress", "Base de Datos", "Mantenimiento"]
 readTime: "3 min"
 date: "2026-06-27"
 ---
 
-Cuando gestionas portales de descargas digitales o blogs de nicho en WordPress bajo servidores compartidos (como BanaHosting), es común notar que la web se pone lenta o que el panel de control arroja errores de límite de memoria. Esto sucede porque WordPress acumula por defecto miles de filas de "revisiones de entradas" (versiones guardadas viejas de tus posts) y basura de caché (*transients*) en la tabla `wp_options`, saturando las consultas SQL.
+Saber cómo **limpiar wordpress** y optimizar la base de datos de tu sitio web en servidores compartidos (como BanaHosting) es fundamental cuando la web se pone lenta o el panel de control arroja errores de límite de memoria. Esto sucede porque WordPress acumula por defecto miles de filas de "revisiones de entradas" (versiones guardadas viejas de tus posts) y basura de caché (*transients*) en la tabla `wp_options`, saturando las consultas SQL.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

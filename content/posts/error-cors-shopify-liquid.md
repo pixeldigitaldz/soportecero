@@ -1,13 +1,13 @@
 ---
 title: "Solución: Error de CORS al consumir APIs externas desde plantillas de Shopify"
-description: "Aprende a resolver el bloqueo de seguridad 'Access-Control-Allow-Origin' al realizar peticiones fetch desde código Liquid o JavaScript en tiendas en línea."
+description: "Aprende a solucionar shopify cors policy en tu tienda y resolver el bloqueo de seguridad 'Access-Control-Allow-Origin' al hacer peticiones fetch."
 category: "Web y Código"
 tags: ["Shopify", "CORS", "JavaScript"]
 readTime: "4 min"
 date: "2026-06-27"
 ---
 
-El error `Access-Control-Allow-Origin` (CORS) salta en la consola del navegador cuando intentas hacer una petición `fetch` desde un script de tu plantilla de Shopify hacia un servidor externo propio (por ejemplo, para cargar planners digitales o diarios personalizados desde una base de datos externa). El navegador bloquea la respuesta porque el servidor externo no autoriza explícitamente al dominio de tu tienda de Shopify a leer sus datos.
+Para **solucionar shopify cors policy en tu tienda** de manera definitiva cuando el error `Access-Control-Allow-Origin` (CORS) salta en la consola del navegador al intentar hacer una petición `fetch` desde un script de tu plantilla de Shopify hacia un servidor externo propio (por ejemplo, para cargar planners digitales o diarios personalizados desde una base de datos externa), debes configurar la autorización en el origen. El navegador bloquea la respuesta porque el servidor externo no autoriza explícitamente al dominio de tu tienda de Shopify a leer sus datos.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

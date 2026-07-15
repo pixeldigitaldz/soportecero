@@ -1,13 +1,13 @@
 ---
 title: "Solución Error CORS Access-Control-Allow-Origin"
-description: "Aprende a solucionar el error de CORS 'Access-Control-Allow-Origin' en JavaScript. Soluciones rápidas para Express, Node.js..."
+description: "Aprende cómo configurar allow cors y solucionar el error de CORS 'Access-Control-Allow-Origin' en tu backend paso a paso."
 category: "Web y Código"
 tags: ["CORS", "JS", "Express"]
 readTime: "4 min"
 date: "2026-06-26"
 ---
 
-El error de CORS (Cross-Origin Resource Sharing) ocurre estrictamente en el navegador del cliente. Sucede cuando una aplicación web en un dominio (ej. `localhost:3000`) intenta consumir recursos de una API alojada en otro dominio, y el servidor de la API no incluye las cabeceras HTTP necesarias para autorizar la petición.
+Aprender **cómo configurar allow cors** para resolver el error de CORS (Cross-Origin Resource Sharing) es esencial, ya que este problema ocurre estrictamente en el navegador del cliente. Sucede cuando una aplicación web en un dominio (ej. `localhost:3000`) intenta consumir recursos de una API alojada en otro dominio, y el servidor de la API no incluye las cabeceras HTTP necesarias para autorizar la petición.
 
 ## 🚀 Cómo solucionar el error paso a paso
 La forma correcta de solucionar esto es configurar el **Backend (servidor)** para que acepte las peticiones de tu cliente. Jamás uses extensiones del navegador en entornos de producción.

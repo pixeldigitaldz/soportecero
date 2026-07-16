@@ -4,7 +4,7 @@ description: "Learn how to force modern image upscaling and improve your FPS on 
 category: "Gaming Tech"
 tags: ["OptiScaler", "Gaming", "Proton"]
 readTime: "4 min"
-date: "2026-07-17"
+date: "2026-07-16"
 ---
 
 If you are a PC gamer with modest hardware or use optimized Linux-based operating systems (such as CachyOS or Bazzite), increasing frames per second (FPS) in demanding titles like Diablo IV is a priority. However, technologies like DLSS are locked for older generation graphics cards.

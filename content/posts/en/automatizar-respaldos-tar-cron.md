@@ -4,7 +4,7 @@ description: "Learn how to automatically pack configuration directories using co
 category: "Systems & Servers"
 tags: ["Linux", "Sysadmin", "Cron"]
 readTime: "3 min"
-date: "2026-07-17"
+date: "2026-07-16"
 ---
 
 The most serious mistake in managing local or home servers is not having automated and intact backups against hardware failures or file corruption. Creating a scheduled task that packages your essential configuration files will guarantee peace of mind.

@@ -1,6 +1,6 @@
 ---
-title: "How to Fix 413 Request Entity Too Large Error in Nginx"
-description: "Fix the 413 error when uploading large images or files to your web server by configuring transfer limits in Nginx and PHP."
+title: "How to Fix 413 Request Entity Too Large Error in Nginx (Quickly)"
+description: "Can't upload files or plugins to your Nginx server? Fix the frustrating 413 Request Entity Too Large error in 3 simple steps with our practical guide."
 category: "Systems & Servers"
 tags: ["Nginx", "Sysadmin", "Web"]
 readTime: "3 min"

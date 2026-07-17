@@ -1,6 +1,6 @@
 ---
-title: "How to Fix SSH Connection Refused (Port 22)"
-description: "Can't connect to your server? Learn how to verify if OpenSSH daemon is running, check the active port, and fix Connection Refused errors."
+title: "How to Fix SSH Connection Refused Error (Quick & Easy)"
+description: "Get locked out of your server? Fix the frustrating SSH connection refused error in under 5 minutes with our proven step-by-step diagnostic guide."
 category: "Systems & Servers"
 tags: ["SSH", "Linux", "Firewall"]
 readTime: "3 min"

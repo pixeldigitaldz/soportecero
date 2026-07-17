@@ -1,6 +1,6 @@
 ---
-title: "Solución SSH Connection Refused (Puerto 22)"
-description: "¿No puedes conectarte a tu servidor? Te mostramos cómo verificar si el demonio OpenSSH está corriendo, activar el puerto..."
+title: "Cómo solucionar el error SSH Connection Refused (Rápido)"
+description: "¿Te has quedado fuera de tu servidor? Soluciona el frustrante error de conexión SSH rechazada en menos de 5 minutos con nuestra guía paso a paso."
 category: "Sistemas y Servidores"
 tags: ["SSH", "Linux", "Firewall"]
 readTime: "3 min"

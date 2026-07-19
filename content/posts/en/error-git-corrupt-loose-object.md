@@ -4,7 +4,7 @@ description: "Resolve loose object corruption in your .git directory by recoveri
 category: "Web & Code"
 tags: ["Git", "Web", "Programming"]
 readTime: "4 min"
-date: "2026-07-29"
+date: "2026-07-13"
 ---
 
 The critical Git error `error: object file .git/objects/... is empty` or `corrupt loose object` occurs after a sudden power outage, disk failure, or forced shutdown of the machine while Git was writing metadata to the local object database of your repository.

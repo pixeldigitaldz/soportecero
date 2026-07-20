@@ -4,27 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso - SoporteCero</title>
+  <title>Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5 - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.">
+  <meta name="description" content="Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-cron-job-not-running.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html">
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/thermal-throttling-raspberry-pi-5.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html" />
   
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso - SoporteCero">
-  <meta property="og:description" content="Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.">
+  <meta property="og:title" content="Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5 - SoporteCero">
+  <meta property="og:description" content="Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-cron-job-not-running.html">
+  <meta property="og:url" content="https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso - SoporteCero">
-  <meta name="twitter:description" content="Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.">
+  <meta name="twitter:title" content="Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5 - SoporteCero">
+  <meta name="twitter:description" content="Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -44,11 +48,11 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso",
-  "description": "Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.",
+  "headline": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5",
+  "description": "Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.",
   "category": "Sistemas y Servidores",
-  "datePublished": "2026-06-27",
-  "dateModified": "2026-06-27",
+  "datePublished": "2026-07-20",
+  "dateModified": "2026-07-20",
   "author": {
     "@type": "Organization",
     "name": "SoporteCero"
@@ -59,7 +63,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://soportecero.com/articulos/error-cron-job-not-running.html"
+    "@id": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html"
   }
 }
   </script>
@@ -67,8 +71,8 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso",
-  "description": "Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.",
+  "name": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5",
+  "description": "Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.",
   "step": []
 }
   </script>
@@ -101,7 +105,7 @@
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/" class="lang-inactive">EN</a>
+      <a href="../en/articulos/thermal-throttling-raspberry-pi-5.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -122,24 +126,24 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
-        <span style="color: var(--text-secondary);">¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso</span>
+        <span style="color: var(--text-secondary);">Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Sistemas y Servidores</span>
-        <h1 id="post-title">¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso</h1>
+        <h1 id="post-title">Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 3 min
+            Lectura: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-06-27
+            Actualizado: 2026-07-20
           </span>
         </div>
       </header>
@@ -170,7 +174,7 @@
             </svg>
             El Diagnóstico Rápido
           </h3>
-          <p>El fallo más recurrente con las tareas automatizadas de Cron es que el script o comando funciona perfectamente cuando lo ejecutas de forma manual en tu terminal, pero falla silenciosamente cuando es invocado por el demonio del sistema (<code>cron</code>). Esto ocurre por diferencias críticas entre la sesión de tu usuario y el entorno aislado de Cron.</p>
+          <p>El estrangulamiento térmico o <em>thermal throttling</em> en Raspberry Pi 5 ocurre cuando el procesador sobrepasa los 80 °C en tareas exigentes. Para evitar daños por calor, el controlador del microcódigo reduce automáticamente la frecuencia del procesador de 2.4 GHz a menos de 1.5 GHz, lo que degrada drásticamente el rendimiento de tus contenedores o emuladores.</p>
         </section>
 
     <nav class="toc-container" aria-label="Tabla de contenidos">
@@ -178,52 +182,69 @@
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-forzar-el-uso-de-rutas-absolutas-en-comandos-y-scripts">Paso 1: Forzar el uso de rutas absolutas en comandos y scripts</a></li>
-        <li class="toc-subitem"><a href="#paso-2-redirigir-errores-y-logs-de-ejecucion-a-un-archivo-fisico">Paso 2: Redirigir errores y logs de ejecución a un archivo físico</a></li>
-        <li class="toc-subitem"><a href="#paso-3-verificar-que-el-demonio-de-cron-este-activo">Paso 3: Verificar que el demonio de Cron esté activo</a></li>
+        <li class="toc-subitem"><a href="#paso-1-diagnosticar-la-temperatura-y-el-estrangulamiento-en-tiempo-real">Paso 1: Diagnosticar la temperatura y el estrangulamiento en tiempo real</a></li>
+        <li class="toc-subitem"><a href="#paso-2-ajustar-los-umbrales-del-ventilador-oficial-active-cooler">Paso 2: Ajustar los umbrales del ventilador oficial (Active Cooler)</a></li>
+        <li class="toc-subitem"><a href="#paso-3-aplicar-y-validar-la-nueva-tabla-termica">Paso 3: Aplicar y validar la nueva tabla térmica</a></li>
       </ol>
     </nav>
     
         <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-forzar-el-uso-de-rutas-absolutas-en-comandos-y-scripts">Paso 1: Forzar el uso de rutas absolutas en comandos y scripts</h3>
-<p>Cron no carga las variables de entorno de tu archivo <code>.bashrc</code> ni hereda la variable <code>PATH</code> de tu sesión interactiva. Por lo tanto, no sabrá dónde están binarios como <code>python3</code>, <code>node</code> o <code>git</code> a menos que utilices rutas completas:</p>
+<h3 id="paso-1-diagnosticar-la-temperatura-y-el-estrangulamiento-en-tiempo-real">Paso 1: Diagnosticar la temperatura y el estrangulamiento en tiempo real</h3>
+<p>Puedes comprobar la temperatura del procesador y verificar si el núcleo de Linux ha registrado alertas de reducción de velocidad de reloj mediante consola:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
       </div>
-      <pre class="formatted-pre"><code># INCORRECTO:
-* * * * * python3 /home/usuario/script.py
+      <pre class="formatted-pre"><code># Consultar la temperatura del CPU en grados Celsius
+vcgencmd measure_temp
 
-# CORRECTO (Usa &quot;which python3&quot; para verificar la ruta en tu sistema):
-* * * * * /usr/bin/python3 /home/usuario/script.py
+# Verificar si existen códigos de error por voltaje o calor (un valor distinto de 0x0 indica problemas)
+vcgencmd get_throttled
 </code></pre>
     </div>
     
-<h3 id="paso-2-redirigir-errores-y-logs-de-ejecucion-a-un-archivo-fisico">Paso 2: Redirigir errores y logs de ejecución a un archivo físico</h3>
-<p>Dado que las tareas en segundo plano no tienen una terminal física para mostrar mensajes de error, debes forzar al sistema a escribirlos en un archivo log para poder auditar el motivo exacto del fallo:</p>
+<h3 id="paso-2-ajustar-los-umbrales-del-ventilador-oficial-active-cooler">Paso 2: Ajustar los umbrales del ventilador oficial (Active Cooler)</h3>
+<p>Asegura que el ventilador de tu disipador oficial comience a girar al 100% antes de alcanzar la temperatura crítica de 80 °C editando los parámetros del firmware:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
       </div>
-      <pre class="formatted-pre"><code># Redirigir la salida estándar (1) y el canal de errores (2) a un log
-0 5 * * * /usr/bin/bash /home/usuario/backup.sh &gt;&gt; /home/usuario/backup.log 2&gt;&amp;1
+      <pre class="formatted-pre"><code># Abrir el archivo de configuración del arranque
+sudo nano /boot/firmware/config.txt
 </code></pre>
     </div>
     
-<h3 id="paso-3-verificar-que-el-demonio-de-cron-este-activo">Paso 3: Verificar que el demonio de Cron esté activo</h3>
-<p>Asegúrate de que el servicio encargado de coordinar la cola de tareas programadas esté corriendo en tu servidor:</p>
+<p>Agrega estas líneas al final del archivo para programar que el ventilador se active al máximo a partir de los 65 °C:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Forzar enfriamiento agresivo
+dtparam=fan_temp0=50000
+dtparam=fan_temp0_hyst=5000
+dtparam=fan_temp1=58000
+dtparam=fan_temp1_hyst=5000
+dtparam=fan_temp2=65000
+dtparam=fan_temp2_hyst=5000
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-aplicar-y-validar-la-nueva-tabla-termica">Paso 3: Aplicar y validar la nueva tabla térmica</h3>
+<p>Guarda los cambios presionando <code>Ctrl + O</code> y reinicia tu placa de desarrollo para que el microcontrolador de energía aplique las directivas:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
       </div>
-      <pre class="formatted-pre"><code>sudo systemctl status cron   # En Debian/Ubuntu
-sudo systemctl status crond  # En Arch/RHEL/CentOS
+      <pre class="formatted-pre"><code># Reiniciar el dispositivo
+sudo reboot
 </code></pre>
     </div>
     
@@ -241,18 +262,7 @@ sudo systemctl status crond  # En Arch/RHEL/CentOS
               Prácticas de seguridad recomendadas:
             </p>
             <ul class="prevention-list">
-              <li>Siempre declara la variable <code>PATH</code> y el shell preferido explícitamente en la parte superior de tu archivo de programación crontab (<code>crontab -e</code>) para garantizar que la ejecución no dependa de variables externas heredadas:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>SHELL=/bin/bash
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-</code></pre>
-    </div>
-    
-</li>
+              <li>No utilices cajas o gabinetes completamente cerrados y sin rejillas de ventilación activa para alojar tu Raspberry Pi 5 en producción. La Pi 5 disipa casi el doble de calor bajo carga máxima comparada con la generación anterior, por lo que depender exclusivamente de disipación pasiva de aluminio sin flujo de aire constante saturará térmicamente el gabinete en pocos minutos, forzando al procesador a trabajar permanentemente en modo degradado.</li>
             </ul>
           </div>
 
@@ -283,23 +293,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5 -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/thermal-throttling-raspberry-pi-5.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Raspberry Pi</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS -->
       <article class="related-card">
         <div class="related-card-content">
@@ -329,6 +322,23 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar el error 413 Request Entity Too Large en Nginx (Rápido) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nginx-client-max-body-size.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error 413 Request Entity Too Large en Nginx (Rápido)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nginx</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>

@@ -12,8 +12,8 @@ El mensaje `permission denied while trying to connect to the Docker daemon socke
 ## 🔍 El Diagnóstico Rápido
 
 | Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| `permission denied while trying to connect to the Docker daemon socket` | El usuario actual no pertenece al grupo de sistema `docker` que administra `/var/run/docker.sock` | Agregar el usuario Linux al grupo `docker` y actualizar los permisos del socket o refrescar la sesión |
+| :--- | :--- | :--- |
+| **Permission Denied** al conectar con el socket (`unix:///var/run/docker.sock`) | El usuario actual no pertenece al grupo de sistema `docker` | Agregar el usuario al grupo `docker` con `usermod` y refrescar la sesión |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

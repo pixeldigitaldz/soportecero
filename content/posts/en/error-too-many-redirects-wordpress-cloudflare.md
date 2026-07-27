@@ -1,10 +1,16 @@
 ---
-title: "How to Fix ERR_TOO_MANY_REDIRECTS Loop in WordPress with Cloudflare SSL"
-description: "Fix the infinite HTTPS redirection loop in WordPress hosted behind Cloudflare by configuring SSL/TLS mode to Full (Strict) and setting reverse proxy headers."
-category: "Web & Code"
-tags: ["WordPress", "Cloudflare", "SSL"]
-readTime: "4 min"
-date: "2026-07-28"
+title: How to Fix ERR_TOO_MANY_REDIRECTS Loop in WordPress with Cloudflare SSL
+description: >-
+  Fix the infinite HTTPS redirection loop in WordPress hosted behind Cloudflare
+  by configuring SSL/TLS mode to Full (Strict) and setting reverse proxy
+  headers.
+category: Web & Code
+tags:
+  - WordPress
+  - Cloudflare
+  - SSL
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The `ERR_TOO_MANY_REDIRECTS` error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.

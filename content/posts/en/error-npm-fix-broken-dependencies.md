@@ -1,10 +1,15 @@
 ---
-title: "How to Fix NPM Vulnerabilities Without Breaking Your Project Dependencies"
-description: "Learn how to safely fix critical security alerts in package.json using manual audits instead of npm audit fix."
-category: "Web & Code"
-tags: ["NPM", "NodeJS", "Programming"]
-readTime: "4 min"
-date: "2026-08-01"
+title: How to Fix NPM Vulnerabilities Without Breaking Your Project Dependencies
+description: >-
+  Learn how to safely fix critical security alerts in package.json using manual
+  audits instead of npm audit fix.
+category: Web & Code
+tags:
+  - NPM
+  - NodeJS
+  - Programming
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The failure when running `npm audit fix --force` in Node.js projects occurs because this utility automatically updates packages to major versions (*major*). This introduces API breaking changes (*breaking changes*) that break the compatibility of your secondary dependencies and stop your application's compilation.

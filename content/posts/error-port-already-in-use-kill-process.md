@@ -1,10 +1,15 @@
 ---
-title: "Cómo solucionar el error 'Port Already in Use' y liberar puertos en Linux"
-description: "Aprende a identificar qué proceso está ocupando un puerto de red en Linux y macOS (EADDRINUSE) y cómo liberarlo de forma segura."
-category: "Sistemas y Servidores"
-tags: ["Linux", "Sysadmin", "Networking"]
-readTime: "3 min"
-date: "2026-07-29"
+title: Cómo solucionar el error 'Port Already in Use' y liberar puertos en Linux
+description: >-
+  Aprende a identificar qué proceso está ocupando un puerto de red en Linux y
+  macOS (EADDRINUSE) y cómo liberarlo de forma segura.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Sysadmin
+  - Networking
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 El error `EADDRINUSE: address already in use` ocurre cuando un servicio de red, servidor web (Nginx, Apache), contenedor Docker o script (Node.js, Python) intenta vincularse (*bind*) a un puerto TCP/UDP que ya está siendo utilizado por otro proceso activo en el sistema operativo.

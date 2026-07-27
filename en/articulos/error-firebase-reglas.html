@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Fix: Firebase Error Denying Database Reads (Security Rules) - SoporteCero</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-firebase-reglas.html">
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-firebase-reglas.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-firebase-reglas.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-firebase-reglas.html" />
+  
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:title" content="Fix: Firebase Error Denying Database Reads (Security Rules) - SoporteCero">
+  <meta property="og:description" content="Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-firebase-reglas.html">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fix: Firebase Error Denying Database Reads (Security Rules) - SoporteCero">
+  <meta name="twitter:description" content="Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Theme Init Script (Prevent Flashing) -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Fix: Firebase Error Denying Database Reads (Security Rules)",
+  "description": "Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.",
+  "category": "Web & Code",
+  "datePublished": "2026-07-27",
+  "dateModified": "2026-07-27",
+  "author": {
+    "@type": "Organization",
+    "name": "SoporteCero"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-firebase-reglas.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Fix: Firebase Error Denying Database Reads (Security Rules)",
+  "description": "Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.",
+  "step": []
+}
+  </script>
+    
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="../?cat=sistemas">Systems & Servers</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web & Code</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-firebase-reglas.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
+        <span style="color: var(--text-secondary);">Fix: Firebase Error Denying Database Reads (Security Rules)</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Web & Code</span>
+        <h1 id="post-title">Fix: Firebase Error Denying Database Reads (Security Rules)</h1>
+        <div class="post-meta">
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Read Time: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Updated: 2026-07-27
+          </span>
+        </div>
+      </header>
+
+      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
+      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6956525438386645"
+             data-ad-slot="4943572587"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+        <section class="diagnostic-box" aria-labelledby="diag-heading">
+          <h3 id="diag-heading">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            Quick Diagnostics
+          </h3>
+          <p>The <code>Firebase Error: [code=permission-denied]</code> error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project&#39;s <strong>Security Rules</strong> do not grant the necessary permissions.</p>
+<p>This failure is extremely common when moving a project from local development to production, or when the &quot;Test mode&quot; grace period (which typically lasts 30 days) expires.</p>
+        </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-subitem"><a href="#step-1-identify-the-database-environment">Step 1: Identify the database environment</a></li>
+        <li class="toc-subitem"><a href="#step-2-configure-secure-rules-for-firestore">Step 2: Configure secure rules (For Firestore)</a></li>
+        <li class="toc-subitem"><a href="#step-3-publish-changes">Step 3: Publish changes</a></li>
+      </ol>
+    </nav>
+    
+        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+<h3 id="step-1-identify-the-database-environment">Step 1: Identify the database environment</h3>
+<p>Go to your Firebase console, select your project, and navigate to the <strong>Cloud Firestore</strong> or <strong>Realtime Database</strong> section in the left menu, then click on the <strong>Rules</strong> tab.</p>
+<h3 id="step-2-configure-secure-rules-for-firestore">Step 2: Configure secure rules (For Firestore)</h3>
+<p>If your database was in test mode, you will see a rule that blocked access after a specific date. <strong>Never use rules that allow global public read and write access (<code>allow read, write: if true;</code>) in production</strong>, as anyone could delete your entire database.</p>
+<p>Implement a conditional structure that requires the user to be authenticated to modify data:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>rules_version = &#39;2&#39;;
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow any web user to read the product catalog or public content
+    match /public_content/{document} {
+      allow read: if true;
+      allow write: if request.auth != null; // Only registered users can write
+    }
+    
+    // Restrict private user collections (e.g. carts, orders, personal data)
+    match /users/{userId} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == userId;
+    }
+  }
+}
+</code></pre>
+    </div>
+    
+<h3 id="step-3-publish-changes">Step 3: Publish changes</h3>
+<p>Click the <strong>Publish</strong> button in the Firebase console. Security rule changes take 1 to 2 minutes to propagate globally. Restart your client application and the permission errors will disappear.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li>Use the built-in Rules Playground in the Firebase console before releasing changes to production.</li>
+<li>Monitor the &quot;Usage&quot; tab to detect abnormal spikes in denied reads, which could indicate a bug in your client code or an external scanning attempt.</li>
+            </ul>
+          </div>
+
+          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
+          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6956525438386645"
+                 data-ad-slot="4943572587"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-conexion-prowlarr-qbittorrent-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Prowlarr</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Fix CORS 'No Access-Control-Allow-Origin' Error in Express and Node.js -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cors-express-nodejs-header.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix CORS 'No Access-Control-Allow-Origin' Error in Express and Node.js</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nodejs</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Resolve Merge Conflicts in Git Without Losing Code -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-merge-conflict-fix.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Resolve Merge Conflicts in Git Without Losing Code</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+        <li><a href="../contacto.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

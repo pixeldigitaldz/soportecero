@@ -1,10 +1,15 @@
 ---
-title: "Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV"
-description: "Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file."
-category: "Gaming Tech"
-tags: ["Gaming", "Diablo IV", "VRAM"]
-readTime: "4 min"
-date: "2026-08-05"
+title: 'Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV'
+description: >-
+  Learn how to mitigate the 'Out of Video Memory' error and drastic performance
+  drops by optimizing texture management and your GPU's paging file.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Diablo IV
+  - VRAM
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The out of video memory (VRAM) error or screen freezing when opening the inventory or changing zones in Diablo IV occurs due to a resource allocation leak in the game engine graphics. The title consumes all the physical memory of the graphics card and, when trying to overflow the remaining data into the system RAM, it collapses if response times are not optimized.

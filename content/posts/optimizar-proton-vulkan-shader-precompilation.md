@@ -1,10 +1,15 @@
 ---
-title: "Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton"
-description: "Elimina los tirones al jugar títulos DirectX en Linux optimizando y activando el procesamiento en segundo plano de shaders de Vulkan."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Proton"]
-readTime: "4 min"
-date: "2026-08-08"
+title: Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton
+description: >-
+  Elimina los tirones al jugar títulos DirectX en Linux optimizando y activando
+  el procesamiento en segundo plano de shaders de Vulkan.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Proton
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Los tirones gráficos repentinos (*shuttering*) e interrupciones al jugar títulos modernos en Linux bajo Steam Proton suelen deberse a la precompilación activa en tiempo de ejecución de shaders de Vulkan. El procesador compila los nuevos modelos gráficos en tiempo real mientras juegas, provocando una caída drástica e instantánea de la tasa de FPS.

@@ -1,10 +1,16 @@
 ---
-title: "How to fix graphics stuttering in Linux games using DXVK cache"
-description: "Learn how to mitigate graphical stuttering when translating DirectX to Vulkan by configuring asynchronous shader compilation in your PC games."
-category: "Gaming Tech"
-tags: ["Linux", "Gaming", "DXVK", "Proton"]
-readTime: "4 min"
-date: "2026-08-09"
+title: How to fix graphics stuttering in Linux games using DXVK cache
+description: >-
+  Learn how to mitigate graphical stuttering when translating DirectX to Vulkan
+  by configuring asynchronous shader compilation in your PC games.
+category: Gaming Tech
+tags:
+  - Linux
+  - Gaming
+  - DXVK
+  - Proton
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Graphic stuttering when playing Windows titles on Linux through Proton or Wine occurs because the games' DirectX graphics calls are translated to the open Vulkan API in real time using the DXVK library. This generates a CPU consumption spike to compile each new texture shader the first time it is displayed on screen.

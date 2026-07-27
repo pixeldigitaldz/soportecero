@@ -1,10 +1,15 @@
 ---
-title: "Fix: Linux Boot Delay due to Timeout Error in NFS Network Mounts"
-description: "Prevent your operating system from freezing for 90 seconds during boot when your NAS or local storage server is offline."
-category: "Systems & Servers"
-tags: ["NFS", "Network", "Sysadmin"]
-readTime: "3 min"
-date: "2026-07-31"
+title: 'Fix: Linux Boot Delay due to Timeout Error in NFS Network Mounts'
+description: >-
+  Prevent your operating system from freezing for 90 seconds during boot when
+  your NAS or local storage server is offline.
+category: Systems & Servers
+tags:
+  - NFS
+  - Network
+  - Sysadmin
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 When you configure network shared folders using the NFS (Network File System) protocol to move movies or backups between your main computer and your home server, the `/etc/fstab` file attempts to connect to the external server during system boot. If the storage server is offline or there is no local network connection, Linux freezes the boot screen for a strict timeout of **90 seconds** before allowing you to log in.

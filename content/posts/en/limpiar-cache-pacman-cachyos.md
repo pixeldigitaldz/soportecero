@@ -1,10 +1,15 @@
 ---
-title: "How to Free Disk Space by Properly Cleaning Pacman Cache in CachyOS"
-description: "Avoid running out of space on your SSD by recovering gigabytes of data accumulated by the Pacman package manager in Arch Linux distributions."
-category: "Systems & Servers"
-tags: ["CachyOS", "Linux", "Maintenance"]
-readTime: "3 min"
-date: "2026-08-05"
+title: How to Free Disk Space by Properly Cleaning Pacman Cache in CachyOS
+description: >-
+  Avoid running out of space on your SSD by recovering gigabytes of data
+  accumulated by the Pacman package manager in Arch Linux distributions.
+category: Systems & Servers
+tags:
+  - CachyOS
+  - Linux
+  - Maintenance
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 Unlike other operating systems, Arch Linux-based distributions (such as CachyOS) do not automatically delete old packages that you download during updates. The `pacman` manager accumulates them indefinitely in the `/var/cache/pacman/pkg/` path in case you need to do a *downgrade*. Over time, this folder can consume 20GB or 30GB of your SSD storage.

@@ -1,10 +1,15 @@
 ---
-title: "Quick guide to recover a corrupt GRUB bootloader in Linux"
-description: "Learn how to restore the GRUB bootloader on UEFI and BIOS systems using a Live USB distribution and the chroot tool."
-category: "Systems & Servers"
-tags: ["Linux", "GRUB", "Bootloader"]
-readTime: "4 min"
-date: "2026-08-07"
+title: Quick guide to recover a corrupt GRUB bootloader in Linux
+description: >-
+  Learn how to restore the GRUB bootloader on UEFI and BIOS systems using a Live
+  USB distribution and the chroot tool.
+category: Systems & Servers
+tags:
+  - Linux
+  - GRUB
+  - Bootloader
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 GRUB bootloader failure (leaving the system frozen at the `grub>` rescue console) usually occurs after a failed kernel update, EFI partition table failures, or after configuring dual boots with Windows. To repair it, we must mount and enter the damaged file system from a temporary environment.

@@ -1,10 +1,15 @@
 ---
-title: "How to clean and optimize a bloated WordPress database in BanaHosting"
-description: "Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting."
-category: "Web & Code"
-tags: ["WordPress", "Database", "Maintenance"]
-readTime: "3 min"
-date: "2026-08-06"
+title: How to clean and optimize a bloated WordPress database in BanaHosting
+description: >-
+  Learn how to clean WordPress and optimize your website's database to speed up
+  load times and reduce CPU usage in BanaHosting.
+category: Web & Code
+tags:
+  - WordPress
+  - Database
+  - Maintenance
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 Knowing how to **clean WordPress** and optimize your website's database on shared servers (like BanaHosting) is essential when the web gets slow or the control panel throws memory limit errors. This happens because WordPress defaults to accumulating thousands of rows of "post revisions" (old saved versions of your posts) and cache junk (*transients*) in the `wp_options` table, bloating SQL queries.

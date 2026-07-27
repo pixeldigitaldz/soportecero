@@ -1,10 +1,16 @@
 ---
-title: "How to Force Renewal of an Expired Let's Encrypt SSL Certificate with Certbot"
-description: "Learn how to resolve Certbot authentication failures and renew your expired SSL certificates by freeing up the necessary ports."
-category: "Systems & Servers"
-tags: ["SSL", "Let's Encrypt", "Certbot", "Nginx"]
-readTime: "4 min"
-date: "2026-08-04"
+title: How to Force Renewal of an Expired Let's Encrypt SSL Certificate with Certbot
+description: >-
+  Learn how to resolve Certbot authentication failures and renew your expired
+  SSL certificates by freeing up the necessary ports.
+category: Systems & Servers
+tags:
+  - SSL
+  - Let's Encrypt
+  - Certbot
+  - Nginx
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The expired SSL certificate error when accessing your website, despite using Let's Encrypt's Certbot, typically occurs because the automatic renewal service failed silently due to port 80 being blocked by your conflicting web server, or due to changes in your DNS records.

@@ -1,10 +1,15 @@
 ---
-title: "How to fix stuttering and graphics lag in Flyff Universe (Browser and Client)"
-description: "Optimize WebGL rendering performance in your browser to eliminate stuttering and play Flyff Universe smoothly."
-category: "Gaming Tech"
-tags: ["Gaming", "Optimization", "Browser"]
-readTime: "3 min"
-date: "2026-08-08"
+title: How to fix stuttering and graphics lag in Flyff Universe (Browser and Client)
+description: >-
+  Optimize WebGL rendering performance in your browser to eliminate stuttering
+  and play Flyff Universe smoothly.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Optimization
+  - Browser
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 Being a game based on modern web technologies (WebGL/WebGPU), Flyff Universe can suffer from severe frame freezing (*stuttering*) or network response lag, even on powerful computers. This happens if the web browser does not have direct access to the graphics chip or if vertical synchronization generates conflicts.

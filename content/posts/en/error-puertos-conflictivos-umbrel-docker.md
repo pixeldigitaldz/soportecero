@@ -1,10 +1,15 @@
 ---
-title: "How to Resolve Port Conflict Errors in Umbrel OS and Docker"
-description: "Learn how to resolve port binding errors when installing custom containers or services that clash with Umbrel's default web proxy."
-category: "Systems & Servers"
-tags: ["Docker", "Umbrel", "Sysadmin"]
-readTime: "4 min"
-date: "2026-08-01"
+title: How to Resolve Port Conflict Errors in Umbrel OS and Docker
+description: >-
+  Learn how to resolve port binding errors when installing custom containers or
+  services that clash with Umbrel's default web proxy.
+category: Systems & Servers
+tags:
+  - Docker
+  - Umbrel
+  - Sysadmin
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The port binding error (`bind: address already in use` or `port already allocated`) when attempting to start a custom container in Umbrel OS occurs because the platform's internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.

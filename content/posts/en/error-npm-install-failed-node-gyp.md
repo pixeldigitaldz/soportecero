@@ -1,10 +1,15 @@
 ---
-title: "How to Fix node-gyp Native Compilation Errors When Installing NPM Packages"
-description: "Fix npm install failures caused by missing C++ build tools and node-gyp compilation issues in your development environment."
-category: "Web & Code"
-tags: ["NPM", "NodeJS", "Programming"]
-readTime: "4 min"
-date: "2026-08-03"
+title: How to Fix node-gyp Native Compilation Errors When Installing NPM Packages
+description: >-
+  Fix npm install failures caused by missing C++ build tools and node-gyp
+  compilation issues in your development environment.
+category: Web & Code
+tags:
+  - NPM
+  - NodeJS
+  - Programming
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The NPM package installation error `node-gyp rebuild failed` or `make: *** [addon.target.mk] Error 1` occurs when a Node.js dependency requires compiling native add-ons written in C or C++ (such as bcrypt, sharp, or sqlite3) and your operating system lacks a compatible C++ compiler or Python in its global environment path.

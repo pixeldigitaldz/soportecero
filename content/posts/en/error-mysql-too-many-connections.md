@@ -1,10 +1,15 @@
 ---
-title: "Fix: 'Too many connections' Error in MySQL / MariaDB Databases"
-description: "Learn how to diagnose and fix the error of exceeding open connections in MySQL by optimizing your server's connection directives."
-category: "Web & Code"
-tags: ["MySQL", "MariaDB", "Database"]
-readTime: "3 min"
-date: "2026-07-31"
+title: 'Fix: ''Too many connections'' Error in MySQL / MariaDB Databases'
+description: >-
+  Learn how to diagnose and fix the error of exceeding open connections in MySQL
+  by optimizing your server's connection directives.
+category: Web & Code
+tags:
+  - MySQL
+  - MariaDB
+  - Database
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 The `Error 1040: Too many connections` error immediately stops queries to your database and occurs when the number of open connection threads from your application exceeds the maximum directive defined in the internal settings of the MySQL or MariaDB server.

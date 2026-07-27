@@ -1,10 +1,15 @@
 ---
-title: "The ultimate file and folder permission guide to secure WordPress"
-description: "Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema."
-category: "Web & Code"
-tags: ["WordPress", "Security", "Linux"]
-readTime: "4 min"
-date: "2026-08-07"
+title: The ultimate file and folder permission guide to secure WordPress
+description: >-
+  Protect your WordPress website from code injections and unauthorized access by
+  applying the optimal security permission schema.
+category: Web & Code
+tags:
+  - WordPress
+  - Security
+  - Linux
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 WordPress security flaws that allow attackers to upload malicious scripts or modify configuration files usually occur due to overly permissive permissions on your hosting directories. Keeping the default configuration of some automatic installers is the most exploited attack vector.

@@ -1,10 +1,15 @@
 ---
-title: "How to Fix Redis OOM Command Not Allowed Error (Maxmemory Policy Setup)"
-description: "Resolve Redis 'OOM command not allowed when used memory > maxmemory' errors by setting proper eviction policies and RAM limits."
-category: "Systems & Servers"
-tags: ["Redis", "Databases", "Sysadmin"]
-readTime: "4 min"
-date: "2026-07-30"
+title: How to Fix Redis OOM Command Not Allowed Error (Maxmemory Policy Setup)
+description: >-
+  Resolve Redis 'OOM command not allowed when used memory > maxmemory' errors by
+  setting proper eviction policies and RAM limits.
+category: Systems & Servers
+tags:
+  - Redis
+  - Databases
+  - Sysadmin
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The `OOM command not allowed when used memory > 'maxmemory'` error occurs when a Redis instance reaches its configured memory ceiling (`maxmemory`) while operating under the default `noeviction` policy. Under these conditions, Redis rejects all write operations (`SET`, `HSET`, `LPUSH`, `SADD`) with an Out-of-Memory exception to protect existing data from unmanaged deletion.

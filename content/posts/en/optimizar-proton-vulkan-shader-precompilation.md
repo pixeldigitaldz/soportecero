@@ -1,10 +1,15 @@
 ---
-title: "How to Optimize Vulkan Shader Precompilation in Steam Proton"
-description: "Eliminate stuttering when playing DirectX games on Linux by optimizing and enabling Vulkan shader background processing."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Proton"]
-readTime: "4 min"
-date: "2026-08-08"
+title: How to Optimize Vulkan Shader Precompilation in Steam Proton
+description: >-
+  Eliminate stuttering when playing DirectX games on Linux by optimizing and
+  enabling Vulkan shader background processing.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Proton
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Sudden graphical frame drops (*stuttering*) and micro-freezes when playing modern games on Linux under Steam Proton are usually caused by active real-time Vulkan shader precompilation. The processor compiles new graphical models on the fly as you play, causing severe and instant drops in framerate.

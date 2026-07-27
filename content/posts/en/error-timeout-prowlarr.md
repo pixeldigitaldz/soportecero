@@ -1,10 +1,17 @@
 ---
-title: "How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers"
-description: "Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers."
-category: "Systems & Servers"
-tags: ["Prowlarr", "Radarr", "Docker"]
-readTime: "4 min"
-date: "2026-08-04"
+title: >-
+  How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with
+  Private Indexers
+description: >-
+  Definitive solution to connection errors and timeouts between automated media
+  managers and private torrent or Usenet indexers.
+category: Systems & Servers
+tags:
+  - Prowlarr
+  - Radarr
+  - Docker
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The `Timeout` or connection timed out error in tools like Prowlarr, Radarr, or Sonarr occurs when the managers attempt to sync or perform a search on a private indexer and the request does not receive a response within the time limit (usually 30 seconds).

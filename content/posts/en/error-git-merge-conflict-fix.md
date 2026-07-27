@@ -1,10 +1,15 @@
 ---
-title: "How to Resolve Merge Conflicts in Git Without Losing Code"
-description: "Learn how to safely identify, interpret, and resolve merge conflicts in Git branches using command-line commands."
-category: "Web & Code"
-tags: ["Git", "Web", "Programming"]
-readTime: "4 min"
-date: "2026-07-29"
+title: How to Resolve Merge Conflicts in Git Without Losing Code
+description: >-
+  Learn how to safely identify, interpret, and resolve merge conflicts in Git
+  branches using command-line commands.
+category: Web & Code
+tags:
+  - Git
+  - Web
+  - Programming
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 A merge conflict in Git occurs when two people modify the same lines of a file in different branches, or when one of them deletes a file that the other is trying to edit. Unable to automatically decide which changes to prioritize, Git halts the process and marks the conflicted files.

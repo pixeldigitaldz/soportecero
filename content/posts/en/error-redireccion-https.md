@@ -1,10 +1,15 @@
 ---
-title: "How to Solve the HTTP to HTTPS Infinite Redirect Loop on Your Own Domain"
-description: "Technical guide to resolve the infinite ERR_TOO_MANY_REDIRECTS loop when configuring SSL certificates on your web server, WordPress, or Cloudflare."
-category: "Web & Code"
-tags: ["SSL", "Cloudflare", "Servers"]
-readTime: "3 min"
-date: "2026-08-02"
+title: How to Solve the HTTP to HTTPS Infinite Redirect Loop on Your Own Domain
+description: >-
+  Technical guide to resolve the infinite ERR_TOO_MANY_REDIRECTS loop when
+  configuring SSL certificates on your web server, WordPress, or Cloudflare.
+category: Web & Code
+tags:
+  - SSL
+  - Cloudflare
+  - Servers
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 The `ERR_TOO_MANY_REDIRECTS` (Too many redirects) error occurs when your web server and an external service (such as Cloudflare) enter into a conflict of instructions: the server tells the browser to use HTTPS, but Cloudflare intercepts the request and returns it in HTTP, creating an infinite loop that prevents the page from loading.

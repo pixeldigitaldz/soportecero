@@ -1,10 +1,17 @@
 ---
-title: "How to Solve Insufficient Permission Errors When Installing Global Packages with NPM"
-description: "Avoid the dangerous use of sudo when installing Node.js dependencies by reconfiguring NPM to save packages in your user directory."
-category: "Web & Code"
-tags: ["NPM", "NodeJS", "Linux"]
-readTime: "4 min"
-date: "2026-08-01"
+title: >-
+  How to Solve Insufficient Permission Errors When Installing Global Packages
+  with NPM
+description: >-
+  Avoid the dangerous use of sudo when installing Node.js dependencies by
+  reconfiguring NPM to save packages in your user directory.
+category: Web & Code
+tags:
+  - NPM
+  - NodeJS
+  - Linux
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The insufficient permission error (`EACCES: permission denied`) when trying to install Node.js packages globally (with the `npm install -g` command) occurs because NPM's default directory (`/usr/local/lib/node_modules/`) is owned exclusively by the root user of your operating system's filesystem.

@@ -1,10 +1,17 @@
 ---
-title: "Cómo solucionar el bucle de redirecciones ERR_TOO_MANY_REDIRECTS en WordPress con Cloudflare"
-description: "Resuelve el bucle infinito de redirecciones HTTPS entre WordPress y Cloudflare cambiando el modo SSL/TLS a Full (Strict) y corrigiendo wp-config.php."
-category: "Web y Código"
-tags: ["WordPress", "Cloudflare", "SSL"]
-readTime: "4 min"
-date: "2026-07-28"
+title: >-
+  Cómo solucionar el bucle de redirecciones ERR_TOO_MANY_REDIRECTS en WordPress
+  con Cloudflare
+description: >-
+  Resuelve el bucle infinito de redirecciones HTTPS entre WordPress y Cloudflare
+  cambiando el modo SSL/TLS a Full (Strict) y corrigiendo wp-config.php.
+category: Web y Código
+tags:
+  - WordPress
+  - Cloudflare
+  - SSL
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 El mensaje de error `ERR_TOO_MANY_REDIRECTS` (o bucle infinito de redirecciones) ocurre en sitios WordPress alojados detrás de Cloudflare cuando el proxy de CDN y el servidor web de origen entran en una espiral de redirecciones HTTP/HTTPS contradictorias.

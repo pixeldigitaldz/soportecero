@@ -1,10 +1,15 @@
 ---
-title: "How to Fix 'Port Already in Use' Error and Kill Process on Linux & macOS"
-description: "Learn how to quickly identify and terminate processes locking TCP/UDP network ports (EADDRINUSE) in Linux and macOS systems."
-category: "Systems & Servers"
-tags: ["Linux", "Sysadmin", "Networking"]
-readTime: "3 min"
-date: "2026-07-29"
+title: How to Fix 'Port Already in Use' Error and Kill Process on Linux & macOS
+description: >-
+  Learn how to quickly identify and terminate processes locking TCP/UDP network
+  ports (EADDRINUSE) in Linux and macOS systems.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - Networking
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 The `EADDRINUSE: address already in use` error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.

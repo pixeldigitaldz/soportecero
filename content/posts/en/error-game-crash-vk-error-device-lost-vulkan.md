@@ -1,10 +1,15 @@
 ---
-title: "How to Fix VK_ERROR_DEVICE_LOST Crash in Vulkan Games under Proton"
-description: "A comprehensive technical guide to resolve the VK_ERROR_DEVICE_LOST GPU hang error in Vulkan, DXVK, and Steam Proton games."
-category: "Gaming Tech"
-tags: ["Vulkan", "Gaming", "Proton"]
-readTime: "4 min"
-date: "2026-07-28"
+title: How to Fix VK_ERROR_DEVICE_LOST Crash in Vulkan Games under Proton
+description: >-
+  A comprehensive technical guide to resolve the VK_ERROR_DEVICE_LOST GPU hang
+  error in Vulkan, DXVK, and Steam Proton games.
+category: Gaming Tech
+tags:
+  - Vulkan
+  - Gaming
+  - Proton
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The `VK_ERROR_DEVICE_LOST` (-4) error code in the Vulkan API indicates that the graphics processing unit (GPU) has stopped responding to the display driver or experienced a hardware context reset (*GPU Hang / TDR*). When running Vulkan or Proton-translated games on Linux and Windows, this issue immediately halts rendering and terminates the process.

@@ -1,10 +1,18 @@
 ---
-title: "Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima"
-description: "Guía técnica para solucionar el error OOM (Out Of Memory) en Redis configurando políticas de desalojo (maxmemory-policy) y optimizando el uso de RAM."
-category: "Sistemas y Servidores"
-tags: ["Redis", "Databases", "Sysadmin"]
-readTime: "4 min"
-date: "2026-07-30"
+title: >-
+  Cómo solucionar el error OOM command not allowed cuando Redis alcanza la
+  memoria máxima
+description: >-
+  Guía técnica para solucionar el error OOM (Out Of Memory) en Redis
+  configurando políticas de desalojo (maxmemory-policy) y optimizando el uso de
+  RAM.
+category: Sistemas y Servidores
+tags:
+  - Redis
+  - Databases
+  - Sysadmin
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 El error `OOM command not allowed when used memory > 'maxmemory'` ocurre en instancias de Redis cuando el uso de memoria RAM alcanza el límite estipulado en el parámetro `maxmemory` y la política de desalojo (*eviction policy*) por defecto está configurada como `noeviction`. Bajo estas condiciones, Redis rechaza cualquier comando que intente agregar o modificar datos (`SET`, `HSET`, `LPUSH`), respondiendo con una excepción de falta de memoria (*Out of Memory*).

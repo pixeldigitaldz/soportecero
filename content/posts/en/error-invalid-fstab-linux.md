@@ -1,10 +1,15 @@
 ---
-title: "Fix: Linux Boot Failure due to Incorrect Configuration in /etc/fstab"
-description: "Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file."
-category: "Systems & Servers"
-tags: ["Linux", "Sysadmin", "Terminal"]
-readTime: "5 min"
-date: "2026-07-30"
+title: 'Fix: Linux Boot Failure due to Incorrect Configuration in /etc/fstab'
+description: >-
+  Learn how to repair your Linux system if it fails to boot and gets stuck in
+  Emergency Mode due to an error in the fstab file.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - Terminal
+readTime: 5 min
+date: '2026-07-27'
 ---
 
 Modifying the `/etc/fstab` file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message `Welcome to emergency mode!`.

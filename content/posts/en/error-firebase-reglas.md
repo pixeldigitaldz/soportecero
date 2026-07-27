@@ -1,10 +1,16 @@
 ---
-title: "Fix: Firebase Error Denying Database Reads (Security Rules)"
-description: "Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security."
-category: "Web & Code"
-tags: ["Firebase", "Database", "Security"]
-readTime: "4 min"
-date: "2026-07-28"
+title: 'Fix: Firebase Error Denying Database Reads (Security Rules)'
+description: >-
+  Learn how to fix the annoying 'Firebase Error: [code=permission-denied]:
+  Missing or insufficient permissions' error in Firestore or Realtime Database
+  without compromising your security.
+category: Web & Code
+tags:
+  - Firebase
+  - Database
+  - Security
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The `Firebase Error: [code=permission-denied]` error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project's **Security Rules** do not grant the necessary permissions.

@@ -1,10 +1,15 @@
 ---
-title: "How to Free Disk Space in Proxmox VE by Cleaning Caches and LXC Templates"
-description: "Learn how to resolve out-of-disk-space errors in Proxmox VE by safely removing duplicated ISOs and orphaned backups."
-category: "Systems & Servers"
-tags: ["Proxmox", "Sysadmin", "Linux"]
-readTime: "4 min"
-date: "2026-08-10"
+title: How to Free Disk Space in Proxmox VE by Cleaning Caches and LXC Templates
+description: >-
+  Learn how to resolve out-of-disk-space errors in Proxmox VE by safely removing
+  duplicated ISOs and orphaned backups.
+category: Systems & Servers
+tags:
+  - Proxmox
+  - Sysadmin
+  - Linux
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The disk space exhausted error on Proxmox VE local storage (`No space left on device` or VM startup failures) occurs due to the accumulation of obsolete OS installation ISOs, unused LXC templates, old backup dumps, and bloated persistent system logs under the `/var/log` directory.

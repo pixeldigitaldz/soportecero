@@ -1,10 +1,15 @@
 ---
-title: "Cómo solucionar el error Hydration Mismatch en aplicaciones de Next.js"
-description: "Aprende a depurar el fallo de inconsistencia en la hidratación de Next.js al renderizar contenido dinámico basado en el estado del cliente."
-category: "Web y Código"
-tags: ["NextJS", "React", "Programación"]
-readTime: "4 min"
-date: "2026-08-15"
+title: Cómo solucionar el error Hydration Mismatch en aplicaciones de Next.js
+description: >-
+  Aprende a depurar el fallo de inconsistencia en la hidratación de Next.js al
+  renderizar contenido dinámico basado en el estado del cliente.
+category: Web y Código
+tags:
+  - NextJS
+  - React
+  - Programación
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 El error de hidratación en Next.js (`Error: Hydration failed because the initial UI does not match what was rendered on the server`) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto `window`) que cambian instantáneamente al cargarse en el navegador del cliente.

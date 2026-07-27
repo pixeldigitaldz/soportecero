@@ -1,10 +1,15 @@
 ---
-title: "How to Fix CORS 'No Access-Control-Allow-Origin' Error in Express and Node.js"
-description: "Learn how to resolve CORS policy blocks in your Express and Node.js backend by properly configuring HTTP headers and middleware."
-category: "Web & Code"
-tags: ["Nodejs", "Express", "CORS"]
-readTime: "4 min"
-date: "2026-07-30"
+title: How to Fix CORS 'No Access-Control-Allow-Origin' Error in Express and Node.js
+description: >-
+  Learn how to resolve CORS policy blocks in your Express and Node.js backend by
+  properly configuring HTTP headers and middleware.
+category: Web & Code
+tags:
+  - Nodejs
+  - Express
+  - CORS
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The browser error **"Access to XMLHttpRequest at '...' from origin '...' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource"** is one of the most common issues encountered when connecting a frontend application (React, Vue, Next.js) with a REST API running on Node.js and Express.

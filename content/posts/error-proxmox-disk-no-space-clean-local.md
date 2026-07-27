@@ -1,10 +1,15 @@
 ---
-title: "Cómo liberar espacio en disco en Proxmox VE limpiando cachés y plantillas LXC"
-description: "Aprende a solucionar el error de espacio de disco agotado en Proxmox VE eliminando ISOs duplicadas y copias de seguridad huérfanas de forma segura."
-category: "Sistemas y Servidores"
-tags: ["Proxmox", "Sysadmin", "Linux"]
-readTime: "4 min"
-date: "2026-08-10"
+title: Cómo liberar espacio en disco en Proxmox VE limpiando cachés y plantillas LXC
+description: >-
+  Aprende a solucionar el error de espacio de disco agotado en Proxmox VE
+  eliminando ISOs duplicadas y copias de seguridad huérfanas de forma segura.
+category: Sistemas y Servidores
+tags:
+  - Proxmox
+  - Sysadmin
+  - Linux
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 El error de espacio agotado en el almacenamiento local de Proxmox VE (`No space left on device` o fallos al arrancar máquinas virtuales) ocurre debido a la acumulación de imágenes ISO obsoletas, plantillas LXC no utilizadas, copias de seguridad de Dump antiguas y archivos de registro persistentes de contenedores corruptos en el directorio `/var/log`.

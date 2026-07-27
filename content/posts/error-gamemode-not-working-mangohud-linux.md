@@ -1,10 +1,15 @@
 ---
-title: "Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux"
-description: "Soluciona problemas de integración donde Feral GameMode o MangoHud no se activan ni muestran la superposición FPS en juegos de Linux o Steam."
-category: "Gaming Tech"
-tags: ["Linux", "Gaming", "Performance"]
-readTime: "4 min"
-date: "2026-07-29"
+title: Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux
+description: >-
+  Soluciona problemas de integración donde Feral GameMode o MangoHud no se
+  activan ni muestran la superposición FPS en juegos de Linux o Steam.
+category: Gaming Tech
+tags:
+  - Linux
+  - Gaming
+  - Performance
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Feral GameMode (`gamemoded`) y MangoHud son herramientas fundamentales en el ecosistema de juegos en Linux: la primera ajusta dinámicamente el gobernador de la CPU, prioridades de E/S y perfiles de energía de la GPU, mientras que la segunda renderiza una superposición (*overlay*) para monitorizar fotogramas (FPS), temperaturas y frecuencias. Sin embargo, inconsistencias en librerías de 32 bits, servicios DBus o variables de entorno pueden provocar que no se carguen en Steam o Lutris.

@@ -1,10 +1,16 @@
 ---
-title: "How to Repair a Corrupted SQLite Database in Sonarr or Radarr"
-description: "Learn how to recover your series and configurations by repairing the SQLite error 'database disk image is malformed' using command-line tools in Linux."
-category: "Systems & Servers"
-tags: ["Sonarr", "Radarr", "Database", "SQLite"]
-readTime: "4 min"
-date: "2026-08-03"
+title: How to Repair a Corrupted SQLite Database in Sonarr or Radarr
+description: >-
+  Learn how to recover your series and configurations by repairing the SQLite
+  error 'database disk image is malformed' using command-line tools in Linux.
+category: Systems & Servers
+tags:
+  - Sonarr
+  - Radarr
+  - Database
+  - SQLite
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 The corrupted database error in Sonarr or Radarr (identified in logs with the message `database disk image is malformed`) occurs when the internal SQLite file (`sonarr.db` or `radarr.db`) becomes corrupted due to interrupted writes, sudden server power outages, or file lock synchronization issues on network-attached storage systems.

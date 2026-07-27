@@ -1,10 +1,15 @@
 ---
-title: "Cómo solucionar el crasheo VK_ERROR_DEVICE_LOST en juegos Vulkan y Proton"
-description: "Guía técnica para corregir el error VK_ERROR_DEVICE_LOST en juegos que usan Vulkan, DXVK o Steam Proton en Linux y Windows."
-category: "Gaming Tech"
-tags: ["Vulkan", "Gaming", "Proton"]
-readTime: "4 min"
-date: "2026-07-28"
+title: Cómo solucionar el crasheo VK_ERROR_DEVICE_LOST en juegos Vulkan y Proton
+description: >-
+  Guía técnica para corregir el error VK_ERROR_DEVICE_LOST en juegos que usan
+  Vulkan, DXVK o Steam Proton en Linux y Windows.
+category: Gaming Tech
+tags:
+  - Vulkan
+  - Gaming
+  - Proton
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 El error `VK_ERROR_DEVICE_LOST` (-4) en la API gráfica Vulkan indica que la unidad de procesamiento gráfico (GPU) ha dejado de responder al controlador del sistema o ha experimentado un reinicio de contexto (*GPU Hang / TDR*). En entornos de juegos en Linux a través de Steam Proton o Wine, así como en ejecuciones nativas de Vulkan, este fallo detiene abruptamente el renderizado y cierra el juego.

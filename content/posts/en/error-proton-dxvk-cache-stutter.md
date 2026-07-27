@@ -1,10 +1,17 @@
 ---
-title: "How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache"
-description: "Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates."
-category: "Gaming Tech"
-tags: ["Linux", "Gaming", "DXVK"]
-readTime: "3 min"
-date: "2026-08-02"
+title: >-
+  How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing
+  DXVK Cache
+description: >-
+  Learn how to configure graphical translation environment variables to compile
+  shaders in the background and stabilize your frame rates.
+category: Gaming Tech
+tags:
+  - Linux
+  - Gaming
+  - DXVK
+readTime: 3 min
+date: '2026-07-27'
 ---
 
 The image stuttering (*stuttering*) when launching a Windows game on Linux using Proton occurs because DirectX graphics calls must be translated to the open **Vulkan** API in real time using a library called DXVK. Every time you enter a new area or an enemy casts an ability, the game freezes for a few milliseconds while compiling the shader for the first time.

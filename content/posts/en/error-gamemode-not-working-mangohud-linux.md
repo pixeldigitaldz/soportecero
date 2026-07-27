@@ -1,10 +1,15 @@
 ---
-title: "How to Fix GameMode and MangoHud Not Working in Linux Gaming"
-description: "Fix common issues where Feral GameMode or MangoHud fails to activate, display overlay stats, or boost performance in Linux gaming."
-category: "Gaming Tech"
-tags: ["Linux", "Gaming", "Performance"]
-readTime: "4 min"
-date: "2026-07-29"
+title: How to Fix GameMode and MangoHud Not Working in Linux Gaming
+description: >-
+  Fix common issues where Feral GameMode or MangoHud fails to activate, display
+  overlay stats, or boost performance in Linux gaming.
+category: Gaming Tech
+tags:
+  - Linux
+  - Gaming
+  - Performance
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Feral GameMode (`gamemoded`) and MangoHud are essential tools for gaming on Linux: GameMode dynamically tweaks CPU governors, I/O priorities, and GPU power states, while MangoHud provides a customizable Vulkan/OpenGL overlay to monitor FPS, frame times, temperatures, and hardware load. However, missing 32-bit libraries, systemd DBus session mismatches, or invalid launch syntax can cause either tool to fail silently.

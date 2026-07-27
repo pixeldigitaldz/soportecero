@@ -335,6 +335,7 @@ function build() {
   // 3. Compile static pages with Hreflang support
   compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contacto.html', 'es');
   compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'nosotros.html'), path.join(DIST_DIR, 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'es');
   
   fs.mkdirSync(path.join(DIST_DIR, 'legal'), { recursive: true });
   compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'es');
@@ -345,6 +346,7 @@ function build() {
   fs.mkdirSync(path.join(DIST_DIR, 'en', 'legal'), { recursive: true });
   compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contacto.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'nosotros.html'), path.join(DIST_DIR, 'en', 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html', 'en');
@@ -774,6 +776,24 @@ function build() {
     <lastmod>${todayStr}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/nosotros.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/nosotros.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://soportecero.com/servicios.html</loc>

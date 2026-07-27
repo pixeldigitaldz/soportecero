@@ -1,10 +1,15 @@
 ---
-title: "How to reduce input lag for competitive gaming in Linux"
-description: "Optimize latency and the response of your peripherals by configuring the Wayland or X11 graphics server and system power profiles."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Performance"]
-readTime: "4 min"
-date: "2026-08-06"
+title: How to reduce input lag for competitive gaming in Linux
+description: >-
+  Optimize latency and the response of your peripherals by configuring the
+  Wayland or X11 graphics server and system power profiles.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Performance
+readTime: 4 min
+date: '2026-07-27'
 ---
 
 Excessive input delay or *input lag* when playing competitive titles on Linux occurs due to the accumulation of buffers in the graphics composition server (especially in Wayland with forced vertical synchronization) and due to the default active power saving configuration that suspends or slows down the response frequency of USB ports.

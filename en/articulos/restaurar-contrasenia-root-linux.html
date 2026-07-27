@@ -168,7 +168,7 @@
         <div class="post-article">
           
         <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="diag-heading">
+          <h3 id="quick-diagnostics">
             <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
             </svg>
@@ -180,10 +180,12 @@
     <nav class="toc-container" aria-label="Table of contents">
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
-            <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Paso 1: Acceder e interceptar el cargador de arranque GRUB</a></li>
         <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
         <li class="toc-subitem"><a href="#paso-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Paso 3: Montar el disco en modo escritura y cambiar la clave</a></li>
+        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
       </ol>
     </nav>
     
@@ -233,7 +235,7 @@ exec /sbin/init
 </code></pre>
     </div>
     
-<h2>🛡️ Consejo de Prevención</h2>
+<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
 <p>Recommended security practices:</p>
 <ul>
 <li>The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system&#39;s bootloader by setting an access password for the GRUB console (<code>grub-mkpasswd-pbkdf2</code>), which will prevent unauthorized users from editing kernel parameters without prior authentication.</li>

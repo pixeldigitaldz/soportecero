@@ -242,14 +242,6 @@ function postProcessHtml(rawHtml, lang = 'es') {
       .replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '') // remove emojis
       .trim();
 
-    if (cleanText.toLowerCase().includes('diagnostico') || 
-        cleanText.toLowerCase().includes('diagnostics') || 
-        cleanText.toLowerCase().includes('prevencion') || 
-        cleanText.toLowerCase().includes('prevention') || 
-        cleanText.toLowerCase().includes('prevención')) {
-      return match;
-    }
-
     const id = slugify(cleanText) || `seccion-${headingCount++}`;
     tocItems.push({
       tag,

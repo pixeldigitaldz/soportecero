@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>How to Fix Unhandled Promise Rejection Error in React and Async/Await - SoporteCero</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A step-by-step technical guide to identify and fix Unhandled Promise Rejection errors in React applications using async/await and fetch.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-react-unhandled-rejection-async-await.html">
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-react-unhandled-rejection-async-await.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-react-unhandled-rejection-async-await.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-react-unhandled-rejection-async-await.html" />
+  
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:title" content="How to Fix Unhandled Promise Rejection Error in React and Async/Await - SoporteCero">
+  <meta property="og:description" content="A step-by-step technical guide to identify and fix Unhandled Promise Rejection errors in React applications using async/await and fetch.">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-react-unhandled-rejection-async-await.html">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Fix Unhandled Promise Rejection Error in React and Async/Await - SoporteCero">
+  <meta name="twitter:description" content="A step-by-step technical guide to identify and fix Unhandled Promise Rejection errors in React applications using async/await and fetch.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Theme Init Script (Prevent Flashing) -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How to Fix Unhandled Promise Rejection Error in React and Async/Await",
+  "description": "A step-by-step technical guide to identify and fix Unhandled Promise Rejection errors in React applications using async/await and fetch.",
+  "category": "Web & Code",
+  "datePublished": "2026-08-03",
+  "dateModified": "2026-08-03",
+  "author": {
+    "@type": "Organization",
+    "name": "SoporteCero"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-react-unhandled-rejection-async-await.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Fix Unhandled Promise Rejection Error in React and Async/Await",
+  "description": "A step-by-step technical guide to identify and fix Unhandled Promise Rejection errors in React applications using async/await and fetch.",
+  "step": []
+}
+  </script>
+    
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="../?cat=sistemas">Systems & Servers</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web & Code</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-react-unhandled-rejection-async-await.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
+        <span style="color: var(--text-secondary);">How to Fix Unhandled Promise Rejection Error in React and Async/Await</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Web & Code</span>
+        <h1 id="post-title">How to Fix Unhandled Promise Rejection Error in React and Async/Await</h1>
+        <div class="post-meta">
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Read Time: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Updated: 2026-08-03
+          </span>
+        </div>
+      </header>
+
+      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
+      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6956525438386645"
+             data-ad-slot="4943572587"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+        <section class="diagnostic-box" aria-labelledby="diag-heading">
+          <h3 id="quick-diagnostics">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            Quick Diagnostics
+          </h3>
+          <p>The <strong>&quot;Unhandled Promise Rejection&quot;</strong> (or <code>Uncaught (in promise)</code>) error occurs in React and JavaScript applications whenever a Promise is rejected—due to a network glitch, bad HTTP response, or runtime exception—without an attached <code>.catch()</code> block or an enclosing <code>try...catch</code> statement. In React apps, unhandled rejections can cause silent UI freezes, stale state, or component crashes in production.</p>
+        </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-subitem"><a href="#step-1-wrap-asyncawait-calls-in-trycatchfinally-blocks">Step 1: Wrap async/await Calls in try...catch...finally Blocks</a></li>
+        <li class="toc-subitem"><a href="#step-2-handle-promises-properly-inside-useeffect">Step 2: Handle Promises Properly Inside useEffect</a></li>
+        <li class="toc-subitem"><a href="#step-3-register-a-global-fallback-for-unhandled-rejections">Step 3: Register a Global Fallback for Unhandled Rejections</a></li>
+      </ol>
+    </nav>
+    
+        <h2 id="quick-diagnostics">🔍 Quick Diagnostics</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Symptom</th>
+<th align="left">Root Cause</th>
+<th align="left">Solution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Uncaught (in promise) Error</code> in browser developer console during form submit or API fetch</td>
+<td align="left">Async function executed without wrapping <code>await</code> calls in a <code>try...catch</code> block</td>
+<td align="left">Wrap <code>await</code> expressions inside <code>try...catch</code> blocks and manage error state</td>
+</tr>
+<tr>
+<td align="left">Unhandled rejection triggered inside a <code>useEffect</code> hook</td>
+<td align="left">Promise launched inside an event handler or effect missing proper error handling</td>
+<td align="left">Create an internal <code>async</code> function inside <code>useEffect</code> and handle errors explicitly</td>
+</tr>
+<tr>
+<td align="left">HTTP 4xx/5xx API errors are not caught as promise rejections</td>
+<td align="left">The native <code>fetch()</code> API does not reject promises on HTTP error status codes (e.g., 404 or 500)</td>
+<td align="left">Check <code>response.ok</code> before parsing JSON and throw an <code>Error</code> manually if false</td>
+</tr>
+</tbody></table>
+<h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+<h3 id="step-1-wrap-asyncawait-calls-in-trycatchfinally-blocks">Step 1: Wrap <code>async/await</code> Calls in <code>try...catch...finally</code> Blocks</h3>
+<p>The primary cause of unhandled rejections is executing asynchronous logic without catching potential failures. Refactor your API handlers:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>// ❌ INCORRECT: If network fails or res.json() throws, the promise rejects unhandled
+const handleFetchData = async () =&gt; {
+  const res = await fetch(&#39;/api/user-data&#39;);
+  const data = await res.json();
+  setUser(data);
+};
+
+// ✅ CORRECT: Clean error interception and state management
+const handleFetchData = async () =&gt; {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch(&#39;/api/user-data&#39;);
+    if (!res.ok) {
+      throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    setUser(data);
+  } catch (err) {
+    console.error(&#39;Failed to fetch user data:&#39;, err.message);
+    setError(err.message || &#39;Connection error&#39;);
+  } finally {
+    setLoading(false);
+  }
+};
+</code></pre>
+    </div>
+    
+<h3 id="step-2-handle-promises-properly-inside-useeffect">Step 2: Handle Promises Properly Inside <code>useEffect</code></h3>
+<p>In React, callback functions passed to <code>useEffect</code> cannot be directly marked as <code>async</code> because effects must return clean-up functions or <code>undefined</code>. Declare an internal async function:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JSX</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>import React, { useState, useEffect } from &#39;react&#39;;
+
+export const UserProfile = ({ userId }) =&gt; {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() =&gt; {
+    let isMounted = true; // Prevents state updates on unmounted components
+
+    const fetchUserProfile = async () =&gt; {
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        if (!response.ok) throw new Error(&#39;User profile not found&#39;);
+        const result = await response.json();
+        
+        if (isMounted) {
+          setUser(result);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message);
+        }
+      }
+    };
+
+    fetchUserProfile();
+
+    return () =&gt; {
+      isMounted = false;
+    };
+  }, [userId]);
+
+  if (error) return &lt;div className=&quot;error-banner&quot;&gt;Error: {error}&lt;/div&gt;;
+  if (!user) return &lt;div&gt;Loading...&lt;/div&gt;;
+
+  return &lt;div&gt;{user.name}&lt;/div&gt;;
+};
+</code></pre>
+    </div>
+    
+<h3 id="step-3-register-a-global-fallback-for-unhandled-rejections">Step 3: Register a Global Fallback for Unhandled Rejections</h3>
+<p>To prevent uncaught promise errors from polluting your application logs unnoticed in production, attach a fallback listener to the <code>window</code> object:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>// In index.js / main.jsx / App.jsx
+if (typeof window !== &#39;undefined&#39;) {
+  window.addEventListener(&#39;unhandledrejection&#39;, (event) =&gt; {
+    console.warn(`[Unhandled Rejection Captured]: ${event.reason}`);
+    // Optional: Log error details to Sentry or monitoring service
+    // event.preventDefault(); // Suppresses default browser console warning if needed
+  });
+}
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Remember <code>fetch()</code> Behavior</strong>: Native <code>fetch()</code> only rejects on network failures (e.g., DNS lookup failure, connection refused), not on HTTP status 404 or 500. Always check <code>response.ok</code>.</li>
+<li><strong>Consider Axios for Auto-Rejection</strong>: Libraries like <code>axios</code> automatically reject promises for any HTTP response outside the 2xx status range.</li>
+<li><strong>Implement React Error Boundaries</strong>: Pair local async error handling with top-level React Error Boundaries to display graceful fallback UI components when unexpected errors occur.</li>
+            </ul>
+          </div>
+
+          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
+          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6956525438386645"
+                 data-ad-slot="4943572587"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: How to Fix Python SSLCertVerificationError CERTIFICATE_VERIFY_FAILED -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssl-certificate-verify-failed-python-requests.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Python SSLCertVerificationError CERTIFICATE_VERIFY_FAILED</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Python</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Fix npm ERR! code ENOENT 'no such file or directory' -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-npm-err-code-enoent-file-not-found.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix npm ERR! code ENOENT 'no such file or directory'</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nodejs</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-conexion-prowlarr-qbittorrent-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Prowlarr</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../../">Home</a></li>
+        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+        <li><a href="../contacto.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

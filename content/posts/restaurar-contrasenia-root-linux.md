@@ -1,45 +1,49 @@
 ---
-title: "Cómo restablecer la contraseña de usuario Root olvidada en sistemas Linux"
-description: "Guía paso a paso para recuperar el acceso administrativo root a tu servidor físico o virtual modificando el cargador de arranque GRUB."
+title: "[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)"
+description: "¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB."
 category: "Sistemas y Servidores"
 tags: ["Linux", "Sysadmin", "Seguridad"]
 readTime: "4 min"
 date: "2026-06-27"
 ---
 
-La pérdida de la contraseña de usuario administrador root en un servidor Linux físico o máquina virtual bloquea el acceso total a las configuraciones del sistema. Afortunadamente, si dispones de acceso físico o acceso a la consola del emulador de virtualización (KVM/IPMI), puedes saltar la autenticación editando los parámetros del núcleo en GRUB.
+Perder la **contraseña de root en Linux** (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de **GRUB**.
 
-## 🚀 Cómo solucionar el error paso a paso
+> **Resumen de la Solución (3 Pasos):**
+> 1. En el menú de **GRUB**, presiona `e`.
+> 2. Añade `init=/bin/bash` al final de la línea `linux`. Presiona `Ctrl + X`.
+> 3. Ejecuta: `mount -o remount,rw /` y luego `passwd root`.
 
-### Paso 1: Acceder e interceptar el cargador de arranque GRUB
-1. Reinicia el servidor.
-2. Al aparecer la pantalla del menú de selección de sistemas operativos de **GRUB**, pulsa inmediatamente la tecla `e` de tu teclado para editar las variables de arranque del núcleo seleccionado.
+## 🚀 Cómo restablecer la contraseña de root paso a paso
+
+### Paso 1: Interceptar el cargador de arranque GRUB
+1. Reinicia tu servidor o equipo con Linux.
+2. Al aparecer la pantalla del menú de selección de sistemas de **GRUB**, pulsa de inmediato la tecla `e` de tu teclado para editar las opciones del kernel.
 
 ### Paso 2: Modificar los parámetros del kernel
-1. Desplázate hacia abajo utilizando las flechas de dirección hasta ubicar la línea que comienza con la palabra `linux` o `linux16`.
-2. Ve al final de dicha línea, elimina las palabras de arranque silencioso (como `rhgb quiet`) y añade el siguiente comando para forzar al núcleo a abrir un intérprete de comandos seguro en lugar de la interfaz de inicio de sesión:
+1. Desplázate con las flechas de dirección hasta ubicar la línea que comienza con la palabra `linux` o `linux16`.
+2. Ve al final de la línea, elimina parámetros como `rhgb quiet` y añade exactamente:
 ```plaintext
 init=/bin/bash
 ```
-3. Presiona la combinación de teclas `Ctrl + X` o `F10` para arrancar el servidor con esta nueva configuración temporal.
+3. Presiona `Ctrl + X` o `F10` para arrancar el sistema con esta consola temporal de superusuario.
 
-### Paso 3: Montar el disco en modo escritura y cambiar la clave
-El sistema iniciará directamente como superusuario sin pedir clave, pero con el disco configurado en modo solo lectura. Habilita la escritura para guardar los cambios:
+### Paso 3: Montar la partición en modo lectura-escritura y cambiar la contraseña de root
+El sistema iniciará en una terminal sin pedir contraseña. Ejecuta los siguientes comandos para cambiar la clave:
 ```bash
-# Remontar la partición raíz con privilegios de escritura
+# Remontar la partición raíz con permisos de escritura
 mount -o remount,rw /
 
-# Modificar la clave del usuario administrador root
+# Cambiar la contraseña del usuario root
 passwd root
 
-# Forzar el reetiquetado de seguridad si usas SELinux (esencial en RHEL/Fedora/Rocky)
+# Si usas SELinux (RHEL, Fedora, AlmaLinux, Rocky Linux), fuerza el reetiquetado:
 touch /.autorelabel
 
-# Reiniciar el equipo
+# Reiniciar el servidor normalmente
 exec /sbin/init
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Consejo de Prevención y Seguridad
+- Si utilizas servidores en la nube o en producción local, protege la consola de GRUB asignando una contraseña en el gestor de arranque (`grub-mkpasswd-pbkdf2`) para evitar que personas con acceso físico modifiquen los parámetros del kernel sin autorización.
 
-Prácticas de seguridad recomendadas:
-- La posibilidad de resetear contraseñas de esta forma es una característica del kernel, pero representa un gran riesgo de seguridad si un atacante tiene acceso físico a tus servidores locales. Protege el cargador de arranque de tu sistema de producción estableciendo una contraseña de acceso a la consola de GRUB (`grub-mkpasswd-pbkdf2`), lo que evitará que usuarios no autorizados editen los parámetros del núcleo sin autenticación previa.

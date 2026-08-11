@@ -104,11 +104,41 @@ function postProcessHtml(rawHtml, lang = 'es') {
   const diagRegex = isEn 
     ? /<h2[^>]*>(?:Quick Diagnostics|Diagnostics|Diagnostic)<\/h2>([\s\S]*?)(?=<h2)/i 
     : /<h2[^>]*>(?:El Diagnóstico Rápido|Diagnóstico del Problema|Diagnóstico)<\/h2>([\s\S]*?)(?=<h2)/i;
-  
+
+  const transformTableToCards = (htmlStr) => {
+    return htmlStr.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableInner) => {
+      let cardsHtml = '<div class="diagnostic-cards">';
+      const theadMatch = tableInner.match(/<thead>([\s\S]*?)<\/thead>/i);
+      let headers = [];
+      if (theadMatch) {
+        headers = [...theadMatch[1].matchAll(/<th>([\s\S]*?)<\/th>/gi)].map(m => m[1].trim());
+      }
+      const tbodyMatch = tableInner.match(/<tbody>([\s\S]*?)<\/tbody>/i);
+      const rowsContext = tbodyMatch ? tbodyMatch[1] : tableInner.replace(/<thead>[\s\S]*?<\/thead>/i, '');
+      const rows = [...rowsContext.matchAll(/<tr>([\s\S]*?)<\/tr>/gi)];
+      
+      for (const row of rows) {
+        const cells = [...row[1].matchAll(/<td>([\s\S]*?)<\/td>/gi)].map(m => m[1].trim());
+        cardsHtml += '<div class="diag-card">';
+        for (let i = 0; i < cells.length; i++) {
+          const label = headers[i] || '';
+          cardsHtml += `
+          <div class="diag-row">
+            <div class="diag-label">${label}</div>
+            <div class="diag-value">${cells[i]}</div>
+          </div>`;
+        }
+        cardsHtml += '</div>';
+      }
+      cardsHtml += '</div>';
+      return cardsHtml;
+    });
+  };
+
   const diagMatch = html.match(diagRegex);
   if (diagMatch) {
     const diagContent = diagMatch[1];
-    let formattedDiag = diagContent.replace(/<table>/g, '<table class="diagnostic-table">');
+    let formattedDiag = transformTableToCards(diagContent);
     diagBoxHtml = `
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="diag-heading">
@@ -127,7 +157,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
       const firstH2Index = html.search(/<h2/i);
       const diagContent = html.substring(0, firstH2Index).trim();
       if (diagContent) {
-        let formattedDiag = diagContent.replace(/<table>/g, '<table class="diagnostic-table">');
+        let formattedDiag = transformTableToCards(diagContent);
         diagBoxHtml = `
         <section class="diagnostic-box" aria-labelledby="diag-heading">
           <h3 id="diag-heading">

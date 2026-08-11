@@ -594,50 +594,80 @@ nav a:hover::after, nav a.active::after {
   font-weight: 700;
 }
 
-.diagnostic-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+.diagnostic-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   margin-top: 1rem;
+}
+
+.diag-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+}
+
+.diag-row {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+@media (min-width: 640px) {
+  .diag-row {
+    flex-direction: row;
+  }
+}
+
+.diag-row:last-child {
+  border-bottom: none;
+}
+
+.diag-label {
+  background-color: rgba(30, 41, 59, 0.5);
+  font-weight: 700;
+  color: var(--text-primary);
+  width: 100%;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.2);
+}
+
+@media (min-width: 640px) {
+  .diag-label {
+    width: 160px;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+  }
+}
+
+.diag-value {
+  padding: 1rem 1.25rem;
+  flex: 1;
+  color: var(--text-primary);
+  line-height: 1.6;
   font-size: 0.95rem;
 }
 
-.diagnostic-table th {
-  text-align: left;
-  padding: 1rem 1.25rem;
-  background-color: rgba(30, 41, 59, 0.5);
-  color: var(--text-primary);
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 2px solid var(--border-color);
-}
-
-.diagnostic-table th:first-child {
-  border-top-left-radius: 8px;
-}
-
-.diagnostic-table th:last-child {
-  border-top-right-radius: 8px;
-}
-
-.diagnostic-table td {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
-  vertical-align: top;
-  line-height: 1.6;
-  color: var(--text-primary);
-}
-
-.diagnostic-table td:first-child {
-  font-weight: 600;
-  color: var(--text-primary);
-  width: 32%;
-}
-
-.diagnostic-table tr:last-child td {
-  border-bottom: none;
+.diag-value code {
+  background-color: var(--inline-code-bg);
+  border: 1px solid var(--inline-code-border);
+  border-radius: 5px;
+  padding: 0.15rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--accent-color);
+  word-break: break-word;
 }
 
 .diagnostic-table code {

@@ -182,19 +182,38 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-identificar-el-entorno-de-base-de-datos">Paso 1: Identificar el entorno de base de datos</a></li>
-        <li class="toc-subitem"><a href="#paso-2-configurar-reglas-seguras-para-firestore">Paso 2: Configurar reglas seguras (Para Firestore)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-publicar-cambios">Paso 3: Publicar cambios</a></li>
+        <li class="toc-item"><a href="#diagnostico-rapido">Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
       </ol>
     </nav>
     
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-identificar-el-entorno-de-base-de-datos">Paso 1: Identificar el entorno de base de datos</h3>
-<p>Entra a tu consola de Firebase, selecciona tu proyecto y dirígete al apartado de <strong>Cloud Firestore</strong> o <strong>Realtime Database</strong> en el menú izquierdo, luego haz clic en la pestaña <strong>Rules (Reglas)</strong>.</p>
-<h3 id="paso-2-configurar-reglas-seguras-para-firestore">Paso 2: Configurar reglas seguras (Para Firestore)</h3>
-<p>Si tu base de datos estaba en modo de prueba, verás una regla que bloqueaba el acceso tras una fecha específica. <strong>Jamás uses reglas que permitan la lectura y escritura pública global (<code>allow read, write: if true;</code>) en producción</strong>, ya que cualquiera podría borrar tu base de datos.</p>
-<p>Implementa una estructura condicional que exija que el usuario esté autenticado para poder modificar datos:</p>
+        <h2 id="diagnostico-rapido">Diagnóstico Rápido</h2>
+<table>
+<thead>
+<tr>
+<th>Causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Modo de Prueba Expirado</strong></td>
+<td>Actualizar la fecha de expiración o configurar reglas de producción</td>
+</tr>
+<tr>
+<td><strong>Usuario no autenticado (<code>request.auth == null</code>)</strong></td>
+<td>Obligar inicio de sesión o permitir lectura pública (<code>allow read: if true;</code>)</td>
+</tr>
+<tr>
+<td><strong>Reglas ausentes o por defecto</strong></td>
+<td>Escribir reglas específicas para la colección que intentas consultar</td>
+</tr>
+</tbody></table>
+<h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+<p><strong>Identificar el entorno de base de datos</strong>
+Entra a tu consola de Firebase, selecciona tu proyecto y dirígete al apartado de <strong>Cloud Firestore</strong> o <strong>Realtime Database</strong> en el menú izquierdo, luego haz clic en la pestaña <strong>Rules (Reglas)</strong>.</p>
+<p><strong>Configurar reglas seguras (Para Firestore)</strong>
+Si tu base de datos estaba en modo de prueba, verás una regla que bloqueaba el acceso tras una fecha específica. Jamás uses reglas que permitan la lectura y escritura pública global (<code>allow read, write: if true;</code>) en producción, ya que cualquiera podría borrar tu base de datos.
+Implementa una estructura condicional que exija que el usuario esté autenticado para poder modificar datos:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -204,13 +223,13 @@
       <pre class="formatted-pre"><code>rules_version = &#39;2&#39;;
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Permitir a cualquier usuario web leer el catálogo de productos o contenido público
+    // Permitir a cualquier usuario leer contenido público
     match /public_content/{document} {
       allow read: if true;
-      allow write: if request.auth != null; // Solo usuarios registrados escriben
+      allow write: if request.auth != null;
     }
     
-    // Restringir colecciones privadas de usuarios (ej. carritos, pedidos, datos personales)
+    // Restringir colecciones privadas de usuarios
     match /users/{userId} {
       allow read, write: if request.auth != null &amp;&amp; request.auth.uid == userId;
     }
@@ -219,8 +238,8 @@ service cloud.firestore {
 </code></pre>
     </div>
     
-<h3 id="paso-3-publicar-cambios">Paso 3: Publicar cambios</h3>
-<p>Haz clic en el botón Publish (Publicar) en la consola de Firebase. Los cambios en las reglas toman entre 1 y 2 minutos en propagarse globalmente. Reinicia tu aplicación cliente y los errores de permisos desaparecerán.</p>
+<p><strong>Publicar cambios</strong>
+Haz clic en el botón Publish (Publicar) en la consola de Firebase. Los cambios en las reglas toman entre 1 y 2 minutos en propagarse globalmente. Reinicia tu aplicación cliente y los errores de permisos desaparecerán.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -235,8 +254,8 @@ service cloud.firestore {
               Prácticas de seguridad recomendadas:
             </p>
             <ul class="prevention-list">
-              <li>Utiliza el simulador de reglas (Rules Playground) integrado en la consola de Firebase antes de lanzar cambios a producción.</li>
-<li>Monitorea la pestaña de &quot;Usage&quot; (Uso) para detectar picos anormales de lecturas denegadas, lo cual podría indicar un bug en tu código cliente o un intento de escaneo externo.</li>
+              <li><strong>Simulador de Reglas:</strong> Utiliza el simulador de reglas (Rules Playground) integrado en la consola de Firebase antes de lanzar cambios a producción.</li>
+<li><strong>Monitoreo:</strong> Monitorea la pestaña de &quot;Usage&quot; (Uso) para detectar picos anormales de lecturas denegadas, lo cual podría indicar un bug en tu código cliente o un intento de acceso no autorizado.</li>
             </ul>
           </div>
 

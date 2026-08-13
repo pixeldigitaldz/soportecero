@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-26"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Stuttering caused by VKD3D DirectX 12 shader compilation** | Use updated Proton-GE and set `VKD3D_CONFIG=single_queue %command%` |
+| **Default shader cache memory limit reached** | Expand Vulkan shader cache size using `__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1` |
+
+
 Micro-**stuttering and sudden FPS drops** playing Elden Ring on Linux (CachyOS, Arch, Ubuntu, Fedora) or Steam Deck stem from DirectX 12 to Vulkan translation pipeline compilation (**VKD3D-Proton**) and VRAM buffer allocation bottlenecks.
 
 > **Quick Solution (1 Minute):**

@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **La clave pública de la máquina remota cambió en el archivo known_hosts** | Eliminar la entrada antigua del host: `ssh-keygen -R IP_O_HOST` |
+| **Ataque Man-in-the-Middle o reinstalación del sistema operativo del servidor** | Confirmar el nuevo huella digital de la clave e ingresar nuevamente mediante SSH |
+
+
 El error **`Host key verification failed`** (acompañado de la advertencia en rojo `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local `~/.ssh/known_hosts`.
 
 Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.

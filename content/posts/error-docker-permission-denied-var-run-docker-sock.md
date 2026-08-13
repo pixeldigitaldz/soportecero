@@ -9,11 +9,11 @@ date: "2026-07-26"
 
 El mensaje `permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock` aparece cuando intentas ejecutar comandos de Docker sin privilegios de superusuario (`sudo`) y tu cuenta de Linux no pertenece al grupo con acceso al socket UNIX del demonio de Docker.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| **Permission Denied** al conectar con el socket (`unix:///var/run/docker.sock`) | El usuario actual no pertenece al grupo de sistema `docker` | Agregar el usuario al grupo `docker` con `usermod` y refrescar la sesión |
+| Causa | Solución |
+|---|---|
+| **Permission Denied al conectar con el socket (`unix:///var/run/docker.sock`)**: El usuario actual no pertenece al grupo de sistema `docker` | Agregar el usuario al grupo `docker` con `usermod` y refrescar la sesión |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

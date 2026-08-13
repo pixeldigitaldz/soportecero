@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong><code>error: signature from &quot;...&quot; is unknown trust</code> or <code>invalid or corrupted package</code> during pacman operations</strong>: Developer PGP keys have changed or local keyring database hasn&#39;t been updated in months</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Isolate and update <code>archlinux-keyring</code> first, then reset the local GPG trust store</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Pacman fails to download repository <code>.sig</code> files or reports invalid timestamps</strong>: System clock is out of sync or pacman mirrorlist is outdated</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable NTP time synchronization using <code>systemd-timesyncd</code> and refresh mirror rankings</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Running <code>pacman -Sy archlinux-keyring</code> also fails due to broken PGP signatures</strong>: The local PGP key database (<code>/etc/pacman.d/gnupg</code>) is corrupted or damaged</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Purge local GPG key directory, re-initialize pacman keys, and populate master keys</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

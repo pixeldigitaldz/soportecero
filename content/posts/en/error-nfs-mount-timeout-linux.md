@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **NFS port (2049) or rpcbind blocked by firewall on target server** | Allow NFS traffic in firewall: `ufw allow 2049/tcp` |
+| **NFS server service inactive or export unlisted in /etc/exports** | Verify exported path with `showmount -e SERVER_IP` |
+
+
 When you configure network shared folders using the NFS (Network File System) protocol to move movies or backups between your main computer and your home server, the `/etc/fstab` file attempts to connect to the external server during system boot. If the storage server is offline or there is no local network connection, Linux freezes the boot screen for a strict timeout of **90 seconds** before allowing you to log in.
 
 ## 🚀 Step-by-Step Solution

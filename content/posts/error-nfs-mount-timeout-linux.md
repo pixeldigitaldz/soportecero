@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Puerto NFS (2049) o rpcbind bloqueado por firewall en el servidor de destino** | Permitir el tráfico de NFS en el firewall: `ufw allow 2049/tcp` |
+| **Servicio NFS server no activo o exportación no declarada en /etc/exports** | Verificar la ruta exportada con `showmount -e IP_SERVIDOR` |
+
+
 Cuando configuras carpetas compartidas por red mediante el protocolo NFS (Network File System) para mover películas o respaldos entre tu computadora principal y tu servidor casero, el archivo `/etc/fstab` intenta conectarse al servidor externo durante el arranque del sistema. Si el servidor de almacenamiento está apagado o no hay señal de red local, Linux congela la pantalla de carga por un tiempo límite estricto de **90 segundos** antes de permitirte iniciar sesión.
 
 ## 🚀 Cómo solucionar el error paso a paso

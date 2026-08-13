@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,7 +186,33 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
       </ol>
     </nav>
     
-      <p>The <strong><code>502 Bad Gateway</code></strong> error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at <code>/var/log/nginx/error.log</code> usually states:
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>php-fpm daemon service stopped or not started</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Start PHP daemon: <code>sudo systemctl start php-fpm</code> (or <code>php8.2-fpm</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Insufficient permissions on UNIX socket /var/run/php/php-fpm.sock</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Change socket owner to <code>www-data:www-data</code> in <code>/etc/php/fpm/pool.d/www.conf</code></div>
+          </div></div></div>
+<p>The <strong><code>502 Bad Gateway</code></strong> error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at <code>/var/log/nginx/error.log</code> usually states:
 <code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> or <code>Connection refused</code>.</p>
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
@@ -203,8 +222,9 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
 <li>Ensure your Nginx <code>fastcgi_pass</code> directive matches your exact installed PHP socket version.</li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+
+    </section>
+    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-check-php-fpm-daemon-status">Step 1: Check PHP-FPM Daemon Status</h3>
 <p>Verify that PHP-FPM is active and running:</p>
 

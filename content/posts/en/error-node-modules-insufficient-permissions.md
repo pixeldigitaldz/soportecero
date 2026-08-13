@@ -14,6 +14,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **node_modules directory owned by root due to prior sudo usage** | Reset directory ownership: `sudo chown -R $USER:$USER node_modules` |
+| **NPM cache directory restricted permissions** | Clean and repair global cache: `npm cache clean --force` |
+
+
 The insufficient permission error (`EACCES: permission denied`) when trying to install Node.js packages globally (with the `npm install -g` command) occurs because NPM's default directory (`/usr/local/lib/node_modules/`) is owned exclusively by the root user of your operating system's filesystem.
 
 ## 🚀 Cómo solucionar el error paso a paso

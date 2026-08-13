@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servidores DNS del sistema o proveedor desactualizados o inaccesibles** | Cambiar los DNS a los de Cloudflare (1.1.1.1) o Google (8.8.8.8) |
+| **Caché DNS del sistema operativo local corrupta** | Vaciar la caché de DNS: `resolvectl flush-caches` (Linux) o `ipconfig /flushdns` |
+
+
 El error de resolución de nombre `DNS_PROBE_FINISHED_NXDOMAIN` ocurre cuando el servidor DNS asignado por tu red local o proveedor de internet no puede encontrar la dirección IP asociada al dominio que intentas abrir, respondiendo que el dominio solicitado no existe.
 
 ## 🚀 Cómo solucionar el error paso a paso

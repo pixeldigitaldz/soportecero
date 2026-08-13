@@ -218,7 +218,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El ratón hace clic en una posición desplazada respecto a la ubicación del puntero visible en pantalla</strong>: Xwayland aplica un escalado por software a la ventana del juego mientras Wine lee las coordenadas del ratón sin escalar</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Desactivar el escalado de Xwayland por el sistema o habilitar la captura nativa de ratón en Proton</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>La ventana del juego se ve borrosa a resolución nativa cuando el escalado de pantalla no es 100%</strong>: El compositor fuerza a Xwayland a renderizar a menor resolución y escalar el mapa de píxeles</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar <code>WAYLAND_DISPLAY</code> y utilizar el nuevo driver nativo Wayland en Wine (Wine 9.0+ / Proton Experimental)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El puntero del ratón se escapa de la pantalla del juego en configuraciones multimonitor</strong>: Falta la implementación del protocolo <code>relative-pointer</code> o <code>pointer-constraints</code> en Xwayland</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Activar <code>PROTON_ENABLE_WAYLAND=1</code> o ajustar el bloqueo de cursor en Wine Explorer</div>
+          </div></div></div>
 
     </section>
     <h2 id="la-solucion-paso-a-paso">

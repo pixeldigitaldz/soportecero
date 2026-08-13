@@ -13,13 +13,13 @@ date: '2026-08-04'
 
 Al ejecutar juegos de Windows en Linux utilizando Steam Proton bajo un servidor de pantalla Wayland con **escalado fraccional** activado (por ejemplo, 125%, 150% o 175% en monitores 1440p o 4K), es habitual experimentar desincronía del cursor del ratón. Los síntomas incluyen un cursor de ratón desalineado que hace clic varios centímetros al lado de los botones de la interfaz del juego, una imagen borrosa por reescalado de Xwayland o la imposibilidad de atrapar (*mouse confinement*) el ratón dentro de la ventana del juego.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| El ratón hace clic en una posición desplazada respecto a la ubicación del puntero visible en pantalla | Xwayland aplica un escalado por software a la ventana del juego mientras Wine lee las coordenadas del ratón sin escalar | Desactivar el escalado de Xwayland por el sistema o habilitar la captura nativa de ratón en Proton |
-| La ventana del juego se ve borrosa a resolución nativa cuando el escalado de pantalla no es 100% | El compositor fuerza a Xwayland a renderizar a menor resolución y escalar el mapa de píxeles | Configurar `WAYLAND_DISPLAY` y utilizar el nuevo driver nativo Wayland en Wine (Wine 9.0+ / Proton Experimental) |
-| El puntero del ratón se escapa de la pantalla del juego en configuraciones multimonitor | Falta la implementación del protocolo `relative-pointer` o `pointer-constraints` en Xwayland | Activar `PROTON_ENABLE_WAYLAND=1` o ajustar el bloqueo de cursor en Wine Explorer |
+| Causa | Solución |
+|---|---|
+| **El ratón hace clic en una posición desplazada respecto a la ubicación del puntero visible en pantalla**: Xwayland aplica un escalado por software a la ventana del juego mientras Wine lee las coordenadas del ratón sin escalar | Desactivar el escalado de Xwayland por el sistema o habilitar la captura nativa de ratón en Proton |
+| **La ventana del juego se ve borrosa a resolución nativa cuando el escalado de pantalla no es 100%**: El compositor fuerza a Xwayland a renderizar a menor resolución y escalar el mapa de píxeles | Configurar `WAYLAND_DISPLAY` y utilizar el nuevo driver nativo Wayland en Wine (Wine 9.0+ / Proton Experimental) |
+| **El puntero del ratón se escapa de la pantalla del juego en configuraciones multimonitor**: Falta la implementación del protocolo `relative-pointer` o `pointer-constraints` en Xwayland | Activar `PROTON_ENABLE_WAYLAND=1` o ajustar el bloqueo de cursor en Wine Explorer |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

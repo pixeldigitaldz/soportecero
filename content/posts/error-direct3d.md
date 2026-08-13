@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **D3DCompiler o librerías de DirectX 11/12 ausentes o corruptas** | Reinstalar el instalador ejecutable de DirectX End-User Runtimes |
+| **Compatibilidad de Proton/Wine desactualizada en Linux** | Activar `DXVK_ASYNC=1` o utilizar Proton Experimental / Proton-GE |
+
+
 El error `Direct3D: Could not create device` es un fallo sumamente común cuando intentas ejecutar juegos lanzados entre los años 2000 y 2012 en sistemas operativos modernos como Windows 10 o Windows 11. 
 
 Este problema ocurre porque las versiones modernas de Windows ya no incluyen por defecto las librerías antiguas de **DirectX 9 (d3dx9.dll)**, o bien porque el juego intenta arrancar en una resolución que tu monitor actual no soporta en modo pantalla completa.

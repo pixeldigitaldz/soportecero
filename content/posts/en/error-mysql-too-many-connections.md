@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Reached max_connections limit in MySQL/MariaDB** | Temporarily increase limit: `SET GLOBAL max_connections = 500;` |
+| **Hanging persistent connections not closed by the application** | Set `max_connections = 500` in `/etc/mysql/my.cnf` and restart service |
+
+
 The `Error 1040: Too many connections` error immediately stops queries to your database and occurs when the number of open connection threads from your application exceeds the maximum directive defined in the internal settings of the MySQL or MariaDB server.
 
 ## 🚀 Step-by-Step Solution

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-13"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Objeto suelto de Git corrupto por apagón brusco o fallo en disco** | Identificar y eliminar el objeto dañado en `.git/objects/` y restaurar con `git fetch` |
+| **Referencia de rama apuntando a un commit inexistente** | Ejecutar `git fsck --full` para localizar el objeto corrupto exacto |
+
+
 El error crítico de Git `error: object file .git/objects/... is empty` o `corrupt loose object` ocurre tras un corte eléctrico repentino, un fallo del disco o un apagado forzado de la máquina mientras Git escribía metadatos en la base de datos de objetos locales de tu repositorio.
 
 ## 🚀 Cómo solucionar el error paso a paso

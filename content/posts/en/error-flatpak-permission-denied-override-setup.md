@@ -9,11 +9,11 @@ date: "2026-08-02"
 
 **Permission Denied** errors in Flatpak applications occur because of Flatpak's built-in sandbox security architecture, which isolates programs from user filesystems, hardware GPUs/USB devices, and Linux system sockets unless explicit permissions are granted by the maintainer or user.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| Flatpak app fails to read/write files in `/media` or external drives, or crashes when saving to custom paths | Strict default security sandbox boundaries enforced by Flatpak | Adjust application filesystem permissions using `flatpak override` via terminal or visually with **Flatseal** |
+| Cause | Solution |
+|---|---|
+| **Flatpak app fails to read/write files in `/media` or external drives, or crashes when saving to custom paths**: Strict default security sandbox boundaries enforced by Flatpak | Adjust application filesystem permissions using `flatpak override` via terminal or visually with **Flatseal** |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

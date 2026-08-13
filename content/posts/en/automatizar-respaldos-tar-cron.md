@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-16"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Cronjob failing due to relative paths or environment variables** | Specify absolute paths in script (`/bin/tar`, `/usr/bin/crontab`) |
+| **Insufficient write permissions in destination directory** | Ensure write permissions with `chmod 755` or run cron as root |
+
+
 The most serious mistake in managing local or home servers is not having automated and intact backups against hardware failures or file corruption. Creating a scheduled task that packages your essential configuration files will guarantee peace of mind.
 
 ## 🚀 Cómo solucionar el error paso a paso

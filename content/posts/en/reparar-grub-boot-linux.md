@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **GRUB bootloader removed or corrupted after Windows Update** | Boot from Live USB and reinstall GRUB: `grub-install /dev/sdX` |
+| **Corrupted or outdated /boot/grub/grub.cfg file** | Regenerate boot config: `grub-mkconfig -o /boot/grub/grub.cfg` |
+
+
 GRUB bootloader failure (leaving the system frozen at the `grub>` rescue console) usually occurs after a failed kernel update, EFI partition table failures, or after configuring dual boots with Windows. To repair it, we must mount and enter the damaged file system from a temporary environment.
 
 ## 🚀 Cómo solucionar el error paso a paso

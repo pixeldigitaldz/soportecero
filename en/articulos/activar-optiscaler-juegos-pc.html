@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -194,10 +187,37 @@
       </ol>
     </nav>
     
-      <p>If you are a PC gamer with modest hardware or use optimized Linux-based operating systems (such as CachyOS or Bazzite), increasing frames per second (FPS) in demanding titles like Diablo IV is a priority. However, technologies like DLSS are locked for older generation graphics cards.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Missing OptiScaler DLL or Wine/Proton not configured</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Install OptiScaler <code>dxgi.dll</code> in the executable (<code>.exe</code>) folder</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Inactive NVAPI environment variable in Linux</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Add <code>DXVK_ENABLE_NVAPI=1 %command%</code> in Steam launch options</div>
+          </div></div></div>
+<p>If you are a PC gamer with modest hardware or use optimized Linux-based operating systems (such as CachyOS or Bazzite), increasing frames per second (FPS) in demanding titles like Diablo IV is a priority. However, technologies like DLSS are locked for older generation graphics cards.</p>
 <p>This is where <strong>OptiScaler</strong> comes in, an open-source mod and wrapper that intercepts DLSS rendering calls and translates them into open technologies like FSR 3 or XeSS. This allows smart upscaling to be enabled in games that did not originally support it on your hardware.</p>
-        </section>
-        <h2 id="como-activar-optiscaler-paso-a-paso">🚀 Cómo activar OptiScaler paso a paso</h2>
+
+    </section>
+    <h2 id="como-activar-optiscaler-paso-a-paso">🚀 Cómo activar OptiScaler paso a paso</h2>
 <h3 id="paso-1-descargar-los-archivos-del-mod">Paso 1: Descargar los archivos del mod</h3>
 <p>Go to the official OptiScaler repository on GitHub and download the latest stable version (usually a packed <code>.zip</code> file). The critical file we need is <code>dxgi.dll</code> or <code>nvngx.dll</code>.</p>
 <h3 id="paso-2-colocar-las-librerias-en-la-ruta-del-juego">Paso 2: Colocar las librerías en la ruta del juego</h3>

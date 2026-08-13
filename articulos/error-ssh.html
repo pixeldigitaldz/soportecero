@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,7 +185,33 @@
       </ol>
     </nav>
     
-      <p>El error <strong>SSH Connection Refused</strong> (o <code>connection refused ssh</code>) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio <strong>OpenSSH está detenido</strong>, el <strong>puerto SSH fue cambiado</strong> o el <strong>firewall (UFW/iptables)</strong> bloquea el puerto 22.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Servicio SSH (sshd) detenido en el servidor de destino</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Iniciar el servicio SSH: <code>sudo systemctl start sshd</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Filtro de seguridad o puerto por defecto bloqueado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar conexión en el puerto asignado con <code>ssh -p PUERTO usuario@host</code></div>
+          </div></div></div>
+<p>El error <strong>SSH Connection Refused</strong> (o <code>connection refused ssh</code>) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio <strong>OpenSSH está detenido</strong>, el <strong>puerto SSH fue cambiado</strong> o el <strong>firewall (UFW/iptables)</strong> bloquea el puerto 22.</p>
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -201,8 +220,9 @@
 <li>Verifica el puerto actual: <code>grep -i &quot;port&quot; /etc/ssh/sshd_config</code></li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="como-solucionar-el-error-ssh-connection-refused-paso-a-paso">🚀 Cómo solucionar el error SSH Connection Refused paso a paso</h2>
+
+    </section>
+    <h2 id="como-solucionar-el-error-ssh-connection-refused-paso-a-paso">🚀 Cómo solucionar el error SSH Connection Refused paso a paso</h2>
 <h3 id="paso-1-verificar-el-estado-del-servicio-openssh-en-el-servidor">Paso 1: Verificar el estado del servicio OpenSSH en el servidor</h3>
 <p>Si tienes acceso local o mediante la consola KVM / Web Console de tu VPS, comprueba si el demonio SSH está ejecutándose:</p>
 

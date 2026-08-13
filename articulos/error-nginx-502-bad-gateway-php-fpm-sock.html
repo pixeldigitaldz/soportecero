@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -193,7 +186,33 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
       </ol>
     </nav>
     
-      <p>El error <strong><code>502 Bad Gateway</code></strong> en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en <code>/var/log/nginx/error.log</code> es:
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Servicio php-fpm detenido o no iniciado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Iniciar el demonio de PHP: <code>sudo systemctl start php-fpm</code> (o <code>php8.2-fpm</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Permisos insuficientes en el archivo socket UNIX /var/run/php/php-fpm.sock</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Cambiar propietario del socket a <code>www-data:www-data</code> en <code>/etc/php/fpm/pool.d/www.conf</code></div>
+          </div></div></div>
+<p>El error <strong><code>502 Bad Gateway</code></strong> en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en <code>/var/log/nginx/error.log</code> es:
 <code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> o <code>Connection refused</code>.</p>
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
@@ -203,8 +222,9 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
 <li>Revisa que la ruta del socket en el <code>fastcgi_pass</code> de Nginx coincida exactamente con la versión activa de PHP.</li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="como-solucionar-el-error-502-bad-gateway-paso-a-paso">🚀 Cómo solucionar el error 502 Bad Gateway paso a paso</h2>
+
+    </section>
+    <h2 id="como-solucionar-el-error-502-bad-gateway-paso-a-paso">🚀 Cómo solucionar el error 502 Bad Gateway paso a paso</h2>
 <h3 id="paso-1-verificar-el-estado-del-demonio-php-fpm">Paso 1: Verificar el estado del demonio PHP-FPM</h3>
 <p>Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor:</p>
 

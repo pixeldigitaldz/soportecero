@@ -17,13 +17,13 @@ date: '2026-07-27'
 
 El error `OOM command not allowed when used memory > 'maxmemory'` ocurre en instancias de Redis cuando el uso de memoria RAM alcanza el límite estipulado en el parámetro `maxmemory` y la política de desalojo (*eviction policy*) por defecto está configurada como `noeviction`. Bajo estas condiciones, Redis rechaza cualquier comando que intente agregar o modificar datos (`SET`, `HSET`, `LPUSH`), respondiendo con una excepción de falta de memoria (*Out of Memory*).
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| Comandos de escritura fallan con `OOM command not allowed` | La memoria alcanzó el límite `maxmemory` bajo la política por defecto `noeviction` | Configurar una política de desalojo automática (`allkeys-lru` o `volatile-lru`) o aumentar `maxmemory` |
-| El proceso de Redis es eliminado por el Kernel (*Linux OOM Killer*) | El archivo `redis.conf` no define un límite `maxmemory`, consumiendo toda la RAM del host | Establecer un tope en `maxmemory` equivalente al 70-80% de la RAM del servidor |
-| Alto ratio de fragmentación de memoria (`mem_fragmentation_ratio > 1.5`) | El asignador de memoria Jemalloc conserva páginas liberadas tras borrar claves masivas | Habilitar la desfragmentación activa en Redis (`activedefrag yes`) |
+| Causa | Solución |
+|---|---|
+| **Comandos de escritura fallan con `OOM command not allowed`**: La memoria alcanzó el límite `maxmemory` bajo la política por defecto `noeviction` | Configurar una política de desalojo automática (`allkeys-lru` o `volatile-lru`) o aumentar `maxmemory` |
+| **El proceso de Redis es eliminado por el Kernel (*Linux OOM Killer*)**: El archivo `redis.conf` no define un límite `maxmemory`, consumiendo toda la RAM del host | Establecer un tope en `maxmemory` equivalente al 70-80% de la RAM del servidor |
+| **Alto ratio de fragmentación de memoria (`mem_fragmentation_ratio > 1.5`)**: El asignador de memoria Jemalloc conserva páginas liberadas tras borrar claves masivas | Habilitar la desfragmentación activa en Redis (`activedefrag yes`) |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

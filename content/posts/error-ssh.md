@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servicio SSH (sshd) detenido en el servidor de destino** | Iniciar el servicio SSH: `sudo systemctl start sshd` |
+| **Filtro de seguridad o puerto por defecto bloqueado** | Verificar conexión en el puerto asignado con `ssh -p PUERTO usuario@host` |
+
+
 El error **SSH Connection Refused** (o `connection refused ssh`) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio **OpenSSH está detenido**, el **puerto SSH fue cambiado** o el **firewall (UFW/iptables)** bloquea el puerto 22.
 
 > **Solución Rápida (1 Minuto):**

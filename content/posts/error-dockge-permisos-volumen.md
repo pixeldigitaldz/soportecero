@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Permisos del sistema de archivos bloqueando el acceso al directorio /data/stacks** | Asignar la propiedad correcta de la carpeta: `sudo chown -R 1000:1000 /data/stacks` |
+| **UID/GID del usuario del contenedor no coincide con el host Linux** | Ajustar la variable de entorno `PUID` y `PGID` en el archivo `compose.yaml` |
+
+
 El error `io.containerd.runc.v2: OCI runtime create failed: permission denied` o los fallos internos donde un contenedor (como Nginx, Plex o un indexer) no puede guardar su configuración, ocurren porque el usuario interno del contenedor no tiene permisos del sistema de archivos de Linux para escribir en la carpeta del host que montaste en la sección `volumes:`.
 
 ## 🚀 Cómo solucionar el error paso a paso

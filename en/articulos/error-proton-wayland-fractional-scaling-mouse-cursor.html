@@ -218,7 +218,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Mouse clicks hit off-target relative to the visible cursor position</strong>: Xwayland applies bitmap scaling to the game window while Wine interprets raw unscaled cursor coordinates</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set Xwayland legacy application scaling to &quot;Apply scaling themselves&quot; or force zero scaling</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Game window appears blurry at native resolution when desktop display scaling is not 100%</strong>: Compositor forces Xwayland to render at a lower resolution and stretch pixels</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable native Wayland driver support in Wine (Wine 9.0+ / Proton GE) via environment flags</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Mouse cursor drifts out of game window into second monitor in multi-display setups</strong>: Missing <code>relative-pointer</code> or <code>pointer-constraints</code> protocol support in older Xwayland layers</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable <code>PROTON_ENABLE_WAYLAND=1</code> or configure mouse warp overrides in Wine registry</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">

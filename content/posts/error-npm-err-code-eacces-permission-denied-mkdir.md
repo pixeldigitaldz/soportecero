@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Ejecución de npm install global sin permisos en /usr/local/lib/node_modules** | Cambiar el directorio global por defecto de npm a la carpeta home del usuario |
+| **Permisos de carpeta del proyecto pertenecientes a root** | Ejecutar `sudo chown -R $USER:$USER .` en la carpeta raíz del proyecto |
+
+
 El error **`npm ERR! code EACCES permission denied`** (o `EACCES: permission denied, access '/usr/local/lib/node_modules'`) ocurre al intentar instalar paquetes globales con `npm install -g <paquete>`. Sucede porque el directorio del sistema pertenece al usuario `root`, impidiendo que tu usuario normal escriba en él.
 
 > **Solución Rápida (Recomendada):**

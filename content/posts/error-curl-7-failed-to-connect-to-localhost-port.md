@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-14"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **El servicio en el puerto especificado no está escuchando peticiones** | Verificar puertos abiertos en la máquina: `netstat -tulnp | grep puerto` |
+| **Contenedor Docker escuchando solo en 127.0.0.1 dentro del contenedor** | Vincular el servicio a `0.0.0.0` para recibir tráfico externo |
+
+
 El error **`curl: (7) Failed to connect to localhost port 3000: Connection refused`** ocurre cuando la utilidad de línea de comandos `curl` intenta enviar una petición a un servicio web en tu máquina local, pero no hay ningún proceso escuchando en ese puerto o el servicio solo está enlazado a IPv6 (`::1`) en lugar de IPv4 (`127.0.0.1`).
 
 > **Solución Rápida (1 Minuto):**

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Port 80 blocked by firewall or misconfigured web server** | Open port 80 in firewall: `ufw allow 80/tcp` |
+| **Inaccessible .well-known/acme-challenge validation path** | Ensure web root directory matches Nginx/Apache configuration block |
+
+
 The error **`Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout`** occurs when issuing or renewing a free Let's Encrypt SSL certificate if Let's Encrypt validation servers cannot access the temporary token file generated on your web server.
 
 > **Quick Solution (1 Minute):**

@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Comandos de escritura fallan con <code>OOM command not allowed</code></strong>: La memoria alcanzó el límite <code>maxmemory</code> bajo la política por defecto <code>noeviction</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar una política de desalojo automática (<code>allkeys-lru</code> o <code>volatile-lru</code>) o aumentar <code>maxmemory</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El proceso de Redis es eliminado por el Kernel (<em>Linux OOM Killer</em>)</strong>: El archivo <code>redis.conf</code> no define un límite <code>maxmemory</code>, consumiendo toda la RAM del host</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Establecer un tope en <code>maxmemory</code> equivalente al 70-80% de la RAM del servidor</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Alto ratio de fragmentación de memoria (<code>mem_fragmentation_ratio &gt; 1.5</code>)</strong>: El asignador de memoria Jemalloc conserva páginas liberadas tras borrar claves masivas</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Habilitar la desfragmentación activa en Redis (<code>activedefrag yes</code>)</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

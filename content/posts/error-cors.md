@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Falta de política CORS en el servidor backend** | Agregar middleware CORS en backend (ej. `app.use(cors())` en Express) |
+| **Peticiones preflight (OPTIONS) rechazadas por falta de encabezados permitidos** | Permitir los métodos `GET, POST, PUT, DELETE` y encabezados `Content-Type, Authorization` |
+
+
 Aprender **cómo configurar allow cors** para resolver el error de CORS (Cross-Origin Resource Sharing) es esencial, ya que este problema ocurre estrictamente en el navegador del cliente. Sucede cuando una aplicación web en un dominio (ej. `localhost:3000`) intenta consumir recursos de una API alojada en otro dominio, y el servidor de la API no incluye las cabeceras HTTP necesarias para autorizar la petición.
 
 ## 🚀 Cómo solucionar el error paso a paso

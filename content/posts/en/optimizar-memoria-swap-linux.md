@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Aggressive swap usage on slow disk causing stuttering** | Lower swappiness parameter: `sudo sysctl vm.swappiness=10` |
+| **Lack of real-time RAM memory compression** | Enable zRAM module in Linux to compress RAM instead of disk swapping |
+
+
 Running out of physical RAM on cloud servers without swap space triggers the Linux kernel's `OOM Killer` (Out of Memory Killer), instantly terminating critical applications like MySQL databases, Nginx web servers, or Node.js processes.
 
 ## 🚀 Step-by-Step Solution

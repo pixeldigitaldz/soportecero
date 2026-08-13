@@ -13,6 +13,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Corrupted Sonarr/Radarr SQLite database due to abrupt shutdown** | Restore an automatic backup from `Backups/scheduled/` folder |
+| **Damaged sqlite3 database integrity** | Repair database: `sqlite3 sonarr.db ".recover" | sqlite3 sonarr_fixed.db` |
+
+
 The corrupted database error in Sonarr or Radarr (identified in logs with the message `database disk image is malformed`) occurs when the internal SQLite file (`sonarr.db` or `radarr.db`) becomes corrupted due to interrupted writes, sudden server power outages, or file lock synchronization issues on network-attached storage systems.
 
 ## 🚀 Cómo solucionar el error paso a paso

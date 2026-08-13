@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **WordPress database bloated by post revisions and transients** | Optimize database via WP-CLI: `wp transient delete --all` |
+| **Database size or storage quota exceeded on BanaHosting** | Clear stale transients from `wp_options` table via phpMyAdmin |
+
+
 Knowing how to **clean WordPress** and optimize your website's database on shared servers (like BanaHosting) is essential when the web gets slow or the control panel throws memory limit errors. This happens because WordPress defaults to accumulating thousands of rows of "post revisions" (old saved versions of your posts) and cache junk (*transients*) in the `wp_options` table, bloating SQL queries.
 
 ## 🚀 Cómo solucionar el error paso a paso

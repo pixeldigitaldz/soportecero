@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **FlareSolverr blocked by Cloudflare Turnstile protection updates** | Update FlareSolverr container image to latest tag from Docker Hub |
+| **Response timeout while solving JS challenge due to resource limits** | Increase `RESOURCE_TIMEOUT` to 60000ms in environment variables |
+
+
 The FlareSolverr timeout error occurs when the tool attempts to solve a Cloudflare bypass challenge (such as JavaScript verification screens or CAPTCHAs) and the waiting time expires unsuccessfully, throwing `Error: The challenge could not be resolved` or `Too many attempts` errors. This happens due to the use of outdated browser signatures or direct IP blocks caused by a poor reputation of your internet service provider.
 
 ## 🚀 Step-by-Step Solution

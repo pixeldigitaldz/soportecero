@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Error <code>EADDRINUSE :::3000</code> o <code>bind: address already in use</code> al iniciar un servidor</strong>: Un proceso en segundo plano (Node, Python, Docker) no se cerró correctamente</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Identificar el PID con <code>lsof</code> o <code>ss</code> y finalizar la ejecución</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El puerto vuelve a quedar ocupado inmediatamente tras matar el proceso</strong>: Un servicio de systemd o un contenedor Docker con política de reinicio automático</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Detener el servicio supervisor (<code>systemctl stop</code> o <code>docker stop</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El puerto se muestra en estado <code>TIME_WAIT</code> y rechaza conexiones nuevas</strong>: El socket no se cerró de forma limpia por falta de <code>SO_REUSEADDR</code> en el servidor</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Esperar el timeout TCP o configurar <code>SO_REUSEADDR</code> en el código fuente</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

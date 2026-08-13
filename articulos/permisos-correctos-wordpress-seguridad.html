@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Permisos excesivamente abiertos (ej. 777) en archivos o carpetas de WordPress</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Asignar permisos seguros: <code>find . -type d -exec chmod 755 {} \;</code> y <code>644</code> para archivos</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Archivo wp-config.php accesible o editable por otros usuarios del servidor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Establecer permisos estrictos en wp-config.php: <code>chmod 600 wp-config.php</code></div>
+          </div></div></div>
+<p>Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-establecer-los-permisos-globales-de-forma-segura-por-consola">Paso 1: Establecer los permisos globales de forma segura por consola</h3>
 <p>Los directorios de WordPress deben pertenecer al usuario de tu servidor web (como <code>www-data</code>, <code>apache</code> o <code>nginx</code>) y tener una máscara de permisos que impida la escritura a otros usuarios:</p>
 

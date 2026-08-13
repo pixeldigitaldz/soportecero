@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Port 80 or 443 required by Umbrel app occupied by another service** | Modify port mapping in App's `docker-compose.yml` file |
+| **Local Nginx or Apache process blocking host ports** | Identify and stop conflicting service: `sudo systemctl stop nginx` |
+
+
 The port binding error (`bind: address already in use` or `port already allocated`) when attempting to start a custom container in Umbrel OS occurs because the platform's internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.
 
 ## 🚀 Step-by-Step Solution

@@ -9,11 +9,11 @@ date: "2026-07-31"
 
 The **500 Internal Server Error** in Apache is one of the most generic and frustrating server responses. It frequently occurs right after editing a `.htaccess` file, adding invalid URL rewrite rules (`mod_rewrite`), or referencing Apache directives from modules that are not installed or enabled on the server.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| HTTP 500 error after updating `.htaccess` or installing plugins | Invalid directive, syntax typo, or disabled Apache module (e.g., `mod_rewrite` or `mod_headers`) | Check Apache error logs (`error.log`), temporarily rename `.htaccess`, and correct directives or wrap them in `<IfModule>` blocks |
+| Cause | Solution |
+|---|---|
+| **HTTP 500 error after updating `.htaccess` or installing plugins**: Invalid directive, syntax typo, or disabled Apache module (e.g., `mod_rewrite` or `mod_headers`) | Check Apache error logs (`error.log`), temporarily rename `.htaccess`, and correct directives or wrap them in `<IfModule>` blocks |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

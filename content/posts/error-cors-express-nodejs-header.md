@@ -18,13 +18,13 @@ El error de navegadores **"Access to XMLHttpRequest at '...' from origin '...' h
 
 Este bloqueo lo ejecuta el navegador web por seguridad cuando el origen (dominio o puerto) del cliente es distinto al del servidor.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| `CORS policy: No 'Access-Control-Allow-Origin'` | El backend no envía la cabecera `Access-Control-Allow-Origin` | Instalar e integrar el middleware `cors` en Express |
-| Bloqueo en peticiones con `POST`, `PUT` o `DELETE` | Fallo en la petición de verificación previa (`OPTIONS` preflight) | Habilitar el manejo de solicitudes preflight en el servidor |
-| Error al enviar cookies o JWT (`credentials: true`) | Incompatibilidad al usar comodín `*` con credenciales | Especificar el origen exacto `origin: 'http://localhost:3000'` |
+| Causa | Solución |
+|---|---|
+| **`CORS policy: No 'Access-Control-Allow-Origin'`**: El backend no envía la cabecera `Access-Control-Allow-Origin` | Instalar e integrar el middleware `cors` en Express |
+| **Bloqueo en peticiones con `POST`, `PUT` o `DELETE`**: Fallo en la petición de verificación previa (`OPTIONS` preflight) | Habilitar el manejo de solicitudes preflight en el servidor |
+| **Error al enviar cookies o JWT (`credentials: true`)**: Incompatibilidad al usar comodín `*` con credenciales | Especificar el origen exacto `origin: 'http://localhost:3000'` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

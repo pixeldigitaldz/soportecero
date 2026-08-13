@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Window compositing enabled causing frame latency (VSync)** | Disable screen compositor or switch to a native Wayland session |
+| **CPU frequency governor set to powersave mode** | Set CPU to performance mode: `gamemoded -r` or `powerprofilesctl set performance` |
+
+
 Excessive input delay or *input lag* when playing competitive titles on Linux occurs due to the accumulation of buffers in the graphics composition server (especially in Wayland with forced vertical synchronization) and due to the default active power saving configuration that suspends or slows down the response frequency of USB ports.
 
 ## 🚀 Cómo solucionar el error paso a paso

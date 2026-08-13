@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **HTML mismatch between server-rendered HTML and client React DOM** | Use `useEffect` to render client-only dynamic data (e.g. dates, localStorage) |
+| **Invalid HTML tag nesting (e.g. <p> inside <p> or <div>)** | Fix DOM structure or wrap with `dynamic(() => ..., { ssr: false })` |
+
+
 The hydration mismatch error in Next.js (`Error: Hydration failed because the initial UI does not match what was rendered on the server`) occurs when server-side rendered HTML contains dynamic variables (such as local timezones, random numbers, or global `window` object states) that instantly change upon loading inside the client's browser.
 
 ## 🚀 Step-by-Step Solution

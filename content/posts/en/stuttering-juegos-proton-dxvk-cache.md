@@ -13,6 +13,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **DXVK shader compilation occurring in real-time during gameplay** | Enable async shader compilation via `DXVK_ASYNC=1` variable |
+| **Corrupted shader cache inside Steam prefix directory** | Clear `shadercache` directory contents and rebuild cache |
+
+
 Graphic stuttering when playing Windows titles on Linux through Proton or Wine occurs because the games' DirectX graphics calls are translated to the open Vulkan API in real time using the DXVK library. This generates a CPU consumption spike to compile each new texture shader the first time it is displayed on screen.
 
 ## 🚀 Cómo solucionar el error paso a paso

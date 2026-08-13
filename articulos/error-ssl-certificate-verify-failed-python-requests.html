@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong><code>SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]</code> en macOS tras instalar Python</strong>: Falta la instalación del almacén de certificados CA por defecto de OpenSSL en macOS</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ejecutar el script <code>Install Certificates.command</code> incluido en la carpeta de Python en macOS</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Fallo de verificación SSL en scripts con <code>requests</code> o <code>urllib3</code> en Linux / Entornos virtuales</strong>: Paquete <code>certifi</code> desactualizado o falta el bundle CA del sistema operativo</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar <code>certifi</code> con <code>pip</code> o definir la variable <code>REQUESTS_CA_BUNDLE</code> hacia la CA raíz</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Error al conectar a un servidor local de desarrollo o con proxy empresarial</strong>: El servidor utiliza un certificado TLS autofirmado o la CA empresarial no está en el almacén de confianza</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Añadir la CA personalizada al bundle de <code>certifi</code> o pasar la ruta del certificado a la petición</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

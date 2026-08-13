@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-03"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Nginx client_max_body_size directive limit below uploaded file size** | Increase limit in `nginx.conf`: `client_max_body_size 64M;` |
+| **php.ini upload_max_filesize or post_max_size restricting upload size** | Update `upload_max_filesize = 64M` in PHP configuration file |
+
+
 The **413 request entity too large** error on an Nginx web server occurs when a client attempts to upload a file (such as an image, a WordPress plugin, or a heavy backup) whose size exceeds the maximum upload limit configured in the web proxy settings.
 
 ## 🚀 Step-by-Step Solution

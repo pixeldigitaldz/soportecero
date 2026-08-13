@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Intentando fusionar dos repositorios o ramas con historiales de commits no conectados** | Permitir la fusión forzada usando la bandera `--allow-unrelated-histories` |
+| **Repositorio remoto inicializado con archivos (README/LICENSE) de forma independiente** | Ejecutar `git pull origin main --allow-unrelated-histories` |
+
+
 El error **`fatal: refusing to merge unrelated histories`** ocurre en Git al intentar hacer `git pull` o `git merge` entre dos repositorios que no comparten un historial de commits inicial común. Sucede con frecuencia cuando creas un repositorio local con `git init` y al mismo tiempo creas un repositorio en GitHub con un archivo `README.md` o `.gitignore` inicial.
 
 > **Solución Rápida (1 Minuto):**

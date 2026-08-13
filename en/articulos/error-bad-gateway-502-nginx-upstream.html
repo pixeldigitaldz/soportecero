@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>The <code>502 Bad Gateway</code> error on an Nginx web server configured as a reverse proxy means that Nginx has received an invalid response (or no response at all) from the origin server or backend (such as PHP-FPM, a Node.js process, Gunicorn, or a Docker container) when trying to forward the client&#39;s request.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Application backend service (PHP-FPM, Node.js, Gunicorn) is down</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Check and start backend service with <code>systemctl status php-fpm</code> or Docker</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Misconfigured port or UNIX socket in proxy_pass directive</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Fix socket path <code>/var/run/php/php-fpm.sock</code> or port in <code>nginx.conf</code></div>
+          </div></div></div>
+<p>The <code>502 Bad Gateway</code> error on an Nginx web server configured as a reverse proxy means that Nginx has received an invalid response (or no response at all) from the origin server or backend (such as PHP-FPM, a Node.js process, Gunicorn, or a Docker container) when trying to forward the client&#39;s request.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-comprobar-el-estado-del-servicio-del-backend">Paso 1: Comprobar el estado del servicio del backend</h3>
 <p>Nginx cannot dispatch the query if the service processing the internal logic of your web application has stopped. Check its status in the console:</p>
 

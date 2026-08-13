@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-18"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Expired or outdated PGP keys in pacman keyring on Arch/CachyOS** | Update pacman keyring: `sudo pacman -Sy cachyos-keyring archlinux-keyring` |
+| **Corrupted repository PGP signatures database** | Reinitialize GPG keyring: `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init` |
+
+
 The Pacman critical error `key "..." could not be looked up remotely` or `signature from "..." is invalid` in CachyOS and Arch Linux-based distributions occurs when the local cryptographic keyring gets outdated or corrupt, preventing secure package update installation.
 
 ## 🚀 Step-by-Step Solution

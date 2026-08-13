@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Tirones constantes (stuttering) al entrar en nuevas zonas por compilación de shaders** | Habilitar la precompilación en segundo plano de shaders Vulkan en los ajustes de Steam |
+| **Caché de shaders deshabilitada o límite de almacenamiento muy bajo** | Configurar `RADV_PERFTEST=gsw %command%` para GPUs AMD o actualizar drivers Mesa |
+
+
 Los tirones gráficos repentinos (*shuttering*) e interrupciones al jugar títulos modernos en Linux bajo Steam Proton suelen deberse a la precompilación activa en tiempo de ejecución de shaders de Vulkan. El procesador compila los nuevos modelos gráficos en tiempo real mientras juegas, provocando una caída drástica e instantánea de la tasa de FPS.
 
 ## 🚀 Cómo solucionar el error paso a paso

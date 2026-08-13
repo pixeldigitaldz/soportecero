@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -191,9 +184,36 @@
       </ol>
     </nav>
     
-      <p>Los problemas de velocidad de red intermitente, las descargas interrumpidas o la imposibilidad de cargar ciertos portales web seguros ocurren a menudo por una mala configuración del tamaño de la <strong>Unidad de Transmisión Máxima (MTU)</strong> de tu tarjeta de red. Si tu proveedor exige paquetes más pequeños que el estándar de tu sistema, los enrutadores intermedios deben fragmentar los datos, degradando el rendimiento.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>MTU mal configurado causando fragmentación de paquetes</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ajustar el MTU a 1500 (o 1492 para PPPoE) con <code>ip link set dev eth0 mtu 1500</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Negociación de velocidad de red (Auto-Negotiation) fallida</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Forzar velocidad Gigabit con <code>ethtool -s eth0 speed 1000 duplex full autoneg on</code></div>
+          </div></div></div>
+<p>Los problemas de velocidad de red intermitente, las descargas interrumpidas o la imposibilidad de cargar ciertos portales web seguros ocurren a menudo por una mala configuración del tamaño de la <strong>Unidad de Transmisión Máxima (MTU)</strong> de tu tarjeta de red. Si tu proveedor exige paquetes más pequeños que el estándar de tu sistema, los enrutadores intermedios deben fragmentar los datos, degradando el rendimiento.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-diagnosticar-la-fragmentacion-de-paquetes-mediante-pruebas-de-ping">Paso 1: Diagnosticar la fragmentación de paquetes mediante pruebas de Ping</h3>
 <p>Vamos a buscar el tamaño máximo de paquete que tu red puede transferir sin necesidad de dividir los datos. Corre la prueba restando la cabecera IP/ICMP de 28 bytes de tu objetivo:</p>
 

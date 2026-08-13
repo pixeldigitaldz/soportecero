@@ -9,11 +9,11 @@ date: "2026-08-01"
 
 El error **FATAL: password authentication failed for user** ocurre en PostgreSQL cuando el servidor de base de datos rechaza la conexión de un cliente debido a una contraseña incorrecta, la falta de un método de autenticación válido en `pg_hba.conf` o una discrepancia entre el usuario del sistema operativo y el rol de PostgreSQL.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| `psql: error: FATAL: password authentication failed for user "postgres"` | Contraseña incorrecta, usuario no existente o método de autenticación (scram-sha-256 / md5 / peer) desconfigurado en `pg_hba.conf` | Acceder mediante el usuario local del sistema `postgres` con socket UNIX, restablecer la contraseña con `ALTER USER` y configurar `pg_hba.conf` |
+| Causa | Solución |
+|---|---|
+| **`psql: error: FATAL: password authentication failed for user "postgres"`**: Contraseña incorrecta, usuario no existente o método de autenticación (scram-sha-256 / md5 / peer) desconfigurado en `pg_hba.conf` | Acceder mediante el usuario local del sistema `postgres` con socket UNIX, restablecer la contraseña con `ALTER USER` y configurar `pg_hba.conf` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

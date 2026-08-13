@@ -14,6 +14,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Corrupted or out-of-sync DXVK shader cache** | Delete `.dxvk-cache` file in game prefix folder |
+| **High CPU usage spike during real-time shader compilation** | Enable async shader precompilation: `DXVK_ASYNC=1 %command%` |
+
+
 The image stuttering (*stuttering*) when launching a Windows game on Linux using Proton occurs because DirectX graphics calls must be translated to the open **Vulkan** API in real time using a library called DXVK. Every time you enter a new area or an enemy casts an ability, the game freezes for a few milliseconds while compiling the shader for the first time.
 
 ## 🚀 Cómo solucionar el error paso a paso

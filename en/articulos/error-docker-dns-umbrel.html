@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>A very common critical failure in home servers based on the <strong>Umbrel OS</strong> ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing <code>Temporary failure in name resolution</code> errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Internal Docker DNS resolver failing on Umbrel OS</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set public DNS in <code>/etc/docker/daemon.json</code> (e.g. <code>&quot;dns&quot;: [&quot;1.1.1.1&quot;]</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Port 53 conflict with systemd-resolved service</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set <code>DNSStubListener=no</code> in <code>/etc/systemd/resolved.conf</code></div>
+          </div></div></div>
+<p>A very common critical failure in home servers based on the <strong>Umbrel OS</strong> ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing <code>Temporary failure in name resolution</code> errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-verify-the-internal-network-block">Step 1: Verify the internal network block</h3>
 <p>Access your Umbrel server via SSH and enter the affected container to check if it responds to a direct numerical ping but fails to resolve text names:</p>
 

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Imágenes, contenedores parados y volúmenes huérfanos acumulados** | Ejecutar limpieza profunda: `docker system prune -a --volumes -f` |
+| **Archivos de logs JSON de contenedores creciendo indefinidamente** | Vaciar los logs acumulados: `truncate -s 0 /var/lib/docker/containers/*/*-json.log` |
+
+
 La acumulación silenciosa de espacio en disco en servidores que corren Docker ocurre porque el motor de contenedores nunca elimina por defecto las imágenes antiguas cuando descargas actualizaciones, ni limpia los archivos temporales de compilación o los archivos de log que crecen indefinidamente en la ruta del host.
 
 ## 🚀 Cómo solucionar el error paso a paso

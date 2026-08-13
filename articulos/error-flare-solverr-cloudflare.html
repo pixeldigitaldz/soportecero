@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -191,9 +184,36 @@
       </ol>
     </nav>
     
-      <p>El error de timeout en FlareSolverr ocurre cuando la herramienta intenta resolver un desafío de paso de Cloudflare (como las pantallas de verificación de JavaScript o CAPTCHA) y los tiempos de espera expiran sin éxito, arrojando errores de tipo <code>Error: El desafío no se pudo resolver</code> o <code>Too many attempts</code>. Esto sucede por el uso de firmas de navegador desactualizadas o por bloqueos directos de IP originados por la mala reputación de tu proveedor de internet.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>FlareSolverr bloqueado por cambios recientes de protección Turnstile de Cloudflare</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar el contenedor FlareSolverr a la última versión disponible en Docker Hub</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Timeout de respuesta al resolver el reto JS debido a falta de recursos</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Aumentar el valor de <code>RESOURCE_TIMEOUT</code> a 60000ms en las variables de entorno</div>
+          </div></div></div>
+<p>El error de timeout en FlareSolverr ocurre cuando la herramienta intenta resolver un desafío de paso de Cloudflare (como las pantallas de verificación de JavaScript o CAPTCHA) y los tiempos de espera expiran sin éxito, arrojando errores de tipo <code>Error: El desafío no se pudo resolver</code> o <code>Too many attempts</code>. Esto sucede por el uso de firmas de navegador desactualizadas o por bloqueos directos de IP originados por la mala reputación de tu proveedor de internet.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-actualizar-a-la-imagen-oficial-mas-reciente-de-docker">Paso 1: Actualizar a la imagen oficial más reciente de Docker</h3>
 <p>Los desafíos de Cloudflare cambian constantemente. Las versiones antiguas de FlareSolverr usan navegadores internos desactualizados que son detectados de inmediato como bots. Actualiza tu contenedor a la última imagen oficial:</p>
 

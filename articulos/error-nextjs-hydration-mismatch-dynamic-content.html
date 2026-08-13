@@ -167,18 +167,15 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
-        <p>El error de hidratación en Next.js (Error: Hydration failed because the initial UI does not match what was rendered on the server) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto window) que cambian instantáneamente al cargarse en el navegador del cliente.</p>
+        <p>dentro de otro  o )
+Corregir la estructura DOM o desactivar SSR temporalmente con dynamic(() =&gt; ..., { ssr: false })
+
+
+El error de hidratación en Next.js (Error: Hydration failed because the initial UI does not match what was rendered on the server) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto window) que cambian instantáneamente al cargarse en el navegador del cliente.</p>
       </section>
 
     <nav class="toc-container" aria-label="Tabla de contenidos">
@@ -192,9 +189,36 @@
       </ol>
     </nav>
     
-      <p>El error de hidratación en Next.js (<code>Error: Hydration failed because the initial UI does not match what was rendered on the server</code>) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto <code>window</code>) que cambian instantáneamente al cargarse en el navegador del cliente.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Diferencia de renderizado entre el HTML generado en el servidor y el cliente React</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Usar <code>useEffect</code> para renderizar datos dinámicos (ej. fechas, localStorage) solo en cliente</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Etiquetas HTML anidadas incorrectamente (ej. <p> dentro de otro <p> o <div>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Corregir la estructura DOM o desactivar SSR temporalmente con <code>dynamic(() =&gt; ..., { ssr: false })</code></div>
+          </div></div></div>
+<p>El error de hidratación en Next.js (<code>Error: Hydration failed because the initial UI does not match what was rendered on the server</code>) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto <code>window</code>) que cambian instantáneamente al cargarse en el navegador del cliente.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-identificar-el-nodo-del-dom-en-conflicto-en-la-consola-de-depuracion">Paso 1: Identificar el nodo del DOM en conflicto en la consola de depuración</h3>
 <p>Abre la consola de desarrollador de tu navegador (F12) al ocurrir el fallo. Next.js mostrará un reporte de inconsistencia detallando qué elemento HTML difiere entre el servidor y el cliente:</p>
 

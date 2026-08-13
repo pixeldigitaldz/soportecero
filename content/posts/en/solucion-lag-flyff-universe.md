@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Hardware acceleration disabled in web browser** | Enable GPU hardware acceleration in Chrome/Firefox settings |
+| **WebGL rendering restricted to default integrated GPU** | Force dedicated GPU usage for browser executable |
+
+
 Being a game based on modern web technologies (WebGL/WebGPU), Flyff Universe can suffer from severe frame freezing (*stuttering*) or network response lag, even on powerful computers. This happens if the web browser does not have direct access to the graphics chip or if vertical synchronization generates conflicts.
 
 ## 🚀 Cómo solucionar el error paso a paso

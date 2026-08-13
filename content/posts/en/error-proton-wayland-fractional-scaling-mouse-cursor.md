@@ -13,13 +13,13 @@ date: '2026-08-04'
 
 When running Windows games on Linux using Steam Proton under a Wayland display compositor with **fractional scaling** enabled (e.g., 125%, 150%, or 175% on 1440p or 4K displays), gamers frequently experience severe mouse cursor desynchronization. Common symptoms include the mouse pointer clicking several inches away from targeted UI elements, blurry rendering caused by Xwayland software upscale, or failure of the game window to lock and confine the mouse cursor during gameplay.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| Mouse clicks hit off-target relative to the visible cursor position | Xwayland applies bitmap scaling to the game window while Wine interprets raw unscaled cursor coordinates | Set Xwayland legacy application scaling to "Apply scaling themselves" or force zero scaling |
-| Game window appears blurry at native resolution when desktop display scaling is not 100% | Compositor forces Xwayland to render at a lower resolution and stretch pixels | Enable native Wayland driver support in Wine (Wine 9.0+ / Proton GE) via environment flags |
-| Mouse cursor drifts out of game window into second monitor in multi-display setups | Missing `relative-pointer` or `pointer-constraints` protocol support in older Xwayland layers | Enable `PROTON_ENABLE_WAYLAND=1` or configure mouse warp overrides in Wine registry |
+| Cause | Solution |
+|---|---|
+| **Mouse clicks hit off-target relative to the visible cursor position**: Xwayland applies bitmap scaling to the game window while Wine interprets raw unscaled cursor coordinates | Set Xwayland legacy application scaling to "Apply scaling themselves" or force zero scaling |
+| **Game window appears blurry at native resolution when desktop display scaling is not 100%**: Compositor forces Xwayland to render at a lower resolution and stretch pixels | Enable native Wayland driver support in Wine (Wine 9.0+ / Proton GE) via environment flags |
+| **Mouse cursor drifts out of game window into second monitor in multi-display setups**: Missing `relative-pointer` or `pointer-constraints` protocol support in older Xwayland layers | Enable `PROTON_ENABLE_WAYLAND=1` or configure mouse warp overrides in Wine registry |
 
 ## 🚀 Step-by-Step Solution
 

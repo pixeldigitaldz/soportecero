@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Controladores GPU desactualizados o corruptos** | Realizar una instalación limpia de drivers Mesa/Nvidia con `DDU` o `pacman -Syu` |
+| **Perfil de energía del sistema en modo Ahorro** | Cambiar el regulador de CPU a alto rendimiento: `powerprofilesctl set performance` |
+
+
 Actualizar los drivers de tu tarjeta gráfica es crucial para soportar nuevos juegos, pero en ocasiones la última versión llega con bugs de compatibilidad o corrompe configuraciones previas del sistema, provocando caídas drásticas de FPS o tartamudeo visual (*stuttering*) en tus partidas online.
 
 ## 🚀 Cómo solucionar el error paso a paso

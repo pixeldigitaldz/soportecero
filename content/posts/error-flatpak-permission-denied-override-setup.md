@@ -9,11 +9,11 @@ date: "2026-08-02"
 
 Los errores de tipo **Permission Denied** en aplicaciones instaladas mediante Flatpak ocurren debido a la arquitectura de aislamiento (*sandbox*) que limita el acceso del programa al sistema de archivos del usuario, a dispositivos USB/GPU o a las interfaces de red de Linux salvo que el empaquetador o el usuario le hayan concedido permisos explícitos.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| La aplicación Flatpak no puede abrir/guardar archivos en `/media` o discos secundarios, o falla al acceder a carpetas personalizadas | Restricción de aislamiento de seguridad (*sandbox*) predeterminada del paquete Flatpak | Ajustar los permisos de acceso al sistema de archivos usando `flatpak override` por terminal o con la interfaz gráfica **Flatseal** |
+| Causa | Solución |
+|---|---|
+| **La aplicación Flatpak no puede abrir/guardar archivos en `/media` o discos secundarios, o falla al acceder a carpetas personalizadas**: Restricción de aislamiento de seguridad (*sandbox*) predeterminada del paquete Flatpak | Ajustar los permisos de acceso al sistema de archivos usando `flatpak override` por terminal o con la interfaz gráfica **Flatseal** |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Forgotten or locked root superuser password** | Boot in single-user mode by appending `init=/bin/bash` in GRUB |
+| **Read-only mounted filesystem during recovery** | Remount read/write: `mount -o remount,rw /` and reset password via `passwd` |
+
+
 Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.
 
 ## 🚀 Cómo solucionar el error paso a paso

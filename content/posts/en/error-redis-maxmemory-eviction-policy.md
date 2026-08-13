@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 The `OOM command not allowed when used memory > 'maxmemory'` error occurs when a Redis instance reaches its configured memory ceiling (`maxmemory`) while operating under the default `noeviction` policy. Under these conditions, Redis rejects all write operations (`SET`, `HSET`, `LPUSH`, `SADD`) with an Out-of-Memory exception to protect existing data from unmanaged deletion.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| Write commands fail with `OOM command not allowed` | Memory hit the `maxmemory` threshold while using the default `noeviction` policy | Configure an automatic eviction policy (`allkeys-lru` / `volatile-lru`) or increase `maxmemory` |
-| The Redis daemon is killed by the Linux Kernel (*OOM Killer*) | `redis.conf` lacks a explicit `maxmemory` boundary, exhausting host system RAM | Set an explicit `maxmemory` quota (e.g., 70-80% of total host physical memory) |
-| High memory fragmentation ratio (`mem_fragmentation_ratio > 1.5`) | The Jemalloc allocator holds unreleased pages after bulk key deletion operations | Enable Redis active defragmentation (`activedefrag yes`) |
+| Cause | Solution |
+|---|---|
+| **Write commands fail with `OOM command not allowed`**: Memory hit the `maxmemory` threshold while using the default `noeviction` policy | Configure an automatic eviction policy (`allkeys-lru` / `volatile-lru`) or increase `maxmemory` |
+| **The Redis daemon is killed by the Linux Kernel (*OOM Killer*)**: `redis.conf` lacks a explicit `maxmemory` boundary, exhausting host system RAM | Set an explicit `maxmemory` quota (e.g., 70-80% of total host physical memory) |
+| **High memory fragmentation ratio (`mem_fragmentation_ratio > 1.5`)**: The Jemalloc allocator holds unreleased pages after bulk key deletion operations | Enable Redis active defragmentation (`activedefrag yes`) |
 
 ## 🚀 Step-by-Step Solution
 

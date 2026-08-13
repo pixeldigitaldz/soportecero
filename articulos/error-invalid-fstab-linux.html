@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>Modificar el archivo <code>/etc/fstab</code> para montar discos duros secundarios o memorias de intercambio (SWAP) es común, pero un solo carácter mal escrito, un espacio de más o un UUID de disco inexistente hará que tu distribución Linux falle al arrancar, enviándote directamente a una pantalla negra con el mensaje de error <code>Welcome to emergency mode!</code>.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Sintaxis incorrecta o UUID inexistente en el archivo /etc/fstab</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Iniciar en modo rescate y corregir la línea defectuosa en <code>/etc/fstab</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Partición no disponible en el arranque impidiendo iniciar el sistema</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Agregar la opción <code>nofail</code> a la partición secundaria en el archivo <code>/etc/fstab</code></div>
+          </div></div></div>
+<p>Modificar el archivo <code>/etc/fstab</code> para montar discos duros secundarios o memorias de intercambio (SWAP) es común, pero un solo carácter mal escrito, un espacio de más o un UUID de disco inexistente hará que tu distribución Linux falle al arrancar, enviándote directamente a una pantalla negra con el mensaje de error <code>Welcome to emergency mode!</code>.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-acceder-con-permisos-de-escritura">Paso 1: Acceder con permisos de escritura</h3>
 <p>En el modo de emergencia, el sistema de archivos suele estar bloqueado en modo &quot;Solo Lectura&quot;, por lo que no podrás guardar ninguna corrección. Ejecuta este comando para desbloquearlo:</p>
 

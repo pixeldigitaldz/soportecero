@@ -13,13 +13,13 @@ date: '2026-08-03'
 
 Al realizar peticiones HTTP seguras en Python utilizando módulos como `urllib`, `requests` o `httpx`, es común encontrarse con la excepción `ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed`. Este error ocurre cuando la biblioteca SSL de Python no logra validar la cadena de certificados TLS/SSL presentados por el servidor de destino, ya sea por falta de certificados CA de confianza en el sistema, certificados autofirmados o configuraciones de red corporativas con proxies de inspección SSL.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| `SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]` en macOS tras instalar Python | Falta la instalación del almacén de certificados CA por defecto de OpenSSL en macOS | Ejecutar el script `Install Certificates.command` incluido en la carpeta de Python en macOS |
-| Fallo de verificación SSL en scripts con `requests` o `urllib3` en Linux / Entornos virtuales | Paquete `certifi` desactualizado o falta el bundle CA del sistema operativo | Actualizar `certifi` con `pip` o definir la variable `REQUESTS_CA_BUNDLE` hacia la CA raíz |
-| Error al conectar a un servidor local de desarrollo o con proxy empresarial | El servidor utiliza un certificado TLS autofirmado o la CA empresarial no está en el almacén de confianza | Añadir la CA personalizada al bundle de `certifi` o pasar la ruta del certificado a la petición |
+| Causa | Solución |
+|---|---|
+| **`SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]` en macOS tras instalar Python**: Falta la instalación del almacén de certificados CA por defecto de OpenSSL en macOS | Ejecutar el script `Install Certificates.command` incluido en la carpeta de Python en macOS |
+| **Fallo de verificación SSL en scripts con `requests` o `urllib3` en Linux / Entornos virtuales**: Paquete `certifi` desactualizado o falta el bundle CA del sistema operativo | Actualizar `certifi` con `pip` o definir la variable `REQUESTS_CA_BUNDLE` hacia la CA raíz |
+| **Error al conectar a un servidor local de desarrollo o con proxy empresarial**: El servidor utiliza un certificado TLS autofirmado o la CA empresarial no está en el almacén de confianza | Añadir la CA personalizada al bundle de `certifi` o pasar la ruta del certificado a la petición |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

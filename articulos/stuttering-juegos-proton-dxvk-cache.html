@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El tartamudeo gráfico o <em>stuttering</em> al jugar títulos de Windows en Linux a través de Proton o Wine ocurre porque las llamadas de gráficos DirectX de los juegos se traducen a la API abierta Vulkan en tiempo real mediante la librería DXVK. Esto genera un pico de consumo en el procesador para compilar cada nuevo sombreador de texturas la primera vez que se presenta en pantalla.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Compilación de shaders DXVK sucediendo en tiempo real durante la partida</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Activar la compilación asíncrona mediante la variable <code>DXVK_ASYNC=1</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Caché de shaders corrupta en el directorio del prefijo de Steam</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Borrar el contenido de la carpeta <code>shadercache</code> y reconstruir el archivo de caché</div>
+          </div></div></div>
+<p>El tartamudeo gráfico o <em>stuttering</em> al jugar títulos de Windows en Linux a través de Proton o Wine ocurre porque las llamadas de gráficos DirectX de los juegos se traducen a la API abierta Vulkan en tiempo real mediante la librería DXVK. Esto genera un pico de consumo en el procesador para compilar cada nuevo sombreador de texturas la primera vez que se presenta en pantalla.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-activar-la-compilacion-asincrona-de-shaders-en-protonsteam">Paso 1: Activar la compilación asíncrona de shaders en Proton/Steam</h3>
 <p>Si juegas títulos que corren bajo DirectX 11 o DirectX 9, puedes ordenarle a DXVK que cargue los shaders de forma asíncrona en segundo plano agregando variables en los parámetros de lanzamiento de Steam:</p>
 

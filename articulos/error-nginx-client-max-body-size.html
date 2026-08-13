@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El error <strong>413 request entity too large</strong> en un servidor web Nginx ocurre cuando un cliente intenta subir un archivo (como una imagen, un plugin de WordPress o un backup pesado) cuyo tamaño supera el límite máximo de carga permitido en la directiva de configuración del proxy web.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Directiva client_max_body_size en Nginx con límite inferior al tamaño del archivo subido</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Aumentar el límite en <code>nginx.conf</code>: <code>client_max_body_size 64M;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Límite upload_max_filesize o post_max_size en php.ini restringiendo el tamaño</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar <code>upload_max_filesize = 64M</code> en el archivo de configuración de PHP</div>
+          </div></div></div>
+<p>El error <strong>413 request entity too large</strong> en un servidor web Nginx ocurre cuando un cliente intenta subir un archivo (como una imagen, un plugin de WordPress o un backup pesado) cuyo tamaño supera el límite máximo de carga permitido en la directiva de configuración del proxy web.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-configurar-el-limite-de-subida-en-nginx">Paso 1: Configurar el límite de subida en Nginx</h3>
 <p>Abre el archivo de configuración global de Nginx o el bloque de servidor (<code>server block</code>) asignado a tu sitio web:</p>
 

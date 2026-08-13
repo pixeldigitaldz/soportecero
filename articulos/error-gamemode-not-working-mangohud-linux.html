@@ -196,7 +196,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>MangoHud no aparece al ejecutar juegos en Steam</strong>: Sintaxis incorrecta en parámetros de lanzamiento o falta paquete de librerías multilib de 32 bits (<code>lib32-mangohud</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Usar <code>mangohud %command%</code> e instalar las librerías <code>lib32</code> / <code>i386</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong><code>gamemoded</code> no cambia el gobernador de CPU a <code>performance</code></strong>: El servicio de usuario systemd no está activo o falta incluir al usuario en el grupo de permisos</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Hablitar <code>gamemoded.service</code> a nivel de usuario y comprobar con <code>gamemoded -t</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Crasheo del juego al iniciar con MangoHud bajo servidores de pantalla Wayland</strong>: Incompatibilidad en capas implícitas de Vulkan o conflictos de renderizado con el <em>compositor</em></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar las capas de Vulkan explícitamente en el archivo <code>MangoHud.conf</code></div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

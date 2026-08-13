@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 El error `VK_ERROR_DEVICE_LOST` (-4) en la API gráfica Vulkan indica que la unidad de procesamiento gráfico (GPU) ha dejado de responder al controlador del sistema o ha experimentado un reinicio de contexto (*GPU Hang / TDR*). En entornos de juegos en Linux a través de Steam Proton o Wine, así como en ejecuciones nativas de Vulkan, este fallo detiene abruptamente el renderizado y cierra el juego.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| El juego se congela y se cierra con el popup o log `VK_ERROR_DEVICE_LOST` | *GPU Hang* o activación del timeout TDR por sobrecalentamiento u overclocking inestable | Restablecer frecuencias de GPU al valor de fábrica y aumentar el tiempo de espera TDR |
-| Crasheos esporádicos en Proton al cargar áreas pesadas o activar Ray Tracing | Incompatibilidad en la caché de shaders de DXVK/VKD3D o asignación excesiva de VRAM | Limpiar la caché de shaders y ajustar variables de entorno de DXVK/VKD3D |
-| Fallo inmediato al iniciar títulos Vulkan/DX12 en tarjetas AMD o NVIDIA | Controlador de GPU obsoleto o capa *Vulkan implicit layer* conflictiva | Actualizar controladores (Mesa RADV / NVIDIA) y desactivar capas secundarias de trazado |
+| Causa | Solución |
+|---|---|
+| **El juego se congela y se cierra con el popup o log `VK_ERROR_DEVICE_LOST`**: *GPU Hang* o activación del timeout TDR por sobrecalentamiento u overclocking inestable | Restablecer frecuencias de GPU al valor de fábrica y aumentar el tiempo de espera TDR |
+| **Crasheos esporádicos en Proton al cargar áreas pesadas o activar Ray Tracing**: Incompatibilidad en la caché de shaders de DXVK/VKD3D o asignación excesiva de VRAM | Limpiar la caché de shaders y ajustar variables de entorno de DXVK/VKD3D |
+| **Fallo inmediato al iniciar títulos Vulkan/DX12 en tarjetas AMD o NVIDIA**: Controlador de GPU obsoleto o capa *Vulkan implicit layer* conflictiva | Actualizar controladores (Mesa RADV / NVIDIA) y desactivar capas secundarias de trazado |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

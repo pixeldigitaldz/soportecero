@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -194,10 +187,37 @@
       </ol>
     </nav>
     
-      <p>Modern development boards and Mini PCs (such as the Raspberry Pi 5) offer incredible performance, but dissipate a lot of heat when running heavy Docker services or media servers. The use of an <strong>Active Cooler (active heatsink with fan)</strong> is mandatory to prevent <em>thermal throttling</em> (automatic power reduction due to excess temperature).</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>PWM fan control overlay not enabled in config.txt</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Add <code>dtparam=fan_temp0=60000</code> in <code>/boot/firmware/config.txt</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Thermal monitoring service inactive</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Adjust thermal thresholds in <code>raspi-config</code> or check JST connector</div>
+          </div></div></div>
+<p>Modern development boards and Mini PCs (such as the Raspberry Pi 5) offer incredible performance, but dissipate a lot of heat when running heavy Docker services or media servers. The use of an <strong>Active Cooler (active heatsink with fan)</strong> is mandatory to prevent <em>thermal throttling</em> (automatic power reduction due to excess temperature).</p>
 <p>By default, the operating system manages the fan automatically, but often the factory thresholds are very high, allowing the board to reach 60°C before turning on the air, shortening the life of the hardware.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</h3>
 <p>Open the terminal of your Linux-based operating system and run the following command to know the exact processor temperature in real time:</p>
 

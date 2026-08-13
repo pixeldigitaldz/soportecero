@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-22"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Desynchronized FAudio or XAudio2 driver in Proton** | Install audio DLLs via `protontricks 230410 xact` |
+| **Low audio buffer latency in PipeWire/PulseAudio** | Set environment variable `PULSE_LATENCY_MSEC=60 %command%` |
+
+
 The issue of missing, stuttering, or crackling audio in fast-paced cooperative games like *Warframe* under Linux operating systems (CachyOS, Bazzite, etc.) occurs because the Windows multimedia libraries (`FAudio` or `XAudio2`) fail to sync correctly with Linux's modern sound server, which is currently typically **PipeWire**.
 
 ## 🚀 Cómo solucionar el error paso a paso

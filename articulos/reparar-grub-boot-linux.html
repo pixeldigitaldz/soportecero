@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate <code>grub&gt;</code>) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Cargador de arranque GRUB eliminado o corrupto tras actualización de Windows</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Iniciar desde un Live USB y reinstalar GRUB con <code>grub-install /dev/sdX</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Archivo de configuración /boot/grub/grub.cfg corrupto o desactualizado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Regenerar el menú de arranque con <code>grub-mkconfig -o /boot/grub/grub.cfg</code></div>
+          </div></div></div>
+<p>El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate <code>grub&gt;</code>) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-iniciar-desde-una-distribucion-live-usb-y-localizar-particiones">Paso 1: Iniciar desde una distribución Live USB y localizar particiones</h3>
 <p>Introduce un Live USB compatible con tu distribución actual, arráncalo en modo UEFI/BIOS y detecta el identificador de tu disco duro:</p>
 

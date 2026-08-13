@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **El puerto 80 o 443 requerido por una App de Umbrel está ocupado por otro servicio** | Modificar la asignación de puertos en el archivo `docker-compose.yml` de la App |
+| **Proceso local de Nginx o Apache bloqueando los puertos en el servidor anfitrión** | Identificar y detener el servicio conflictivo: `sudo systemctl stop nginx` |
+
+
 El error de puerto ya asignado (`bind: address already in use` o `port already allocated`) al intentar levantar un contenedor personalizado en Umbrel OS ocurre porque el proxy web interno de la plataforma (basado en Nginx o Traefik) ya tiene reservado el puerto 80 y 443 para gestionar la tienda de aplicaciones y el acceso seguro a su panel.
 
 ## 🚀 Cómo solucionar el error paso a paso

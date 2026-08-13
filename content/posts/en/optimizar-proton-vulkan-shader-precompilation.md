@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Frequent stuttering when entering new areas due to shader compilation** | Enable background Vulkan shader pre-compilation in Steam settings |
+| **Disabled shader cache or low storage limit** | Set `RADV_PERFTEST=gsw %command%` for AMD GPUs or update Mesa drivers |
+
+
 Sudden graphical frame drops (*stuttering*) and micro-freezes when playing modern games on Linux under Steam Proton are usually caused by active real-time Vulkan shader precompilation. The processor compiles new graphical models on the fly as you play, causing severe and instant drops in framerate.
 
 ## 🚀 Step-by-Step Solution

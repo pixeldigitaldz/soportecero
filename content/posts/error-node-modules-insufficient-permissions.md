@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Directorio node_modules perteneciendo al usuario root debido a uso previo de sudo** | Restablecer la propiedad del directorio: `sudo chown -R $USER:$USER node_modules` |
+| **Caché de NPM con permisos restrictivos** | Limpiar y reparar la caché global: `npm cache clean --force` |
+
+
 El error de permisos insuficientes (`EACCES: permission denied`) al intentar instalar paquetes de Node.js de manera global (con el comando `npm install -g`) ocurre porque el directorio predeterminado de NPM (`/usr/local/lib/node_modules/`) es propiedad exclusiva del usuario root del sistema de archivos de tu sistema operativo.
 
 ## 🚀 Cómo solucionar el error paso a paso

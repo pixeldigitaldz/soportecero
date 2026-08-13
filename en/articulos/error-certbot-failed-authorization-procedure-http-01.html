@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,7 +185,33 @@
       </ol>
     </nav>
     
-      <p>The error <strong><code>Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout</code></strong> occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Port 80 blocked by firewall or misconfigured web server</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Open port 80 in firewall: <code>ufw allow 80/tcp</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Inaccessible .well-known/acme-challenge validation path</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Ensure web root directory matches Nginx/Apache configuration block</div>
+          </div></div></div>
+<p>The error <strong><code>Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout</code></strong> occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
 <ol>
@@ -201,8 +220,9 @@
 <code>sudo systemctl stop nginx &amp;&amp; sudo certbot certonly --standalone -d yourdomain.com</code></li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+
+    </section>
+    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-verify-port-80-accessibility">Step 1: Verify Port 80 Accessibility</h3>
 <p>Let&#39;s Encrypt strictly requires <strong>port 80</strong> to be accessible over the public internet to validate domain ownership via the <code>http-01</code> challenge, even if your site redirects traffic to HTTPS (port 443).</p>
 <ol>

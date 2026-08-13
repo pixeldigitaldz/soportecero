@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 The `EADDRINUSE: address already in use` error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| Server startup fails with `EADDRINUSE :::3000` or `bind: address already in use` | A background node/python script or orphaned dev server is bound to the port | Locate the PID using `lsof` or `ss` and terminate the process |
-| Port instantly becomes occupied again right after killing the PID | A systemd unit or Docker container restart policy is resurrecting the process | Stop the supervising daemon (`systemctl stop` or `docker stop`) |
-| Socket remains stuck in `TIME_WAIT` state after stopping application | Socket closed ungracefully without enabling `SO_REUSEADDR` flag | Wait for TCP socket timeout or configure `SO_REUSEADDR` in code |
+| Cause | Solution |
+|---|---|
+| **Server startup fails with `EADDRINUSE :::3000` or `bind: address already in use`**: A background node/python script or orphaned dev server is bound to the port | Locate the PID using `lsof` or `ss` and terminate the process |
+| **Port instantly becomes occupied again right after killing the PID**: A systemd unit or Docker container restart policy is resurrecting the process | Stop the supervising daemon (`systemctl stop` or `docker stop`) |
+| **Socket remains stuck in `TIME_WAIT` state after stopping application**: Socket closed ungracefully without enabling `SO_REUSEADDR` flag | Wait for TCP socket timeout or configure `SO_REUSEADDR` in code |
 
 ## 🚀 Step-by-Step Solution
 

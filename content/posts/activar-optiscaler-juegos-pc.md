@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Falta DLL de OptiScaler o Wine/Proton no configurado** | Instalar `dxgi.dll` de OptiScaler en la carpeta del ejecutable (`.exe`) |
+| **Variable de entorno NVAPI inactiva en Linux** | Agregar `DXVK_ENABLE_NVAPI=1 %command%` en los parámetros de Steam |
+
+
 Si eres un jugador de PC con hardware modesto o utilizas sistemas operativos optimizados basados en Linux (como CachyOS o Bazzite), aumentar los fotogramas por segundo (FPS) en títulos exigentes como Diablo IV es una prioridad. Sin embargo, tecnologías como DLSS están bloqueadas para tarjetas gráficas de generaciones anteriores.
 
 Aquí es donde entra **OptiScaler**, un mod y wrapper de código abierto que intercepta las llamadas de renderizado de DLSS y las traduce a tecnologías abiertas como FSR 3 o XeSS. Esto permite activar el reescalado inteligente en juegos que originalmente no lo soportaban en tu hardware.

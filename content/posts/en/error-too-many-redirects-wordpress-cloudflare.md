@@ -15,11 +15,11 @@ date: '2026-07-27'
 
 The `ERR_TOO_MANY_REDIRECTS` error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| Browser displays `ERR_TOO_MANY_REDIRECTS` when attempting to open site | Cloudflare is set to "Flexible" SSL mode, sending unencrypted HTTP to origin while WordPress forces HTTP to HTTPS redirect | Change Cloudflare SSL/TLS mode to "Full" or "Full (Strict)" and update HTTPS proxy detection in `wp-config.php` |
+| Cause | Solution |
+|---|---|
+| **Browser displays `ERR_TOO_MANY_REDIRECTS` when attempting to open site**: Cloudflare is set to "Flexible" SSL mode, sending unencrypted HTTP to origin while WordPress forces HTTP to HTTPS redirect | Change Cloudflare SSL/TLS mode to "Full" or "Full (Strict)" and update HTTPS proxy detection in `wp-config.php` |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

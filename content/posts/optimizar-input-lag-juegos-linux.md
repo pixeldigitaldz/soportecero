@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-06"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Composición de ventanas activada generando retardo de fotogramas (VSync)** | Desactivar la composición de pantalla o utilizar una sesión Wayland nativa |
+| **Regulador de frecuencia de CPU en modo powersave** | Establecer la CPU en modo rendimiento: `gamemoded -r` o `powerprofilesctl set performance` |
+
+
 El retraso de entrada o *input lag* excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.
 
 ## 🚀 Cómo solucionar el error paso a paso

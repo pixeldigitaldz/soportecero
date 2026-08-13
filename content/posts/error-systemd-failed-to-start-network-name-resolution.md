@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-30"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servicio systemd-resolved fallando por conflicto de permisos o configuración corrupta** | Revisar los logs del servicio con `journalctl -u systemd-resolved -b` |
+| **Enlace simbólico del archivo /etc/resolv.conf roto** | Recrear el enlace simbólico hacia `/run/systemd/resolve/stub-resolv.conf` |
+
+
 El error **`Could not resolve host: google.com`** o **`Temporary failure in name resolution`** al ejecutar `ping`, `apt update` o `curl` en servidores Linux (Ubuntu, Debian, CentOS) ocurre cuando el servicio local de resolución de nombres DNS (**`systemd-resolved`**) o el enlace simbólico del archivo `/etc/resolv.conf` está corrupto o desconfigurado.
 
 > **Solución Rápida (1 Minuto):**

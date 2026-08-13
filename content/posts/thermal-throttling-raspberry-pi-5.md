@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-20"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Temperatura del SoC alcanzando el límite de 80°C bajo carga constante** | Instalar el disipador oficial Raspberry Pi Active Cooler |
+| **Falta de disipación de calor adecuada en la carcasa** | Usar una carcasa de aluminio con disipación pasiva o ventilador de control PWM |
+
+
 El estrangulamiento térmico o *thermal throttling* en Raspberry Pi 5 ocurre cuando el procesador sobrepasa los 80 °C en tareas exigentes. Para evitar daños por calor, el controlador del microcódigo reduce automáticamente la frecuencia del procesador de 2.4 GHz a menos de 1.5 GHz, lo que degrada drásticamente el rendimiento de tus contenedores o emuladores.
 
 ## 🚀 Cómo solucionar el error paso a paso

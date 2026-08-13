@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Overly permissive file permissions (e.g. 777) on WordPress files** | Set secure permissions: `find . -type d -exec chmod 755 {} \;` and `644` for files |
+| **wp-config.php file accessible or writable by other server users** | Set strict permissions on wp-config.php: `chmod 600 wp-config.php` |
+
+
 WordPress security flaws that allow attackers to upload malicious scripts or modify configuration files usually occur due to overly permissive permissions on your hosting directories. Keeping the default configuration of some automatic installers is the most exploited attack vector.
 
 ## 🚀 Cómo solucionar el error paso a paso

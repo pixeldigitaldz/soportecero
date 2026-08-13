@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Resolución de pantalla no soportada por el compositor Gamescope** | Establecer la resolución explícita: `gamescope -w 1280 -h 720 -- %command%` |
+| **Fallo en la tasa de refresco (Hz) elegida en el menú de ajuste rápido** | Restablecer la tasa de refresco a 60Hz o refrescar la sesión del servidor gráfico |
+
+
 El problema de **pantalla negra al lanzar juegos en Gamescope, SteamOS o escritorios Linux con Wayland** ocurre frecuentemente por incompatibilidades en la resolución nativa de Gamescope, conflictos con capas de superposición (*overlays* como MangoHud) o versiones de Proton que no negocian correctamente la cadena de renderizado Vulkan.
 
 > **Solución Rápida (1 Minuto):**

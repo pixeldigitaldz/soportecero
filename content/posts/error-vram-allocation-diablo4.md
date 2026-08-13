@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Desbordamiento de memoria VRAM en GPUs con 8GB o menos en texturas Ultra** | Reducir el ajuste de Texturas a Alto o Medio en las opciones gráficas del juego |
+| **Manejo ineficiente del pool de memoria DirectX 12 por parte de VKD3D-Proton** | Agregar la variable de entorno `VKD3D_CONFIG=upload_hvv %command%` en Steam |
+
+
 El error de falta de memoria de video (VRAM) o la congelación de pantalla al abrir el inventario o cambiar de zona en Diablo IV ocurre por una fuga en la asignación de recursos gráficos del motor del juego. El título consume toda la memoria física de la tarjeta gráfica y, al intentar desbordar los datos sobrantes en la RAM del sistema, colapsa si los tiempos de respuesta no están optimizados.
 
 ## 🚀 Cómo solucionar el error paso a paso

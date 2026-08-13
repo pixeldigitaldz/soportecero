@@ -9,11 +9,11 @@ date: "2026-08-01"
 
 El mensaje **npm ERR! code ENOENT** (Error NO ENtity) indica que el gestor de paquetes de Node.js intentó abrir o modificar un archivo o directorio que no existe en la ruta especificada. Ocurre comúnmente durante `npm install`, `npx` o la ejecución de scripts al faltar el archivo `package.json`, existir referencias obsoletas en `package-lock.json` o haber una caché corrupta.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| `npm ERR! code ENOENT syscall open` al ejecutar comandos de npm | Falta `package.json` en el directorio actual, versión desincronizada de `package-lock.json` o datos corruptos en la caché local | Verificar la ubicación actual con `pwd`, limpiar la caché de npm con `--force` y regenerar los módulos y el lockfile |
+| Causa | Solución |
+|---|---|
+| **`npm ERR! code ENOENT syscall open` al ejecutar comandos de npm**: Falta `package.json` en el directorio actual, versión desincronizada de `package-lock.json` o datos corruptos en la caché local | Verificar la ubicación actual con `pwd`, limpiar la caché de npm con `--force` y regenerar los módulos y el lockfile |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

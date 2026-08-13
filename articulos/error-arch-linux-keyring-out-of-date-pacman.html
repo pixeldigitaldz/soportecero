@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong><code>error: signature from &quot;...&quot; is unknown trust</code> o <code>invalid or corrupted package</code> al usar pacman</strong>: Las claves PGP de los desarrolladores cambiaron o el llavero local lleva meses sin actualizarse</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar primero <code>archlinux-keyring</code> de forma aislada y reiniciar la base de datos de GPG</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Pacman falla al descargar las firmas <code>.sig</code> de los repositorios espejo</strong>: Espejos (mirrors) desactualizados o hora del sistema fuera de sincronía</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Sincronizar el reloj del sistema mediante <code>systemd-timesyncd</code> y actualizar la lista de mirrors</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El comando <code>pacman -Sy archlinux-keyring</code> también falla por firmas corruptas</strong>: La base de datos de claves PGP local (<code>/etc/pacman.d/gnupg</code>) se encuentra corrupta</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Eliminar la carpeta de claves GPG, re-inicializar el keyring y poblar las claves master</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

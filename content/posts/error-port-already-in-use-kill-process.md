@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 El error `EADDRINUSE: address already in use` ocurre cuando un servicio de red, servidor web (Nginx, Apache), contenedor Docker o script (Node.js, Python) intenta vincularse (*bind*) a un puerto TCP/UDP que ya está siendo utilizado por otro proceso activo en el sistema operativo.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| Error `EADDRINUSE :::3000` o `bind: address already in use` al iniciar un servidor | Un proceso en segundo plano (Node, Python, Docker) no se cerró correctamente | Identificar el PID con `lsof` o `ss` y finalizar la ejecución |
-| El puerto vuelve a quedar ocupado inmediatamente tras matar el proceso | Un servicio de systemd o un contenedor Docker con política de reinicio automático | Detener el servicio supervisor (`systemctl stop` o `docker stop`) |
-| El puerto se muestra en estado `TIME_WAIT` y rechaza conexiones nuevas | El socket no se cerró de forma limpia por falta de `SO_REUSEADDR` en el servidor | Esperar el timeout TCP o configurar `SO_REUSEADDR` en el código fuente |
+| Causa | Solución |
+|---|---|
+| **Error `EADDRINUSE :::3000` o `bind: address already in use` al iniciar un servidor**: Un proceso en segundo plano (Node, Python, Docker) no se cerró correctamente | Identificar el PID con `lsof` o `ss` y finalizar la ejecución |
+| **El puerto vuelve a quedar ocupado inmediatamente tras matar el proceso**: Un servicio de systemd o un contenedor Docker con política de reinicio automático | Detener el servicio supervisor (`systemctl stop` o `docker stop`) |
+| **El puerto se muestra en estado `TIME_WAIT` y rechaza conexiones nuevas**: El socket no se cerró de forma limpia por falta de `SO_REUSEADDR` en el servidor | Esperar el timeout TCP o configurar `SO_REUSEADDR` en el código fuente |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

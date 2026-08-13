@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,7 +185,33 @@
       </ol>
     </nav>
     
-      <p>El <strong>parpadeo visual (<em>flickering</em>), tartamudeo (<em>stuttering</em>) o desincronización de cuadros</strong> al jugar en sistemas Linux con tarjetas gráficas <strong>NVIDIA bajo entornos Wayland</strong> (KDE Plasma 6, Hyprland, GNOME) se debe a la desincronización entre el búfer de renderizado del controlador y el compositor de ventanas.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Falta de soporte de Explicit Sync en controladores Nvidia anteriores a la serie 555</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar los controladores propietarios de Nvidia a la versión 555.58 o superior</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Desincronización de fotogramas entre XWayland y el servidor Wayland</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Habilitar la bandera de sincronización explícita en el archivo de configuración del compositor</div>
+          </div></div></div>
+<p>El <strong>parpadeo visual (<em>flickering</em>), tartamudeo (<em>stuttering</em>) o desincronización de cuadros</strong> al jugar en sistemas Linux con tarjetas gráficas <strong>NVIDIA bajo entornos Wayland</strong> (KDE Plasma 6, Hyprland, GNOME) se debe a la desincronización entre el búfer de renderizado del controlador y el compositor de ventanas.</p>
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -202,8 +221,9 @@
 <code>__GLX_VENDOR_LIBRARY_NAME=nvidia</code></li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="como-corregir-el-rendimiento-de-nvidia-en-wayland-paso-a-paso">🚀 Cómo corregir el rendimiento de NVIDIA en Wayland paso a paso</h2>
+
+    </section>
+    <h2 id="como-corregir-el-rendimiento-de-nvidia-en-wayland-paso-a-paso">🚀 Cómo corregir el rendimiento de NVIDIA en Wayland paso a paso</h2>
 <h3 id="paso-1-verificar-e-instalar-controladores-nvidia-555-explicit-sync">Paso 1: Verificar e instalar controladores NVIDIA 555+ (Explicit Sync)</h3>
 <p>La causa raíz histórica del lag en NVIDIA/Wayland se solucionó con el protocolo de <strong>Sincronización Explícita (Explicit Sync)</strong> disponible a partir de la versión <strong>555</strong> de los controladores propietarios.</p>
 <ul>

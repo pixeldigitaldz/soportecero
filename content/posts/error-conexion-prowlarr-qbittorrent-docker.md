@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Nombre de host de red de Docker no alcanzable entre contenedores** | Conectar ambos contenedores a la misma red bridge de Docker (`docker network connect`) |
+| **API Key o credenciales de autenticación qBittorrent incorrectas** | Desactivar la protección CSRF en qBittorrent o verificar el puerto web UI (8080) |
+
+
 El error de conexión rechazada (`Connection Refused` o `Test failed: Connection refused`) al intentar vincular Prowlarr con qBittorrent en Docker ocurre porque ambos servicios corren en contenedores aislados que no comparten la misma red lógica virtual de Docker, o porque qBittorrent rechaza conexiones externas debido a una mala configuración en su API de control.
 
 ## 🚀 Cómo solucionar el error paso a paso

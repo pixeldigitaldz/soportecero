@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Tirones (stuttering) por compilación de shaders VKD3D DirectX 12** | Usar Proton-GE actualizado e incluir `VKD3D_CONFIG=single_queue %command%` |
+| **Límite de memoria caché de shaders por defecto saturado** | Aumentar el tamaño de la caché de Vulkan agregando `__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1` |
+
+
 El **`stuttering` (tirones de imagen) y las caídas de cuadros por segundo (FPS)** en Elden Ring al ejecutarse en sistemas Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck provienen del procesamiento síncrono del compilador de traducción de DirectX 12 a Vulkan (**VKD3D-Proton**) y la gestión de memoria VRAM en controladores gráficos.
 
 > **Solución Rápida (1 Minuto):**

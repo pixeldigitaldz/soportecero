@@ -13,13 +13,13 @@ date: '2026-08-04'
 
 Al intentar actualizar el sistema o instalar nuevos paquetes en Arch Linux o distribuciones derivadas (como CachyOS, EndeavourOS o Manjaro) mediante `pacman -Syu`, es muy común enfrentarse a errores como `error: signature from "Developer Name <email>" is unknown trust` o `error: el paquete es inválido o está dañado (firma PGP inválida)`. Esto ocurre porque las claves GPG del proyecto Arch Linux expiran o cambian con el tiempo, y el llavero local (`archlinux-keyring`) no puede validar los paquetes firmados por los mantenedores oficiales.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| `error: signature from "..." is unknown trust` o `invalid or corrupted package` al usar pacman | Las claves PGP de los desarrolladores cambiaron o el llavero local lleva meses sin actualizarse | Actualizar primero `archlinux-keyring` de forma aislada y reiniciar la base de datos de GPG |
-| Pacman falla al descargar las firmas `.sig` de los repositorios espejo | Espejos (mirrors) desactualizados o hora del sistema fuera de sincronía | Sincronizar el reloj del sistema mediante `systemd-timesyncd` y actualizar la lista de mirrors |
-| El comando `pacman -Sy archlinux-keyring` también falla por firmas corruptas | La base de datos de claves PGP local (`/etc/pacman.d/gnupg`) se encuentra corrupta | Eliminar la carpeta de claves GPG, re-inicializar el keyring y poblar las claves master |
+| Causa | Solución |
+|---|---|
+| **`error: signature from "..." is unknown trust` o `invalid or corrupted package` al usar pacman**: Las claves PGP de los desarrolladores cambiaron o el llavero local lleva meses sin actualizarse | Actualizar primero `archlinux-keyring` de forma aislada y reiniciar la base de datos de GPG |
+| **Pacman falla al descargar las firmas `.sig` de los repositorios espejo**: Espejos (mirrors) desactualizados o hora del sistema fuera de sincronía | Sincronizar el reloj del sistema mediante `systemd-timesyncd` y actualizar la lista de mirrors |
+| **El comando `pacman -Sy archlinux-keyring` también falla por firmas corruptas**: La base de datos de claves PGP local (`/etc/pacman.d/gnupg`) se encuentra corrupta | Eliminar la carpeta de claves GPG, re-inicializar el keyring y poblar las claves master |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

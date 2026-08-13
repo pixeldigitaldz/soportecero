@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-21"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Restricted local filesystem permissions on mounted volume** | Set local permissions: `chmod -R 755` on dirs and `644` on files |
+| **Missing index entrypoint file (index.html / index.php)** | Verify casing match on root index file |
+
+
 The **403 forbidden nginx** error in a Docker container usually occurs when the web server does not have read permissions to access the files of the mounted local volume, or when it does not find a valid indexed start file in the root directory of the service path.
 
 ## 🚀 Cómo solucionar el error paso a paso

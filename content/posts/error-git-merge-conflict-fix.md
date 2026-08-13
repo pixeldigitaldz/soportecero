@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Modificaciones paralelas en las mismas líneas del mismo archivo entre ramas** | Editar el archivo, eliminar las marcas `<<<<<<<`, `=======`, `>>>>>>>` y hacer commit |
+| **Fusión automática abortada por cambios locales no confirmados** | Guardar los cambios temporalmente en el Stash: `git stash` antes de hacer el merge |
+
+
 Un conflicto de fusión (*merge conflict*) en Git ocurre cuando dos personas modifican las mismas líneas de un archivo en ramas diferentes, o cuando una de ellas elimina un archivo que la otra está intentando editar. Al no poder decidir automáticamente qué cambios priorizar, Git detiene el proceso y marca los archivos en conflicto.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Ruta de origen especificada en el comando COPY/ADD del Dockerfile no existe** | Verificar la ruta exacta en la estructura de archivos local y el archivo `.dockerignore` |
+| **Contexto de compilación de Docker apuntando a una carpeta incorrecta** | Ejecutar el comando `docker build` asegurando la sintaxis `.` al final del comando |
+
+
 El error **`failed to compute cache key: failed to walk: lstat ...: no such file or directory`** durante el comando `docker build` ocurre cuando la instrucción `COPY` o `ADD` dentro del `Dockerfile` hace referencia a un archivo o directorio local que no existe dentro del **contexto de construcción** de Docker.
 
 > **Solución Rápida (1 Minuto):**

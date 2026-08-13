@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Caché de compilación de shaders DXVK desincronizada o dañada** | Eliminar el archivo `.dxvk-cache` en la carpeta prefix del juego |
+| **Subida brusca de uso de CPU durante compilación en tiempo real** | Activar precompilación asíncrona de shaders: `DXVK_ASYNC=1 %command%` |
+
+
 El tartamudeo de la imagen (*stuttering*) al iniciar un juego de Windows en Linux mediante Proton ocurre porque las llamadas de gráficos de DirectX deben traducirse a la API abierta **Vulkan** en tiempo real mediante una librería llamada DXVK. Cada vez que entras a una zona nueva o un enemigo lanza una habilidad, el juego se congela unos milisegundos mientras compila el sombreador por primera vez.
 
 ## 🚀 Cómo solucionar el error paso a paso

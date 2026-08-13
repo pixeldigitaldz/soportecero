@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje <code>database disk image is malformed</code>) ocurre cuando el archivo interno SQLite (<code>sonarr.db</code> o <code>radarr.db</code>) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Base de datos SQLite de Sonarr/Radarr corrupta por apagado repentino del contenedor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Restaurar un respaldo automático de la carpeta <code>Backups/scheduled/</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Integridad de la base de datos sqlite3 dañada</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reparar exportando e importando datos: `sqlite3 sonarr.db &quot;.recover&quot;</div>
+          </div></div></div>
+<p>El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje <code>database disk image is malformed</code>) ocurre cuando el archivo interno SQLite (<code>sonarr.db</code> o <code>radarr.db</code>) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-detener-el-contenedor-o-servicio-afectado">Paso 1: Detener el contenedor o servicio afectado</h3>
 <p>Antes de manipular la base de datos, debes asegurarte de que no haya ningún proceso escribiendo en ella. Detén el contenedor de Docker correspondiente:</p>
 

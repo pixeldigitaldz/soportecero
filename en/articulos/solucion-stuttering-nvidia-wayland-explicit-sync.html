@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,7 +185,33 @@
       </ol>
     </nav>
     
-      <p>Visual <strong>flickering, stuttering, and frame out-of-order issues</strong> when gaming on Linux with <strong>NVIDIA graphics cards under Wayland compositors</strong> (KDE Plasma 6, Hyprland, GNOME) stems from buffer synchronization mismatches between the proprietary display driver and the Wayland compositor windowing system.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Lack of Explicit Sync support in Nvidia drivers prior to version 555</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Update proprietary Nvidia drivers to version 555.58 or higher</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Frame desynchronization between XWayland and Wayland compositor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable explicit sync flag in compositor configuration file</div>
+          </div></div></div>
+<p>Visual <strong>flickering, stuttering, and frame out-of-order issues</strong> when gaming on Linux with <strong>NVIDIA graphics cards under Wayland compositors</strong> (KDE Plasma 6, Hyprland, GNOME) stems from buffer synchronization mismatches between the proprietary display driver and the Wayland compositor windowing system.</p>
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
 <ol>
@@ -201,8 +220,9 @@
 <li>Add <code>GBM_BACKEND=nvidia-drm</code> to <code>/etc/environment</code>.</li>
 </ol>
 </blockquote>
-        </section>
-        <h2 id="step-by-step-optimization">🚀 Step-by-Step Optimization</h2>
+
+    </section>
+    <h2 id="step-by-step-optimization">🚀 Step-by-Step Optimization</h2>
 <h3 id="step-1-install-nvidia-555-drivers-explicit-sync-support">Step 1: Install NVIDIA 555+ Drivers (Explicit Sync Support)</h3>
 <p>Explicit Sync protocol support was introduced in the <strong>NVIDIA 555</strong> driver branch, eliminating implicit buffer ordering lag.</p>
 <ul>

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Proceso cloud-init esperando respuestas de la red durante el arranque de la VM** | Desactivar la búsqueda de metadatos de red innecesarios en `/etc/cloud/cloud.cfg` |
+| **Servicios de cloud-init demorando el inicio de systemd** | Deshabilitar módulos no utilizados: `systemctl disable cloud-init` |
+
+
 El mensaje **`cloud-init: waiting for network config`** o la demora de 2 a 5 minutos en la pantalla de inicio de máquinas virtuales Ubuntu Server en **Proxmox VE, KVM o AWS** ocurre cuando la suite de inicialización `cloud-init` intenta consultar servicios DHCP o metadatos de red en interfaces secundarias no configuradas.
 
 > **Solución Rápida (1 Minuto):**

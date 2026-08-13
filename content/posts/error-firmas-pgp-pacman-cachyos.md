@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-18"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Claves PGP del llavero de pacman expiradas o desactualizadas en Arch/CachyOS** | Actualizar el keyring de pacman: `sudo pacman -Sy cachyos-keyring archlinux-keyring` |
+| **Base de datos de firmas de repositorios corrupta** | Reiniciar el llavero de llaves gpg: `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init` |
+
+
 El error crítico de Pacman `error: key "..." could not be looked up remotely` o `error: signature from "..." is invalid` en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado o corrupto, impidiendo la instalación segura de cualquier actualización de software.
 
 ## 🚀 Cómo solucionar el error paso a paso

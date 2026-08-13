@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Bucle de redirección infinito (Too Many Redirects) por discrepancia de protocolo** | Configurar las cabeceras `X-Forwarded-Proto` en el proxy inverso Nginx/Cloudflare |
+| **URL del sitio en WordPress configurada con http:// en lugar de https://** | Actualizar las opciones `siteurl` y `home` en la base de datos de WordPress |
+
+
 El error `ERR_TOO_MANY_REDIRECTS` (Demasiadas redirecciones) ocurre cuando tu servidor web y un servicio externo (como Cloudflare) entran en un conflicto de instrucciones: el servidor le dice al navegador que use HTTPS, pero Cloudflare intercepta la petición y la devuelve en HTTP, creando un bucle infinito que impide cargar la página.
 
 ## 🚀 Cómo solucionar el error paso a paso

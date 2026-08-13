@@ -13,13 +13,13 @@ date: '2026-08-03'
 
 When executing secure HTTPS requests in Python using packages like `urllib`, `requests`, or `httpx`, developers frequently encounter `ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed`. This error occurs when Python's underlying SSL module cannot validate the TLS/SSL certificate chain returned by the target server due to missing system Root CAs, self-signed certificates, or corporate SSL inspection proxies.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| `SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]` on macOS after installing Python | macOS Python builds do not use system Keychain CAs by default and require manual OpenSSL CA setup | Run the `Install Certificates.command` script included in the macOS Python application bundle |
-| SSL verification error in scripts using `requests` or `urllib3` on Linux / Virtualenv | Outdated `certifi` package or missing operating system CA certificates bundle | Upgrade `certifi` via `pip` or set the `REQUESTS_CA_BUNDLE` environment variable to system CAs |
-| Connection failure when targeting internal APIs, staging servers, or corporate proxies | Target server uses a self-signed certificate or custom Enterprise Root CA missing from trust store | Pass the custom CA certificate path to the request or set custom environment variable bundles |
+| Cause | Solution |
+|---|---|
+| **`SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]` on macOS after installing Python**: macOS Python builds do not use system Keychain CAs by default and require manual OpenSSL CA setup | Run the `Install Certificates.command` script included in the macOS Python application bundle |
+| **SSL verification error in scripts using `requests` or `urllib3` on Linux / Virtualenv**: Outdated `certifi` package or missing operating system CA certificates bundle | Upgrade `certifi` via `pip` or set the `REQUESTS_CA_BUNDLE` environment variable to system CAs |
+| **Connection failure when targeting internal APIs, staging servers, or corporate proxies**: Target server uses a self-signed certificate or custom Enterprise Root CA missing from trust store | Pass the custom CA certificate path to the request or set custom environment variable bundles |
 
 ## 🚀 Step-by-Step Solution
 

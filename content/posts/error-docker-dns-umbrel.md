@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **El servicio DNS interno de Docker no resuelve nombres en Umbrel OS** | Agregar DNS públicos en `/etc/docker/daemon.json` (ej. `"dns": ["1.1.1.1"]`) |
+| **Conflicto con systemd-resolved escuchando en el puerto 53** | Configurar `DNSStubListener=no` en `/etc/systemd/resolved.conf` |
+
+
 Un fallo crítico muy común en servidores domésticos basados en el ecosistema **Umbrel OS** ocurre cuando los contenedores de Docker (como Sonarr o tus nodos) dejan de descargar actualizaciones o pierden la conexión con los servidores exteriores de repente, arrojando errores de tipo `Temporary failure in name resolution`. Esto sucede porque el demonio de Docker pierde la ruta hacia el resolvedor DNS local del sistema operativo anfitrión.
 
 ## 🚀 Cómo solucionar el error paso a paso

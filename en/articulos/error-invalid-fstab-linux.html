@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>Modifying the <code>/etc/fstab</code> file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message <code>Welcome to emergency mode!</code>.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Incorrect syntax or invalid UUID in /etc/fstab file</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Boot into rescue mode and fix broken entry in <code>/etc/fstab</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Unavailable partition at boot preventing system startup</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Add <code>nofail</code> option to secondary partition in <code>/etc/fstab</code></div>
+          </div></div></div>
+<p>Modifying the <code>/etc/fstab</code> file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message <code>Welcome to emergency mode!</code>.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-gain-write-access">Step 1: Gain write access</h3>
 <p>In emergency mode, the file system is typically locked in &quot;Read-Only&quot; mode, meaning you won&#39;t be able to save any corrections. Execute this command to unlock it:</p>
 

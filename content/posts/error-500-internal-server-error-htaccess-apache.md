@@ -9,11 +9,11 @@ date: "2026-07-31"
 
 El error **500 Internal Server Error** en Apache es una de las respuestas de fallo más genéricas y frustrantes. Ocurre con frecuencia inmediatamente después de modificar el archivo `.htaccess`, introducir reglas de reescritura incorrectas (`mod_rewrite`), o incluir directivas de módulos que no están instalados o activados en el servidor web.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| HTTP 500 tras editar `.htaccess` o instalar un plugin/CMS | Directiva no válida, error tipográfico de sintaxis o módulo de Apache no activado (ej. `mod_rewrite` o `mod_headers`) | Revisar los registros de error de Apache (`error.log`), renombrar el archivo temporalmente y corregir o envolver las directivas en bloques `<IfModule>` |
+| Causa | Solución |
+|---|---|
+| **HTTP 500 tras editar `.htaccess` o instalar un plugin/CMS**: Directiva no válida, error tipográfico de sintaxis o módulo de Apache no activado (ej. `mod_rewrite` o `mod_headers`) | Revisar los registros de error de Apache (`error.log`), renombrar el archivo temporalmente y corregir o envolver las directivas en bloques `<IfModule>` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

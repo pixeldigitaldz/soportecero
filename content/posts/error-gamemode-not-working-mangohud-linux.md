@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 Feral GameMode (`gamemoded`) y MangoHud son herramientas fundamentales en el ecosistema de juegos en Linux: la primera ajusta dinámicamente el gobernador de la CPU, prioridades de E/S y perfiles de energía de la GPU, mientras que la segunda renderiza una superposición (*overlay*) para monitorizar fotogramas (FPS), temperaturas y frecuencias. Sin embargo, inconsistencias en librerías de 32 bits, servicios DBus o variables de entorno pueden provocar que no se carguen en Steam o Lutris.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| MangoHud no aparece al ejecutar juegos en Steam | Sintaxis incorrecta en parámetros de lanzamiento o falta paquete de librerías multilib de 32 bits (`lib32-mangohud`) | Usar `mangohud %command%` e instalar las librerías `lib32` / `i386` |
-| `gamemoded` no cambia el gobernador de CPU a `performance` | El servicio de usuario systemd no está activo o falta incluir al usuario en el grupo de permisos | Hablitar `gamemoded.service` a nivel de usuario y comprobar con `gamemoded -t` |
-| Crasheo del juego al iniciar con MangoHud bajo servidores de pantalla Wayland | Incompatibilidad en capas implícitas de Vulkan o conflictos de renderizado con el *compositor* | Configurar las capas de Vulkan explícitamente en el archivo `MangoHud.conf` |
+| Causa | Solución |
+|---|---|
+| **MangoHud no aparece al ejecutar juegos en Steam**: Sintaxis incorrecta en parámetros de lanzamiento o falta paquete de librerías multilib de 32 bits (`lib32-mangohud`) | Usar `mangohud %command%` e instalar las librerías `lib32` / `i386` |
+| **`gamemoded` no cambia el gobernador de CPU a `performance`**: El servicio de usuario systemd no está activo o falta incluir al usuario en el grupo de permisos | Hablitar `gamemoded.service` a nivel de usuario y comprobar con `gamemoded -t` |
+| **Crasheo del juego al iniciar con MangoHud bajo servidores de pantalla Wayland**: Incompatibilidad en capas implícitas de Vulkan o conflictos de renderizado con el *compositor* | Configurar las capas de Vulkan explícitamente en el archivo `MangoHud.conf` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

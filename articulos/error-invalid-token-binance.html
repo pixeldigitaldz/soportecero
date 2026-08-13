@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -191,9 +184,36 @@
       </ol>
     </nav>
     
-      <p>El error <code>Invalid Signature</code> o <code>Token Expired</code> en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>API Key o Secret Key de Binance expirada, mal copiada o con IP no autorizada</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Generar una nueva clave API en Binance y registrar la dirección IP estática de tu servidor</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Desincronización de hora del sistema local con el reloj del servidor de Binance</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Sincronizar el reloj del servidor con NTP: <code>sudo ntpdate pool.ntp.org</code></div>
+          </div></div></div>
+<p>El error <code>Invalid Signature</code> o <code>Token Expired</code> en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-sincronizar-el-reloj-del-servidor-ntp">Paso 1: Sincronizar el reloj del servidor (NTP)</h3>
 <p>Binance rechaza cualquier petición cuyo Timestamp varíe por más de unos pocos segundos respecto a su servidor. En tu servidor Linux, fuerza la sincronización horaria ejecutando:</p>
 

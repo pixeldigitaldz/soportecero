@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **cloud-init process waiting for network response during VM boot** | Disable unused network metadata lookup in `/etc/cloud/cloud.cfg` |
+| **cloud-init services delaying systemd startup** | Disable unused modules: `systemctl disable cloud-init` |
+
+
 The message **`cloud-init: waiting for network config`** or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on **Proxmox VE, KVM, or Cloud VPS** occurs when `cloud-init` stalls waiting for DHCP responses on unconfigured secondary network interfaces.
 
 > **Quick Solution (1 Minute):**

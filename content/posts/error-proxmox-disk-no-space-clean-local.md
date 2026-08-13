@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Almacenamiento local (root) de Proxmox al 100% impidiendo el arranque de VMs** | Eliminar imágenes ISO antiguas y respaldos en `/var/lib/vz/template/iso/` |
+| **Archivos de registros (logs) de Proxmox saturados en /var/log/** | Limpiar archivos de logs comprimidos viejos: `rm -f /var/log/*.gz /var/log/pve/tasks/*` |
+
+
 El error de espacio agotado en el almacenamiento local de Proxmox VE (`No space left on device` o fallos al arrancar máquinas virtuales) ocurre debido a la acumulación de imágenes ISO obsoletas, plantillas LXC no utilizadas, copias de seguridad de Dump antiguas y archivos de registro persistentes de contenedores corruptos en el directorio `/var/log`.
 
 ## 🚀 Cómo solucionar el error paso a paso

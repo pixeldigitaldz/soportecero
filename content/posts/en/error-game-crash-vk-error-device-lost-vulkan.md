@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 The `VK_ERROR_DEVICE_LOST` (-4) error code in the Vulkan API indicates that the graphics processing unit (GPU) has stopped responding to the display driver or experienced a hardware context reset (*GPU Hang / TDR*). When running Vulkan or Proton-translated games on Linux and Windows, this issue immediately halts rendering and terminates the process.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution | |
-| :--- | :--- | :--- |
-| Game freezes and crashes suddenly with `VK_ERROR_DEVICE_LOST` error log | GPU Hang or TDR timeout triggered by thermal throttling or unstable overclock | Reset GPU clock/voltage settings to stock and increase TDR timeout values |
-| Sporadic crashes under Proton when loading heavy areas or enabling Ray Tracing | Corrupted DXVK/VKD3D pipeline shader cache or VRAM overcommit | Clear shader cache directories and configure DXVK environment variables |
-| Instant crash when launching DirectX 12 or Vulkan titles on AMD/NVIDIA GPUs | Outdated graphics drivers (Mesa RADV / NVIDIA) or conflicting Vulkan layers | Update GPU drivers and disable unnecessary Vulkan implicit layers |
+| Cause | Solution |
+|---|---|
+| **Game freezes and crashes suddenly with `VK_ERROR_DEVICE_LOST` error log**: GPU Hang or TDR timeout triggered by thermal throttling or unstable overclock | Reset GPU clock/voltage settings to stock and increase TDR timeout values |
+| **Sporadic crashes under Proton when loading heavy areas or enabling Ray Tracing**: Corrupted DXVK/VKD3D pipeline shader cache or VRAM overcommit | Clear shader cache directories and configure DXVK environment variables |
+| **Instant crash when launching DirectX 12 or Vulkan titles on AMD/NVIDIA GPUs**: Outdated graphics drivers (Mesa RADV / NVIDIA) or conflicting Vulkan layers | Update GPU drivers and disable unnecessary Vulkan implicit layers |
 
 ## 🚀 Step-by-Step Solution
 

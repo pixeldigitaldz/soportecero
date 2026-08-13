@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Uso agresivo del espacio swap en disco lento causando tirones (stuttering)** | Reducir la agresividad de swappiness: `sudo sysctl vm.swappiness=10` |
+| **Falta de compresión de memoria RAM en tiempo real** | Habilitar el módulo zRAM en Linux para comprimir la memoria en lugar de usar swap en disco |
+
+
 El desbordamiento de memoria RAM en servidores en la nube sin particiones de intercambio (Swap) provoca que el kernel de Linux active el proceso asesino `OOM Killer` (Out of Memory Killer), deteniendo de inmediato aplicaciones críticas como bases de datos MySQL, servidores web Nginx o procesos de Node.js.
 
 ## 🚀 Cómo configurar la memoria virtual en Linux paso a paso

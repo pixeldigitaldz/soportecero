@@ -14,6 +14,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Indexer connection blocked by Cloudflare / Turnstile challenge** | Connect Prowlarr with a running FlareSolverr container instance |
+| **High latency or server DNS failing to resolve indexer domains** | Increase request timeout limit in Prowlarr indexer settings |
+
+
 The `Timeout` or connection timed out error in tools like Prowlarr, Radarr, or Sonarr occurs when the managers attempt to sync or perform a search on a private indexer and the request does not receive a response within the time limit (usually 30 seconds).
 
 This is primarily due to blocks by Cloudflare's security challenge on the tracker indexer, or name resolution (DNS) issues within the internal network of your Docker containers.

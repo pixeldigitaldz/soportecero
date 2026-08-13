@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>The <code>ERR_TOO_MANY_REDIRECTS</code> (Too many redirects) error occurs when your web server and an external service (such as Cloudflare) enter into a conflict of instructions: the server tells the browser to use HTTPS, but Cloudflare intercepts the request and returns it in HTTP, creating an infinite loop that prevents the page from loading.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Infinite redirect loop (Too Many Redirects) due to protocol mismatch</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set <code>X-Forwarded-Proto</code> headers in Nginx/Cloudflare reverse proxy</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>WordPress Site URL configured with http:// instead of https://</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Update <code>siteurl</code> and <code>home</code> options in WordPress database</div>
+          </div></div></div>
+<p>The <code>ERR_TOO_MANY_REDIRECTS</code> (Too many redirects) error occurs when your web server and an external service (such as Cloudflare) enter into a conflict of instructions: the server tells the browser to use HTTPS, but Cloudflare intercepts the request and returns it in HTTP, creating an infinite loop that prevents the page from loading.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-ajustar-el-cifrado-en-cloudflare">Paso 1: Ajustar el cifrado en Cloudflare</h3>
 <p>If you use Cloudflare to protect your own domain, the primary cause is having the SSL mode configured as &quot;Flexible&quot;.</p>
 <ol>

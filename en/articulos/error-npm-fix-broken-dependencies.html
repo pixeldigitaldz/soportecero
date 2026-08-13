@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>The failure when running <code>npm audit fix --force</code> in Node.js projects occurs because this utility automatically updates packages to major versions (<em>major</em>). This introduces API breaking changes (<em>breaking changes</em>) that break the compatibility of your secondary dependencies and stop your application&#39;s compilation.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Corrupted dependency tree or package conflicts in package-lock.json</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Remove locks and reinstall: <code>rm -rf node_modules package-lock.json &amp;&amp; npm install</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Incompatible package versions installed via npm registry</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Force resolve stale dependencies using <code>npm audit fix --force</code></div>
+          </div></div></div>
+<p>The failure when running <code>npm audit fix --force</code> in Node.js projects occurs because this utility automatically updates packages to major versions (<em>major</em>). This introduces API breaking changes (<em>breaking changes</em>) that break the compatibility of your secondary dependencies and stop your application&#39;s compilation.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-identificar-las-vulnerabilidades-criticas-reales">Paso 1: Identificar las vulnerabilidades críticas reales</h3>
 <p>Instead of forcing automatic updates, audit the dependencies to locate which specific package introduces the security breach:</p>
 

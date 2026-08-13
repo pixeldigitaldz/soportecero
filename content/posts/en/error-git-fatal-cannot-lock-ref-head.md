@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-20"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Stale Git ref lock file present (.git/refs/heads/X.lock)** | Remove leftover lock file: `rm -f .git/refs/heads/branch-name.lock` |
+| **Multiple concurrent Git processes running simultaneously** | Kill other active Git processes or IDE locks before retrying |
+
+
 The error **`error: cannot lock ref 'refs/remotes/origin/main': is at ... but expected ...`** or `fatal: cannot lock ref` occurs during `git pull`, `git fetch`, or `git checkout` when local Git reference pointers become corrupted from abrupt process terminations or case-sensitivity branch conflicts.
 
 > **Quick Solution (1 Minute):**

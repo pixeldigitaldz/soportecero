@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Parallel edits on identical lines across branches** | Edit file, remove `<<<<<<<`, `=======`, `>>>>>>>` conflict markers and commit |
+| **Automatic merge aborted due to uncommitted local changes** | Stash local changes: `git stash` before executing merge |
+
+
 A merge conflict in Git occurs when two people modify the same lines of a file in different branches, or when one of them deletes a file that the other is trying to edit. Unable to automatically decide which changes to prioritize, Git halts the process and marks the conflicted files.
 
 ## 🚀 Step-by-Step Solution

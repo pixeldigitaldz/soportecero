@@ -9,11 +9,11 @@ date: "2026-07-31"
 
 El estado **CrashLoopBackOff** en Kubernetes indica que un contenedor dentro de un Pod falla al iniciarse, se interrumpe inmediatamente y entra en un ciclo continuo de reinicios automáticos donde Kubernetes incrementa de forma exponencial el tiempo de espera entre intentos.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| Pod en estado `CrashLoopBackOff` con incremento constante en la cuenta de `RESTARTS` | Error en la aplicación (código), falta de variables de entorno, falta de memoria (OOMKilled) o fallos en `livenessProbe` | Inspeccionar los logs con `kubectl logs --previous` y revisar eventos del sistema con `kubectl describe pod` |
+| Causa | Solución |
+|---|---|
+| **Pod en estado `CrashLoopBackOff` con incremento constante en la cuenta de `RESTARTS`**: Error en la aplicación (código), falta de variables de entorno, falta de memoria (OOMKilled) o fallos en `livenessProbe` | Inspeccionar los logs con `kubectl logs --previous` y revisar eventos del sistema con `kubectl describe pod` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

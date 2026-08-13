@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>The port binding error (<code>bind: address already in use</code> or <code>port already allocated</code>) when attempting to start a custom container in Umbrel OS occurs because the platform&#39;s internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Port 80 or 443 required by Umbrel app occupied by another service</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Modify port mapping in App&#39;s <code>docker-compose.yml</code> file</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Local Nginx or Apache process blocking host ports</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Identify and stop conflicting service: <code>sudo systemctl stop nginx</code></div>
+          </div></div></div>
+<p>The port binding error (<code>bind: address already in use</code> or <code>port already allocated</code>) when attempting to start a custom container in Umbrel OS occurs because the platform&#39;s internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-identify-which-process-or-container-is-using-the-port">Step 1: Identify which process or container is using the port</h3>
 <p>Before modifying any compose files, connect to your Umbrel via SSH and identify precisely which service is binding to the target port:</p>
 

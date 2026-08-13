@@ -13,13 +13,13 @@ date: '2026-08-04'
 
 When performing a system update or installing packages on Arch Linux and its derivatives (such as CachyOS, EndeavourOS, or Manjaro) using `pacman -Syu`, users frequently encounter errors like `error: signature from "Developer Name <email>" is unknown trust` or `error: package is invalid or corrupted (invalid PGP signature)`. This error occurs because developer GPG signing keys expire or get rotated over time, leaving the local `archlinux-keyring` unable to verify newly signed package manifests.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| `error: signature from "..." is unknown trust` or `invalid or corrupted package` during pacman operations | Developer PGP keys have changed or local keyring database hasn't been updated in months | Isolate and update `archlinux-keyring` first, then reset the local GPG trust store |
-| Pacman fails to download repository `.sig` files or reports invalid timestamps | System clock is out of sync or pacman mirrorlist is outdated | Enable NTP time synchronization using `systemd-timesyncd` and refresh mirror rankings |
-| Running `pacman -Sy archlinux-keyring` also fails due to broken PGP signatures | The local PGP key database (`/etc/pacman.d/gnupg`) is corrupted or damaged | Purge local GPG key directory, re-initialize pacman keys, and populate master keys |
+| Cause | Solution |
+|---|---|
+| **`error: signature from "..." is unknown trust` or `invalid or corrupted package` during pacman operations**: Developer PGP keys have changed or local keyring database hasn't been updated in months | Isolate and update `archlinux-keyring` first, then reset the local GPG trust store |
+| **Pacman fails to download repository `.sig` files or reports invalid timestamps**: System clock is out of sync or pacman mirrorlist is outdated | Enable NTP time synchronization using `systemd-timesyncd` and refresh mirror rankings |
+| **Running `pacman -Sy archlinux-keyring` also fails due to broken PGP signatures**: The local PGP key database (`/etc/pacman.d/gnupg`) is corrupted or damaged | Purge local GPG key directory, re-initialize pacman keys, and populate master keys |
 
 ## 🚀 Step-by-Step Solution
 

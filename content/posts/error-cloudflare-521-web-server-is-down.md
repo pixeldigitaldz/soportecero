@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-24"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servidor web de origen apagado o caído** | Iniciar el servidor web local (Nginx/Apache): `systemctl restart nginx` |
+| **Firewall del servidor bloqueando las IPs de Cloudflare** | Agregar el rango de IPs oficiales de Cloudflare a la lista blanca del firewall |
+
+
 El **`Error 521: Web server is down`** devuelto por la pantalla de protección de Cloudflare ocurre cuando los servidores proxy de Cloudflare intentaron conectarse a la dirección IP de tu servidor de origen (en los puertos 80 o 443), pero el servidor web (Nginx / Apache) rechazó la conexión o la rechazó un cortafuegos.
 
 > **Solución Rápida (1 Minuto):**

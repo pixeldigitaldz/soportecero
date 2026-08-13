@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong><code>Uncaught (in promise) Error</code> in browser developer console during form submit or API fetch</strong>: Async function executed without wrapping <code>await</code> calls in a <code>try...catch</code> block</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Wrap <code>await</code> expressions inside <code>try...catch</code> blocks and manage error state</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Unhandled rejection triggered inside a <code>useEffect</code> hook</strong>: Promise launched inside an event handler or effect missing proper error handling</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Create an internal <code>async</code> function inside <code>useEffect</code> and handle errors explicitly</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>HTTP 4xx/5xx API errors are not caught as promise rejections</strong>: The native <code>fetch()</code> API does not reject promises on HTTP error status codes (e.g., 404 or 500)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Check <code>response.ok</code> before parsing JSON and throw an <code>Error</code> manually if false</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

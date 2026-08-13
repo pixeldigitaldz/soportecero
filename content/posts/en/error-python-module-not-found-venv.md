@@ -9,11 +9,11 @@ date: "2026-07-27"
 
 The exception `ModuleNotFoundError: No module named 'module_name'` is one of the most frequent errors in Python development. It occurs when Python attempts to import a package that is missing from the search path (`sys.path`) of the active Python interpreter.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'package_name'` | Script is executed with global system Python or the package was installed outside the active virtual environment | Activate virtualenv (`source venv/bin/activate`), check binary path, and install package using `python -m pip install` |
+| Cause | Solution |
+|---|---|
+| **`ModuleNotFoundError: No module named 'package_name'`**: Script is executed with global system Python or the package was installed outside the active virtual environment | Activate virtualenv (`source venv/bin/activate`), check binary path, and install package using `python -m pip install` |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

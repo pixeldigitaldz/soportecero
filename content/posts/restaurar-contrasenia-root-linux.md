@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Contraseña de superusuario root olvidada o bloqueada** | Iniciar en modo monousuario (single-user) agregando `init=/bin/bash` en GRUB |
+| **Sistema de archivos montado en modo lectura (read-only) durante la recuperación** | Remontar en modo lectura/escritura: `mount -o remount,rw /` y cambiar clave con `passwd` |
+
+
 Perder la **contraseña de root en Linux** (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de **GRUB**.
 
 > **Resumen de la Solución (3 Pasos):**

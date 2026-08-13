@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-27"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Filesystem permissions blocking access to /data/stacks directory** | Assign proper directory ownership: `sudo chown -R 1000:1000 /data/stacks` |
+| **Container user UID/GID mismatch with Linux host** | Set `PUID` and `PGID` environment variables in `compose.yaml` |
+
+
 The `io.containerd.runc.v2: OCI runtime create failed: permission denied` error or internal failures where a container (such as Nginx, Plex, or an indexer) cannot save its configuration occur because the internal user of the container does not have Linux file system permissions to write to the host folder mounted in the `volumes:` section.
 
 ## 🚀 Step-by-Step Solution

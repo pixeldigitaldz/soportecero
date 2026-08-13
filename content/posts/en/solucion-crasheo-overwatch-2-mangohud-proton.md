@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-16"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **MangoHud overlay incompatibility with DXVK/VKD3D compiler** | Disable `MANGOHUD=1` or update MangoHud to latest version |
+| **Screen capture conflict or Proton overlay incompatibility** | Use `MANGOHUD_CONFIG=no_display %command%` launch options |
+
+
 Unexpected **crashes or freezes playing Overwatch 2** on Linux (CachyOS, Arch, Ubuntu, Fedora) or Steam Deck via Proton are primarily triggered by synchronous DXVK shader compilation, incompatible performance overlays like MangoHud, or missing codecs in standard Proton builds.
 
 > **Quick Solution (1 Minute):**

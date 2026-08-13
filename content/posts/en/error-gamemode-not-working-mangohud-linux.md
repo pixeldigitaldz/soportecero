@@ -14,13 +14,13 @@ date: '2026-07-27'
 
 Feral GameMode (`gamemoded`) and MangoHud are essential tools for gaming on Linux: GameMode dynamically tweaks CPU governors, I/O priorities, and GPU power states, while MangoHud provides a customizable Vulkan/OpenGL overlay to monitor FPS, frame times, temperatures, and hardware load. However, missing 32-bit libraries, systemd DBus session mismatches, or invalid launch syntax can cause either tool to fail silently.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| MangoHud overlay does not display in Steam games | Missing 32-bit multilib MangoHud packages (`lib32-mangohud`) or improper launch options | Use `mangohud %command%` and install 32-bit compatibility libraries |
-| `gamemoded` fails to set the CPU governor to `performance` | `gamemoded.service` user unit is disabled or missing DBus permissions | Enable `gamemoded` user service via systemd and verify with `gamemoded -t` |
-| Game crashes on startup with MangoHud under Wayland compositors | Vulkan implicit layer incompatibility or conflicting overlay hooks | Set explicit Vulkan layers and clean up `MangoHud.conf` settings |
+| Cause | Solution |
+|---|---|
+| **MangoHud overlay does not display in Steam games**: Missing 32-bit multilib MangoHud packages (`lib32-mangohud`) or improper launch options | Use `mangohud %command%` and install 32-bit compatibility libraries |
+| **`gamemoded` fails to set the CPU governor to `performance`**: `gamemoded.service` user unit is disabled or missing DBus permissions | Enable `gamemoded` user service via systemd and verify with `gamemoded -t` |
+| **Game crashes on startup with MangoHud under Wayland compositors**: Vulkan implicit layer incompatibility or conflicting overlay hooks | Set explicit Vulkan layers and clean up `MangoHud.conf` settings |
 
 ## 🚀 Step-by-Step Solution
 

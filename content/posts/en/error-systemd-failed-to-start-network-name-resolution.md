@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-30"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **systemd-resolved service failing due to permission or config corruption** | Check service logs via `journalctl -u systemd-resolved -b` |
+| **Broken /etc/resolv.conf symlink** | Recreate symlink pointing to `/run/systemd/resolve/stub-resolv.conf` |
+
+
 The error **`Could not resolve host: google.com`** or **`Temporary failure in name resolution`** running `ping`, `apt update`, or `curl` on Linux servers (Ubuntu, Debian, CentOS) occurs when the local DNS resolution daemon (**`systemd-resolved`**) or the symlink file `/etc/resolv.conf` is broken or misconfigured.
 
 > **Quick Solution (1 Minute):**

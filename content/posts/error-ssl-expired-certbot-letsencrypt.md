@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Certificado SSL/TLS de Let's Encrypt expirado por fallo en el proceso de renovación** | Forzar la renovación del certificado: `sudo certbot renew --force-renewal` |
+| **Desafío HTTP-01 fallido por puerto 80 cerrado o bloqueado** | Asegurar que el servidor web responda en el puerto 80 y reiniciar Nginx/Apache |
+
+
 El error de certificado SSL expirado al acceder a tu sitio web, a pesar de usar Certbot de Let's Encrypt, ocurre habitualmente porque el servicio automático de renovación falló silenciosamente debido al bloqueo del puerto 80 por parte de tu servidor web en conflicto, o por cambios en tus registros DNS.
 
 ## 🚀 Cómo solucionar el error paso a paso

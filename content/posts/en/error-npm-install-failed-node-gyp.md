@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Missing C/C++ build tools (make, gcc, python3) on system** | Install dev tools: `sudo apt install build-essential` or `pacman -S base-devel` |
+| **Node.js version too recent for legacy native C++ modules** | Use NVM to temporarily switch to an LTS Node.js release |
+
+
 The NPM package installation error `node-gyp rebuild failed` or `make: *** [addon.target.mk] Error 1` occurs when a Node.js dependency requires compiling native add-ons written in C or C++ (such as bcrypt, sharp, or sqlite3) and your operating system lacks a compatible C++ compiler or Python in its global environment path.
 
 ## 🚀 Step-by-Step Solution

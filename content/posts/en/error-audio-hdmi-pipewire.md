@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-22"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **HDMI output profile disabled or unselected in WirePlumber** | Select proper HDMI output profile via `pavucontrol` or `wpctl` |
+| **Incompatible sample rate with audio receiver** | Set `default.clock.rate = 48000` in `/etc/pipewire/pipewire.conf` |
+
+
 The sudden loss of sound output through the HDMI port (leaving the TV or monitor muted) typically occurs after suspending and waking up the machine, or when changing screens. This happens because the PipeWire sound server loses synchronization of the HDMI port's digital link descriptor with the kernel's ALSA graphic controller.
 
 ## 🚀 Cómo solucionar el error paso a paso

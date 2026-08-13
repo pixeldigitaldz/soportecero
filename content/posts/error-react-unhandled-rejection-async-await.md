@@ -13,13 +13,13 @@ date: '2026-08-03'
 
 El mensaje de error **"Unhandled Promise Rejection"** (o `Uncaught (in promise)`) ocurre en aplicaciones React y JavaScript cuando una Promesa es rechazada (debido a un error de red, respuesta HTTP no válida o fallo en la lógica interna) pero no existe un bloque `.catch()` o una instrucción `try...catch` adecuada para capturar la excepción. En React, esto puede causar cierres inesperados de componentes, estados desincronizados o pantallas en blanco en producción.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| Excepción `Uncaught (in promise) Error` en la consola del navegador al enviar un formulario o cargar datos | Función `async` ejecutada sin envolver las llamadas asíncronas en un bloque `try...catch` | Envolver las llamadas `await` en bloques `try...catch` y gestionar el estado de error |
-| Rejection no capturado dentro de un `useEffect` | Promesa lanzada dentro de un handler de evento o efecto que falta por retornar o tratar los errores | Crear una función interna `async` dentro del `useEffect` e implementar manejo de errores explícito |
-| Errores 4xx/5xx de API no son detectados como rechazos en `fetch()` | `fetch()` no rechaza la promesa por códigos de estado HTTP de error (ej. 404 o 500) a menos que se fuerce manualmente | Validar `response.ok` antes de procesar el cuerpo JSON y lanzar un `Error` si es falso |
+| Causa | Solución |
+|---|---|
+| **Excepción `Uncaught (in promise) Error` en la consola del navegador al enviar un formulario o cargar datos**: Función `async` ejecutada sin envolver las llamadas asíncronas en un bloque `try...catch` | Envolver las llamadas `await` en bloques `try...catch` y gestionar el estado de error |
+| **Rejection no capturado dentro de un `useEffect`**: Promesa lanzada dentro de un handler de evento o efecto que falta por retornar o tratar los errores | Crear una función interna `async` dentro del `useEffect` e implementar manejo de errores explícito |
+| **Errores 4xx/5xx de API no son detectados como rechazos en `fetch()`**: `fetch()` no rechaza la promesa por códigos de estado HTTP de error (ej. 404 o 500) a menos que se fuerce manualmente | Validar `response.ok` antes de procesar el cuerpo JSON y lanzar un `Error` si es falso |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

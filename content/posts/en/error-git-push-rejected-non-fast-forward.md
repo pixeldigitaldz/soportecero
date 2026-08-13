@@ -9,11 +9,11 @@ date: "2026-07-27"
 
 The error `[rejected - non-fast-forward]` or `updates were rejected because the remote contains work that you do not have locally` occurs when you attempt to push local commits to a remote branch in Git, but the remote repository contains newer commits that your local branch lacks.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| `error: failed to push some refs ... [rejected - non-fast-forward]` | The remote repository branch has commits that have not been integrated into your local working copy | Run `git pull --rebase origin <branch>` to apply remote changes before running `git push` |
+| Cause | Solution |
+|---|---|
+| **`error: failed to push some refs ... [rejected - non-fast-forward]`**: The remote repository branch has commits that have not been integrated into your local working copy | Run `git pull --rebase origin <branch>` to apply remote changes before running `git push` |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Acumulación descontrolada de paquetes antiguos en /var/cache/pacman/pkg/** | Eliminar versiones antiguas del caché: `sudo paccache -r` |
+| **Falta de limpieza de paquetes huérfanos sin dependencias activas** | Eliminar paquetes huérfanos con `sudo pacman -Rns $(pacman -Qtdq)` |
+
+
 A diferencia de otros sistemas operativos, las distribuciones basadas en Arch Linux (como CachyOS) no eliminan de forma automática los paquetes antiguos que descargas durante las actualizaciones. El gestor `pacman` los acumula indefinidamente en la ruta `/var/cache/pacman/pkg/` por si necesitas hacer un *downgrade*. Con el tiempo, esta carpeta puede devorarse 20GB o 30GB de tu almacenamiento SSD.
 
 ## 🚀 Cómo solucionar el error paso a paso

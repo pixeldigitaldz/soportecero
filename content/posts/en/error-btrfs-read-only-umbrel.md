@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-23"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Btrfs filesystem errors caused by unexpected power loss** | Check kernel log `dmesg` and run `btrfs check --repair /dev/sdX` |
+| **Storage drive damaged or switched to read-only fail-safe mode** | Remount drive read/write: `mount -o remount,rw /data` |
+
+
 When a secondary hard drive configured with the modern BTRFS file system (very common in storage arrays and home servers like Umbrel or ZimaOS) detects a write error, a power outage, or corrupt sectors, the Linux kernel automatically changes its state to `Read-Only` to prevent existing information from being destroyed. This immediately freezes all your automation and download applications.
 
 ## 🚀 Cómo solucionar el error paso a paso

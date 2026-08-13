@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-24"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Missing Access-Control-Allow-Origin header in API requests** | Set `Access-Control-Allow-Origin: *` header on origin server |
+| **Fetch request originated from different subdomain or protocol (HTTP vs HTTPS)** | Ensure all fetch calls use HTTPS and identical base URL |
+
+
 To permanently **fix the Shopify CORS policy in your store** when the `Access-Control-Allow-Origin` (CORS) error appears in the browser console when trying to make a `fetch` request from a script in your Shopify template to your own external server (for example, to load digital planners or custom diaries from an external database), you must configure authorization at the source. The browser blocks the response because the external server does not explicitly authorize your Shopify store's domain to read its data.
 
 ## 🚀 Cómo solucionar el error paso a paso

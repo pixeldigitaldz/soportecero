@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong><code>SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]</code> on macOS after installing Python</strong>: macOS Python builds do not use system Keychain CAs by default and require manual OpenSSL CA setup</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Run the <code>Install Certificates.command</code> script included in the macOS Python application bundle</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>SSL verification error in scripts using <code>requests</code> or <code>urllib3</code> on Linux / Virtualenv</strong>: Outdated <code>certifi</code> package or missing operating system CA certificates bundle</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Upgrade <code>certifi</code> via <code>pip</code> or set the <code>REQUESTS_CA_BUNDLE</code> environment variable to system CAs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Connection failure when targeting internal APIs, staging servers, or corporate proxies</strong>: Target server uses a self-signed certificate or custom Enterprise Root CA missing from trust store</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Pass the custom CA certificate path to the request or set custom environment variable bundles</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

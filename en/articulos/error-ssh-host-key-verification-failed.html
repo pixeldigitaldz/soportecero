@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,15 +186,42 @@
       </ol>
     </nav>
     
-      <p>The error <strong><code>Host key verification failed</code></strong> (accompanied by the warning <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) occurs when your SSH client detects that the remote server&#39;s cryptographic host key fingerprint does not match the entry saved in your local <code>~/.ssh/known_hosts</code> file.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Remote host public key changed in known_hosts file</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Remove stale host entry: <code>ssh-keygen -R HOST_OR_IP</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Man-in-the-Middle alert or server OS reinstallation</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Verify key fingerprint and re-authenticate via SSH</div>
+          </div></div></div>
+<p>The error <strong><code>Host key verification failed</code></strong> (accompanied by the warning <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) occurs when your SSH client detects that the remote server&#39;s cryptographic host key fingerprint does not match the entry saved in your local <code>~/.ssh/known_hosts</code> file.</p>
 <p>This commonly happens when you reinstall your server OS, rebuild a VPS instance with the same IP address, or regenerate OpenSSH keys.</p>
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong>
 Remove the outdated key entry from your known_hosts file:
 <code>ssh-keygen -R your-server-ip-or-domain</code></p>
 </blockquote>
-        </section>
-        <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+
+    </section>
+    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-remove-the-outdated-fingerprint">Step 1: Remove the Outdated Fingerprint</h3>
 <p>Execute the built-in <code>ssh-keygen</code> command specifying your target server IP or hostname:</p>
 

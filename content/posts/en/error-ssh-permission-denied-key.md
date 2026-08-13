@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Overly permissive file permissions on private key (~/.ssh/id_rsa)** | Set strict permissions on private key: `chmod 600 ~/.ssh/id_rsa` |
+| **Public key missing from remote server's authorized_keys** | Copy public key to server: `ssh-copy-id user@server` |
+
+
 The `Permission denied (publickey)` error when trying to connect to a remote server via SSH occurs because the SSH daemon (`sshd`) on the remote server rejects the private key presented by your client. This is usually due to file permissions being too permissive, which invalidates the security of the connection and forces the server to discard the attempt for protection.
 
 ## 🚀 Cómo solucionar el error paso a paso

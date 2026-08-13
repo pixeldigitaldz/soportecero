@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El error de permisos insuficientes (<code>EACCES: permission denied</code>) al intentar instalar paquetes de Node.js de manera global (con el comando <code>npm install -g</code>) ocurre porque el directorio predeterminado de NPM (<code>/usr/local/lib/node_modules/</code>) es propiedad exclusiva del usuario root del sistema de archivos de tu sistema operativo.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Directorio node_modules perteneciendo al usuario root debido a uso previo de sudo</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Restablecer la propiedad del directorio: <code>sudo chown -R $USER:$USER node_modules</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Caché de NPM con permisos restrictivos</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Limpiar y reparar la caché global: <code>npm cache clean --force</code></div>
+          </div></div></div>
+<p>El error de permisos insuficientes (<code>EACCES: permission denied</code>) al intentar instalar paquetes de Node.js de manera global (con el comando <code>npm install -g</code>) ocurre porque el directorio predeterminado de NPM (<code>/usr/local/lib/node_modules/</code>) es propiedad exclusiva del usuario root del sistema de archivos de tu sistema operativo.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-configurar-una-ruta-de-instalacion-local-para-npm">Paso 1: Configurar una ruta de instalación local para NPM</h3>
 <p>No debes usar <code>sudo</code> para instalar paquetes globales, ya que esto puede permitir la ejecución de scripts maliciosos con privilegios de root. En su lugar, configura un directorio local en tu carpeta personal:</p>
 

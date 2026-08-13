@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Insuficiente memoria VRAM o fragmentación VKD3D** | Bajar la calidad de texturas a Media y activar `VKD3D_CONFIG=single_queue` |
+| **Límite de descriptores de archivos insuficiente (esync/fsync)** | Aumentar `ulimit -n 1048576` en `/etc/security/limits.conf` |
+
+
 El cierre inesperado de Diablo IV bajo entornos Linux mediante la capa de compatibilidad Proton suele manifestarse al ingresar a capitales o núcleos urbanos de alta densidad (como Kyovashad). Este crasheo ocurre debido a la sobrecarga e ineficiencia en el intercambio y asignación de texturas de alta resolución a través de la API de traducción de Direct3D 12 a Vulkan (VKD3D).
 
 ## 🚀 Cómo solucionar el error paso a paso

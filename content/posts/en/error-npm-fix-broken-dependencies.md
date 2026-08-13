@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Corrupted dependency tree or package conflicts in package-lock.json** | Remove locks and reinstall: `rm -rf node_modules package-lock.json && npm install` |
+| **Incompatible package versions installed via npm registry** | Force resolve stale dependencies using `npm audit fix --force` |
+
+
 The failure when running `npm audit fix --force` in Node.js projects occurs because this utility automatically updates packages to major versions (*major*). This introduces API breaking changes (*breaking changes*) that break the compatibility of your secondary dependencies and stop your application's compilation.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El error de instalación de paquetes NPM como <code>node-gyp rebuild failed</code> o <code>make: *** [addon.target.mk] Error 1</code> ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Falta de herramientas de compilación C/C++ (make, gcc, python3) en el sistema</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Instalar paquete de desarrollo: <code>sudo apt install build-essential</code> o <code>pacman -S base-devel</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Versión de Node.js demasiado reciente para módulos nativos antiguos</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Utilizar NVM para cambiar temporalmente a una versión LTS de Node.js</div>
+          </div></div></div>
+<p>El error de instalación de paquetes NPM como <code>node-gyp rebuild failed</code> o <code>make: *** [addon.target.mk] Error 1</code> ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-instalar-las-herramientas-de-desarrollo-en-tu-sistema-operativo">Paso 1: Instalar las herramientas de desarrollo en tu sistema operativo</h3>
 <p>Instala los compiladores de C++ (<code>make</code>, <code>g++</code>, <code>gcc</code>) y las dependencias nativas requeridas para la compilación de addons de Node.js:</p>
 

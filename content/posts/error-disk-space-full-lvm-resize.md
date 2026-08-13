@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-06"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Volumen Lógico (LV) sin espacio libre pero con espacio disponible en Volume Group (VG)** | Extender el volumen lógico: `lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv` |
+| **Sistema de archivos no redimensionado tras extender el volumen** | Redimensionar el sistema de archivos ext4 o xfs con `resize2fs` o `xfs_growfs` |
+
+
 El error de disco lleno (`No space left on device`) en un servidor Linux que utiliza LVM (Logical Volume Manager) puede paralizar bases de datos y servicios. La ventaja de LVM es que permite expandir el almacenamiento en caliente, sumando espacio físico al volumen lógico y extendiendo el sistema de archivos sin necesidad de reiniciar.
 
 ## 🚀 Cómo solucionar el error paso a paso

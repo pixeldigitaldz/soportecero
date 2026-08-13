@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Perfil de salida HDMI desactivado o deshabilitado en WirePlumber** | Seleccionar el perfil HDMI adecuado mediante `pavucontrol` o `wpctl` |
+| **Frecuencia de muestreo (sample rate) incompatible con el receptor** | Configurar `default.clock.rate = 48000` en `/etc/pipewire/pipewire.conf` |
+
+
 La pérdida repentina de salida de sonido a través del puerto HDMI (quedando el televisor o monitor mudo) suele ocurrir tras suspender y despertar el equipo, o al cambiar de pantalla. Esto sucede porque el servidor de sonido PipeWire pierde la sincronización del descriptor de enlace digital del puerto HDMI con el controlador gráfico ALSA del kernel.
 
 ## 🚀 Cómo solucionar el error paso a paso

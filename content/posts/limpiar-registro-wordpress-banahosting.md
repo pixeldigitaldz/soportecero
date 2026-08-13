@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Base de datos de WordPress saturada por revisiones de entradas y transitorios** | Optimizar la base de datos desde WP-CLI: `wp transient delete --all` |
+| **Límite de tamaño de base de datos o almacenamiento superado en BanaHosting** | Vaciar la tabla `wp_options` de datos temporales obsoletos mediante phpMyAdmin |
+
+
 Saber cómo **limpiar wordpress** y optimizar la base de datos de tu sitio web en servidores compartidos (como BanaHosting) es fundamental cuando la web se pone lenta o el panel de control arroja errores de límite de memoria. Esto sucede porque WordPress acumula por defecto miles de filas de "revisiones de entradas" (versiones guardadas viejas de tus posts) y basura de caché (*transients*) en la tabla `wp_options`, saturando las consultas SQL.
 
 ## 🚀 Cómo solucionar el error paso a paso

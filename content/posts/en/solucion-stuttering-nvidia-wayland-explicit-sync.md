@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-03"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Lack of Explicit Sync support in Nvidia drivers prior to version 555** | Update proprietary Nvidia drivers to version 555.58 or higher |
+| **Frame desynchronization between XWayland and Wayland compositor** | Enable explicit sync flag in compositor configuration file |
+
+
 Visual **flickering, stuttering, and frame out-of-order issues** when gaming on Linux with **NVIDIA graphics cards under Wayland compositors** (KDE Plasma 6, Hyprland, GNOME) stems from buffer synchronization mismatches between the proprietary display driver and the Wayland compositor windowing system.
 
 > **Quick Solution (1 Minute):**

@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>The <code>io.containerd.runc.v2: OCI runtime create failed: permission denied</code> error or internal failures where a container (such as Nginx, Plex, or an indexer) cannot save its configuration occur because the internal user of the container does not have Linux file system permissions to write to the host folder mounted in the <code>volumes:</code> section.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Filesystem permissions blocking access to /data/stacks directory</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Assign proper directory ownership: <code>sudo chown -R 1000:1000 /data/stacks</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Container user UID/GID mismatch with Linux host</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set <code>PUID</code> and <code>PGID</code> environment variables in <code>compose.yaml</code></div>
+          </div></div></div>
+<p>The <code>io.containerd.runc.v2: OCI runtime create failed: permission denied</code> error or internal failures where a container (such as Nginx, Plex, or an indexer) cannot save its configuration occur because the internal user of the container does not have Linux file system permissions to write to the host folder mounted in the <code>volumes:</code> section.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-find-the-uid-and-gid-of-the-container">Step 1: Find the UID and GID of the container</h3>
 <p>Many containers allow you to specify which system user they should run as using environment variables in the <code>docker-compose.yml</code> file. Check the container&#39;s documentation for the <code>PUID</code> and <code>PGID</code> variables.</p>
 <h3 id="step-2-identify-your-local-user">Step 2: Identify your local user</h3>

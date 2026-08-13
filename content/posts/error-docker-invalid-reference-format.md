@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-18"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Error sintáctico en el nombre de la imagen o banderas del comando docker run** | Asegurar que el tag de la imagen esté en minúsculas y sin caracteres no válidos |
+| **Rutas de volúmenes con espacios sin comillas en la sintaxis del comando** | Encerrar las rutas entre comillas dobles: `-v "/ruta local:/ruta contenedor"` |
+
+
 El error **`docker: invalid reference format`** (o `invalid reference format: repository name must be lowercase`) ocurre al ejecutar comandos `docker run`, `docker pull` o `docker build` cuando la sintaxis de los nombres de imagen, banderas de volumen (`-v`) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.
 
 > **Solución Rápida (1 Minuto):**

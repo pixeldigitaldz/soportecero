@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **MTU mal configurado causando fragmentación de paquetes** | Ajustar el MTU a 1500 (o 1492 para PPPoE) con `ip link set dev eth0 mtu 1500` |
+| **Negociación de velocidad de red (Auto-Negotiation) fallida** | Forzar velocidad Gigabit con `ethtool -s eth0 speed 1000 duplex full autoneg on` |
+
+
 Los problemas de velocidad de red intermitente, las descargas interrumpidas o la imposibilidad de cargar ciertos portales web seguros ocurren a menudo por una mala configuración del tamaño de la **Unidad de Transmisión Máxima (MTU)** de tu tarjeta de red. Si tu proveedor exige paquetes más pequeños que el estándar de tu sistema, los enrutadores intermedios deben fragmentar los datos, degradando el rendimiento.
 
 ## 🚀 Cómo solucionar el error paso a paso

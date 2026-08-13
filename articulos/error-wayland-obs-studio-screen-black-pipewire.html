@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>La fuente &quot;Captura de pantalla (PipeWire)&quot; aparece totalmente negra o no muestra selector de ventana</strong>: El servicio <code>xdg-desktop-portal</code> o el backend del entorno de escritorio no está instalado o falló</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Instalar el backend portal correspondiente (GNOME/KDE/Hyprland) y reiniciar el servicio de usuario</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>La opción de captura PipeWire no aparece en la lista de fuentes de OBS Studio</strong>: Falta el módulo <code>obs-xdg-portal</code> o se está forzando a OBS a ejecutarse en modo Xwayland/X11</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Instalar la extensión portal de OBS e iniciar OBS nativamente en Wayland</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El cuadro de diálogo para seleccionar la pantalla aparece, pero OBS muestra un marco negro congelado</strong>: Permisos denegados en PipeWire o sesión de portal colgada por cambios de resolución</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reiniciar los daemon <code>pipewire</code> y <code>wireplumber</code> sin reiniciar el sistema</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

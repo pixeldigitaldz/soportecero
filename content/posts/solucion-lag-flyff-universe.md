@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Aceleración por hardware deshabilitada en el navegador web** | Activar la aceleración gráfica por GPU en los ajustes de Chrome/Firefox |
+| **Procesamiento de WebGL limitado por la GPU integrada predeterminada** | Forzar el uso de la tarjeta gráfica dedicada para el ejecutable del navegador |
+
+
 Al ser un juego basado en tecnologías web modernas (WebGL/WebGPU), Flyff Universe puede sufrir congelamientos severos de fotogramas (*stuttering*) o retraso de respuesta de red, incluso en computadoras potentes. Esto sucede si el navegador web no tiene acceso directo al chip gráfico o si la sincronización vertical genera conflictos.
 
 ## 🚀 Cómo solucionar el error paso a paso

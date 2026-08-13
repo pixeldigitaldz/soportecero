@@ -9,11 +9,11 @@ date: "2026-07-31"
 
 The **CrashLoopBackOff** status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-|---|---|---|
-| Pod stuck in `CrashLoopBackOff` status with high `RESTARTS` counter | Application crash, missing environment variables, Out of Memory (`OOMKilled`), or failing `livenessProbe` | Inspect previous container logs with `kubectl logs --previous` and check events with `kubectl describe pod` |
+| Cause | Solution |
+|---|---|
+| **Pod stuck in `CrashLoopBackOff` status with high `RESTARTS` counter**: Application crash, missing environment variables, Out of Memory (`OOMKilled`), or failing `livenessProbe` | Inspect previous container logs with `kubectl logs --previous` and check events with `kubectl describe pod` |
 
 ## 🚀 How to Fix the Error Step-by-Step
 

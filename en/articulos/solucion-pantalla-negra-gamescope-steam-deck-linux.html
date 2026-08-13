@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,14 +185,41 @@
       </ol>
     </nav>
     
-      <p>A <strong>black screen when launching games via Gamescope on SteamOS or Linux Wayland desktops</strong> usually stems from resolution mismatching, overlay conflicts (such as MangoHud), or Proton versions failing to negotiate the Vulkan swapchain properly.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Unsupported display resolution in Gamescope compositor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set explicit resolution: <code>gamescope -w 1280 -h 720 -- %command%</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Refresh rate (Hz) mismatch in quick settings menu</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Reset refresh rate to 60Hz or restart display server session</div>
+          </div></div></div>
+<p>A <strong>black screen when launching games via Gamescope on SteamOS or Linux Wayland desktops</strong> usually stems from resolution mismatching, overlay conflicts (such as MangoHud), or Proton versions failing to negotiate the Vulkan swapchain properly.</p>
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong>
 Set Steam Launch Options for the game:
 <code>gamescope -w 1920 -h 1080 -W 1920 -H 1080 -f -- %command%</code></p>
 </blockquote>
-        </section>
-        <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+
+    </section>
+    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-set-explicit-resolution-parameters">Step 1: Set Explicit Resolution Parameters</h3>
 <p>Right-click your game in Steam -&gt; <strong>Properties</strong> -&gt; <strong>General</strong> -&gt; <strong>Launch Options</strong>, and paste:</p>
 

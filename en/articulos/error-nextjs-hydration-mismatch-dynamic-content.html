@@ -167,18 +167,15 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
-        <p>The hydration mismatch error in Next.js (Error: Hydration failed because the initial UI does not match what was rendered on the server) occurs when server-side rendered HTML contains dynamic variables (such as local timezones, random numbers, or global window object states) that instantly change upon loading inside the client&#39;s browser.</p>
+        <p>inside  or )
+Fix DOM structure or wrap with dynamic(() =&gt; ..., { ssr: false })
+
+
+The hydration mismatch error in Next.js (Error: Hydration failed because the initial UI does not match what was rendered on the server) occurs when server-side rendered HTML contains dynamic variables (such as local timezones, random numbers, or global window object states) that instantly change upon loading inside the client&#39;s browser.</p>
       </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -192,9 +189,36 @@
       </ol>
     </nav>
     
-      <p>The hydration mismatch error in Next.js (<code>Error: Hydration failed because the initial UI does not match what was rendered on the server</code>) occurs when server-side rendered HTML contains dynamic variables (such as local timezones, random numbers, or global <code>window</code> object states) that instantly change upon loading inside the client&#39;s browser.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>HTML mismatch between server-rendered HTML and client React DOM</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Use <code>useEffect</code> to render client-only dynamic data (e.g. dates, localStorage)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Invalid HTML tag nesting (e.g. <p> inside <p> or <div>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Fix DOM structure or wrap with <code>dynamic(() =&gt; ..., { ssr: false })</code></div>
+          </div></div></div>
+<p>The hydration mismatch error in Next.js (<code>Error: Hydration failed because the initial UI does not match what was rendered on the server</code>) occurs when server-side rendered HTML contains dynamic variables (such as local timezones, random numbers, or global <code>window</code> object states) that instantly change upon loading inside the client&#39;s browser.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-locate-the-conflicting-dom-node-in-your-browser-devtools">Step 1: Locate the conflicting DOM node in your browser devtools</h3>
 <p>Open your browser&#39;s developer console (F12) when the error triggers. Next.js will print a mismatch log highlighting exactly which HTML node differs between the server output and client tree:</p>
 

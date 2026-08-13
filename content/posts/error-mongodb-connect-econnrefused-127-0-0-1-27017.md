@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-22"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servidor MongoDB (mongod) no está en ejecución** | Iniciar el servicio de base de datos: `sudo systemctl start mongod` |
+| **MongoDB escuchando solo en la interfaz local o puerto cambiado** | Ajustar la directiva `bindIp: 0.0.0.0` en `/etc/mongod.conf` si se requiere acceso remoto |
+
+
 El error **`connect ECONNREFUSED 127.0.0.1:27017`** o `MongooseServerSelectionError: connect ECONNREFUSED` ocurre cuando tu aplicación en Node.js, Python o cliente GUI (Compass) intenta establecer conexión con MongoDB, pero el servicio **`mongod` no está en ejecución** o está escuchando en una interfaz de red diferente.
 
 > **Solución Rápida (1 Minuto):**

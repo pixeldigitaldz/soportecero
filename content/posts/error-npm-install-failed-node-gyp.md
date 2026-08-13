@@ -14,6 +14,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Falta de herramientas de compilación C/C++ (make, gcc, python3) en el sistema** | Instalar paquete de desarrollo: `sudo apt install build-essential` o `pacman -S base-devel` |
+| **Versión de Node.js demasiado reciente para módulos nativos antiguos** | Utilizar NVM para cambiar temporalmente a una versión LTS de Node.js |
+
+
 El error de instalación de paquetes NPM como `node-gyp rebuild failed` o `make: *** [addon.target.mk] Error 1` ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.
 
 ## 🚀 Cómo solucionar el error paso a paso

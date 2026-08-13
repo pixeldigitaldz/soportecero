@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a <code>Read-Only</code> (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Errores en el sistema de archivos Btrfs por corte de energía inesperado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar el log de kernel <code>dmesg</code> y ejecutar <code>btrfs check --repair /dev/sdX</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Unidad de almacenamiento dañada o en modo de protección contra fallas</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Remontar la unidad en modo lectura/escritura: <code>mount -o remount,rw /data</code></div>
+          </div></div></div>
+<p>Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a <code>Read-Only</code> (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-desmontar-la-unidad-afectada">Paso 1: Desmontar la unidad afectada</h3>
 <p>No intentes forzar la escritura de datos sobre un disco bloqueado. Primero, detén los servicios de Docker que lo estén usando y desmonta la ruta:</p>
 

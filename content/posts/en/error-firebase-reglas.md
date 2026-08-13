@@ -13,6 +13,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Firestore/Storage security rules blocking requests (Permission Denied)** | Review and update rules in Firebase Console or `firestore.rules` file |
+| **Request sent without a valid authentication token** | Ensure user is authenticated (`request.auth != null`) |
+
+
 The `Firebase Error: [code=permission-denied]` error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project's **Security Rules** do not grant the necessary permissions.
 
 This failure is extremely common when moving a project from local development to production, or when the "Test mode" grace period (which typically lasts 30 days) expires.

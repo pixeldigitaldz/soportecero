@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-18"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Syntax error in image name or flags of docker run command** | Ensure image tag is lowercase and free of illegal characters |
+| **Unquoted volume mount paths containing spaces** | Enclose paths in quotes: `-v "/local path:/container path"` |
+
+
 The error **`docker: invalid reference format`** (or `invalid reference format: repository name must be lowercase`) occurs when executing `docker run`, `docker pull`, or `docker build` commands with malformed quotes, uppercase characters in image names, or invalid volume syntax (`-v`).
 
 > **Quick Solution (1 Minute):**

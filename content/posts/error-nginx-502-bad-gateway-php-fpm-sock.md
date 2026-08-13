@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-12"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servicio php-fpm detenido o no iniciado** | Iniciar el demonio de PHP: `sudo systemctl start php-fpm` (o `php8.2-fpm`) |
+| **Permisos insuficientes en el archivo socket UNIX /var/run/php/php-fpm.sock** | Cambiar propietario del socket a `www-data:www-data` en `/etc/php/fpm/pool.d/www.conf` |
+
+
 El error **`502 Bad Gateway`** en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en `/var/log/nginx/error.log` es:
 `connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` o `Connection refused`.
 

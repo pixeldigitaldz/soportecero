@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>&quot;Screen Capture (PipeWire)&quot; source shows a completely black frame or fails to open selection prompt</strong>: The <code>xdg-desktop-portal</code> service or desktop-specific portal backend is missing or crashed</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Install the appropriate portal backend (GNOME/KDE/Hyprland) and restart user systemd services</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>PipeWire capture option does not appear in the OBS Studio sources menu</strong>: Missing <code>obs-xdg-portal</code> plugin or OBS is being forced to run under Xwayland/X11 compatibility mode</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Install the OBS portal integration module and launch OBS natively under Wayland</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Screen selection dialog appears, but OBS displays a frozen black preview rectangle</strong>: PipeWire permission mismatch or stale portal session after display resolution changes</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Restart the <code>pipewire</code> and <code>wireplumber</code> user services without rebooting the system</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

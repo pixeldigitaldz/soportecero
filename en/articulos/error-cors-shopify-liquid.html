@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>To permanently <strong>fix the Shopify CORS policy in your store</strong> when the <code>Access-Control-Allow-Origin</code> (CORS) error appears in the browser console when trying to make a <code>fetch</code> request from a script in your Shopify template to your own external server (for example, to load digital planners or custom diaries from an external database), you must configure authorization at the source. The browser blocks the response because the external server does not explicitly authorize your Shopify store&#39;s domain to read its data.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Missing Access-Control-Allow-Origin header in API requests</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set <code>Access-Control-Allow-Origin: *</code> header on origin server</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Fetch request originated from different subdomain or protocol (HTTP vs HTTPS)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Ensure all fetch calls use HTTPS and identical base URL</div>
+          </div></div></div>
+<p>To permanently <strong>fix the Shopify CORS policy in your store</strong> when the <code>Access-Control-Allow-Origin</code> (CORS) error appears in the browser console when trying to make a <code>fetch</code> request from a script in your Shopify template to your own external server (for example, to load digital planners or custom diaries from an external database), you must configure authorization at the source. The browser blocks the response because the external server does not explicitly authorize your Shopify store&#39;s domain to read its data.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-configurar-las-cabeceras-en-tu-servidor-externo">Paso 1: Configurar las cabeceras en tu servidor externo</h3>
 <p>The actual solution is not done inside Shopify, but rather on the backend server receiving the request. You must respond by adding the corresponding CORS header.</p>
 <ul>

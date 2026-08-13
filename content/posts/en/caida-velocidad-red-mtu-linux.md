@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-19"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Misconfigured MTU causing packet fragmentation** | Set MTU to 1500 (or 1492 for PPPoE): `ip link set dev eth0 mtu 1500` |
+| **Failed network speed auto-negotiation** | Force Gigabit speed: `ethtool -s eth0 speed 1000 duplex full autoneg on` |
+
+
 Intermittent network speed issues, interrupted downloads, or the inability to load certain secure web portals often occur due to a poor configuration of the **Maximum Transmission Unit (MTU)** size of your network card. If your provider requires packages smaller than your system's standard, intermediate routers must fragment the data, degrading performance.
 
 ## 🚀 Cómo solucionar el error paso a paso

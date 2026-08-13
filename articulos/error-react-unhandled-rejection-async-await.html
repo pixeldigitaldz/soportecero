@@ -195,7 +195,31 @@
         El Diagnóstico Rápido
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Excepción <code>Uncaught (in promise) Error</code> en la consola del navegador al enviar un formulario o cargar datos</strong>: Función <code>async</code> ejecutada sin envolver las llamadas asíncronas en un bloque <code>try...catch</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Envolver las llamadas <code>await</code> en bloques <code>try...catch</code> y gestionar el estado de error</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Rejection no capturado dentro de un <code>useEffect</code></strong>: Promesa lanzada dentro de un handler de evento o efecto que falta por retornar o tratar los errores</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Crear una función interna <code>async</code> dentro del <code>useEffect</code> e implementar manejo de errores explícito</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Errores 4xx/5xx de API no son detectados como rechazos en <code>fetch()</code></strong>: <code>fetch()</code> no rechaza la promesa por códigos de estado HTTP de error (ej. 404 o 500) a menos que se fuerce manualmente</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Validar <code>response.ok</code> antes de procesar el cuerpo JSON y lanzar un <code>Error</code> si es falso</div>
+          </div></div></div>
 
     </section>
     <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>

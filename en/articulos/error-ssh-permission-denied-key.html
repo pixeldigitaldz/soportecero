@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -193,9 +186,36 @@
       </ol>
     </nav>
     
-      <p>The <code>Permission denied (publickey)</code> error when trying to connect to a remote server via SSH occurs because the SSH daemon (<code>sshd</code>) on the remote server rejects the private key presented by your client. This is usually due to file permissions being too permissive, which invalidates the security of the connection and forces the server to discard the attempt for protection.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Overly permissive file permissions on private key (~/.ssh/id_rsa)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set strict permissions on private key: <code>chmod 600 ~/.ssh/id_rsa</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Public key missing from remote server&#39;s authorized_keys</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Copy public key to server: <code>ssh-copy-id user@server</code></div>
+          </div></div></div>
+<p>The <code>Permission denied (publickey)</code> error when trying to connect to a remote server via SSH occurs because the SSH daemon (<code>sshd</code>) on the remote server rejects the private key presented by your client. This is usually due to file permissions being too permissive, which invalidates the security of the connection and forces the server to discard the attempt for protection.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-corregir-los-permisos-de-tu-clave-privada-en-el-cliente">Paso 1: Corregir los permisos de tu clave privada en el cliente</h3>
 <p>The private key must never be readable by other users of the local machine. Adjust the permissions of the <code>.pem</code> or <code>id_rsa</code> file:</p>
 

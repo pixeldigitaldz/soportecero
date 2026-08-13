@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-19"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **PWM fan control overlay not enabled in config.txt** | Add `dtparam=fan_temp0=60000` in `/boot/firmware/config.txt` |
+| **Thermal monitoring service inactive** | Adjust thermal thresholds in `raspi-config` or check JST connector |
+
+
 Modern development boards and Mini PCs (such as the Raspberry Pi 5) offer incredible performance, but dissipate a lot of heat when running heavy Docker services or media servers. The use of an **Active Cooler (active heatsink with fan)** is mandatory to prevent *thermal throttling* (automatic power reduction due to excess temperature).
 
 By default, the operating system manages the fan automatically, but often the factory thresholds are very high, allowing the board to reach 60°C before turning on the air, shortening the life of the hardware.

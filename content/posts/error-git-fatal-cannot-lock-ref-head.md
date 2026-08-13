@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-20"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Archivo de bloqueo de referencia de Git acumulado (.git/refs/heads/X.lock)** | Eliminar el archivo lock sobrante con `rm -f .git/refs/heads/nombre-rama.lock` |
+| **Múltiples procesos de Git ejecutándose simultáneamente** | Finalizar otros procesos activos de Git o IDEs antes de reintentar el comando |
+
+
 El error **`error: cannot lock ref 'refs/remotes/origin/main': is at ... but expected ...`** o `fatal: cannot lock ref` ocurre al intentar hacer `git pull`, `git fetch` o `git checkout` cuando el puntero de referencia local de Git se corrompe debido a un cierre inesperado del proceso de Git o a un conflicto entre nombres de ramas con mayúsculas y minúsculas.
 
 > **Solución Rápida (1 Minuto):**

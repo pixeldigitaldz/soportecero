@@ -13,6 +13,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Binance API Key/Secret expired, copied incorrectly, or IP not whitelisted** | Generate new Binance API Key and whitelist server static IP |
+| **Local system clock out of sync with Binance server time** | Sync server clock with NTP: `sudo ntpdate pool.ntp.org` |
+
+
 The `Invalid Signature` or `Token Expired` error in the Binance Pay API occurs when you attempt to process a payment in USDT or another cryptocurrency and the Binance servers reject the request. The primary cause is a timestamp desynchronization between your local server and Binance's official clock, or incorrect concatenation of API keys when generating the HMAC-SHA512 cryptographic signature.
 
 ## 🚀 Step-by-Step Solution

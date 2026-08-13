@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servicio de aplicación (PHP-FPM, Node.js, Gunicorn) fuera de servicio** | Verificar e iniciar el servicio backend con `systemctl status php-fpm` o Docker |
+| **Puerto o socket UNIX mal configurado en la directiva proxy_pass** | Corregir la ruta del socket `/var/run/php/php-fpm.sock` o puerto en `nginx.conf` |
+
+
 El error `502 Bad Gateway` en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.
 
 ## 🚀 Cómo solucionar el error paso a paso

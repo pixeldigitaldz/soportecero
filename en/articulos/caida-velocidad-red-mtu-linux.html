@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>Intermittent network speed issues, interrupted downloads, or the inability to load certain secure web portals often occur due to a poor configuration of the <strong>Maximum Transmission Unit (MTU)</strong> size of your network card. If your provider requires packages smaller than your system&#39;s standard, intermediate routers must fragment the data, degrading performance.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Misconfigured MTU causing packet fragmentation</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set MTU to 1500 (or 1492 for PPPoE): <code>ip link set dev eth0 mtu 1500</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Failed network speed auto-negotiation</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Force Gigabit speed: <code>ethtool -s eth0 speed 1000 duplex full autoneg on</code></div>
+          </div></div></div>
+<p>Intermittent network speed issues, interrupted downloads, or the inability to load certain secure web portals often occur due to a poor configuration of the <strong>Maximum Transmission Unit (MTU)</strong> size of your network card. If your provider requires packages smaller than your system&#39;s standard, intermediate routers must fragment the data, degrading performance.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-diagnosticar-la-fragmentacion-de-paquetes-mediante-pruebas-de-ping">Paso 1: Diagnosticar la fragmentación de paquetes mediante pruebas de Ping</h3>
 <p>We are going to find the maximum packet size that your network can transfer without needing to split the data. Run the test by subtracting the 28-byte IP/ICMP header from your target:</p>
 

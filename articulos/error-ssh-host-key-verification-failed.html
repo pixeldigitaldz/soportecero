@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -193,15 +186,42 @@
       </ol>
     </nav>
     
-      <p>El error <strong><code>Host key verification failed</code></strong> (acompañado de la advertencia en rojo <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local <code>~/.ssh/known_hosts</code>.</p>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>La clave pública de la máquina remota cambió en el archivo known_hosts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Eliminar la entrada antigua del host: <code>ssh-keygen -R IP_O_HOST</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Ataque Man-in-the-Middle o reinstalación del sistema operativo del servidor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Confirmar el nuevo huella digital de la clave e ingresar nuevamente mediante SSH</div>
+          </div></div></div>
+<p>El error <strong><code>Host key verification failed</code></strong> (acompañado de la advertencia en rojo <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local <code>~/.ssh/known_hosts</code>.</p>
 <p>Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.</p>
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong>
 Elimina la clave antigua del servidor ejecutando:
 <code>ssh-keygen -R tu-direccion-ip-o-dominio</code></p>
 </blockquote>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-eliminar-la-huella-digital-obsoleta-del-servidor">Paso 1: Eliminar la huella digital obsoleta del servidor</h3>
 <p>Ejecuta la herramienta nativa de <code>ssh-keygen</code> indicando la IP o nombre de host del servidor remoto:</p>
 

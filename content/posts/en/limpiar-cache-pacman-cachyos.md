@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Uncontrolled accumulation of old packages in /var/cache/pacman/pkg/** | Clean old package cache: `sudo paccache -r` |
+| **Uncleaned orphaned packages with no active dependencies** | Remove orphan packages: `sudo pacman -Rns $(pacman -Qtdq)` |
+
+
 Unlike other operating systems, Arch Linux-based distributions (such as CachyOS) do not automatically delete old packages that you download during updates. The `pacman` manager accumulates them indefinitely in the `/var/cache/pacman/pkg/` path in case you need to do a *downgrade*. Over time, this folder can consume 20GB or 30GB of your SSD storage.
 
 ## 🚀 Cómo solucionar el error paso a paso

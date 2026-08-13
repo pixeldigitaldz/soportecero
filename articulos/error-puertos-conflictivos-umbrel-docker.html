@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>El error de puerto ya asignado (<code>bind: address already in use</code> o <code>port already allocated</code>) al intentar levantar un contenedor personalizado en Umbrel OS ocurre porque el proxy web interno de la plataforma (basado en Nginx o Traefik) ya tiene reservado el puerto 80 y 443 para gestionar la tienda de aplicaciones y el acceso seguro a su panel.</p>
-        </section>
-        <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El puerto 80 o 443 requerido por una App de Umbrel está ocupado por otro servicio</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Modificar la asignación de puertos en el archivo <code>docker-compose.yml</code> de la App</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Proceso local de Nginx o Apache bloqueando los puertos en el servidor anfitrión</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Identificar y detener el servicio conflictivo: <code>sudo systemctl stop nginx</code></div>
+          </div></div></div>
+<p>El error de puerto ya asignado (<code>bind: address already in use</code> o <code>port already allocated</code>) al intentar levantar un contenedor personalizado en Umbrel OS ocurre porque el proxy web interno de la plataforma (basado en Nginx o Traefik) ya tiene reservado el puerto 80 y 443 para gestionar la tienda de aplicaciones y el acceso seguro a su panel.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-localizar-que-contenedor-o-proceso-esta-ocupando-el-puerto">Paso 1: Localizar qué contenedor o proceso está ocupando el puerto</h3>
 <p>Antes de modificar cualquier compose, identifica de manera precisa qué servicio está acaparando el puerto del sistema mediante la consola SSH de tu Umbrel:</p>
 

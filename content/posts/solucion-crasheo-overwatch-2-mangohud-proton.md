@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-16"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Incompatibilidad de la capa MangoHud con el compilador DXVK/VKD3D** | Desactivar el parámetro `MANGOHUD=1` o actualizar MangoHud a la versión más reciente |
+| **Conflicto de captura de pantalla u overlay de compatibilidad de Proton** | Utilizar `MANGOHUD_CONFIG=no_display %command%` en los parámetros de arranque |
+
+
 El **cierre inesperado (*crash*) o congelamiento de Overwatch 2** al ejecutarse en Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck a través de Proton suele estar causado por la compilación síncrona de shaders de DXVK, capas de rendimiento incompatibles como MangoHud o la falta de parches en la versión estándar de Proton.
 
 > **Solución Rápida (1 Minuto):**

@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-22"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **MongoDB server daemon (mongod) is not running** | Start database service: `sudo systemctl start mongod` |
+| **MongoDB binding exclusively to localhost or non-default port** | Set `bindIp: 0.0.0.0` in `/etc/mongod.conf` if remote access is required |
+
+
 The error **`connect ECONNREFUSED 127.0.0.1:27017`** or `MongooseServerSelectionError: connect ECONNREFUSED` occurs when your Node.js application or database client attempts to connect to MongoDB, but the **`mongod` service daemon is stopped** or listening strictly on an unmapped network interface.
 
 > **Quick Solution (1 Minute):**

@@ -13,13 +13,13 @@ date: '2026-08-02'
 
 Al ejecutar OBS Studio en distribuciones Linux modernas con entornos de escritorio basados en Wayland (como GNOME, KDE Plasma, Hyprland o Sway), es común encontrarse con una pantalla negra al intentar añadir una fuente de "Captura de pantalla" o "Captura de ventana". A diferencia de X11, Wayland prohíbe por diseño que las aplicaciones lean directamente el framebuffer de otras ventanas, delegando la captura al servidor de streaming de medios **PipeWire** a través de **XDG Desktop Portal**.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-| :--- | :--- | :--- |
-| La fuente "Captura de pantalla (PipeWire)" aparece totalmente negra o no muestra selector de ventana | El servicio `xdg-desktop-portal` o el backend del entorno de escritorio no está instalado o falló | Instalar el backend portal correspondiente (GNOME/KDE/Hyprland) y reiniciar el servicio de usuario |
-| La opción de captura PipeWire no aparece en la lista de fuentes de OBS Studio | Falta el módulo `obs-xdg-portal` o se está forzando a OBS a ejecutarse en modo Xwayland/X11 | Instalar la extensión portal de OBS e iniciar OBS nativamente en Wayland |
-| El cuadro de diálogo para seleccionar la pantalla aparece, pero OBS muestra un marco negro congelado | Permisos denegados en PipeWire o sesión de portal colgada por cambios de resolución | Reiniciar los daemon `pipewire` y `wireplumber` sin reiniciar el sistema |
+| Causa | Solución |
+|---|---|
+| **La fuente "Captura de pantalla (PipeWire)" aparece totalmente negra o no muestra selector de ventana**: El servicio `xdg-desktop-portal` o el backend del entorno de escritorio no está instalado o falló | Instalar el backend portal correspondiente (GNOME/KDE/Hyprland) y reiniciar el servicio de usuario |
+| **La opción de captura PipeWire no aparece en la lista de fuentes de OBS Studio**: Falta el módulo `obs-xdg-portal` o se está forzando a OBS a ejecutarse en modo Xwayland/X11 | Instalar la extensión portal de OBS e iniciar OBS nativamente en Wayland |
+| **El cuadro de diálogo para seleccionar la pantalla aparece, pero OBS muestra un marco negro congelado**: Permisos denegados en PipeWire o sesión de portal colgada por cambios de resolución | Reiniciar los daemon `pipewire` y `wireplumber` sin reiniciar el sistema |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

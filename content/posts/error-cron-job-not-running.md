@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Servicio de cron deshabilitado o detenido** | Iniciar el demonio de cron: `systemctl enable --now cron` (o `crond`) |
+| **Falta de salto de línea al final del archivo crontab o rutas relativas** | Usar siempre rutas absolutas para comandos y ejecutables en la sintaxis de cron |
+
+
 El fallo más recurrente con las tareas automatizadas de Cron es que el script o comando funciona perfectamente cuando lo ejecutas de forma manual en tu terminal, pero falla silenciosamente cuando es invocado por el demonio del sistema (`cron`). Esto ocurre por diferencias críticas entre la sesión de tu usuario y el entorno aislado de Cron.
 
 ## 🚀 Cómo solucionar el error paso a paso

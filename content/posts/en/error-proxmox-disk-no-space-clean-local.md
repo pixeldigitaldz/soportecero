@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Proxmox local (root) storage at 100% preventing VM startup** | Delete old ISO images and backups under `/var/lib/vz/template/iso/` |
+| **Saturated Proxmox log files under /var/log/** | Clean old compressed log files: `rm -f /var/log/*.gz /var/log/pve/tasks/*` |
+
+
 The disk space exhausted error on Proxmox VE local storage (`No space left on device` or VM startup failures) occurs due to the accumulation of obsolete OS installation ISOs, unused LXC templates, old backup dumps, and bloated persistent system logs under the `/var/log` directory.
 
 ## 🚀 Step-by-Step Solution

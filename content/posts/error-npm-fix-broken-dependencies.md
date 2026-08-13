@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-03"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Árbol de dependencias corrupto o conflictos de paquetes en package-lock.json** | Eliminar bloqueos y reinstalar: `rm -rf node_modules package-lock.json && npm install` |
+| **Versiones incompatibles instaladas mediante el registro de npm** | Forzar resolución de dependencias obsoletas con `npm audit fix --force` |
+
+
 El fallo al ejecutar `npm audit fix --force` en proyectos de Node.js ocurre porque esta utilidad actualiza de forma automática paquetes a versiones mayores (*major*). Esto introduce cambios de ruptura de API (*breaking changes*) que rompen la compatibilidad de tus dependencias secundarias y detienen la compilación de tu aplicación.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -196,7 +196,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>MangoHud overlay does not display in Steam games</strong>: Missing 32-bit multilib MangoHud packages (<code>lib32-mangohud</code>) or improper launch options</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Use <code>mangohud %command%</code> and install 32-bit compatibility libraries</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong><code>gamemoded</code> fails to set the CPU governor to <code>performance</code></strong>: <code>gamemoded.service</code> user unit is disabled or missing DBus permissions</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable <code>gamemoded</code> user service via systemd and verify with <code>gamemoded -t</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Game crashes on startup with MangoHud under Wayland compositors</strong>: Vulkan implicit layer incompatibility or conflicting overlay hooks</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set explicit Vulkan layers and clean up <code>MangoHud.conf</code> settings</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

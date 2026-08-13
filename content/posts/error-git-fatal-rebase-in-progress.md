@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-28"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Operación de Rebase pendiente o interrumpida por conflictos** | Resolver conflictos y continuar con `git rebase --continue` o abortar con `git rebase --abort` |
+| **Carpeta temporal .git/rebase-merge bloqueando nuevos comandos** | Cancelar la operación rebase actual para restaurar el estado limpio del árbol |
+
+
 El estado **`interactive rebase in progress`** (o el error opuesto `fatal: No rebase in progress`) ocurre al ejecutar `git rebase` cuando Git encuentra conflictos de fusión en un commit intermedio y suspende la secuencia a la espera de intervención manual. Si la terminal se cierra o la carpeta oculta `.git/rebase-merge` se corrompe, el repositorio queda bloqueado.
 
 > **Solución Rápida (1 Minuto):**

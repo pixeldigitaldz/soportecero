@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-06-26"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Missing CORS policy on the backend server** | Add CORS middleware to backend (e.g. `app.use(cors())` in Express) |
+| **Preflight (OPTIONS) requests rejected due to missing allowed headers** | Allow `GET, POST, PUT, DELETE` methods and `Content-Type, Authorization` headers |
+
+
 The CORS (Cross-Origin Resource Sharing) error occurs strictly in the client's browser. It happens when a web application on one domain (e.g., `localhost:3000`) tries to consume resources from an API hosted on another domain, and the API server does not include the necessary HTTP headers to authorize the request.
 
 ## 🚀 Step-by-Step Solution

@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Diferencia de renderizado entre el HTML generado en el servidor y el cliente React** | Usar `useEffect` para renderizar datos dinámicos (ej. fechas, localStorage) solo en cliente |
+| **Etiquetas HTML anidadas incorrectamente (ej. <p> dentro de otro <p> o <div>)** | Corregir la estructura DOM o desactivar SSR temporalmente con `dynamic(() => ..., { ssr: false })` |
+
+
 El error de hidratación en Next.js (`Error: Hydration failed because the initial UI does not match what was rendered on the server`) ocurre cuando el HTML renderizado por el servidor contiene valores dinámicos (tales como fechas con zonas horarias locales, números aleatorios o estados del objeto `window`) que cambian instantáneamente al cargarse en el navegador del cliente.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -192,9 +185,36 @@
       </ol>
     </nav>
     
-      <p>The NPM package installation error <code>node-gyp rebuild failed</code> or <code>make: *** [addon.target.mk] Error 1</code> occurs when a Node.js dependency requires compiling native add-ons written in C or C++ (such as bcrypt, sharp, or sqlite3) and your operating system lacks a compatible C++ compiler or Python in its global environment path.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Missing C/C++ build tools (make, gcc, python3) on system</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Install dev tools: <code>sudo apt install build-essential</code> or <code>pacman -S base-devel</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Node.js version too recent for legacy native C++ modules</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Use NVM to temporarily switch to an LTS Node.js release</div>
+          </div></div></div>
+<p>The NPM package installation error <code>node-gyp rebuild failed</code> or <code>make: *** [addon.target.mk] Error 1</code> occurs when a Node.js dependency requires compiling native add-ons written in C or C++ (such as bcrypt, sharp, or sqlite3) and your operating system lacks a compatible C++ compiler or Python in its global environment path.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-install-build-tools-on-your-operating-system">Step 1: Install build tools on your operating system</h3>
 <p>Install the required C++ compilers (<code>make</code>, <code>g++</code>, <code>gcc</code>), Python, and base development packages:</p>
 

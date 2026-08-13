@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-18"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Corrupted or saturated DXVK Shader Cache** | Delete the `shadercache` folder in game prefix on Steam/Lutris |
+| **Proton-GE version incompatible with latest WoW patch** | Update to latest Proton-GE release via ProtonUp-Qt |
+
+
 Micro-stuttering in World of Warcraft when traversing areas of recent expansions like *The War Within* or *Midnight* under Linux occurs mainly due to the late compilation of texture shaders. When the official Steam or Lutris client translates DirectX 12 instructions to Vulkan in real time, CPU performance is momentarily saturated, causing severe FPS drops for milliseconds.
 
 ## 🚀 Cómo solucionar el error paso a paso

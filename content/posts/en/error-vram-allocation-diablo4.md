@@ -12,6 +12,13 @@ readTime: 4 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **VRAM overflow on GPUs with 8GB or less using Ultra textures** | Lower texture settings to High or Medium in-game |
+| **Inefficient DirectX 12 memory pool management by VKD3D-Proton** | Add `VKD3D_CONFIG=upload_hvv %command%` in Steam launch parameters |
+
+
 The out of video memory (VRAM) error or screen freezing when opening the inventory or changing zones in Diablo IV occurs due to a resource allocation leak in the game engine graphics. The title consumes all the physical memory of the graphics card and, when trying to overflow the remaining data into the system RAM, it collapses if response times are not optimized.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -16,11 +16,11 @@ date: '2026-07-27'
 
 El mensaje de error `ERR_TOO_MANY_REDIRECTS` (o bucle infinito de redirecciones) ocurre en sitios WordPress alojados detrás de Cloudflare cuando el proxy de CDN y el servidor web de origen entran en una espiral de redirecciones HTTP/HTTPS contradictorias.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| El navegador muestra `ERR_TOO_MANY_REDIRECTS` al acceder al sitio web | Cloudflare está configurado en modo SSL "Flexible", enviando peticiones HTTP al origen mientras WordPress redirige de HTTP a HTTPS | Ajustar el modo de cifrado SSL/TLS en Cloudflare a "Full" o "Full (Strict)" y configurar las constantes HTTPS en `wp-config.php` |
+| Causa | Solución |
+|---|---|
+| **El navegador muestra `ERR_TOO_MANY_REDIRECTS` al acceder al sitio web**: Cloudflare está configurado en modo SSL "Flexible", enviando peticiones HTTP al origen mientras WordPress redirige de HTTP a HTTPS | Ajustar el modo de cifrado SSL/TLS en Cloudflare a "Full" o "Full (Strict)" y configurar las constantes HTTPS en `wp-config.php` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

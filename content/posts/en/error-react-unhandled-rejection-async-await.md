@@ -13,13 +13,13 @@ date: '2026-08-03'
 
 The **"Unhandled Promise Rejection"** (or `Uncaught (in promise)`) error occurs in React and JavaScript applications whenever a Promise is rejected—due to a network glitch, bad HTTP response, or runtime exception—without an attached `.catch()` block or an enclosing `try...catch` statement. In React apps, unhandled rejections can cause silent UI freezes, stale state, or component crashes in production.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| `Uncaught (in promise) Error` in browser developer console during form submit or API fetch | Async function executed without wrapping `await` calls in a `try...catch` block | Wrap `await` expressions inside `try...catch` blocks and manage error state |
-| Unhandled rejection triggered inside a `useEffect` hook | Promise launched inside an event handler or effect missing proper error handling | Create an internal `async` function inside `useEffect` and handle errors explicitly |
-| HTTP 4xx/5xx API errors are not caught as promise rejections | The native `fetch()` API does not reject promises on HTTP error status codes (e.g., 404 or 500) | Check `response.ok` before parsing JSON and throw an `Error` manually if false |
+| Cause | Solution |
+|---|---|
+| **`Uncaught (in promise) Error` in browser developer console during form submit or API fetch**: Async function executed without wrapping `await` calls in a `try...catch` block | Wrap `await` expressions inside `try...catch` blocks and manage error state |
+| **Unhandled rejection triggered inside a `useEffect` hook**: Promise launched inside an event handler or effect missing proper error handling | Create an internal `async` function inside `useEffect` and handle errors explicitly |
+| **HTTP 4xx/5xx API errors are not caught as promise rejections**: The native `fetch()` API does not reject promises on HTTP error status codes (e.g., 404 or 500) | Check `response.ok` before parsing JSON and throw an `Error` manually if false |
 
 ## 🚀 Step-by-Step Solution
 

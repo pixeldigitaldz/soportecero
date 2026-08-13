@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-07-18"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Outdated or corrupted GPU graphics drivers** | Perform clean Mesa/Nvidia driver install via `DDU` or `pacman -Syu` |
+| **System power profile set to Power Saver mode** | Set CPU governor to performance: `powerprofilesctl set performance` |
+
+
 Updating your graphics card drivers is crucial to support new games, but sometimes the latest version arrives with compatibility bugs or corrupts previous system configurations, causing drastic drops in FPS or visual stuttering in your online games.
 
 ## 🚀 Cómo solucionar el error paso a paso

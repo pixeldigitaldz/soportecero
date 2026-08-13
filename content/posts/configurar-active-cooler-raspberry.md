@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Overlay de control PWM del ventilador no activado en config.txt** | Agregar `dtparam=fan_temp0=60000` en `/boot/firmware/config.txt` |
+| **Servicio de monitoreo térmico inactivo** | Reorganizar los umbrales térmicos en `raspi-config` o verificar la conexión JST |
+
+
 Las placas de desarrollo y Mini PCs modernos (como la Raspberry Pi 5) ofrecen un rendimiento increíble, pero disipan mucho calor cuando ejecutas servicios pesados de Docker o servidores multimedia. El uso de un **Active Cooler (disipador activo con ventilador)** es obligatorio para evitar el *thermal throttling* (reducción automática de potencia por exceso de temperatura).
 
 Por defecto, el sistema operativo gestiona el ventilador de forma automática, pero muchas veces los umbrales de fábrica son muy altos, permitiendo que la placa alcance los 60°C antes de encender el aire, acortando la vida útil del hardware.

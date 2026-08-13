@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Write commands fail with <code>OOM command not allowed</code></strong>: Memory hit the <code>maxmemory</code> threshold while using the default <code>noeviction</code> policy</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Configure an automatic eviction policy (<code>allkeys-lru</code> / <code>volatile-lru</code>) or increase <code>maxmemory</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>The Redis daemon is killed by the Linux Kernel (<em>OOM Killer</em>)</strong>: <code>redis.conf</code> lacks a explicit <code>maxmemory</code> boundary, exhausting host system RAM</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set an explicit <code>maxmemory</code> quota (e.g., 70-80% of total host physical memory)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>High memory fragmentation ratio (<code>mem_fragmentation_ratio &gt; 1.5</code>)</strong>: The Jemalloc allocator holds unreleased pages after bulk key deletion operations</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable Redis active defragmentation (<code>activedefrag yes</code>)</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

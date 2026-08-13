@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-25"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Reglas de firewall iptables o UFW bloqueando el puerto SSH (22)** | Permitir el puerto 22 en el firewall: `sudo ufw allow 22/tcp` |
+| **Servidor SSH no está escuchando en la dirección IP esperada** | Verificar el estado del demonio SSH con `sudo systemctl status sshd` |
+
+
 El error de tiempo de espera agotado en el **puerto 22** (`ssh: connect to host ... port 22: Connection timed out`) ocurre cuando el cortafuegos del servidor destino (generalmente IPTables o UFW en Ubuntu/Debian) bloquea o descarta silenciosamente los paquetes de red entrantes en el puerto 22, impidiendo la autenticación del cliente.
 
 ## 🚀 Cómo solucionar el error paso a paso

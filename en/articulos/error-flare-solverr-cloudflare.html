@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -191,9 +184,36 @@
       </ol>
     </nav>
     
-      <p>The FlareSolverr timeout error occurs when the tool attempts to solve a Cloudflare bypass challenge (such as JavaScript verification screens or CAPTCHAs) and the waiting time expires unsuccessfully, throwing <code>Error: The challenge could not be resolved</code> or <code>Too many attempts</code> errors. This happens due to the use of outdated browser signatures or direct IP blocks caused by a poor reputation of your internet service provider.</p>
-        </section>
-        <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>FlareSolverr blocked by Cloudflare Turnstile protection updates</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Update FlareSolverr container image to latest tag from Docker Hub</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Response timeout while solving JS challenge due to resource limits</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Increase <code>RESOURCE_TIMEOUT</code> to 60000ms in environment variables</div>
+          </div></div></div>
+<p>The FlareSolverr timeout error occurs when the tool attempts to solve a Cloudflare bypass challenge (such as JavaScript verification screens or CAPTCHAs) and the waiting time expires unsuccessfully, throwing <code>Error: The challenge could not be resolved</code> or <code>Too many attempts</code> errors. This happens due to the use of outdated browser signatures or direct IP blocks caused by a poor reputation of your internet service provider.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-update-to-the-latest-official-docker-image">Step 1: Update to the latest official Docker image</h3>
 <p>Cloudflare challenges change constantly. Older versions of FlareSolverr use outdated internal web browsers that are immediately flagged as bots. Update your container to the latest official image:</p>
 

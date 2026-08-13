@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-08-28"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Pending or interrupted Rebase operation due to merge conflicts** | Resolve conflicts and run `git rebase --continue` or abort with `git rebase --abort` |
+| **Stale .git/rebase-merge directory blocking new commands** | Abort pending rebase operation to restore clean working tree |
+
+
 The status **`interactive rebase in progress`** (or the contradictory error `fatal: No rebase in progress`) occurs when running `git rebase` if Git encounters conflicts mid-sequence and halts execution pending manual resolution. If terminal sessions disconnect or `.git/rebase-merge` locks become stale, your repository remains locked in rebase state.
 
 > **Quick Solution (1 Minute):**

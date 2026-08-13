@@ -9,11 +9,11 @@ date: "2026-07-27"
 
 El error `ModuleNotFoundError: No module named 'nombre_modulo'` es una de las excepciones más comunes en Python. Ocurre cuando el intérprete intenta importar una librería externa o módulo interno que no está presente en la ruta de búsqueda de paquetes (`sys.path`) de la instancia activa de Python.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| `ModuleNotFoundError: No module named 'libreria'` | El script se ejecuta con el Python global del sistema o la librería se instaló fuera del entorno virtual activo | Activar el virtualenv (`source venv/bin/activate`), verificar la ruta del binario e instalar la librería con `python -m pip install` |
+| Causa | Solución |
+|---|---|
+| **`ModuleNotFoundError: No module named 'libreria'`**: El script se ejecuta con el Python global del sistema o la librería se instaló fuera del entorno virtual activo | Activar el virtualenv (`source venv/bin/activate`), verificar la ruta del binario e instalar la librería con `python -m pip install` |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

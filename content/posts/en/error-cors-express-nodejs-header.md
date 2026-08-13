@@ -16,13 +16,13 @@ The browser error **"Access to XMLHttpRequest at '...' from origin '...' has bee
 
 This block is enforced by the web browser for security reasons whenever the client's origin (domain or port) differs from the server's origin.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| `CORS policy: No 'Access-Control-Allow-Origin'` | Backend is not sending the `Access-Control-Allow-Origin` header | Install and configure the `cors` middleware in Express |
-| Blocked on `POST`, `PUT`, or `DELETE` requests | Failed preflight verification (`OPTIONS` request) | Enable preflight request handling on the server |
-| Error sending cookies or JWT (`credentials: true`) | Incompatibility when using wildcard `*` with credentials | Specify the exact origin `origin: 'http://localhost:3000'` |
+| Cause | Solution |
+|---|---|
+| **`CORS policy: No 'Access-Control-Allow-Origin'`**: Backend is not sending the `Access-Control-Allow-Origin` header | Install and configure the `cors` middleware in Express |
+| **Blocked on `POST`, `PUT`, or `DELETE` requests**: Failed preflight verification (`OPTIONS` request) | Enable preflight request handling on the server |
+| **Error sending cookies or JWT (`credentials: true`)**: Incompatibility when using wildcard `*` with credentials | Specify the exact origin `origin: 'http://localhost:3000'` |
 
 ## 🚀 Step-by-Step Solution
 

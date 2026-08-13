@@ -12,6 +12,13 @@ readTime: 5 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Incorrect syntax or invalid UUID in /etc/fstab file** | Boot into rescue mode and fix broken entry in `/etc/fstab` |
+| **Unavailable partition at boot preventing system startup** | Add `nofail` option to secondary partition in `/etc/fstab` |
+
+
 Modifying the `/etc/fstab` file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message `Welcome to emergency mode!`.
 
 ## 🚀 Step-by-Step Solution

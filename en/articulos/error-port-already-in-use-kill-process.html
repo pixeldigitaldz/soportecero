@@ -195,7 +195,31 @@
         Quick Diagnostics
       </h3>
       
-<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Server startup fails with <code>EADDRINUSE :::3000</code> or <code>bind: address already in use</code></strong>: A background node/python script or orphaned dev server is bound to the port</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Locate the PID using <code>lsof</code> or <code>ss</code> and terminate the process</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Port instantly becomes occupied again right after killing the PID</strong>: A systemd unit or Docker container restart policy is resurrecting the process</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Stop the supervising daemon (<code>systemctl stop</code> or <code>docker stop</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Socket remains stuck in <code>TIME_WAIT</code> state after stopping application</strong>: Socket closed ungracefully without enabling <code>SO_REUSEADDR</code> flag</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Wait for TCP socket timeout or configure <code>SO_REUSEADDR</code> in code</div>
+          </div></div></div>
 
     </section>
     <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>

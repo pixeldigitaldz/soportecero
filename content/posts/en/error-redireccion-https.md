@@ -12,6 +12,13 @@ readTime: 3 min
 date: '2026-07-27'
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Infinite redirect loop (Too Many Redirects) due to protocol mismatch** | Set `X-Forwarded-Proto` headers in Nginx/Cloudflare reverse proxy |
+| **WordPress Site URL configured with http:// instead of https://** | Update `siteurl` and `home` options in WordPress database |
+
+
 The `ERR_TOO_MANY_REDIRECTS` (Too many redirects) error occurs when your web server and an external service (such as Cloudflare) enter into a conflict of instructions: the server tells the browser to use HTTPS, but Cloudflare intercepts the request and returns it in HTTP, creating an infinite loop that prevents the page from loading.
 
 ## 🚀 Cómo solucionar el error paso a paso

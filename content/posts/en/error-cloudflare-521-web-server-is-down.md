@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-08-24"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Origin web server down or stopped** | Start local web server (Nginx/Apache): `systemctl restart nginx` |
+| **Server firewall blocking Cloudflare IP ranges** | Whitelist official Cloudflare IP ranges in server firewall |
+
+
 The **`Error 521: Web server is down`** returned by Cloudflare's edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.
 
 > **Quick Solution (1 Minute):**

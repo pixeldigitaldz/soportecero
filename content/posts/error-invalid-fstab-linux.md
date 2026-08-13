@@ -7,6 +7,13 @@ readTime: "5 min"
 date: "2026-06-26"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Sintaxis incorrecta o UUID inexistente en el archivo /etc/fstab** | Iniciar en modo rescate y corregir la línea defectuosa en `/etc/fstab` |
+| **Partición no disponible en el arranque impidiendo iniciar el sistema** | Agregar la opción `nofail` a la partición secundaria en el archivo `/etc/fstab` |
+
+
 Modificar el archivo `/etc/fstab` para montar discos duros secundarios o memorias de intercambio (SWAP) es común, pero un solo carácter mal escrito, un espacio de más o un UUID de disco inexistente hará que tu distribución Linux falle al arrancar, enviándote directamente a una pantalla negra con el mensaje de error `Welcome to emergency mode!`.
 
 ## 🚀 Cómo solucionar el error paso a paso

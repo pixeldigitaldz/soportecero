@@ -13,13 +13,13 @@ date: '2026-08-02'
 
 When running OBS Studio on modern Linux distributions powered by Wayland display servers (such as GNOME, KDE Plasma, Hyprland, or Sway), users frequently encounter a black screen when adding a "Screen Capture" or "Window Capture" source. Unlike legacy X11, Wayland security policies prevent applications from directly reading raw framebuffer memory, relying instead on **PipeWire** media streams routed through **XDG Desktop Portal**.
 
-## 🔍 Quick Diagnostics
+## Quick Diagnostics
 
-| Symptom | Root Cause | Solution |
-| :--- | :--- | :--- |
-| "Screen Capture (PipeWire)" source shows a completely black frame or fails to open selection prompt | The `xdg-desktop-portal` service or desktop-specific portal backend is missing or crashed | Install the appropriate portal backend (GNOME/KDE/Hyprland) and restart user systemd services |
-| PipeWire capture option does not appear in the OBS Studio sources menu | Missing `obs-xdg-portal` plugin or OBS is being forced to run under Xwayland/X11 compatibility mode | Install the OBS portal integration module and launch OBS natively under Wayland |
-| Screen selection dialog appears, but OBS displays a frozen black preview rectangle | PipeWire permission mismatch or stale portal session after display resolution changes | Restart the `pipewire` and `wireplumber` user services without rebooting the system |
+| Cause | Solution |
+|---|---|
+| **"Screen Capture (PipeWire)" source shows a completely black frame or fails to open selection prompt**: The `xdg-desktop-portal` service or desktop-specific portal backend is missing or crashed | Install the appropriate portal backend (GNOME/KDE/Hyprland) and restart user systemd services |
+| **PipeWire capture option does not appear in the OBS Studio sources menu**: Missing `obs-xdg-portal` plugin or OBS is being forced to run under Xwayland/X11 compatibility mode | Install the OBS portal integration module and launch OBS natively under Wayland |
+| **Screen selection dialog appears, but OBS displays a frozen black preview rectangle**: PipeWire permission mismatch or stale portal session after display resolution changes | Restart the `pipewire` and `wireplumber` user services without rebooting the system |
 
 ## 🚀 Step-by-Step Solution
 

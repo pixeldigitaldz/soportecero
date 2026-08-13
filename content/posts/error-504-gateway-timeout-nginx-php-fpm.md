@@ -9,11 +9,11 @@ date: "2026-07-26"
 
 El error **504 Gateway Timeout** ocurre cuando Nginx actúa como proxy inverso frente a un servidor backend (como PHP-FPM) y este último no responde a tiempo antes de que expire el límite de espera configurado en el servidor web.
 
-## 🔍 El Diagnóstico Rápido
+## Diagnóstico Rápido
 
-| Síntoma | Causa Raíz | Solución |
-|---|---|---|
-| HTTP 504 Gateway Timeout al procesar scripts PHP pesados | Nginx o PHP-FPM interrumpe la conexión porque el script tarda más que `fastcgi_read_timeout` o `max_execution_time` | Aumentar los valores de timeout en `nginx.conf` y en los archivos de configuración de PHP-FPM |
+| Causa | Solución |
+|---|---|
+| **HTTP 504 Gateway Timeout al procesar scripts PHP pesados**: Nginx o PHP-FPM interrumpe la conexión porque el script tarda más que `fastcgi_read_timeout` o `max_execution_time` | Aumentar los valores de timeout en `nginx.conf` y en los archivos de configuración de PHP-FPM |
 
 ## 🚀 Cómo solucionar el error paso a paso
 

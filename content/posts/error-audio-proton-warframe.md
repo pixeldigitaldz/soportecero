@@ -7,6 +7,13 @@ readTime: "3 min"
 date: "2026-06-27"
 ---
 
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Controlador de audio FAudio o XAudio2 desincronizado en Proton** | Instalar librerías de sonido mediante `protontricks 230410 xact` |
+| **Latencia de búfer de audio muy baja en PipeWire/PulseAudio** | Establecer la variable de entorno `PULSE_LATENCY_MSEC=60 %command%` |
+
+
 El fallo de sonido ausente, entrecortado o con molestos crujidos en juegos cooperativos de ritmo rápido como *Warframe* bajo sistemas operativos Linux (CachyOS, Bazzite, etc.) ocurre porque las librerías multimedia de Windows (`FAudio` o `XAudio2`) no logran sincronizarse correctamente con el servidor de sonido moderno de Linux, que actualmente suele ser **PipeWire**.
 
 ## 🚀 Cómo solucionar el error paso a paso

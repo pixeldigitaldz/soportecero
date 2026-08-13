@@ -7,6 +7,13 @@ readTime: "4 min"
 date: "2026-07-21"
 ---
 
+## Quick Diagnostics
+| Cause | Solution |
+|---|---|
+| **Accumulated unused images, stopped containers, and orphaned volumes** | Run deep purge: `docker system prune -a --volumes -f` |
+| **Container JSON log files growing indefinitely** | Truncate logs: `truncate -s 0 /var/lib/docker/containers/*/*-json.log` |
+
+
 The silent accumulation of disk space on servers running Docker occurs because the container engine never deletes old images by default when you download updates, nor does it clean up temporary build files or log files that grow indefinitely on the host path.
 
 ## 🚀 Cómo solucionar el error paso a paso

@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-verificar-y-activar-el-servicio-de-gamemode-gamemoded">Paso 1: Verificar y activar el servicio de GameMode (gamemoded)</a></li>
         <li class="toc-subitem"><a href="#paso-2-instalar-las-dependencias-de-32-y-64-bits-para-mangohud">Paso 2: Instalar las dependencias de 32 y 64 bits para MangoHud</a></li>
@@ -195,33 +187,19 @@
     </nav>
     
       <p>Feral GameMode (<code>gamemoded</code>) y MangoHud son herramientas fundamentales en el ecosistema de juegos en Linux: la primera ajusta dinámicamente el gobernador de la CPU, prioridades de E/S y perfiles de energía de la GPU, mientras que la segunda renderiza una superposición (<em>overlay</em>) para monitorizar fotogramas (FPS), temperaturas y frecuencias. Sin embargo, inconsistencias en librerías de 32 bits, servicios DBus o variables de entorno pueden provocar que no se carguen en Steam o Lutris.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">MangoHud no aparece al ejecutar juegos en Steam</td>
-<td align="left">Sintaxis incorrecta en parámetros de lanzamiento o falta paquete de librerías multilib de 32 bits (<code>lib32-mangohud</code>)</td>
-<td align="left">Usar <code>mangohud %command%</code> e instalar las librerías <code>lib32</code> / <code>i386</code></td>
-</tr>
-<tr>
-<td align="left"><code>gamemoded</code> no cambia el gobernador de CPU a <code>performance</code></td>
-<td align="left">El servicio de usuario systemd no está activo o falta incluir al usuario en el grupo de permisos</td>
-<td align="left">Hablitar <code>gamemoded.service</code> a nivel de usuario y comprobar con <code>gamemoded -t</code></td>
-</tr>
-<tr>
-<td align="left">Crasheo del juego al iniciar con MangoHud bajo servidores de pantalla Wayland</td>
-<td align="left">Incompatibilidad en capas implícitas de Vulkan o conflictos de renderizado con el <em>compositor</em></td>
-<td align="left">Configurar las capas de Vulkan explícitamente en el archivo <code>MangoHud.conf</code></td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-verificar-y-activar-el-servicio-de-gamemode-gamemoded">Paso 1: Verificar y activar el servicio de GameMode (<code>gamemoded</code>)</h3>
 <p>Comprueba que el demonio <code>gamemoded</code> esté instalado y corriendo correctamente en tu sesión de usuario mediante systemd:</p>
 

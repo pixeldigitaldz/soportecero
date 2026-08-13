@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-inspeccionar-la-razon-del-fallo-con-kubectl-describe">Paso 1: Inspeccionar la razón del fallo con kubectl describe</a></li>
         <li class="toc-subitem"><a href="#paso-2-extraer-los-registros-del-contenedor-logs">Paso 2: Extraer los registros del contenedor (Logs)</a></li>
@@ -195,23 +187,31 @@
     </nav>
     
       <p>El estado <strong>CrashLoopBackOff</strong> en Kubernetes indica que un contenedor dentro de un Pod falla al iniciarse, se interrumpe inmediatamente y entra en un ciclo continuo de reinicios automáticos donde Kubernetes incrementa de forma exponencial el tiempo de espera entre intentos.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th>Síntoma</th>
-<th>Causa Raíz</th>
-<th>Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Pod en estado <code>CrashLoopBackOff</code> con incremento constante en la cuenta de <code>RESTARTS</code></td>
-<td>Error en la aplicación (código), falta de variables de entorno, falta de memoria (OOMKilled) o fallos en <code>livenessProbe</code></td>
-<td>Inspeccionar los logs con <code>kubectl logs --previous</code> y revisar eventos del sistema con <code>kubectl describe pod</code></td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Síntoma</div>
+            <div class="diag-value">Pod en estado <code>CrashLoopBackOff</code> con incremento constante en la cuenta de <code>RESTARTS</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Causa Raíz</div>
+            <div class="diag-value">Error en la aplicación (código), falta de variables de entorno, falta de memoria (OOMKilled) o fallos en <code>livenessProbe</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Inspeccionar los logs con <code>kubectl logs --previous</code> y revisar eventos del sistema con <code>kubectl describe pod</code></div>
+          </div></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-inspeccionar-la-razon-del-fallo-con-kubectl-describe">Paso 1: Inspeccionar la razón del fallo con kubectl describe</h3>
 <p>El primer comando para obtener contexto detallado sobre el ciclo de vida del Pod es <code>kubectl describe</code>:</p>
 

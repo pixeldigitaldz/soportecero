@@ -190,14 +190,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -208,7 +201,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-configurar-el-comportamiento-de-escalado-de-xwayland-en-el-escritorio">Paso 1: Configurar el comportamiento de escalado de Xwayland en el escritorio</a></li>
         <li class="toc-subitem"><a href="#paso-2-habilitar-el-driver-nativo-de-wayland-en-proton-experimental-proton-ge">Paso 2: Habilitar el Driver Nativo de Wayland en Proton Experimental / Proton GE</a></li>
@@ -217,33 +209,19 @@
     </nav>
     
       <p>Al ejecutar juegos de Windows en Linux utilizando Steam Proton bajo un servidor de pantalla Wayland con <strong>escalado fraccional</strong> activado (por ejemplo, 125%, 150% o 175% en monitores 1440p o 4K), es habitual experimentar desincronía del cursor del ratón. Los síntomas incluyen un cursor de ratón desalineado que hace clic varios centímetros al lado de los botones de la interfaz del juego, una imagen borrosa por reescalado de Xwayland o la imposibilidad de atrapar (<em>mouse confinement</em>) el ratón dentro de la ventana del juego.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">El ratón hace clic en una posición desplazada respecto a la ubicación del puntero visible en pantalla</td>
-<td align="left">Xwayland aplica un escalado por software a la ventana del juego mientras Wine lee las coordenadas del ratón sin escalar</td>
-<td align="left">Desactivar el escalado de Xwayland por el sistema o habilitar la captura nativa de ratón en Proton</td>
-</tr>
-<tr>
-<td align="left">La ventana del juego se ve borrosa a resolución nativa cuando el escalado de pantalla no es 100%</td>
-<td align="left">El compositor fuerza a Xwayland a renderizar a menor resolución y escalar el mapa de píxeles</td>
-<td align="left">Configurar <code>WAYLAND_DISPLAY</code> y utilizar el nuevo driver nativo Wayland en Wine (Wine 9.0+ / Proton Experimental)</td>
-</tr>
-<tr>
-<td align="left">El puntero del ratón se escapa de la pantalla del juego en configuraciones multimonitor</td>
-<td align="left">Falta la implementación del protocolo <code>relative-pointer</code> o <code>pointer-constraints</code> en Xwayland</td>
-<td align="left">Activar <code>PROTON_ENABLE_WAYLAND=1</code> o ajustar el bloqueo de cursor en Wine Explorer</td>
-</tr>
-</tbody></table>
-<h2 id="la-solucion-paso-a-paso">
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
           </svg>

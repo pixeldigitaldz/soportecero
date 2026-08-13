@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-obtener-e-integrar-las-actualizaciones-remotas-con-rebase">Paso 1: Obtener e integrar las actualizaciones remotas con Rebase</a></li>
         <li class="toc-subitem"><a href="#paso-2-resolver-posibles-conflictos-de-codigo">Paso 2: Resolver posibles conflictos de código</a></li>
@@ -194,23 +186,31 @@
     </nav>
     
       <p>El error <code>[rejected - non-fast-forward]</code> o <code>updates were rejected because the remote contains work that you do not have locally</code> ocurre cuando intentas enviar commits locales a una rama remota en Git, pero el servidor remoto contiene commits más recientes que tu rama local no posee.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th>Síntoma</th>
-<th>Causa Raíz</th>
-<th>Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>error: failed to push some refs ... [rejected - non-fast-forward]</code></td>
-<td>El repositorio remoto tiene commits en la rama que no han sido integrados en tu copia local</td>
-<td>Ejecutar <code>git pull --rebase origin &lt;rama&gt;</code> para aplicar los cambios remotos antes del <code>git push</code></td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Síntoma</div>
+            <div class="diag-value"><code>error: failed to push some refs ... [rejected - non-fast-forward]</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Causa Raíz</div>
+            <div class="diag-value">El repositorio remoto tiene commits en la rama que no han sido integrados en tu copia local</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ejecutar <code>git pull --rebase origin &lt;rama&gt;</code> para aplicar los cambios remotos antes del <code>git push</code></div>
+          </div></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-obtener-e-integrar-las-actualizaciones-remotas-con-rebase">Paso 1: Obtener e integrar las actualizaciones remotas con Rebase</h3>
 <p>En lugar de realizar un merge convencional que crea un commit de cruce desordenado, utiliza <code>git pull --rebase</code> para colocar tus nuevos commits locales encima del historial remoto actualizado:</p>
 

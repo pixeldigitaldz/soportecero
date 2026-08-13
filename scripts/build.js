@@ -121,9 +121,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   // 2. Diagnostic Box layout wrapping
   let diagBoxHtml = '';
   const diagTitle = isEn ? 'Quick Diagnostics' : 'El Diagnóstico Rápido';
-  const diagRegex = isEn 
-    ? /<h2[^>]*>(?:Quick Diagnostics|Diagnostics|Diagnostic)<\/h2>([\s\S]*?)(?=<h2)/i 
-    : /<h2[^>]*>(?:El Diagnóstico Rápido|Diagnóstico del Problema|Diagnóstico)<\/h2>([\s\S]*?)(?=<h2)/i;
+  const diagRegex = /<h2[^>]*>[^<]*(?:Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const transformTableToCards = (htmlStr) => {
     return htmlStr.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableInner) => {

@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
         <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
         <li class="toc-subitem"><a href="#step-1-inspect-redis-memory-usage-statistics">Step 1: Inspect Redis Memory Usage Statistics</a></li>
         <li class="toc-subitem"><a href="#step-2-change-eviction-policy-maxmemory-policy-live">Step 2: Change Eviction Policy (maxmemory-policy) Live</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>The <code>OOM command not allowed when used memory &gt; &#39;maxmemory&#39;</code> error occurs when a Redis instance reaches its configured memory ceiling (<code>maxmemory</code>) while operating under the default <code>noeviction</code> policy. Under these conditions, Redis rejects all write operations (<code>SET</code>, <code>HSET</code>, <code>LPUSH</code>, <code>SADD</code>) with an Out-of-Memory exception to protect existing data from unmanaged deletion.</p>
-        </section>
-        <h2 id="quick-diagnostics">🔍 Quick Diagnostics</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Symptom</th>
-<th align="left">Root Cause</th>
-<th align="left">Solution</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Write commands fail with <code>OOM command not allowed</code></td>
-<td align="left">Memory hit the <code>maxmemory</code> threshold while using the default <code>noeviction</code> policy</td>
-<td align="left">Configure an automatic eviction policy (<code>allkeys-lru</code> / <code>volatile-lru</code>) or increase <code>maxmemory</code></td>
-</tr>
-<tr>
-<td align="left">The Redis daemon is killed by the Linux Kernel (<em>OOM Killer</em>)</td>
-<td align="left"><code>redis.conf</code> lacks a explicit <code>maxmemory</code> boundary, exhausting host system RAM</td>
-<td align="left">Set an explicit <code>maxmemory</code> quota (e.g., 70-80% of total host physical memory)</td>
-</tr>
-<tr>
-<td align="left">High memory fragmentation ratio (<code>mem_fragmentation_ratio &gt; 1.5</code>)</td>
-<td align="left">The Jemalloc allocator holds unreleased pages after bulk key deletion operations</td>
-<td align="left">Enable Redis active defragmentation (<code>activedefrag yes</code>)</td>
-</tr>
-</tbody></table>
-<h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-inspect-redis-memory-usage-statistics">Step 1: Inspect Redis Memory Usage Statistics</h3>
 <p>Connect to your Redis instance using <code>redis-cli</code> and query the memory subsytem status:</p>
 

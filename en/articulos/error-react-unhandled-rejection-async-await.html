@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
         <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
         <li class="toc-subitem"><a href="#step-1-wrap-asyncawait-calls-in-trycatchfinally-blocks">Step 1: Wrap async/await Calls in try...catch...finally Blocks</a></li>
         <li class="toc-subitem"><a href="#step-2-handle-promises-properly-inside-useeffect">Step 2: Handle Promises Properly Inside useEffect</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>The <strong>&quot;Unhandled Promise Rejection&quot;</strong> (or <code>Uncaught (in promise)</code>) error occurs in React and JavaScript applications whenever a Promise is rejected—due to a network glitch, bad HTTP response, or runtime exception—without an attached <code>.catch()</code> block or an enclosing <code>try...catch</code> statement. In React apps, unhandled rejections can cause silent UI freezes, stale state, or component crashes in production.</p>
-        </section>
-        <h2 id="quick-diagnostics">🔍 Quick Diagnostics</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Symptom</th>
-<th align="left">Root Cause</th>
-<th align="left">Solution</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>Uncaught (in promise) Error</code> in browser developer console during form submit or API fetch</td>
-<td align="left">Async function executed without wrapping <code>await</code> calls in a <code>try...catch</code> block</td>
-<td align="left">Wrap <code>await</code> expressions inside <code>try...catch</code> blocks and manage error state</td>
-</tr>
-<tr>
-<td align="left">Unhandled rejection triggered inside a <code>useEffect</code> hook</td>
-<td align="left">Promise launched inside an event handler or effect missing proper error handling</td>
-<td align="left">Create an internal <code>async</code> function inside <code>useEffect</code> and handle errors explicitly</td>
-</tr>
-<tr>
-<td align="left">HTTP 4xx/5xx API errors are not caught as promise rejections</td>
-<td align="left">The native <code>fetch()</code> API does not reject promises on HTTP error status codes (e.g., 404 or 500)</td>
-<td align="left">Check <code>response.ok</code> before parsing JSON and throw an <code>Error</code> manually if false</td>
-</tr>
-</tbody></table>
-<h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-wrap-asyncawait-calls-in-trycatchfinally-blocks">Step 1: Wrap <code>async/await</code> Calls in <code>try...catch...finally</code> Blocks</h3>
 <p>The primary cause of unhandled rejections is executing asynchronous logic without catching potential failures. Refactor your API handlers:</p>
 

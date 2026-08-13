@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-solucion-para-macos-instalacion-de-certificados-openssl">Paso 1: Solución para macOS (Instalación de certificados OpenSSL)</a></li>
         <li class="toc-subitem"><a href="#paso-2-actualizar-el-paquete-certifi-y-los-certificados-del-sistema">Paso 2: Actualizar el paquete certifi y los certificados del sistema</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>Al realizar peticiones HTTP seguras en Python utilizando módulos como <code>urllib</code>, <code>requests</code> o <code>httpx</code>, es común encontrarse con la excepción <code>ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed</code>. Este error ocurre cuando la biblioteca SSL de Python no logra validar la cadena de certificados TLS/SSL presentados por el servidor de destino, ya sea por falta de certificados CA de confianza en el sistema, certificados autofirmados o configuraciones de red corporativas con proxies de inspección SSL.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]</code> en macOS tras instalar Python</td>
-<td align="left">Falta la instalación del almacén de certificados CA por defecto de OpenSSL en macOS</td>
-<td align="left">Ejecutar el script <code>Install Certificates.command</code> incluido en la carpeta de Python en macOS</td>
-</tr>
-<tr>
-<td align="left">Fallo de verificación SSL en scripts con <code>requests</code> o <code>urllib3</code> en Linux / Entornos virtuales</td>
-<td align="left">Paquete <code>certifi</code> desactualizado o falta el bundle CA del sistema operativo</td>
-<td align="left">Actualizar <code>certifi</code> con <code>pip</code> o definir la variable <code>REQUESTS_CA_BUNDLE</code> hacia la CA raíz</td>
-</tr>
-<tr>
-<td align="left">Error al conectar a un servidor local de desarrollo o con proxy empresarial</td>
-<td align="left">El servidor utiliza un certificado TLS autofirmado o la CA empresarial no está en el almacén de confianza</td>
-<td align="left">Añadir la CA personalizada al bundle de <code>certifi</code> o pasar la ruta del certificado a la petición</td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-solucion-para-macos-instalacion-de-certificados-openssl">Paso 1: Solución para macOS (Instalación de certificados OpenSSL)</h3>
 <p>Si estás utilizando macOS y descargaste Python desde python.org o Homebrew, el entorno a menudo no viene con los certificados de autoridad de certificación (CA) del sistema vinculados a la librería <code>ssl</code>:</p>
 

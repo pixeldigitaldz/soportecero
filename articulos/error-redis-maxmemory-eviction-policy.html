@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-diagnosticar-el-estado-de-memoria-en-redis-cli">Paso 1: Diagnosticar el estado de memoria en Redis CLI</a></li>
         <li class="toc-subitem"><a href="#paso-2-cambiar-la-politica-de-desalojo-maxmemory-policy-en-caliente">Paso 2: Cambiar la política de desalojo (maxmemory-policy) en caliente</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>El error <code>OOM command not allowed when used memory &gt; &#39;maxmemory&#39;</code> ocurre en instancias de Redis cuando el uso de memoria RAM alcanza el límite estipulado en el parámetro <code>maxmemory</code> y la política de desalojo (<em>eviction policy</em>) por defecto está configurada como <code>noeviction</code>. Bajo estas condiciones, Redis rechaza cualquier comando que intente agregar o modificar datos (<code>SET</code>, <code>HSET</code>, <code>LPUSH</code>), respondiendo con una excepción de falta de memoria (<em>Out of Memory</em>).</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Comandos de escritura fallan con <code>OOM command not allowed</code></td>
-<td align="left">La memoria alcanzó el límite <code>maxmemory</code> bajo la política por defecto <code>noeviction</code></td>
-<td align="left">Configurar una política de desalojo automática (<code>allkeys-lru</code> o <code>volatile-lru</code>) o aumentar <code>maxmemory</code></td>
-</tr>
-<tr>
-<td align="left">El proceso de Redis es eliminado por el Kernel (<em>Linux OOM Killer</em>)</td>
-<td align="left">El archivo <code>redis.conf</code> no define un límite <code>maxmemory</code>, consumiendo toda la RAM del host</td>
-<td align="left">Establecer un tope en <code>maxmemory</code> equivalente al 70-80% de la RAM del servidor</td>
-</tr>
-<tr>
-<td align="left">Alto ratio de fragmentación de memoria (<code>mem_fragmentation_ratio &gt; 1.5</code>)</td>
-<td align="left">El asignador de memoria Jemalloc conserva páginas liberadas tras borrar claves masivas</td>
-<td align="left">Habilitar la desfragmentación activa en Redis (<code>activedefrag yes</code>)</td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-diagnosticar-el-estado-de-memoria-en-redis-cli">Paso 1: Diagnosticar el estado de memoria en Redis CLI</h3>
 <p>Conéctate a tu instancia de Redis y ejecuta el comando de información de memoria para auditar la memoria consumida y la política actual:</p>
 

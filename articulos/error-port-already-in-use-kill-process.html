@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-identificar-el-proceso-y-pid-que-ocupa-el-puerto">Paso 1: Identificar el proceso y PID que ocupa el puerto</a></li>
         <li class="toc-subitem"><a href="#paso-2-finalizar-el-proceso-ocupante-de-forma-segura">Paso 2: Finalizar el proceso ocupante de forma segura</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>El error <code>EADDRINUSE: address already in use</code> ocurre cuando un servicio de red, servidor web (Nginx, Apache), contenedor Docker o script (Node.js, Python) intenta vincularse (<em>bind</em>) a un puerto TCP/UDP que ya está siendo utilizado por otro proceso activo en el sistema operativo.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Error <code>EADDRINUSE :::3000</code> o <code>bind: address already in use</code> al iniciar un servidor</td>
-<td align="left">Un proceso en segundo plano (Node, Python, Docker) no se cerró correctamente</td>
-<td align="left">Identificar el PID con <code>lsof</code> o <code>ss</code> y finalizar la ejecución</td>
-</tr>
-<tr>
-<td align="left">El puerto vuelve a quedar ocupado inmediatamente tras matar el proceso</td>
-<td align="left">Un servicio de systemd o un contenedor Docker con política de reinicio automático</td>
-<td align="left">Detener el servicio supervisor (<code>systemctl stop</code> o <code>docker stop</code>)</td>
-</tr>
-<tr>
-<td align="left">El puerto se muestra en estado <code>TIME_WAIT</code> y rechaza conexiones nuevas</td>
-<td align="left">El socket no se cerró de forma limpia por falta de <code>SO_REUSEADDR</code> en el servidor</td>
-<td align="left">Esperar el timeout TCP o configurar <code>SO_REUSEADDR</code> en el código fuente</td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-identificar-el-proceso-y-pid-que-ocupa-el-puerto">Paso 1: Identificar el proceso y PID que ocupa el puerto</h3>
 <p>Utiliza herramientas estándar de red en la terminal para encontrar el identificador de proceso (PID) vinculado al puerto conflictivo (por ejemplo, el puerto <code>3000</code> o <code>8080</code>):</p>
 

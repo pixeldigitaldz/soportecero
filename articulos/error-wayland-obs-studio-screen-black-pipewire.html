@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-instalar-xdg-desktop-portal-y-el-backend-de-tu-escritorio">Paso 1: Instalar XDG Desktop Portal y el backend de tu escritorio</a></li>
         <li class="toc-subitem"><a href="#paso-2-reiniciar-los-servicios-de-portal-y-pipewire">Paso 2: Reiniciar los servicios de Portal y PipeWire</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>Al ejecutar OBS Studio en distribuciones Linux modernas con entornos de escritorio basados en Wayland (como GNOME, KDE Plasma, Hyprland o Sway), es común encontrarse con una pantalla negra al intentar añadir una fuente de &quot;Captura de pantalla&quot; o &quot;Captura de ventana&quot;. A diferencia de X11, Wayland prohíbe por diseño que las aplicaciones lean directamente el framebuffer de otras ventanas, delegando la captura al servidor de streaming de medios <strong>PipeWire</strong> a través de <strong>XDG Desktop Portal</strong>.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Síntoma</th>
-<th align="left">Causa Raíz</th>
-<th align="left">Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">La fuente &quot;Captura de pantalla (PipeWire)&quot; aparece totalmente negra o no muestra selector de ventana</td>
-<td align="left">El servicio <code>xdg-desktop-portal</code> o el backend del entorno de escritorio no está instalado o falló</td>
-<td align="left">Instalar el backend portal correspondiente (GNOME/KDE/Hyprland) y reiniciar el servicio de usuario</td>
-</tr>
-<tr>
-<td align="left">La opción de captura PipeWire no aparece en la lista de fuentes de OBS Studio</td>
-<td align="left">Falta el módulo <code>obs-xdg-portal</code> o se está forzando a OBS a ejecutarse en modo Xwayland/X11</td>
-<td align="left">Instalar la extensión portal de OBS e iniciar OBS nativamente en Wayland</td>
-</tr>
-<tr>
-<td align="left">El cuadro de diálogo para seleccionar la pantalla aparece, pero OBS muestra un marco negro congelado</td>
-<td align="left">Permisos denegados en PipeWire o sesión de portal colgada por cambios de resolución</td>
-<td align="left">Reiniciar los daemon <code>pipewire</code> y <code>wireplumber</code> sin reiniciar el sistema</td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-instalar-xdg-desktop-portal-y-el-backend-de-tu-escritorio">Paso 1: Instalar XDG Desktop Portal y el backend de tu escritorio</h3>
 <p>Para que OBS pueda solicitar captura de pantalla a Wayland, necesitas tener el portal base y el backend específico de tu compositor:</p>
 

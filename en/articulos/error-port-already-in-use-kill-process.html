@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="quick-diagnostics">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            Quick Diagnostics
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
         <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
         <li class="toc-subitem"><a href="#step-1-locate-the-process-id-pid-holding-the-port">Step 1: Locate the Process ID (PID) Holding the Port</a></li>
         <li class="toc-subitem"><a href="#step-2-gracefully-or-forcefully-terminate-the-process">Step 2: Gracefully or Forcefully Terminate the Process</a></li>
@@ -194,33 +186,19 @@
     </nav>
     
       <p>The <code>EADDRINUSE: address already in use</code> error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.</p>
-        </section>
-        <h2 id="quick-diagnostics">🔍 Quick Diagnostics</h2>
-<table>
-<thead>
-<tr>
-<th align="left">Symptom</th>
-<th align="left">Root Cause</th>
-<th align="left">Solution</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Server startup fails with <code>EADDRINUSE :::3000</code> or <code>bind: address already in use</code></td>
-<td align="left">A background node/python script or orphaned dev server is bound to the port</td>
-<td align="left">Locate the PID using <code>lsof</code> or <code>ss</code> and terminate the process</td>
-</tr>
-<tr>
-<td align="left">Port instantly becomes occupied again right after killing the PID</td>
-<td align="left">A systemd unit or Docker container restart policy is resurrecting the process</td>
-<td align="left">Stop the supervising daemon (<code>systemctl stop</code> or <code>docker stop</code>)</td>
-</tr>
-<tr>
-<td align="left">Socket remains stuck in <code>TIME_WAIT</code> state after stopping application</td>
-<td align="left">Socket closed ungracefully without enabling <code>SO_REUSEADDR</code> flag</td>
-<td align="left">Wait for TCP socket timeout or configure <code>SO_REUSEADDR</code> in code</td>
-</tr>
-</tbody></table>
-<h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card"></div><div class="diag-card"></div><div class="diag-card"></div></div>
+
+    </section>
+    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
 <h3 id="step-1-locate-the-process-id-pid-holding-the-port">Step 1: Locate the Process ID (PID) Holding the Port</h3>
 <p>Use command-line networking tools to find which application process is bound to the target port (e.g., port <code>3000</code> or <code>8080</code>):</p>
 

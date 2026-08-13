@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -186,34 +179,47 @@ En Linux, ejecuta el siguiente comando para ver qué aplicación está ocupando 
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#diagnostico-rapido">Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
       </ol>
     </nav>
     
-        </section>
-        <h2 id="diagnostico-rapido">Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th>Causa</th>
-<th>Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Otro servicio usa el puerto (ej. Nginx/Apache)</strong></td>
-<td>Detener el servicio o cambiar el puerto en Docker (<code>docker-compose.yml</code>)</td>
-</tr>
-<tr>
-<td><strong>Contenedor zombi reteniendo el puerto</strong></td>
-<td>Reiniciar el servicio de Docker o matar el proceso</td>
-</tr>
-<tr>
-<td><strong>Conflicto con Docker Desktop (Windows/Mac)</strong></td>
-<td>Reiniciar Docker Desktop o WSL2</td>
-</tr>
-</tbody></table>
-<h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Otro servicio usa el puerto (ej. Nginx/Apache)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Detener el servicio o cambiar el puerto en Docker (<code>docker-compose.yml</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Contenedor zombi reteniendo el puerto</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reiniciar el servicio de Docker o matar el proceso</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Conflicto con Docker Desktop (Windows/Mac)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reiniciar Docker Desktop o WSL2</div>
+          </div></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
 <p><strong>Encuentra qué proceso está usando el puerto</strong>
 En Linux, ejecuta el siguiente comando para ver qué aplicación está ocupando el puerto (cambia <code>80</code> por tu puerto en conflicto):</p>
 

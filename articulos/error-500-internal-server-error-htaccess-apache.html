@@ -167,14 +167,7 @@
         <!-- Main Column -->
         <div class="post-article">
           
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="el-diagnostico-rapido">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            El Diagnóstico Rápido
-          </h3>
-          <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
@@ -185,7 +178,6 @@
       <div class="toc-title">📌 Contenido de esta guía</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
         <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
         <li class="toc-subitem"><a href="#paso-1-isolar-el-problema-usando-el-archivo-htaccess">Paso 1: Isolar el problema usando el archivo .htaccess</a></li>
         <li class="toc-subitem"><a href="#paso-2-consultar-los-registros-de-error-de-apache-errorlog">Paso 2: Consultar los registros de error de Apache (error.log)</a></li>
@@ -195,23 +187,31 @@
     </nav>
     
       <p>El error <strong>500 Internal Server Error</strong> en Apache es una de las respuestas de fallo más genéricas y frustrantes. Ocurre con frecuencia inmediatamente después de modificar el archivo <code>.htaccess</code>, introducir reglas de reescritura incorrectas (<code>mod_rewrite</code>), o incluir directivas de módulos que no están instalados o activados en el servidor web.</p>
-        </section>
-        <h2 id="el-diagnostico-rapido">🔍 El Diagnóstico Rápido</h2>
-<table>
-<thead>
-<tr>
-<th>Síntoma</th>
-<th>Causa Raíz</th>
-<th>Solución</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>HTTP 500 tras editar <code>.htaccess</code> o instalar un plugin/CMS</td>
-<td>Directiva no válida, error tipográfico de sintaxis o módulo de Apache no activado (ej. <code>mod_rewrite</code> o <code>mod_headers</code>)</td>
-<td>Revisar los registros de error de Apache (<code>error.log</code>), renombrar el archivo temporalmente y corregir o envolver las directivas en bloques <code>&lt;IfModule&gt;</code></td>
-</tr>
-</tbody></table>
-<h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Síntoma</div>
+            <div class="diag-value">HTTP 500 tras editar <code>.htaccess</code> o instalar un plugin/CMS</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Causa Raíz</div>
+            <div class="diag-value">Directiva no válida, error tipográfico de sintaxis o módulo de Apache no activado (ej. <code>mod_rewrite</code> o <code>mod_headers</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Revisar los registros de error de Apache (<code>error.log</code>), renombrar el archivo temporalmente y corregir o envolver las directivas en bloques <code>&lt;IfModule&gt;</code></div>
+          </div></div></div>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
 <h3 id="paso-1-isolar-el-problema-usando-el-archivo-htaccess">Paso 1: Isolar el problema usando el archivo .htaccess</h3>
 <p>Para confirmar al 100% que el origen del error 500 es el archivo <code>.htaccess</code>, conéctate a tu servidor mediante SSH o FTP y renombra el archivo temporalmente:</p>
 

@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Linux Boot Delay due to Timeout Error in NFS Network Mounts'
+title: 'Solved: Linux Boot Delay due to Timeout Error in NFS Network Mounts'
 description: >-
   Prevent your operating system from freezing for 90 seconds during boot when
   your NAS or local storage server is offline.

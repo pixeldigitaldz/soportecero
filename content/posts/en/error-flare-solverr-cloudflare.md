@@ -1,5 +1,5 @@
 ---
-title: 'Fix: FlareSolverr Timeout Error when Bypassing Cloudflare Challenges'
+title: 'Resolving: FlareSolverr Timeout Error when Bypassing Cloudflare Challenges'
 description: >-
   Learn how to troubleshoot timeout errors and unresolved challenges when
   configuring FlareSolverr with download managers and automation tools.

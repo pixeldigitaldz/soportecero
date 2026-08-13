@@ -1,5 +1,5 @@
 ---
-title: "Fix: Distorted or Missing Audio in Warframe under Proton Linux"
+title: "Guide: Distorted or Missing Audio in Warframe under Proton Linux"
 description: "Learn how to fix missing audio, crackling, or misconfigured channels when running multiplayer titles via the Proton compatibility layer."
 category: "Gaming Tech"
 tags: ["Gaming", "Linux", "Proton"]

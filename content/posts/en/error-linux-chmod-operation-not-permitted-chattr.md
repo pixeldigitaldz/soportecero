@@ -1,5 +1,5 @@
 ---
-title: 'Fix: chmod Operation not permitted (Even as Root) in Linux'
+title: 'How to fix: chmod Operation not permitted (Even as Root) in Linux'
 description: 'How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).'
 category: 'Systems & Servers'
 date: '2026-08-13'

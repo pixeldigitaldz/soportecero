@@ -1,5 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const esPrefixes = [
   "Guía: ",
@@ -30,7 +34,7 @@ function processDirectory(dir, isEn) {
     if (!file.endsWith('.md')) continue;
     const filePath = path.join(dir, file);
     let content = fs.readFileSync(filePath, 'utf8');
-    
+
     if (isEn) {
       if (content.match(/title:\s*['"]Fix:\s/i)) {
         const prefix = enPrefixes[enIdx % enPrefixes.length];

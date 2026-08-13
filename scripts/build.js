@@ -83,6 +83,26 @@ function postProcessHtml(rawHtml, lang = 'es') {
   let parsedSteps = [];
   const isEn = lang === 'en';
 
+  // 0. Extract GEO / AI Summary (TL;DR)
+  const firstParagraphMatch = html.match(/<p>([\s\S]*?)<\/p>/i);
+  if (firstParagraphMatch) {
+    // Strip internal HTML tags for a clean AI text snippet
+    const summaryText = firstParagraphMatch[1].replace(/<[^>]*>/g, '').trim(); 
+    if (summaryText.length > 30) {
+      const summaryTitle = isEn ? '✨ Quick Answer' : '✨ Respuesta Rápida';
+      const aiSummaryHtml = `
+      <section class="ai-summary" role="doc-abstract" aria-label="${summaryTitle}">
+        <div class="ai-summary-header">
+          ${summaryTitle}
+        </div>
+        <p>${summaryText}</p>
+      </section>
+      `;
+      // Inject right at the beginning of the article content
+      html = aiSummaryHtml + html;
+    }
+  }
+
   // 1. Code blocks wrapping in custom containers with copy buttons
   html = html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (match, langClass, code) => {
     const displayLang = langClass ? langClass.toUpperCase() : (isEn ? 'CODE' : 'CÓDIGO');

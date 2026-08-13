@@ -1,5 +1,5 @@
 ---
-title: 'Solución: The query requires an index en Cloud Firestore'
+title: 'Cómo resolver: The query requires an index en Cloud Firestore'
 description: 'Aprende a resolver el error FAILED_PRECONDITION: The query requires an index al hacer búsquedas compuestas en Firebase.'
 category: 'Web y Código'
 date: '2026-08-19'

@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Firebase Error Denying Database Reads (Security Rules)'
+title: 'Guide: Firebase Error Denying Database Reads (Security Rules)'
 description: >-
   Learn how to fix the annoying 'Firebase Error: [code=permission-denied]:
   Missing or insufficient permissions' error in Firestore or Realtime Database

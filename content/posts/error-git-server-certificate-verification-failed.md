@@ -1,5 +1,5 @@
 ---
-title: 'Solución: server certificate verification failed en Git'
+title: 'Resuelto: server certificate verification failed en Git'
 description: 'Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.'
 category: 'Web y Código'
 date: '2026-08-15'

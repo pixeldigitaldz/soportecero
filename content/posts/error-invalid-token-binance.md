@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de Token Inválido o expirado en la API de Binance Pay"
+title: "Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay"
 description: "Aprende a corregir el fallo de autenticación 'Invalid Signature' o token expirado al integrar pasarelas de pago cripto en tu aplicación web."
 category: "Web y Código"
 tags: ["Binance", "API", "Crypto"]

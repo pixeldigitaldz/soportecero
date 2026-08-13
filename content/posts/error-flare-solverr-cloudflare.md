@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare"
+title: "Reparar: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare"
 description: "Aprende a solucionar los fallos de timeout y desafíos no resueltos al configurar FlareSolverr con gestores de descargas y automatizadores."
 category: "Sistemas y Servidores"
 tags: ["Docker", "Cloudflare", "FlareSolverr"]

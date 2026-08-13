@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de CORS al consumir APIs externas desde plantillas de Shopify"
+title: "Cómo resolver: Error de CORS al consumir APIs externas desde plantillas de Shopify"
 description: "Aprende a solucionar shopify cors policy en tu tienda y resolver el bloqueo de seguridad 'Access-Control-Allow-Origin' al hacer peticiones fetch."
 category: "Web y Código"
 tags: ["Shopify", "CORS", "JavaScript"]

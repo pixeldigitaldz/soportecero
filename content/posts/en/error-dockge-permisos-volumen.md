@@ -1,5 +1,5 @@
 ---
-title: "Fix: Permission Denied Error in Docker Compose Volumes"
+title: "Resolving: Permission Denied Error in Docker Compose Volumes"
 description: "Learn how to troubleshoot read and write failures in local folders mounted as volumes in Linux Docker containers."
 category: "Systems & Servers"
 tags: ["Docker", "Linux", "Servers"]

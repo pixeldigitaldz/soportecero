@@ -1,5 +1,5 @@
 ---
-title: 'Solución: Error 2002 (HY000): Can''t connect to local MySQL server through socket'
+title: 'Cómo resolver: Error 2002 (HY000): Can''t connect to local MySQL server through socket'
 description: 'Cómo diagnosticar y solucionar el error 2002 de MySQL/MariaDB cuando no puede conectarse a través del socket mysql.sock.'
 category: 'Sistemas y Servidores'
 date: '2026-08-16'

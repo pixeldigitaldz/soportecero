@@ -1,5 +1,5 @@
 ---
-title: 'Fix: The query requires an index in Cloud Firestore'
+title: 'How to fix: The query requires an index in Cloud Firestore'
 description: 'Learn how to resolve the FAILED_PRECONDITION: The query requires an index error when doing compound queries in Firebase.'
 category: 'Web & Code'
 date: '2026-08-19'

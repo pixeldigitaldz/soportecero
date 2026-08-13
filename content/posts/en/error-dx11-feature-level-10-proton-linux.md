@@ -1,5 +1,5 @@
 ---
-title: 'Fix: DX11 feature level 10.0 is required to run the engine (Proton/Linux)'
+title: 'Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux)'
 description: 'How to fix the DirectX 11 error in Linux using Steam Play (Proton), Lutris or Heroic Games Launcher.'
 category: 'Gaming Tech'
 date: '2026-08-14'

@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux"
+title: "Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux"
 description: "Aprende a reparar los problemas de falta de audio, crujidos o canales desconfigurados al ejecutar títulos multijugador mediante la capa de compatibilidad Proton."
 category: "Gaming Tech"
 tags: ["Gaming", "Linux", "Proton"]

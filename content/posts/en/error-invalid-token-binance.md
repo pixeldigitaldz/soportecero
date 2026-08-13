@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Invalid or Expired Token Error in the Binance Pay API'
+title: 'Guide: Invalid or Expired Token Error in the Binance Pay API'
 description: >-
   Learn how to fix the 'Invalid Signature' authentication failure or expired
   token error when integrating crypto payment gateways into your web

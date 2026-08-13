@@ -1,5 +1,5 @@
 ---
-title: "Solución: Caídas de FPS y crasheos por asignación de VRAM en Diablo IV"
+title: "Error: Caídas de FPS y crasheos por asignación de VRAM en Diablo IV"
 description: "Aprende a mitigar el error 'Out of Video Memory' y las caídas drásticas de rendimiento optimizando la gestión de texturas y el archivo de paginación de tu GPU."
 category: "Gaming Tech"
 tags: ["Gaming", "Diablo IV", "VRAM"]

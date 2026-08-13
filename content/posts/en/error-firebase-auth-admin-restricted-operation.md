@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Error (auth/admin-restricted-operation) in Firebase'
+title: 'Troubleshooting: Error (auth/admin-restricted-operation) in Firebase'
 description: 'How to fix the Firebase Auth error when trying to create or delete users and receiving admin-restricted-operation.'
 category: 'Web & Code'
 date: '2026-08-17'

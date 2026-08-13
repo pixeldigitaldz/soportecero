@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de permisos (Permission Denied) en volúmenes de Docker Compose"
+title: "Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose"
 description: "Aprende a solucionar los fallos de lectura y escritura en carpetas locales montadas como volúmenes en contenedores Docker de Linux."
 category: "Sistemas y Servidores"
 tags: ["Docker", "Linux", "Servidores"]

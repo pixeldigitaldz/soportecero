@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Linux Boot Failure due to Incorrect Configuration in /etc/fstab'
+title: 'Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab'
 description: >-
   Learn how to repair your Linux system if it fails to boot and gets stuck in
   Emergency Mode due to an error in the fstab file.

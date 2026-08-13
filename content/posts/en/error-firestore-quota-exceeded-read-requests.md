@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Quota exceeded for quota metric Read requests in Firestore'
+title: 'Error: Quota exceeded for quota metric Read requests in Firestore'
 description: 'Learn to diagnose why you exceeded your free reading limit in Firebase and how to fix infinite loops in your frontend.'
 category: 'Web & Code'
 date: '2026-08-18'

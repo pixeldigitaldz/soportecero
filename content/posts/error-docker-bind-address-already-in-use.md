@@ -1,5 +1,5 @@
 ---
-title: 'Solución: Error starting userland proxy: bind: address already in use en Docker'
+title: 'Error: Error starting userland proxy: bind: address already in use en Docker'
 description: 'Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.'
 category: 'Sistemas y Servidores'
 date: '2026-08-12'

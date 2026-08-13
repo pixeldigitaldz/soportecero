@@ -1,5 +1,5 @@
 ---
-title: 'Solución: chmod Operation not permitted (Incluso como Root) en Linux'
+title: 'Guía: chmod Operation not permitted (Incluso como Root) en Linux'
 description: 'Cómo solucionar el error Operation not permitted al usar chmod o chown en Linux, provocado por atributos inmutables (chattr).'
 category: 'Sistemas y Servidores'
 date: '2026-08-13'

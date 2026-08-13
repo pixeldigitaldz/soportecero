@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Error 2002 (HY000): Can''t connect to local MySQL server through socket'
+title: 'Error: Error 2002 (HY000): Can''t connect to local MySQL server through socket'
 description: 'How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.'
 category: 'Systems & Servers'
 date: '2026-08-16'

@@ -1,5 +1,5 @@
 ---
-title: "Fix: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)"
+title: "Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)"
 description: "Learn how to resolve the network block where your containers in Umbrel lose access to the outside due to conflicts with the internal DNS resolver."
 category: "Systems & Servers"
 tags: ["Umbrel", "Docker", "DNS"]

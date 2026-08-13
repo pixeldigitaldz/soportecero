@@ -1,5 +1,5 @@
 ---
-title: 'Fix: Error starting userland proxy: bind: address already in use in Docker'
+title: 'How to fix: Error starting userland proxy: bind: address already in use in Docker'
 description: 'How to fix the port already in use error in Docker step by step on Linux and Windows.'
 category: 'Systems & Servers'
 date: '2026-08-12'

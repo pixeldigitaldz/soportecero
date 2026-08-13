@@ -1,5 +1,5 @@
 ---
-title: "Solución: Error de Firebase al denegar la lectura de la base de datos (Reglas de seguridad)"
+title: "Guía: Error de Firebase al denegar la lectura de la base de datos (Reglas de seguridad)"
 description: "Aprende a corregir el molesto error 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' en Firestore o Realtime Database sin comprometer tu seguridad."
 category: "Web y Código"
 tags: ["Firebase", "Database", "Security"]

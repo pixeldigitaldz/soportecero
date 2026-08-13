@@ -1,5 +1,5 @@
 ---
-title: 'Fix: ''Too many connections'' Error in MySQL / MariaDB Databases'
+title: 'Resolving: ''Too many connections'' Error in MySQL / MariaDB Databases'
 description: >-
   Learn how to diagnose and fix the error of exceeding open connections in MySQL
   by optimizing your server's connection directives.

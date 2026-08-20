@@ -4,31 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab - SoporteCero</title>
+  <title>How to fix and understand active (exited) or failed services in Systemd - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file.">
+  <meta name="description" content="Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-invalid-fstab-linux.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-systemctl-status-active-exited-failed.html">
   
-  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-invalid-fstab-linux.html" />
-  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-invalid-fstab-linux.html" />
-  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-invalid-fstab-linux.html" />
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-systemctl-status-active-exited-failed.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-systemctl-status-active-exited-failed.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-systemctl-status-active-exited-failed.html" />
   
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab - SoporteCero">
-  <meta property="og:description" content="Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file.">
+  <meta property="og:title" content="How to fix and understand active (exited) or failed services in Systemd - SoporteCero">
+  <meta property="og:description" content="Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-invalid-fstab-linux.html">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-systemctl-status-active-exited-failed.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab - SoporteCero">
-  <meta name="twitter:description" content="Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file.">
+  <meta name="twitter:title" content="How to fix and understand active (exited) or failed services in Systemd - SoporteCero">
+  <meta name="twitter:description" content="Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -48,11 +48,11 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab",
-  "description": "Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file.",
+  "headline": "How to fix and understand active (exited) or failed services in Systemd",
+  "description": "Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.",
   "category": "Systems & Servers",
-  "datePublished": "2026-07-27",
-  "dateModified": "2026-07-27",
+  "datePublished": "2026-08-20",
+  "dateModified": "2026-08-20",
   "author": {
     "@type": "Organization",
     "name": "SoporteCero"
@@ -63,7 +63,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://soportecero.com/en/articulos/error-invalid-fstab-linux.html"
+    "@id": "https://soportecero.com/en/articulos/error-systemctl-status-active-exited-failed.html"
   }
 }
   </script>
@@ -71,8 +71,8 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab",
-  "description": "Learn how to repair your Linux system if it fails to boot and gets stuck in Emergency Mode due to an error in the fstab file.",
+  "name": "How to fix and understand active (exited) or failed services in Systemd",
+  "description": "Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.",
   "step": []
 }
   </script>
@@ -103,7 +103,7 @@
       </nav>
       
     <div class="lang-selector">
-      <a href="../../articulos/error-invalid-fstab-linux.html" class="lang-inactive">ES</a>
+      <a href="../../articulos/error-systemctl-status-active-exited-failed.html" class="lang-inactive">ES</a>
       <span class="lang-separator">|</span>
       <span class="lang-active">EN</span>
     </div>
@@ -126,24 +126,24 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
-        <span style="color: var(--text-secondary);">Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab</span>
+        <span style="color: var(--text-secondary);">How to fix and understand active (exited) or failed services in Systemd</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">Troubleshooting: Linux Boot Failure due to Incorrect Configuration in /etc/fstab</h1>
+        <h1 id="post-title">How to fix and understand active (exited) or failed services in Systemd</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 5 min
+            Read Time: 3 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Updated: 2026-07-27
+            Updated: 2026-08-20
           </span>
         </div>
       </header>
@@ -171,7 +171,7 @@
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
-        <p>Modifying the /etc/fstab file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message Welcome to emergency mode!.</p>
+        <p>The active (exited) status in Systemd indicates that the command configured under ExecStart successfully completed its execution and finished, while a failed or activating (auto-restart) status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.</p>
       </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -179,14 +179,12 @@
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
         <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-gain-write-access">Step 1: Gain write access</a></li>
-        <li class="toc-subitem"><a href="#step-2-edit-the-file-with-caution">Step 2: Edit the file with caution</a></li>
-        <li class="toc-subitem"><a href="#step-3-comment-out-or-repair-the-corrupt-line">Step 3: Comment out or repair the corrupt line</a></li>
-        <li class="toc-subitem"><a href="#step-4-test-and-reboot">Step 4: Test and reboot</a></li>
       </ol>
     </nav>
     
-      
+      <p>The <code>active (exited)</code> status in Systemd indicates that the command configured under <code>ExecStart</code> successfully completed its execution and finished, while a <code>failed</code> or <code>activating (auto-restart)</code> status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.</p>
+<p>Understanding the difference between <code>Type=oneshot</code> and <code>Type=simple</code> service definitions is essential to know whether your application is running as expected or silently dropping connections.</p>
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -198,81 +196,92 @@
 <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Incorrect syntax or invalid UUID in /etc/fstab file</strong></div>
+            <div class="diag-value"><strong>Service configured as <code>Type=oneshot</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">Solution</div>
-            <div class="diag-value">Boot into rescue mode and fix broken entry in <code>/etc/fstab</code></div>
+            <div class="diag-value">Expected behavior for single-run provisioning scripts or cron alternatives</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Unavailable partition at boot preventing system startup</strong></div>
+            <div class="diag-value"><strong>Configuration file error or missing env vars</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">Solution</div>
-            <div class="diag-value">Add <code>nofail</code> option to secondary partition in <code>/etc/fstab</code></div>
+            <div class="diag-value">Inspect runtime logs with <code>journalctl -u service-name -e --no-pager</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Permission denied on binary or working directory</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Ensure the user configured under <code>User=</code> has access to <code>WorkingDirectory=</code></div>
           </div></div></div>
-<p>Modifying the <code>/etc/fstab</code> file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message <code>Welcome to emergency mode!</code>.</p>
 
     </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-gain-write-access">Step 1: Gain write access</h3>
-<p>In emergency mode, the file system is typically locked in &quot;Read-Only&quot; mode, meaning you won&#39;t be able to save any corrections. Execute this command to unlock it:</p>
+    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
+<p><strong>Inspect detailed service logs</strong>
+When a service crashes or produces unexpected exit codes, standard <code>systemctl status</code> only shows truncated lines. Use <code>journalctl</code> to view the full stderr stream:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code>mount -o remount,rw /
+      <pre class="formatted-pre"><code>sudo journalctl -u my-service.service -n 50 --no-pager
 </code></pre>
     </div>
     
-<h3 id="step-2-edit-the-file-with-caution">Step 2: Edit the file with caution</h3>
-<p>Open the configuration file using the console&#39;s built-in text editor:</p>
+<p><strong>Verify the service type in the unit file</strong>
+Open the Systemd unit file located at <code>/etc/systemd/system/my-service.service</code>. If your app is a persistent background worker (like a Node, Python, or Go daemon) but has <code>Type=oneshot</code>, Systemd will not supervise it as an ongoing daemon:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>[Unit]
+Description=My Background Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/my-app
+ExecStart=/usr/bin/node /var/www/my-app/server.js
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+    </div>
+    
+<p><strong>Reload the Systemd daemon and restart the unit</strong>
+Whenever you modify a <code>.service</code> configuration file, inform the Linux init system before restarting the service:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code>nano /etc/fstab
+      <pre class="formatted-pre"><code>sudo systemctl daemon-reload
+sudo systemctl restart my-service.service
+sudo systemctl status my-service.service
 </code></pre>
     </div>
     
-<h3 id="step-3-comment-out-or-repair-the-corrupt-line">Step 3: Comment out or repair the corrupt line</h3>
-<p>Find the last line you added (the one for the new disk or SWAP). If you are not sure what the syntax error is, insert a hash symbol # at the beginning of that entire line. This tells Linux to ignore that instruction during boot:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># /swapfile none swap sw 0 0
-</code></pre>
-    </div>
-    
-<p>Save the changes by pressing Ctrl + O, press Enter, and exit with Ctrl + X.</p>
-<h3 id="step-4-test-and-reboot">Step 4: Test and reboot</h3>
-<p>Before rebooting blindly, tell the system to check if the syntax of the fstab file is correct:</p>
+<p><strong>Use absolute paths for all executables</strong>
+Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. Always provide the full absolute path to binaries (e.g., <code>/usr/bin/python3</code> instead of <code>python3</code>). Find absolute paths using:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code>findmnt --verify
-</code></pre>
-    </div>
-    
-<p>If the terminal does not output red error lines, you can perform a clean reboot to return to your desktop environment:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>reboot
+      <pre class="formatted-pre"><code>which node
+which python3
 </code></pre>
     </div>
     
@@ -290,7 +299,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>When adding secondary disks in /etc/fstab, always use the nofail property in the parameters (e.g., defaults,nofail). This way, if the external disk is disconnected or fails, Linux will bypass mounting it and boot normally instead of crashing into emergency mode.</li>
+              <li><strong>Syntax validation:</strong> Run <code>systemd-analyze verify /etc/systemd/system/my-service.service</code> to catch syntax and path warnings prior to deploying.</li>
+<li><strong>Restart throttle limits:</strong> Always declare <code>RestartSec=5s</code> and <code>StartLimitBurst=5</code> to prevent broken binaries from entering aggressive CPU-hogging restart loops.</li>
             </ul>
           </div>
 
@@ -321,23 +331,6 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: [FIXED] Error 'invalid reference format' in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -367,6 +360,23 @@
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">MySQL</span>
             <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to fix: chmod Operation not permitted (Even as Root) in Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-linux-chmod-operation-not-permitted-chattr.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix: chmod Operation not permitted (Even as Root) in Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 2 min</span>
           </div>
         </div>
       </article>

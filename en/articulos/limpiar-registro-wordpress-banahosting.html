@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to clean and optimize a bloated WordPress database in BanaHosting | SoporteCero</title>
   <meta name="description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/limpiar-registro-wordpress-banahosting.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/limpiar-registro-wordpress-banahosting.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to clean and optimize a bloated WordPress database in BanaHosting">
   <meta property="og:description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-27">
+  <meta property="article:section" content="Systems & Servers">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to clean and optimize a bloated WordPress database in BanaHosting">
   <meta name="twitter:description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -203,11 +202,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -217,7 +218,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -246,7 +247,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 5 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -257,7 +258,180 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>Unchecked growth of WordPress databases in shared hosting environments like BanaHosting or standard cPanel VPS causes sites to exceed inode quotas, trigger CPU/IOPS resource throttling, and suffer intermittent 500/503 errors. The culprit is typically unpruned _transient_ options and thousands of draft revisions.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#is-deleting-transient-rows-safe">Is deleting transient rows safe?</a></li>
+        <li class="toc-subitem"><a href="#will-removing-revisions-affect-my-live-published-posts">Will removing revisions affect my live published posts?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>wp_options table bloated by expired transient records and unpruned autoload data</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Run SQL cleanup queries for transients in phpMyAdmin</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Accumulated post revisions and orphan postmeta consuming IOPS in wp_posts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Cap post revisions in <code>wp-config.php</code> and run OPTIMIZE TABLE in MySQL</div>
+          </div></div></div>
+<p>Unchecked growth of WordPress databases in shared hosting environments like BanaHosting or standard cPanel VPS causes sites to exceed inode quotas, trigger CPU/IOPS resource throttling, and suffer intermittent 500/503 errors. The culprit is typically unpruned <code>_transient_</code> options and thousands of draft revisions.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Limit Post Revisions in wp-config.php</h4>
+            <p>Prevent WordPress from creating unlimited revision rows by adding configuration limits to <code>wp-config.php</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PHP</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>// Limit post revisions to 3 versions
+define(&#39;WP_POST_REVISIONS&#39;, 3);
+
+// Increase autosave interval to 120 seconds
+define(&#39;AUTOSAVE_INTERVAL&#39;, 120);
+
+// Empty trash automatically every 7 days
+define(&#39;EMPTY_TRASH_DAYS&#39;, 7);
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Clean Expired Transients in wp_options via phpMyAdmin</h4>
+            <p>Open <strong>cPanel &gt; phpMyAdmin</strong>, select your database, and run this query under the SQL tab:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>-- Remove transient records from options table
+DELETE FROM wp_options WHERE option_name LIKE (&#39;_transient_%&#39;);
+DELETE FROM wp_options WHERE option_name LIKE (&#39;_site_transient_%&#39;);
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Remove Orphan Revisions and Post Meta</h4>
+            <p>Delete old draft revisions and their detached metadata entries:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>-- 1. Remove revision entries
+DELETE a,b,c
+FROM wp_posts a
+LEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)
+LEFT JOIN wp_postmeta c ON (a.ID = c.post_id)
+WHERE a.post_type = &#39;revision&#39;;
+
+-- 2. Clean orphan postmeta rows
+DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE wp.ID IS NULL;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Step 4: Defragment and Optimize Database Tables</h4>
+            <p>Reclaim unallocated disk space and rebuild index trees:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>OPTIMIZE TABLE wp_options, wp_posts, wp_postmeta, wp_comments;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
+<h3 id="is-deleting-transient-rows-safe">Is deleting <em>transient</em> rows safe?</h3>
+<p>Yes, completely safe. Transients are temporary cached values that plugins will transparently re-populate upon the next request.</p>
+<h3 id="will-removing-revisions-affect-my-live-published-posts">Will removing revisions affect my live published posts?</h3>
+<p>No. Only historical intermediate drafts are pruned. Live articles remain untouched.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Avoid database logging plugins:</strong> Offload analytics and redirect tracking to services like Cloudflare or GA4 rather than writing raw hits into MySQL tables.</li>
+<li><strong>Automate maintenance:</strong> Schedule monthly optimization cron tasks via WP-CLI or lightweight maintenance tools.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -330,8 +504,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -339,7 +513,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

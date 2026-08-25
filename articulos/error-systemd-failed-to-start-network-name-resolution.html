@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved | SoporteCero</title>
   <meta name="description" content="Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-systemd-failed-to-start-network-name-resolution.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved">
   <meta property="og:description" content="Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved">
   <meta name="twitter:description" content="Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,199 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El fallo generalizado Temporary failure in name resolution, Could not resolve host: google.com o Failed to start Network Name Resolution en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo /etc/resolv.conf) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-ping-8888-funciona-pero-ping-googlecom-falla">¿Por qué ping 8.8.8.8 funciona pero ping google.com falla?</a></li>
+        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-runsystemdresolvestub-resolvconf-y-resolvconf-normal">¿Qué diferencia hay entre /run/systemd/resolve/stub-resolv.conf y resolv.conf normal?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Enlace simbólico roto en /etc/resolv.conf apuntando a un stub de systemd-resolved inactivo</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Recrear el enlace simbólico a <code>/run/systemd/resolve/stub-resolv.conf</code> o restaurar archivo estático</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Daemon systemd-resolved caído con estado failed (status=failed)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reiniciar el servicio con <code>sudo systemctl restart systemd-resolved</code> y configurar DNS públicos</div>
+          </div></div></div>
+<p>El fallo generalizado <code>Temporary failure in name resolution</code>, <code>Could not resolve host: google.com</code> o <code>Failed to start Network Name Resolution</code> en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo <code>/etc/resolv.conf</code>) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Restablecer temporalmente la conectividad mediante nameservers estáticos</h4>
+            <p>Si tu servidor no puede descargar paquetes por falta de DNS, añade manualmente un resolvedor temporal:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Configurar DNS públicos directos de Cloudflare y Google
+echo -e &quot;nameserver 1.1.1.1\nnameserver 8.8.8.8&quot; | sudo tee /etc/resolv.conf
+</code></pre>
+    </div>
+    
+<p>Comprueba de inmediato si puedes resolver dominios:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>ping -c 3 google.com
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Reparar el enlace simbólico oficial de systemd-resolved</h4>
+            <p>En Ubuntu y distribuciones modernas con systemd, <code>/etc/resolv.conf</code> debe ser un enlace simbólico al stub del resolvedor:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Eliminar el archivo o enlace roto anterior
+sudo rm -f /etc/resolv.conf
+
+# 2. Crear el enlace simbólico correcto
+sudo ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+# 3. Reiniciar y habilitar el servicio de resolución
+sudo systemctl restart systemd-resolved
+sudo systemctl enable systemd-resolved
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Configurar servidores DNS estables en resolved.conf</h4>
+            <p>Abre el archivo de configuración principal de resolución (<code>/etc/systemd/resolved.conf</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>[Resolve]
+DNS=1.1.1.1 8.8.8.8
+FallbackDNS=1.0.0.1 8.8.4.4
+Domains=~.
+DNSSEC=allow-downgrade
+</code></pre>
+    </div>
+    
+<p>Aplica los cambios reiniciando el servicio:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo systemctl restart systemd-resolved
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Validar el estado con resolvectl</h4>
+            <p>Comprueba que el resolvedor tiene asignados servidores DNS en cada interfaz de red activa:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Comprobar el estado global de DNS
+resolvectl status
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="por-que-ping-8888-funciona-pero-ping-googlecom-falla">¿Por qué ping 8.8.8.8 funciona pero ping google.com falla?</h3>
+<p>Porque la conectividad IP a nivel de enrutamiento funciona correctamente, pero el subsistema de traducción de nombres (DNS) está caído.</p>
+<h3 id="que-diferencia-hay-entre-runsystemdresolvestub-resolvconf-y-resolvconf-normal">¿Qué diferencia hay entre /run/systemd/resolve/stub-resolv.conf y resolv.conf normal?</h3>
+<p>El stub redirige las peticiones locales a la IP <code>127.0.0.53</code> gestionada por el daemon de systemd-resolved para permitir almacenamiento en caché y validación DNSSEC.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Evita que gestores de red sobreescriban /etc/resolv.conf:</strong> Si utilizas NetworkManager, asegúrate de que esté configurado para colaborar con systemd-resolved (<code>dns=systemd-resolved</code> en <code>/etc/NetworkManager/NetworkManager.conf</code>).</li>
+<li><strong>Bloquea el archivo si experimentas sobreescrituras no deseadas:</strong> Puedes aplicar el atributo inmutable en caso de emergencia: <code>sudo chattr +i /etc/resolv.conf</code>.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

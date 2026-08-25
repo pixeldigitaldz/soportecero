@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) | SoporteCero</title>
   <meta name="description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-504-gateway-timeout-nginx-php-fpm.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)">
   <meta property="og:description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-26">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)">
   <meta name="twitter:description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,202 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error 504 Gateway Timeout en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-el-error-502-bad-gateway-y-el-504-gateway-timeout">¿Qué diferencia hay entre el error 502 Bad Gateway y el 504 Gateway Timeout?</a></li>
+        <li class="toc-subitem"><a href="#cloudflare-puede-generar-un-error-504">¿Cloudflare puede generar un error 504?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Script PHP tarda más tiempo en responder que el límite fastcgi_read_timeout en Nginx</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Aumentar <code>fastcgi_read_timeout 300s;</code> en la configuración del bloque server de Nginx</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Límites max_execution_time y request_terminate_timeout bajos en php.ini y pool PHP-FPM</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Aumentar <code>max_execution_time = 300</code> en <code>php.ini</code> y <code>request_terminate_timeout = 300s</code> en <code>www.conf</code></div>
+          </div></div></div>
+<p>El error <code>504 Gateway Timeout</code> en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Aumentar los tiempos de espera en la configuración de Nginx</h4>
+            <p>Abre el archivo de configuración de tu sitio web (por ejemplo, <code>/etc/nginx/sites-available/mi-sitio.conf</code> o <code>/etc/nginx/nginx.conf</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">NGINX</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>server {
+    listen 80;
+    server_name misitio.com;
+    root /var/www/misitio;
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+
+        # Aumentar tiempos de espera a 300 segundos (5 minutos)
+        fastcgi_connect_timeout 300s;
+        fastcgi_send_timeout 300s;
+        fastcgi_read_timeout 300s;
+        
+        # Optimizar buffers de FastCGI para respuestas grandes
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+    }
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Ajustar los límites de ejecución en php.ini</h4>
+            <p>Modifica el archivo <code>php.ini</code> correspondiente a tu versión de PHP-FPM (ej. <code>/etc/php/8.3/fpm/php.ini</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>; Tiempo máximo de ejecución en segundos
+max_execution_time = 300
+
+; Tiempo máximo de análisis de datos de entrada
+max_input_time = 300
+
+; Límite de memoria para scripts pesados
+memory_limit = 512M
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Configurar el pool de PHP-FPM (www.conf)</h4>
+            <p>Edita el archivo de configuración del pool (<code>/etc/php/8.3/fpm/pool.d/www.conf</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>; Tiempo de espera antes de terminar un proceso PHP colgado
+request_terminate_timeout = 300s
+
+; Asegurar suficientes procesos hijos para atender peticiones concurrentes
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 10
+pm.min_spare_servers = 5
+pm.max_spare_servers = 20
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Validar la sintaxis y reiniciar los servicios</h4>
+            <p>Comprueba que no existen errores de sintaxis antes de reiniciar:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Comprobar configuración de Nginx
+sudo nginx -t
+
+# 2. Reiniciar PHP-FPM y Nginx
+sudo systemctl restart php8.3-fpm
+sudo systemctl restart nginx
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="que-diferencia-hay-entre-el-error-502-bad-gateway-y-el-504-gateway-timeout">¿Qué diferencia hay entre el error 502 Bad Gateway y el 504 Gateway Timeout?</h3>
+<p>El error <strong>502</strong> ocurre cuando PHP-FPM está completamente caído o el socket no responde de inmediato. El error <strong>504</strong> ocurre cuando PHP-FPM sí está activo, pero la tarea tarda demasiado tiempo en completarse y supera el límite de tiempo.</p>
+<h3 id="cloudflare-puede-generar-un-error-504">¿Cloudflare puede generar un error 504?</h3>
+<p>Sí. Si utilizas Cloudflare con proxy activo (nube naranja), Cloudflare tiene un timeout estricto de 100 segundos para planes gratuitos. Si tu backend tarda más de 100 segundos, Cloudflare mostrará su propia pantalla 504.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Monitorea consultas lentas en MySQL:</strong> Muchos timeouts 504 no son fallos de PHP, sino consultas SQL bloqueadas en bases de datos sin índices. Habilita el <em>Slow Query Log</em> en MySQL/MariaDB.</li>
+<li><strong>Utiliza colas asíncronas para tareas largas:</strong> Si tu aplicación envía correos masivos o procesa imágenes, utiliza colas con Redis/RabbitMQ o Celery en segundo plano en lugar de ejecutar la tarea dentro de la petición HTTP del usuario.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

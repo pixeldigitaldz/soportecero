@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python | SoporteCero</title>
   <meta name="description" content="Soluciona el error SSL: CERTIFICATE_VERIFY_FAILED en Python requests, urllib y pip en macOS, Linux y Windows paso a paso.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-ssl-certificate-verify-failed-python-requests.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-ssl-certificate-verify-failed-python-requests.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-ssl-certificate-verify-failed-python-requests.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-ssl-certificate-verify-failed-python-requests.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python">
   <meta property="og:description" content="Soluciona el error SSL: CERTIFICATE_VERIFY_FAILED en Python requests, urllib y pip en macOS, Linux y Windows paso a paso.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-ssl-certificate-verify-failed-python-requests.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-03">
+  <meta property="article:section" content="Web y Código">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python">
   <meta name="twitter:description" content="Soluciona el error SSL: CERTIFICATE_VERIFY_FAILED en Python requests, urllib y pip en macOS, Linux y Windows paso a paso.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,190 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate en Python (requests, urllib3, aiohttp o pip) ocurre cuando la librería no puede validar la cadena de confianza del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación (CA).</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-mi-navegador-abre-la-pagina-sin-error-pero-python-falla">¿Por qué mi navegador abre la página sin error pero Python falla?</a></li>
+        <li class="toc-subitem"><a href="#como-verifico-que-archivo-de-certificados-esta-usando-certifi">¿Cómo verifico qué archivo de certificados está usando certifi?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Python en macOS sin certificados raíz de OpenSSL instalados</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ejecutar el script Install Certificates.command en la carpeta de Python en Aplicaciones</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Paquete certifi desactualizado o certificado CA corporativo/intermedio no reconocido</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar certifi con <code>pip install --upgrade certifi</code> o pasar la ruta del certificado CA en verify=&#39;/ruta/ca.crt&#39;</div>
+          </div></div></div>
+<p>El error ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate en Python (requests, urllib3, aiohttp o pip) ocurre cuando la librería no puede validar la cadena de confianza del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación (CA).</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Solución para macOS (Instalación de certificados OpenSSL)</h4>
+            <p>Las versiones oficiales de Python para macOS no utilizan por defecto el llavero del sistema (Keychain), sino su propio almacén OpenSSL que viene vacío tras la instalación:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejecutar el script oficial de instalación de certificados para Python 3
+/Applications/Python\ 3.*/Install\ Certificates.command
+</code></pre>
+    </div>
+    
+<p>O mediante terminal si utilizas Homebrew o pyenv:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Instalar y enlazar certificados en el entorno
+pip install --upgrade certifi
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Actualizar el paquete certifi y los certificados del sistema operativo</h4>
+            <p>Asegúrate de que tu entorno virtual y tu sistema operativo dispongan del bundle de certificados raíz más reciente:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># En tu entorno virtual de Python
+pip install --upgrade certifi urllib3 requests
+
+# En Linux (Debian / Ubuntu) para actualizar CAs del sistema:
+sudo apt-get update &amp;&amp; sudo apt-get install --reinstall ca-certificates -y
+sudo update-ca-certificates
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Especificar un certificado CA personalizado en Requests</h4>
+            <p>Si estás consumiendo una API interna, un proxy corporativo o un servidor con certificado autofirmado, especifica la ruta de tu CA:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PYTHON</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>import requests
+import certifi
+
+# Opción 1: Utilizar el bundle verificado de certifi
+response = requests.get(&#39;https://api.ejemplo.com&#39;, verify=certifi.where())
+
+# Opción 2: Especificar tu certificado corporativo (.pem / .crt)
+response = requests.get(&#39;https://api-interna.local&#39;, verify=&#39;/etc/ssl/certs/mi-empresa-ca.crt&#39;)
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Configurar variables de entorno globales (SSL_CERT_FILE / REQUESTS_CA_BUNDLE)</h4>
+            <p>Para que todas las librerías de Python reconozcan el almacén de certificados sin modificar cada script individual:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Exportar en tu terminal o archivo ~/.bashrc / ~/.zshrc
+export SSL_CERT_FILE=$(python -m certifi)
+export REQUESTS_CA_BUNDLE=$(python -m certifi)
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="por-que-mi-navegador-abre-la-pagina-sin-error-pero-python-falla">¿Por qué mi navegador abre la página sin error pero Python falla?</h3>
+<p>Los navegadores web utilizan el almacén de certificados del sistema operativo y admiten mecanismos automáticos como AIA (Authority Information Access) para descargar certificados intermedios faltantes, algo que Python no hace automáticamente por motivos de rendimiento y seguridad estricta.</p>
+<h3 id="como-verifico-que-archivo-de-certificados-esta-usando-certifi">¿Cómo verifico qué archivo de certificados está usando certifi?</h3>
+<p>Ejecuta en tu terminal: <code>python -c &quot;import certifi; print(certifi.where())&quot;</code>.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>No uses verify=False en producción:</strong> Desactivar la verificación SSL con requests.get(url, verify=False) deshabilita el cifrado autenticado y deja tu conexión expuesta a ataques Man-in-the-Middle (MitM) donde contraseñas y tokens pueden ser interceptados.</li>
+<li><strong>Mantén actualizados tus entornos virtuales:</strong> Incluye certifi en tu archivo requirements.txt para asegurar bundles de certificados vigentes en despliegues automatizados.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

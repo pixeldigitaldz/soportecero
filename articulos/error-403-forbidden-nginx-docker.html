@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker | SoporteCero</title>
   <meta name="description" content="Aprende a diagnosticar y corregir los problemas de acceso y permisos de archivos al montar directorios web en contenedores de Nginx.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-403-forbidden-nginx-docker.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-403-forbidden-nginx-docker.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-403-forbidden-nginx-docker.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-403-forbidden-nginx-docker.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker">
   <meta property="og:description" content="Aprende a diagnosticar y corregir los problemas de acceso y permisos de archivos al montar directorios web en contenedores de Nginx.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-403-forbidden-nginx-docker.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-27">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar el error 403 Forbidden en Nginx dentro de Docker">
   <meta name="twitter:description" content="Aprende a diagnosticar y corregir los problemas de acceso y permisos de archivos al montar directorios web en contenedores de Nginx.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -138,7 +137,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -160,6 +159,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -209,7 +210,128 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error 403 forbidden nginx en un contenedor de Docker suele ocurrir cuando el servidor web no tiene permisos de lectura para acceder a los archivos del volumen local montado, o cuando no encuentra un archivo de inicio indexado válido en el directorio raíz de la ruta de servicio.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Permisos del sistema de archivos local en el volumen montado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ajustar permisos locales: <code>chmod -R 755</code> en carpetas y <code>644</code> en archivos</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Falta de archivo de inicio index (index.html / index.php)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar concordancia de mayúsculas/minúsculas en el archivo raíz</div>
+          </div></div></div>
+<p>El error <strong>403 forbidden nginx</strong> en un contenedor de Docker suele ocurrir cuando el servidor web no tiene permisos de lectura para acceder a los archivos del volumen local montado, o cuando no encuentra un archivo de inicio indexado válido en el directorio raíz de la ruta de servicio.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Corregir los permisos del sistema de archivos local</h4>
+            <p>El usuario dentro del contenedor de Nginx (habitualmente <code>nginx</code> o <code>www-data</code> con UID 101 o 82) requiere permisos de lectura en los archivos y ejecución en los directorios de tu carpeta compartida. En tu servidor Linux, ajusta los privilegios ejecutando:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Cambiar la propiedad al usuario y grupo del servidor web si es necesario,
+# o asegurar permisos de lectura globales (lectura para archivos, lectura+ejecución para carpetas):
+sudo find /ruta/local/a/tus/archivos/web -type d -exec chmod 755 {} \;
+sudo find /ruta/local/a/tus/archivos/web -type f -exec chmod 644 {} \;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Verificar el archivo de inicio (Index)</h4>
+            <p>Asegúrate de que el bloque <code>server</code> en tu configuración de Nginx (<code>nginx.conf</code> o el archivo en <code>conf.d</code>) busque un archivo existente. Comprueba que el archivo principal de tu directorio esté nombrado exactamente de la siguiente manera y en minúsculas:</p>
+<ul>
+<li><code>index.html</code></li>
+<li><code>index.php</code></li>
+</ul>
+<p>Una falta de concordancia en las mayúsculas (como <code>Index.html</code> o <code>INDEX.HTML</code>) provocará el fallo 403 de inmediato en sistemas Linux debido a que el sistema de archivos distingue entre mayúsculas y minúsculas (<em>case-sensitive</em>).</p>
+          </div>
+        </li>
+        
+</ol>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Al trabajar en distribuciones basadas en Red Hat (como CentOS, Rocky Linux o Fedora), evita que las políticas de seguridad de <strong>SELinux</strong> en el sistema anfitrión bloqueen el acceso a los descriptores de archivos del contenedor. Siempre que configures el montaje de un volumen local, añade la etiqueta de seguridad compartida <code>:Z</code> al final de la ruta del volumen en tu comando o archivo de Docker Compose:
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">YAML</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>volumes:
+  - /ruta/local:/usr/share/nginx/html:Z
+</code></pre>
+    </div>
+    
+</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

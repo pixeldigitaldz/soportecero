@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite) - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite) | SoporteCero</title>
   <meta name="description" content="Prevent your heavy games and Docker instances from closing unexpectedly by configuring or expanding SWAP memory space on modern Linux distributions.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/crasheo-memoria-swap-linux.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/crasheo-memoria-swap-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite) - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite)">
   <meta property="og:description" content="Prevent your heavy games and Docker instances from closing unexpectedly by configuring or expanding SWAP memory space on modern Linux distributions.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/crasheo-memoria-swap-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-20">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite) - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite)">
   <meta name="twitter:description" content="Prevent your heavy games and Docker instances from closing unexpectedly by configuring or expanding SWAP memory space on modern Linux distributions.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -121,11 +120,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -135,7 +136,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -164,7 +165,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read time: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -175,7 +176,149 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>When running demanding titles on modern hardware under high-performance Linux distributions like CachyOS or Bazzite, the system may suddenly close your games or heavy containers without warning. When checking the logs, the culprit is usually the Out Of Memory (OOM) Killer process.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-comprobar-tu-estado-actual-de-swap">Paso 1: Comprobar tu estado actual de SWAP</a></li>
+        <li class="toc-subitem"><a href="#paso-2-crear-un-archivo-swap-seguro-de-8-gigabytes">Paso 2: Crear un archivo SWAP seguro de 8 Gigabytes</a></li>
+        <li class="toc-subitem"><a href="#paso-3-hacer-el-cambio-permanente-para-cada-reinicio">Paso 3: Hacer el cambio permanente para cada reinicio</a></li>
+        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>RAM and Swap space completely exhausted (OOM Killer)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Create extra swap file: <code>fallocate -l 4G /swapfile &amp;&amp; mkswap /swapfile</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Misconfigured vm.swappiness parameter</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Set balanced swappiness (10-30): <code>sysctl vm.swappiness=20</code></div>
+          </div></div></div>
+<p>When running demanding titles on modern hardware under high-performance Linux distributions like <strong>CachyOS</strong> or <strong>Bazzite</strong>, the system may suddenly close your games or heavy containers without warning. When checking the logs, the culprit is usually the <code>Out Of Memory (OOM) Killer</code> process.</p>
+<p>This happens because the system runs out of physical RAM and, failing to find enough virtual memory (<strong>SWAP space</strong>) configured on local storage, freezes or kills the application to protect the operating system.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+<h3 id="paso-1-comprobar-tu-estado-actual-de-swap">Paso 1: Comprobar tu estado actual de SWAP</h3>
+<p>Open your terminal and run the following command to see if you have virtual memory active:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>swapon --show
+</code></pre>
+    </div>
+    
+<p>If no response line appears, your system completely lacks swap memory.</p>
+<h3 id="paso-2-crear-un-archivo-swap-seguro-de-8-gigabytes">Paso 2: Crear un archivo SWAP seguro de 8 Gigabytes</h3>
+<p>For gaming and editing, an 8GB file allocated on your SSD is ideal for supporting spikes in RAM consumption. Run the following commands in order:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Crear el archivo asignando el espacio
+sudo fallocate -l 8G /swapfile
+
+# 2. Darle permisos de seguridad correctos
+sudo chmod 600 /swapfile
+
+# 3. Formatear el archivo como espacio de intercambio
+sudo mkswap /swapfile
+
+# 4. Activar la nueva memoria SWAP
+sudo swapon /swapfile
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-hacer-el-cambio-permanente-para-cada-reinicio">Paso 3: Hacer el cambio permanente para cada reinicio</h3>
+<p>To prevent the configuration from being erased when shutting down the PC, add the file to the system partition table:</p>
+<ol>
+<li>Open the configuration file:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo nano /etc/fstab
+</code></pre>
+    </div>
+    
+<ol start="2">
+<li>Add the following line at the very end:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>/swapfile none swap sw 0 0
+</code></pre>
+    </div>
+    
+<p>Save (Ctrl + O, Enter) and exit (Ctrl + X).</p>
+<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
+<p>Recommended safety practices:</p>
+<ul>
+<li>If you use modern systems, look into using zRAM instead of a traditional SWAP file. zRAM compresses data directly in your physical RAM, being up to 10 times faster than reading and writing to a solid-state drive (SSD).</li>
+</ul>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -248,8 +391,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -257,7 +400,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

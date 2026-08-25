@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS | SoporteCero</title>
   <meta name="description" content="Aprende a forzar el escalado de imagen moderno y mejorar tus FPS en tarjetas gráficas antiguas utilizando OptiScaler mediante configuraciones manuales de librerías.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/activar-optiscaler-juegos-pc.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/activar-optiscaler-juegos-pc.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/activar-optiscaler-juegos-pc.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/activar-optiscaler-juegos-pc.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS">
   <meta property="og:description" content="Aprende a forzar el escalado de imagen moderno y mejorar tus FPS en tarjetas gráficas antiguas utilizando OptiScaler mediante configuraciones manuales de librerías.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/activar-optiscaler-juegos-pc.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-26">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS">
   <meta name="twitter:description" content="Aprende a forzar el escalado de imagen moderno y mejorar tus FPS en tarjetas gráficas antiguas utilizando OptiScaler mediante configuraciones manuales de librerías.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -126,6 +125,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -175,7 +176,103 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Si eres un jugador de PC con hardware modesto o utilizas sistemas operativos optimizados basados en Linux (como CachyOS o Bazzite), aumentar los fotogramas por segundo (FPS) en títulos exigentes como Diablo IV es una prioridad. Sin embargo, tecnologías como DLSS están bloqueadas para tarjetas gráficas de generaciones anteriores.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#como-activar-optiscaler-paso-a-paso">Cómo activar OptiScaler paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-descargar-los-archivos-del-mod">Paso 1: Descargar los archivos del mod</a></li>
+        <li class="toc-subitem"><a href="#paso-2-colocar-las-librerias-en-la-ruta-del-juego">Paso 2: Colocar las librerías en la ruta del juego</a></li>
+        <li class="toc-subitem"><a href="#paso-3-configurar-el-entorno-de-ejecucion-ejemplo-en-steam-linux-proton">Paso 3: Configurar el entorno de ejecución (Ejemplo en Steam / Linux / Proton)</a></li>
+        <li class="toc-subitem"><a href="#paso-4-ajustar-los-modos-dentro-del-juego">Paso 4: Ajustar los modos dentro del juego</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Falta DLL de OptiScaler o Wine/Proton no configurado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Instalar <code>dxgi.dll</code> de OptiScaler en la carpeta del ejecutable (<code>.exe</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Variable de entorno NVAPI inactiva en Linux</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Agregar <code>DXVK_ENABLE_NVAPI=1 %command%</code> en los parámetros de Steam</div>
+          </div></div></div>
+<p>Si eres un jugador de PC con hardware modesto o utilizas sistemas operativos optimizados basados en Linux (como CachyOS o Bazzite), aumentar los fotogramas por segundo (FPS) en títulos exigentes como Diablo IV es una prioridad. Sin embargo, tecnologías como DLSS están bloqueadas para tarjetas gráficas de generaciones anteriores.</p>
+<p>Aquí es donde entra <strong>OptiScaler</strong>, un mod y wrapper de código abierto que intercepta las llamadas de renderizado de DLSS y las traduce a tecnologías abiertas como FSR 3 o XeSS. Esto permite activar el reescalado inteligente en juegos que originalmente no lo soportaban en tu hardware.</p>
+
+    </section>
+    <h2 id="como-activar-optiscaler-paso-a-paso">🚀 Cómo activar OptiScaler paso a paso</h2>
+<h3 id="paso-1-descargar-los-archivos-del-mod">Paso 1: Descargar los archivos del mod</h3>
+<p>Dirígete al repositorio oficial de OptiScaler en GitHub y descarga la última versión estable (suele ser un archivo empaquetado <code>.zip</code>). El archivo crítico que necesitamos es <code>dxgi.dll</code> o <code>nvngx.dll</code>.</p>
+<h3 id="paso-2-colocar-las-librerias-en-la-ruta-del-juego">Paso 2: Colocar las librerías en la ruta del juego</h3>
+<p>Abre la carpeta raíz donde se encuentra instalado el ejecutable principal (<code>.exe</code>) de tu videojuego. Copia y pega los archivos descargados (<code>dxgi.dll</code> y el archivo de configuración <code>optiscaler.ini</code>) allí mismo.</p>
+<h3 id="paso-3-configurar-el-entorno-de-ejecucion-ejemplo-en-steam-linux-proton">Paso 3: Configurar el entorno de ejecución (Ejemplo en Steam / Linux / Proton)</h3>
+<p>Si juegas en Windows, el juego cargará el archivo <code>.dll</code> automáticamente al abrirse. Pero si estás utilizando Steam en Linux con Proton, debes obligar al sistema a cargar esa librería personalizada de forma nativa.</p>
+<ol>
+<li>Abre Steam, haz clic derecho sobre el juego y selecciona <strong>Propiedades</strong>.</li>
+<li>En la pestaña <strong>General</strong>, ve a la sección de <strong>Parámetros de lanzamiento</strong>.</li>
+<li>Pega exactamente la siguiente línea de comandos:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>WINEDLLOVERRIDES=&quot;dxgi=n,b&quot; %command%
+</code></pre>
+    </div>
+    
+<h3 id="paso-4-ajustar-los-modos-dentro-del-juego">Paso 4: Ajustar los modos dentro del juego</h3>
+<p>Inicia el videojuego de forma convencional. Ve al menú de ajustes gráficos. Notarás que la opción de NVIDIA DLSS ahora se encuentra habilitada para ser seleccionada, incluso si tienes una tarjeta de otra marca. Actívala en modo Calidad (Quality) o Equilibrado (Balanced) para disfrutar de una ganancia masiva de rendimiento sin perder nitidez visual.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Dado que OptiScaler inyecta y modifica librerías dinámicas en tiempo de ejecución, utilízalo únicamente en modos de un solo jugador (Single Player) o juegos cooperativos. Evita usarlo en títulos competitivos multijugador con sistemas antitrampas estrictos a nivel de kernel (como Valve Anti-Cheat o Easy Anti-Cheat), ya que podrían malinterpretar el mod como un programa malicioso y banear tu cuenta.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

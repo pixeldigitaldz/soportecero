@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck | SoporteCero</title>
   <meta name="description" content="¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al usar Proton? Solución paso a paso para DXVK y compilación de shaders.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck">
   <meta property="og:description" content="¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al usar Proton? Solución paso a paso para DXVK y compilación de shaders.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-16">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck">
   <meta name="twitter:description" content="¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al usar Proton? Solución paso a paso para DXVK y compilación de shaders.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -138,7 +137,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -160,6 +159,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -209,7 +210,145 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El cierre inesperado (crash) o congelamiento de Overwatch 2 al ejecutarse en Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck a través de Proton suele estar causado por la compilación síncrona de shaders de DXVK, capas de rendimiento incompatibles como MangoHud o la falta de parches en la versión estándar de Proton.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-desactivar-la-superposicion-de-mangohud">Paso 1: Desactivar la superposición de MangoHud</a></li>
+        <li class="toc-subitem"><a href="#paso-2-cambiar-a-ge-proton-proton-ge">Paso 2: Cambiar a GE-Proton (Proton-GE)</a></li>
+        <li class="toc-subitem"><a href="#paso-3-limpiar-la-cache-de-shaders-corrupta-de-dxvk">Paso 3: Limpiar la caché de Shaders corrupta de DXVK</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Incompatibilidad de la capa MangoHud con el compilador DXVK/VKD3D</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Desactivar el parámetro <code>MANGOHUD=1</code> o actualizar MangoHud a la versión más reciente</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Conflicto de captura de pantalla u overlay de compatibilidad de Proton</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Utilizar <code>MANGOHUD_CONFIG=no_display %command%</code> en los parámetros de arranque</div>
+          </div></div></div>
+<p>El <strong>cierre inesperado (<em>crash</em>) o congelamiento de Overwatch 2</strong> al ejecutarse en Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck a través de Proton suele estar causado por la compilación síncrona de shaders de DXVK, capas de rendimiento incompatibles como MangoHud o la falta de parches en la versión estándar de Proton.</p>
+<blockquote>
+<p><strong>Solución Rápida (1 Minuto):</strong></p>
+<ol>
+<li>En las Opciones de Lanzamiento de Steam para Overwatch 2, añade:
+<code>MANGOHUD=0 %command%</code></li>
+<li>Cambia la versión de compatibilidad a <strong>GE-Proton</strong> (Proton GloriousEggroll).</li>
+</ol>
+</blockquote>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-desactivar-la-superposicion-de-mangohud">Paso 1: Desactivar la superposición de MangoHud</h3>
+<p>MangoHud y otros inyectores de métricas en pantalla pueden colisionar con el sistema antitrampas y la inicialización de la ventana de DXVK en juegos de Blizzard.</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            Abre Steam -&gt; Biblioteca -&gt; Clic derecho en <strong>Overwatch 2</strong> -&gt; <strong>Propiedades</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2</h4>
+            En la pestaña <strong>General</strong>, ve al campo <strong>Parámetros de lanzamiento</strong> e introduce:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>MANGOHUD=0 %command%
+</code></pre>
+    </div>
+    
+<h3 id="paso-2-cambiar-a-ge-proton-proton-ge">Paso 2: Cambiar a GE-Proton (Proton-GE)</h3>
+<p>Las ejecuciones oficiales de Proton pueden generar pantallas negras o cierres al cargar videos de introducción de Battle.net.</p>
+<ol>
+<li>Abre la aplicación <strong>ProtonUp-Qt</strong> (instalable desde Discover en Steam Deck o pacman/apt).</li>
+<li>Descarga e instala la última versión de <strong>GE-Proton</strong> (ejemplo: <code>GE-Proton9-10</code>).</li>
+<li>En Steam, ve a Propiedades de Overwatch 2 -&gt; <strong>Compatibilidad</strong> -&gt; Activa &quot;Forzar el uso de una herramienta específica de compatibilidad&quot; -&gt; Selecciona <code>GE-Proton</code>.</li>
+</ol>
+<h3 id="paso-3-limpiar-la-cache-de-shaders-corrupta-de-dxvk">Paso 3: Limpiar la caché de Shaders corrupta de DXVK</h3>
+<p>Si el juego crashea justo al entrar a una partida multijugador:</p>
+<p>Navega a la carpeta de caché de Steam en tu sistema y elimina la caché de shaders compilada previa:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>rm -rf ~/.steam/steam/steamapps/shadercache/2357570
+</code></pre>
+    </div>
+    
+<p><em>(El ID <code>2357570</code> corresponde al código oficial de Overwatch 2 en Steam).</em></p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Tras una actualización importante del juego o de los controladores de video, deja que el juego permanezca 2 minutos en el menú principal para que regenere la caché de shaders sin provocar tirones de FPS en medio de la partida.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes | SoporteCero</title>
   <meta name="description" content="Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-arch-linux-keyring-out-of-date-pacman.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-arch-linux-keyring-out-of-date-pacman.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-arch-linux-keyring-out-of-date-pacman.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-arch-linux-keyring-out-of-date-pacman.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes">
   <meta property="og:description" content="Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-arch-linux-keyring-out-of-date-pacman.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-04">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes">
   <meta name="twitter:description" content="Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,183 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El fallo recurrente error: archlinux-keyring: signature is marginal trust o error: failed to commit transaction (invalid or corrupted package (PGP signature)) ocurre cuando los desarrolladores y empaquetadores de Arch Linux rotan o renuevan sus certificados criptográficos mientras tu sistema conserva un llavero antiguo, impidiendo que Pacman confíe en los nuevos paquetes oficiales.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#que-significa-marginal-trust-en-pacman">¿Qué significa marginal trust en Pacman?</a></li>
+        <li class="toc-subitem"><a href="#puedo-actualizar-paquetes-individuales-si-el-keyring-esta-roto">¿Puedo actualizar paquetes individuales si el keyring está roto?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Paquete archlinux-keyring desactualizado en una instalación inactiva por semanas</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Actualizar exclusivamente el llavero con <code>sudo pacman -Sy archlinux-keyring</code> antes de la actualización general</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Directorio de firmas criptográficas corrupto en /etc/pacman.d/gnupg</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Reconstruir el llavero GPG con <code>sudo rm -rf /etc/pacman.d/gnupg &amp;&amp; sudo pacman-key --init &amp;&amp; sudo pacman-key --populate archlinux</code></div>
+          </div></div></div>
+<p>El fallo recurrente <code>error: archlinux-keyring: signature is marginal trust</code> o <code>error: failed to commit transaction (invalid or corrupted package (PGP signature))</code> ocurre cuando los desarrolladores y empaquetadores de Arch Linux rotan o renuevan sus certificados criptográficos mientras tu sistema conserva un llavero antiguo, impidiendo que Pacman confíe en los nuevos paquetes oficiales.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Sincronizar la hora del sistema</h4>
+            <p>Un reloj del sistema desfasado causará que todas las firmas PGP válidas sean rechazadas de inmediato:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Forzar la sincronización horaria con los servidores NTP
+sudo timedatectl set-ntp true
+timedatectl status
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Actualizar el paquete archlinux-keyring de forma aislada</h4>
+            <p>Antes de ejecutar una actualización general con <code>pacman -Syu</code>, fuerza la descarga e instalación del paquete de firmas más reciente:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Sincronizar repositorios e instalar únicamente archlinux-keyring
+sudo pacman -Sy archlinux-keyring --noconfirm
+
+# En sistemas derivados como CachyOS o Manjaro, actualiza también sus llaveros:
+# sudo pacman -Sy cachyos-keyring manjaro-keyring --noconfirm
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Regenerar el llavero GPG de Pacman si persiste el error</h4>
+            <p>Si el paso anterior arroja fallos de base de datos o confianza marginal corrupta, reinicializa el subsistema de claves:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Eliminar el directorio de claves corrupto
+sudo rm -rf /etc/pacman.d/gnupg
+
+# 2. Inicializar la configuración criptográfica
+sudo pacman-key --init
+
+# 3. Poblar las firmas de los desarrolladores oficiales
+sudo pacman-key --populate archlinux
+
+# 4. Refrescar las claves con los servidores públicos
+sudo pacman-key --refresh-keys
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Limpiar la caché de paquetes y actualizar el sistema</h4>
+            <p>Elimina los paquetes que fallaron durante la descarga y procede con la actualización total:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Limpiar archivos corruptos de /var/cache/pacman/pkg/
+sudo pacman -Scc --noconfirm
+
+# Ejecutar la actualización completa del sistema
+sudo pacman -Syu
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="que-significa-marginal-trust-en-pacman">¿Qué significa marginal trust en Pacman?</h3>
+<p>Significa que la clave pública con la que se firmó el paquete no tiene suficientes firmas de desarrolladores principales (Master Keys) en tu base de datos local para considerarse 100% de confianza.</p>
+<h3 id="puedo-actualizar-paquetes-individuales-si-el-keyring-esta-roto">¿Puedo actualizar paquetes individuales si el keyring está roto?</h3>
+<p>No de forma segura, ya que Pacman abortará la transacción completa antes de modificar cualquier archivo en el disco para proteger el sistema.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Actualiza con regularidad:</strong> Si utilizas una distribución rolling-release como Arch Linux o CachyOS, realiza actualizaciones al menos cada 1 o 2 semanas para evitar que los llaveros de seguridad queden desfasados.</li>
+<li><strong>No modifiques SigLevel a TrustAll:</strong> Desactivar la verificación de firmas en /etc/pacman.conf elimina la protección contra ataques de suplantación y paquetes adulterados.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

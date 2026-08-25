@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux | SoporteCero</title>
   <meta name="description" content="Learn how to resolve distorted audio, crackling, and missing sound in Warframe using Steam Proton, FAudio, and PipeWire.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-audio-proton-warframe.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-audio-proton-warframe.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-audio-proton-warframe.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-audio-proton-warframe.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux">
   <meta property="og:description" content="Learn how to resolve distorted audio, crackling, and missing sound in Warframe using Steam Proton, FAudio, and PipeWire.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-audio-proton-warframe.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux">
   <meta name="twitter:description" content="Learn how to resolve distorted audio, crackling, and missing sound in Warframe using Steam Proton, FAudio, and PipeWire.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -174,7 +173,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -191,11 +190,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -205,7 +206,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -234,7 +235,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 5 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -245,7 +246,171 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>When running Warframe on Linux via Steam Proton or Steam Deck, players frequently encounter distorted audio, severe crackling during intense combat, or missing cinematic sound effects. This stems from latency buffer underruns between the Warframe sound engine (Wwise/XAudio2) and the host audio daemon.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-subitem"><a href="#step-1-set-pipewire-clock-rate-to-48000-hz">Step 1: Set PipeWire Clock Rate to 48000 Hz</a></li>
+        <li class="toc-subitem"><a href="#step-2-utilize-ge-proton-with-dedicated-launch-options">Step 2: Utilize GE-Proton with Dedicated Launch Options</a></li>
+        <li class="toc-subitem"><a href="#step-3-configure-launcher-audio-output-settings">Step 3: Configure Launcher Audio Output Settings</a></li>
+        <li class="toc-subitem"><a href="#step-4-purge-corrupted-wine-prefix-if-audio-remains-muted">Step 4: Purge Corrupted WINE Prefix if Audio Remains Muted</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#why-does-audio-crackle-during-dense-particle-effects">Why does audio crackle during dense particle effects?</a></li>
+        <li class="toc-subitem"><a href="#will-deleting-the-compatdata-folder-delete-my-warframe-account">Will deleting the compatdata folder delete my Warframe account?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Sample rate mismatch or aggressive low audio buffer quantum in PipeWire/PulseAudio</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enforce 48000 Hz sample rate and set <code>PULSE_LATENCY_MSEC=60</code> in launch options</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>XAudio2 / FAudio translation layer compatibility issues in Proton wineprefix</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Switch to GE-Proton and configure <code>WINEDLLOVERRIDES=&quot;xaudio2_7=n,b&quot;</code></div>
+          </div></div></div>
+<p>When running Warframe on Linux via Steam Proton or Steam Deck, players frequently encounter distorted audio, severe crackling during intense combat, or missing cinematic sound effects. This stems from latency buffer underruns between the Warframe sound engine (Wwise/XAudio2) and the host audio daemon.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+
+<h3 id="step-1-set-pipewire-clock-rate-to-48000-hz">Step 1: Set PipeWire Clock Rate to 48000 Hz</h3>
+<p>Prevent continuous audio resampling overhead by enforcing the game industry standard 48 kHz clock:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Enforce sample rate and quantum buffer in active PipeWire session
+pw-metadata -n settings 0 clock.force-rate 48000
+pw-metadata -n settings 0 clock.force-quantum 1024
+</code></pre>
+    </div>
+    
+<h3 id="step-2-utilize-ge-proton-with-dedicated-launch-options">Step 2: Utilize GE-Proton with Dedicated Launch Options</h3>
+<p>GE-Proton bundles optimized FAudio runtime builds:</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1</h4>
+            Open Warframe <strong>Properties &gt; Compatibility</strong> in Steam.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2</h4>
+            Select the latest <strong>GE-Proton</strong> build.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3</h4>
+            Under <strong>General &gt; Launch Options</strong>, add:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>WINEDLLOVERRIDES=&quot;xaudio2_7=n,b&quot; PULSE_LATENCY_MSEC=60 %command%
+</code></pre>
+    </div>
+    
+<ul>
+<li><code>PULSE_LATENCY_MSEC=60</code>: Injects a safe hardware buffer window, eliminating underrun pops.</li>
+</ul>
+<h3 id="step-3-configure-launcher-audio-output-settings">Step 3: Configure Launcher Audio Output Settings</h3>
+<ol>
+<li>On the Warframe pre-game launcher, click the <strong>Settings Gear Icon</strong>.</li>
+<li>Select <strong>Stereo 2.0 / Headphone Mode</strong>.</li>
+<li>Toggle off 64-bit Audio if crackling persists on legacy USB DACs.</li>
+</ol>
+<h3 id="step-4-purge-corrupted-wine-prefix-if-audio-remains-muted">Step 4: Purge Corrupted WINE Prefix if Audio Remains Muted</h3>
+<p>Rebuild the local compatibility wrapper from scratch:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Warframe official Steam AppID is 230410
+rm -rf ~/.local/share/Steam/steamapps/compatdata/230410
+</code></pre>
+    </div>
+    
+<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
+<h3 id="why-does-audio-crackle-during-dense-particle-effects">Why does audio crackle during dense particle effects?</h3>
+<p>Heavy CPU load starves the real-time audio thread, causing a buffer underrun. Elevating <code>PULSE_LATENCY_MSEC=90</code> stabilizes playback.</p>
+<h3 id="will-deleting-the-compatdata-folder-delete-my-warframe-account">Will deleting the compatdata folder delete my Warframe account?</h3>
+<p>No. Your account character data and inventory are securely stored on Digital Extremes cloud servers.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Avoid extreme DAC sample rates (192 kHz):</strong> Very high sample rates introduce translation overhead in WINE without audible benefits.</li>
+<li><strong>Maintain updated WirePlumber packages:</strong> Upstream bug fixes continuously enhance multi-channel audio synchronization.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -318,8 +483,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -327,7 +492,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

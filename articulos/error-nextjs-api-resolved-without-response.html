@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Guía: API resolved without sending a response for /api/ en Next.js - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Guía: API resolved without sending a response for /api/ en Next.js | SoporteCero</title>
   <meta name="description" content="Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-nextjs-api-resolved-without-response.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-nextjs-api-resolved-without-response.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-nextjs-api-resolved-without-response.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-nextjs-api-resolved-without-response.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Guía: API resolved without sending a response for /api/ en Next.js - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Guía: API resolved without sending a response for /api/ en Next.js">
   <meta property="og:description" content="Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-nextjs-api-resolved-without-response.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-21">
+  <meta property="article:section" content="Web y Código">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guía: API resolved without sending a response for /api/ en Next.js - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Guía: API resolved without sending a response for /api/ en Next.js">
   <meta name="twitter:description" content="Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -126,6 +125,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -175,7 +176,147 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error y advertencia API resolved without sending a response for /api/... en Next.js ocurre cuando un endpoint de API (Route Handler o Pages API) ejecuta operaciones asíncronas como consultas a bases de datos o llamadas externas con promesas sin utilizar await o sin retornar una promesa explícita antes de que finalice la función controladora.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
+      <p>El error y advertencia <code>API resolved without sending a response for /api/...</code> en Next.js ocurre cuando un endpoint de API (Route Handler o Pages API) ejecuta operaciones asíncronas como consultas a bases de datos o llamadas externas con promesas sin utilizar <code>await</code> o sin retornar una promesa explícita antes de que finalice la función controladora.</p>
+<p>Este fallo provoca que el servidor de Node.js cierre prematuramente el contexto de la solicitud o genere fugas de memoria y respuestas colgadas (timeouts) en el cliente.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Promesa asíncrona no esperada (<code>missing await</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Asegurarse de anteponer <code>await</code> a todas las llamadas a base de datos y APIs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Uso de callbacks tradicionales (como Stripe webhooks o JWT)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Envolver el callback en un objeto <code>new Promise((resolve, reject) =&gt; ...)</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Falta de <code>return res.status(...)</code> en ramas condicionales</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar que todas las rutas de código envíen una respuesta HTTP válida</div>
+          </div></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+<p><strong>Asegura el uso de async/await en tu controlador</strong>
+Si estás usando el Pages Router (<code>pages/api/...</code>), cada promesa ejecutada dentro del handler debe ser esperada antes de invocar <code>res.json()</code> o <code>res.send()</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>// pages/api/usuarios.js
+export default async function handler(req, res) {
+  try {
+    // Si olvidas el await aquí, Next.js resolverá antes de que la DB responda
+    const usuarios = await db.collection(&#39;usuarios&#39;).find().toArray();
+    return res.status(200).json({ success: true, data: usuarios });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+}
+</code></pre>
+    </div>
+    
+<p><strong>Maneja librerías basadas en callbacks con Promesas</strong>
+Si trabajas con librerías externas que usan firmas de callbacks (como <code>multer</code>, <code>passport</code> o <code>jsonwebtoken</code>), debes envolver la llamada:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>export default async function handler(req, res) {
+  await new Promise((resolve, reject) =&gt; {
+    jwt.verify(token, secretKey, (err, decoded) =&gt; {
+      if (err) {
+        res.status(401).json({ error: &#39;Token inválido&#39; });
+        return resolve();
+      }
+      res.status(200).json({ user: decoded });
+      return resolve();
+    });
+  });
+}
+</code></pre>
+    </div>
+    
+<p><strong>Migración a Route Handlers en App Router (Next.js 13+)</strong>
+Si utilizas el App Router (<code>app/api/.../route.js</code>), debes retornar un objeto <code>Response</code> o <code>NextResponse</code> nativo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>// app/api/usuarios/route.js
+import { NextResponse } from &#39;next/server&#39;;
+
+export async function GET(request) {
+  const data = await obtenerDatosDeServidor();
+  return NextResponse.json(data);
+}
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Linter de promesas:</strong> Habilita la regla <code>@typescript-eslint/no-floating-promises</code> en ESLint para advertir automáticamente sobre promesas no resueltas en tiempo de desarrollo.</li>
+<li><strong>Manejo de timeouts:</strong> Configura tiempos límite de respuesta en tus clientes de base de datos para evitar que un bloqueo de red deje las solicitudes colgadas indefinidamente.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

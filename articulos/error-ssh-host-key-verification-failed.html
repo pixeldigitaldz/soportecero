@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>[SOLUCIONADO] Error 'Host key verification failed' en SSH - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>[SOLUCIONADO] Error 'Host key verification failed' en SSH | SoporteCero</title>
   <meta name="description" content="¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-ssh-host-key-verification-failed.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="[SOLUCIONADO] Error 'Host key verification failed' en SSH - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Error 'Host key verification failed' en SSH">
   <meta property="og:description" content="¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-03">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="[SOLUCIONADO] Error 'Host key verification failed' en SSH - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Error 'Host key verification failed' en SSH">
   <meta name="twitter:description" content="¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -150,7 +149,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -172,6 +171,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -221,7 +222,166 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error Host key verification failed (acompañado de la advertencia en rojo WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local ~/.ssh/known_hosts.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#advertencia-de-seguridad-importante">️ Advertencia de Seguridad Importante</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>La clave pública de la máquina remota cambió en el archivo known_hosts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Eliminar la entrada antigua del host: <code>ssh-keygen -R IP_O_HOST</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Ataque Man-in-the-Middle o reinstalación del sistema operativo del servidor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Confirmar el nuevo huella digital de la clave e ingresar nuevamente mediante SSH</div>
+          </div></div></div>
+<p>El error <strong><code>Host key verification failed</code></strong> (acompañado de la advertencia en rojo <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local <code>~/.ssh/known_hosts</code>.</p>
+<p>Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.</p>
+<blockquote>
+<p><strong>Solución Rápida (1 Minuto):</strong>
+Elimina la clave antigua del servidor ejecutando:
+<code>ssh-keygen -R tu-direccion-ip-o-dominio</code></p>
+</blockquote>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Eliminar la huella digital obsoleta del servidor</h4>
+            <p>Ejecuta la herramienta nativa de <code>ssh-keygen</code> indicando la IP o nombre de host del servidor remoto:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>ssh-keygen -R 192.168.1.100
+</code></pre>
+    </div>
+    
+<p><em>(Reemplaza <code>192.168.1.100</code> por la IP o dominio de tu servidor).</em></p>
+<p>Este comando busca y elimina automáticamente la línea en conflicto dentro de tu archivo <code>~/.ssh/known_hosts</code> y genera un respaldo de seguridad (<code>known_hosts.old</code>).</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Volver a conectar y aceptar la nueva huella digital</h4>
+            <p>Intenta conectar nuevamente por SSH:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>ssh usuario@192.168.1.100
+</code></pre>
+    </div>
+    
+<p>La terminal mostrará la nueva huella criptográfica SHA256 e interactuará preguntando:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</code></pre>
+    </div>
+    
+<p>Escribe <code>yes</code> y presiona <strong>Enter</strong>. SSH registrará la nueva firma en <code>known_hosts</code> y establecerá la conexión normalmente.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Limpieza manual en known_hosts (Alternativa)</h4>
+            <p>Si la advertencia indica el número de línea exacto (por ejemplo: <code>Offending RSA key in /home/usuario/.ssh/known_hosts:42</code>):</p>
+<p>Puedes abrir el archivo en tu editor de texto y eliminar la línea 42:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>nano +42 ~/.ssh/known_hosts
+</code></pre>
+    </div>
+    
+<p>Guarda los cambios (<code>Ctrl + O</code> -&gt; <code>Enter</code>) y sal (<code>Ctrl + X</code>).</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="advertencia-de-seguridad-importante">🛡️ Advertencia de Seguridad Importante</h2>
+<ul>
+<li>Si <strong>NO</strong> has reinstalado el servidor ni cambiado su configuración y este error aparece de la nada en un servidor remoto de producción, <strong>no elimines la clave a ciegas</strong>. Podrías estar sufriendo un ataque de interceptación en la red conocido como <strong>Man-in-the-Middle (MITM)</strong>. Contacta primero al administrador de red o soporte de tu proveedor de hosting.</li>
+</ul>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy | SoporteCero</title>
   <meta name="description" content="Learn how to diagnose why Nginx returns a 502 Bad Gateway error by checking sockets and backend services.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-bad-gateway-502-nginx-upstream.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-bad-gateway-502-nginx-upstream.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy">
   <meta property="og:description" content="Learn how to diagnose why Nginx returns a 502 Bad Gateway error by checking sockets and backend services.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-bad-gateway-502-nginx-upstream.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-23">
+  <meta property="article:section" content="Systems & Servers">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Diagnose and Fix 502 Bad Gateway Error in Nginx Reverse Proxy">
   <meta name="twitter:description" content="Learn how to diagnose why Nginx returns a 502 Bad Gateway error by checking sockets and backend services.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -121,11 +120,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -135,7 +136,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -164,7 +165,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read time: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -175,7 +176,133 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>The 502 Bad Gateway error on an Nginx web server configured as a reverse proxy means that Nginx has received an invalid response (or no response at all) from the origin server or backend (such as PHP-FPM, a Node.js process, Gunicorn, or a Docker container) when trying to forward the client&#39;s request.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-comprobar-el-estado-del-servicio-del-backend">Paso 1: Comprobar el estado del servicio del backend</a></li>
+        <li class="toc-subitem"><a href="#paso-2-verificar-la-ruta-del-socket-o-puerto-en-la-configuracion">Paso 2: Verificar la ruta del Socket o Puerto en la configuración</a></li>
+        <li class="toc-subitem"><a href="#paso-3-revisar-el-registro-detallado-de-logs-de-nginx">Paso 3: Revisar el registro detallado de logs de Nginx</a></li>
+        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Application backend service (PHP-FPM, Node.js, Gunicorn) is down</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Check and start backend service with <code>systemctl status php-fpm</code> or Docker</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Misconfigured port or UNIX socket in proxy_pass directive</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Fix socket path <code>/var/run/php/php-fpm.sock</code> or port in <code>nginx.conf</code></div>
+          </div></div></div>
+<p>The <code>502 Bad Gateway</code> error on an Nginx web server configured as a reverse proxy means that Nginx has received an invalid response (or no response at all) from the origin server or backend (such as PHP-FPM, a Node.js process, Gunicorn, or a Docker container) when trying to forward the client&#39;s request.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+<h3 id="paso-1-comprobar-el-estado-del-servicio-del-backend">Paso 1: Comprobar el estado del servicio del backend</h3>
+<p>Nginx cannot dispatch the query if the service processing the internal logic of your web application has stopped. Check its status in the console:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejemplo si tu aplicación usa PHP-FPM
+sudo systemctl status php8.2-fpm
+
+# Ejemplo si usas NodeJS en segundo plano con PM2
+pm2 status
+
+# Ejemplo si corres el backend en contenedores
+docker ps
+</code></pre>
+    </div>
+    
+<p><em>(Si el servicio trasero está inactivo, inicialo de inmediato: <code>sudo systemctl start php8.2-fpm</code>).</em></p>
+<h3 id="paso-2-verificar-la-ruta-del-socket-o-puerto-en-la-configuracion">Paso 2: Verificar la ruta del Socket o Puerto en la configuración</h3>
+<p>If the backend is active but you still receive the 502 error, it is likely that Nginx is trying to communicate through an incorrect port or unix socket. Open the configuration file for your site&#39;s block <code>/etc/nginx/sites-available/default</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">NGINX</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejemplo de enrutamiento por Socket Unix. Verifica que la ruta física del archivo .sock sea idéntica
+fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+
+# Ejemplo de enrutamiento por puerto local. Asegura que el servicio escuche en el puerto correcto
+proxy_pass http://127.0.0.1:3000;
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-revisar-el-registro-detallado-de-logs-de-nginx">Paso 3: Revisar el registro detallado de logs de Nginx</h3>
+<p>The Nginx error log will provide the exact connection refused description. Inspect it in real time:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo tail -n 50 -f /var/log/nginx/error.log
+</code></pre>
+    </div>
+    
+<p><em>(Busca descriptores como <code>Connection refused</code> o <code>Permission denied</code> en la comunicación con el socket).</em></p>
+<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
+<p>Recommended safety practices:</p>
+<ul>
+<li>Configure monitoring systems or automatic watchdogs for your backends. If a memory leak causes your Node.js or PHP-FPM application to suddenly collapse and leaves Nginx disconnected, tools like Systemd (with the <code>Restart=on-failure</code> directive) or process managers like PM2 will automatically bring the service back up within milliseconds, mitigating the occurrence of the 502 error for your visitors.</li>
+</ul>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -248,8 +375,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -257,7 +384,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

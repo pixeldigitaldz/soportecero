@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK | SoporteCero</title>
   <meta name="description" content="Aprende a configurar las variables de entorno de traducción gráfica para compilar shaders en segundo plano y estabilizar tus fotogramas.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-proton-dxvk-cache-stutter.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-proton-dxvk-cache-stutter.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-proton-dxvk-cache-stutter.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK">
   <meta property="og:description" content="Aprende a configurar las variables de entorno de traducción gráfica para compilar shaders en segundo plano y estabilizar tus fotogramas.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-proton-dxvk-cache-stutter.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-27">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK">
   <meta name="twitter:description" content="Aprende a configurar las variables de entorno de traducción gráfica para compilar shaders en segundo plano y estabilizar tus fotogramas.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -138,7 +137,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -160,6 +159,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -209,7 +210,128 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El tartamudeo de la imagen (stuttering) al iniciar un juego de Windows en Linux mediante Proton ocurre porque las llamadas de gráficos de DirectX deben traducirse a la API abierta Vulkan en tiempo real mediante una librería llamada DXVK. Cada vez que entras a una zona nueva o un enemigo lanza una habilidad, el juego se congela unos milisegundos mientras compila el sombreador por primera vez.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-habilitar-la-compilacion-de-shaders-en-paralelo-gpl">Paso 1: Habilitar la compilación de shaders en paralelo (GPL)</a></li>
+        <li class="toc-subitem"><a href="#paso-2-asignar-un-espacio-ilimitado-para-la-cache-en-el-disco-ssd">Paso 2: Asignar un espacio ilimitado para la caché en el disco SSD</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Caché de compilación de shaders DXVK desincronizada o dañada</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Eliminar el archivo <code>.dxvk-cache</code> en la carpeta prefix del juego</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Subida brusca de uso de CPU durante compilación en tiempo real</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Activar precompilación asíncrona de shaders: <code>DXVK_ASYNC=1 %command%</code></div>
+          </div></div></div>
+<p>El tartamudeo de la imagen (<em>stuttering</em>) al iniciar un juego de Windows en Linux mediante Proton ocurre porque las llamadas de gráficos de DirectX deben traducirse a la API abierta <strong>Vulkan</strong> en tiempo real mediante una librería llamada DXVK. Cada vez que entras a una zona nueva o un enemigo lanza una habilidad, el juego se congela unos milisegundos mientras compila el sombreador por primera vez.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-habilitar-la-compilacion-de-shaders-en-paralelo-gpl">Paso 1: Habilitar la compilación de shaders en paralelo (GPL)</h3>
+<p>Si tienes controladores gráficos modernos (NVIDIA o AMD Mesa recientes), puedes activar la característica <em>Graphics Pipeline Library (GPL)</em>, que compila los shaders de forma invisible antes de que aparezcan en pantalla.</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            Abre las propiedades del juego en Steam.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2</h4>
+            En la barra de <strong>Parámetros de lanzamiento</strong>, añade la siguiente línea mágica de variables:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>dxvk.enableGraphicsPipelineLibrary = True __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1 %command%
+</code></pre>
+    </div>
+    
+<h3 id="paso-2-asignar-un-espacio-ilimitado-para-la-cache-en-el-disco-ssd">Paso 2: Asignar un espacio ilimitado para la caché en el disco SSD</h3>
+<p>Por defecto, los controladores de video limitan el tamaño de la carpeta de caché a 1GB o 2GB. Cuando se llena, el sistema borra los shaders viejos y vuelve a generar tirones. Modifica los límites de tu sistema operativo añadiendo estas líneas en tu terminal para que la GPU retenga todo el aprendizaje de texturas:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>echo &quot;export EXTRA_LDFLAGS=\&quot;-Wl,-O1 -Wl,--as-needed\&quot;&quot; &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Al usar distribuciones de rendimiento como CachyOS, evita limpiar los archivos temporales del sistema de forma masiva con herramientas automáticas antes de jugar. Borrar la carpeta <code>.nv</code> o <code>.cache</code> de tu directorio de usuario destruirá semanas de compilación previa de tus juegos favoritos, obligando a tu tarjeta de video a empezar el molesto proceso de tartamudeo desde cero en la siguiente partida.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

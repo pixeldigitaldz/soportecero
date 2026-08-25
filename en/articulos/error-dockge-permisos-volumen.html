@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Resolving: Permission Denied Error in Docker Compose Volumes - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Resolving: Permission Denied Error in Docker Compose Volumes | SoporteCero</title>
   <meta name="description" content="Learn how to solve EACCES and Permission Denied errors in Docker Compose and Dockge shared volume binds step by step.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-dockge-permisos-volumen.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-dockge-permisos-volumen.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-dockge-permisos-volumen.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-dockge-permisos-volumen.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Resolving: Permission Denied Error in Docker Compose Volumes - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Resolving: Permission Denied Error in Docker Compose Volumes">
   <meta property="og:description" content="Learn how to solve EACCES and Permission Denied errors in Docker Compose and Dockge shared volume binds step by step.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-dockge-permisos-volumen.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-27">
+  <meta property="article:section" content="Systems & Servers">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Resolving: Permission Denied Error in Docker Compose Volumes - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Resolving: Permission Denied Error in Docker Compose Volumes">
   <meta name="twitter:description" content="Learn how to solve EACCES and Permission Denied errors in Docker Compose and Dockge shared volume binds step by step.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -203,11 +202,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -217,7 +218,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -246,7 +247,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 5 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -257,7 +258,187 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>The recurring error EACCES: permission denied, touch: cannot touch &#39;/data/...&#39;: Permission denied or failed to open stream: Permission denied in applications managed via Dockge or Docker Compose arises when the container internal runtime user (such as node UID 1000 or www-data UID 33) lacks write permissions on the mounted host filesystem path.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#what-is-the-difference-between-z-and-z-volume-flags">What is the difference between :z and :Z volume flags?</a></li>
+        <li class="toc-subitem"><a href="#how-do-i-check-my-linux-user-id">How do I check my Linux user ID?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Container internal process UID/GID does not match directory ownership on host</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Adjust host folder ownership via <code>sudo chown -R 1000:1000 /path/data</code> or set <code>user: &quot;1000:1000&quot;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>SELinux / AppArmor security context blocking write access to bind mount</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Append volume flag <code>:z</code> or <code>:Z</code> in <code>docker-compose.yml</code></div>
+          </div></div></div>
+<p>The recurring error <code>EACCES: permission denied</code>, <code>touch: cannot touch &#39;/data/...&#39;: Permission denied</code> or <code>failed to open stream: Permission denied</code> in applications managed via Dockge or Docker Compose arises when the container internal runtime user (such as <code>node</code> UID 1000 or <code>www-data</code> UID 33) lacks write permissions on the mounted host filesystem path.</p>
+
+    </section>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Identify the Container Process UID/GID</h4>
+            <p>Determine the exact user identity executing inside the container image:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Inspect container user identity
+docker run --rm &lt;image_name&gt; id
+</code></pre>
+    </div>
+    
+<p>Common image user mappings:</p>
+<ul>
+<li><strong>Node.js</strong>: UID <code>1000</code>, GID <code>1000</code> (<code>node</code> user).</li>
+<li><strong>Nginx / PHP-FPM</strong>: UID <code>33</code>, GID <code>33</code> (<code>www-data</code> user).</li>
+<li><strong>PostgreSQL</strong>: UID <code>999</code> (<code>postgres</code> user).</li>
+</ul>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Adjust Host Directory Ownership and Permissions</h4>
+            <p>Update directory ownership on the host machine to match the container process UID:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># For containers running as UID 1000 (Dockge / Node):
+sudo chown -R 1000:1000 /opt/dockge/stacks/my-stack/data
+
+# Grant standard read/write/execute permissions
+sudo chmod -R 775 /opt/dockge/stacks/my-stack/data
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Specify User Context in docker-compose.yml</h4>
+            <p>Pass your host user IDs into the service configuration:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">YAML</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>services:
+  my-app:
+    image: my-app:latest
+    user: &quot;${UID:-1000}:${GID:-1000}&quot;
+    volumes:
+      - ./data:/app/data:z
+    restart: unless-stopped
+</code></pre>
+    </div>
+    
+<p><em>Note:</em> The <code>:z</code> suffix properly assigns SELinux labels on Fedora, RHEL, and Rocky Linux systems.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Step 4: Recreate Container and Verify Logs</h4>
+            <p>Apply changes and monitor execution:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Recreate container stack
+docker compose down &amp;&amp; docker compose up -d
+
+# Check logs for write confirmation
+docker compose logs -f
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
+<h3 id="what-is-the-difference-between-z-and-z-volume-flags">What is the difference between :z and :Z volume flags?</h3>
+<p>The <code>:z</code> flag shares the SELinux label across containers, whereas <code>:Z</code> establishes a private label restricted to a single container instance.</p>
+<h3 id="how-do-i-check-my-linux-user-id">How do I check my Linux user ID?</h3>
+<p>Run <code>id -u</code> for user ID and <code>id -g</code> for group ID in your terminal.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Avoid blanket chmod 777:</strong> While <code>chmod 777</code> resolves permission blocks, it leaves directories world-writable. Prefer targeted <code>chown</code> alignment.</li>
+<li><strong>Utilize PUID/PGID parameters:</strong> For images supporting LinuxServer.io init scripts, define <code>PUID=1000</code> and <code>PGID=1000</code> in service environment variables.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -330,8 +511,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -339,7 +520,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

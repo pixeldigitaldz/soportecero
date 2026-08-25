@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux | SoporteCero</title>
   <meta name="description" content="Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-audio-proton-warframe.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-audio-proton-warframe.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-audio-proton-warframe.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-audio-proton-warframe.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux">
   <meta property="og:description" content="Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-audio-proton-warframe.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux">
   <meta name="twitter:description" content="Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -174,7 +173,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -196,6 +195,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -245,7 +246,171 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Al ejecutar Warframe en Linux mediante Steam Proton o en Steam Deck, los jugadores a menudo experimentan audio distorsionado, crujidos constantes (crackling) o ausencia total de sonido en cinemáticas y combate. Esto ocurre por desajustes en el búfer de latencia entre el motor de sonido de Warframe (Wwise/XAudio2) y el servidor de sonido del sistema anfitrión.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-configurar-la-frecuencia-de-muestreo-de-pipewire-a-48000-hz">Paso 1: Configurar la frecuencia de muestreo de PipeWire a 48000 Hz</a></li>
+        <li class="toc-subitem"><a href="#paso-2-usar-ge-proton-y-forzar-bibliotecas-nativas-de-xaudio2">Paso 2: Usar GE-Proton y forzar bibliotecas nativas de XAudio2</a></li>
+        <li class="toc-subitem"><a href="#paso-3-ajustar-el-motor-de-audio-en-el-lanzador-de-warframe">Paso 3: Ajustar el motor de audio en el lanzador de Warframe</a></li>
+        <li class="toc-subitem"><a href="#paso-4-eliminar-prefijos-de-wine-corruptos-si-persiste-el-fallo">Paso 4: Eliminar prefijos de WINE corruptos si persiste el fallo</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-el-audio-cruje-solo-cuando-hay-muchas-explosiones-en-pantalla">¿Por qué el audio cruje solo cuando hay muchas explosiones en pantalla?</a></li>
+        <li class="toc-subitem"><a href="#se-pierde-el-progreso-de-mi-cuenta-al-borrar-compatdata">¿Se pierde el progreso de mi cuenta al borrar compatdata?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Frecuencia de muestreo (sample rate) incompatible o tamaño de búfer de audio bajo en PipeWire/PulseAudio</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar frecuencia fija a 48000 Hz y ajustar <code>default.clock.min-quantum</code> a 1024 en PipeWire</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Incompatibilidad en bibliotecas de decodificación de audio XAudio2/FAudio en el prefijo de Proton</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Utilizar Proton-GE y añadir <code>WINEDLLOVERRIDES=&quot;xaudio2_7=n,b&quot;</code> en las opciones de lanzamiento</div>
+          </div></div></div>
+<p>Al ejecutar Warframe en Linux mediante Steam Proton o en Steam Deck, los jugadores a menudo experimentan audio distorsionado, crujidos constantes (crackling) o ausencia total de sonido en cinemáticas y combate. Esto ocurre por desajustes en el búfer de latencia entre el motor de sonido de Warframe (Wwise/XAudio2) y el servidor de sonido del sistema anfitrión.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-configurar-la-frecuencia-de-muestreo-de-pipewire-a-48000-hz">Paso 1: Configurar la frecuencia de muestreo de PipeWire a 48000 Hz</h3>
+<p>La mayoría de motores de videojuegos modernos esperan una frecuencia de reloj estándar de 48 kHz. Evita el remuestreo forzando estos parámetros en <code>~/.config/pipewire/pipewire.conf</code> o mediante variables de entorno:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Configurar latencia y reloj óptimos en la sesión de usuario
+pw-metadata -n settings 0 clock.force-rate 48000
+pw-metadata -n settings 0 clock.force-quantum 1024
+</code></pre>
+    </div>
+    
+<h3 id="paso-2-usar-ge-proton-y-forzar-bibliotecas-nativas-de-xaudio2">Paso 2: Usar GE-Proton y forzar bibliotecas nativas de XAudio2</h3>
+<p>El empaquetado comunitario GE-Proton integra parches actualizados de FAudio y WINE XAudio2:</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            En Steam, abre las propiedades de <strong>Warframe &gt; Compatibilidad</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2</h4>
+            Selecciona la versión más reciente de <strong>GE-Proton</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3</h4>
+            En la pestaña <strong>General &gt; Parámetros de lanzamiento</strong>, añade:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>WINEDLLOVERRIDES=&quot;xaudio2_7=n,b&quot; PULSE_LATENCY_MSEC=60 %command%
+</code></pre>
+    </div>
+    
+<ul>
+<li><code>PULSE_LATENCY_MSEC=60</code>: Añade un pequeño margen de búfer para evitar cortes por subdesbordamiento (buffer underrun).</li>
+</ul>
+<h3 id="paso-3-ajustar-el-motor-de-audio-en-el-lanzador-de-warframe">Paso 3: Ajustar el motor de audio en el lanzador de Warframe</h3>
+<ol>
+<li>Al abrir el launcher de Warframe en Steam, pulsa en el icono de engranaje (Ajustes).</li>
+<li>Desactiva la opción <strong>Audio de 64 bits</strong> si tu tarjeta de sonido sufre chasquidos.</li>
+<li>Asegúrate de que el modo de salida esté configurado en <strong>Altavoces 2.0 / Auriculares estéreo</strong>.</li>
+</ol>
+<h3 id="paso-4-eliminar-prefijos-de-wine-corruptos-si-persiste-el-fallo">Paso 4: Eliminar prefijos de WINE corruptos si persiste el fallo</h3>
+<p>Si tras actualizar Proton el audio sigue mudo, borra el prefijo local del juego para que Steam lo regenere limpio:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># El AppID oficial de Warframe en Steam es 230410
+rm -rf ~/.local/share/Steam/steamapps/compatdata/230410
+</code></pre>
+    </div>
+    
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="por-que-el-audio-cruje-solo-cuando-hay-muchas-explosiones-en-pantalla">¿Por qué el audio cruje solo cuando hay muchas explosiones en pantalla?</h3>
+<p>Porque la CPU entra en picos de alta carga y se produce un &quot;underrun&quot; de búfer. Aumentar <code>PULSE_LATENCY_MSEC=90</code> soluciona este problema de inmediato.</p>
+<h3 id="se-pierde-el-progreso-de-mi-cuenta-al-borrar-compatdata">¿Se pierde el progreso de mi cuenta al borrar compatdata?</h3>
+<p>No. El progreso de Warframe se guarda en los servidores de Digital Extremes en la nube.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>No uses frecuencias de 96 kHz o 192 kHz sin necesidad:</strong> Las frecuencias de estudio muy altas saturan la capa de traducción WINE y aumentan el consumo de CPU innecesariamente.</li>
+<li><strong>Mantén actualizados los paquetes de WirePlumber:</strong> Los parches recientes eliminan fallos de sincronización con clientes de 32 y 64 bits.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js | SoporteCero</title>
   <meta name="description" content="Aprende a diagnosticar y solucionar el agotamiento de conexiones en PostgreSQL max_connections utilizando Connection Pooling con PgBouncer o Prisma.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js">
   <meta property="og:description" content="Aprende a diagnosticar y solucionar el agotamiento de conexiones en PostgreSQL max_connections utilizando Connection Pooling con PgBouncer o Prisma.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-24">
+  <meta property="article:section" content="Web y Código">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo resolver FATAL: sorry, too many clients already en PostgreSQL y Node.js">
   <meta name="twitter:description" content="Aprende a diagnosticar y solucionar el agotamiento de conexiones en PostgreSQL max_connections utilizando Connection Pooling con PgBouncer o Prisma.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -126,6 +125,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -175,7 +176,179 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error FATAL: sorry, too many clients already en PostgreSQL ocurre cuando el número de conexiones simultáneas abiertas hacia el servidor de base de datos supera el límite configurado en la directiva max_connections (que por defecto suele ser 100 en instancias estándar).</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
+      <p>El error <code>FATAL: sorry, too many clients already</code> en PostgreSQL ocurre cuando el número de conexiones simultáneas abiertas hacia el servidor de base de datos supera el límite configurado en la directiva <code>max_connections</code> (que por defecto suele ser 100 en instancias estándar).</p>
+<p>En entornos web modernos con Node.js, Next.js, microservicios o arquitecturas Serverless (AWS Lambda, Vercel), abrir conexiones directas en cada solicitud sin un gestor de pool satura rápidamente la memoria del motor PostgreSQL.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Conexiones abiertas sin cerrar (<code>connection leaks</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Asegurar que cada cliente de base de datos ejecute <code>client.release()</code> o termine en bloques <code>finally</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Arquitectura Serverless abriendo conexiones por cada invocación</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Implementar un Connection Pooler intermedio como <strong>PgBouncer</strong> o <strong>Prisma Accelerate / Supabase Pooler</strong></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Límite <code>max_connections</code> insuficiente para el servidor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Incrementar <code>max_connections</code> en <code>postgresql.conf</code> si el servidor dispone de memoria RAM suficiente</div>
+          </div></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+<p><strong>Inspecciona las conexiones activas e inactivas en tiempo real</strong>
+Conéctate a PostgreSQL con <code>psql</code> y consulta el estado de las sesiones para identificar qué aplicación está reteniendo las conexiones:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT state, count(*) 
+FROM pg_stat_activity 
+GROUP BY state;
+</code></pre>
+    </div>
+    
+<p>Para ver qué consultas o usuarios están consumiendo más conexiones:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT pid, usename, client_addr, state, query_start, query 
+FROM pg_stat_activity 
+WHERE state != &#39;idle&#39; 
+ORDER BY query_start DESC;
+</code></pre>
+    </div>
+    
+<p><strong>Termina conexiones colgadas de emergencia</strong>
+Si necesitas recuperar el acceso al servidor inmediatamente para labores de mantenimiento:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT pg_terminate_backend(pid) 
+FROM pg_stat_activity 
+WHERE state = &#39;idle&#39; AND pid &lt;&gt; pg_backend_pid();
+</code></pre>
+    </div>
+    
+<p><strong>Configura correctamente un Connection Pool en Node.js (pg / pg-pool)</strong>
+Nunca instancies un nuevo <code>new Client()</code> en cada ruta o solicitud de tu API. Usa un <code>Pool</code> global compartido:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>import { Pool } from &#39;pg&#39;;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20, // Máximo 20 conexiones simultáneas por instancia
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+export async function query(text, params) {
+  const client = await pool.connect();
+  try {
+    return await client.query(text, params);
+  } finally {
+    client.release(); // Vital: liberar la conexión de vuelta al pool
+  }
+}
+</code></pre>
+    </div>
+    
+<p><strong>Aumenta el límite de <code>max_connections</code> en el servidor</strong>
+Si tu servidor cuenta con hardware potente (más de 8 GB de RAM), edita <code>/etc/postgresql/16/main/postgresql.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>max_connections = 250
+shared_buffers = 2GB
+</code></pre>
+    </div>
+    
+<p>Aplica los cambios reiniciando el servicio:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo systemctl restart postgresql
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Uso obligatorio de PgBouncer:</strong> En producción con alto tráfico, coloca PgBouncer en modo <code>transaction pooling</code> delante de PostgreSQL. Esto permite gestionar más de 10,000 conexiones concurrentes consumiendo únicamente 50 conexiones reales en la base de datos.</li>
+<li><strong>Monitoreo de métricas:</strong> Configura alertas en Prometheus o Datadog cuando las conexiones superen el 80% del valor de <code>max_connections</code>.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

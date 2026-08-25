@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente) - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente) | SoporteCero</title>
   <meta name="description" content="Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/solucion-lag-flyff-universe.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/solucion-lag-flyff-universe.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/solucion-lag-flyff-universe.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/solucion-lag-flyff-universe.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente) - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)">
   <meta property="og:description" content="Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/solucion-lag-flyff-universe.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente) - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)">
   <meta name="twitter:description" content="Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -174,7 +173,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -196,6 +195,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -245,7 +246,151 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Flyff Universe es un MMORPG que se ejecuta directamente sobre el motor WebGL del navegador. Cuando los jugadores experimentan caídas severas de FPS, tirones constantes o congelamientos en ciudades concurridas (como Flaris o Saint Morning), la causa principal suele ser una renderización por software en el navegador o una saturación de llamadas de dibujo (draw calls) en la GPU.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-activar-la-aceleracion-por-hardware-en-tu-navegador">Paso 1: Activar la Aceleración por Hardware en tu navegador</a></li>
+        <li class="toc-subitem"><a href="#paso-2-optimizar-las-banderas-de-webgl-y-angle-en-chrome-flags">Paso 2: Optimizar las banderas de WebGL y ANGLE en Chrome Flags</a></li>
+        <li class="toc-subitem"><a href="#paso-3-ajustar-la-configuracion-grafica-interna-de-flyff-universe">Paso 3: Ajustar la configuración gráfica interna de Flyff Universe</a></li>
+        <li class="toc-subitem"><a href="#paso-4-utilizar-el-cliente-de-escritorio-oficial-o-navegador-dedicado">Paso 4: Utilizar el Cliente de Escritorio Oficial o Navegador Dedicado</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#como-se-si-webgl-esta-usando-mi-gpu-dedicada">¿Cómo sé si WebGL está usando mi GPU dedicada?</a></li>
+        <li class="toc-subitem"><a href="#por-que-el-juego-se-congela-al-cambiar-de-pestana">¿Por qué el juego se congela al cambiar de pestaña?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Aceleración por hardware desactivada en el navegador web o WebGL ejecutándose por software</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Habilitar aceleración por hardware y cambiar el backend gráfico ANGLE a D3D11 o Vulkan en <code>chrome://flags</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Saturación de memoria por renderizado de cientos de modelos de personajes y sombras en ciudades</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Limitar el rango de dibujado de jugadores a &#39;Cercano&#39; y desactivar sombras dinámicas en ajustes del juego</div>
+          </div></div></div>
+<p>Flyff Universe es un MMORPG que se ejecuta directamente sobre el motor WebGL del navegador. Cuando los jugadores experimentan caídas severas de FPS, tirones constantes o congelamientos en ciudades concurridas (como Flaris o Saint Morning), la causa principal suele ser una renderización por software en el navegador o una saturación de llamadas de dibujo (draw calls) en la GPU.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-activar-la-aceleracion-por-hardware-en-tu-navegador">Paso 1: Activar la Aceleración por Hardware en tu navegador</h3>
+<p>Asegúrate de que tu navegador web utilice la tarjeta gráfica dedicada en lugar de la CPU para renderizar gráficos WebGL:</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            En Google Chrome, Brave o Edge, ve a <strong>Ajustes &gt; Sistema</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2</h4>
+            Activa la opción <strong>Usar aceleración por hardware cuando esté disponible</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3</h4>
+            Reinicia el navegador por completo.
+          </div>
+        </li>
+        
+</ol>
+<h3 id="paso-2-optimizar-las-banderas-de-webgl-y-angle-en-chrome-flags">Paso 2: Optimizar las banderas de WebGL y ANGLE en Chrome Flags</h3>
+<p>Ajusta los parámetros internos del motor Chromium para maximizar el rendimiento de la GPU:</p>
+<ol>
+<li>Escribe en la barra de direcciones: <code>chrome://flags</code></li>
+<li>Busca <strong>Choose ANGLE graphics backend</strong> y cámbialo a:<ul>
+<li><strong>D3D11</strong> o <strong>D3D11on12</strong> (en Windows).</li>
+<li><strong>Vulkan</strong> o <strong>OpenGL</strong> (en Linux).</li>
+</ul>
+</li>
+<li>Busca <strong>Override software rendering list</strong> y cámbialo a <strong>Enabled</strong> (fuerza aceleración gráfica incluso en GPUs no listadas).</li>
+<li>Haz clic en <strong>Relaunch</strong> (Reiniciar navegador).</li>
+</ol>
+<h3 id="paso-3-ajustar-la-configuracion-grafica-interna-de-flyff-universe">Paso 3: Ajustar la configuración gráfica interna de Flyff Universe</h3>
+<p>En el menú de opciones dentro del juego (<code>Esc &gt; Opciones &gt; Gráficos</code>):</p>
+<ul>
+<li><strong>Límite de FPS</strong>: Ajústalo a <strong>60 FPS</strong> o a la tasa de refresco nativa de tu monitor.</li>
+<li><strong>Rango de visualización de jugadores</strong>: Cámbialo a <strong>Cercano</strong> o <strong>Medio</strong> (reduce drásticamente el lag en ciudades principales).</li>
+<li><strong>Sombras</strong>: Desactiva las sombras dinámicas.</li>
+<li><strong>Oclusión ambiental (SSAO)</strong>: Desactivado.</li>
+</ul>
+<h3 id="paso-4-utilizar-el-cliente-de-escritorio-oficial-o-navegador-dedicado">Paso 4: Utilizar el Cliente de Escritorio Oficial o Navegador Dedicado</h3>
+<p>Si juegas con muchas pestañas abiertas, el navegador reduce los recursos de la pestaña de Flyff:</p>
+<ul>
+<li>Descarga el cliente de escritorio oficial basado en Electron de Flyff Universe.</li>
+<li>O crea un acceso directo como aplicación de ventana independiente en Chrome (<em>Menú &gt; Guardar y compartir &gt; Instalar página como aplicación</em>).</li>
+</ul>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="como-se-si-webgl-esta-usando-mi-gpu-dedicada">¿Cómo sé si WebGL está usando mi GPU dedicada?</h3>
+<p>Abre <code>chrome://gpu</code> en tu navegador y comprueba que <strong>WebGL</strong> y <strong>WebGL2</strong> indiquen <em>Hardware accelerated</em>.</p>
+<h3 id="por-que-el-juego-se-congela-al-cambiar-de-pestana">¿Por qué el juego se congela al cambiar de pestaña?</h3>
+<p>Porque los navegadores suspenden los temporizadores JavaScript (<code>requestAnimationFrame</code>) de pestañas en segundo plano para ahorrar energía.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Cierra pestañas con reproducción de video en segundo plano:</strong> Sitios como YouTube o Twitch consumen decodificadores de video por hardware que compiten directamente con WebGL.</li>
+<li><strong>Mantén actualizados los controladores de tu GPU:</strong> Las mejoras de drivers optimizan la tasa de compilación de shaders WebGL.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

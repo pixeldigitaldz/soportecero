@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux | SoporteCero</title>
   <meta name="description" content="Soluciona problemas de integración donde Feral GameMode o MangoHud no se activan ni muestran la superposición FPS en juegos de Linux o Steam.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-gamemode-not-working-mangohud-linux.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-gamemode-not-working-mangohud-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-gamemode-not-working-mangohud-linux.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux">
   <meta property="og:description" content="Soluciona problemas de integración donde Feral GameMode o MangoHud no se activan ni muestran la superposición FPS en juegos de Linux o Steam.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-gamemode-not-working-mangohud-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-27">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux">
   <meta name="twitter:description" content="Soluciona problemas de integración donde Feral GameMode o MangoHud no se activan ni muestran la superposición FPS en juegos de Linux o Steam.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -162,7 +161,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -184,6 +183,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -233,7 +234,205 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Feral GameMode (gamemoded) y MangoHud son herramientas fundamentales en el ecosistema de juegos en Linux: la primera ajusta dinámicamente el gobernador de la CPU, prioridades de E/S y perfiles de energía de la GPU, mientras que la segunda renderiza una superposición (overlay) para monitorizar fotogramas (FPS), temperaturas y frecuencias. Sin embargo, inconsistencias en librerías de 32 bits, servicios DBus o variables de entorno pueden provocar que no se carguen en Steam o Lutris.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
+      <p>Feral GameMode (<code>gamemoded</code>) y MangoHud son herramientas fundamentales en el ecosistema de juegos en Linux: la primera ajusta dinámicamente el gobernador de la CPU, prioridades de E/S y perfiles de energía de la GPU, mientras que la segunda renderiza una superposición (<em>overlay</em>) para monitorizar fotogramas (FPS), temperaturas y frecuencias. Sin embargo, inconsistencias en librerías de 32 bits, servicios DBus o variables de entorno pueden provocar que no se carguen en Steam o Lutris.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>MangoHud no aparece al ejecutar juegos en Steam</strong>: Sintaxis incorrecta en parámetros de lanzamiento o falta paquete de librerías multilib de 32 bits (<code>lib32-mangohud</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Usar <code>mangohud %command%</code> e instalar las librerías <code>lib32</code> / <code>i386</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong><code>gamemoded</code> no cambia el gobernador de CPU a <code>performance</code></strong>: El servicio de usuario systemd no está activo o falta incluir al usuario en el grupo de permisos</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Hablitar <code>gamemoded.service</code> a nivel de usuario y comprobar con <code>gamemoded -t</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Crasheo del juego al iniciar con MangoHud bajo servidores de pantalla Wayland</strong>: Incompatibilidad en capas implícitas de Vulkan o conflictos de renderizado con el <em>compositor</em></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar las capas de Vulkan explícitamente en el archivo <code>MangoHud.conf</code></div>
+          </div></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Verificar y activar el servicio de GameMode (gamemoded)</h4>
+            <p>Comprueba que el demonio <code>gamemoded</code> esté instalado y corriendo correctamente en tu sesión de usuario mediante systemd:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Comprobar el estado del servicio en tu usuario
+systemctl --user status gamemoded.service
+
+# Si está inactivo, inicialízalo y habilítalo para el inicio automático
+systemctl --user enable --now gamemoded.service
+
+# Ejecutar el test integral de autodiagnóstico de GameMode
+gamemoded -t
+</code></pre>
+    </div>
+    
+<p><em>(Si el test falla en la sección de CPU governor, asegúrate de tener instalado <code>dbus</code> y el paquete <code>cpupower</code> en tu distribución).</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Instalar las dependencias de 32 y 64 bits para MangoHud</h4>
+            <p>Juegos antiguos o ejecutables en Proton de 32 bits requieren que MangoHud esté disponible en ambas arquitecturas (<code>x86</code> y <code>x86_64</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># En Arch Linux / CachyOS / Manjaro:
+sudo pacman -S mangohud lib32-mangohud gamemode lib32-gamemode
+
+# En Ubuntu / Debian / Pop!_OS:
+sudo apt install mangohud gamemode mangohud:i386
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Configurar las Opciones de Lanzamiento en Steam y Lutris</h4>
+            <p>En Steam, haz clic derecho sobre el juego &gt; <em>Propiedades</em> &gt; <em>General</em> &gt; <em>Parámetros de lanzamiento</em>, e ingresa la combinación de ambos comandos:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Opción estándar recomendada para combinar GameMode y MangoHud
+gamemoderun mangohud %command%
+
+# Si deseas forzar parámetros específicos de MangoHud mediante variables de entorno
+MANGOHUD=1 MANGOHUD_CONFIG=cpu_temp,gpu_temp,fps,fps_limit=144 gamemoderun %command%
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Ajustar el archivo de configuración global de MangoHud</h4>
+            <p>Crea o edita el archivo de configuración en tu directorio personal para personalizar los paneles y solucionar fallos visuales en Wayland:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Crear directorio de configuración si no existe
+mkdir -p ~/.config/MangoHud/
+
+# Crear o editar el archivo MangoHud.conf
+nano ~/.config/MangoHud/MangoHud.conf
+</code></pre>
+    </div>
+    
+<p>Añade los siguientes parámetros optimizados:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>legacy_layout=false
+gpu_stats
+gpu_temp
+cpu_stats
+cpu_temp
+fps
+frametime=1
+toggle_hud=Shift_R+F12
+no_display
+</code></pre>
+    </div>
+    
+<p><em>(Nota: La opción <code>no_display</code> permite arrancar MangoHud oculto por defecto y mostrarlo únicamente cuando presiones <code>Shift Derecho + F12</code>).</em></p>
+          </div>
+        </li>
+        
+</ol>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Verifica conflictos de superposiciones</strong>: Evita ejecutar simultáneamente overlays de Discord (Vencord), RivaTuner o VKBasalt si experimentas micro-tirones (<em>stuttering</em>) o cierres inesperados.</li>
+<li><strong>Audita permisos en plataformas Flatpak</strong>: Si ejecutas Steam o Heroic Games Launcher desde Flatpak, debes conceder permisos a la aplicación para comunicarse con el demonio DBus de GameMode mediante Flatseal o con el comando: <code>flatpak override --user --talk-name=org.freedesktop.gamemode com.valvesoftware.Steam</code>.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

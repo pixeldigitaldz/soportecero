@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux | SoporteCero</title>
   <meta name="description" content="Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/optimizar-input-lag-juegos-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux">
   <meta property="og:description" content="Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-06">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux">
   <meta name="twitter:description" content="Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -150,7 +149,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -172,6 +171,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -221,7 +222,148 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El retraso de entrada o input lag excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Composición de ventanas activada generando retardo de fotogramas (VSync)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Desactivar la composición de pantalla o utilizar una sesión Wayland nativa</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Regulador de frecuencia de CPU en modo powersave</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Establecer la CPU en modo rendimiento: <code>gamemoded -r</code> o <code>powerprofilesctl set performance</code></div>
+          </div></div></div>
+<p>El retraso de entrada o <em>input lag</em> excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</h4>
+            <p>Para que tu ratón y teclado competitivo respondan instantáneamente, fuerza al controlador del kernel a usar una tasa de refresco constante de 1000 Hz en los puertos USB:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Crear un archivo de reglas para el módulo del ratón USB
+echo &quot;options usbhid mousepoll=1&quot; | sudo tee /etc/modprobe.d/usbhid.conf
+
+# Recargar el módulo HID para aplicar los cambios de inmediato
+sudo rmmod usbhid &amp;&amp; sudo modprobe usbhid
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</h4>
+            <p>Si usas entornos KDE Plasma o GNOME bajo Wayland, la sincronización vertical añade latencia. Permite el desgarro de pantalla en juegos a pantalla completa para eliminar el retraso de dibujado:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># En KDE Plasma 6, añade esta regla a tu configuración local para permitir Tearing
+kwriteconfig6 --file kwinrc --group Wayland --key AllowTearing true
+
+# Reiniciar el compositor gráfico para aplicar
+systemctl --user restart plasma-kwin_wayland
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Configurar el daemon de energía en modo Rendimiento</h4>
+            <p>Evita que el regulador del procesador de Linux reduzca la frecuencia de reloj del bus de datos del sistema durante tus partidas de juego:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Cambiar el perfil de energía del sistema a alto rendimiento
+powerprofilesctl set performance
+
+# Verificar que el perfil se haya activado correctamente
+powerprofilesctl get
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>No configures frecuencias de sondeo superiores a 1000 Hz (como ratones de 4000 Hz u 8000 Hz) si tu procesador no cuenta con al menos 6 núcleos físicos modernos dedicados. Una tasa de sondeo sobredimensionada consumirá ciclos masivos del procesador para atender las interrupciones del puerto USB de manera constante, lo que resultará en tirones gráficos repentinos (<em>frame drops</em>) y una menor tasa media de FPS durante tus partidas de juego.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

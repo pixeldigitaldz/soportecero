@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose | SoporteCero</title>
   <meta name="description" content="Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-dockge-permisos-volumen.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-dockge-permisos-volumen.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-dockge-permisos-volumen.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-dockge-permisos-volumen.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose">
   <meta property="og:description" content="Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-dockge-permisos-volumen.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-26">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose">
   <meta name="twitter:description" content="Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,188 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El fallo recurrente EACCES: permission denied, touch: cannot touch &#39;/data/...&#39;: Permission denied o failed to open stream: Permission denied en aplicaciones desplegadas con Dockge o Docker Compose ocurre cuando el usuario interno del contenedor (como node UID 1000, www-data UID 33 o nobody UID 65534) no posee permisos de escritura sobre el directorio montado en el sistema anfitrión.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-z-y-z-en-los-volumenes-de-docker">¿Qué diferencia hay entre :z y :Z en los volúmenes de Docker?</a></li>
+        <li class="toc-subitem"><a href="#como-se-que-uid-tiene-mi-usuario-en-linux">¿Cómo sé qué UID tiene mi usuario en Linux?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El UID/GID del usuario dentro del contenedor no coincide con el propietario de la carpeta en el host</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Cambiar el propietario de la carpeta con <code>sudo chown -R 1000:1000 /ruta/volumen</code> o usar variable <code>user: &quot;1000:1000&quot;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Bloqueo de seguridad por contexto SELinux o AppArmor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Añadir el flag de volumen <code>:z</code> o <code>:Z</code> al mapear volúmenes en <code>docker-compose.yml</code></div>
+          </div></div></div>
+<p>El fallo recurrente <code>EACCES: permission denied</code>, <code>touch: cannot touch &#39;/data/...&#39;: Permission denied</code> o <code>failed to open stream: Permission denied</code> en aplicaciones desplegadas con Dockge o Docker Compose ocurre cuando el usuario interno del contenedor (como <code>node</code> UID 1000, <code>www-data</code> UID 33 o <code>nobody</code> UID 65534) no posee permisos de escritura sobre el directorio montado en el sistema anfitrión.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Averiguar el UID y GID del usuario del contenedor</h4>
+            <p>Revisa qué usuario ejecuta el proceso dentro de la imagen de Docker:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejecutar un comando id temporal dentro de la imagen del contenedor
+docker run --rm &lt;nombre_imagen&gt; id
+</code></pre>
+    </div>
+    
+<p>Ejemplos comunes de UIDs según la imagen:</p>
+<ul>
+<li><strong>Node.js</strong>: UID <code>1000</code>, GID <code>1000</code> (usuario <code>node</code>).</li>
+<li><strong>Nginx / PHP-FPM</strong>: UID <code>33</code>, GID <code>33</code> (usuario <code>www-data</code>).</li>
+<li><strong>PostgreSQL</strong>: UID <code>999</code> o <code>70</code> (usuario <code>postgres</code>).</li>
+<li><strong>Uptime Kuma / Dockge</strong>: UID <code>1000</code> o <code>0</code> (root).</li>
+</ul>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Corregir el propietario y permisos de la carpeta en el host</h4>
+            <p>Asigna la propiedad del directorio en el servidor anfitrión al usuario correspondiente del contenedor:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Para contenedores que corren como usuario 1000 (estándar en Node/Dockge):
+sudo chown -R 1000:1000 /opt/dockge/stacks/mi-stack/data
+
+# Asegurar permisos de lectura, escritura y ejecución de directorios
+sudo chmod -R 775 /opt/dockge/stacks/mi-stack/data
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Especificar el usuario explícitamente en docker-compose.yml</h4>
+            <p>En tu archivo <code>compose.yaml</code>, puedes forzar a Docker a ejecutar el contenedor con el ID de tu usuario actual en Linux (<code>id -u</code> e <code>id -g</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">YAML</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>services:
+  mi-app:
+    image: mi-app:latest
+    user: &quot;${UID:-1000}:${GID:-1000}&quot;
+    volumes:
+      - ./data:/app/data:z
+    restart: unless-stopped
+</code></pre>
+    </div>
+    
+<p><em>Nota:</em> El sufijo <code>:z</code> (o <code>:Z</code> para aislamiento exclusivo) reetiqueta el contexto de seguridad SELinux en distribuciones como Fedora, Red Hat, CentOS y Rocky Linux.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Reiniciar el contenedor y verificar la persistencia</h4>
+            <p>Reinicia el servicio para validar que la aplicación puede crear y modificar archivos:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Reiniciar el contenedor en Dockge o mediante CLI
+docker compose down &amp;&amp; docker compose up -d
+
+# Verificar los logs para confirmar que no hay errores EACCES
+docker compose logs -f
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="que-diferencia-hay-entre-z-y-z-en-los-volumenes-de-docker">¿Qué diferencia hay entre :z y :Z en los volúmenes de Docker?</h3>
+<p>El modificador <code>:z</code> comparte el contexto SELinux entre múltiples contenedores, mientras que <code>:Z</code> asigna una etiqueta privada exclusiva solo para ese contenedor específico.</p>
+<h3 id="como-se-que-uid-tiene-mi-usuario-en-linux">¿Cómo sé qué UID tiene mi usuario en Linux?</h3>
+<p>Ejecuta <code>id -u</code> para el identificador de usuario y <code>id -g</code> para el grupo.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Evita chmod 777 como solución definitiva:</strong> Aunque <code>chmod 777</code> resuelve el bloqueo de inmediato, concede permisos totales a cualquier proceso local en el servidor, creando una brecha de seguridad. Utiliza siempre <code>chown</code> con el UID específico.</li>
+<li><strong>Estandariza los entornos PUID/PGID:</strong> Muchas imágenes comunitarias (como las de LinuxServer.io) admiten variables de entorno <code>PUID=1000</code> y <code>PGID=1000</code> para auto-ajustar permisos en el arranque.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

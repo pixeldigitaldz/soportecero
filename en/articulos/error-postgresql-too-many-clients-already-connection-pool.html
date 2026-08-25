@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js | SoporteCero</title>
   <meta name="description" content="Learn how to diagnose and fix connection pool exhaustion in PostgreSQL max_connections using PgBouncer and connection pooling in Node.js.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-postgresql-too-many-clients-already-connection-pool.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-postgresql-too-many-clients-already-connection-pool.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js">
   <meta property="og:description" content="Learn how to diagnose and fix connection pool exhaustion in PostgreSQL max_connections using PgBouncer and connection pooling in Node.js.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-postgresql-too-many-clients-already-connection-pool.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-24">
+  <meta property="article:section" content="Web & Code">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js">
   <meta name="twitter:description" content="Learn how to diagnose and fix connection pool exhaustion in PostgreSQL max_connections using PgBouncer and connection pooling in Node.js.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -121,11 +120,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -135,7 +136,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -164,7 +165,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 3 min
+            Read time: 3 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -175,7 +176,179 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>The error FATAL: sorry, too many clients already in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the max_connections parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
+      <p>The error <code>FATAL: sorry, too many clients already</code> in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the <code>max_connections</code> parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
+<p>In modern web stacks using Node.js, Next.js, or Serverless functions (AWS Lambda, Vercel), instantiating direct database clients on every HTTP request rapidly exhausts the database process pool and memory.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Unclosed connection leaks</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Always invoke <code>client.release()</code> inside <code>finally</code> blocks when using client checkouts</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Serverless functions spawning unpooled connections</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Implement a centralized Connection Pooler such as <strong>PgBouncer</strong> or <strong>Supabase / Prisma Pooler</strong></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong><code>max_connections</code> limit set too low for hardware</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Increase <code>max_connections</code> in <code>postgresql.conf</code> if the server has sufficient RAM</div>
+          </div></div></div>
+
+    </section>
+    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
+<p><strong>Inspect active and idle connection distribution</strong>
+Connect to PostgreSQL using <code>psql</code> and execute the following diagnostic query:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT state, count(*) 
+FROM pg_stat_activity 
+GROUP BY state;
+</code></pre>
+    </div>
+    
+<p>To inspect which queries are consuming connection slots:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT pid, usename, client_addr, state, query_start, query 
+FROM pg_stat_activity 
+WHERE state != &#39;idle&#39; 
+ORDER BY query_start DESC;
+</code></pre>
+    </div>
+    
+<p><strong>Terminate stuck or zombie connections</strong>
+If you need immediate database recovery access:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">SQL</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>SELECT pg_terminate_backend(pid) 
+FROM pg_stat_activity 
+WHERE state = &#39;idle&#39; AND pid &lt;&gt; pg_backend_pid();
+</code></pre>
+    </div>
+    
+<p><strong>Configure global Connection Pooling in Node.js</strong>
+Never create <code>new Client()</code> per API endpoint. Always reuse a single shared <code>Pool</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">JAVASCRIPT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>import { Pool } from &#39;pg&#39;;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20, // Max concurrent connections per worker
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+export async function query(text, params) {
+  const client = await pool.connect();
+  try {
+    return await client.query(text, params);
+  } finally {
+    client.release(); // Crucial: return connection back to pool
+  }
+}
+</code></pre>
+    </div>
+    
+<p><strong>Increase <code>max_connections</code> in postgresql.conf</strong>
+For dedicated production servers with 8GB+ RAM, adjust <code>/etc/postgresql/16/main/postgresql.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>max_connections = 250
+shared_buffers = 2GB
+</code></pre>
+    </div>
+    
+<p>Restart the service to apply changes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo systemctl restart postgresql
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Deploy PgBouncer in transaction mode:</strong> Place PgBouncer in front of PostgreSQL in production. This allows serving over 10,000 concurrent client requests using only 50 physical backend database connections.</li>
+<li><strong>Connection monitoring:</strong> Configure automated alerts when active connections exceed 80% of <code>max_connections</code>.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -248,8 +421,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -257,7 +430,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

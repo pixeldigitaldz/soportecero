@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH | SoporteCero</title>
   <meta name="description" content="Cómo solucionar el error de conexión SSH kex_exchange_identification Connection closed by remote host provocado por Fail2ban, límites de MaxStartups o bloqueos de red.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-ssh-kex-exchange-identification-connection-closed.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-ssh-kex-exchange-identification-connection-closed.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-ssh-kex-exchange-identification-connection-closed.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-ssh-kex-exchange-identification-connection-closed.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH">
   <meta property="og:description" content="Cómo solucionar el error de conexión SSH kex_exchange_identification Connection closed by remote host provocado por Fail2ban, límites de MaxStartups o bloqueos de red.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-ssh-kex-exchange-identification-connection-closed.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-08-24">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH">
   <meta name="twitter:description" content="Cómo solucionar el error de conexión SSH kex_exchange_identification Connection closed by remote host provocado por Fail2ban, límites de MaxStartups o bloqueos de red.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -126,6 +125,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -175,7 +176,160 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error kex_exchange_identification: Connection closed by remote host (o read: Connection reset by peer) ocurre antes de que comience la autenticación SSH, durante la fase inicial de negociación de claves criptográficas (Key Exchange), debido a bloqueos en hosts.deny, límites de concurrencia en MaxStartups o baneos automáticos de Fail2ban.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
+      <p>El error <code>kex_exchange_identification: Connection closed by remote host</code> (o <code>read: Connection reset by peer</code>) ocurre antes de que comience la autenticación SSH, durante la fase inicial de negociación de claves criptográficas (Key Exchange), debido a bloqueos en <code>hosts.deny</code>, límites de concurrencia en <code>MaxStartups</code> o baneos automáticos de Fail2ban.</p>
+<p>Cuando el servidor rechaza abruptamente el handshake inicial de TCP/SSH, el cliente no llega a recibir el prompt de contraseña o clave pública.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Límite de conexiones simultáneas superado (<code>MaxStartups</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Aumentar <code>MaxStartups</code> en <code>/etc/ssh/sshd_config</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>IP bloqueada por Fail2ban o <code>hosts.deny</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Desbanear la IP con <code>fail2ban-client set sshd unbanip TU_IP</code> o revisar <code>/etc/hosts.deny</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Reglas de rate-limiting en UFW o iptables</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Comprobar reglas de límite de conexiones SSH en el cortafuegos</div>
+          </div></div></div>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+<p><strong>Ejecuta SSH en modo depuración detallado</strong>
+Para identificar en qué milisegundo exacto se corta la negociación, conéctate con el flag <code>-vvv</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>ssh -vvv usuario@ip-del-servidor
+</code></pre>
+    </div>
+    
+<p>Si el cierre ocurre inmediatamente después de <code>SSH2_MSG_KEXINIT sent</code>, el servidor remoto está cerrando el socket deliberadamente por reglas de seguridad.</p>
+<p><strong>Ajusta la directiva MaxStartups en el servidor SSH</strong>
+Si múltiples desarrolladores, herramientas CI/CD o conexiones automáticas de VS Code Remote se conectan a la vez, el daemon <code>sshd</code> empieza a descartar conexiones no autenticadas. Edita <code>/etc/ssh/sshd_config</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Formato: start:rate:full (ejemplo: comenzar a descartar al llegar a 50, descartar el 50%, bloqueo total en 100)
+MaxStartups 50:30:100
+MaxSessions 50
+</code></pre>
+    </div>
+    
+<p>Reinicia el servicio SSH:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo systemctl restart sshd
+</code></pre>
+    </div>
+    
+<p><strong>Verifica si tu IP pública fue baneada por Fail2ban</strong>
+Si realizaste intentos fallidos de conexión o abriste muchas pestañas SSH rápidamente, Fail2ban pudo haber añadido tu IP a la tabla de bloqueo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo fail2ban-client status sshd
+# Para desbanear tu IP:
+sudo fail2ban-client set sshd unbanip 203.0.113.45
+</code></pre>
+    </div>
+    
+<p><strong>Comprueba los archivos TCP Wrappers (/etc/hosts.allow y /etc/hosts.deny)</strong>
+En distribuciones con soporte de TCP Wrappers heredado, verifica que no exista una regla de denegación:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo cat /etc/hosts.deny
+</code></pre>
+    </div>
+    
+<p>Si <code>/etc/hosts.deny</code> contiene <code>sshd: ALL</code>, debes añadir tu IP de confianza en <code>/etc/hosts.allow</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">INI</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sshd: 203.0.113.45, 192.168.1.0/24
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Lista blanca en Fail2ban:</strong> Agrega tus IPs corporativas o VPN fijas en la directiva <code>ignoreip</code> dentro de <code>/etc/fail2ban/jail.local</code>.</li>
+<li><strong>Uso de multiplexación SSH:</strong> Habilita <code>ControlMaster</code> en tu archivo local <code>~/.ssh/config</code> para reutilizar una única conexión TCP para múltiples sesiones y terminales de VS Code.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

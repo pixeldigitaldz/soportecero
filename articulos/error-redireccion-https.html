@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio | SoporteCero</title>
   <meta name="description" content="Aprende a solucionar el bucle ERR_TOO_MANY_REDIRECTS entre Cloudflare, Nginx, Apache y WordPress al forzar HTTPS.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-redireccion-https.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-redireccion-https.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-redireccion-https.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-redireccion-https.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio">
   <meta property="og:description" content="Aprende a solucionar el bucle ERR_TOO_MANY_REDIRECTS entre Cloudflare, Nginx, Apache y WordPress al forzar HTTPS.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-redireccion-https.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Web y Código">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio">
   <meta name="twitter:description" content="Aprende a solucionar el bucle ERR_TOO_MANY_REDIRECTS entre Cloudflare, Nginx, Apache y WordPress al forzar HTTPS.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -174,7 +173,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -196,6 +195,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -245,7 +246,177 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error ERR_TOO_MANY_REDIRECTS (Redirección infinita) ocurre cuando el navegador del usuario entra en un bucle cerrado de peticiones HTTP/HTTPS que nunca llega a completarse. La causa principal es una desincronización entre un proxy inverso perimetral (como Cloudflare o un CDN) y el servidor de origen (Nginx/Apache/WordPress).</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-configurar-el-modo-ssltls-en-cloudflare-a-completo-estricto">Paso 1: Configurar el modo SSL/TLS en Cloudflare a Completo (Estricto)</a></li>
+        <li class="toc-subitem"><a href="#paso-2-configurar-la-deteccion-de-https-detras-de-proxy-en-wordpress-wp-configphp">Paso 2: Configurar la detección de HTTPS detrás de proxy en WordPress (wp-config.php)</a></li>
+        <li class="toc-subitem"><a href="#paso-3-configurar-la-redireccion-correcta-en-nginx">Paso 3: Configurar la redirección correcta en Nginx</a></li>
+        <li class="toc-subitem"><a href="#paso-4-limpiar-la-cache-de-redirecciones-301-en-el-navegador">Paso 4: Limpiar la caché de redirecciones 301 en el navegador</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-ocurre-el-bucle-con-ssl-flexible-de-cloudflare">¿Por qué ocurre el bucle con SSL Flexible de Cloudflare?</a></li>
+        <li class="toc-subitem"><a href="#como-verifico-la-cadena-de-redireccion-desde-la-terminal">¿Cómo verifico la cadena de redirección desde la terminal?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Modo de cifrado SSL en Cloudflare configurado en &#39;Flexible&#39; mientras el servidor redirige a HTTPS</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Cambiar el modo de cifrado en Cloudflare a &#39;Full (Strict)&#39;</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Bucle de redirección en .htaccess o Nginx por no evaluar la cabecera X-Forwarded-Proto</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Configurar <code>fastcgi_param HTTPS on;</code> y verificar <code>$_SERVER[&#39;HTTP_X_FORWARDED_PROTO&#39;]</code></div>
+          </div></div></div>
+<p>El error <code>ERR_TOO_MANY_REDIRECTS</code> (Redirección infinita) ocurre cuando el navegador del usuario entra en un bucle cerrado de peticiones HTTP/HTTPS que nunca llega a completarse. La causa principal es una desincronización entre un proxy inverso perimetral (como Cloudflare o un CDN) y el servidor de origen (Nginx/Apache/WordPress).</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-configurar-el-modo-ssltls-en-cloudflare-a-completo-estricto">Paso 1: Configurar el modo SSL/TLS en Cloudflare a Completo (Estricto)</h3>
+<p>Si utilizas Cloudflare con el modo <strong>Flexible</strong>, Cloudflare conecta con tu servidor por HTTP plano (puerto 80). Si tu servidor web tiene una regla para redirigir todo el tráfico a HTTPS, se generará un bucle infinito:</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            Inicia sesión en tu panel de <strong>Cloudflare</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2</h4>
+            Ve a <strong>SSL/TLS &gt; Overview</strong> (Información general).
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3</h4>
+            Cambia la opción de <em>Flexible</em> a <strong>Full</strong> (Completo) o <strong>Full (Strict)</strong> (Completo estricto).
+          </div>
+        </li>
+        
+</ol>
+<h3 id="paso-2-configurar-la-deteccion-de-https-detras-de-proxy-en-wordpress-wp-configphp">Paso 2: Configurar la detección de HTTPS detrás de proxy en WordPress (wp-config.php)</h3>
+<p>Indica a WordPress que confíe en la cabecera de protocolo seguro enviada por el proxy inverso:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PHP</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>// Añadir al inicio de wp-config.php (antes de require_once wp-settings.php):
+if (isset($_SERVER[&#39;HTTP_X_FORWARDED_PROTO&#39;]) &amp;&amp; $_SERVER[&#39;HTTP_X_FORWARDED_PROTO&#39;] === &#39;https&#39;) {
+    $_SERVER[&#39;HTTPS&#39;] = &#39;on&#39;;
+}
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-configurar-la-redireccion-correcta-en-nginx">Paso 3: Configurar la redirección correcta en Nginx</h3>
+<p>Asegúrate de que tu bloque de servidor en Nginx redirija limpiamente solo en el puerto 80 sin crear bucles en el puerto 443:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">NGINX</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Bloque HTTP (Puerto 80) -&gt; Redirigir a HTTPS
+server {
+    listen 80;
+    server_name misitio.com www.misitio.com;
+    return 301 https://$host$request_uri;
+}
+
+# Bloque HTTPS (Puerto 443) -&gt; Servir contenido
+server {
+    listen 443 ssl http2;
+    server_name misitio.com www.misitio.com;
+
+    ssl_certificate /etc/letsencrypt/live/misitio.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/misitio.com/privkey.pem;
+
+    location / {
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_pass http://localhost:3000;
+    }
+}
+</code></pre>
+    </div>
+    
+<h3 id="paso-4-limpiar-la-cache-de-redirecciones-301-en-el-navegador">Paso 4: Limpiar la caché de redirecciones 301 en el navegador</h3>
+<p>Las redirecciones HTTP 301 se guardan de forma persistente en la caché del navegador:</p>
+<ol>
+<li>Abre una ventana de incógnito para comprobar si el bucle persiste.</li>
+<li>Limpia la caché de navegación y cookies del dominio.</li>
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="por-que-ocurre-el-bucle-con-ssl-flexible-de-cloudflare">¿Por qué ocurre el bucle con SSL Flexible de Cloudflare?</h3>
+<p>Porque el visitante pide HTTPS a Cloudflare, Cloudflare solicita HTTP a tu servidor, tu servidor responde con un 301 diciendo &quot;ve a HTTPS&quot;, y Cloudflare vuelve a repetir el ciclo indefinidamente.</p>
+<h3 id="como-verifico-la-cadena-de-redireccion-desde-la-terminal">¿Cómo verifico la cadena de redirección desde la terminal?</h3>
+<p>Ejecuta: <code>curl -IL https://misitio.com</code> para observar cada código de respuesta HTTP (301, 302, 200) en cada salto.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Activa HSTS (HTTP Strict Transport Security):</strong> Una vez que tu HTTPS sea 100% estable, habilita HSTS para que los navegadores recuerden conectar siempre por HTTPS directamente sin realizar redirecciones previas.</li>
+<li><strong>Sincroniza las URLs en Ajustes de WordPress:</strong> Comprueba que en <em>Ajustes &gt; Generales</em>, tanto <em>Dirección de WordPress (URL)</em> como <em>Dirección del sitio (URL)</em> comiencen exactamente con <code>https://</code>.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

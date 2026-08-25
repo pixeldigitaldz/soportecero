@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to reset a forgotten root user password in Linux systems - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to reset a forgotten root user password in Linux systems | SoporteCero</title>
   <meta name="description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to reset a forgotten root user password in Linux systems - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to reset a forgotten root user password in Linux systems">
   <meta property="og:description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-27">
+  <meta property="article:section" content="Systems & Servers">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to reset a forgotten root user password in Linux systems - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to reset a forgotten root user password in Linux systems">
   <meta name="twitter:description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -121,11 +120,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -135,7 +136,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -164,7 +165,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read time: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -175,7 +176,129 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Paso 1: Acceder e interceptar el cargador de arranque GRUB</a></li>
+        <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
+        <li class="toc-subitem"><a href="#paso-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Paso 3: Montar el disco en modo escritura y cambiar la clave</a></li>
+        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Forgotten or locked root superuser password</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Boot in single-user mode by appending <code>init=/bin/bash</code> in GRUB</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Read-only mounted filesystem during recovery</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Remount read/write: <code>mount -o remount,rw /</code> and reset password via <code>passwd</code></div>
+          </div></div></div>
+<p>Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.</p>
+
+    </section>
+    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
+<h3 id="paso-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Paso 1: Acceder e interceptar el cargador de arranque GRUB</h3>
+<ol>
+<li>Restart the server.</li>
+<li>When the <strong>GRUB</strong> operating system selection menu screen appears, immediately press the <code>e</code> key on your keyboard to edit the boot variables of the selected kernel.</li>
+</ol>
+<h3 id="paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</h3>
+<ol>
+<li>Scroll down using the arrow keys to locate the line starting with the word <code>linux</code> or <code>linux16</code>.</li>
+<li>Go to the end of that line, delete the silent boot words (such as <code>rhgb quiet</code>) and add the following command to force the kernel to open a secure command prompt instead of the login interface:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>init=/bin/bash
+</code></pre>
+    </div>
+    
+<ol start="3">
+<li>Press the <code>Ctrl + X</code> or <code>F10</code> key combination to boot the server with this new temporary configuration.</li>
+</ol>
+<h3 id="paso-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Paso 3: Montar el disco en modo escritura y cambiar la clave</h3>
+<p>The system will boot directly as superuser without asking for a password, but with the disk configured in read-only mode. Enable write access to save changes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Remontar la partición raíz con privilegios de escritura
+mount -o remount,rw /
+
+# Modificar la clave del usuario administrador root
+passwd root
+
+# Forzar el reetiquetado de seguridad si usas SELinux (esencial en RHEL/Fedora/Rocky)
+touch /.autorelabel
+
+# Reiniciar el equipo
+exec /sbin/init
+</code></pre>
+    </div>
+    
+<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
+<p>Recommended security practices:</p>
+<ul>
+<li>The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system&#39;s bootloader by setting an access password for the GRUB console (<code>grub-mkpasswd-pbkdf2</code>), which will prevent unauthorized users from editing kernel parameters without prior authentication.</li>
+</ul>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -248,8 +371,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -257,7 +380,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

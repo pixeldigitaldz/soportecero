@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy | SoporteCero</title>
   <meta name="description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-bad-gateway-502-nginx-upstream.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy">
   <meta property="og:description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-27">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy">
   <meta name="twitter:description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -150,7 +149,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -172,6 +171,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -221,7 +222,151 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error 502 Bad Gateway en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Servicio de aplicación (PHP-FPM, Node.js, Gunicorn) fuera de servicio</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar e iniciar el servicio backend con <code>systemctl status php-fpm</code> o Docker</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Puerto o socket UNIX mal configurado en la directiva proxy_pass</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Corregir la ruta del socket <code>/var/run/php/php-fpm.sock</code> o puerto en <code>nginx.conf</code></div>
+          </div></div></div>
+<p>El error <code>502 Bad Gateway</code> en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Comprobar el estado del servicio del backend</h4>
+            <p>Nginx no puede despachar la consulta si el servicio que procesa la lógica interna de tu aplicación web se ha detenido. Comprueba su estado en consola:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejemplo si tu aplicación usa PHP-FPM
+sudo systemctl status php8.2-fpm
+
+# Ejemplo si usas NodeJS en segundo plano con PM2
+pm2 status
+
+# Ejemplo si corres el backend en contenedores
+docker ps
+</code></pre>
+    </div>
+    
+<p><em>(Si el servicio trasero está inactivo, inicialo de inmediato: <code>sudo systemctl start php8.2-fpm</code>).</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Verificar la ruta del Socket o Puerto en la configuración</h4>
+            <p>Si el backend está activo pero sigues recibiendo el error 502, es probable que Nginx esté intentando comunicarse a través de un puerto o socket unix incorrecto. Abre el archivo de configuración del bloque de tu sitio <code>/etc/nginx/sites-available/default</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">NGINX</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Ejemplo de enrutamiento por Socket Unix. Verifica que la ruta física del archivo .sock sea idéntica
+fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+
+# Ejemplo de enrutamiento por puerto local. Asegura que el servicio escuche en el puerto correcto
+proxy_pass http://127.0.0.1:3000;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Revisar el registro detallado de logs de Nginx</h4>
+            <p>El log de errores de Nginx te dará la causa de conexión rechazada exacta. Inspecciónalo en tiempo real:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo tail -n 50 -f /var/log/nginx/error.log
+</code></pre>
+    </div>
+    
+<p><em>(Busca descriptores como <code>Connection refused</code> o <code>Permission denied</code> en la comunicación con el socket).</em></p>
+          </div>
+        </li>
+        
+</ol>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Configura sistemas de monitorización o guardianes (<em>watchdogs</em>) automáticos para tus backends. Si una fuga de memoria provoca que tu aplicación de NodeJS o PHP-FPM colapse repentinamente y deje a Nginx incomunicado, herramientas como Systemd (con la directiva <code>Restart=on-failure</code>) o gestores de procesos como PM2 levantarán el servicio de forma automática en milisegundos, mitigando la aparición del error 502 a tus visitantes.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

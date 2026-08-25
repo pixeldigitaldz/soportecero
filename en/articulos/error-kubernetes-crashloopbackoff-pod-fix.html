@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Fix CrashLoopBackOff Pod Status in Kubernetes - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>How to Fix CrashLoopBackOff Pod Status in Kubernetes | SoporteCero</title>
   <meta name="description" content="Learn how to diagnose and resolve CrashLoopBackOff status in Kubernetes Pods by inspecting logs, fixing OOMKilled issues, and configuring health probes.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-kubernetes-crashloopbackoff-pod-fix.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-kubernetes-crashloopbackoff-pod-fix.html" />
   
-  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to Fix CrashLoopBackOff Pod Status in Kubernetes - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to Fix CrashLoopBackOff Pod Status in Kubernetes">
   <meta property="og:description" content="Learn how to diagnose and resolve CrashLoopBackOff status in Kubernetes Pods by inspecting logs, fixing OOMKilled issues, and configuring health probes.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-07-31">
+  <meta property="article:section" content="Systems & Servers">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Fix CrashLoopBackOff Pod Status in Kubernetes - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Fix CrashLoopBackOff Pod Status in Kubernetes">
   <meta name="twitter:description" content="Learn how to diagnose and resolve CrashLoopBackOff status in Kubernetes Pods by inspecting logs, fixing OOMKilled issues, and configuring health probes.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -162,7 +161,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -179,11 +178,13 @@
         </svg>
         Soporte<span class="logo-cero">Cero</span>
       </a>
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main Navigation">
         <ul>
           <li><a href="../?cat=sistemas">Systems & Servers</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -193,7 +194,7 @@
       <span class="lang-active">EN</span>
     </div>
     
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle visual theme" title="Toggle visual theme">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
         <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
         </svg>
@@ -222,7 +223,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read time: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -233,7 +234,193 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+        <div class="ai-summary-header">
+          ✨ Quick Answer
+        </div>
+        <p>The CrashLoopBackOff status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
+      <p>The <strong>CrashLoopBackOff</strong> status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
       
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Pod stuck in <code>CrashLoopBackOff</code> status with high <code>RESTARTS</code> counter</strong>: Application crash, missing environment variables, Out of Memory (<code>OOMKilled</code>), or failing <code>livenessProbe</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Inspect previous container logs with <code>kubectl logs --previous</code> and check events with <code>kubectl describe pod</code></div>
+          </div></div></div>
+
+    </section>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Inspect the failure reason with kubectl describe</h4>
+            <p>The primary command for gathering lifecycle details about the failing Pod is <code>kubectl describe</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Fetch detailed status of the target Pod
+kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;
+</code></pre>
+    </div>
+    
+<p>In the <strong>Containers &gt; State</strong> and <strong>Last State</strong> sections, pay close attention to the following indicators:</p>
+<ul>
+<li><strong>Exit Code 1 or 127</strong>: Application failure (unhandled runtime exception, missing file, or broken <code>CMD</code> path).</li>
+<li><strong>Exit Code 137 (OOMKilled)</strong>: The container exceeded its strict memory limit (<code>limits.memory</code>) configured in the YAML manifest.</li>
+<li><strong>Liveness probe failed</strong>: The configured health check failed to respond within the specified timeout.</li>
+</ul>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Extract logs from the crashed container</h4>
+            <p>To inspect standard output (<code>stdout</code>/<code>stderr</code>) right before the container crashed on its previous attempt, add the <code>--previous</code> flag:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># View logs from the previous container instance
+kubectl logs &lt;pod-name&gt; --previous -n &lt;namespace&gt;
+
+# If the Pod has multiple containers, specify the container name:
+kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt; --previous -n &lt;namespace&gt;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Adjust container memory limits (OOMKilled)</h4>
+            <p>If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">YAML</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-service
+spec:
+  template:
+    spec:
+      containers:
+      - name: my-app
+        image: my-image:latest
+        resources:
+          requests:
+            memory: &quot;256Mi&quot;
+            cpu: &quot;250m&quot;
+          limits:
+            memory: &quot;512Mi&quot; # Increase limit if OOMKilled occurs
+            cpu: &quot;500m&quot;
+</code></pre>
+    </div>
+    
+<p>Apply the changes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>kubectl apply -f deployment.yaml
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Step 4: Adjust or delay Liveness and Readiness Probes</h4>
+            <p>If your application takes a long time to boot (such as performing database migrations on startup), the <code>livenessProbe</code> might kill the Pod prematurely. Increase <code>initialDelaySeconds</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">YAML</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 30 # Give the application time to complete initialization
+  periodSeconds: 10
+  failureThreshold: 3
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Test container images locally</strong>: Run the container locally using <code>docker run -it --rm &lt;image&gt;</code> with identical environment variables to verify that the entrypoint script executes cleanly.</li>
+<li><strong>Set realistic startup delays</strong>: Heavy frameworks or Java applications require higher <code>initialDelaySeconds</code> (30-60s) to prevent false-positive restarts.</li>
+<li><strong>Validate ConfigMaps and Secrets</strong>: Ensure all required environment variables and configuration files exist prior to triggering deployments.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>
@@ -306,8 +493,8 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../../">Home</a></li>
-        <li><a href="../nosotros.html">About Us</a></li>
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
@@ -315,7 +502,7 @@
         <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero is an independent technical portal dedicated to documenting practical solutions, commands, and support guides for developers, system administrators, and gamers. Mentioned trademarks and software are the exclusive property of their respective owners. Proposed solutions are offered free of charge and for informational purposes only.
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. All rights reserved.

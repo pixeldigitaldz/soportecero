@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite) - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite) | SoporteCero</title>
   <meta name="description" content="Evita que tus juegos pesados e instancias de Docker se cierren solos configurando o expandiendo el espacio de memoria SWAP en distribuciones modernas de Linux.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/crasheo-memoria-swap-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite) - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite)">
   <meta property="og:description" content="Evita que tus juegos pesados e instancias de Docker se cierren solos configurando o expandiendo el espacio de memoria SWAP en distribuciones modernas de Linux.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/crasheo-memoria-swap-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-26">
+  <meta property="article:section" content="Gaming Tech">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite) - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite)">
   <meta name="twitter:description" content="Evita que tus juegos pesados e instancias de Docker se cierren solos configurando o expandiendo el espacio de memoria SWAP en distribuciones modernas de Linux.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -126,7 +125,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -148,6 +147,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -197,7 +198,157 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Al ejecutar títulos demandantes en hardware moderno bajo distribuciones Linux de alto rendimiento como CachyOS o Bazzite, el sistema puede cerrar repentinamente tus juegos o contenedores pesados sin previo aviso. Al revisar los logs, el culpable suele ser el proceso Out Of Memory (OOM) Killer.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-comprobar-tu-estado-actual-de-swap">Paso 1: Comprobar tu estado actual de SWAP</a></li>
+        <li class="toc-subitem"><a href="#paso-2-crear-un-archivo-swap-seguro-de-8-gigabytes">Paso 2: Crear un archivo SWAP seguro de 8 Gigabytes</a></li>
+        <li class="toc-subitem"><a href="#paso-3-hacer-el-cambio-permanente-para-cada-reinicio">Paso 3: Hacer el cambio permanente para cada reinicio</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Memoria RAM y espacio Swap totalmente agotados (OOM Killer)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Crear un archivo swap adicional con <code>fallocate -l 4G /swapfile &amp;&amp; mkswap /swapfile</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Parámetro vm.swappiness desconfigurado</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Ajustar swappiness a un valor equilibrado (10-30): <code>sysctl vm.swappiness=20</code></div>
+          </div></div></div>
+<p>Al ejecutar títulos demandantes en hardware moderno bajo distribuciones Linux de alto rendimiento como <strong>CachyOS</strong> o <strong>Bazzite</strong>, el sistema puede cerrar repentinamente tus juegos o contenedores pesados sin previo aviso. Al revisar los logs, el culpable suele ser el proceso <code>Out Of Memory (OOM) Killer</code>.</p>
+<p>Esto pasa porque el sistema se queda sin memoria RAM física y, al no encontrar suficiente memoria virtual (<strong>espacio SWAP</strong>) configurada en el almacenamiento local, congela o mata la aplicación para proteger el sistema operativo.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-comprobar-tu-estado-actual-de-swap">Paso 1: Comprobar tu estado actual de SWAP</h3>
+<p>Abre tu terminal y ejecuta el siguiente comando para ver si tienes memoria virtual activa:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>swapon --show
+</code></pre>
+    </div>
+    
+<p>Si no sale ninguna línea de respuesta, tu sistema carece por completo de memoria de intercambio.</p>
+<h3 id="paso-2-crear-un-archivo-swap-seguro-de-8-gigabytes">Paso 2: Crear un archivo SWAP seguro de 8 Gigabytes</h3>
+<p>Para juegos y edición, un archivo de 8GB asignado en tu SSD es ideal para dar soporte en picos de consumo de RAM. Ejecuta los siguientes comandos en orden:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Crear el archivo asignando el espacio
+sudo fallocate -l 8G /swapfile
+
+# 2. Darle permisos de seguridad correctos
+sudo chmod 600 /swapfile
+
+# 3. Formatear el archivo como espacio de intercambio
+sudo mkswap /swapfile
+
+# 4. Activar la nueva memoria SWAP
+sudo swapon /swapfile
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-hacer-el-cambio-permanente-para-cada-reinicio">Paso 3: Hacer el cambio permanente para cada reinicio</h3>
+<p>Para evitar que la configuración se borre al apagar la PC, añade el archivo a la tabla de particiones del sistema:</p>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1</h4>
+            Abre el archivo de configuración:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo nano /etc/fstab
+</code></pre>
+    </div>
+    
+<ol start="2">
+<li>Añade la siguiente línea al final del todo:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>/swapfile none swap sw 0 0
+</code></pre>
+    </div>
+    
+<p>Guardar (Ctrl + O, Enter) y salir (Ctrl + X).</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Si usas sistemas modernos, investiga el uso de zRAM en lugar de un archivo SWAP tradicional. zRAM comprime los datos directamente en tu memoria RAM física, siendo hasta 10 veces más rápido que leer y escribir en un disco de estado sólido (SSD).</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

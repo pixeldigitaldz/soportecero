@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS | SoporteCero</title>
   <meta name="description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/limpiar-cache-pacman-cachyos.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS">
   <meta property="og:description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-25">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS">
   <meta name="twitter:description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -186,7 +185,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -208,6 +207,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -257,7 +258,180 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>En CachyOS y distribuciones basadas en Arch Linux, el gestor de paquetes Pacman nunca elimina automáticamente los paquetes descargados (.pkg.tar.zst) de /var/cache/pacman/pkg/. Con el paso de las semanas, este directorio puede acumular fácilmente 20GB o 50GB de espacio en disco, provocando advertencias de poco espacio en la partición raíz.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-pacman-guarda-todas-las-versiones-descargadas">¿Por qué Pacman guarda todas las versiones descargadas?</a></li>
+        <li class="toc-subitem"><a href="#es-seguro-activar-paccachetimer">¿Es seguro activar paccache.timer?</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Directorio /var/cache/pacman/pkg saturado por cientos de versiones antiguas de paquetes</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Limpiar versiones antiguas manteniendo solo las últimas 2 con <code>sudo paccache -r</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Caché huérfana de paquetes compilados por AUR helpers como Yay o Paru en ~/.cache</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Limpiar la caché AUR con <code>yay -Sc --aur</code> o purgar <code>~/.cache/yay</code></div>
+          </div></div></div>
+<p>En CachyOS y distribuciones basadas en Arch Linux, el gestor de paquetes Pacman nunca elimina automáticamente los paquetes descargados (<code>.pkg.tar.zst</code>) de <code>/var/cache/pacman/pkg/</code>. Con el paso de las semanas, este directorio puede acumular fácilmente 20GB o 50GB de espacio en disco, provocando advertencias de poco espacio en la partición raíz.</p>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Comprobar el tamaño actual de la caché de Pacman</h4>
+            <p>Inspecciona cuánto espacio en disco está ocupando la carpeta de paquetes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Ver el tamaño exacto del directorio de caché de Pacman
+du -sh /var/cache/pacman/pkg/
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Limpieza segura manteniendo versiones de respaldo con paccache</h4>
+            <p>La herramienta oficial <code>paccache</code> (del paquete <code>pacman-contrib</code>) permite eliminar versiones antiguas conservando las últimas 2 versiones por si necesitas hacer rollback:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># 1. Instalar pacman-contrib si no está presente
+sudo pacman -S pacman-contrib --noconfirm
+
+# 2. Eliminar todas las versiones anteriores excepto las 2 más recientes
+sudo paccache -r -k 2
+
+# 3. Eliminar paquetes desinstalados que aún quedaron en caché
+sudo paccache -ruk0
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Limpieza total de paquetes (Solo cuando necesitas espacio urgente)</h4>
+            <p>Si requieres liberar todo el espacio posible de inmediato:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Limpiar paquetes no instalados
+sudo pacman -Sc --noconfirm
+
+# Limpiar por completo TODA la caché de Pacman (0 archivos residuales)
+sudo pacman -Scc --noconfirm
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Paso 4: Limpiar la caché de compilaciones AUR (Yay / Paru)</h4>
+            <p>Los paquetes descargados y compilados desde AUR se guardan en la carpeta de usuario:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Si usas Yay:
+yay -Sc --aur --noconfirm
+rm -rf ~/.cache/yay/*
+
+# Si usas Paru:
+paru -Scc --noconfirm
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
+<h3 id="por-que-pacman-guarda-todas-las-versiones-descargadas">¿Por qué Pacman guarda todas las versiones descargadas?</h3>
+<p>Para permitir volver a una versión anterior (<code>pacman -U /var/cache/pacman/pkg/paquete-antiguo.pkg.tar.zst</code>) de forma offline si una actualización reciente rompe alguna aplicación.</p>
+<h3 id="es-seguro-activar-paccachetimer">¿Es seguro activar paccache.timer?</h3>
+<p>Sí, es completamente seguro. Por defecto, el temporizador conserva las últimas 3 versiones de cada paquete y elimina versiones obsoletas cada semana.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Activa el temporizador de limpieza automática de systemd:</strong> Habilita el timer oficial para que el sistema limpie la caché semanalmente de forma desatendida:</li>
+<li><strong>Elimina paquetes huérfanos periódicamente:</strong> Ejecuta <code>sudo pacman -Rns $(pacman -Qtdq)</code> para desinstalar dependencias no utilizadas.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

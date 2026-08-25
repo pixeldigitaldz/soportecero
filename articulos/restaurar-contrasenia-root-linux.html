@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear) - SoporteCero</title>
-  
-  <!-- SEO Meta Tags -->
+  <title>[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear) | SoporteCero</title>
   <meta name="description" content="¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html" />
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html" />
   
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear) - SoporteCero">
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)">
   <meta property="og:description" content="¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB.">
-  <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="og:url" content="https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="article:published_time" content="2026-06-27">
+  <meta property="article:section" content="Sistemas y Servidores">
   
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear) - SoporteCero">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)">
   <meta name="twitter:description" content="¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB.">
-  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
-
-  <!-- Stylesheet -->
+  
   <link rel="stylesheet" href="../css/style.css">
   
-  <!-- Theme Init Script (Prevent Flashing) -->
+  <!-- Anti-FOUC Theme Script -->
   <script>
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
   </script>
@@ -104,7 +103,7 @@
 }
   </script>
     
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -126,6 +125,8 @@
           <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="../?cat=gaming">Gaming Tech</a></li>
           <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
@@ -175,7 +176,131 @@
         </div>
       </header>
 
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Perder la contraseña de root en Linux (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de GRUB.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#como-restablecer-la-contrasena-de-root-paso-a-paso">Cómo restablecer la contraseña de root paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-interceptar-el-cargador-de-arranque-grub">Paso 1: Interceptar el cargador de arranque GRUB</a></li>
+        <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
+        <li class="toc-subitem"><a href="#paso-3-montar-la-particion-en-modo-lectura-escritura-y-cambiar-la-contrasena-de-root">Paso 3: Montar la partición en modo lectura-escritura y cambiar la contraseña de root</a></li>
+      </ol>
+    </nav>
+    
       
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Contraseña de superusuario root olvidada o bloqueada</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Iniciar en modo monousuario (single-user) agregando <code>init=/bin/bash</code> en GRUB</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Sistema de archivos montado en modo lectura (read-only) durante la recuperación</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Remontar en modo lectura/escritura: <code>mount -o remount,rw /</code> y cambiar clave con <code>passwd</code></div>
+          </div></div></div>
+<p>Perder la <strong>contraseña de root en Linux</strong> (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de <strong>GRUB</strong>.</p>
+<blockquote>
+<p><strong>Resumen de la Solución (3 Pasos):</strong></p>
+<ol>
+<li>En el menú de <strong>GRUB</strong>, presiona <code>e</code>.</li>
+<li>Añade <code>init=/bin/bash</code> al final de la línea <code>linux</code>. Presiona <code>Ctrl + X</code>.</li>
+<li>Ejecuta: <code>mount -o remount,rw /</code> y luego <code>passwd root</code>.</li>
+</ol>
+</blockquote>
+
+    </section>
+    <h2 id="como-restablecer-la-contrasena-de-root-paso-a-paso">🚀 Cómo restablecer la contraseña de root paso a paso</h2>
+<h3 id="paso-1-interceptar-el-cargador-de-arranque-grub">Paso 1: Interceptar el cargador de arranque GRUB</h3>
+<ol>
+<li>Reinicia tu servidor o equipo con Linux.</li>
+<li>Al aparecer la pantalla del menú de selección de sistemas de <strong>GRUB</strong>, pulsa de inmediato la tecla <code>e</code> de tu teclado para editar las opciones del kernel.</li>
+</ol>
+<h3 id="paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</h3>
+<ol>
+<li>Desplázate con las flechas de dirección hasta ubicar la línea que comienza con la palabra <code>linux</code> o <code>linux16</code>.</li>
+<li>Ve al final de la línea, elimina parámetros como <code>rhgb quiet</code> y añade exactamente:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">PLAINTEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>init=/bin/bash
+</code></pre>
+    </div>
+    
+<ol start="3">
+<li>Presiona <code>Ctrl + X</code> o <code>F10</code> para arrancar el sistema con esta consola temporal de superusuario.</li>
+</ol>
+<h3 id="paso-3-montar-la-particion-en-modo-lectura-escritura-y-cambiar-la-contrasena-de-root">Paso 3: Montar la partición en modo lectura-escritura y cambiar la contraseña de root</h3>
+<p>El sistema iniciará en una terminal sin pedir contraseña. Ejecuta los siguientes comandos para cambiar la clave:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Remontar la partición raíz con permisos de escritura
+mount -o remount,rw /
+
+# Cambiar la contraseña del usuario root
+passwd root
+
+# Si usas SELinux (RHEL, Fedora, AlmaLinux, Rocky Linux), fuerza el reetiquetado:
+touch /.autorelabel
+
+# Reiniciar el servidor normalmente
+exec /sbin/init
+</code></pre>
+    </div>
+    
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Si utilizas servidores en la nube o en producción local, protege la consola de GRUB asignando una contraseña en el gestor de arranque (<code>grub-mkpasswd-pbkdf2</code>) para evitar que personas con acceso físico modifiquen los parámetros del kernel sin autorización.</li>
+            </ul>
+          </div>
+        </div>
       </div>
       
     </article>

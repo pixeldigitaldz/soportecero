@@ -1,53 +1,62 @@
 ---
-title: "[SOLUCIONADO] Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux"
-description: "¿Elden Ring sufre tirones (stuttering) o caídas bruscas de FPS en Linux o Steam Deck? Solución paso a paso para VKD3D-Proton y DirectX 12."
+title: "Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa"
+description: "Aprende a eliminar los tirones y congelamientos en Elden Ring en Linux usando GE-Proton, VKD3D-Proton, Vulkan GPL y RADV."
 category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Steam Deck", "Proton", "VKD3D", "Elden Ring"]
-readTime: "4 min"
-date: "2026-08-26"
+tags: ["Elden Ring", "Proton", "Linux", "Gaming", "VKD3D", "Vulkan", "Steam Deck"]
+readTime: "5 min"
+date: "2026-08-24"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Tirones (stuttering) por compilación de shaders VKD3D DirectX 12** | Usar Proton-GE actualizado e incluir `VKD3D_CONFIG=single_queue %command%` |
-| **Límite de memoria caché de shaders por defecto saturado** | Aumentar el tamaño de la caché de Vulkan agregando `__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1` |
+| **Compilación síncrona de sombreadores DirectX 12 en VKD3D al explorar nuevas regiones de las Tierras Intermedias** | Activar Vulkan GPL (`RADV_PERFTEST=gpl`) y habilitar preprocesamiento de shaders en Steam |
+| **Incompatibilidades en la gestión de memoria VRAM o límites de descriptores en el kernel** | Utilizar GE-Proton más reciente y ajustar `vm.max_map_count=1048576` |
 
+Elden Ring utiliza Direct3D 12 de forma nativa. Al ejecutarse en Linux mediante Steam Proton, el motor traduce las instrucciones gráficas a Vulkan mediante la capa VKD3D-Proton. Si la compilación de shaders se produce en tiempo real de forma síncrona o el controlador no utiliza Graphics Pipeline Library (GPL), el juego experimenta congelamientos perceptibles (stuttering) de 100-300ms cada vez que aparece un nuevo enemigo, efecto visual o zona en pantalla.
 
-El **`stuttering` (tirones de imagen) y las caídas de cuadros por segundo (FPS)** en Elden Ring al ejecutarse en sistemas Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck provienen del procesamiento síncrono del compilador de traducción de DirectX 12 a Vulkan (**VKD3D-Proton**) y la gestión de memoria VRAM en controladores gráficos.
+## 🚀 Cómo solucionar el error paso a paso
 
-> **Solución Rápida (1 Minuto):**
-> Añade la siguiente variable de entorno en las Opciones de Lanzamiento de Steam para Elden Ring:
-> `VKD3D_CONFIG=no_upload_hacks RADV_PERFTEST=gsw %command%`
-
-## 🚀 Cómo solucionar el stuttering en Elden Ring paso a paso
-
-### Paso 1: Configurar variables de ajuste de VKD3D-Proton
-DirectX 12 requiere una compilación intensiva de tuberías (*pipeline state objects*). Al usar VKD3D, las optimizaciones de transferencia de memoria reducen los tirones durante la exploración del mapa abierto:
-
-1. Abre Steam -> Clic derecho en **Elden Ring** -> **Propiedades**.
-2. En los **Parámetros de lanzamiento**, añade:
+### Paso 1: Activar Vulkan Graphics Pipeline Library (GPL)
+En tarjetas gráficas AMD (controlador Mesa RADV) y NVIDIA (driver 535+), Vulkan GPL elimina el tartamudeo compilando los sombreadores en micro-bloques rápidos:
 ```bash
-VKD3D_CONFIG=no_upload_hacks %command%
+# Comprobar la versión instalada del controlador Mesa
+glxinfo -B | grep -i "OpenGL version"
+
+# En opciones de lanzamiento de Elden Ring en Steam (para AMD):
+RADV_PERFTEST=gpl %command%
 ```
 
-### Paso 2: Activar la compilación de Shaders en segundo plano (Mesa RADV / NVIDIA)
-Si utilizas tarjetas gráficas AMD (controladores Mesa RADV) o NVIDIA:
+### Paso 2: Utilizar la versión recomendada de GE-Proton
+Las versiones oficiales de Valve y GE-Proton incorporan optimizaciones personalizadas para el bucle de renderizado de Elden Ring:
+1. Abre **Steam > Biblioteca > Clic derecho en Elden Ring > Propiedades**.
+2. En la pestaña **Compatibilidad**, marca *Forzar el uso de una herramienta de compatibilidad específica de Steam Play*.
+3. Selecciona la versión más reciente de **GE-Proton** (o *Proton Experimental*).
 
-* **Para GPUs AMD:** Habilita el compilador de shaders ultra-rápido ACO:
-  ```bash
-  RADV_PERFTEST=aco VKD3D_CONFIG=no_upload_hacks %command%
-  ```
-* **Para GPUs NVIDIA:** Aumenta el límite de la caché de shaders en `/etc/environment`:
-  ```bash
-  __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
-  ```
+### Paso 3: Incrementar el límite de descriptores de memoria en Linux (vm.max_map_count)
+El motor de FromSoftware genera un número masivo de mapeos de memoria que superan los límites tradicionales de Linux:
+```bash
+# Aumentar temporalmente el límite de mapeo
+sudo sysctl -w vm.max_map_count=1048576
 
-### Paso 3: Usar GE-Proton (Bleeding Edge)
-Las versiones optimizadas de Proton-GE incorporan parches específicos de VKD3D para corregir cuellos de botella en la memoria de video de juegos de FromSoftware:
+# Hacer la configuración persistente en /etc/sysctl.d/99-eldenring.conf
+echo "vm.max_map_count = 1048576" | sudo tee /etc/sysctl.d/99-eldenring.conf
+sudo sysctl --system
+```
 
-1. Abre **ProtonUp-Qt** e instala la última versión de `GE-Proton`.
-2. En Steam -> Propiedades de Elden Ring -> **Compatibilidad** -> Selecciona `GE-Proton`.
+### Paso 4: Desactivar el Easy Anti-Cheat para pruebas offline (Opcional)
+Si juegas en modo individual sin multijugador y buscas la máxima fluidez absoluta:
+- Renombra `start_protected_game.exe` a `start_protected_game.exe.bak` en la carpeta del juego.
+- Haz una copia de `eldenring.exe` y nómbrala `start_protected_game.exe`.
 
-## 🛡️ Consejo de Prevención y Rendimiento
-* No desactives la opción de precarga de shaders (*Shader Pre-compilation*) en las preferencias globales de Steam.
+## 🛡️ Consejos de Prevención
+- **Activa la caché de sombreadores en segundo plano en Steam:** Ve a *Steam > Parámetros > Descargas > Sombreador previo al almacenamiento en caché* y marca ambas casillas para descargar cachés comunitarias.
+- **No limites los FPS con herramientas externas:** El motor de Elden Ring está diseñado para 60 FPS fijos; usar limitadores agresivos de terceros puede desestabilizar la sincronización de cuadros (frame pacing).
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Elden Ring funciona mejor en Linux que en Windows?
+Sí. Gracias a la precompilación de shaders a nivel de driver en Vulkan que Valve desarrolló para Proton en Steam Deck, la versión de Linux a menudo tiene menos stuttering que la versión nativa de Windows en su lanzamiento.
+
+### ¿Se puede jugar a más de 60 FPS en Linux?
+El juego viene bloqueado a 60 FPS por diseño de la física del motor. Existen mods para desbloquear los FPS, pero requieren jugar en modo offline para evitar sanciones de Easy Anti-Cheat.

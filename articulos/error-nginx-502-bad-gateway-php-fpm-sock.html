@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM",
   "description": "¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a corregir el socket de comunicación de PHP-FPM en 3 pasos.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Nginx, PHP-FPM, Sysadmin, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-12",
   "dateModified": "2026-08-12",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM",
+      "item": "https://soportecero.com/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM",
   "description": "¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a corregir el socket de comunicación de PHP-FPM en 3 pasos.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html#verificar-el-estado-del-demonio-php-fpm",
+      "name": "Verificar el estado del demonio PHP-FPM",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar el servicio (ajusta según tu versión: 8.1, 8.2, 8.3)\nsudo systemctl status php8.2-fpm\n\n    \n    \nSi el estado indica inactive (dead) o failed, inicialízalo:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl enable --now php8.2-fpm"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html#verificar-la-ubicacion-exacta-del-archivo-socket-sock",
+      "name": "Verificar la ubicación exacta del archivo Socket (.sock)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba la ruta real donde PHP-FPM está escuchando las conexiones:\n\n    \n      \n        BASH\n        Copiar\n      \n      ls -la /run/php/\n\n    \n    \nSalida esperada: php8.2-fpm.sock o php8.3-fpm.sock.\nAbre el archivo de configuración del bloque de servidor de tu sitio en /etc/nginx/sites-available/tudominio.conf:\n\n    \n      \n        NGINX\n        Copiar\n      \n      location ~ \\.php$ {\n    include snippets/fastcgi-php.conf;\n    # La ruta DEBE coincidir exactamente con el archivo .sock de tu s"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html#corregir-permisos-en-el-socket-de-php-fpm",
+      "name": "Corregir permisos en el socket de PHP-FPM",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el archivo .sock existe pero Nginx muestra Permission denied en sus registros:\nAbre la configuración del pool de usuarios de PHP-FPM:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo nano /etc/php/8.2/fpm/pool.d/www.conf\n\n    \n    \nAsegúrate de que el propietario del socket sea el mismo usuario que ejecuta Nginx (www-data):\n\n    \n      \n        INI\n        Copiar\n      \n      listen.owner = www-data\nlisten.group = www-data\nlisten.mode = 0660\n\n    \n    \nReinicia PHP-FPM y Nginx:\n\n   "
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,204 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error 502 Bad Gateway en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en /var/log/nginx/error.log es:
-connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory) o Connection refused.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-502-bad-gateway-paso-a-paso">Cómo solucionar el error 502 Bad Gateway paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-el-estado-del-demonio-php-fpm">Paso 1: Verificar el estado del demonio PHP-FPM</a></li>
-        <li class="toc-subitem"><a href="#paso-2-verificar-la-ubicacion-exacta-del-archivo-socket-sock">Paso 2: Verificar la ubicación exacta del archivo Socket (.sock)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-corregir-permisos-en-el-socket-de-php-fpm">Paso 3: Corregir permisos en el socket de PHP-FPM</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Servicio php-fpm detenido o no iniciado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Iniciar el demonio de PHP: <code>sudo systemctl start php-fpm</code> (o <code>php8.2-fpm</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Permisos insuficientes en el archivo socket UNIX /var/run/php/php-fpm.sock</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Cambiar propietario del socket a <code>www-data:www-data</code> en <code>/etc/php/fpm/pool.d/www.conf</code></div>
-          </div></div></div>
-<p>El error <strong><code>502 Bad Gateway</code></strong> en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en <code>/var/log/nginx/error.log</code> es:
-<code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> o <code>Connection refused</code>.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Inicia el servicio PHP-FPM de tu versión instalada:
-<code>sudo systemctl restart php8.2-fpm</code></li>
-<li>Revisa que la ruta del socket en el <code>fastcgi_pass</code> de Nginx coincida exactamente con la versión activa de PHP.</li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-502-bad-gateway-paso-a-paso">🚀 Cómo solucionar el error 502 Bad Gateway paso a paso</h2>
-<h3 id="paso-1-verificar-el-estado-del-demonio-php-fpm">Paso 1: Verificar el estado del demonio PHP-FPM</h3>
-<p>Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Comprobar el servicio (ajusta según tu versión: 8.1, 8.2, 8.3)
-sudo systemctl status php8.2-fpm
-</code></pre>
-    </div>
-    
-<p>Si el estado indica <code>inactive (dead)</code> o <code>failed</code>, inicialízalo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl enable --now php8.2-fpm
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-verificar-la-ubicacion-exacta-del-archivo-socket-sock">Paso 2: Verificar la ubicación exacta del archivo Socket (<code>.sock</code>)</h3>
-<p>Comprueba la ruta real donde PHP-FPM está escuchando las conexiones:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>ls -la /run/php/
-</code></pre>
-    </div>
-    
-<p>Salida esperada: <code>php8.2-fpm.sock</code> o <code>php8.3-fpm.sock</code>.</p>
-<p>Abre el archivo de configuración del bloque de servidor de tu sitio en <code>/etc/nginx/sites-available/tudominio.conf</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">NGINX</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>location ~ \.php$ {
-    include snippets/fastcgi-php.conf;
-    # La ruta DEBE coincidir exactamente con el archivo .sock de tu sistema:
-    fastcgi_pass unix:/run/php/php8.2-fpm.sock;
-}
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-corregir-permisos-en-el-socket-de-php-fpm">Paso 3: Corregir permisos en el socket de PHP-FPM</h3>
-<p>Si el archivo <code>.sock</code> existe pero Nginx muestra <code>Permission denied</code> en sus registros:</p>
-<p>Abre la configuración del pool de usuarios de PHP-FPM:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nano /etc/php/8.2/fpm/pool.d/www.conf
-</code></pre>
-    </div>
-    
-<p>Asegúrate de que el propietario del socket sea el mismo usuario que ejecuta Nginx (<code>www-data</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>listen.owner = www-data
-listen.group = www-data
-listen.mode = 0660
-</code></pre>
-    </div>
-    
-<p>Reinicia PHP-FPM y Nginx:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart php8.2-fpm
-sudo systemctl restart nginx
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Al actualizar la versión de PHP en el servidor (ej. de PHP 8.1 a 8.3), recuerda actualizar la ruta <code>fastcgi_pass</code> en Nginx, de lo contrario volverá el error 502.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -377,6 +253,23 @@ sudo systemctl restart nginx
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -388,23 +281,6 @@ sudo systemctl restart nginx
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

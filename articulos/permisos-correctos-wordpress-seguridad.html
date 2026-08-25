@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "La guía definitiva de permisos de archivos y carpetas para asegurar WordPress",
   "description": "Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "WordPress, Seguridad, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "La guía definitiva de permisos de archivos y carpetas para asegurar WordPress",
+      "item": "https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "La guía definitiva de permisos de archivos y carpetas para asegurar WordPress",
   "description": "Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html#establecer-los-permisos-globales-de-forma-segura-por-consola",
+      "name": "Establecer los permisos globales de forma segura por consola",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Los directorios de WordPress deben pertenecer al usuario de tu servidor web (como www-data, apache o nginx) y tener una máscara de permisos que impida la escritura a otros usuarios:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Cambiar la propiedad de los archivos al usuario del servidor web\nsudo chown -R www-data:www-data /var/www/html/wordpress\n\n# Forzar a todas las carpetas a tener permisos 755\nfind /var/www/html/wordpress -type d -exec chmod 755 {} \\;\n\n# Forzar a todos los archivos"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html#proteger-al-maximo-el-archivo-critico-wp-configphp",
+      "name": "Proteger al máximo el archivo crítico wp-config.php",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "El archivo wp-config.php contiene las credenciales de tu base de datos y llaves de seguridad de la sesión. Nadie excepto el servidor web y tú deben poder leerlo:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Cambiar permisos de lectura exclusiva al dueño del archivo\nchmod 600 /var/www/html/wordpress/wp-config.php"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html#proteger-el-archivo-de-reescritura-htaccess",
+      "name": "Proteger el archivo de reescritura .htaccess",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si utilizas el servidor web Apache, asegura el archivo de control de rutas frente a manipulaciones de plugins o inyecciones de código maliciosas:\n\n    \n      \n        BASH\n        Copiar\n      \n      chmod 644 /var/www/html/wordpress/.htaccess"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,148 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-establecer-los-permisos-globales-de-forma-segura-por-consola">Paso 1: Establecer los permisos globales de forma segura por consola</a></li>
-        <li class="toc-subitem"><a href="#paso-2-proteger-al-maximo-el-archivo-critico-wp-configphp">Paso 2: Proteger al máximo el archivo crítico wp-config.php</a></li>
-        <li class="toc-subitem"><a href="#paso-3-proteger-el-archivo-de-reescritura-htaccess">Paso 3: Proteger el archivo de reescritura .htaccess</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Permisos excesivamente abiertos (ej. 777) en archivos o carpetas de WordPress</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Asignar permisos seguros: <code>find . -type d -exec chmod 755 {} \;</code> y <code>644</code> para archivos</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Archivo wp-config.php accesible o editable por otros usuarios del servidor</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Establecer permisos estrictos en wp-config.php: <code>chmod 600 wp-config.php</code></div>
-          </div></div></div>
-<p>Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-establecer-los-permisos-globales-de-forma-segura-por-consola">Paso 1: Establecer los permisos globales de forma segura por consola</h3>
-<p>Los directorios de WordPress deben pertenecer al usuario de tu servidor web (como <code>www-data</code>, <code>apache</code> o <code>nginx</code>) y tener una máscara de permisos que impida la escritura a otros usuarios:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar la propiedad de los archivos al usuario del servidor web
-sudo chown -R www-data:www-data /var/www/html/wordpress
-
-# Forzar a todas las carpetas a tener permisos 755
-find /var/www/html/wordpress -type d -exec chmod 755 {} \;
-
-# Forzar a todos los archivos a tener permisos 644
-find /var/www/html/wordpress -type f -exec chmod 644 {} \;
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-proteger-al-maximo-el-archivo-critico-wp-configphp">Paso 2: Proteger al máximo el archivo crítico wp-config.php</h3>
-<p>El archivo <code>wp-config.php</code> contiene las credenciales de tu base de datos y llaves de seguridad de la sesión. Nadie excepto el servidor web y tú deben poder leerlo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar permisos de lectura exclusiva al dueño del archivo
-chmod 600 /var/www/html/wordpress/wp-config.php
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-proteger-el-archivo-de-reescritura-htaccess">Paso 3: Proteger el archivo de reescritura .htaccess</h3>
-<p>Si utilizas el servidor web Apache, asegura el archivo de control de rutas frente a manipulaciones de plugins o inyecciones de código maliciosas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>chmod 644 /var/www/html/wordpress/.htaccess
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Nunca apliques permisos 777 (lectura, escritura y ejecución para todo el mundo) a ninguna carpeta o archivo de tu sitio web bajo ninguna circunstancia</strong>, ni siquiera de manera temporal para solucionar problemas de subida de imágenes en la carpeta <code>wp-content/uploads</code>. Si un plugin tiene problemas para guardar archivos, esto se debe a un conflicto de propiedad del usuario del sistema de archivos (<code>chown</code>) y no a la falta de permisos de escritura globales; abrir las puertas por completo permitirá que cualquier script inyectado en el servidor tome el control total de tu host.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -321,23 +253,6 @@ chmod 600 /var/www/html/wordpress/wp-config.php
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -349,6 +264,23 @@ chmod 600 /var/www/html/wordpress/wp-config.php
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

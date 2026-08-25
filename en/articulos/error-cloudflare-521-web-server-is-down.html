@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 521 Web Server Is Down in Cloudflare",
   "description": "Users seeing Cloudflare Error 521 Web Server Is Down? Step-by-step resolution for Nginx, Apache, and origin firewall IP allowlists.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Cloudflare, Nginx, Apache, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-24",
   "dateModified": "2026-08-24",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error 521 Web Server Is Down in Cloudflare",
-  "description": "Users seeing Cloudflare Error 521 Web Server Is Down? Step-by-step resolution for Nginx, Apache, and origin firewall IP allowlists.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error 521 Web Server Is Down in Cloudflare",
+      "item": "https://soportecero.com/en/articulos/error-cloudflare-521-web-server-is-down.html"
+    }
+  ]
 }
   </script>
     
@@ -148,162 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The Error 521: Web server is down returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</a></li>
-        <li class="toc-subitem"><a href="#step-2-whitelist-cloudflare-ip-ranges-in-firewall">Step 2: Whitelist Cloudflare IP Ranges in Firewall</a></li>
-        <li class="toc-subitem"><a href="#step-3-check-cloudflare-ssltls-mode-settings">Step 3: Check Cloudflare SSL/TLS Mode Settings</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Origin web server down or stopped</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Start local web server (Nginx/Apache): <code>systemctl restart nginx</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Server firewall blocking Cloudflare IP ranges</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Whitelist official Cloudflare IP ranges in server firewall</div>
-          </div></div></div>
-<p>The <strong><code>Error 521: Web server is down</code></strong> returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Restart your origin web server daemon:
-<code>sudo systemctl restart nginx</code> or <code>sudo systemctl restart apache2</code></li>
-<li>Allow Cloudflare IP ranges in your firewall (UFW/iptables):
-<code>sudo ufw allow 80/tcp &amp;&amp; sudo ufw allow 443/tcp</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</h3>
-<p>SSH into your origin VPS and check web server status:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Nginx
-sudo systemctl status nginx
-
-# Apache
-sudo systemctl status apache2
-</code></pre>
-    </div>
-    
-<p>If the process has crashed, restart it immediately:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart nginx
-</code></pre>
-    </div>
-    
-<h3 id="step-2-whitelist-cloudflare-ip-ranges-in-firewall">Step 2: Whitelist Cloudflare IP Ranges in Firewall</h3>
-<p>If your local firewall (UFW) or cloud security groups (AWS, Hetzner, DigitalOcean) block proxy requests, Cloudflare throws Error 521.</p>
-<p>Ensure HTTP/HTTPS ports are open to Cloudflare:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw reload
-</code></pre>
-    </div>
-    
-<h3 id="step-3-check-cloudflare-ssltls-mode-settings">Step 3: Check Cloudflare SSL/TLS Mode Settings</h3>
-<p>If SSL is set to <strong>Full (Strict)</strong>, Cloudflare demands an active SSL certificate on port 443 of the origin web server.</p>
-<ol>
-<li>Navigate to <strong>Cloudflare Dashboard</strong> -&gt; <strong>SSL/TLS</strong>.</li>
-<li>Switch mode from <em>Full (Strict)</em> to <strong>Full</strong> or <strong>Flexible</strong> to test if origin SSL configuration is the root cause.</li>
-<li>Install a free Let&#39;s Encrypt certificate or Cloudflare Origin CA certificate on Nginx.</li>
-</ol>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -318,6 +190,23 @@ sudo ufw reload
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -346,23 +235,6 @@ sudo ufw reload
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [FIXED] Error 'invalid reference format' in Docker -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-invalid-reference-format.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'invalid reference format' in Docker</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar el error Permission Denied (publickey) en conexiones SSH",
   "description": "Aprende a reparar los fallos de autenticación por clave pública en SSH ajustando los permisos de directorios y del archivo authorized_keys.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "SSH, Linux, Seguridad",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar el error Permission Denied (publickey) en conexiones SSH",
+      "item": "https://soportecero.com/articulos/error-ssh-permission-denied-key.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar el error Permission Denied (publickey) en conexiones SSH",
   "description": "Aprende a reparar los fallos de autenticación por clave pública en SSH ajustando los permisos de directorios y del archivo authorized_keys.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-ssh-permission-denied-key.html#corregir-los-permisos-de-tu-clave-privada-en-el-cliente",
+      "name": "Corregir los permisos de tu clave privada en el cliente",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "La clave privada nunca debe ser legible por otros usuarios de la máquina local. Ajusta los permisos del archivo .pem o id_rsa:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Cambiar permisos para que solo el propietario pueda leer el archivo\nchmod 600 ~/.ssh/id_rsa"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-ssh-permission-denied-key.html#ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor",
+      "name": "Ajustar los permisos del directorio .ssh y autorizaciones en el servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Accede a la consola del servidor (a través de TTY o consola del proveedor de hosting) y ejecuta las siguientes correcciones sobre tu directorio de inicio:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Asegurar el directorio de configuración de SSH\nchmod 700 ~/.ssh\n\n# Asegurar el archivo que almacena las claves autorizadas\nchmod 600 ~/.ssh/authorized_keys\n\n# Restablecer la propiedad de los archivos a tu usuario actual\nchown -R $USER:$USER ~/.ssh"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-ssh-permission-denied-key.html#comprobar-la-directiva-de-autenticacion-en-el-servidor",
+      "name": "Comprobar la directiva de autenticación en el servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el error persiste, edita el archivo de configuración del servicio SSH en el servidor /etc/ssh/sshd_config y verifica que la autenticación por clave pública esté habilitada:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      PubkeyAuthentication yes\nAuthorizedKeysFile .ssh/authorized_keys\n\n    \n    \nReinicia el servicio para aplicar los cambios:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl restart sshd"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,160 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error Permission denied (publickey) al intentar conectarte a un servidor remoto mediante SSH ocurre porque el demonio SSH (sshd) en el servidor remoto rechaza la clave privada presentada por tu cliente. Esto se debe habitualmente a permisos de archivos demasiado permisivos, lo cual invalida la seguridad de la conexión y obliga al servidor a descartar el intento por protección.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-corregir-los-permisos-de-tu-clave-privada-en-el-cliente">Paso 1: Corregir los permisos de tu clave privada en el cliente</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor">Paso 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor</a></li>
-        <li class="toc-subitem"><a href="#paso-3-comprobar-la-directiva-de-autenticacion-en-el-servidor">Paso 3: Comprobar la directiva de autenticación en el servidor</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Permisos excesivamente abiertos en el archivo de clave privada (~/.ssh/id_rsa)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Asignar permisos estrictos a la clave privada: <code>chmod 600 ~/.ssh/id_rsa</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Clave pública no agregada al archivo authorized_keys del servidor remoto</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Copiar la clave pública al servidor con <code>ssh-copy-id usuario@servidor</code></div>
-          </div></div></div>
-<p>El error <code>Permission denied (publickey)</code> al intentar conectarte a un servidor remoto mediante SSH ocurre porque el demonio SSH (<code>sshd</code>) en el servidor remoto rechaza la clave privada presentada por tu cliente. Esto se debe habitualmente a permisos de archivos demasiado permisivos, lo cual invalida la seguridad de la conexión y obliga al servidor a descartar el intento por protección.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-corregir-los-permisos-de-tu-clave-privada-en-el-cliente">Paso 1: Corregir los permisos de tu clave privada en el cliente</h3>
-<p>La clave privada nunca debe ser legible por otros usuarios de la máquina local. Ajusta los permisos del archivo <code>.pem</code> o <code>id_rsa</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar permisos para que solo el propietario pueda leer el archivo
-chmod 600 ~/.ssh/id_rsa
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor">Paso 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor</h3>
-<p>Accede a la consola del servidor (a través de TTY o consola del proveedor de hosting) y ejecuta las siguientes correcciones sobre tu directorio de inicio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Asegurar el directorio de configuración de SSH
-chmod 700 ~/.ssh
-
-# Asegurar el archivo que almacena las claves autorizadas
-chmod 600 ~/.ssh/authorized_keys
-
-# Restablecer la propiedad de los archivos a tu usuario actual
-chown -R $USER:$USER ~/.ssh
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-comprobar-la-directiva-de-autenticacion-en-el-servidor">Paso 3: Comprobar la directiva de autenticación en el servidor</h3>
-<p>Si el error persiste, edita el archivo de configuración del servicio SSH en el servidor <code>/etc/ssh/sshd_config</code> y verifica que la autenticación por clave pública esté habilitada:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>PubkeyAuthentication yes
-AuthorizedKeysFile .ssh/authorized_keys
-</code></pre>
-    </div>
-    
-<p>Reinicia el servicio para aplicar los cambios:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart sshd
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Evita compartir tu clave privada a través de medios inseguros o utilizar permisos laxos en el host local. Mantén siempre el principio de mínimos privilegios en tu configuración SSH. Configurar la directiva <code>StrictModes yes</code> en el servidor obliga a SSHD a rechazar conexiones de forma proactiva si los permisos de la carpeta personal o archivos autorizados son inseguros, previniendo intrusiones accidentales por descuidos en el sistema de archivos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -333,6 +253,23 @@ AuthorizedKeysFile .ssh/authorized_keys
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -344,23 +281,6 @@ AuthorizedKeysFile .ssh/authorized_keys
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

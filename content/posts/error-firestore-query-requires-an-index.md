@@ -1,32 +1,73 @@
 ---
-title: 'Cómo resolver: The query requires an index en Cloud Firestore'
-description: 'Aprende a resolver el error FAILED_PRECONDITION: The query requires an index al hacer búsquedas compuestas en Firebase.'
-category: 'Web y Código'
-date: '2026-08-19'
-readTime: '2 min'
-tags: ['Firebase', 'Firestore', 'Database']
+title: "Cómo resolver: The query requires an index en Cloud Firestore"
+description: "Aprende a solucionar el error de índice compuesto faltante en consultas complejas de Firebase Cloud Firestore paso a paso."
+category: "Web y Código"
+tags: ["Firebase", "Cloud Firestore", "JavaScript", "NoSQL", "Bases de Datos"]
+readTime: "5 min"
+date: "2026-08-19"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Consulta compuesta no indexada** | Hacer clic en el enlace que Firebase devuelve en el mensaje de error para crear el índice |
-| **Falta de índices en despliegues** | Usar Firebase CLI para desplegar `firestore.indexes.json` |
+| **Consulta compuesta en Firestore que combina múltiples campos con filtros de desigualdad o diferente orden** | Crear el índice compuesto mediante el enlace directo generado en el log de error de la consola |
+| **Índice compuesto faltante en el archivo de despliegue firestore.indexes.json** | Definir la colección, campos y ordenación en firestore.indexes.json y desplegar con Firebase CLI |
 
-## La Solución Paso a Paso
+El error FAILED_PRECONDITION: The query requires an index en Cloud Firestore se genera cuando ejecutas una consulta compleja que combina cláusulas where() sobre múltiples campos distintos o mezcla un filtro de rango/desigualdad (<, <=, >, >=) con una ordenación orderBy() en un campo diferente. Por diseño NoSQL, Firestore exige un índice compuesto previo para garantizar un rendimiento constante en tiempo de consulta O(N).
 
-**Revisa el mensaje de error en la consola**
-Cuando intentas hacer una consulta en Firestore que combina filtrados de igualdad (`==`) con desigualdades (`>`, `<`, `!=`) o múltiples ordenamientos (`orderBy`), Firestore te exigirá un índice compuesto.
-El mensaje de error en la consola del navegador lucirá así:
-`FirebaseError: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/...`
+## 🚀 Cómo solucionar el error paso a paso
 
-**Haz clic en el enlace autogenerado**
-Firestore es extremadamente amigable. El propio error incluye una URL exacta. 
-Simplemente copia y pega el enlace `https://console.firebase.google.com/...` en tu navegador. Esto te llevará directamente a la consola de Firebase con un modal ya prellenado con los campos exactos que necesitas indexar.
+### Paso 1: Crear el índice automáticamente desde el enlace de error
+La forma más rápida de solucionar el problema durante la etapa de desarrollo es hacer clic directamente en la URL proporcionada en el mensaje de error de tu terminal o consola del navegador:
+```javascript
+// Ejemplo de consulta que detona el error sin índice:
+const q = query(
+  collection(db, "pedidos"),
+  where("estado", "==", "completado"),
+  where("total", ">", 100),
+  orderBy("total", "desc")
+);
+```
+1. Copia el enlace que acompaña al error The query requires an index. You can create it here: ...
+2. Pégalo en tu navegador. Firebase Console abrirá la pantalla de creación con todos los campos y modos de ordenación preconfigurados.
+3. Haz clic en **Crear índice** (Create Index) y espera entre 1 y 3 minutos a que el estado cambie de Building a Enabled.
 
-**Espera a que se construya el índice**
-Una vez que hagas clic en "Crear" dentro de la consola, el estado del índice pasará a *Building* (Construyendo). Este proceso puede tardar desde unos minutos hasta un par de horas dependiendo del tamaño de tu colección. Cuando el estado cambie a *Enabled* (Habilitado), tu consulta funcionará inmediatamente sin cambiar nada de código.
+### Paso 2: Declarar el índice de forma persistente en firestore.indexes.json
+Para entornos de integración continua (CI/CD) y producción, define el índice en tu proyecto local para evitar que se pierda en despliegues posteriores:
+```json
+{
+  "indexes": [
+    {
+      "collectionGroup": "pedidos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "estado", "order": "ASCENDING" },
+        { "fieldPath": "total", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
+```
 
-## Prevención
-- **Guarda tus índices en código:** Para evitar problemas al migrar de un entorno de pruebas a producción, usa el CLI de Firebase para descargar tus índices locales: `firebase firestore:indexes > firestore.indexes.json` y súbelos a tu control de versiones (Git).
-- **Evita desigualdades excesivas:** Recuerda que Firestore solo permite una desigualdad por consulta (`<`, `<=`, `>`, `>=`, `!=`, `not-in`). Si necesitas filtros muy complejos en múltiples campos, tal vez necesites un motor de búsqueda externo como Algolia.
+### Paso 3: Desplegar los índices con la CLI de Firebase
+Una vez guardado tu archivo firestore.indexes.json, publica las reglas e índices directamente a tu base de datos:
+```bash
+# Desplegar únicamente los índices de Cloud Firestore
+npx firebase deploy --only firestore:indexes
+```
+
+### Paso 4: Validar la ejecución de la consulta
+Comprueba que tu aplicación ya no arroja la excepción FAILED_PRECONDITION y procesa los documentos normalmente.
+
+## 🛡️ Consejos de Prevención
+- **Optimiza tus modelos de datos:** Evita crear consultas que filtren por más de 3 o 4 campos variables si puedes consolidar estados en un solo campo indexable (por ejemplo, usar un array de etiquetas o un campo compuesto tipo estado_region: "completado_latam").
+- **Controla el límite de índices:** Firestore tiene un límite máximo de 200 índices compuestos por base de datos. Mantén limpio tu archivo firestore.indexes.json eliminando índices obsoletos.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Cuánto tiempo tarda en construirse un índice compuesto?
+En colecciones pequeñas tarda menos de 60 segundos. En colecciones con millones de documentos, el proceso en segundo plano puede demorar entre 10 y 30 minutos sin interrumpir las demás operaciones de lectura y escritura.
+
+### ¿Las consultas simples de un solo campo requieren crear índices compuestos?
+No. Firestore crea índices simples de campo único de forma automática para todos los campos de tus documentos en orden ascendente y descendente.

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git",
   "description": "¿Git muestra 'cannot lock ref' o 'unable to update local ref' al hacer pull o fetch? Solución paso a paso para eliminar locks corruptos.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "Git, GitHub, DevOps",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-20",
   "dateModified": "2026-08-20",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git",
+      "item": "https://soportecero.com/articulos/error-git-fatal-cannot-lock-ref-head.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git",
   "description": "¿Git muestra 'cannot lock ref' o 'unable to update local ref' al hacer pull o fetch? Solución paso a paso para eliminar locks corruptos.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-git-fatal-cannot-lock-ref-head.html#podar-referencias-remotas-git-remote-prune",
+      "name": "Podar referencias remotas (Git Remote Prune)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En la mayoría de los casos, este error se debe a ramas remotas eliminadas en GitHub/GitLab que siguen existiendo en la caché local:\n\n    \n      \n        BASH\n        Copiar\n      \n      git remote prune origin\n\n    \n    \nLuego intenta hacer fetch de nuevo:\n\n    \n      \n        BASH\n        Copiar\n      \n      git fetch origin"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-git-fatal-cannot-lock-ref-head.html#eliminar-manualmente-el-archivo-de-bloqueo-lock",
+      "name": "Eliminar manualmente el archivo de bloqueo .lock",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el comando Git fue interrumpido repentinamente (por un corte de energía o cierre de terminal), Git deja un archivo de bloqueo de seguridad que impide escrituras posteriores:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Eliminar archivo lock de la rama principal\nrm -f .git/refs/remotes/origin/main.lock\n\n# O eliminar todos los locks de referencias si no estás seguro de cuál es:\nfind .git/refs -name &quot;*.lock&quot; -type f -delete"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-git-fatal-cannot-lock-ref-head.html#resolver-conflictos-de-nombres-de-ramas-case-sensitivity",
+      "name": "Resolver conflictos de nombres de ramas (Case-Sensitivity)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si una rama se llama Feature y otra feature, sistemas de archivos insensibles a mayúsculas (como Windows o macOS por defecto) fallarán al crear los archivos de referencia correspondientes.\nFuerza la limpieza del embalaje de referencias de Git:\n\n    \n      \n        BASH\n        Copiar\n      \n      git pack-refs --all --prune"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,165 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ... o fatal: cannot lock ref ocurre al intentar hacer git pull, git fetch o git checkout cuando el puntero de referencia local de Git se corrompe debido a un cierre inesperado del proceso de Git o a un conflicto entre nombres de ramas con mayúsculas y minúsculas.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-cannot-lock-ref-paso-a-paso">Cómo solucionar el error cannot lock ref paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-podar-referencias-remotas-git-remote-prune">Paso 1: Podar referencias remotas (Git Remote Prune)</a></li>
-        <li class="toc-subitem"><a href="#paso-2-eliminar-manualmente-el-archivo-de-bloqueo-lock">Paso 2: Eliminar manualmente el archivo de bloqueo .lock</a></li>
-        <li class="toc-subitem"><a href="#paso-3-resolver-conflictos-de-nombres-de-ramas-case-sensitivity">Paso 3: Resolver conflictos de nombres de ramas (Case-Sensitivity)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Archivo de bloqueo de referencia de Git acumulado (.git/refs/heads/X.lock)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Eliminar el archivo lock sobrante con <code>rm -f .git/refs/heads/nombre-rama.lock</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Múltiples procesos de Git ejecutándose simultáneamente</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Finalizar otros procesos activos de Git o IDEs antes de reintentar el comando</div>
-          </div></div></div>
-<p>El error <strong><code>error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ...</code></strong> o <code>fatal: cannot lock ref</code> ocurre al intentar hacer <code>git pull</code>, <code>git fetch</code> o <code>git checkout</code> cuando el puntero de referencia local de Git se corrompe debido a un cierre inesperado del proceso de Git o a un conflicto entre nombres de ramas con mayúsculas y minúsculas.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Poda las referencias obsoletas del repositorio remoto:
-<code>git remote prune origin</code></li>
-<li>Si persiste, elimina el archivo lock corrupto:
-<code>rm -f .git/refs/remotes/origin/main.lock</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-cannot-lock-ref-paso-a-paso">🚀 Cómo solucionar el error cannot lock ref paso a paso</h2>
-<h3 id="paso-1-podar-referencias-remotas-git-remote-prune">Paso 1: Podar referencias remotas (<em>Git Remote Prune</em>)</h3>
-<p>En la mayoría de los casos, este error se debe a ramas remotas eliminadas en GitHub/GitLab que siguen existiendo en la caché local:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git remote prune origin
-</code></pre>
-    </div>
-    
-<p>Luego intenta hacer fetch de nuevo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git fetch origin
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-eliminar-manualmente-el-archivo-de-bloqueo-lock">Paso 2: Eliminar manualmente el archivo de bloqueo <code>.lock</code></h3>
-<p>Si el comando Git fue interrumpido repentinamente (por un corte de energía o cierre de terminal), Git deja un archivo de bloqueo de seguridad que impide escrituras posteriores:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Eliminar archivo lock de la rama principal
-rm -f .git/refs/remotes/origin/main.lock
-
-# O eliminar todos los locks de referencias si no estás seguro de cuál es:
-find .git/refs -name &quot;*.lock&quot; -type f -delete
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-resolver-conflictos-de-nombres-de-ramas-case-sensitivity">Paso 3: Resolver conflictos de nombres de ramas (Case-Sensitivity)</h3>
-<p>Si una rama se llama <code>Feature</code> y otra <code>feature</code>, sistemas de archivos insensibles a mayúsculas (como Windows o macOS por defecto) fallarán al crear los archivos de referencia correspondientes.</p>
-<p>Fuerza la limpieza del embalaje de referencias de Git:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git pack-refs --all --prune
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No fuerces el cierre de la ventana de terminal mientras se ejecuten operaciones de <code>git pull</code> o <code>git push</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -338,23 +253,6 @@ find .git/refs -name &quot;*.lock&quot; -type f -delete
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -367,6 +265,23 @@ find .git/refs -name &quot;*.lock&quot; -type f -delete
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
             <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo resolver: The query requires an index en Cloud Firestore -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-firestore-query-requires-an-index.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo resolver: The query requires an index en Cloud Firestore</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Firebase</span>
+            <span>Lectura: 5 min</span>
           </div>
         </div>
       </article>

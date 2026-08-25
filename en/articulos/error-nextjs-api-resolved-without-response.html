@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Guide: Fix API resolved without sending a response for /api/ in Next.js",
   "description": "Learn how to resolve the API resolved without sending a response warning in Next.js Pages and App Router when handling async promises and callbacks.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "Next.js, Node.js, React",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-21",
   "dateModified": "2026-08-21",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Guide: Fix API resolved without sending a response for /api/ in Next.js",
-  "description": "Learn how to resolve the API resolved without sending a response warning in Next.js Pages and App Router when handling async promises and callbacks.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Guide: Fix API resolved without sending a response for /api/ in Next.js",
+      "item": "https://soportecero.com/en/articulos/error-nextjs-api-resolved-without-response.html"
+    }
+  ]
 }
   </script>
     
@@ -148,173 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The warning API resolved without sending a response for /api/... in Next.js occurs when an API Route Handler or Pages API endpoint executes asynchronous logic (such as database queries, third-party APIs, or webhooks) without await or without resolving a returned Promise before the handler function finishes execution.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The warning <code>API resolved without sending a response for /api/...</code> in Next.js occurs when an API Route Handler or Pages API endpoint executes asynchronous logic (such as database queries, third-party APIs, or webhooks) without <code>await</code> or without resolving a returned Promise before the handler function finishes execution.</p>
-<p>This issue can cause Node.js server connections to hang, resulting in frontend request timeouts, memory leaks, and dropped HTTP responses.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Unawaited async Promise (<code>missing await</code>)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Prefix all database queries and external fetch requests with <code>await</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Callback-based middleware (Stripe webhooks, JWT)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Wrap legacy callback functions in <code>new Promise((resolve, reject) =&gt; ...)</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Missing response in conditional branch</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure every <code>if/else</code> execution path returns a valid <code>res.status()</code> or <code>Response</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Ensure proper async/await flow in your handler</strong>
-If you are using the Pages Router (<code>pages/api/...</code>), every asynchronous database call must be completed before returning the response:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>// pages/api/users.js
-export default async function handler(req, res) {
-  try {
-    // Omitting await will trigger the unhandled resolution warning
-    const users = await db.collection(&#39;users&#39;).find().toArray();
-    return res.status(200).json({ success: true, data: users });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
-  }
-}
-</code></pre>
-    </div>
-    
-<p><strong>Wrap callback-based libraries inside Promises</strong>
-When dealing with older packages that do not provide native Promises (e.g. <code>jsonwebtoken</code> or <code>multer</code>), explicitly wrap the call:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>export default async function handler(req, res) {
-  await new Promise((resolve) =&gt; {
-    jwt.verify(token, secretKey, (err, decoded) =&gt; {
-      if (err) {
-        res.status(401).json({ error: &#39;Invalid token&#39; });
-        return resolve();
-      }
-      res.status(200).json({ user: decoded });
-      return resolve();
-    });
-  });
-}
-</code></pre>
-    </div>
-    
-<p><strong>Use App Router Route Handlers (Next.js 13+)</strong>
-For the modern App Router (<code>app/api/.../route.js</code>), return native web standard <code>Response</code> or <code>NextResponse</code> instances:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>// app/api/users/route.js
-import { NextResponse } from &#39;next/server&#39;;
-
-export async function GET(request) {
-  const data = await fetchUserData();
-  return NextResponse.json(data);
-}
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>ESLint floating promise rule:</strong> Enable <code>@typescript-eslint/no-floating-promises</code> to catch unhandled async promises at build time.</li>
-<li><strong>Client timeout limits:</strong> Configure timeout handlers on database drivers to guarantee requests fail gracefully instead of hanging connections indefinitely.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -346,23 +207,6 @@ export async function GET(request) {
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
       <article class="related-card">
         <div class="related-card-content">
@@ -375,6 +219,23 @@ export async function GET(request) {
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to fix: The query requires an index in Cloud Firestore -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-firestore-query-requires-an-index.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix: The query requires an index in Cloud Firestore</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Firebase</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

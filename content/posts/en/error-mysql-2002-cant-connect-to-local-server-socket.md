@@ -1,58 +1,74 @@
 ---
-title: 'Error: Error 2002 (HY000): Can''t connect to local MySQL server through socket'
-description: 'How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.'
-category: 'Systems & Servers'
-date: '2026-08-16'
-readTime: '3 min'
-tags: ['MySQL', 'Databases', 'Linux']
+title: "How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket"
+description: "Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS."
+category: "Web & Code"
+tags: ["MySQL", "MariaDB", "Linux", "SysAdmin", "Databases", "Ubuntu"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **MySQL/MariaDB service is down** | Start the service: `systemctl start mysql` |
-| **Missing or corrupted mysql.sock file** | Restart the service or recreate the path manually |
-| **Incorrect permissions on /var/run/mysqld** | Change owner to mysql: `chown mysql:mysql /var/run/mysqld/` |
+| **MySQL / MariaDB daemon stopped or unable to create UNIX socket due to exhausted storage** | Inspect disk with `df -h` and start service with `sudo systemctl start mysql` |
+| **Socket path mismatch between my.cnf (/var/run/mysqld/mysqld.sock vs /tmp/mysql.sock)** | Create compatibility symlink or synchronize socket paths across `[client]` and `[mysqld]` |
 
-## Step-by-Step Solution
+The exception `ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)` occurs when local CLI clients or web applications attempt communication via the UNIX domain socket IPC endpoint and find the socket file missing or the `mysqld` daemon in a failed state.
 
-**Check the service status**
-The most common error is that MySQL or MariaDB are simply not running. Check it:
+## 🚀 Step-by-Step Solution
+
+### Step 1: Verify Service Health and Storage Headroom
+Confirm whether the daemon is actively running and storage is unconstrained:
 ```bash
-sudo systemctl status mysql
-# or if you use mariadb: sudo systemctl status mariadb
-```
-If it says *inactive* or *failed*, start it:
-```bash
+# 1. Check disk capacity
+df -h
+
+# 2. Inspect MySQL / MariaDB daemon state
+sudo systemctl status mysql # or mariadb
+
+# 3. Start daemon if inactive
 sudo systemctl start mysql
 ```
 
-**Find the socket file manually**
-Sometimes, the MySQL client looks for the `.sock` file in `/tmp/mysql.sock` but the server created it in `/var/run/mysqld/mysqld.sock`. To find where the socket really is, check your configuration file (`/etc/mysql/my.cnf` or `/etc/my.cnf`):
+### Step 2: Recreate Socket Directory and Fix Permissions
+If volatile `tmpfs` mounting cleared the parent runtime directory on reboot:
 ```bash
-grep -i "socket" /etc/mysql/my.cnf
-```
-If you know the server is running but the socket is in another location, you can connect by specifying it:
-```bash
-mysql -u root -p -S /var/run/mysqld/mysqld.sock
-```
-
-**Permission and directory issues**
-If the server fails to start complaining about the socket, the `/var/run/mysqld` folder might not exist or might not have the correct permissions (often happens after hard reboots or updates).
-Recreate the folder and give permissions:
-```bash
+# Create target socket directory
 sudo mkdir -p /var/run/mysqld
-sudo chown mysql:mysql /var/run/mysqld
+
+# Grant ownership to system 'mysql' account
+sudo chown -R mysql:mysql /var/run/mysqld
+sudo chmod -R 755 /var/run/mysqld
+
+# Restart database service
 sudo systemctl restart mysql
 ```
 
-**Check for lack of disk space**
-Sometimes, MySQL shuts down unexpectedly because the root partition (`/`) or `/var` has run out of space, preventing the creation of the temporary socket file.
-```bash
-df -h
-```
-If the disk is at 100%, free up space and restart the service.
+### Step 3: Align Socket Directives in my.cnf
+Ensure client and server configuration blocks share identical socket paths:
+```ini
+# /etc/mysql/my.cnf
+[mysqld]
+socket = /var/run/mysqld/mysqld.sock
 
-## Prevention Tips
-- **Disk monitoring:** Make sure to set up disk space alerts on your server.
-- **Standardized configuration:** Define the `socket` path explicitly under the `[client]` and `[mysqld]` section in your `my.cnf` file so that both the server and the client always match the location.
+[client]
+socket = /var/run/mysqld/mysqld.sock
+```
+
+### Step 4: Create a Compatibility Symlink
+If legacy applications expect the socket at `/tmp/mysql.sock`:
+```bash
+sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
+```
+
+## 🛡️ Prevention Advice
+- **Audit MySQL Error Logs:** Periodically inspect `/var/log/mysql/error.log` to identify InnoDB table corruption before unexpected crashes.
+- **Tune memory allocation on lean instances:** On 1GB VPS instances, set `innodb_buffer_pool_size = 256M` to avoid OOM Killer invocations.
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### Why does 127.0.0.1 connect while localhost fails?
+In UNIX environments, connecting to `localhost` forces UNIX domain socket communication, while `127.0.0.1` utilizes network TCP/IP sockets on port 3306.
+
+### What does error code (2) represent?
+The (2) suffix corresponds to the standard Linux POSIX error `ENOENT` (No such file or directory), confirming the physical socket file is absent from disk.

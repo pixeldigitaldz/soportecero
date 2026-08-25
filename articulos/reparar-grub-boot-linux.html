@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux",
   "description": "Aprende a restablecer el cargador de arranque GRUB en sistemas UEFI y BIOS utilizando una distribución Live USB y la herramienta chroot.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Linux, GRUB, Bootloader",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux",
+      "item": "https://soportecero.com/articulos/reparar-grub-boot-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux",
   "description": "Aprende a restablecer el cargador de arranque GRUB en sistemas UEFI y BIOS utilizando una distribución Live USB y la herramienta chroot.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/reparar-grub-boot-linux.html#iniciar-desde-una-distribucion-live-usb-y-localizar-particiones",
+      "name": "Iniciar desde una distribución Live USB y localizar particiones",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Introduce un Live USB compatible con tu distribución actual, arráncalo en modo UEFI/BIOS y detecta el identificador de tu disco duro:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo fdisk -l\n\n    \n    \n(Identifica tu partición raíz de Linux, por ejemplo /dev/sda2, y la partición EFI en formato FAT32, por ejemplo /dev/sda1)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/reparar-grub-boot-linux.html#montar-el-sistema-danado-y-preparar-el-chroot",
+      "name": "Montar el sistema dañado y preparar el chroot",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Monta la estructura de directorios del sistema de archivos dañado en la sesión temporal:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Montar partición raíz\nsudo mount /dev/sda2 /mnt\n\n# Montar directorios de comunicación del kernel\nfor i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done\n\n# Montar partición EFI si usas UEFI\nsudo mount /dev/sda1 /mnt/boot/efi"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/reparar-grub-boot-linux.html#entrar-al-sistema-chroot-y-reinstalar-grub",
+      "name": "Entrar al sistema (chroot) y reinstalar GRUB",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ingresa como superusuario al entorno de tu sistema de archivos original y reinstala el cargador de arranque:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Cambiar la raíz del shell\nsudo chroot /mnt /bin/bash\n\n# Reinstalar GRUB apuntando al disco (reemplazar /dev/sda por el disco físico general)\ngrub-install /dev/sda\n\n# Regenerar el archivo de configuración del menú de arranque\nupdate-grub\n\n# Salir y desmontar\nexit\nsudo reboot"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,159 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate grub&gt;) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-iniciar-desde-una-distribucion-live-usb-y-localizar-particiones">Paso 1: Iniciar desde una distribución Live USB y localizar particiones</a></li>
-        <li class="toc-subitem"><a href="#paso-2-montar-el-sistema-danado-y-preparar-el-chroot">Paso 2: Montar el sistema dañado y preparar el chroot</a></li>
-        <li class="toc-subitem"><a href="#paso-3-entrar-al-sistema-chroot-y-reinstalar-grub">Paso 3: Entrar al sistema (chroot) y reinstalar GRUB</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Cargador de arranque GRUB eliminado o corrupto tras actualización de Windows</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Iniciar desde un Live USB y reinstalar GRUB con <code>grub-install /dev/sdX</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Archivo de configuración /boot/grub/grub.cfg corrupto o desactualizado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Regenerar el menú de arranque con <code>grub-mkconfig -o /boot/grub/grub.cfg</code></div>
-          </div></div></div>
-<p>El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate <code>grub&gt;</code>) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-iniciar-desde-una-distribucion-live-usb-y-localizar-particiones">Paso 1: Iniciar desde una distribución Live USB y localizar particiones</h3>
-<p>Introduce un Live USB compatible con tu distribución actual, arráncalo en modo UEFI/BIOS y detecta el identificador de tu disco duro:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo fdisk -l
-</code></pre>
-    </div>
-    
-<p><em>(Identifica tu partición raíz de Linux, por ejemplo <code>/dev/sda2</code>, y la partición EFI en formato FAT32, por ejemplo <code>/dev/sda1</code>).</em></p>
-<h3 id="paso-2-montar-el-sistema-danado-y-preparar-el-chroot">Paso 2: Montar el sistema dañado y preparar el chroot</h3>
-<p>Monta la estructura de directorios del sistema de archivos dañado en la sesión temporal:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Montar partición raíz
-sudo mount /dev/sda2 /mnt
-
-# Montar directorios de comunicación del kernel
-for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i /mnt$i; done
-
-# Montar partición EFI si usas UEFI
-sudo mount /dev/sda1 /mnt/boot/efi
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-entrar-al-sistema-chroot-y-reinstalar-grub">Paso 3: Entrar al sistema (chroot) y reinstalar GRUB</h3>
-<p>Ingresa como superusuario al entorno de tu sistema de archivos original y reinstala el cargador de arranque:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar la raíz del shell
-sudo chroot /mnt /bin/bash
-
-# Reinstalar GRUB apuntando al disco (reemplazar /dev/sda por el disco físico general)
-grub-install /dev/sda
-
-# Regenerar el archivo de configuración del menú de arranque
-update-grub
-
-# Salir y desmontar
-exit
-sudo reboot
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Antes de modificar el orden de particiones o instalar actualizaciones mayores del kernel, genera respaldos de la configuración de GRUB (<code>/etc/default/grub</code>). Nunca manipules o fuerces la instalación de GRUB en la partición EFI (<code>grub-install /dev/sda1</code>) en lugar del dispositivo físico del disco (<code>/dev/sda</code>), ya que esto puede corromper las tablas de montaje EFI de tu placa base de forma permanente, impidiendo que reconozca cualquier medio de almacenamiento durante la autocomprobación de encendido (POST).</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -332,6 +253,23 @@ sudo reboot
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -343,23 +281,6 @@ sudo reboot
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

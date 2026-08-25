@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix 500 Internal Server Error Caused by .htaccess Conflicts",
   "description": "Learn how to diagnose and resolve HTTP 500 Internal Server Errors in Apache servers caused by syntax errors or missing modules in your .htaccess file.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Apache, Sysadmin, Web",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-31",
   "dateModified": "2026-07-31",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,85 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix 500 Internal Server Error Caused by .htaccess Conflicts",
+      "item": "https://soportecero.com/en/articulos/error-500-internal-server-error-htaccess-apache.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix 500 Internal Server Error Caused by .htaccess Conflicts",
   "description": "Learn how to diagnose and resolve HTTP 500 Internal Server Errors in Apache servers caused by syntax errors or missing modules in your .htaccess file.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-500-internal-server-error-htaccess-apache.html#isolate-the-issue-using-the-htaccess-file",
+      "name": "Isolate the issue using the .htaccess file",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To confirm 100% that the root cause of the 500 error comes from .htaccess, connect to your server via SSH or FTP and temporarily rename the file:\n\n    \n      \n        BASH\n        Copy\n      \n      # Navigate to your web root directory (e.g. /var/www/html)\ncd /var/www/html\n\n# Rename the file to temporarily disable it\nmv .htaccess .htaccess.bak\n\n    \n    \nReload your website in the browser. If the 500 Internal Server Error disappears (or turns into an expected 404), you have confirmed that the is"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-500-internal-server-error-htaccess-apache.html#check-the-apache-error-log-errorlog",
+      "name": "Check the Apache error log (error.log)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Apache logs the exact line number and directive causing the crash. Run the following command to inspect the latest error entries in real time:\n\n    \n      \n        BASH\n        Copy\n      \n      # On Debian/Ubuntu\nsudo tail -f /var/log/apache2/error.log\n\n# On RHEL/CentOS/Rocky Linux\nsudo tail -f /var/log/httpd/error_log\n\n    \n    \nLook for lines tagged [core:alert] containing messages such as:\n\nInvalid command &#39;RewriteEngine&#39;, perhaps misspelled or defined by a module not included in the"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-500-internal-server-error-htaccess-apache.html#enable-the-required-apache-modules",
+      "name": "Enable the required Apache modules",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If the error log states that a directive like RewriteEngine or Header is invalid, the corresponding Apache module is disabled. Enable them by executing:\n\n    \n      \n        BASH\n        Copy\n      \n      # Enable mod_rewrite and mod_headers on Ubuntu/Debian\nsudo a2enmod rewrite headers\n\n# Restart the Apache service to apply changes\nsudo systemctl restart apache2"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-500-internal-server-error-htaccess-apache.html#wrap-directives-conditionally-and-validate-syntax",
+      "name": "Wrap directives conditionally and validate syntax",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To prevent missing modules from throwing a site-wide 500 error, wrap sensitive configuration lines inside module conditional blocks in .htaccess:\n\n    \n      \n        APACHE\n        Copy\n      \n      # Ensure rewrite rules only execute if mod_rewrite is loaded\n&lt;IfModule mod_rewrite.c&gt;\n    RewriteEngine On\n    RewriteBase /\n    RewriteCond %{REQUEST_FILENAME} !-f\n    RewriteCond %{REQUEST_FILENAME} !-d\n    RewriteRule ^ index.php [L]\n&lt;/IfModule&gt;\n\n# Safely set HTTP security headers\n&lt"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,177 +233,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The 500 Internal Server Error in Apache is one of the most generic and frustrating server responses. It frequently occurs right after editing a .htaccess file, adding invalid URL rewrite rules (mod_rewrite), or referencing Apache directives from modules that are not installed or enabled on the server.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#how-to-fix-the-error-step-by-step">How to Fix the Error Step-by-Step</a></li>
-        <li class="toc-subitem"><a href="#step-1-isolate-the-issue-using-the-htaccess-file">Step 1: Isolate the issue using the .htaccess file</a></li>
-        <li class="toc-subitem"><a href="#step-2-check-the-apache-error-log-errorlog">Step 2: Check the Apache error log (error.log)</a></li>
-        <li class="toc-subitem"><a href="#step-3-enable-the-required-apache-modules">Step 3: Enable the required Apache modules</a></li>
-        <li class="toc-subitem"><a href="#step-4-wrap-directives-conditionally-and-validate-syntax">Step 4: Wrap directives conditionally and validate syntax</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <strong>500 Internal Server Error</strong> in Apache is one of the most generic and frustrating server responses. It frequently occurs right after editing a <code>.htaccess</code> file, adding invalid URL rewrite rules (<code>mod_rewrite</code>), or referencing Apache directives from modules that are not installed or enabled on the server.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>HTTP 500 error after updating <code>.htaccess</code> or installing plugins</strong>: Invalid directive, syntax typo, or disabled Apache module (e.g., <code>mod_rewrite</code> or <code>mod_headers</code>)</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Check Apache error logs (<code>error.log</code>), temporarily rename <code>.htaccess</code>, and correct directives or wrap them in <code>&lt;IfModule&gt;</code> blocks</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="how-to-fix-the-error-step-by-step">🚀 How to Fix the Error Step-by-Step</h2>
-<h3 id="step-1-isolate-the-issue-using-the-htaccess-file">Step 1: Isolate the issue using the .htaccess file</h3>
-<p>To confirm 100% that the root cause of the 500 error comes from <code>.htaccess</code>, connect to your server via SSH or FTP and temporarily rename the file:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Navigate to your web root directory (e.g. /var/www/html)
-cd /var/www/html
-
-# Rename the file to temporarily disable it
-mv .htaccess .htaccess.bak
-</code></pre>
-    </div>
-    
-<p>Reload your website in the browser. If the 500 Internal Server Error disappears (or turns into an expected 404), you have confirmed that the issue lies in a corrupted directive within <code>.htaccess</code>.</p>
-<h3 id="step-2-check-the-apache-error-log-errorlog">Step 2: Check the Apache error log (error.log)</h3>
-<p>Apache logs the exact line number and directive causing the crash. Run the following command to inspect the latest error entries in real time:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># On Debian/Ubuntu
-sudo tail -f /var/log/apache2/error.log
-
-# On RHEL/CentOS/Rocky Linux
-sudo tail -f /var/log/httpd/error_log
-</code></pre>
-    </div>
-    
-<p>Look for lines tagged <code>[core:alert]</code> containing messages such as:</p>
-<ul>
-<li><code>Invalid command &#39;RewriteEngine&#39;, perhaps misspelled or defined by a module not included in the server configuration</code></li>
-<li><code>CustomLog not allowed here</code></li>
-</ul>
-<h3 id="step-3-enable-the-required-apache-modules">Step 3: Enable the required Apache modules</h3>
-<p>If the error log states that a directive like <code>RewriteEngine</code> or <code>Header</code> is invalid, the corresponding Apache module is disabled. Enable them by executing:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Enable mod_rewrite and mod_headers on Ubuntu/Debian
-sudo a2enmod rewrite headers
-
-# Restart the Apache service to apply changes
-sudo systemctl restart apache2
-</code></pre>
-    </div>
-    
-<h3 id="step-4-wrap-directives-conditionally-and-validate-syntax">Step 4: Wrap directives conditionally and validate syntax</h3>
-<p>To prevent missing modules from throwing a site-wide 500 error, wrap sensitive configuration lines inside module conditional blocks in <code>.htaccess</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">APACHE</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Ensure rewrite rules only execute if mod_rewrite is loaded
-&lt;IfModule mod_rewrite.c&gt;
-    RewriteEngine On
-    RewriteBase /
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [L]
-&lt;/IfModule&gt;
-
-# Safely set HTTP security headers
-&lt;IfModule mod_headers.c&gt;
-    Header set X-Content-Type-Options &quot;nosniff&quot;
-&lt;/IfModule&gt;
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Always create backups</strong>: Run <code>cp .htaccess .htaccess.bak</code> before pasting snippets found online.</li>
-<li><strong>Use <code>&lt;IfModule&gt;</code> guards</strong>: Never include compression directives (<code>mod_deflate</code>) or security headers without validating availability first.</li>
-<li><strong>Check file permissions</strong>: Ensure <code>.htaccess</code> has <code>644</code> permissions (owned by <code>www-data</code> or your user with public read access). Overly permissive modes like <code>777</code> can be rejected by strict security modules like <code>SUEXEC</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -350,6 +265,23 @@ sudo systemctl restart apache2
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -361,23 +293,6 @@ sudo systemctl restart apache2
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

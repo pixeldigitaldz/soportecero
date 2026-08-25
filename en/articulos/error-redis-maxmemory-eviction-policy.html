@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix Redis OOM Command Not Allowed Error (Maxmemory Policy Setup)",
   "description": "Resolve Redis 'OOM command not allowed when used memory > maxmemory' errors by setting proper eviction policies and RAM limits.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Redis, Databases, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix Redis OOM Command Not Allowed Error (Maxmemory Policy Setup)",
+      "item": "https://soportecero.com/en/articulos/error-redis-maxmemory-eviction-policy.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix Redis OOM Command Not Allowed Error (Maxmemory Policy Setup)",
   "description": "Resolve Redis 'OOM command not allowed when used memory > maxmemory' errors by setting proper eviction policies and RAM limits.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-redis-maxmemory-eviction-policy.html#inspect-redis-memory-usage-statistics",
+      "name": "Inspect Redis Memory Usage Statistics",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Connect to your Redis instance using redis-cli and query the memory subsytem status:\n\n    \n      \n        BASH\n        Copy\n      \n      # Connect via redis-cli\nredis-cli -h 127.0.0.1 -p 6379\n\n# Query memory statistics\n127.0.0.1:6379&gt; INFO memory\n\n# Key fields to examine:\n# used_memory_human:1.95G\n# maxmemory_human:2.00G\n# maxmemory_policy:noeviction"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-redis-maxmemory-eviction-policy.html#change-eviction-policy-maxmemory-policy-live",
+      "name": "Change Eviction Policy (maxmemory-policy) Live",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To restore service immediately without restarting your Redis cluster or process, update the eviction policy at runtime:\n\n    \n      \n        BASH\n        Copy\n      \n      # Enable Least Recently Used (LRU) eviction across all keys\n127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru\n\n# Optional: Dynamically increase maxmemory if free host memory is available\n127.0.0.1:6379&gt; CONFIG SET maxmemory 3gb\n\n    \n    \nKey Redis eviction policies explained:\n\nallkeys-lru: Evicts the least recentl"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-redis-maxmemory-eviction-policy.html#persist-changes-in-configuration-file-redisconf",
+      "name": "Persist Changes in Configuration File (redis.conf)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To ensure settings persist across server reboots or container restarts, update your primary redis.conf:\n\n    \n      \n        INI\n        Copy\n      \n      # Path: /etc/redis/redis.conf or custom redis.conf\n\n# Maximum RAM allocated to Redis (e.g., 2 Gigabytes)\nmaxmemory 2048mb\n\n# Production eviction policy for cache workloads\nmaxmemory-policy allkeys-lru\n\n# Enable background active defragmentation\nactivedefrag yes\n\n    \n    \nApply and verify the system service status:\n\n    \n      \n        BASH\n  "
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,190 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The OOM command not allowed when used memory &gt; &#39;maxmemory&#39; error occurs when a Redis instance reaches its configured memory ceiling (maxmemory) while operating under the default noeviction policy. Under these conditions, Redis rejects all write operations (SET, HSET, LPUSH, SADD) with an Out-of-Memory exception to protect existing data from unmanaged deletion.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-inspect-redis-memory-usage-statistics">Step 1: Inspect Redis Memory Usage Statistics</a></li>
-        <li class="toc-subitem"><a href="#step-2-change-eviction-policy-maxmemory-policy-live">Step 2: Change Eviction Policy (maxmemory-policy) Live</a></li>
-        <li class="toc-subitem"><a href="#step-3-persist-changes-in-configuration-file-redisconf">Step 3: Persist Changes in Configuration File (redis.conf)</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <code>OOM command not allowed when used memory &gt; &#39;maxmemory&#39;</code> error occurs when a Redis instance reaches its configured memory ceiling (<code>maxmemory</code>) while operating under the default <code>noeviction</code> policy. Under these conditions, Redis rejects all write operations (<code>SET</code>, <code>HSET</code>, <code>LPUSH</code>, <code>SADD</code>) with an Out-of-Memory exception to protect existing data from unmanaged deletion.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Write commands fail with <code>OOM command not allowed</code></strong>: Memory hit the <code>maxmemory</code> threshold while using the default <code>noeviction</code> policy</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Configure an automatic eviction policy (<code>allkeys-lru</code> / <code>volatile-lru</code>) or increase <code>maxmemory</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>The Redis daemon is killed by the Linux Kernel (<em>OOM Killer</em>)</strong>: <code>redis.conf</code> lacks a explicit <code>maxmemory</code> boundary, exhausting host system RAM</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set an explicit <code>maxmemory</code> quota (e.g., 70-80% of total host physical memory)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>High memory fragmentation ratio (<code>mem_fragmentation_ratio &gt; 1.5</code>)</strong>: The Jemalloc allocator holds unreleased pages after bulk key deletion operations</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Enable Redis active defragmentation (<code>activedefrag yes</code>)</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-inspect-redis-memory-usage-statistics">Step 1: Inspect Redis Memory Usage Statistics</h3>
-<p>Connect to your Redis instance using <code>redis-cli</code> and query the memory subsytem status:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Connect via redis-cli
-redis-cli -h 127.0.0.1 -p 6379
-
-# Query memory statistics
-127.0.0.1:6379&gt; INFO memory
-
-# Key fields to examine:
-# used_memory_human:1.95G
-# maxmemory_human:2.00G
-# maxmemory_policy:noeviction
-</code></pre>
-    </div>
-    
-<h3 id="step-2-change-eviction-policy-maxmemory-policy-live">Step 2: Change Eviction Policy (<code>maxmemory-policy</code>) Live</h3>
-<p>To restore service immediately without restarting your Redis cluster or process, update the eviction policy at runtime:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Enable Least Recently Used (LRU) eviction across all keys
-127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru
-
-# Optional: Dynamically increase maxmemory if free host memory is available
-127.0.0.1:6379&gt; CONFIG SET maxmemory 3gb
-</code></pre>
-    </div>
-    
-<p>Key Redis eviction policies explained:</p>
-<ul>
-<li><strong><code>allkeys-lru</code></strong>: Evicts the least recently used keys out of all keys. Recommended for web caching layers.</li>
-<li><strong><code>volatile-lru</code></strong>: Evicts least recently used keys among those with an explicit TTL set.</li>
-<li><strong><code>allkeys-lfu</code></strong>: Evicts the least frequently used keys across the dataset.</li>
-<li><strong><code>noeviction</code></strong>: Rejects all write commands with an OOM error (default setting).</li>
-</ul>
-<h3 id="step-3-persist-changes-in-configuration-file-redisconf">Step 3: Persist Changes in Configuration File (<code>redis.conf</code>)</h3>
-<p>To ensure settings persist across server reboots or container restarts, update your primary <code>redis.conf</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Path: /etc/redis/redis.conf or custom redis.conf
-
-# Maximum RAM allocated to Redis (e.g., 2 Gigabytes)
-maxmemory 2048mb
-
-# Production eviction policy for cache workloads
-maxmemory-policy allkeys-lru
-
-# Enable background active defragmentation
-activedefrag yes
-</code></pre>
-    </div>
-    
-<p>Apply and verify the system service status:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart redis-server
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Enforce Key TTLs</strong>: Always specify Time-To-Live expiration intervals when writing cache entries from application code (<code>SET key value EX 3600</code>) to enable natural key garbage collection.</li>
-<li><strong>Scan for Big Keys</strong>: Routinely scan for bloated data structures using built-in analysis tools: <code>redis-cli --bigkeys</code> or <code>redis-cli --memkeys</code>.</li>
-<li><strong>Configure Memory Alerts</strong>: Set up monitoring alerts in Prometheus or Datadog to notify team members when <code>used_memory</code> exceeds 80% of configured <code>maxmemory</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -363,6 +253,23 @@ activedefrag yes
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -374,23 +281,6 @@ activedefrag yes
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

@@ -1,50 +1,70 @@
 ---
-title: 'Solved: server certificate verification failed in Git'
-description: 'How to fix the SSL certificate error in Git when trying to clone, pull or push from a remote repository.'
-category: 'Web & Code'
-date: '2026-08-15'
-readTime: '3 min'
-tags: ['Git', 'Security', 'DevOps']
+title: "Fix: server certificate verification failed in Git"
+description: "Learn how to resolve SSL certificate verification failed errors (fatal: unable to access) in Git across Linux, Windows, and macOS securely."
+category: "Web & Code"
+tags: ["Git", "SSL", "Linux", "Security", "GitHub", "DevOps"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **Outdated system certificates** | Update `ca-certificates` |
-| **Proxy or Antivirus blocking SSL** | Use SSH instead of HTTPS |
-| **Server with self-signed certificate** | Disable global verification (Temporary) with `http.sslVerify false` |
+| **Outdated Certificate Authority (CA) root store on the host operating system** | Update `ca-certificates` package on Linux via `sudo update-ca-certificates` |
+| **Enterprise proxy SSL inspection or untrusted internal CA certificate bundle** | Register certificate bundle with `git config --global http.sslCAInfo /path/ca.crt` |
 
-## Step-by-Step Solution
+The error `fatal: unable to access 'https://github.com/...': server certificate verification failed. CAfile: none CRLfile: none` occurs when the local Git client cannot validate the remote SSL/TLS certificate chain against its local trusted Certificate Authority bundle.
 
-**Update your system's root certificates (Recommended)**
-Most of the time, the error occurs because your server's (or PC's) operating system has expired certificate authorities (CA).
-On Ubuntu/Debian:
+## 🚀 Step-by-Step Solution
+
+### Step 1: Update Operating System Root Certificates
+Expired intermediate or root certificates trigger validation rejections across network endpoints:
 ```bash
+# On Debian / Ubuntu:
 sudo apt-get update
-sudo apt-get install --reinstall ca-certificates
-```
-On CentOS/RHEL:
-```bash
-sudo yum update ca-certificates
+sudo apt-get install --reinstall ca-certificates -y
+sudo update-ca-certificates
+
+# On Arch Linux / CachyOS:
+sudo pacman -Sy ca-certificates --noconfirm
+
+# On RHEL / Fedora / Rocky Linux:
+sudo dnf reinstall ca-certificates -y
+sudo update-ca-trust
 ```
 
-**Use SSH instead of HTTPS**
-If Github/Gitlab is blocking your traffic due to corporate proxy issues or your local CA, changing the remote URL to SSH usually bypasses HTTPS SSL validation:
+### Step 2: Declare Explicit CA Bundle in Git Config
+If operating behind a corporate intercepting firewall:
 ```bash
-git remote set-url origin git@github.com:user/repository.git
-```
-Make sure you have your SSH keys configured (`ssh-keygen`).
+# Define global CA certificate path in Linux:
+git config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
 
-**Disable global SSL verification (Risky, only for testing)**
-If you are connecting to an internal server (local Gitea/Gitlab) with a self-signed certificate, you can tell Git to ignore SSL security for that repository:
-```bash
-git config http.sslVerify false
-```
-*If you want to apply it to all projects on your machine:*
-```bash
-git config --global http.sslVerify false
+# In Windows Git Bash:
+git config --global http.sslCAInfo "C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt"
 ```
 
-## Prevention Tips
-- **CA Management:** If your company uses internally signed certificates, make sure to add them to the `/etc/ssl/certs/` path and run `update-ca-certificates`.
-- **Prefer SSH:** Get used to using SSH keys for Git operations; they are faster and do not suffer from SSL certificate expiration issues in the same way as HTTPS.
+### Step 3: Synchronize System Clock with NTP
+Clock skew invalidates valid certificates:
+```bash
+# Enforce system time synchronization on Linux
+sudo timedatectl set-ntp true
+timedatectl status
+```
+
+### Step 4: Configure Windows Native Certificate Backend (Schannel)
+On Windows workstations, instruct Git to leverage the native Windows Certificate Manager:
+```bash
+git config --global http.sslBackend schannel
+```
+
+## 🛡️ Prevention Advice
+- **Avoid global http.sslVerify false:** Setting `git config --global http.sslVerify false` strips encryption validation, exposing repository commits to MitM credential harvesting.
+- **Adopt SSH authentication:** Clone repositories over SSH (`git@github.com:user/repo.git`) to bypass HTTPS SSL validation layers entirely.
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### How do I bypass sslVerify for a single emergency command?
+Pass the configuration inline without mutating global defaults: `git -c http.sslVerify=false clone https://...`.
+
+### Why does GitHub load in Chrome but fail in Git CLI?
+Web browsers leverage the operating system native certificate store, while Git CLI may depend on a distinct OpenSSL bundle.

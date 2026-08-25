@@ -1,53 +1,65 @@
 ---
-title: Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton
-description: >-
-  Elimina los tirones al jugar títulos DirectX en Linux optimizando y activando
-  el procesamiento en segundo plano de shaders de Vulkan.
-category: Gaming Tech
-tags:
-  - Gaming
-  - Linux
-  - Proton
-readTime: 4 min
-date: '2026-07-27'
+title: "Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton"
+description: "Elimina el stuttering y acelera la carga de shaders en juegos DirectX 11 y 12 usando Proton, DXVK y RADV/Nvidia en Linux."
+category: "Gaming Tech"
+tags: ["Gaming", "Linux", "Proton", "Vulkan", "DXVK", "Steam Deck"]
+readTime: "5 min"
+date: "2026-07-27"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Tirones constantes (stuttering) al entrar en nuevas zonas por compilación de shaders** | Habilitar la precompilación en segundo plano de shaders Vulkan en los ajustes de Steam |
-| **Caché de shaders deshabilitada o límite de almacenamiento muy bajo** | Configurar `RADV_PERFTEST=gsw %command%` para GPUs AMD o actualizar drivers Mesa |
+| **Tartamudeo (stuttering) al entrar en nuevas zonas por compilación síncrona de shaders** | Activar compilación en segundo plano en Steam y habilitar GPL (Graphics Pipeline Library) |
+| **Caché de shaders de Vulkan corrupta o saturada en disco** | Limpiar el directorio `shadercache` y activar `RADV_PERFTEST=gpl` o `DXVK_ASYNC=1` |
 
-
-Los tirones gráficos repentinos (*shuttering*) e interrupciones al jugar títulos modernos en Linux bajo Steam Proton suelen deberse a la precompilación activa en tiempo de ejecución de shaders de Vulkan. El procesador compila los nuevos modelos gráficos en tiempo real mientras juegas, provocando una caída drástica e instantánea de la tasa de FPS.
+Al jugar en Linux mediante Steam Proton, el tartamudeo o caída abrupta de fotogramas (stuttering) durante los primeros minutos de juego se debe a que el controlador gráfico está traduciendo llamadas de DirectX a código binario Vulkan (SPIR-V) en tiempo real (just-in-time). Si la GPU espera a que la CPU compile el sombreador antes de dibujar el fotograma, se genera una congelación perceptible.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Activar el procesamiento en segundo plano de Shaders en Steam
-Configura Steam para que compile de forma asíncrona y en segundo plano todos los recursos gráficos antes de que ejecutes el juego:
-1. Abre Steam y navega a **Parámetros** > **Precompilación de sombreadores**.
-2. Asegura que la casilla **Habilitar precompilación de sombreadores (Shader Pre-caching)** esté marcada.
-3. Activa la opción **Permitir procesamiento de sombreadores de Vulkan en segundo plano**.
+### Paso 1: Activar el procesamiento de Shaders en segundo plano en Steam
+Steam incluye un sistema oficial para descargar y precompilar cachés de shaders compartidas:
+1. Abre **Steam > Parámetros > Descargas** (Settings > Downloads).
+2. En la sección **Sombreador previo al almacenamiento en caché** (Shader Pre-caching), marca las opciones:
+   - *Habilitar sombreadores previos al almacenamiento en caché*.
+   - *Permitir el procesamiento de sombreadores de Vulkan en segundo plano*.
+3. Esto descargará paquetes de shaders precompilados por otros usuarios con tu misma GPU.
 
-### Paso 2: Utilizar DXVK Async para juegos DirectX 11
-Para títulos basados en DirectX 11, puedes forzar a DXVK a compilar shaders de forma asíncrona añadiendo parámetros de lanzamiento específicos en tu juego de Steam:
+### Paso 2: Habilitar Graphics Pipeline Library (GPL) en controladores Mesa (AMD / Intel)
+Los controladores abiertos RADV (Mesa 23.1+) y Nvidia (driver 535+) soportan GPL, permitiendo compilar sombreadores de forma ultra-rápida sin pausas:
 ```bash
-# Establecer la directiva de compilación asíncrona para el juego en Steam
-dxvk.enableAsync = true
-```
-*(Haz clic derecho en el juego > Propiedades > General > Parámetros de lanzamiento e ingresa):*
-```plaintext
-PROTON_ASYNC=1 %command%
+# Comprobar la versión de Mesa instalada
+glxinfo -B | grep -i "OpenGL version"
+
+# En AMD: Asegurar que GPL está activo en las opciones de lanzamiento de Steam:
+RADV_PERFTEST=gpl %command%
 ```
 
-### Paso 3: Limpiar cachés de sombreadores corruptos
-Si los tirones persisten, purga la caché antigua de sombreadores de Vulkan para forzar una reconstrucción limpia y estable de las texturas de tus tarjetas gráficas NVIDIA o AMD:
+### Paso 3: Limpiar cachés de shaders corruptas
+Si un juego sigue sufriendo tirones tras una actualización de controladores o parches del juego, elimina la caché local para forzar su regeneración limpia:
 ```bash
-# Eliminar el directorio de caché de sombreadores de Steam
-rm -rf ~/.steam/steam/steamapps/shadercache/*
+# Localizar y borrar la carpeta shadercache del juego (reemplaza <AppID> por el ID del juego)
+rm -rf ~/.local/share/Steam/steamapps/shadercache/<AppID>
+
+# En Steam Deck / Flatpak:
+rm -rf ~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/shadercache/<AppID>
 ```
 
-## 🛡️ Consejo de Prevención
+### Paso 4: Optimizar la memoria de caché con variables de entorno de Mesa / DXVK
+Aumenta el tamaño máximo de la caché de shaders en disco para evitar que el sistema borre sombreadores antiguos:
+```bash
+# Parámetros recomendados en las propiedades del juego en Steam:
+__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1 MESA_SHADER_CACHE_MAX_SIZE=16G %command%
+```
 
-Prácticas de seguridad recomendadas:
-- No utilices la bandera `PROTON_ASYNC=1` en juegos competitivos online multijugador que cuenten con sistemas antitrampas restrictivos a nivel de kernel (como Easy Anti-Cheat o BattlEye). La inyección asíncrona altera la cadencia nativa de dibujado de frames de la librería del juego, lo que puede ser interpretado por los algoritmos del detector de trampas como un intento de manipulación visual del cliente, resultando en el bloqueo permanente de tu cuenta de jugador.
+## 🛡️ Consejos de Prevención
+- **Instala juegos en discos SSD NVMe:** La velocidad de lectura de la caché de shaders afecta directamente el tiempo de carga de texturas y niveles.
+- **Mantén actualizados los drivers Mesa / Nvidia:** Cada versión de Mesa introduce optimizaciones críticas en la compilación de pipelines Vulkan.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Qué diferencia hay entre DXVK Async y Vulkan GPL?
+DXVK Async no dibuja el objeto hasta que el shader está listo (provocando parpadeo visual pero 0 tirones). Vulkan GPL es el estándar oficial del consorcio Khronos que compila al vuelo sin artefactos visuales ni tirones.
+
+### ¿Dónde puedo ver el AppID de un juego de Steam?
+En la URL de la tienda del juego en Steam (los números tras `/app/`) o en las propiedades del juego en tu biblioteca dentro de *Actualizaciones*.

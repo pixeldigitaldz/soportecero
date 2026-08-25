@@ -2,7 +2,7 @@
 title: 'Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH'
 description: 'Cómo solucionar el error de conexión SSH kex_exchange_identification Connection closed by remote host provocado por Fail2ban, límites de MaxStartups o bloqueos de red.'
 category: 'Sistemas y Servidores'
-date: '2026-08-25'
+date: '2026-08-24'
 readTime: '3 min'
 tags: ['SSH', 'Linux', 'Seguridad']
 ---

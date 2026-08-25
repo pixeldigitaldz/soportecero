@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix 'Port Already in Use' Error and Kill Process on Linux & macOS",
   "description": "Learn how to quickly identify and terminate processes locking TCP/UDP network ports (EADDRINUSE) in Linux and macOS systems.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Linux, Sysadmin, Networking",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix 'Port Already in Use' Error and Kill Process on Linux & macOS",
+      "item": "https://soportecero.com/en/articulos/error-port-already-in-use-kill-process.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix 'Port Already in Use' Error and Kill Process on Linux & macOS",
   "description": "Learn how to quickly identify and terminate processes locking TCP/UDP network ports (EADDRINUSE) in Linux and macOS systems.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-port-already-in-use-kill-process.html#locate-the-process-id-pid-holding-the-port",
+      "name": "Locate the Process ID (PID) Holding the Port",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Use command-line networking tools to find which application process is bound to the target port (e.g., port 3000 or 8080):\n\n    \n      \n        BASH\n        Copy\n      \n      # Method 1: Using lsof (LiSt Open Files)\nsudo lsof -i :3000\n\n# Sample output:\n# COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME\n# node    14205 user   23u  IPv6 128941      0t0  TCP *:3000 (LISTEN)\n\n# Method 2: Using ss (Socket Statistics)\nsudo ss -tulpn | grep :3000\n\n# Method 3: Using fuser\nsudo fuser 3000/tcp"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-port-already-in-use-kill-process.html#gracefully-or-forcefully-terminate-the-process",
+      "name": "Gracefully or Forcefully Terminate the Process",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Once you have the PID (e.g., 14205), send a graceful termination signal (SIGTERM) to release network sockets cleanly. If the process is unresponsive, issue a forceful SIGKILL:\n\n    \n      \n        BASH\n        Copy\n      \n      # Terminate gracefully (SIGTERM)\nkill 14205\n\n# Force immediate termination if unresponsive (SIGKILL)\nkill -9 14205\n\n# Or kill the port occupant directly in one command using fuser:\nsudo fuser -k 3000/tcp"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-port-already-in-use-kill-process.html#handle-auto-restarting-services-systemd-amp-docker",
+      "name": "Handle Auto-Restarting Services (systemd &amp; Docker)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If the process respawns automatically, it is managed by a supervisor service.\nFor systemd services:\n\n    \n      \n        BASH\n        Copy\n      \n      # Inspect service controlling the port\nsudo systemctl status &lt;service-name&gt;\n\n# Stop the service\nsudo systemctl stop &lt;service-name&gt;\n\n    \n    \nFor Docker containers:\n\n    \n      \n        BASH\n        Copy\n      \n      # List containers binding local ports\ndocker ps --format &quot;table {{.ID}}\\t{{.Names}}\\t{{.Ports}}&quot;\n\n# Stop the "
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,188 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The EADDRINUSE: address already in use error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-locate-the-process-id-pid-holding-the-port">Step 1: Locate the Process ID (PID) Holding the Port</a></li>
-        <li class="toc-subitem"><a href="#step-2-gracefully-or-forcefully-terminate-the-process">Step 2: Gracefully or Forcefully Terminate the Process</a></li>
-        <li class="toc-subitem"><a href="#step-3-handle-auto-restarting-services-systemd-amp-docker">Step 3: Handle Auto-Restarting Services (systemd &amp; Docker)</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <code>EADDRINUSE: address already in use</code> error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Server startup fails with <code>EADDRINUSE :::3000</code> or <code>bind: address already in use</code></strong>: A background node/python script or orphaned dev server is bound to the port</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Locate the PID using <code>lsof</code> or <code>ss</code> and terminate the process</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Port instantly becomes occupied again right after killing the PID</strong>: A systemd unit or Docker container restart policy is resurrecting the process</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Stop the supervising daemon (<code>systemctl stop</code> or <code>docker stop</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Socket remains stuck in <code>TIME_WAIT</code> state after stopping application</strong>: Socket closed ungracefully without enabling <code>SO_REUSEADDR</code> flag</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Wait for TCP socket timeout or configure <code>SO_REUSEADDR</code> in code</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-locate-the-process-id-pid-holding-the-port">Step 1: Locate the Process ID (PID) Holding the Port</h3>
-<p>Use command-line networking tools to find which application process is bound to the target port (e.g., port <code>3000</code> or <code>8080</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Method 1: Using lsof (LiSt Open Files)
-sudo lsof -i :3000
-
-# Sample output:
-# COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-# node    14205 user   23u  IPv6 128941      0t0  TCP *:3000 (LISTEN)
-
-# Method 2: Using ss (Socket Statistics)
-sudo ss -tulpn | grep :3000
-
-# Method 3: Using fuser
-sudo fuser 3000/tcp
-</code></pre>
-    </div>
-    
-<h3 id="step-2-gracefully-or-forcefully-terminate-the-process">Step 2: Gracefully or Forcefully Terminate the Process</h3>
-<p>Once you have the PID (e.g., <code>14205</code>), send a graceful termination signal (<code>SIGTERM</code>) to release network sockets cleanly. If the process is unresponsive, issue a forceful <code>SIGKILL</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Terminate gracefully (SIGTERM)
-kill 14205
-
-# Force immediate termination if unresponsive (SIGKILL)
-kill -9 14205
-
-# Or kill the port occupant directly in one command using fuser:
-sudo fuser -k 3000/tcp
-</code></pre>
-    </div>
-    
-<h3 id="step-3-handle-auto-restarting-services-systemd-amp-docker">Step 3: Handle Auto-Restarting Services (systemd &amp; Docker)</h3>
-<p>If the process respawns automatically, it is managed by a supervisor service.</p>
-<p>For <strong>systemd</strong> services:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Inspect service controlling the port
-sudo systemctl status &lt;service-name&gt;
-
-# Stop the service
-sudo systemctl stop &lt;service-name&gt;
-</code></pre>
-    </div>
-    
-<p>For <strong>Docker</strong> containers:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># List containers binding local ports
-docker ps --format &quot;table {{.ID}}\t{{.Names}}\t{{.Ports}}&quot;
-
-# Stop the container blocking the port
-docker stop &lt;container-name&gt;
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Implement Graceful Shutdowns in Code</strong>: Capture <code>SIGINT</code> and <code>SIGTERM</code> signals in your app code (Node.js, Express, Go) to close HTTP listeners and database connections cleanly before exiting.</li>
-<li><strong>Enable Socket Reuse (<code>SO_REUSEADDR</code>)</strong>: When writing TCP network servers, set the <code>SO_REUSEADDR</code> socket option to allow immediate rebinding without waiting for <code>TIME_WAIT</code> timeouts during rapid development restarts.</li>
-<li><strong>Use Dynamic Port Fallbacks</strong>: Use environment variables (<code>PORT=3001 npm start</code>) or automatic port detection during local development to avoid port conflicts with host services.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -361,6 +253,23 @@ docker stop &lt;container-name&gt;
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -372,23 +281,6 @@ docker stop &lt;container-name&gt;
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

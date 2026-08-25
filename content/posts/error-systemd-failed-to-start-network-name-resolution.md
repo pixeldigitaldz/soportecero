@@ -1,67 +1,76 @@
 ---
 title: "[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved"
-description: "¿Tu servidor Linux perdió la conexión a internet por 'Could not resolve host'? Solución paso a paso para reparar la resolución DNS y resolv.conf."
+description: "Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso."
 category: "Sistemas y Servidores"
-tags: ["Linux", "DNS", "Sysadmin", "Ubuntu"]
-readTime: "4 min"
-date: "2026-08-30"
+tags: ["systemd", "DNS", "Linux", "SysAdmin", "Ubuntu", "Redes"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Servicio systemd-resolved fallando por conflicto de permisos o configuración corrupta** | Revisar los logs del servicio con `journalctl -u systemd-resolved -b` |
-| **Enlace simbólico del archivo /etc/resolv.conf roto** | Recrear el enlace simbólico hacia `/run/systemd/resolve/stub-resolv.conf` |
+| **Enlace simbólico roto en /etc/resolv.conf apuntando a un stub de systemd-resolved inactivo** | Recrear el enlace simbólico a `/run/systemd/resolve/stub-resolv.conf` o restaurar archivo estático |
+| **Daemon systemd-resolved caído con estado failed (status=failed)** | Reiniciar el servicio con `sudo systemctl restart systemd-resolved` y configurar DNS públicos |
 
+El fallo generalizado `Temporary failure in name resolution`, `Could not resolve host: google.com` o `Failed to start Network Name Resolution` en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo `/etc/resolv.conf`) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.
 
-El error **`Could not resolve host: google.com`** o **`Temporary failure in name resolution`** al ejecutar `ping`, `apt update` o `curl` en servidores Linux (Ubuntu, Debian, CentOS) ocurre cuando el servicio local de resolución de nombres DNS (**`systemd-resolved`**) o el enlace simbólico del archivo `/etc/resolv.conf` está corrupto o desconfigurado.
+## 🚀 Cómo solucionar el error paso a paso
 
-> **Solución Rápida (1 Minuto):**
-> 1. Restablece temporalmente un servidor DNS primario en `/etc/resolv.conf`:
->    `echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf`
-> 2. Reinicia el servicio de DNS nativo:
->    `sudo systemctl restart systemd-resolved`
-
-## 🚀 Cómo solucionar los fallos de resolución DNS en Linux paso a paso
-
-### Paso 1: Comprobar el servicio `systemd-resolved`
-Verifica si el demonio de resolución DNS predeterminado de systemd se encuentra activo:
-
+### Paso 1: Restablecer temporalmente la conectividad mediante nameservers estáticos
+Si tu servidor no puede descargar paquetes por falta de DNS, añade manualmente un resolvedor temporal:
 ```bash
-sudo systemctl status systemd-resolved
+# Configurar DNS públicos directos de Cloudflare y Google
+echo -e "nameserver 1.1.1.1\nnameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 ```
-Si se encuentra detenido o bloqueado, inicialízalo:
+Comprueba de inmediato si puedes resolver dominios:
 ```bash
-sudo systemctl enable --now systemd-resolved
+ping -c 3 google.com
 ```
 
-### Paso 2: Reconstruir el enlace simbólico de `/etc/resolv.conf`
-En distribuciones modernas de Linux, `/etc/resolv.conf` debe ser un enlace simbólico que apunta al archivo administrado por systemd. Si un programa lo sobrescribió convirtiéndolo en un archivo estático roto:
-
+### Paso 2: Reparar el enlace simbólico oficial de systemd-resolved
+En Ubuntu y distribuciones modernas con systemd, `/etc/resolv.conf` debe ser un enlace simbólico al stub del resolvedor:
 ```bash
-# 1. Eliminar el archivo resolv.conf corrupto
+# 1. Eliminar el archivo o enlace roto anterior
 sudo rm -f /etc/resolv.conf
 
-# 2. Crear el enlace simbolico hacia la configuracion stub de systemd
+# 2. Crear el enlace simbólico correcto
 sudo ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
-# 3. Reiniciar servicios de red
+# 3. Reiniciar y habilitar el servicio de resolución
+sudo systemctl restart systemd-resolved
+sudo systemctl enable systemd-resolved
+```
+
+### Paso 3: Configurar servidores DNS estables en resolved.conf
+Abre el archivo de configuración principal de resolución (`/etc/systemd/resolved.conf`):
+```ini
+[Resolve]
+DNS=1.1.1.1 8.8.8.8
+FallbackDNS=1.0.0.1 8.8.4.4
+Domains=~.
+DNSSEC=allow-downgrade
+```
+Aplica los cambios reiniciando el servicio:
+```bash
 sudo systemctl restart systemd-resolved
 ```
 
-### Paso 3: Asignar servidores DNS estáticos en Netplan / NetworkManager
-Para evitar que el proveedor de hosting o DHCP sobrescriba la configuración con servidores DNS no funcionales tras reiniciar:
+### Paso 4: Validar el estado con resolvectl
+Comprueba que el resolvedor tiene asignados servidores DNS en cada interfaz de red activa:
+```bash
+# Comprobar el estado global de DNS
+resolvectl status
+```
 
-* **En Ubuntu Server (Netplan `/etc/netplan/50-cloud-init.yaml`):**
-  ```yaml
-  network:
-    version: 2
-    ethernets:
-      eth0:
-        nameservers:
-          addresses: [8.8.8.8, 1.1.1.1]
-  ```
-  Aplica los cambios con `sudo netplan apply`.
+## 🛡️ Consejos de Prevención
+- **Evita que gestores de red sobreescriban /etc/resolv.conf:** Si utilizas NetworkManager, asegúrate de que esté configurado para colaborar con systemd-resolved (`dns=systemd-resolved` en `/etc/NetworkManager/NetworkManager.conf`).
+- **Bloquea el archivo si experimentas sobreescrituras no deseadas:** Puedes aplicar el atributo inmutable en caso de emergencia: `sudo chattr +i /etc/resolv.conf`.
 
-## 🛡️ Consejo de Prevención
-* Evita modificar manualmente el archivo `/etc/resolv.conf` sin usar la herramienta de gestión de red de tu distribución (`netplan` o `nmcli`).
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué ping 8.8.8.8 funciona pero ping google.com falla?
+Porque la conectividad IP a nivel de enrutamiento funciona correctamente, pero el subsistema de traducción de nombres (DNS) está caído.
+
+### ¿Qué diferencia hay entre /run/systemd/resolve/stub-resolv.conf y resolv.conf normal?
+El stub redirige las peticiones locales a la IP `127.0.0.53` gestionada por el daemon de systemd-resolved para permitir almacenamiento en caché y validación DNSSEC.

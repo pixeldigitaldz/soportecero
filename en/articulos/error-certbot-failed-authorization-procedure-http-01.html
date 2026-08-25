@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error Certbot 'Failed authorization procedure (http-01)'",
   "description": "Let's Encrypt / Certbot failing SSL certificate generation due to HTTP-01 challenge failure? Fix port 80 blocks and Nginx location routes.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Certbot, SSL, Nginx, Apache, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
   "dateModified": "2026-08-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error Certbot 'Failed authorization procedure (http-01)'",
-  "description": "Let's Encrypt / Certbot failing SSL certificate generation due to HTTP-01 challenge failure? Fix port 80 blocks and Nginx location routes.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error Certbot 'Failed authorization procedure (http-01)'",
+      "item": "https://soportecero.com/en/articulos/error-certbot-failed-authorization-procedure-http-01.html"
+    }
+  ]
 }
   </script>
     
@@ -148,186 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-port-80-accessibility">Step 1: Verify Port 80 Accessibility</a></li>
-        <li class="toc-subitem"><a href="#step-2-configure-acme-challenge-location-in-nginx">Step 2: Configure ACME Challenge Location in Nginx</a></li>
-        <li class="toc-subitem"><a href="#step-3-issue-via-standalone-mode">Step 3: Issue via Standalone Mode</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Port 80 blocked by firewall or misconfigured web server</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Open port 80 in firewall: <code>ufw allow 80/tcp</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Inaccessible .well-known/acme-challenge validation path</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure web root directory matches Nginx/Apache configuration block</div>
-          </div></div></div>
-<p>The error <strong><code>Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout</code></strong> occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Open port 80 in your firewall: <code>sudo ufw allow 80/tcp</code></li>
-<li>Stop Nginx temporarily to issue via standalone mode:
-<code>sudo systemctl stop nginx &amp;&amp; sudo certbot certonly --standalone -d yourdomain.com</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-verify-port-80-accessibility">Step 1: Verify Port 80 Accessibility</h3>
-<p>Let&#39;s Encrypt strictly requires <strong>port 80</strong> to be accessible over the public internet to validate domain ownership via the <code>http-01</code> challenge, even if your site redirects traffic to HTTPS (port 443).</p>
-<ol>
-<li><strong>Firewall Settings (UFW):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw reload
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>Cloud Security Groups (AWS / GCP / Proxmox):</strong>
-Ensure your cloud security rules permit inbound traffic on port <code>80</code> from <code>0.0.0.0/0</code>.</li>
-</ol>
-<h3 id="step-2-configure-acme-challenge-location-in-nginx">Step 2: Configure ACME Challenge Location in Nginx</h3>
-<p>If Nginx is active, ensure the server block explicitly grants access to the hidden <code>.well-known/acme-challenge/</code> directory:</p>
-<p>Edit <code>/etc/nginx/sites-available/yourdomain.conf</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">NGINX</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>server {
-    listen 80;
-    server_name yourdomain.com www.yourdomain.com;
-
-    location /.well-known/acme-challenge/ {
-        root /var/www/html;
-        allow all;
-    }
-
-    location / {
-        return 301 https://$host$request_uri;
-    }
-}
-</code></pre>
-    </div>
-    
-<p>Test and reload Nginx:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nginx -t &amp;&amp; sudo systemctl restart nginx
-</code></pre>
-    </div>
-    
-<h3 id="step-3-issue-via-standalone-mode">Step 3: Issue via Standalone Mode</h3>
-<p>If web server routing interferes with token verification, temporarily stop your web server and run Certbot in <code>standalone</code> mode:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># 1. Stop web server
-sudo systemctl stop nginx || sudo systemctl stop apache2
-
-# 2. Issue certificate
-sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
-
-# 3. Restart web server
-sudo systemctl start nginx || sudo systemctl start apache2
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -359,6 +207,23 @@ sudo systemctl start nginx || sudo systemctl start apache2
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -370,23 +235,6 @@ sudo systemctl start nginx || sudo systemctl start apache2
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

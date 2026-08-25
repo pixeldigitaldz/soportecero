@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Error iptables failed: No chain/target/match by that name en Docker",
   "description": "Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, Linux, Redes",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Error iptables failed: No chain/target/match by that name en Docker",
-  "description": "Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Error iptables failed: No chain/target/match by that name en Docker",
+      "item": "https://soportecero.com/articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html"
+    }
+  ]
 }
   </script>
     
@@ -148,173 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error iptables failed: iptables --wait -t nat -A DOCKER ... No chain/target/match by that name se produce cuando el cortafuegos del sistema (UFW, Firewalld o iptables) se reinicia o recarga mientras el daemon de Docker está activo, eliminando las cadenas nativas DOCKER y DOCKER-USER de la tabla NAT.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <code>iptables failed: iptables --wait -t nat -A DOCKER ... No chain/target/match by that name</code> se produce cuando el cortafuegos del sistema (UFW, Firewalld o iptables) se reinicia o recarga mientras el daemon de Docker está activo, eliminando las cadenas nativas <code>DOCKER</code> y <code>DOCKER-USER</code> de la tabla NAT.</p>
-<p>Al intentar mapear puertos de red en un nuevo contenedor (<code>-p 8080:80</code>), Docker falla porque no encuentra la infraestructura de enrutamiento necesaria.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Reinicio de UFW o Firewalld después de Docker</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reiniciar el servicio de Docker (<code>sudo systemctl restart docker</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Conflicto entre iptables heredado y nftables</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Configurar Docker o el sistema para usar <code>iptables-legacy</code> o un backend coherente</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Módulos de kernel iptables no cargados</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Cargar los módulos con <code>sudo modprobe ip_tables &amp;&amp; sudo modprobe iptable_nat</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
-<p><strong>Reinicia el servicio de Docker para regenerar las cadenas</strong>
-La solución inmediata y más común es forzar a Docker a reconstruir sus reglas en la tabla de filtrado de paquetes:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart docker
-</code></pre>
-    </div>
-    
-<p>Una vez reiniciado, prueba iniciar tu stack de contenedores:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker compose up -d
-</code></pre>
-    </div>
-    
-<p><strong>Configura el orden de inicio entre UFW y Docker</strong>
-Si usas Ubuntu/Debian con UFW, asegúrate de que UFW cargue antes que Docker. En caso de reiniciar UFW con <code>sudo ufw reload</code>, acostúmbrate a encadenar el reinicio de Docker:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo ufw reload &amp;&amp; sudo systemctl restart docker
-</code></pre>
-    </div>
-    
-<p><strong>Verifica la compatibilidad con nftables</strong>
-En distribuciones modernas (Debian 12+, Arch Linux, RHEL 9), el sistema operativo utiliza <code>nftables</code> por defecto. Si Docker intenta comunicarse con <code>iptables-legacy</code>, se producirán desajustes. Comprueba la alternativa activa:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo update-alternatives --config iptables
-</code></pre>
-    </div>
-    
-<p>Selecciona la opción recomendada para tu distribución (usualmente <code>iptables-nft</code> en sistemas actuales).</p>
-<p><strong>Carga los módulos de red de Linux</strong>
-Si estás en un VPS o contenedor Proxmox (LXC), es posible que los módulos NAT del kernel no se hayan cargado automáticamente:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo modprobe ip_tables
-sudo modprobe iptable_nat
-sudo modprobe iptable_filter
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Uso de la cadena DOCKER-USER:</strong> Nunca agregues reglas de firewall personalizadas directamente a la cadena <code>DOCKER</code>. Añádelas a la cadena <code>DOCKER-USER</code> para que no se borren en cada reinicio.</li>
-<li><strong>Configuración de daemon.json:</strong> Puedes deshabilitar la manipulación automática de iptables en Docker (<code>&quot;iptables&quot;: false</code> en <code>/etc/docker/daemon.json</code>) si prefieres gestionar el enrutamiento manualmente con Nginx Proxy Manager o Traefik.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -346,6 +207,23 @@ sudo modprobe iptable_filter
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
       <article class="related-card">
         <div class="related-card-content">
@@ -357,23 +235,6 @@ sudo modprobe iptable_filter
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error 'invalid reference format' en Docker -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-invalid-reference-format.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'invalid reference format' en Docker</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

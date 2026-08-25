@@ -1,40 +1,57 @@
 ---
 title: "Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)"
-description: "Optimiza el rendimiento del renderizado WebGL en tu navegador para eliminar el stuttering y jugar de forma fluida a Flyff Universe."
+description: "Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE."
 category: "Gaming Tech"
-tags: ["Gaming", "Optimización", "Navegador"]
-readTime: "3 min"
-date: "2026-06-26"
+tags: ["Flyff Universe", "Gaming", "WebGL", "Chrome", "Navegador", "FPS Drop"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Aceleración por hardware deshabilitada en el navegador web** | Activar la aceleración gráfica por GPU en los ajustes de Chrome/Firefox |
-| **Procesamiento de WebGL limitado por la GPU integrada predeterminada** | Forzar el uso de la tarjeta gráfica dedicada para el ejecutable del navegador |
+| **Aceleración por hardware desactivada en el navegador web o WebGL ejecutándose por software** | Habilitar aceleración por hardware y cambiar el backend gráfico ANGLE a D3D11 o Vulkan en `chrome://flags` |
+| **Saturación de memoria por renderizado de cientos de modelos de personajes y sombras en ciudades** | Limitar el rango de dibujado de jugadores a 'Cercano' y desactivar sombras dinámicas en ajustes del juego |
 
-
-Al ser un juego basado en tecnologías web modernas (WebGL/WebGPU), Flyff Universe puede sufrir congelamientos severos de fotogramas (*stuttering*) o retraso de respuesta de red, incluso en computadoras potentes. Esto sucede si el navegador web no tiene acceso directo al chip gráfico o si la sincronización vertical genera conflictos.
+Flyff Universe es un MMORPG que se ejecuta directamente sobre el motor WebGL del navegador. Cuando los jugadores experimentan caídas severas de FPS, tirones constantes o congelamientos en ciudades concurridas (como Flaris o Saint Morning), la causa principal suele ser una renderización por software en el navegador o una saturación de llamadas de dibujo (draw calls) en la GPU.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Forzar la aceleración por hardware
-Si tu navegador procesa el juego con el procesador (CPU) en lugar de la tarjeta de video, los FPS irán fatales.
-1. Ve a la **Configuración** de tu navegador (Chrome, Edge o Brave).
-2. Busca la palabra **"Sistema"** o **"Rendimiento"**.
-3. Activa la casilla **"Utilizar aceleración por hardware cuando esté disponible"** y reinicia el navegador.
+### Paso 1: Activar la Aceleración por Hardware en tu navegador
+Asegúrate de que tu navegador web utilice la tarjeta gráfica dedicada en lugar de la CPU para renderizar gráficos WebGL:
+1. En Google Chrome, Brave o Edge, ve a **Ajustes > Sistema**.
+2. Activa la opción **Usar aceleración por hardware cuando esté disponible**.
+3. Reinicia el navegador por completo.
 
-### Paso 2: Habilitar las flags de WebGL en Chrome/Brave
-Podemos desbloquear el límite de rendimiento gráfico del navegador escribiendo lo siguiente en la barra de direcciones:
-```text
-chrome://flags/#choose-angle-vulkan
-```
-Si tienes una GPU moderna (especialmente en Linux), cambia el valor de "Default" a Vulkan u OpenGL. Esto reduce drásticamente el uso de CPU y estabiliza los FPS en ciudades llenas de jugadores.
+### Paso 2: Optimizar las banderas de WebGL y ANGLE en Chrome Flags
+Ajusta los parámetros internos del motor Chromium para maximizar el rendimiento de la GPU:
+1. Escribe en la barra de direcciones: `chrome://flags`
+2. Busca **Choose ANGLE graphics backend** y cámbialo a:
+   - **D3D11** o **D3D11on12** (en Windows).
+   - **Vulkan** o **OpenGL** (en Linux).
+3. Busca **Override software rendering list** y cámbialo a **Enabled** (fuerza aceleración gráfica incluso en GPUs no listadas).
+4. Haz clic en **Relaunch** (Reiniciar navegador).
 
-### Paso 3: Desactivar efectos pesados in-game
-Dentro del juego, presiona Esc, ve a Opciones Gráficas y reduce el rango de visión de los modelos de otros personajes. Desactiva el postprocesado de sombras dinámicas si estás jugando en una laptop o dispositivo móvil.
+### Paso 3: Ajustar la configuración gráfica interna de Flyff Universe
+En el menú de opciones dentro del juego (`Esc > Opciones > Gráficos`):
+- **Límite de FPS**: Ajústalo a **60 FPS** o a la tasa de refresco nativa de tu monitor.
+- **Rango de visualización de jugadores**: Cámbialo a **Cercano** o **Medio** (reduce drásticamente el lag en ciudades principales).
+- **Sombras**: Desactiva las sombras dinámicas.
+- **Oclusión ambiental (SSAO)**: Desactivado.
 
-## 🛡️ Consejo de Prevención
+### Paso 4: Utilizar el Cliente de Escritorio Oficial o Navegador Dedicado
+Si juegas con muchas pestañas abiertas, el navegador reduce los recursos de la pestaña de Flyff:
+- Descarga el cliente de escritorio oficial basado en Electron de Flyff Universe.
+- O crea un acceso directo como aplicación de ventana independiente en Chrome (*Menú > Guardar y compartir > Instalar página como aplicación*).
 
-Prácticas de seguridad recomendadas:
-* Si juegas multicuenta abriendo varias pestañas del navegador en simultáneo, asegúrate de desactivar la opción "Ahorro de memoria" (Memory Saver) del navegador. De lo contrario, el sistema suspenderá las pestañas de fondo que dejes minimizadas, desconectando tus personajes por inactividad.
+## 🛡️ Consejos de Prevención
+- **Cierra pestañas con reproducción de video en segundo plano:** Sitios como YouTube o Twitch consumen decodificadores de video por hardware que compiten directamente con WebGL.
+- **Mantén actualizados los controladores de tu GPU:** Las mejoras de drivers optimizan la tasa de compilación de shaders WebGL.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Cómo sé si WebGL está usando mi GPU dedicada?
+Abre `chrome://gpu` en tu navegador y comprueba que **WebGL** y **WebGL2** indiquen *Hardware accelerated*.
+
+### ¿Por qué el juego se congela al cambiar de pestaña?
+Porque los navegadores suspenden los temporizadores JavaScript (`requestAnimationFrame`) de pestañas en segundo plano para ahorrar energía.

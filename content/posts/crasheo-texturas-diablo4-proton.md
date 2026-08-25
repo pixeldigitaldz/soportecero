@@ -1,37 +1,63 @@
 ---
 title: "Solución al crasheo por carga de texturas en Diablo IV bajo Linux (Proton)"
-description: "Aprende a mitigar las congelaciones y cierres inesperados de Diablo IV al entrar a zonas densas configurando las variables de VKD3D."
+description: "Aprende a solucionar el error Out of Memory y los cierres al cargar texturas en Diablo IV jugando en Linux con Steam Proton y Battle.net."
 category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Diablo IV", "Proton"]
-readTime: "3 min"
-date: "2026-06-27"
+tags: ["Diablo 4", "Proton", "Linux", "Gaming", "Vulkan", "VKD3D"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Insuficiente memoria VRAM o fragmentación VKD3D** | Bajar la calidad de texturas a Media y activar `VKD3D_CONFIG=single_queue` |
-| **Límite de descriptores de archivos insuficiente (esync/fsync)** | Aumentar `ulimit -n 1048576` en `/etc/security/limits.conf` |
+| **Saturación y fragmentación de VRAM al cargar texturas en calidad Ultra con VKD3D** | Reducir la calidad de texturas a Alta/Media y configurar `VKD3D_CONFIG=no_upload_hvv` |
+| **Falta de memoria de intercambio (Swap) o agotamiento del límite de descriptores de archivos** | Asignar al menos 8GB de swap y aumentar los límites `fs.file-max` y `vm.max_map_count` |
 
-
-El cierre inesperado de Diablo IV bajo entornos Linux mediante la capa de compatibilidad Proton suele manifestarse al ingresar a capitales o núcleos urbanos de alta densidad (como Kyovashad). Este crasheo ocurre debido a la sobrecarga e ineficiencia en el intercambio y asignación de texturas de alta resolución a través de la API de traducción de Direct3D 12 a Vulkan (VKD3D).
+El cierre inesperado de Diablo IV en Linux (a menudo con el error `Fenris Error` o `Out of Memory - The application ran out of video memory`) ocurre debido a la alta demanda de memoria de video (VRAM) y memoria RAM física que requiere el motor de Blizzard al cargar paquetes de texturas de alta resolución mediante la capa de traducción Direct3D 12 a Vulkan (VKD3D-Proton).
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Configurar variables de optimización de transferencia en Steam
-Forzar al traductor de DirectX 12 a gestionar la carga de texturas y el mapeo de memoria del host de forma más eficiente previene el colapso del bus de datos de la GPU.
-1. Abre Steam, haz clic derecho sobre Diablo IV y selecciona **Propiedades**.
-2. En la sección de **Parámetros de lanzamiento**, ingresa exactamente el siguiente comando al principio de tus variables:
+### Paso 1: Reducir la resolución de texturas a Alta o Media
+El paquete de texturas Ultra de Diablo IV consume más de 16GB de VRAM en DirectX 12 nativo, lo que bajo Vulkan satura el asignador de memoria de la GPU:
+1. En el menú de Diablo IV, ve a **Opciones > Gráficos**.
+2. Cambia **Calidad de las texturas** de *Ultra* a **Alta** (o *Media* en GPUs con 8GB de VRAM o menos).
+3. Desactiva la distorsión cromática y reduce la calidad de las sombras de contacto.
+
+### Paso 2: Configurar parámetros de lanzamiento en Steam / Lutris
+Añade variables de optimización para VKD3D y DXVK en las opciones de lanzamiento del juego:
 ```bash
-VKD3D_CONFIG=no_upload_hcm %command%
+# Parámetros recomendados para Diablo IV en Steam
+VKD3D_CONFIG=no_upload_hvv PROTON_ENABLE_NVAPI=1 %command%
 ```
-*(Nota: La variable `no_upload_hcm` desactiva la asignación agresiva de memoria de host visible para la GPU, estabilizando la carga de texturas de fondo sin penalizar el rendimiento).*
+- `no_upload_hvv`: Evita que VKD3D agote el heap de memoria visible del host (Host Visible Video Memory) en GPUs modernas.
 
-### Paso 2: Limitar la asignación física de texturas en los ajustes del juego
-1. Ve al panel de opciones gráficas del juego.
-2. Asegúrate de configurar la calidad de texturas en **Alto (High)** o **Medio (Medium)** en lugar de "Ultra". Esto previene que la traducción de memoria de video sature los límites del sistema.
+### Paso 3: Incrementar el límite de mapeo de memoria en el Kernel (max_map_count)
+Diablo IV crea cientos de miles de asignaciones de memoria simultáneas que pueden superar el límite por defecto de Linux:
+```bash
+# Comprobar el valor actual
+cat /proc/sys/vm/max_map_count
 
-## 🛡️ Consejo de Prevención
+# Aumentar a 1048576 de forma temporal
+sudo sysctl -w vm.max_map_count=1048576
 
-Prácticas de seguridad recomendadas:
-- No utilices texturas en calidad "Ultra" en tarjetas gráficas que cuenten con menos de 12GB de VRAM física dedicada. Al ejecutarse mediante capas de traducción gráfica en Linux, el consumo de memoria se incrementa ligeramente; si el juego supera el límite físico de la tarjeta e intenta volcar texturas a la memoria RAM general del sistema, los tiempos de transferencia provocarán bloqueos y crasheos ineludibles.
+# Hacerlo permanente en /etc/sysctl.d/99-gaming.conf
+echo "vm.max_map_count = 1048576" | sudo tee /etc/sysctl.d/99-gaming.conf
+sudo sysctl --system
+```
+
+### Paso 4: Utilizar la versión Proton GE (GloriousEggroll) más reciente
+Proton Experimental o Proton GE contienen parches específicos para corregir fugas de memoria en VKD3D:
+1. Instala **ProtonUp-Qt** y descarga la versión más reciente de **GE-Proton**.
+2. En las propiedades de Diablo IV en Steam, ve a *Compatibilidad* y fuerza el uso de GE-Proton.
+
+## 🛡️ Consejos de Prevención
+- **Asegura al menos 8GB-16GB de Swap:** Los picos de carga en transiciones de mazmorras pueden provocar cierres inmediatos del proceso por el OOM Killer si no existe memoria de intercambio suficiente.
+- **Mantén actualizados los drivers Mesa:** Si juegas con tarjetas AMD Radeon, utiliza Mesa 24.0+ para beneficiarte del asignador de memoria mejorado de RADV.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿El juego funciona fluidamente en Steam Deck?
+Sí, en Steam Deck se recomienda configurar texturas en calidad Media, resolución nativa con FSR en modo Calidad y limitar la tasa de cuadros a 45 FPS para mantener temperaturas estables.
+
+### ¿Qué significa el error Fenris en Diablo IV?
+Es el gestor interno de excepciones y depuración de Blizzard. Cuando se produce un desbordamiento de búfer en la GPU o falla la reserva de memoria, Fenris genera un volcado y cierra el juego.

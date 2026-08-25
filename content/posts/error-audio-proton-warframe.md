@@ -1,41 +1,60 @@
 ---
 title: "Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux"
-description: "Aprende a reparar los problemas de falta de audio, crujidos o canales desconfigurados al ejecutar títulos multijugador mediante la capa de compatibilidad Proton."
+description: "Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire."
 category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Proton"]
-readTime: "3 min"
-date: "2026-06-27"
+tags: ["Warframe", "Proton", "Linux", "Gaming", "Audio", "Steam Deck"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Controlador de audio FAudio o XAudio2 desincronizado en Proton** | Instalar librerías de sonido mediante `protontricks 230410 xact` |
-| **Latencia de búfer de audio muy baja en PipeWire/PulseAudio** | Establecer la variable de entorno `PULSE_LATENCY_MSEC=60 %command%` |
+| **Frecuencia de muestreo (sample rate) incompatible o tamaño de búfer de audio bajo en PipeWire/PulseAudio** | Configurar frecuencia fija a 48000 Hz y ajustar `default.clock.min-quantum` a 1024 en PipeWire |
+| **Incompatibilidad en bibliotecas de decodificación de audio XAudio2/FAudio en el prefijo de Proton** | Utilizar Proton-GE y añadir `WINEDLLOVERRIDES="xaudio2_7=n,b"` en las opciones de lanzamiento |
 
-
-El fallo de sonido ausente, entrecortado o con molestos crujidos en juegos cooperativos de ritmo rápido como *Warframe* bajo sistemas operativos Linux (CachyOS, Bazzite, etc.) ocurre porque las librerías multimedia de Windows (`FAudio` o `XAudio2`) no logran sincronizarse correctamente con el servidor de sonido moderno de Linux, que actualmente suele ser **PipeWire**.
+Al ejecutar Warframe en Linux mediante Steam Proton o en Steam Deck, los jugadores a menudo experimentan audio distorsionado, crujidos constantes (crackling) o ausencia total de sonido en cinemáticas y combate. Esto ocurre por desajustes en el búfer de latencia entre el motor de sonido de Warframe (Wwise/XAudio2) y el servidor de sonido del sistema anfitrión.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Forzar el uso de la librería de audio nativa de Proton
-En la gran mayoría de los casos, podemos solucionar los crujidos obligando al entorno de Wine a procesar el motor de audio de forma nativa a través de los parámetros de lanzamiento de Steam.
-1. Abre Steam, haz clic derecho en Warframe y ve a **Propiedades**.
-2. En la barra de **Parámetros de lanzamiento**, introduce la siguiente variable de entorno al inicio de tus comandos actuales:
+### Paso 1: Configurar la frecuencia de muestreo de PipeWire a 48000 Hz
+La mayoría de motores de videojuegos modernos esperan una frecuencia de reloj estándar de 48 kHz. Evita el remuestreo forzando estos parámetros en `~/.config/pipewire/pipewire.conf` o mediante variables de entorno:
 ```bash
-PROTON_AUDIO=alsa %command%
+# Configurar latencia y reloj óptimos en la sesión de usuario
+pw-metadata -n settings 0 clock.force-rate 48000
+pw-metadata -n settings 0 clock.force-quantum 1024
 ```
-Si usas un sistema con configuraciones de sonido PulseAudio antiguas, prueba cambiando `alsa` por `pulse`.
 
-### Paso 2: Instalar xaudio mediante Protontricks (Si no hay sonido absoluto)
-
-Si el juego está completamente mudo, significa que faltan componentes en el prefijo aislado del juego. Instálalos usando la consola:
+### Paso 2: Usar GE-Proton y forzar bibliotecas nativas de XAudio2
+El empaquetado comunitario GE-Proton integra parches actualizados de FAudio y WINE XAudio2:
+1. En Steam, abre las propiedades de **Warframe > Compatibilidad**.
+2. Selecciona la versión más reciente de **GE-Proton**.
+3. En la pestaña **General > Parámetros de lanzamiento**, añade:
 ```bash
-protontricks 230410 d3dcompiler_47 xaudio2_7
+WINEDLLOVERRIDES="xaudio2_7=n,b" PULSE_LATENCY_MSEC=60 %command%
 ```
-*(Nota: `230410` es el identificador numérico oficial de Warframe dentro de la tienda de Steam).*
+- `PULSE_LATENCY_MSEC=60`: Añade un pequeño margen de búfer para evitar cortes por subdesbordamiento (buffer underrun).
 
-## 🛡️ Consejo de Prevención
+### Paso 3: Ajustar el motor de audio en el lanzador de Warframe
+1. Al abrir el launcher de Warframe en Steam, pulsa en el icono de engranaje (Ajustes).
+2. Desactiva la opción **Audio de 64 bits** si tu tarjeta de sonido sufre chasquidos.
+3. Asegúrate de que el modo de salida esté configurado en **Altavoces 2.0 / Auriculares estéreo**.
 
-Prácticas de seguridad recomendadas:
-- Configura la tasa de muestreo de tu servidor PipeWire a una frecuencia estándar de 44100 Hz o 48000 Hz en el archivo `/etc/pipewire/pipewire.conf`. Valores de calidad audiófila exagerados (como 192000 Hz) rompen el remuestreo automático de la capa Proton, provocando retrasos severos de audio durante las batallas masivas in-game.
+### Paso 4: Eliminar prefijos de WINE corruptos si persiste el fallo
+Si tras actualizar Proton el audio sigue mudo, borra el prefijo local del juego para que Steam lo regenere limpio:
+```bash
+# El AppID oficial de Warframe en Steam es 230410
+rm -rf ~/.local/share/Steam/steamapps/compatdata/230410
+```
+
+## 🛡️ Consejos de Prevención
+- **No uses frecuencias de 96 kHz o 192 kHz sin necesidad:** Las frecuencias de estudio muy altas saturan la capa de traducción WINE y aumentan el consumo de CPU innecesariamente.
+- **Mantén actualizados los paquetes de WirePlumber:** Los parches recientes eliminan fallos de sincronización con clientes de 32 y 64 bits.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué el audio cruje solo cuando hay muchas explosiones en pantalla?
+Porque la CPU entra en picos de alta carga y se produce un "underrun" de búfer. Aumentar `PULSE_LATENCY_MSEC=90` soluciona este problema de inmediato.
+
+### ¿Se pierde el progreso de mi cuenta al borrar compatdata?
+No. El progreso de Warframe se guarda en los servidores de Digital Extremes en la nube.

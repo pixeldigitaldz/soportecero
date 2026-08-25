@@ -7,7 +7,7 @@
   <title>Resuelto: server certificate verification failed en Git - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.">
+  <meta name="description" content="Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Resuelto: server certificate verification failed en Git - SoporteCero">
-  <meta property="og:description" content="Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.">
+  <meta property="og:description" content="Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Resuelto: server certificate verification failed en Git - SoporteCero">
-  <meta name="twitter:description" content="Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.">
+  <meta name="twitter:description" content="Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Resuelto: server certificate verification failed en Git",
-  "description": "Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.",
+  "description": "Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura.",
+  "inLanguage": "es",
   "category": "Web y Código",
-  "datePublished": "2026-08-15",
-  "dateModified": "2026-08-15",
+  "articleSection": "Web y Código",
+  "keywords": "Git, SSL, Linux, Seguridad, GitHub, DevOps",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Resuelto: server certificate verification failed en Git",
+      "item": "https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Resuelto: server certificate verification failed en Git",
-  "description": "Cómo solucionar el error de certificado SSL en Git al intentar hacer un clone, pull o push desde un repositorio remoto.",
-  "step": []
+  "description": "Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html#actualizar-los-certificados-raiz-del-sistema-operativo",
+      "name": "Actualizar los certificados raíz del sistema operativo",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "La causa más habitual en servidores Linux desactualizados es la expiración de certificados raíz antiguos (como Let&#39;s Encrypt o DigiCert):\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Debian / Ubuntu:\nsudo apt-get update\nsudo apt-get install --reinstall ca-certificates -y\nsudo update-ca-certificates\n\n# En Arch Linux / CachyOS:\nsudo pacman -Sy ca-certificates --noconfirm\n\n# En Red Hat / CentOS / Rocky Linux:\nsudo dnf reinstall ca-certificates -y\nsudo update-ca-trust"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html#configurar-la-ruta-explicita-del-archivo-ca-en-git",
+      "name": "Configurar la ruta explícita del archivo CA en Git",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si utilizas un certificado corporativo de empresa o una CA interna:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Configurar la ruta global de la Autoridad de Certificación\ngit config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt\n\n# En Windows:\ngit config --global http.sslCAInfo &quot;C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt&quot;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html#sincronizar-el-reloj-del-sistema-mediante-ntp",
+      "name": "Sincronizar el reloj del sistema mediante NTP",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si la fecha y hora de tu máquina están desfasadas, los certificados válidos serán rechazados automáticamente:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Sincronizar reloj en Linux\nsudo timedatectl set-ntp true\ntimedatectl status"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-git-server-certificate-verification-failed.html#configurar-git-para-usar-el-almacen-nativo-del-sistema-en-windows-schannel",
+      "name": "Configurar Git para usar el almacén nativo del sistema en Windows (Schannel)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En Windows, configura Git para usar el almacén de certificados de Windows en lugar del bundle OpenSSL interno:\n\n    \n      \n        BASH\n        Copiar\n      \n      git config --global http.sslBackend schannel"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo desactivo sslVerify solo para un comando de emergencia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Puedes pasar el flag en línea sin alterar la configuración global: git -c http.sslVerify=false clone https://...."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué mi navegador abre GitHub pero Git falla en la terminal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque los navegadores web modernos tienen almacenes de certificados independientes de la biblioteca OpenSSL que utiliza la CLI de Git."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,183 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 3 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-08-15
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Actualiza los certificados raíz de tu sistema (Recomendado)
-La mayoría de las veces, el error ocurre porque el sistema operativo de tu servidor (o PC) tiene certificados de autoridades (CA) expirados. 
-En Ubuntu/Debian:</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Certificados del sistema desactualizados</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Actualizar <code>ca-certificates</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Proxy o Antivirus bloqueando el SSL</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Usar SSH en lugar de HTTPS</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Servidor con certificado autofirmado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Desactivar verificación global (Temporal) con <code>http.sslVerify false</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
-<p><strong>Actualiza los certificados raíz de tu sistema (Recomendado)</strong>
-La mayoría de las veces, el error ocurre porque el sistema operativo de tu servidor (o PC) tiene certificados de autoridades (CA) expirados. 
-En Ubuntu/Debian:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo apt-get update
-sudo apt-get install --reinstall ca-certificates
-</code></pre>
-    </div>
-    
-<p>En CentOS/RHEL:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo yum update ca-certificates
-</code></pre>
-    </div>
-    
-<p><strong>Usa SSH en lugar de HTTPS</strong>
-Si Github/Gitlab está bloqueando tu tráfico por problemas con tu proxy corporativo o tu CA local, cambiar la URL del remoto a SSH suele saltarse la validación SSL de HTTPS:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git remote set-url origin git@github.com:usuario/repositorio.git
-</code></pre>
-    </div>
-    
-<p>Asegúrate de tener tus claves SSH configuradas (<code>ssh-keygen</code>).</p>
-<p><strong>Desactiva la verificación SSL global (Riesgoso, solo para test)</strong>
-Si estás conectándote a un servidor interno (Gitea/Gitlab local) con un certificado autofirmado, puedes decirle a Git que ignore la seguridad SSL para ese repositorio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git config http.sslVerify false
-</code></pre>
-    </div>
-    
-<p><em>Si quieres aplicarlo a todos los proyectos de tu máquina:</em></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>git config --global http.sslVerify false
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Gestión de CAs:</strong> Si tu empresa usa certificados firmados internamente, asegúrate de añadirlos a la ruta <code>/etc/ssl/certs/</code> y correr <code>update-ca-certificates</code>.</li>
-<li><strong>Preferir SSH:</strong> Acostúmbrate a usar claves SSH para operaciones con Git; son más rápidas y no sufren de problemas de caducidad de certificados SSL de la misma manera que HTTPS.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -345,23 +289,6 @@ Si estás conectándote a un servidor interno (Gitea/Gitlab local) con un certif
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -373,6 +300,23 @@ Si estás conectándote a un servidor interno (Gitea/Gitlab local) con un certif
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

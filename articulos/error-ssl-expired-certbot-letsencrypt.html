@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo forzar la renovación de un certificado SSL de Let's Encrypt expirado con Certbot",
   "description": "Aprende a solucionar los fallos de autenticación de Certbot y renueva tus certificados SSL expirados liberando los puertos necesarios.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "SSL, Let's Encrypt, Certbot, Nginx",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo forzar la renovación de un certificado SSL de Let's Encrypt expirado con Certbot",
+      "item": "https://soportecero.com/articulos/error-ssl-expired-certbot-letsencrypt.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo forzar la renovación de un certificado SSL de Let's Encrypt expirado con Certbot",
   "description": "Aprende a solucionar los fallos de autenticación de Certbot y renueva tus certificados SSL expirados liberando los puertos necesarios.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-ssl-expired-certbot-letsencrypt.html#identificar-y-liberar-puertos-bloqueados",
+      "name": "Identificar y liberar puertos bloqueados",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Let&#39;s Encrypt utiliza el desafío HTTP-01 para verificar que eres dueño del dominio, lo que requiere acceso libre en el puerto 80. Detén temporalmente el servidor web en conflicto:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Si utilizas Nginx\nsudo systemctl stop nginx\n\n# Si utilizas Apache\nsudo systemctl stop apache2"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-ssl-expired-certbot-letsencrypt.html#ejecutar-la-renovacion-forzada-de-certbot",
+      "name": "Ejecutar la renovación forzada de Certbot",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Inicia la renovación manual forzada para ignorar las políticas de caché de expiración previas:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Forzar la renovación en consola\nsudo certbot renew --force-renewal\n\n    \n    \n(Verifica que la consola te devuelva un mensaje de éxito: Congratulations, all renewals succeeded)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-ssl-expired-certbot-letsencrypt.html#volver-a-iniciar-los-servidores-web-y-verificar",
+      "name": "Volver a iniciar los servidores web y verificar",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Reinicia tus servicios de producción para aplicar las nuevas llaves criptográficas:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl start nginx\nsudo systemctl start apache2"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,158 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error de certificado SSL expirado al acceder a tu sitio web, a pesar de usar Certbot de Let&#39;s Encrypt, ocurre habitualmente porque el servicio automático de renovación falló silenciosamente debido al bloqueo del puerto 80 por parte de tu servidor web en conflicto, o por cambios en tus registros DNS.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-identificar-y-liberar-puertos-bloqueados">Paso 1: Identificar y liberar puertos bloqueados</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ejecutar-la-renovacion-forzada-de-certbot">Paso 2: Ejecutar la renovación forzada de Certbot</a></li>
-        <li class="toc-subitem"><a href="#paso-3-volver-a-iniciar-los-servidores-web-y-verificar">Paso 3: Volver a iniciar los servidores web y verificar</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Certificado SSL/TLS de Let&#39;s Encrypt expirado por fallo en el proceso de renovación</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Forzar la renovación del certificado: <code>sudo certbot renew --force-renewal</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Desafío HTTP-01 fallido por puerto 80 cerrado o bloqueado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Asegurar que el servidor web responda en el puerto 80 y reiniciar Nginx/Apache</div>
-          </div></div></div>
-<p>El error de certificado SSL expirado al acceder a tu sitio web, a pesar de usar Certbot de Let&#39;s Encrypt, ocurre habitualmente porque el servicio automático de renovación falló silenciosamente debido al bloqueo del puerto 80 por parte de tu servidor web en conflicto, o por cambios en tus registros DNS.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-identificar-y-liberar-puertos-bloqueados">Paso 1: Identificar y liberar puertos bloqueados</h3>
-<p>Let&#39;s Encrypt utiliza el desafío HTTP-01 para verificar que eres dueño del dominio, lo que requiere acceso libre en el puerto <code>80</code>. Detén temporalmente el servidor web en conflicto:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Si utilizas Nginx
-sudo systemctl stop nginx
-
-# Si utilizas Apache
-sudo systemctl stop apache2
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-ejecutar-la-renovacion-forzada-de-certbot">Paso 2: Ejecutar la renovación forzada de Certbot</h3>
-<p>Inicia la renovación manual forzada para ignorar las políticas de caché de expiración previas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Forzar la renovación en consola
-sudo certbot renew --force-renewal
-</code></pre>
-    </div>
-    
-<p><em>(Verifica que la consola te devuelva un mensaje de éxito: <code>Congratulations, all renewals succeeded</code>).</em></p>
-<h3 id="paso-3-volver-a-iniciar-los-servidores-web-y-verificar">Paso 3: Volver a iniciar los servidores web y verificar</h3>
-<p>Reinicia tus servicios de producción para aplicar las nuevas llaves criptográficas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl start nginx
-sudo systemctl start apache2
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No dependas exclusivamente de renovaciones manuales periódicas para la seguridad de tus sitios. Asegúrate de verificar que el temporizador interno de renovación automática de Certbot esté activo en el sistema, lo que validará el estado del certificado dos veces al día:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Verificar el estado del temporizador systemd
-systemctl list-timers | grep certbot
-</code></pre>
-    </div>
-    
-Si los desafíos HTTP en el puerto 80 fallan de forma regular debido a cortafuegos de seguridad corporativos, migra tu proceso de validación al desafío DNS-01 utilizando las API correspondientes de tu proveedor de nombres (Cloudflare, Route53, etc.).</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -331,6 +253,23 @@ Si los desafíos HTTP en el puerto 80 fallan de forma regular debido a cortafueg
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -342,23 +281,6 @@ Si los desafíos HTTP en el puerto 80 fallan de forma regular debido a cortafueg
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

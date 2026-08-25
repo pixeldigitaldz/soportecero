@@ -7,7 +7,7 @@
   <title>Error: Error starting userland proxy: bind: address already in use en Docker - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.">
+  <meta name="description" content="Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Error: Error starting userland proxy: bind: address already in use en Docker - SoporteCero">
-  <meta property="og:description" content="Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.">
+  <meta property="og:description" content="Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Error: Error starting userland proxy: bind: address already in use en Docker - SoporteCero">
-  <meta name="twitter:description" content="Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.">
+  <meta name="twitter:description" content="Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Error: Error starting userland proxy: bind: address already in use en Docker",
-  "description": "Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.",
+  "description": "Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
-  "datePublished": "2026-08-12",
-  "dateModified": "2026-08-12",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, Linux, Puertos, SysAdmin, Networking, DevOps",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Error: Error starting userland proxy: bind: address already in use en Docker",
+      "item": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Error: Error starting userland proxy: bind: address already in use en Docker",
-  "description": "Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.",
-  "step": []
+  "description": "Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html#localizar-que-proceso-esta-utilizando-el-puerto-en-conflicto",
+      "name": "Localizar qué proceso está utilizando el puerto en conflicto",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Utiliza herramientas de red de Linux para descubrir el Process ID (PID) exacto del servicio bloqueante:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Opción 1: Usando lsof (ejemplo para puerto 80 u 8080)\nsudo lsof -i :80\n\n# Opción 2: Usando ss (Socket Statistics)\nsudo ss -tulpn | grep :80"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html#detener-el-servicio-o-proceso-del-sistema-operativo",
+      "name": "Detener el servicio o proceso del sistema operativo",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el puerto está ocupado por un servidor web instalado en el sistema anfitrión:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Si es Apache o Nginx en el host:\nsudo systemctl stop nginx\nsudo systemctl stop apache2\n\n# Si es un proceso genérico, finalízalo mediante su PID:\nsudo kill -15 &lt;PID&gt;\n# Si no responde de inmediato:\nsudo kill -9 &lt;PID&gt;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html#identificar-contenedores-docker-ocultos-reteniendo-el-puerto",
+      "name": "Identificar contenedores Docker ocultos reteniendo el puerto",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "A menudo un contenedor anterior se quedó en estado detached o en bucle de reinicio:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Listar todos los contenedores (incluyendo detenidos)\ndocker ps -a --filter &quot;publish=80&quot;\n\n# Detener y eliminar el contenedor en conflicto\ndocker stop &lt;container_id&gt;\ndocker rm &lt;container_id&gt;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html#cambiar-el-puerto-en-el-mapeo-de-docker-composeyml",
+      "name": "Cambiar el puerto en el mapeo de docker-compose.yml",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si necesitas que ambos servicios coexistan, cambia el puerto del host en tu archivo de composición:\n\n    \n      \n        YAML\n        Copiar\n      \n      services:\n  mi-aplicacion:\n    image: nginx:alpine\n    ports:\n      # Mapear el puerto 8080 del host al puerto 80 interno del contenedor\n      - &quot;8080:80&quot;\n    restart: unless-stopped"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué lsof no muestra nada pero Docker sigue dando error de bind?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A veces el módulo docker-proxy en iptables queda desincronizado tras un cuelgue del sistema. Reiniciar el daemon de Docker (sudo systemctl restart docker) limpia las tablas NAT huérfanas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo enlazar dos contenedores al mismo puerto interno?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Cada contenedor tiene su propia pila de red aislada. Lo que no puedes hacer es mapear ambos al mismo puerto de la máquina host."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,194 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 3 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-08-12
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Encuentra qué proceso está usando el puerto
-En Linux, ejecuta el siguiente comando para ver qué aplicación está ocupando el puerto (cambia 80 por tu puerto en conflicto):</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Otro servicio usa el puerto (ej. Nginx/Apache)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Detener el servicio o cambiar el puerto en Docker (<code>docker-compose.yml</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Contenedor zombi reteniendo el puerto</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reiniciar el servicio de Docker o matar el proceso</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Conflicto con Docker Desktop (Windows/Mac)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reiniciar Docker Desktop o WSL2</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
-<p><strong>Encuentra qué proceso está usando el puerto</strong>
-En Linux, ejecuta el siguiente comando para ver qué aplicación está ocupando el puerto (cambia <code>80</code> por tu puerto en conflicto):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo netstat -tulpn | grep :80
-</code></pre>
-    </div>
-    
-<p>O usando <code>lsof</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo lsof -i :80
-</code></pre>
-    </div>
-    
-<p><strong>Detén el servicio conflictivo</strong>
-Si descubres que Apache o Nginx están corriendo nativamente y ocupando el puerto 80, detenlos:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl stop apache2
-sudo systemctl disable apache2
-</code></pre>
-    </div>
-    
-<p><strong>Mata el proceso si es necesario</strong>
-Si es un proceso zombi, puedes matarlo usando su PID (el número que te dio el comando anterior):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo kill -9 &lt;PID&gt;
-</code></pre>
-    </div>
-    
-<p><strong>Cambia el puerto en tu Docker Compose</strong>
-Si no puedes detener el servicio nativo, simplemente cambia el puerto que expone Docker editando tu <code>docker-compose.yml</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>ports:
-  - &quot;8080:80&quot; # Cambia el puerto izquierdo (host)
-</code></pre>
-    </div>
-    
-<p>Luego vuelve a levantar el contenedor:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker-compose up -d
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Asignación de puertos:</strong> Usa un proxy inverso como Traefik o Nginx Proxy Manager en los puertos 80/443 y expón el resto de contenedores de forma interna.</li>
-<li><strong>Monitoreo:</strong> Revisa qué puertos están en uso en tu servidor antes de desplegar un nuevo stack usando <code>netstat</code> o <code>ss</code>.</li>
-<li><strong>Limpieza regular:</strong> Ejecuta <code>docker system prune</code> para limpiar redes y contenedores huérfanos que podrían estar bloqueando recursos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -356,6 +289,23 @@ Si no puedes detener el servicio nativo, simplemente cambia el puerto que expone
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -367,23 +317,6 @@ Si no puedes detener el servicio nativo, simplemente cambia el puerto que expone
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

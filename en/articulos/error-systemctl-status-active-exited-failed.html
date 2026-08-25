@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to fix and understand active (exited) or failed services in Systemd",
   "description": "Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Linux, Systemd, DevOps",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-20",
   "dateModified": "2026-08-20",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to fix and understand active (exited) or failed services in Systemd",
-  "description": "Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to fix and understand active (exited) or failed services in Systemd",
+      "item": "https://soportecero.com/en/articulos/error-systemctl-status-active-exited-failed.html"
+    }
+  ]
 }
   </script>
     
@@ -148,175 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The active (exited) status in Systemd indicates that the command configured under ExecStart successfully completed its execution and finished, while a failed or activating (auto-restart) status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <code>active (exited)</code> status in Systemd indicates that the command configured under <code>ExecStart</code> successfully completed its execution and finished, while a <code>failed</code> or <code>activating (auto-restart)</code> status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.</p>
-<p>Understanding the difference between <code>Type=oneshot</code> and <code>Type=simple</code> service definitions is essential to know whether your application is running as expected or silently dropping connections.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Service configured as <code>Type=oneshot</code></strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Expected behavior for single-run provisioning scripts or cron alternatives</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Configuration file error or missing env vars</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Inspect runtime logs with <code>journalctl -u service-name -e --no-pager</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Permission denied on binary or working directory</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure the user configured under <code>User=</code> has access to <code>WorkingDirectory=</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Inspect detailed service logs</strong>
-When a service crashes or produces unexpected exit codes, standard <code>systemctl status</code> only shows truncated lines. Use <code>journalctl</code> to view the full stderr stream:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo journalctl -u my-service.service -n 50 --no-pager
-</code></pre>
-    </div>
-    
-<p><strong>Verify the service type in the unit file</strong>
-Open the Systemd unit file located at <code>/etc/systemd/system/my-service.service</code>. If your app is a persistent background worker (like a Node, Python, or Go daemon) but has <code>Type=oneshot</code>, Systemd will not supervise it as an ongoing daemon:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>[Unit]
-Description=My Background Daemon
-After=network.target
-
-[Service]
-Type=simple
-User=www-data
-WorkingDirectory=/var/www/my-app
-ExecStart=/usr/bin/node /var/www/my-app/server.js
-Restart=on-failure
-RestartSec=5s
-
-[Install]
-WantedBy=multi-user.target
-</code></pre>
-    </div>
-    
-<p><strong>Reload the Systemd daemon and restart the unit</strong>
-Whenever you modify a <code>.service</code> configuration file, inform the Linux init system before restarting the service:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl daemon-reload
-sudo systemctl restart my-service.service
-sudo systemctl status my-service.service
-</code></pre>
-    </div>
-    
-<p><strong>Use absolute paths for all executables</strong>
-Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. Always provide the full absolute path to binaries (e.g., <code>/usr/bin/python3</code> instead of <code>python3</code>). Find absolute paths using:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>which node
-which python3
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Syntax validation:</strong> Run <code>systemd-analyze verify /etc/systemd/system/my-service.service</code> to catch syntax and path warnings prior to deploying.</li>
-<li><strong>Restart throttle limits:</strong> Always declare <code>RestartSec=5s</code> and <code>StartLimitBurst=5</code> to prevent broken binaries from entering aggressive CPU-hogging restart loops.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -348,6 +207,23 @@ which python3
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -355,23 +231,6 @@ which python3
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
               <a href="../articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: iptables failed: No chain/target/match by that name in Docker</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [FIXED] Error 'invalid reference format' in Docker -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-invalid-reference-format.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'invalid reference format' in Docker</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">

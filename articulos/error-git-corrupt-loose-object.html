@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo reparar el error 'Corrupt loose object' en repositorios Git locales",
   "description": "Soluciona la corrupción de objetos sueltos en tu directorio .git recuperando los archivos dañados desde el historial de confirmaciones de tu remoto.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "Git, Web, Programación",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-13",
   "dateModified": "2026-07-13",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo reparar el error 'Corrupt loose object' en repositorios Git locales",
+      "item": "https://soportecero.com/articulos/error-git-corrupt-loose-object.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo reparar el error 'Corrupt loose object' en repositorios Git locales",
   "description": "Soluciona la corrupción de objetos sueltos en tu directorio .git recuperando los archivos dañados desde el historial de confirmaciones de tu remoto.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-git-corrupt-loose-object.html#localizar-y-eliminar-el-objeto-corrupto-de-la-base-de-datos",
+      "name": "Localizar y eliminar el objeto corrupto de la base de datos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Git detendrá cualquier operación (status, add, commit) si encuentra un objeto corrupto de tamaño 0 bytes. Ejecuta una comprobación del árbol del repositorio para identificar el archivo dañado:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Ejecutar verificación de integridad física del repositorio\ngit fsck --full\n\n    \n    \n(Anota la ruta del hash del objeto marcado como vacío o corrupto, por ejemplo .git/objects/8f/c3a9..., e introduce el comando para eliminarlo físicamente de la base "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-git-corrupt-loose-object.html#recuperar-los-objetos-eliminados-desde-tu-copia-remota",
+      "name": "Recuperar los objetos eliminados desde tu copia remota",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Una vez que el objeto corrupto ha sido removido, indícale a Git que vuelva a descargar y reconstruir los índices de objetos faltantes desde tu servidor remoto en la nube (como GitHub o GitLab):\n\n    \n      \n        BASH\n        Copiar\n      \n      # Descargar objetos faltantes sin alterar tus archivos de trabajo locales\ngit fetch --all"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-git-corrupt-loose-object.html#verificar-y-reconstruir-el-estado-del-indice-local",
+      "name": "Verificar y reconstruir el estado del índice local",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Vuelve a comprobar la consistencia general del repositorio y reconecta el puntero de tu rama local de trabajo:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Validar que no existan más objetos dañados\ngit fsck --full\n\n# Si persiste un fallo en la cabecera HEAD, restablécela al commit del remoto\ngit update-ref refs/heads/main origin/main"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,158 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error crítico de Git error: object file .git/objects/... is empty o corrupt loose object ocurre tras un corte eléctrico repentino, un fallo del disco o un apagado forzado de la máquina mientras Git escribía metadatos en la base de datos de objetos locales de tu repositorio.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-localizar-y-eliminar-el-objeto-corrupto-de-la-base-de-datos">Paso 1: Localizar y eliminar el objeto corrupto de la base de datos</a></li>
-        <li class="toc-subitem"><a href="#paso-2-recuperar-los-objetos-eliminados-desde-tu-copia-remota">Paso 2: Recuperar los objetos eliminados desde tu copia remota</a></li>
-        <li class="toc-subitem"><a href="#paso-3-verificar-y-reconstruir-el-estado-del-indice-local">Paso 3: Verificar y reconstruir el estado del índice local</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Objeto suelto de Git corrupto por apagón brusco o fallo en disco</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Identificar y eliminar el objeto dañado en <code>.git/objects/</code> y restaurar con <code>git fetch</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Referencia de rama apuntando a un commit inexistente</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Ejecutar <code>git fsck --full</code> para localizar el objeto corrupto exacto</div>
-          </div></div></div>
-<p>El error crítico de Git <code>error: object file .git/objects/... is empty</code> o <code>corrupt loose object</code> ocurre tras un corte eléctrico repentino, un fallo del disco o un apagado forzado de la máquina mientras Git escribía metadatos en la base de datos de objetos locales de tu repositorio.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-localizar-y-eliminar-el-objeto-corrupto-de-la-base-de-datos">Paso 1: Localizar y eliminar el objeto corrupto de la base de datos</h3>
-<p>Git detendrá cualquier operación (<code>status</code>, <code>add</code>, <code>commit</code>) si encuentra un objeto corrupto de tamaño 0 bytes. Ejecuta una comprobación del árbol del repositorio para identificar el archivo dañado:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Ejecutar verificación de integridad física del repositorio
-git fsck --full
-</code></pre>
-    </div>
-    
-<p><em>(Anota la ruta del hash del objeto marcado como vacío o corrupto, por ejemplo <code>.git/objects/8f/c3a9...</code>, e introduce el comando para eliminarlo físicamente de la base de datos local):</em></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Eliminar el archivo de objeto corrupto vacío de 0 bytes
-rm .git/objects/8f/c3a9...
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-recuperar-los-objetos-eliminados-desde-tu-copia-remota">Paso 2: Recuperar los objetos eliminados desde tu copia remota</h3>
-<p>Una vez que el objeto corrupto ha sido removido, indícale a Git que vuelva a descargar y reconstruir los índices de objetos faltantes desde tu servidor remoto en la nube (como GitHub o GitLab):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Descargar objetos faltantes sin alterar tus archivos de trabajo locales
-git fetch --all
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-verificar-y-reconstruir-el-estado-del-indice-local">Paso 3: Verificar y reconstruir el estado del índice local</h3>
-<p>Vuelve a comprobar la consistencia general del repositorio y reconecta el puntero de tu rama local de trabajo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Validar que no existan más objetos dañados
-git fsck --full
-
-# Si persiste un fallo en la cabecera HEAD, restablécela al commit del remoto
-git update-ref refs/heads/main origin/main
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Evita forzar el apagado directo o el reinicio abrupto de tu PC de desarrollo mientras se ejecutan comandos transaccionales pesados de control de versiones (tales como <code>git checkout</code>, <code>git clone</code> o <code>git gc</code>). Si trabajas en entornos virtuales o servidores locales remotos propensos a cortes eléctricos intermitentes, configura tu flujo para realizar commits pequeños con frecuencia y subirlos a tu remoto para tener un respaldo inmediato de tus hashes seguros.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -331,23 +253,6 @@ git update-ref refs/heads/main origin/main
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -359,6 +264,23 @@ git update-ref refs/heads/main origin/main
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

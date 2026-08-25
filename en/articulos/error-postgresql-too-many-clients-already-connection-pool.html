@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js",
   "description": "Learn how to diagnose and fix connection pool exhaustion in PostgreSQL max_connections using PgBouncer and connection pooling in Node.js.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "PostgreSQL, Node.js, Databases",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-24",
   "dateModified": "2026-08-24",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js",
-  "description": "Learn how to diagnose and fix connection pool exhaustion in PostgreSQL max_connections using PgBouncer and connection pooling in Node.js.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js",
+      "item": "https://soportecero.com/en/articulos/error-postgresql-too-many-clients-already-connection-pool.html"
+    }
+  ]
 }
   </script>
     
@@ -148,205 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error FATAL: sorry, too many clients already in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the max_connections parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The error <code>FATAL: sorry, too many clients already</code> in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the <code>max_connections</code> parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
-<p>In modern web stacks using Node.js, Next.js, or Serverless functions (AWS Lambda, Vercel), instantiating direct database clients on every HTTP request rapidly exhausts the database process pool and memory.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Unclosed connection leaks</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Always invoke <code>client.release()</code> inside <code>finally</code> blocks when using client checkouts</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Serverless functions spawning unpooled connections</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Implement a centralized Connection Pooler such as <strong>PgBouncer</strong> or <strong>Supabase / Prisma Pooler</strong></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong><code>max_connections</code> limit set too low for hardware</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Increase <code>max_connections</code> in <code>postgresql.conf</code> if the server has sufficient RAM</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Inspect active and idle connection distribution</strong>
-Connect to PostgreSQL using <code>psql</code> and execute the following diagnostic query:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">SQL</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>SELECT state, count(*) 
-FROM pg_stat_activity 
-GROUP BY state;
-</code></pre>
-    </div>
-    
-<p>To inspect which queries are consuming connection slots:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">SQL</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>SELECT pid, usename, client_addr, state, query_start, query 
-FROM pg_stat_activity 
-WHERE state != &#39;idle&#39; 
-ORDER BY query_start DESC;
-</code></pre>
-    </div>
-    
-<p><strong>Terminate stuck or zombie connections</strong>
-If you need immediate database recovery access:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">SQL</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>SELECT pg_terminate_backend(pid) 
-FROM pg_stat_activity 
-WHERE state = &#39;idle&#39; AND pid &lt;&gt; pg_backend_pid();
-</code></pre>
-    </div>
-    
-<p><strong>Configure global Connection Pooling in Node.js</strong>
-Never create <code>new Client()</code> per API endpoint. Always reuse a single shared <code>Pool</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>import { Pool } from &#39;pg&#39;;
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20, // Max concurrent connections per worker
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-export async function query(text, params) {
-  const client = await pool.connect();
-  try {
-    return await client.query(text, params);
-  } finally {
-    client.release(); // Crucial: return connection back to pool
-  }
-}
-</code></pre>
-    </div>
-    
-<p><strong>Increase <code>max_connections</code> in postgresql.conf</strong>
-For dedicated production servers with 8GB+ RAM, adjust <code>/etc/postgresql/16/main/postgresql.conf</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>max_connections = 250
-shared_buffers = 2GB
-</code></pre>
-    </div>
-    
-<p>Restart the service to apply changes:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart postgresql
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Deploy PgBouncer in transaction mode:</strong> Place PgBouncer in front of PostgreSQL in production. This allows serving over 10,000 concurrent client requests using only 50 physical backend database connections.</li>
-<li><strong>Connection monitoring:</strong> Configure automated alerts when active connections exceed 80% of <code>max_connections</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -361,23 +190,6 @@ shared_buffers = 2GB
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -407,6 +219,23 @@ shared_buffers = 2GB
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to fix: The query requires an index in Cloud Firestore -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-firestore-query-requires-an-index.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix: The query requires an index in Cloud Firestore</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Firebase</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

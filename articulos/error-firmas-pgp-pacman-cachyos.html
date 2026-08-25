@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS",
   "description": "Aprende a restablecer y actualizar las claves del llavero de Pacman para corregir fallos de firma inválida en CachyOS y Arch Linux.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "CachyOS, Arch Linux, Pacman, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-18",
   "dateModified": "2026-07-18",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS",
+      "item": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS",
   "description": "Aprende a restablecer y actualizar las claves del llavero de Pacman para corregir fallos de firma inválida en CachyOS y Arch Linux.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html#sincronizar-el-reloj-del-sistema-mediante-ntp",
+      "name": "Sincronizar el reloj del sistema mediante NTP",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Una causa muy frecuente de firmas criptográficas inválidas es un desfase en el reloj del sistema. Si la fecha de tu máquina no coincide con la fecha de emisión del certificado PGP, la validación fallará automáticamente:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Forzar la sincronización horaria con los servidores NTP\nsudo timedatectl set-ntp true\n\n# Comprobar el estado del reloj del sistema\ntimedatectl status"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html#limpiar-paquetes-corruptos-de-la-cache-local-de-pacman",
+      "name": "Limpiar paquetes corruptos de la caché local de Pacman",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Elimina cualquier archivo .pkg.tar.zst descargado parcialmente que contenga firmas defectuosas en el disco:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Limpiar por completo la caché de paquetes de Pacman\nsudo pacman -Scc --noconfirm"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html#inicializar-y-repoblar-el-llavero-criptografico-desde-cero",
+      "name": "Inicializar y repoblar el llavero criptográfico desde cero",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si la base de datos de claves locales sufrió corrupción de datos, renuévala por completo:\n\n    \n      \n        BASH\n        Copiar\n      \n      # 1. Eliminar el directorio de firmas local corrupto\nsudo rm -rf /etc/pacman.d/gnupg\n\n# 2. Inicializar un nuevo llavero de seguridad en limpio\nsudo pacman-key --init\n\n# 3. Poblar el llavero con las firmas oficiales de Arch y CachyOS\nsudo pacman-key --populate archlinux cachyos"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html#actualizar-los-paquetes-de-llaveros-oficiales-y-sincronizar-el-sistema",
+      "name": "Actualizar los paquetes de llaveros oficiales y sincronizar el sistema",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Instala las versiones más recientes de los llaveros de firmas sin verificar dependencias cruzadas y luego ejecuta la actualización completa:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Actualizar los paquetes keyring de Arch y CachyOS\nsudo pacman -Sy archlinux-keyring cachyos-keyring --noconfirm\n\n# Refrescar las claves con los servidores de claves PGP oficiales\nsudo pacman-key --refresh-keys\n\n# Ejecutar una actualización completa del sistema\nsudo pacman -Syu"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué pacman-key --refresh-keys tarda tanto o da timeout?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Los servidores de claves de Ubuntu o MIT a menudo sufren congestión o bloqueos de firewall en el puerto 11371. Si falla, utiliza el servidor de claves de Arch añadiendo el parámetro: sudo pacman-key --refresh-keys --keyserver hkps://keyserver.ubuntu.com."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué hago si un paquete específico sigue dando error de firma tras repoblar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Puedes forzar la descarga de la base de datos con sudo pacman -Syy y verificar si ese paquete en particular fue marcado como huérfano en los repositorios de CachyOS."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,7 +246,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 4 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -148,152 +257,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error crítico de Pacman error: key &quot;...&quot; could not be looked up remotely o error: signature from &quot;...&quot; is invalid en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado o corrupto, impidiendo la instalación segura de cualquier actualización de software.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-limpiar-la-cache-de-descargas-de-pacman">Paso 1: Limpiar la caché de descargas de Pacman</a></li>
-        <li class="toc-subitem"><a href="#paso-2-inicializar-y-reconstruir-el-llavero-criptografico">Paso 2: Inicializar y reconstruir el llavero criptográfico</a></li>
-        <li class="toc-subitem"><a href="#paso-3-actualizar-las-claves-pgp-de-forma-manual">Paso 3: Actualizar las claves PGP de forma manual</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Claves PGP del llavero de pacman expiradas o desactualizadas en Arch/CachyOS</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Actualizar el keyring de pacman: <code>sudo pacman -Sy cachyos-keyring archlinux-keyring</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Base de datos de firmas de repositorios corrupta</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reiniciar el llavero de llaves gpg: <code>sudo rm -rf /etc/pacman.d/gnupg &amp;&amp; sudo pacman-key --init</code></div>
-          </div></div></div>
-<p>El error crítico de Pacman <code>error: key &quot;...&quot; could not be looked up remotely</code> o <code>error: signature from &quot;...&quot; is invalid</code> en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado o corrupto, impidiendo la instalación segura de cualquier actualización de software.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-limpiar-la-cache-de-descargas-de-pacman">Paso 1: Limpiar la caché de descargas de Pacman</h3>
-<p>El primer paso es eliminar cualquier paquete parcialmente descargado o corrupto de tu almacenamiento local:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Limpiar por completo la caché de paquetes de Pacman
-sudo pacman -Scc
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-inicializar-y-reconstruir-el-llavero-criptografico">Paso 2: Inicializar y reconstruir el llavero criptográfico</h3>
-<p>Para corregir descriptores rotos en tu base de datos de seguridad, inicializa el llavero de Pacman desde cero:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Eliminar el directorio de firmas local corrupto
-sudo rm -rf /etc/pacman.d/gnupg
-
-# Inicializar un nuevo llavero de seguridad en limpio
-sudo pacman-key --init
-
-# Poblar el llavero con las firmas oficiales de Arch y CachyOS
-sudo pacman-key --populate archlinux cachyos
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-actualizar-las-claves-pgp-de-forma-manual">Paso 3: Actualizar las claves PGP de forma manual</h3>
-<p>Una vez reconstruido el llavero, instala el paquete actualizado de firmas oficiales directamente para renovar todas las fechas de expiración criptográficas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Instalar los llaveros de firmas más recientes sin comprobar dependencias
-sudo pacman -Sy archlinux-keyring cachyos-keyring
-
-# Realizar una actualización completa del sistema
-sudo pacman -Syu
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No deshabilites bajo ningún concepto la comprobación de firmas en el archivo <code>/etc/pacman.conf</code> cambiando la directiva <code>SigLevel = Required Database Optional</code> por <code>TrustAll</code> o <code>Never</code>. Hacer esto expone a tu sistema operativo CachyOS a la instalación silenciosa de código malicioso o binarios modificados por terceros que intercepten tus peticiones web, poniendo en riesgo la integridad y confidencialidad total de tus datos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -325,6 +289,23 @@ sudo pacman -Syu
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -336,23 +317,6 @@ sudo pacman -Syu
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

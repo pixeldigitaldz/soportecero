@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix 413 Request Entity Too Large Error in Nginx (Quickly)",
   "description": "Can't upload files or plugins to your Nginx server? Fix the frustrating 413 Request Entity Too Large error in 3 simple steps with our practical guide.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Nginx, Sysadmin, Web",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-03",
   "dateModified": "2026-07-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix 413 Request Entity Too Large Error in Nginx (Quickly)",
+      "item": "https://soportecero.com/en/articulos/error-nginx-client-max-body-size.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix 413 Request Entity Too Large Error in Nginx (Quickly)",
   "description": "Can't upload files or plugins to your Nginx server? Fix the frustrating 413 Request Entity Too Large error in 3 simple steps with our practical guide.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-nginx-client-max-body-size.html#configure-upload-limit-in-nginx",
+      "name": "Configure upload limit in Nginx",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Open the global Nginx configuration file or the specific website server block configuration:\n\n    \n      \n        BASH\n        Copy\n      \n      # Open main Nginx configuration file\nsudo nano /etc/nginx/nginx.conf\n\n    \n    \nInside the http, server, or location block, add or modify the following directive to increase the upload limit (for example, to 64 Megabytes):\n\n    \n      \n        NGINX\n        Copy\n      \n      # Allow uploads up to 64MB\nclient_max_body_size 64M;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-nginx-client-max-body-size.html#adjust-php-fpm-upload-limits-if-applicable",
+      "name": "Adjust PHP-FPM upload limits (if applicable)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your website runs on PHP (such as WordPress, Drupal, or Laravel), you must align Nginx&#39;s limits with your PHP interpreter configurations:\n\n    \n      \n        BASH\n        Copy\n      \n      # Open the active PHP configuration file (adjust for your active PHP version)\nsudo nano /etc/php/8.2/fpm/php.ini\n\n    \n    \nFind and edit the following variables to match your Nginx configuration limits:\n\n    \n      \n        INI\n        Copy\n      \n      upload_max_filesize = 64M\npost_max_size = 64M\nme"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-nginx-client-max-body-size.html#validate-syntax-and-restart-services",
+      "name": "Validate syntax and restart services",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Test your Nginx configuration syntax for correctness before applying changes to production:\n\n    \n      \n        BASH\n        Copy\n      \n      # Test web server configuration syntax\nsudo nginx -t\n\n# Restart system services to apply the new configurations\nsudo systemctl restart nginx\nsudo systemctl restart php8.2-fpm"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,172 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The 413 request entity too large error on an Nginx web server occurs when a client attempts to upload a file (such as an image, a WordPress plugin, or a heavy backup) whose size exceeds the maximum upload limit configured in the web proxy settings.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-configure-upload-limit-in-nginx">Step 1: Configure upload limit in Nginx</a></li>
-        <li class="toc-subitem"><a href="#step-2-adjust-php-fpm-upload-limits-if-applicable">Step 2: Adjust PHP-FPM upload limits (if applicable)</a></li>
-        <li class="toc-subitem"><a href="#step-3-validate-syntax-and-restart-services">Step 3: Validate syntax and restart services</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Nginx client_max_body_size directive limit below uploaded file size</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Increase limit in <code>nginx.conf</code>: <code>client_max_body_size 64M;</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>php.ini upload_max_filesize or post_max_size restricting upload size</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Update <code>upload_max_filesize = 64M</code> in PHP configuration file</div>
-          </div></div></div>
-<p>The <strong>413 request entity too large</strong> error on an Nginx web server occurs when a client attempts to upload a file (such as an image, a WordPress plugin, or a heavy backup) whose size exceeds the maximum upload limit configured in the web proxy settings.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-configure-upload-limit-in-nginx">Step 1: Configure upload limit in Nginx</h3>
-<p>Open the global Nginx configuration file or the specific website server block configuration:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Open main Nginx configuration file
-sudo nano /etc/nginx/nginx.conf
-</code></pre>
-    </div>
-    
-<p>Inside the <code>http</code>, <code>server</code>, or <code>location</code> block, add or modify the following directive to increase the upload limit (for example, to 64 Megabytes):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">NGINX</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Allow uploads up to 64MB
-client_max_body_size 64M;
-</code></pre>
-    </div>
-    
-<h3 id="step-2-adjust-php-fpm-upload-limits-if-applicable">Step 2: Adjust PHP-FPM upload limits (if applicable)</h3>
-<p>If your website runs on PHP (such as WordPress, Drupal, or Laravel), you must align Nginx&#39;s limits with your PHP interpreter configurations:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Open the active PHP configuration file (adjust for your active PHP version)
-sudo nano /etc/php/8.2/fpm/php.ini
-</code></pre>
-    </div>
-    
-<p>Find and edit the following variables to match your Nginx configuration limits:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>upload_max_filesize = 64M
-post_max_size = 64M
-memory_limit = 256M
-</code></pre>
-    </div>
-    
-<h3 id="step-3-validate-syntax-and-restart-services">Step 3: Validate syntax and restart services</h3>
-<p>Test your Nginx configuration syntax for correctness before applying changes to production:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Test web server configuration syntax
-sudo nginx -t
-
-# Restart system services to apply the new configurations
-sudo systemctl restart nginx
-sudo systemctl restart php8.2-fpm
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Do not set the <code>client_max_body_size</code> directive to <code>0</code> (which disables size checking completely). Configuring an infinite upload limit exposes your Nginx web server to Denial of Service (DoS) attacks, allowing malicious actors to saturate your system storage by continuously uploading massive files.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -345,6 +253,23 @@ sudo systemctl restart php8.2-fpm
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -356,23 +281,6 @@ sudo systemctl restart php8.2-fpm
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

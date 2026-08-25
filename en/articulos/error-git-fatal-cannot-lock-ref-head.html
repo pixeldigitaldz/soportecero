@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'fatal: cannot lock ref' in Git",
   "description": "Git returning 'cannot lock ref' or 'unable to update local ref' during pull or fetch? Step-by-step resolution to clear stale locks.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "Git, GitHub, DevOps",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-20",
   "dateModified": "2026-08-20",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error 'fatal: cannot lock ref' in Git",
-  "description": "Git returning 'cannot lock ref' or 'unable to update local ref' during pull or fetch? Step-by-step resolution to clear stale locks.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error 'fatal: cannot lock ref' in Git",
+      "item": "https://soportecero.com/en/articulos/error-git-fatal-cannot-lock-ref-head.html"
+    }
+  ]
 }
   </script>
     
@@ -148,165 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ... or fatal: cannot lock ref occurs during git pull, git fetch, or git checkout when local Git reference pointers become corrupted from abrupt process terminations or case-sensitivity branch conflicts.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-prune-stale-remote-references">Step 1: Prune Stale Remote References</a></li>
-        <li class="toc-subitem"><a href="#step-2-remove-stale-lock-files">Step 2: Remove Stale Lock Files</a></li>
-        <li class="toc-subitem"><a href="#step-3-resolve-case-sensitivity-branch-collisions">Step 3: Resolve Case-Sensitivity Branch Collisions</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Stale Git ref lock file present (.git/refs/heads/X.lock)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Remove leftover lock file: <code>rm -f .git/refs/heads/branch-name.lock</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Multiple concurrent Git processes running simultaneously</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Kill other active Git processes or IDE locks before retrying</div>
-          </div></div></div>
-<p>The error <strong><code>error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ...</code></strong> or <code>fatal: cannot lock ref</code> occurs during <code>git pull</code>, <code>git fetch</code>, or <code>git checkout</code> when local Git reference pointers become corrupted from abrupt process terminations or case-sensitivity branch conflicts.</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Prune outdated remote references:
-<code>git remote prune origin</code></li>
-<li>Manually delete the stale lock file if needed:
-<code>rm -f .git/refs/remotes/origin/main.lock</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-prune-stale-remote-references">Step 1: Prune Stale Remote References</h3>
-<p>In most scenarios, this happens when branches deleted on GitHub/GitLab still exist in your local tracking cache:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>git remote prune origin
-</code></pre>
-    </div>
-    
-<p>Now retry your fetch command:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>git fetch origin
-</code></pre>
-    </div>
-    
-<h3 id="step-2-remove-stale-lock-files">Step 2: Remove Stale Lock Files</h3>
-<p>If a git operation was abruptly killed (power loss or terminal kill), Git leaves behind temporary safety lock files:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Remove specific lock file
-rm -f .git/refs/remotes/origin/main.lock
-
-# Purge any stale lock files in refs directory:
-find .git/refs -name &quot;*.lock&quot; -type f -delete
-</code></pre>
-    </div>
-    
-<h3 id="step-3-resolve-case-sensitivity-branch-collisions">Step 3: Resolve Case-Sensitivity Branch Collisions</h3>
-<p>If two remote branches differ only by case (e.g., <code>Feature</code> and <code>feature</code>), case-insensitive filesystems (Windows/macOS) fail to create distinct reference files.</p>
-<p>Repack reference files into a single packed-refs file:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>git pack-refs --all --prune
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -338,23 +207,6 @@ find .git/refs -name &quot;*.lock&quot; -type f -delete
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -367,6 +219,23 @@ find .git/refs -name &quot;*.lock&quot; -type f -delete
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
             <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to fix: The query requires an index in Cloud Firestore -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-firestore-query-requires-an-index.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix: The query requires an index in Cloud Firestore</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Firebase</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

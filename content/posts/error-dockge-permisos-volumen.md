@@ -1,51 +1,75 @@
 ---
 title: "Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose"
-description: "Aprende a solucionar los fallos de lectura y escritura en carpetas locales montadas como volúmenes en contenedores Docker de Linux."
+description: "Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge."
 category: "Sistemas y Servidores"
-tags: ["Docker", "Linux", "Servidores"]
-readTime: "4 min"
+tags: ["Docker", "Dockge", "Linux", "Permisos", "Docker Compose", "DevOps"]
+readTime: "5 min"
 date: "2026-06-26"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Permisos del sistema de archivos bloqueando el acceso al directorio /data/stacks** | Asignar la propiedad correcta de la carpeta: `sudo chown -R 1000:1000 /data/stacks` |
-| **UID/GID del usuario del contenedor no coincide con el host Linux** | Ajustar la variable de entorno `PUID` y `PGID` en el archivo `compose.yaml` |
+| **El UID/GID del usuario dentro del contenedor no coincide con el propietario de la carpeta en el host** | Cambiar el propietario de la carpeta con `sudo chown -R 1000:1000 /ruta/volumen` o usar variable `user: "1000:1000"` |
+| **Bloqueo de seguridad por contexto SELinux o AppArmor** | Añadir el flag de volumen `:z` o `:Z` al mapear volúmenes en `docker-compose.yml` |
 
-
-El error `io.containerd.runc.v2: OCI runtime create failed: permission denied` o los fallos internos donde un contenedor (como Nginx, Plex o un indexer) no puede guardar su configuración, ocurren porque el usuario interno del contenedor no tiene permisos del sistema de archivos de Linux para escribir en la carpeta del host que montaste en la sección `volumes:`.
+El fallo recurrente `EACCES: permission denied`, `touch: cannot touch '/data/...': Permission denied` o `failed to open stream: Permission denied` en aplicaciones desplegadas con Dockge o Docker Compose ocurre cuando el usuario interno del contenedor (como `node` UID 1000, `www-data` UID 33 o `nobody` UID 65534) no posee permisos de escritura sobre el directorio montado en el sistema anfitrión.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Averiguar el UID y GID del contenedor
-Muchos contenedores te permiten especificar con qué usuario del sistema deben ejecutarse mediante variables de entorno en el archivo `docker-compose.yml`. Revisa la documentación del contenedor buscando las variables `PUID` y `PGID`.
-
-### Paso 2: Identificar tu usuario local
-En la terminal de tu servidor, ejecuta el comando para ver el identificador de tu usuario actual:
+### Paso 1: Averiguar el UID y GID del usuario del contenedor
+Revisa qué usuario ejecuta el proceso dentro de la imagen de Docker:
 ```bash
-id
+# Ejecutar un comando id temporal dentro de la imagen del contenedor
+docker run --rm <nombre_imagen> id
+```
+Ejemplos comunes de UIDs según la imagen:
+- **Node.js**: UID `1000`, GID `1000` (usuario `node`).
+- **Nginx / PHP-FPM**: UID `33`, GID `33` (usuario `www-data`).
+- **PostgreSQL**: UID `999` o `70` (usuario `postgres`).
+- **Uptime Kuma / Dockge**: UID `1000` o `0` (root).
+
+### Paso 2: Corregir el propietario y permisos de la carpeta en el host
+Asigna la propiedad del directorio en el servidor anfitrión al usuario correspondiente del contenedor:
+```bash
+# Para contenedores que corren como usuario 1000 (estándar en Node/Dockge):
+sudo chown -R 1000:1000 /opt/dockge/stacks/mi-stack/data
+
+# Asegurar permisos de lectura, escritura y ejecución de directorios
+sudo chmod -R 775 /opt/dockge/stacks/mi-stack/data
 ```
 
-Verás algo como `uid=1000(rodolfo) gid=1000(rodolfo)`. Toma nota de esos números.
-
-### Paso 3: Corregir los permisos de la carpeta en el Host
-Si montaste una carpeta local en `./config`, debes asignarle la propiedad al usuario correcto de tu Linux para que Docker pueda manipularla:
-```bash
-# Cambiar el propietario al usuario 1000
-sudo chown -R 1000:1000 ./config
-
-# Asegurar permisos de lectura y escritura estándar
-sudo chmod -R 755 ./config
+### Paso 3: Especificar el usuario explícitamente en docker-compose.yml
+En tu archivo `compose.yaml`, puedes forzar a Docker a ejecutar el contenedor con el ID de tu usuario actual en Linux (`id -u` e `id -g`):
+```yaml
+services:
+  mi-app:
+    image: mi-app:latest
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./data:/app/data:z
+    restart: unless-stopped
 ```
+*Nota:* El sufijo `:z` (o `:Z` para aislamiento exclusivo) reetiqueta el contexto de seguridad SELinux en distribuciones como Fedora, Red Hat, CentOS y Rocky Linux.
 
-### Paso 4: Reiniciar el contenedor
-Aplica un reinicio forzado para que el demonio de Docker tome la nueva configuración del disco:
+### Paso 4: Reiniciar el contenedor y verificar la persistencia
+Reinicia el servicio para validar que la aplicación puede crear y modificar archivos:
 ```bash
+# Reiniciar el contenedor en Dockge o mediante CLI
 docker compose down && docker compose up -d
+
+# Verificar los logs para confirmar que no hay errores EACCES
+docker compose logs -f
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Consejos de Prevención
+- **Evita chmod 777 como solución definitiva:** Aunque `chmod 777` resuelve el bloqueo de inmediato, concede permisos totales a cualquier proceso local en el servidor, creando una brecha de seguridad. Utiliza siempre `chown` con el UID específico.
+- **Estandariza los entornos PUID/PGID:** Muchas imágenes comunitarias (como las de LinuxServer.io) admiten variables de entorno `PUID=1000` y `PGID=1000` para auto-ajustar permisos en el arranque.
 
-Prácticas de seguridad recomendadas:
-* Jamás uses chmod 777 de forma masiva para solucionar problemas de Docker. Darle permisos de ejecución y escritura global a cualquiera expone tu servidor a que cualquier proceso comprometido modifique archivos raíz de tu sistema operativo.
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Qué diferencia hay entre :z y :Z en los volúmenes de Docker?
+El modificador `:z` comparte el contexto SELinux entre múltiples contenedores, mientras que `:Z` asigna una etiqueta privada exclusiva solo para ese contenedor específico.
+
+### ¿Cómo sé qué UID tiene mi usuario en Linux?
+Ejecuta `id -u` para el identificador de usuario y `id -g` para el grupo.

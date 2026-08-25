@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Error: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero</title>
+  <title>How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.">
+  <meta name="description" content="Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html">
   
@@ -20,15 +20,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="Error: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero">
-  <meta property="og:description" content="How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.">
+  <meta property="og:title" content="How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero">
+  <meta property="og:description" content="Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Error: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero">
-  <meta name="twitter:description" content="How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.">
+  <meta name="twitter:title" content="How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket - SoporteCero">
+  <meta name="twitter:description" content="Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -48,18 +48,28 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Error: Error 2002 (HY000): Can't connect to local MySQL server through socket",
-  "description": "How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.",
-  "category": "Systems & Servers",
-  "datePublished": "2026-08-16",
-  "dateModified": "2026-08-16",
+  "headline": "How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket",
+  "description": "Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.",
+  "inLanguage": "en",
+  "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "MySQL, MariaDB, Linux, SysAdmin, Databases, Ubuntu",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket",
+      "item": "https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Error: Error 2002 (HY000): Can't connect to local MySQL server through socket",
-  "description": "How to diagnose and fix MySQL/MariaDB error 2002 when it cannot connect through the mysql.sock socket.",
-  "step": []
+  "name": "How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket",
+  "description": "Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html#verify-service-health-and-storage-headroom",
+      "name": "Verify Service Health and Storage Headroom",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Confirm whether the daemon is actively running and storage is unconstrained:\n\n    \n      \n        BASH\n        Copy\n      \n      # 1. Check disk capacity\ndf -h\n\n# 2. Inspect MySQL / MariaDB daemon state\nsudo systemctl status mysql # or mariadb\n\n# 3. Start daemon if inactive\nsudo systemctl start mysql"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html#recreate-socket-directory-and-fix-permissions",
+      "name": "Recreate Socket Directory and Fix Permissions",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If volatile tmpfs mounting cleared the parent runtime directory on reboot:\n\n    \n      \n        BASH\n        Copy\n      \n      # Create target socket directory\nsudo mkdir -p /var/run/mysqld\n\n# Grant ownership to system &#39;mysql&#39; account\nsudo chown -R mysql:mysql /var/run/mysqld\nsudo chmod -R 755 /var/run/mysqld\n\n# Restart database service\nsudo systemctl restart mysql"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html#align-socket-directives-in-mycnf",
+      "name": "Align Socket Directives in my.cnf",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ensure client and server configuration blocks share identical socket paths:\n\n    \n      \n        INI\n        Copy\n      \n      # /etc/mysql/my.cnf\n[mysqld]\nsocket = /var/run/mysqld/mysqld.sock\n\n[client]\nsocket = /var/run/mysqld/mysqld.sock"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-mysql-2002-cant-connect-to-local-server-socket.html#create-a-compatibility-symlink",
+      "name": "Create a Compatibility Symlink",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If legacy applications expect the socket at /tmp/mysql.sock:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does 127.0.0.1 connect while localhost fails?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In UNIX environments, connecting to localhost forces UNIX domain socket communication, while 127.0.0.1 utilizes network TCP/IP sockets on port 3306."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does error code (2) represent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The (2) suffix corresponds to the standard Linux POSIX error ENOENT (No such file or directory), confirming the physical socket file is absent from disk."
+      }
+    }
+  ]
 }
   </script>
     
@@ -126,207 +235,29 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
-        <span style="color: var(--text-secondary);">Error: Error 2002 (HY000): Can't connect to local MySQL server through socket</span>
+        <span style="color: var(--text-secondary);">How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket</span>
       </div>
 
       <header class="post-header">
-        <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">Error: Error 2002 (HY000): Can't connect to local MySQL server through socket</h1>
+        <span class="card-category">Web & Code</span>
+        <h1 id="post-title">How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 3 min
+            Read Time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Updated: 2026-08-16
+            Updated: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>Check the service status
-The most common error is that MySQL or MariaDB are simply not running. Check it:</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>MySQL/MariaDB service is down</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Start the service: <code>systemctl start mysql</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Missing or corrupted mysql.sock file</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Restart the service or recreate the path manually</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Incorrect permissions on /var/run/mysqld</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Change owner to mysql: <code>chown mysql:mysql /var/run/mysqld/</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Check the service status</strong>
-The most common error is that MySQL or MariaDB are simply not running. Check it:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl status mysql
-# or if you use mariadb: sudo systemctl status mariadb
-</code></pre>
-    </div>
-    
-<p>If it says <em>inactive</em> or <em>failed</em>, start it:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl start mysql
-</code></pre>
-    </div>
-    
-<p><strong>Find the socket file manually</strong>
-Sometimes, the MySQL client looks for the <code>.sock</code> file in <code>/tmp/mysql.sock</code> but the server created it in <code>/var/run/mysqld/mysqld.sock</code>. To find where the socket really is, check your configuration file (<code>/etc/mysql/my.cnf</code> or <code>/etc/my.cnf</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>grep -i &quot;socket&quot; /etc/mysql/my.cnf
-</code></pre>
-    </div>
-    
-<p>If you know the server is running but the socket is in another location, you can connect by specifying it:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>mysql -u root -p -S /var/run/mysqld/mysqld.sock
-</code></pre>
-    </div>
-    
-<p><strong>Permission and directory issues</strong>
-If the server fails to start complaining about the socket, the <code>/var/run/mysqld</code> folder might not exist or might not have the correct permissions (often happens after hard reboots or updates).
-Recreate the folder and give permissions:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo mkdir -p /var/run/mysqld
-sudo chown mysql:mysql /var/run/mysqld
-sudo systemctl restart mysql
-</code></pre>
-    </div>
-    
-<p><strong>Check for lack of disk space</strong>
-Sometimes, MySQL shuts down unexpectedly because the root partition (<code>/</code>) or <code>/var</code> has run out of space, preventing the creation of the temporary socket file.</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>df -h
-</code></pre>
-    </div>
-    
-<p>If the disk is at 100%, free up space and restart the service.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Disk monitoring:</strong> Make sure to set up disk space alerts on your server.</li>
-<li><strong>Standardized configuration:</strong> Define the <code>socket</code> path explicitly under the <code>[client]</code> and <code>[mysqld]</code> section in your <code>my.cnf</code> file so that both the server and the client always match the location.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -341,51 +272,51 @@ Sometimes, MySQL shuts down unexpectedly because the root partition (<code>/</co
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: [FIXED] Error 521 Web Server Is Down in Cloudflare -->
+      <!-- Related Card: How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 521 Web Server Is Down in Cloudflare</a>
+              <a href="../articulos/error-postgresql-too-many-clients-already-connection-pool.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Cloudflare</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: iptables failed: No chain/target/match by that name in Docker</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
+            <span class="card-tag">PostgreSQL</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
+      <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
+              <a href="../articulos/error-nextjs-api-resolved-without-response.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Guide: Fix API resolved without sending a response for /api/ in Next.js</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
+            <span class="card-tag">Next.js</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'fatal: cannot lock ref' in Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

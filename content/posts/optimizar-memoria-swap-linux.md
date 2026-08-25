@@ -1,56 +1,81 @@
 ---
 title: "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap"
-description: "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness."
+description: "Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux."
 category: "Sistemas y Servidores"
-tags: ["Linux", "Sysadmin", "Swap"]
-readTime: "4 min"
+tags: ["Linux", "SysAdmin", "Swap", "Rendimiento", "Ubuntu", "Debian"]
+readTime: "5 min"
 date: "2026-06-27"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Uso agresivo del espacio swap en disco lento causando tirones (stuttering)** | Reducir la agresividad de swappiness: `sudo sysctl vm.swappiness=10` |
-| **Falta de compresión de memoria RAM en tiempo real** | Habilitar el módulo zRAM en Linux para comprimir la memoria en lugar de usar swap en disco |
+| **Servidor o PC sin memoria Swap configurada sufriendo cierres por OOM Killer** | Crear un swapfile de 4GB a 8GB con `fallocate` o `dd` y activarlo con `swapon` |
+| **Uso excesivo y lento de Swap con RAM libre disponible (swappiness alto)** | Reducir el parámetro `vm.swappiness` a 10 o 20 en `/etc/sysctl.conf` |
 
+En sistemas operativos Linux, la memoria Swap (espacio de intercambio) permite al kernel descargar páginas de memoria RAM inactivas hacia el disco de almacenamiento, liberando memoria física de alta velocidad para la caché del sistema de archivos y aplicaciones activas. Un sistema sin Swap o con un valor de `swappiness` inadecuado sufrirá congelamientos o cierres forzados por el OOM Killer.
 
-El desbordamiento de memoria RAM en servidores en la nube sin particiones de intercambio (Swap) provoca que el kernel de Linux active el proceso asesino `OOM Killer` (Out of Memory Killer), deteniendo de inmediato aplicaciones críticas como bases de datos MySQL, servidores web Nginx o procesos de Node.js.
-
-## 🚀 Cómo configurar la memoria virtual en Linux paso a paso
+## 🚀 Cómo solucionar el error paso a paso
 
 ### Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)
-Si tu servidor VPS no cuenta con memoria de intercambio asignada, puedes generar un archivo dinámico de 4GB para mitigar picos de consumo:
+Si tu servidor carece de partición Swap, crea un archivo de intercambio en la raíz del sistema:
 ```bash
-# Crear un archivo vacío preasignado
-sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
+# 1. Comprobar si ya existe swap activa
+sudo swapon --show
+free -h
 
-# Asignar permisos estrictos de superusuario
+# 2. Crear un archivo preasignado de 4GB (o 8GB según tu RAM)
+sudo fallocate -l 4G /swapfile
+
+# Si fallocate no es compatible con tu sistema de archivos (ej. Btrfs o XFS antiguo):
+# sudo dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress
+
+# 3. Asignar permisos estrictos de solo lectura/escritura para root
 sudo chmod 600 /swapfile
 
-# Dar formato de intercambio al archivo
+# 4. Formatear el archivo como área de intercambio
 sudo mkswap /swapfile
 
-# Activar el archivo como memoria Swap en el sistema
+# 5. Activar el Swapfile en el sistema
 sudo swapon /swapfile
 ```
 
-### Paso 2: Configurar la persistencia del montaje
-Edita la tabla de sistemas de archivos del kernel (`/etc/fstab`) para asegurar que el sistema cargue la memoria de intercambio automáticamente al encenderse:
+### Paso 2: Configurar la persistencia del montaje en /etc/fstab
+Asegura que el archivo Swap se monte automáticamente tras cada reinicio del sistema:
 ```bash
-echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+# Hacer una copia de seguridad de fstab
+sudo cp /etc/fstab /etc/fstab.bak
+
+# Añadir la entrada persistente
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ```
 
-### Paso 3: Optimizar el umbral de activación (Swappiness)
-El valor predeterminado de `swappiness` (normalmente 60) obliga al kernel a escribir en el disco demasiado pronto, lo que puede ralentizar servidores. Para optimizar el uso de memoria física RAM al máximo, baja el valor a `10` o `20`:
+### Paso 3: Optimizar los parámetros del kernel (swappiness y vfs_cache_pressure)
+Por defecto, muchas distribuciones tienen `vm.swappiness=60`, lo que hace que el kernel utilice el disco antes de lo necesario. Para servidores y equipos de escritorio con SSD:
 ```bash
-# Cambiar el valor temporalmente en memoria
+# Comprobar el valor actual
+cat /proc/sys/vm/swappiness
+
+# Establecer temporalmente swappiness a 10 (solo usa swap bajo presión real)
 sudo sysctl vm.swappiness=10
+sudo sysctl vm.vfs_cache_pressure=50
 
-# Fijar la configuración en los parámetros del sistema
-echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
+# Hacer la configuración permanente en /etc/sysctl.d/99-swap.conf
+echo -e "vm.swappiness=10\nvm.vfs_cache_pressure=50" | sudo tee /etc/sysctl.d/99-swap.conf
+sudo sysctl --system
 ```
 
-## 🛡️ Prevención y buenas prácticas para la memoria virtual en Linux
+### Paso 4: Verificar el estado de la memoria
+Comprueba con `free -h` que el nuevo espacio Swap aparece activo y disponible.
 
-Prácticas de seguridad recomendadas:
-- Evita ubicar archivos de memoria Swap en almacenamiento SSD secundario de baja calidad o discos externos compartidos. El ciclo constante de lecturas y escrituras intensivas puede desgastar físicamente las celdas de almacenamiento SSD de grado de consumo antes de tiempo, degradando de forma irreversible las tasas de transferencia de datos de tu disco duro principal.
+## 🛡️ Consejos de Prevención
+- **Cuidado en sistemas de archivos Btrfs:** En Btrfs, los archivos swap requieren atributos especiales (`chattr +C /swapfile`) para desactivar el Copy-on-Write (CoW) antes de asignar espacio.
+- **Utiliza ZRAM en equipos con poca memoria:** Para dispositivos con 2GB a 4GB de RAM (como Raspberry Pi), considera `zram-tools` para comprimir memoria en RAM en lugar de escribir en discos lentos.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Cuánta memoria Swap debo asignar?
+Como regla general: para sistemas con menos de 4GB de RAM, asigna el doble de RAM en Swap. Para sistemas con 8GB a 16GB, asigna entre 4GB y 8GB de Swap. Para más de 32GB de RAM, 4GB a 8GB suelen ser suficientes para amortiguar picos.
+
+### ¿El archivo Swap desgasta los discos SSD?
+Con un `swappiness` bajo (10 a 20), la escritura en Swap es mínima y no afectará la vida útil de los SSD modernos con nivelación de desgaste (wear leveling).

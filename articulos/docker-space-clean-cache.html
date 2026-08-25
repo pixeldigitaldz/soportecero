@@ -7,7 +7,7 @@
   <title>Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Optimiza el almacenamiento de tu servidor eliminando imágenes sin uso, volúmenes huérfanos y archivos de registros de contenedores en Docker.">
+  <meta name="description" content="Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/docker-space-clean-cache.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker - SoporteCero">
-  <meta property="og:description" content="Optimiza el almacenamiento de tu servidor eliminando imágenes sin uso, volúmenes huérfanos y archivos de registros de contenedores en Docker.">
+  <meta property="og:description" content="Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/docker-space-clean-cache.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker - SoporteCero">
-  <meta name="twitter:description" content="Optimiza el almacenamiento de tu servidor eliminando imágenes sin uso, volúmenes huérfanos y archivos de registros de contenedores en Docker.">
+  <meta name="twitter:description" content="Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker",
-  "description": "Optimiza el almacenamiento de tu servidor eliminando imágenes sin uso, volúmenes huérfanos y archivos de registros de contenedores en Docker.",
+  "description": "Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
-  "datePublished": "2026-06-27",
-  "dateModified": "2026-06-27",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, Linux, DevOps, SysAdmin, Almacenamiento",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker",
+      "item": "https://soportecero.com/articulos/docker-space-clean-cache.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker",
-  "description": "Optimiza el almacenamiento de tu servidor eliminando imágenes sin uso, volúmenes huérfanos y archivos de registros de contenedores en Docker.",
-  "step": []
+  "description": "Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/docker-space-clean-cache.html#analizar-el-uso-de-almacenamiento-en-docker",
+      "name": "Analizar el uso de almacenamiento en Docker",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Antes de borrar nada, identifica qué componentes están consumiendo más espacio:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Ver el resumen de consumo de imágenes, contenedores y volúmenes\ndocker system df\n\n# Ver información detallada de cada elemento\ndocker system df -v"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/docker-space-clean-cache.html#limpiar-imagenes-contenedores-y-redes-en-desuso",
+      "name": "Limpiar imágenes, contenedores y redes en desuso",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ejecuta una purga integral de todos los recursos no asociados a contenedores actualmente en ejecución:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Eliminar contenedores detenidos, redes no utilizadas e imágenes sin contenedor activo\ndocker system prune -a --force\n\n# Limpiar específicamente la caché de compilación de BuildKit\ndocker builder prune -a --force"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/docker-space-clean-cache.html#eliminar-volumenes-huerfanos-dangling-volumes",
+      "name": "Eliminar volúmenes huérfanos (Dangling Volumes)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Los volúmenes anónimos creados por bases de datos o servicios temporales no se borran automáticamente con docker rm:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Listar volúmenes que no están vinculados a ningún contenedor\ndocker volume ls -qf dangling=true\n\n# Eliminar todos los volúmenes huérfanos de forma segura\ndocker volume prune --force"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/docker-space-clean-cache.html#limpiar-y-limitar-los-archivos-de-logs-de-contenedores",
+      "name": "Limpiar y limitar los archivos de logs de contenedores",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si los logs de contenedores en formato JSON han crecido hasta ocupar varios gigabytes:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Truncar logs de todos los contenedores en vivo sin detenerlos\nsudo sh -c &#39;truncate -s 0 /var/lib/docker/containers/*/*-json.log&#39;\n\n    \n    \nPara evitar que vuelvan a crecer descontroladamente, crea o edita /etc/docker/daemon.json:\n\n    \n      \n        JSON\n        Copiar\n      \n      {\n  &quot;log-driver&quot;: &quot;json-file&quot;,\n  &quot;log-o"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿docker system prune -a borra las bases de datos de mis contenedores activos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Los volúmenes y contenedores que estén en ejecución no son afectados. Sin embargo, si tienes contenedores detenidos que piensas volver a iniciar, asegúrate de utilizar volúmenes nombrados para proteger sus datos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo muevo /var/lib/docker a un disco secundario más grande?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Configura la directiva &quot;data-root&quot;: &quot;/nuevo/disco/docker&quot; en /etc/docker/daemon.json y reinicia el servicio tras migrar los archivos."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,159 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 4 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-06-27
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>La acumulación silenciosa de espacio en disco en servidores que corren Docker ocurre porque el motor de contenedores nunca elimina por defecto las imágenes antiguas cuando descargas actualizaciones, ni limpia los archivos temporales de compilación o los archivos de log que crecen indefinidamente en la ruta del host.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-ejecutar-una-limpieza-de-datos-inactivos-y-volumenes-huerfanos">Paso 1: Ejecutar una limpieza de datos inactivos y volúmenes huérfanos</a></li>
-        <li class="toc-subitem"><a href="#paso-2-localizar-y-vaciar-archivos-de-registro-logs-saturados">Paso 2: Localizar y vaciar archivos de registro (Logs) saturados</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Imágenes, contenedores parados y volúmenes huérfanos acumulados</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Ejecutar limpieza profunda: <code>docker system prune -a --volumes -f</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Archivos de logs JSON de contenedores creciendo indefinidamente</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Vaciar los logs acumulados: <code>truncate -s 0 /var/lib/docker/containers/*/*-json.log</code></div>
-          </div></div></div>
-<p>La acumulación silenciosa de espacio en disco en servidores que corren Docker ocurre porque el motor de contenedores nunca elimina por defecto las imágenes antiguas cuando descargas actualizaciones, ni limpia los archivos temporales de compilación o los archivos de log que crecen indefinidamente en la ruta del host.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-ejecutar-una-limpieza-de-datos-inactivos-y-volumenes-huerfanos">Paso 1: Ejecutar una limpieza de datos inactivos y volúmenes huérfanos</h3>
-<p>El comando <code>prune</code> elimina imágenes no utilizadas, redes y contenedores parados. Para forzar la eliminación de volúmenes huérfanos que ya no están asociados a ningún contenedor activo, corre:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Limpieza profunda de bajo impacto de recursos inactivos
-docker system prune -a --volumes -f
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-localizar-y-vaciar-archivos-de-registro-logs-saturados">Paso 2: Localizar y vaciar archivos de registro (Logs) saturados</h3>
-<p>Los contenedores que imprimen información en consola constantemente generan logs en formato JSON que pueden llegar a ocupar cientos de gigabytes. Utiliza este script rápido en consola para identificar el tamaño de los logs y truncarlos de inmediato sin detener tus servicios:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Listar y vaciar logs JSON acumulados en la ruta raíz de Docker
-find /var/lib/docker/containers/ -name &quot;*-json.log&quot; -exec du -sh {} +
-
-# Truncar logs a tamaño cero
-sudo find /var/lib/docker/containers/ -name &quot;*-json.log&quot; -exec sh -c &#39;cat /dev/null &gt; &quot;{}&quot;&#39; \;
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Evita que los contenedores acumulen archivos de registros de manera descontrolada en tu almacenamiento local. Configura siempre la rotación automática de logs a nivel global agregando parámetros de límites en el archivo daemon de Docker (<code>/etc/docker/daemon.json</code>) antes de desplegar tus servicios:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JSON</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>{
-  &quot;log-driver&quot;: &quot;json-file&quot;,
-  &quot;log-opts&quot;: {
-    &quot;max-size&quot;: &quot;10m&quot;,
-    &quot;max-file&quot;: &quot;3&quot;
-  }
-}
-</code></pre>
-    </div>
-    
-</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -321,6 +289,23 @@ sudo find /var/lib/docker/containers/ -name &quot;*-json.log&quot; -exec sh -c &
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -332,23 +317,6 @@ sudo find /var/lib/docker/containers/ -name &quot;*-json.log&quot; -exec sh -c &
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

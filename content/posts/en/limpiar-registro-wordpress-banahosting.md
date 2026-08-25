@@ -1,46 +1,71 @@
 ---
-title: How to clean and optimize a bloated WordPress database in BanaHosting
-description: >-
-  Learn how to clean WordPress and optimize your website's database to speed up
-  load times and reduce CPU usage in BanaHosting.
-category: Web & Code
-tags:
-  - WordPress
-  - Database
-  - Maintenance
-readTime: 3 min
-date: '2026-07-27'
+title: "How to clean and optimize a bloated WordPress database in BanaHosting"
+description: "Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting."
+category: "Systems & Servers"
+tags: ["WordPress", "BanaHosting", "MySQL", "cPanel", "Optimization"]
+readTime: "5 min"
+date: "2026-07-27"
 ---
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **WordPress database bloated by post revisions and transients** | Optimize database via WP-CLI: `wp transient delete --all` |
-| **Database size or storage quota exceeded on BanaHosting** | Clear stale transients from `wp_options` table via phpMyAdmin |
+| **wp_options table bloated by expired transient records and unpruned autoload data** | Run SQL cleanup queries for transients in phpMyAdmin |
+| **Accumulated post revisions and orphan postmeta consuming IOPS in wp_posts** | Cap post revisions in `wp-config.php` and run OPTIMIZE TABLE in MySQL |
 
+Unchecked growth of WordPress databases in shared hosting environments like BanaHosting or standard cPanel VPS causes sites to exceed inode quotas, trigger CPU/IOPS resource throttling, and suffer intermittent 500/503 errors. The culprit is typically unpruned `_transient_` options and thousands of draft revisions.
 
-Knowing how to **clean WordPress** and optimize your website's database on shared servers (like BanaHosting) is essential when the web gets slow or the control panel throws memory limit errors. This happens because WordPress defaults to accumulating thousands of rows of "post revisions" (old saved versions of your posts) and cache junk (*transients*) in the `wp_options` table, bloating SQL queries.
+## 🚀 Step-by-Step Solution
 
-## 🚀 Cómo solucionar el error paso a paso
+### Step 1: Limit Post Revisions in wp-config.php
+Prevent WordPress from creating unlimited revision rows by adding configuration limits to `wp-config.php`:
+```php
+// Limit post revisions to 3 versions
+define('WP_POST_REVISIONS', 3);
 
-### Paso 1: Limitar las revisiones de entradas en wp-config.php
-By default, WordPress saves infinite copies of every change you make. We are going to cap it to a maximum of 3 versions so it stops bloating the database.
-1. Enter the File Manager of your cPanel in BanaHosting.
-2. Open the `wp-config.php` file and add the following line just before the text that says *That's all, stop editing!*:
-  ```php
-  define('WP_POST_REVISIONS', 3);
-  ```
+// Increase autosave interval to 120 seconds
+define('AUTOSAVE_INTERVAL', 120);
 
-### Paso 2: Ejecutar una limpieza SQL directa (Vía phpMyAdmin)
-
-Enter phpMyAdmin from your cPanel, select your WordPress database, go to the SQL tab and run this command to delete all stored old revisions in one go:
-```sql
-DELETE FROM wp_posts WHERE post_type = 'revision';
+// Empty trash automatically every 7 days
+define('EMPTY_TRASH_DAYS', 7);
 ```
 
-You will see how the size of your database drops drastically, speeding up searches and server response times.
+### Step 2: Clean Expired Transients in wp_options via phpMyAdmin
+Open **cPanel > phpMyAdmin**, select your database, and run this query under the SQL tab:
+```sql
+-- Remove transient records from options table
+DELETE FROM wp_options WHERE option_name LIKE ('_transient_%');
+DELETE FROM wp_options WHERE option_name LIKE ('_site_transient_%');
+```
 
-## 🛡️ Consejo de Prevención
+### Step 3: Remove Orphan Revisions and Post Meta
+Delete old draft revisions and their detached metadata entries:
+```sql
+-- 1. Remove revision entries
+DELETE a,b,c
+FROM wp_posts a
+LEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)
+LEFT JOIN wp_postmeta c ON (a.ID = c.post_id)
+WHERE a.post_type = 'revision';
 
-Recommended security practices:
-- Make a full backup of your database in `.sql` format before running any direct deletion command. If you make a syntax error in the SQL query without having a prior backup, you could delete the actual articles of your blog or corrupt permanent link relationships irreversibly.
+-- 2. Clean orphan postmeta rows
+DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE wp.ID IS NULL;
+```
+
+### Step 4: Defragment and Optimize Database Tables
+Reclaim unallocated disk space and rebuild index trees:
+```sql
+OPTIMIZE TABLE wp_options, wp_posts, wp_postmeta, wp_comments;
+```
+
+## 🛡️ Prevention Advice
+- **Avoid database logging plugins:** Offload analytics and redirect tracking to services like Cloudflare or GA4 rather than writing raw hits into MySQL tables.
+- **Automate maintenance:** Schedule monthly optimization cron tasks via WP-CLI or lightweight maintenance tools.
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### Is deleting _transient_ rows safe?
+Yes, completely safe. Transients are temporary cached values that plugins will transparently re-populate upon the next request.
+
+### Will removing revisions affect my live published posts?
+No. Only historical intermediate drafts are pruned. Live articles remain untouched.

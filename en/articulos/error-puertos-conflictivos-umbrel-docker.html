@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Resolve Port Conflict Errors in Umbrel OS and Docker",
   "description": "Learn how to resolve port binding errors when installing custom containers or services that clash with Umbrel's default web proxy.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Docker, Umbrel, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Resolve Port Conflict Errors in Umbrel OS and Docker",
+      "item": "https://soportecero.com/en/articulos/error-puertos-conflictivos-umbrel-docker.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Resolve Port Conflict Errors in Umbrel OS and Docker",
   "description": "Learn how to resolve port binding errors when installing custom containers or services that clash with Umbrel's default web proxy.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-puertos-conflictivos-umbrel-docker.html#identify-which-process-or-container-is-using-the-port",
+      "name": "Identify which process or container is using the port",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Before modifying any compose files, connect to your Umbrel via SSH and identify precisely which service is binding to the target port:\n\n    \n      \n        BASH\n        Copy\n      \n      # Locate processes listening on the conflicting port (e.g., port 80)\nsudo lsof -i :80\n\n# List active Docker container port mappings\ndocker ps --format &quot;table {{.ID}}\\t{{.Names}}\\t{{.Ports}}&quot;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-puertos-conflictivos-umbrel-docker.html#update-port-mapping-in-your-docker-composeyml-file",
+      "name": "Update port mapping in your docker-compose.yml file",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Do not attempt to kill or remove processes belonging to Umbrel&#39;s native dashboard. Instead, modify the port mapping of the container you want to deploy, changing its host-facing port to an unallocated one (e.g., change 80:80 to 8085:80):\n\n    \n      \n        YAML\n        Copy\n      \n      services:\n  app-custom:\n    image: nginx:alpine\n    ports:\n      # Map free host port 8085 to container port 80\n      - &quot;8085:80&quot;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-puertos-conflictivos-umbrel-docker.html#recreate-and-start-the-container",
+      "name": "Recreate and start the container",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Apply the configuration changes by recreating the container:\n\n    \n      \n        BASH\n        Copy\n      \n      # Bring the container stack down and recreate it in detached mode\ndocker compose down &amp;&amp; docker compose up -d"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,150 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The port binding error (bind: address already in use or port already allocated) when attempting to start a custom container in Umbrel OS occurs because the platform&#39;s internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-identify-which-process-or-container-is-using-the-port">Step 1: Identify which process or container is using the port</a></li>
-        <li class="toc-subitem"><a href="#step-2-update-port-mapping-in-your-docker-composeyml-file">Step 2: Update port mapping in your docker-compose.yml file</a></li>
-        <li class="toc-subitem"><a href="#step-3-recreate-and-start-the-container">Step 3: Recreate and start the container</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Port 80 or 443 required by Umbrel app occupied by another service</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Modify port mapping in App&#39;s <code>docker-compose.yml</code> file</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Local Nginx or Apache process blocking host ports</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Identify and stop conflicting service: <code>sudo systemctl stop nginx</code></div>
-          </div></div></div>
-<p>The port binding error (<code>bind: address already in use</code> or <code>port already allocated</code>) when attempting to start a custom container in Umbrel OS occurs because the platform&#39;s internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-identify-which-process-or-container-is-using-the-port">Step 1: Identify which process or container is using the port</h3>
-<p>Before modifying any compose files, connect to your Umbrel via SSH and identify precisely which service is binding to the target port:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Locate processes listening on the conflicting port (e.g., port 80)
-sudo lsof -i :80
-
-# List active Docker container port mappings
-docker ps --format &quot;table {{.ID}}\t{{.Names}}\t{{.Ports}}&quot;
-</code></pre>
-    </div>
-    
-<h3 id="step-2-update-port-mapping-in-your-docker-composeyml-file">Step 2: Update port mapping in your docker-compose.yml file</h3>
-<p>Do not attempt to kill or remove processes belonging to Umbrel&#39;s native dashboard. Instead, modify the port mapping of the container you want to deploy, changing its host-facing port to an unallocated one (e.g., change <code>80:80</code> to <code>8085:80</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>services:
-  app-custom:
-    image: nginx:alpine
-    ports:
-      # Map free host port 8085 to container port 80
-      - &quot;8085:80&quot;
-</code></pre>
-    </div>
-    
-<h3 id="step-3-recreate-and-start-the-container">Step 3: Recreate and start the container</h3>
-<p>Apply the configuration changes by recreating the container:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Bring the container stack down and recreate it in detached mode
-docker compose down &amp;&amp; docker compose up -d
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Avoid modifying Umbrel&#39;s main system Docker network interfaces (<code>docker0</code> or the native host network) when running custom third-party applications. Always declare isolated bridge networks (<code>bridge</code>) within your custom Compose files. This prevents accidental port and DNS routing conflicts, keeping your Bitcoin node and server applications fully secure.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -323,6 +253,23 @@ docker compose down &amp;&amp; docker compose up -d
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -334,23 +281,6 @@ docker compose down &amp;&amp; docker compose up -d
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

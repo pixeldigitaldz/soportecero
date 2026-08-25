@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5",
   "description": "Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Raspberry Pi, Hardware, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-20",
   "dateModified": "2026-07-20",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5",
+      "item": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5",
   "description": "Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html#diagnosticar-la-temperatura-y-el-estrangulamiento-en-tiempo-real",
+      "name": "Diagnosticar la temperatura y el estrangulamiento en tiempo real",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Puedes comprobar la temperatura del procesador y verificar si el núcleo de Linux ha registrado alertas de reducción de velocidad de reloj mediante consola:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Consultar la temperatura del CPU en grados Celsius\nvcgencmd measure_temp\n\n# Verificar si existen códigos de error por voltaje o calor (un valor distinto de 0x0 indica problemas)\nvcgencmd get_throttled"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html#ajustar-los-umbrales-del-ventilador-oficial-active-cooler",
+      "name": "Ajustar los umbrales del ventilador oficial (Active Cooler)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegura que el ventilador de tu disipador oficial comience a girar al 100% antes de alcanzar la temperatura crítica de 80 °C editando los parámetros del firmware:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Abrir el archivo de configuración del arranque\nsudo nano /boot/firmware/config.txt\n\n    \n    \nAgrega estas líneas al final del archivo para programar que el ventilador se active al máximo a partir de los 65 °C:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      # Forzar en"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html#aplicar-y-validar-la-nueva-tabla-termica",
+      "name": "Aplicar y validar la nueva tabla térmica",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Guarda los cambios presionando Ctrl + O y reinicia tu placa de desarrollo para que el microcontrolador de energía aplique las directivas:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Reiniciar el dispositivo\nsudo reboot"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,163 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El estrangulamiento térmico o thermal throttling en Raspberry Pi 5 ocurre cuando el procesador sobrepasa los 80 °C en tareas exigentes. Para evitar daños por calor, el controlador del microcódigo reduce automáticamente la frecuencia del procesador de 2.4 GHz a menos de 1.5 GHz, lo que degrada drásticamente el rendimiento de tus contenedores o emuladores.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-diagnosticar-la-temperatura-y-el-estrangulamiento-en-tiempo-real">Paso 1: Diagnosticar la temperatura y el estrangulamiento en tiempo real</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ajustar-los-umbrales-del-ventilador-oficial-active-cooler">Paso 2: Ajustar los umbrales del ventilador oficial (Active Cooler)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-aplicar-y-validar-la-nueva-tabla-termica">Paso 3: Aplicar y validar la nueva tabla térmica</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Temperatura del SoC alcanzando el límite de 80°C bajo carga constante</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Instalar el disipador oficial Raspberry Pi Active Cooler</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Falta de disipación de calor adecuada en la carcasa</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Usar una carcasa de aluminio con disipación pasiva o ventilador de control PWM</div>
-          </div></div></div>
-<p>El estrangulamiento térmico o <em>thermal throttling</em> en Raspberry Pi 5 ocurre cuando el procesador sobrepasa los 80 °C en tareas exigentes. Para evitar daños por calor, el controlador del microcódigo reduce automáticamente la frecuencia del procesador de 2.4 GHz a menos de 1.5 GHz, lo que degrada drásticamente el rendimiento de tus contenedores o emuladores.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-diagnosticar-la-temperatura-y-el-estrangulamiento-en-tiempo-real">Paso 1: Diagnosticar la temperatura y el estrangulamiento en tiempo real</h3>
-<p>Puedes comprobar la temperatura del procesador y verificar si el núcleo de Linux ha registrado alertas de reducción de velocidad de reloj mediante consola:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Consultar la temperatura del CPU en grados Celsius
-vcgencmd measure_temp
-
-# Verificar si existen códigos de error por voltaje o calor (un valor distinto de 0x0 indica problemas)
-vcgencmd get_throttled
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-ajustar-los-umbrales-del-ventilador-oficial-active-cooler">Paso 2: Ajustar los umbrales del ventilador oficial (Active Cooler)</h3>
-<p>Asegura que el ventilador de tu disipador oficial comience a girar al 100% antes de alcanzar la temperatura crítica de 80 °C editando los parámetros del firmware:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Abrir el archivo de configuración del arranque
-sudo nano /boot/firmware/config.txt
-</code></pre>
-    </div>
-    
-<p>Agrega estas líneas al final del archivo para programar que el ventilador se active al máximo a partir de los 65 °C:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Forzar enfriamiento agresivo
-dtparam=fan_temp0=50000
-dtparam=fan_temp0_hyst=5000
-dtparam=fan_temp1=58000
-dtparam=fan_temp1_hyst=5000
-dtparam=fan_temp2=65000
-dtparam=fan_temp2_hyst=5000
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-aplicar-y-validar-la-nueva-tabla-termica">Paso 3: Aplicar y validar la nueva tabla térmica</h3>
-<p>Guarda los cambios presionando <code>Ctrl + O</code> y reinicia tu placa de desarrollo para que el microcontrolador de energía aplique las directivas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Reiniciar el dispositivo
-sudo reboot
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No utilices cajas o gabinetes completamente cerrados y sin rejillas de ventilación activa para alojar tu Raspberry Pi 5 en producción. La Pi 5 disipa casi el doble de calor bajo carga máxima comparada con la generación anterior, por lo que depender exclusivamente de disipación pasiva de aluminio sin flujo de aire constante saturará térmicamente el gabinete en pocos minutos, forzando al procesador a trabajar permanentemente en modo degradado.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -336,6 +253,23 @@ sudo reboot
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -347,23 +281,6 @@ sudo reboot
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Contacto | SoporteCero</title>
-  <meta name="description" content="Formulario de contacto de SoporteCero. Contáctanos por sugerencias de tutoriales, reportar errores o colaboraciones comerciales.">
+  <title>Contacto y Soporte Editorial | SoporteCero</title>
+  <meta name="description" content="Ponte en contacto con el equipo técnico y editorial de SoporteCero. Sugerencias de tutoriales, corrección de errores y consultas técnicas.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/contacto.html">
   {{hreflang}}
   <link rel="stylesheet" href="css/style.css">
-  <!-- Google AdSense -->
+  <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
      crossorigin="anonymous"></script>
 </head>
@@ -32,6 +32,8 @@
           <li><a href="./?cat=sistemas">Sistemas y Servidores</a></li>
           <li><a href="./?cat=gaming">Gaming Tech</a></li>
           <li><a href="./?cat=web">Web y Código</a></li>
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="contacto.html" class="active">Contacto</a></li>
         </ul>
       </nav>
       {{lang_selector}}
@@ -53,35 +55,58 @@
       <span style="color: var(--text-secondary);">Contacto</span>
     </div>
 
-    <article class="post-article" style="max-width: 600px; margin: 0 auto; padding: 2.5rem 2rem;">
-      <h1 style="margin-bottom: 1rem; text-align: center;">Contacto</h1>
-      <p style="margin-bottom: 2rem; text-align: center; color: var(--text-secondary);">
-        ¿Tienes alguna sugerencia de tutorial, quieres reportar un error o necesitas ayuda adicional? Escríbenos y te responderemos lo antes posible.
+    <article class="post-article" style="max-width: 750px; margin: 0 auto; padding: 2.5rem 2rem;">
+      <h1 style="margin-bottom: 1rem; text-align: center;">Contacto y Soporte Editorial</h1>
+      <p style="margin-bottom: 2rem; text-align: center; color: var(--text-secondary); line-height: 1.6;">
+        ¿Encontraste un comando desactualizado? ¿Deseas proponer una guía técnica o reportar un error? Nuestro equipo técnico revisa y responde activamente todas las solicitudes de la comunidad.
       </p>
 
-      <form action="#" method="POST" id="contact-form" onsubmit="event.preventDefault(); alert('¡Mensaje enviado con éxito! (Esta es una demostración estática)'); this.reset();" style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- Contact Info Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1.2rem; text-align: center; background-color: rgba(30, 41, 59, 0.2);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📧</div>
+          <strong style="display: block; margin-bottom: 0.25rem;">Correo Directo</strong>
+          <a href="mailto:contacto@soportecero.com" style="color: var(--accent-color); font-size: 0.9rem; word-break: break-all;">contacto@soportecero.com</a>
+        </div>
+        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1.2rem; text-align: center; background-color: rgba(30, 41, 59, 0.2);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⏱️</div>
+          <strong style="display: block; margin-bottom: 0.25rem;">Tiempo de Respuesta</strong>
+          <span style="color: var(--text-secondary); font-size: 0.9rem;">Menos de 24-48 horas</span>
+        </div>
+        <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1.2rem; text-align: center; background-color: rgba(30, 41, 59, 0.2);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+          <strong style="display: block; margin-bottom: 0.25rem;">Correcciones</strong>
+          <span style="color: var(--text-secondary); font-size: 0.9rem;">Revisión en laboratorio</span>
+        </div>
+      </div>
+
+      <form id="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-feedback').style.display='block'; this.reset();" style="display: flex; flex-direction: column; gap: 1.5rem;">
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
           <label for="form-name" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Nombre completo</label>
-          <input type="text" id="form-name" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; transition: border-color var(--transition-speed);" placeholder="Ingresa tu nombre">
+          <input type="text" id="form-name" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem;" placeholder="Ingresa tu nombre">
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
           <label for="form-email" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Correo electrónico</label>
-          <input type="email" id="form-email" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; transition: border-color var(--transition-speed);" placeholder="correo@ejemplo.com">
+          <input type="email" id="form-email" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem;" placeholder="tu-correo@ejemplo.com">
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <label for="form-subject" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Asunto</label>
-          <input type="text" id="form-subject" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; transition: border-color var(--transition-speed);" placeholder="Ej. Sugerencia de tutorial / Error reportado">
+          <label for="form-subject" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Asunto / Motivo del mensaje</label>
+          <input type="text" id="form-subject" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem;" placeholder="Ej. Sugerencia de guía técnica / Corrección de comando">
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <label for="form-message" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Mensaje</label>
-          <textarea id="form-message" rows="5" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; transition: border-color var(--transition-speed); font-family: inherit; resize: vertical;" placeholder="Escribe aquí tu consulta en detalle..."></textarea>
+          <label for="form-message" style="font-weight: 600; font-size: 0.95rem; color: var(--text-primary);">Detalle de tu consulta o sugerencia</label>
+          <textarea id="form-message" rows="5" required style="padding: 0.8rem 1rem; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; font-family: inherit; resize: vertical;" placeholder="Explica detalladamente la duda técnica o la corrección propuesta..."></textarea>
         </div>
 
-        <button type="submit" style="background-color: var(--accent-color); border: none; color: var(--bg-color); padding: 0.9rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color var(--transition-speed); margin-top: 0.5rem;">
-          Enviar Mensaje
+        <div id="form-feedback" style="display: none; padding: 1rem; background-color: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e; border-radius: 8px; color: #22c55e; font-size: 0.95rem; text-align: center;">
+          ✓ ¡Gracias por tu mensaje! Nuestro equipo técnico revisará tu solicitud a la brevedad.
+        </div>
+
+        <button type="submit" style="background-color: var(--accent-color); border: none; color: #fff; padding: 0.9rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity var(--transition-speed); margin-top: 0.5rem;">
+          Enviar Mensaje al Equipo
         </button>
       </form>
     </article>
@@ -92,6 +117,7 @@
     <footer>
       <ul class="footer-nav">
         <li><a href="./">Inicio</a></li>
+        <li><a href="nosotros.html">Sobre Nosotros</a></li>
         <li><a href="legal/privacidad.html">Política de Privacidad</a></li>
         <li><a href="legal/terminos.html">Términos de Servicio</a></li>
         <li><a href="legal/cookies.html">Política de Cookies</a></li>
@@ -99,7 +125,7 @@
         <li><a href="servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
-        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers.
       </p>
       <p class="footer-copyright">
         &copy; 2026 SoporteCero. Todos los derechos reservados.

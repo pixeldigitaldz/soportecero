@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix SSH Connection Timeout Errors Due to Firewall Rules",
   "description": "Learn how to diagnose connection blocks on port 22 and correctly configure IPTables or UFW rules to allow secure remote access.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "SSH, Sysadmin, Firewall",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-25",
   "dateModified": "2026-07-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix SSH Connection Timeout Errors Due to Firewall Rules",
+      "item": "https://soportecero.com/en/articulos/error-ssh-connection-timeout-iptables.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix SSH Connection Timeout Errors Due to Firewall Rules",
   "description": "Learn how to diagnose connection blocks on port 22 and correctly configure IPTables or UFW rules to allow secure remote access.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-ssh-connection-timeout-iptables.html#diagnose-if-the-ssh-port-is-blocked-or-closed",
+      "name": "Diagnose if the SSH port is blocked or closed",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Perform a direct network check towards the server&#39;s port from your local terminal to verify if it responds to TCP handshakes:\n\n    \n      \n        BASH\n        Copy\n      \n      # Check port 22 (SSH) status on your remote server\nnc -zv 192.168.1.100 22\n\n    \n    \n(If the output returns &quot;Connection timed out&quot; or hangs indefinitely, the port is being blocked by a local or cloud network firewall)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-ssh-connection-timeout-iptables.html#allow-ssh-traffic-in-ufw-uncomplicated-firewall",
+      "name": "Allow SSH traffic in UFW (Uncomplicated Firewall)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your server uses UFW, explicitly allow secure remote access and reload kernel rules:\n\n    \n      \n        BASH\n        Copy\n      \n      # Allow incoming TCP traffic on the default SSH port\nsudo ufw allow 22/tcp\n\n# Enable UFW if inactive, then reload active rules\nsudo ufw enable &amp;&amp; sudo ufw reload"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-ssh-connection-timeout-iptables.html#configure-explicit-rules-in-iptables",
+      "name": "Configure explicit rules in IPTables",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If you do not use UFW or need fine-grained rules in raw IPTables, open port 22 directly in your input chain:\n\n    \n      \n        BASH\n        Copy\n      \n      # Accept incoming TCP packets on port 22\nsudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT\n\n# Save the active rules to persist across system reboots\nsudo iptables-save | sudo tee /etc/iptables/rules.v4"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,150 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The time limit reached error on port 22 (ssh: connect to host ... port 22: Connection timed out) occurs when the destination server&#39;s firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-diagnose-if-the-ssh-port-is-blocked-or-closed">Step 1: Diagnose if the SSH port is blocked or closed</a></li>
-        <li class="toc-subitem"><a href="#step-2-allow-ssh-traffic-in-ufw-uncomplicated-firewall">Step 2: Allow SSH traffic in UFW (Uncomplicated Firewall)</a></li>
-        <li class="toc-subitem"><a href="#step-3-configure-explicit-rules-in-iptables">Step 3: Configure explicit rules in IPTables</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>iptables or UFW firewall rules blocking SSH port (22)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Allow SSH port 22 in firewall: <code>sudo ufw allow 22/tcp</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>SSH server daemon not listening on expected IP address</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Check SSH daemon status: <code>sudo systemctl status sshd</code></div>
-          </div></div></div>
-<p>The time limit reached error on <strong>port 22</strong> (<code>ssh: connect to host ... port 22: Connection timed out</code>) occurs when the destination server&#39;s firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-diagnose-if-the-ssh-port-is-blocked-or-closed">Step 1: Diagnose if the SSH port is blocked or closed</h3>
-<p>Perform a direct network check towards the server&#39;s port from your local terminal to verify if it responds to TCP handshakes:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Check port 22 (SSH) status on your remote server
-nc -zv 192.168.1.100 22
-</code></pre>
-    </div>
-    
-<p><em>(If the output returns &quot;Connection timed out&quot; or hangs indefinitely, the port is being blocked by a local or cloud network firewall).</em></p>
-<h3 id="step-2-allow-ssh-traffic-in-ufw-uncomplicated-firewall">Step 2: Allow SSH traffic in UFW (Uncomplicated Firewall)</h3>
-<p>If your server uses UFW, explicitly allow secure remote access and reload kernel rules:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Allow incoming TCP traffic on the default SSH port
-sudo ufw allow 22/tcp
-
-# Enable UFW if inactive, then reload active rules
-sudo ufw enable &amp;&amp; sudo ufw reload
-</code></pre>
-    </div>
-    
-<h3 id="step-3-configure-explicit-rules-in-iptables">Step 3: Configure explicit rules in IPTables</h3>
-<p>If you do not use UFW or need fine-grained rules in raw IPTables, open port 22 directly in your input chain:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Accept incoming TCP packets on port 22
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-
-# Save the active rules to persist across system reboots
-sudo iptables-save | sudo tee /etc/iptables/rules.v4
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Do not expose your default SSH port (22) openly to all Internet IP addresses (<code>0.0.0.0/0</code>). Doing so will saturate your authentication logs with automated brute-force attempts in minutes. Instead, restrict access to your specific subnet or VPN IP range, or change the listening port in <code>/etc/ssh/sshd_config</code> to a non-standard one.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -323,6 +253,23 @@ sudo iptables-save | sudo tee /etc/iptables/rules.v4
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -334,23 +281,6 @@ sudo iptables-save | sudo tee /etc/iptables/rules.v4
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

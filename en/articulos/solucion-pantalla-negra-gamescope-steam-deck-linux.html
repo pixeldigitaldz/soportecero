@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Black Screen Opening Games on Gamescope / Steam Deck",
   "description": "Games showing a black screen or crashing under Gamescope or Steam Deck with Proton? Step-by-step troubleshooting guide for Wayland and Vulkan.",
+  "inLanguage": "en",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Gaming, Linux, Steam Deck, Proton",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
   "dateModified": "2026-08-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Black Screen Opening Games on Gamescope / Steam Deck",
-  "description": "Games showing a black screen or crashing under Gamescope or Steam Deck with Proton? Step-by-step troubleshooting guide for Wayland and Vulkan.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/en/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Black Screen Opening Games on Gamescope / Steam Deck",
+      "item": "https://soportecero.com/en/articulos/solucion-pantalla-negra-gamescope-steam-deck-linux.html"
+    }
+  ]
 }
   </script>
     
@@ -148,145 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>A black screen when launching games via Gamescope on SteamOS or Linux Wayland desktops usually stems from resolution mismatching, overlay conflicts (such as MangoHud), or Proton versions failing to negotiate the Vulkan swapchain properly.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-set-explicit-resolution-parameters">Step 1: Set Explicit Resolution Parameters</a></li>
-        <li class="toc-subitem"><a href="#step-2-disable-mangohud-overlay-temporarily">Step 2: Disable MangoHud Overlay Temporarily</a></li>
-        <li class="toc-subitem"><a href="#step-3-switch-to-proton-ge-gloriouseggroll">Step 3: Switch to Proton GE (GloriousEggroll)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Unsupported display resolution in Gamescope compositor</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set explicit resolution: <code>gamescope -w 1280 -h 720 -- %command%</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Refresh rate (Hz) mismatch in quick settings menu</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Reset refresh rate to 60Hz or restart display server session</div>
-          </div></div></div>
-<p>A <strong>black screen when launching games via Gamescope on SteamOS or Linux Wayland desktops</strong> usually stems from resolution mismatching, overlay conflicts (such as MangoHud), or Proton versions failing to negotiate the Vulkan swapchain properly.</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong>
-Set Steam Launch Options for the game:
-<code>gamescope -w 1920 -h 1080 -W 1920 -H 1080 -f -- %command%</code></p>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-set-explicit-resolution-parameters">Step 1: Set Explicit Resolution Parameters</h3>
-<p>Right-click your game in Steam -&gt; <strong>Properties</strong> -&gt; <strong>General</strong> -&gt; <strong>Launch Options</strong>, and paste:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>gamescope -w 1280 -h 720 -W 1920 -H 1080 -r 60 -f -- %command%
-</code></pre>
-    </div>
-    
-<ul>
-<li><strong><code>-w</code> / <code>-h</code></strong>: Game internal render resolution.</li>
-<li><strong><code>-W</code> / <code>-H</code></strong>: Display output resolution.</li>
-<li><strong><code>-f</code></strong>: Force native fullscreen mode.</li>
-</ul>
-<h3 id="step-2-disable-mangohud-overlay-temporarily">Step 2: Disable MangoHud Overlay Temporarily</h3>
-<p>DirectX 11 games using DXVK may fail if MangoHud hooks into the swapchain before Gamescope initializes:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>MANGOHUD=0 %command%
-</code></pre>
-    </div>
-    
-<h3 id="step-3-switch-to-proton-ge-gloriouseggroll">Step 3: Switch to Proton GE (GloriousEggroll)</h3>
-<p>Missing proprietary video codecs (like Media Foundation) cause black screens during game introduction cutscenes:</p>
-<ol>
-<li>Install <strong>ProtonUp-Qt</strong> from the Discover store on your Steam Deck or Linux distro.</li>
-<li>Download the latest <strong>Proton-GE</strong> release (e.g., <code>GE-Proton9-10</code>).</li>
-<li>In Steam, navigate to Game Properties -&gt; <strong>Compatibility</strong> -&gt; Select <code>GE-Proton</code>.</li>
-</ol>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -301,6 +190,23 @@ Set Steam Launch Options for the game:
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Fix Counter-Strike 2 crashing and FPS stutter on Linux (Vulkan / Mesa) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -330,23 +236,6 @@ Set Steam Launch Options for the game:
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

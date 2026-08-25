@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay",
   "description": "Aprende a corregir el fallo de autenticación 'Invalid Signature' o token expirado al integrar pasarelas de pago cripto en tu aplicación web.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "Binance, API, Crypto",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,61 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay",
+      "item": "https://soportecero.com/articulos/error-invalid-token-binance.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay",
   "description": "Aprende a corregir el fallo de autenticación 'Invalid Signature' o token expirado al integrar pasarelas de pago cripto en tu aplicación web.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-invalid-token-binance.html#sincronizar-el-reloj-del-servidor-ntp",
+      "name": "Sincronizar el reloj del servidor (NTP)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Binance rechaza cualquier petición cuyo Timestamp varíe por más de unos pocos segundos respecto a su servidor. En tu servidor Linux, fuerza la sincronización horaria ejecutando:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo timedatectl set-ntp true\nsudo systemctl restart systemd-timesyncd\n\n    \n    \nVerifica que la hora esté perfectamente cuadrada con el comando timedatectl."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-invalid-token-binance.html#ordenar-las-variables-para-la-firma-payload",
+      "name": "Ordenar las variables para la firma (Payload)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "La firma criptográfica requiere que unas el Timestamp, un string aleatorio (Nonce) y el cuerpo de la petición (Body JSON) en un formato estricto. Asegúrate de que tu código concatene los elementos exactamente en este orden antes de pasarlo por la función de hash:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      TIMESTAMP + &quot;\\n&quot; + NONCE + &quot;\\n&quot; + BODY_JSON_STRING + &quot;\\n&quot;\n\n    \n    \nUn error común es que el JSON de tu código ordene las llaves de forma distinta"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,130 +209,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error Invalid Signature o Token Expired en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-sincronizar-el-reloj-del-servidor-ntp">Paso 1: Sincronizar el reloj del servidor (NTP)</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ordenar-las-variables-para-la-firma-payload">Paso 2: Ordenar las variables para la firma (Payload)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>API Key o Secret Key de Binance expirada, mal copiada o con IP no autorizada</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Generar una nueva clave API en Binance y registrar la dirección IP estática de tu servidor</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Desincronización de hora del sistema local con el reloj del servidor de Binance</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Sincronizar el reloj del servidor con NTP: <code>sudo ntpdate pool.ntp.org</code></div>
-          </div></div></div>
-<p>El error <code>Invalid Signature</code> o <code>Token Expired</code> en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-sincronizar-el-reloj-del-servidor-ntp">Paso 1: Sincronizar el reloj del servidor (NTP)</h3>
-<p>Binance rechaza cualquier petición cuyo Timestamp varíe por más de unos pocos segundos respecto a su servidor. En tu servidor Linux, fuerza la sincronización horaria ejecutando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo timedatectl set-ntp true
-sudo systemctl restart systemd-timesyncd
-</code></pre>
-    </div>
-    
-<p>Verifica que la hora esté perfectamente cuadrada con el comando <code>timedatectl</code>.</p>
-<h3 id="paso-2-ordenar-las-variables-para-la-firma-payload">Paso 2: Ordenar las variables para la firma (Payload)</h3>
-<p>La firma criptográfica requiere que unas el Timestamp, un string aleatorio (Nonce) y el cuerpo de la petición (Body JSON) en un formato estricto. Asegúrate de que tu código concatene los elementos exactamente en este orden antes de pasarlo por la función de hash:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>TIMESTAMP + &quot;\n&quot; + NONCE + &quot;\n&quot; + BODY_JSON_STRING + &quot;\n&quot;
-</code></pre>
-    </div>
-    
-<p>Un error común es que el JSON de tu código ordene las llaves de forma distinta a como las envías en el cuerpo HTTP, rompiendo la firma de inmediato.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Nunca expongas tus llaves privadas (Secret Key) en el código frontend de tu aplicación (JavaScript del cliente). Cualquier usuario podría inspeccionar la página, robar tus credenciales de Binance Pay y vaciar los fondos de tu cuenta comercial. Realiza siempre las solicitudes de firma estrictamente desde el backend (Node.js, PHP o Python).</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -303,23 +241,6 @@ sudo systemctl restart systemd-timesyncd
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -331,6 +252,23 @@ sudo systemctl restart systemd-timesyncd
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

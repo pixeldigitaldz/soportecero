@@ -1,35 +1,56 @@
 ---
 title: "Cómo solucionar la caída de FPS en juegos online tras la última actualización del driver de video"
-description: "Aprende a corregir los tirones, stuttering y pérdidas drásticas de rendimiento gráfico tras actualizar los controladores de NVIDIA o AMD en tu PC."
+description: "Aprende a diagnosticar y revertir controladores gráficos corruptos, limpiar cachés de shaders y restablecer el rendimiento de tus juegos en Windows y Linux."
 category: "Gaming Tech"
-tags: ["Gaming", "Drivers", "Optimización"]
-readTime: "3 min"
-date: "2026-06-26"
+tags: ["GPU", "Drivers", "Nvidia", "AMD", "Gaming", "FPS Drop"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Controladores GPU desactualizados o corruptos** | Realizar una instalación limpia de drivers Mesa/Nvidia con `DDU` o `pacman -Syu` |
-| **Perfil de energía del sistema en modo Ahorro** | Cambiar el regulador de CPU a alto rendimiento: `powerprofilesctl set performance` |
+| **Controlador gráfico recién instalado con perfiles corruptos o conflicto de registros previos** | Realizar una desinstalación limpia con DDU (Display Driver Uninstaller) y reinstalar driver WHQL |
+| **Caché de shaders obsoleta o saturada tras la actualización del compilador de la GPU** | Purgar los directorios DirectX / Vulkan shader cache y regenerar los perfiles de sombreado |
 
-
-Actualizar los drivers de tu tarjeta gráfica es crucial para soportar nuevos juegos, pero en ocasiones la última versión llega con bugs de compatibilidad o corrompe configuraciones previas del sistema, provocando caídas drásticas de FPS o tartamudeo visual (*stuttering*) en tus partidas online.
+Experimentar una caída drástica de fotogramas por segundo (FPS) o micro-tirones constantes en títulos competitivos después de actualizar los controladores de NVIDIA (GeForce Game Ready) o AMD (Adrenalin Edition) es un problema frecuente. Ocurre cuando los nuevos archivos binarios entran en conflicto con configuraciones previas del registro, perfiles de energía modificados o cachés de sombreadores incompatibles generadas con versiones anteriores.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Limpieza absoluta con DDU (Display Driver Uninstaller)
-Instalar un driver sobre otro suele dejar archivos basura conflictivos. La solución es limpiar el sistema por completo.
-1. Descarga la herramienta gratuita **DDU (Display Driver Uninstaller)**.
-2. Reinicia tu computadora en **Modo Seguro** (Safe Mode).
-3. Abre DDU, selecciona tu tipo de GPU (NVIDIA/AMD) y haz clic en **"Limpiar y reiniciar"** (Clean and restart).
-4. Al iniciar el sistema normalmente, instala una versión anterior del driver que sepas que funcionaba de forma estable.
+### Paso 1: Purgar la caché de sombreadores DirectX y Vulkan
+Cuando se actualiza el controlador, los shaders antiguos en disco quedan desalineados respecto al nuevo motor de compilación:
+1. En Windows, presiona `Win + R`, escribe `cleanmgr` y selecciona la unidad `C:`.
+2. Marca la casilla **Caché del sombreador de DirectX** (DirectX Shader Cache) y pulsa Aceptar.
+3. En Linux (Steam/Proton), elimina la caché de shaders del juego:
+```bash
+# Limpiar caché de shaders DXVK/Vulkan
+rm -rf ~/.local/share/Steam/steamapps/shadercache/*
+```
 
-### Paso 2: Vaciar el caché de sombreadores (Shader Cache)
-Muchas veces los tirones ocurren porque el juego intenta usar shaders compilados con el driver viejo.
-- **En NVIDIA:** Ve al *Panel de Control de NVIDIA > Controlar la configuración 3D*, busca *Caché del sombreador* y cámbialo a desactivado, dale a aplicar, reinicia la PC y vuélvelo a activar en "Ilimitado".
-- **En Linux (Steam/Proton):** Ve a los ajustes de Steam > *Sombreado de reproducción previa (Shader Pre-compilation)* y activa la casilla para permitir que Steam descargue los shaders actualizados antes de lanzar el juego.
+### Paso 2: Desinstalación limpia del controlador con DDU
+Para eliminar cualquier rastro residual de registros o bibliotecas DLL conflictivas:
+1. Descarga la herramienta gratuita **Display Driver Uninstaller (DDU)**.
+2. Reinicia tu equipo en **Modo Seguro** (Safe Mode).
+3. Abre DDU, selecciona tu tipo de GPU (**NVIDIA** o **AMD**) y haz clic en **Limpiar y reiniciar** (Clean and restart).
+4. Al reiniciar en modo normal, instala la versión anterior estable (o la versión WHQL recomendada) descargada directamente de la web oficial.
 
-## 🛡️ Consejo de Prevención
-Prácticas de seguridad recomendadas:
-- No actualices tus controladores de video el mismo día que salen al mercado, a menos que sea estrictamente necesario para abrir un juego nuevo. Espera una semana a que la comunidad reporte si la versión tiene fallos de rendimiento.
+### Paso 3: Configurar el modo de energía de la GPU a Máximo Rendimiento
+A menudo las actualizaciones restablecen la administración de energía a un modo conservador que ralentiza la frecuencia de reloj del núcleo:
+- **Panel de Control NVIDIA**: Ve a *Controlar la configuración 3D > Modo de control de energía* y selecciona **Preferir rendimiento máximo**.
+- **Software AMD Adrenalin**: En la pestaña *Rendimiento > Ajuste*, desactiva límites de energía agresivos.
+
+### Paso 4: Desactivar la superposición (Overlay) de software de terceros
+Actualizaciones de drivers suelen causar incompatibilidades temporales con overlays que inyectan hooks en DirectX:
+- Desactiva el overlay de **Discord**, **GeForce Experience** o **Steam Overlay** temporalmente para aislar si el hook gráfico es el causante del stuttering.
+
+## 🛡️ Consejos de Prevención
+- **No actualices drivers el día de lanzamiento:** A menos que el nuevo driver incluya soporte indispensable para un juego que acabas de adquirir, espera 4-7 días para comprobar si la comunidad reporta regresiones de rendimiento.
+- **Evita programas automáticos de actualización de drivers:** Utiliza únicamente los instaladores oficiales firmados por AMD o NVIDIA.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Es mejor hacer Rollback desde el Administrador de Dispositivos?
+El botón "Revertir al controlador anterior" de Windows puede funcionar en emergencias, pero no limpia las ramas de registro huérfanas. DDU sigue siendo el método estándar recomendado para evitar conflictos.
+
+### ¿Por qué mi juego tarda más en cargar tras borrar la caché de shaders?
+Porque el juego recompila los sombreadores en el primer inicio. Tras los primeros minutos de juego, la carga volverá a su velocidad habitual sin tirones.

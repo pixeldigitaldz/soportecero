@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Configure Fan Speed (Active Cooler) via Command Console",
   "description": "Learn how to control temperature thresholds and adjust fan speed on Mini PCs and development boards using the terminal to prevent overheating.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Hardware, Linux, Raspberry Pi",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-19",
   "dateModified": "2026-07-19",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Configure Fan Speed (Active Cooler) via Command Console",
-  "description": "Learn how to control temperature thresholds and adjust fan speed on Mini PCs and development boards using the terminal to prevent overheating.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Configure Fan Speed (Active Cooler) via Command Console",
+      "item": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html"
+    }
+  ]
 }
   </script>
     
@@ -148,168 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>Modern development boards and Mini PCs (such as the Raspberry Pi 5) offer incredible performance, but dissipate a lot of heat when running heavy Docker services or media servers. The use of an Active Cooler (active heatsink with fan) is mandatory to prevent thermal throttling (automatic power reduction due to excess temperature).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</a></li>
-        <li class="toc-subitem"><a href="#paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</a></li>
-        <li class="toc-subitem"><a href="#paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</a></li>
-        <li class="toc-subitem"><a href="#paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>PWM fan control overlay not enabled in config.txt</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Add <code>dtparam=fan_temp0=60000</code> in <code>/boot/firmware/config.txt</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Thermal monitoring service inactive</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Adjust thermal thresholds in <code>raspi-config</code> or check JST connector</div>
-          </div></div></div>
-<p>Modern development boards and Mini PCs (such as the Raspberry Pi 5) offer incredible performance, but dissipate a lot of heat when running heavy Docker services or media servers. The use of an <strong>Active Cooler (active heatsink with fan)</strong> is mandatory to prevent <em>thermal throttling</em> (automatic power reduction due to excess temperature).</p>
-<p>By default, the operating system manages the fan automatically, but often the factory thresholds are very high, allowing the board to reach 60°C before turning on the air, shortening the life of the hardware.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</h3>
-<p>Open the terminal of your Linux-based operating system and run the following command to know the exact processor temperature in real time:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>vcgencmd measure_temp
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</h3>
-<p>On systems based on Raspberry Pi OS, we can modify the activation parameters by editing the config.txt file. Open the editor with administrator privileges:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nano /boot/firmware/config.txt
-</code></pre>
-    </div>
-    
-<p>(Nota: En versiones antiguas de sistemas operativos, la ruta puede ser simplemente <code>/boot/config.txt</code>).</p>
-<h3 id="paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</h3>
-<p>Scroll to the end of the file and add the following lines to customize the exact degrees at which the fan will change speed (the values correspond to millidegrees Celsius, for example 50000 is equivalent to 50°C):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Ajuste personalizado del Active Cooler
-dtparam=fan_temp0=45000
-dtparam=fan_temp0_hyst=5000
-dtparam=fan_temp1=52000
-dtparam=fan_temp1_hyst=5000
-dtparam=fan_temp2=60000
-dtparam=fan_temp2_hyst=5000
-</code></pre>
-    </div>
-    
-<p>Save the file by pressing <code>Ctrl + O</code>, confirm with <code>Enter</code> and exit with <code>Ctrl + X</code>.</p>
-<h3 id="paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</h3>
-<p>To apply hardware changes in the internal configuration tables, perform a clean reboot:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo reboot
-</code></pre>
-    </div>
-    
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended safety practices:</p>
-<ul>
-<li>Avoid direct connections of generic fans to the 5V/GND GPIO pins without PWM control, because if the fan consumes too much current or you try to wire it incorrectly, you can cause a lethal short circuit that damages the board permanently (leaving it with a solid red LED of death). Always use official accessories connected to the dedicated JST fan connector.</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -341,6 +207,23 @@ dtparam=fan_temp2_hyst=5000
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -352,23 +235,6 @@ dtparam=fan_temp2_hyst=5000
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

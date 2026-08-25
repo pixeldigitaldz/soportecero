@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'curl: (7) Failed to connect to localhost port'",
   "description": "¿Recibes el fallo de conexión curl (7) al probar APIs o servicios web locales? Solución paso a paso para resolver la escucha de puertos.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "cURL, Node.js, API, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-14",
   "dateModified": "2026-08-14",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'curl: (7) Failed to connect to localhost port'",
+      "item": "https://soportecero.com/articulos/error-curl-7-failed-to-connect-to-localhost-port.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'curl: (7) Failed to connect to localhost port'",
   "description": "¿Recibes el fallo de conexión curl (7) al probar APIs o servicios web locales? Solución paso a paso para resolver la escucha de puertos.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-curl-7-failed-to-connect-to-localhost-port.html#verificar-la-escucha-de-puertos-activos-en-tu-sistema",
+      "name": "Verificar la escucha de puertos activos en tu sistema",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba qué proceso está escuchando en el puerto deseado usando ss o netstat:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Inspeccionar el puerto 3000 (o cambia por tu puerto: 8080, 5000, 80)\nsudo ss -tulpn | grep :3000\n\n    \n    \nSi la comando no devuelve ninguna salida, el servidor Node.js, Python o Go no está en ejecución. Inicializa tu servidor web antes de lanzar la petición cURL."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-curl-7-failed-to-connect-to-localhost-port.html#conflicto-entre-localhost-ipv6-vs-ipv4",
+      "name": "Conflicto entre localhost (IPv6 vs IPv4)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En distribuciones de Linux recientes, localhost resuelve primero a la dirección de bucle invertido de IPv6 ::1. Si tu servidor web en Node.js (Express) o Python (Flask/FastAPI) está configurado para escuchar únicamente en 127.0.0.1 (IPv4), cURL fallará al intentar la versión IPv6.\nSolución 1: Forzar cURL a usar IPv4:\n\n    \n      \n        BASH\n        Copiar\n      \n      curl -4 http://localhost:3000\n\n    \n    \nSolución 2: Usar la dirección IP loopback explícita:\n\n    \n      \n        BASH\n       "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-curl-7-failed-to-connect-to-localhost-port.html#configurar-la-direccion-de-enlace-en-tu-codigo-host-binding",
+      "name": "Configurar la dirección de enlace en tu código (Host Binding)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En tu servidor de aplicaciones backend, asegúrate de enlazar el host a 0.0.0.0 o 127.0.0.1 en lugar de omitirlo:\n\nEn Express.js (Node.js):\n    \n      \n        JAVASCRIPT\n        Copiar\n      \n      app.listen(3000, &#39;0.0.0.0&#39;, () =&gt; {\n  console.log(&#39;Servidor activo en el puerto 3000&#39;);\n});\n\n    \n    \n\nEn FastAPI / Uvicorn (Python):\n    \n      \n        BASH\n        Copiar\n      \n      uvicorn main:app --host 0.0.0.0 --port 3000"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,178 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error curl: (7) Failed to connect to localhost port 3000: Connection refused ocurre cuando la utilidad de línea de comandos curl intenta enviar una petición a un servicio web en tu máquina local, pero no hay ningún proceso escuchando en ese puerto o el servicio solo está enlazado a IPv6 (::1) en lugar de IPv4 (127.0.0.1).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-curl-7-paso-a-paso">Cómo solucionar el error curl (7) paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-la-escucha-de-puertos-activos-en-tu-sistema">Paso 1: Verificar la escucha de puertos activos en tu sistema</a></li>
-        <li class="toc-subitem"><a href="#paso-2-conflicto-entre-localhost-ipv6-vs-ipv4">Paso 2: Conflicto entre localhost (IPv6 vs IPv4)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-configurar-la-direccion-de-enlace-en-tu-codigo-host-binding">Paso 3: Configurar la dirección de enlace en tu código (Host Binding)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>El servicio en el puerto especificado no está escuchando peticiones</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Verificar puertos abiertos en la máquina: `netstat -tulnp</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Contenedor Docker escuchando solo en 127.0.0.1 dentro del contenedor</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Vincular el servicio a <code>0.0.0.0</code> para recibir tráfico externo</div>
-          </div></div></div>
-<p>El error <strong><code>curl: (7) Failed to connect to localhost port 3000: Connection refused</code></strong> ocurre cuando la utilidad de línea de comandos <code>curl</code> intenta enviar una petición a un servicio web en tu máquina local, pero no hay ningún proceso escuchando en ese puerto o el servicio solo está enlazado a IPv6 (<code>::1</code>) en lugar de IPv4 (<code>127.0.0.1</code>).</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Comprueba si tu servidor local está encendido en otra terminal.</li>
-<li>Prueba conectando a la IP explícita <code>127.0.0.1</code> en lugar del nombre <code>localhost</code>:
-<code>curl http://127.0.0.1:3000</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-curl-7-paso-a-paso">🚀 Cómo solucionar el error curl (7) paso a paso</h2>
-<h3 id="paso-1-verificar-la-escucha-de-puertos-activos-en-tu-sistema">Paso 1: Verificar la escucha de puertos activos en tu sistema</h3>
-<p>Comprueba qué proceso está escuchando en el puerto deseado usando <code>ss</code> o <code>netstat</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Inspeccionar el puerto 3000 (o cambia por tu puerto: 8080, 5000, 80)
-sudo ss -tulpn | grep :3000
-</code></pre>
-    </div>
-    
-<p>Si la comando no devuelve ninguna salida, el servidor Node.js, Python o Go no está en ejecución. Inicializa tu servidor web antes de lanzar la petición cURL.</p>
-<h3 id="paso-2-conflicto-entre-localhost-ipv6-vs-ipv4">Paso 2: Conflicto entre <code>localhost</code> (IPv6 vs IPv4)</h3>
-<p>En distribuciones de Linux recientes, <code>localhost</code> resuelve primero a la dirección de bucle invertido de IPv6 <code>::1</code>. Si tu servidor web en Node.js (Express) o Python (Flask/FastAPI) está configurado para escuchar únicamente en <code>127.0.0.1</code> (IPv4), cURL fallará al intentar la versión IPv6.</p>
-<p><strong>Solución 1: Forzar cURL a usar IPv4:</strong></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>curl -4 http://localhost:3000
-</code></pre>
-    </div>
-    
-<p><strong>Solución 2: Usar la dirección IP loopback explícita:</strong></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>curl http://127.0.0.1:3000
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-configurar-la-direccion-de-enlace-en-tu-codigo-host-binding">Paso 3: Configurar la dirección de enlace en tu código (Host Binding)</h3>
-<p>En tu servidor de aplicaciones backend, asegúrate de enlazar el host a <code>0.0.0.0</code> o <code>127.0.0.1</code> en lugar de omitirlo:</p>
-<ul>
-<li><strong>En Express.js (Node.js):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>app.listen(3000, &#39;0.0.0.0&#39;, () =&gt; {
-  console.log(&#39;Servidor activo en el puerto 3000&#39;);
-});
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>En FastAPI / Uvicorn (Python):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>uvicorn main:app --host 0.0.0.0 --port 3000
-</code></pre>
-    </div>
-    
-</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Si estás probando contenedores de Docker, recuerda mapear el puerto del contenedor hacia el host (<code>docker run -p 3000:3000 ...</code>).</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -351,23 +253,6 @@ sudo ss -tulpn | grep :3000
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -379,6 +264,23 @@ sudo ss -tulpn | grep :3000
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -7,7 +7,7 @@
   <title>Solution: CORS Error When Consuming External APIs from Shopify Templates - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Learn how to fix shopify cors policy in your store and resolve the 'Access-Control-Allow-Origin' security block when making fetch requests.">
+  <meta name="description" content="Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid themes, storefront JavaScript, and Shopify App Proxies.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-cors-shopify-liquid.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Solution: CORS Error When Consuming External APIs from Shopify Templates - SoporteCero">
-  <meta property="og:description" content="Learn how to fix shopify cors policy in your store and resolve the 'Access-Control-Allow-Origin' security block when making fetch requests.">
+  <meta property="og:description" content="Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid themes, storefront JavaScript, and Shopify App Proxies.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-cors-shopify-liquid.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Solution: CORS Error When Consuming External APIs from Shopify Templates - SoporteCero">
-  <meta name="twitter:description" content="Learn how to fix shopify cors policy in your store and resolve the 'Access-Control-Allow-Origin' security block when making fetch requests.">
+  <meta name="twitter:description" content="Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid themes, storefront JavaScript, and Shopify App Proxies.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Solution: CORS Error When Consuming External APIs from Shopify Templates",
-  "description": "Learn how to fix shopify cors policy in your store and resolve the 'Access-Control-Allow-Origin' security block when making fetch requests.",
+  "description": "Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid themes, storefront JavaScript, and Shopify App Proxies.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "Shopify, Liquid, CORS, JavaScript, APIs, Frontend",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-24",
   "dateModified": "2026-07-24",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,97 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Solution: CORS Error When Consuming External APIs from Shopify Templates",
+      "item": "https://soportecero.com/en/articulos/error-cors-shopify-liquid.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Solution: CORS Error When Consuming External APIs from Shopify Templates",
-  "description": "Learn how to fix shopify cors policy in your store and resolve the 'Access-Control-Allow-Origin' security block when making fetch requests.",
-  "step": []
+  "description": "Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid themes, storefront JavaScript, and Shopify App Proxies.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-cors-shopify-liquid.html#step-1",
+      "name": "Step 1",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In Shopify Partner Dashboard &gt; App Setup &gt; App Proxy, define a proxy path such as apps/my-proxy."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-cors-shopify-liquid.html#step-2",
+      "name": "Step 2",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Point the destination to your server URL: https://my-api.com/api/."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-cors-shopify-liquid.html#step-3",
+      "name": "Step 3",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Execute client-side storefront requests against the same-origin URL:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can CORS headers be set in Liquid files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Liquid is a server-side template engine that produces HTML. CORS validation happens on the client browser when dispatching AJAX requests to external hosts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is App Proxy superior for private store data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Shopify signs all App Proxy requests using HMAC-SHA256 headers, allowing your backend to verify that requests originate from an authorized store session."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,7 +234,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read Time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -148,139 +245,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>To permanently fix the Shopify CORS policy in your store when the Access-Control-Allow-Origin (CORS) error appears in the browser console when trying to make a fetch request from a script in your Shopify template to your own external server (for example, to load digital planners or custom diaries from an external database), you must configure authorization at the source. The browser blocks the response because the external server does not explicitly authorize your Shopify store&#39;s domain to read its data.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-configurar-las-cabeceras-en-tu-servidor-externo">Paso 1: Configurar las cabeceras en tu servidor externo</a></li>
-        <li class="toc-subitem"><a href="#paso-2-utilizar-los-proxies-de-aplicacion-de-shopify-alternative-premium">Paso 2: Utilizar los Proxies de Aplicación de Shopify (Alternative Premium)</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Missing Access-Control-Allow-Origin header in API requests</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set <code>Access-Control-Allow-Origin: *</code> header on origin server</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Fetch request originated from different subdomain or protocol (HTTP vs HTTPS)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure all fetch calls use HTTPS and identical base URL</div>
-          </div></div></div>
-<p>To permanently <strong>fix the Shopify CORS policy in your store</strong> when the <code>Access-Control-Allow-Origin</code> (CORS) error appears in the browser console when trying to make a <code>fetch</code> request from a script in your Shopify template to your own external server (for example, to load digital planners or custom diaries from an external database), you must configure authorization at the source. The browser blocks the response because the external server does not explicitly authorize your Shopify store&#39;s domain to read its data.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-configurar-las-cabeceras-en-tu-servidor-externo">Paso 1: Configurar las cabeceras en tu servidor externo</h3>
-<p>The actual solution is not done inside Shopify, but rather on the backend server receiving the request. You must respond by adding the corresponding CORS header.</p>
-<ul>
-<li><strong>If you are using Node.js (Express), install and configure the official middleware:</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>npm install cors
-</code></pre>
-    </div>
-    
-Then apply it, restricting access only to your store:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>const cors = require(&#39;cors&#39;);
-app.use(cors({
-  origin: &#39;https://tu-tienda-shopify.com&#39;
-}));
-</code></pre>
-    </div>
-    
-</li>
-</ul>
-<h3 id="paso-2-utilizar-los-proxies-de-aplicacion-de-shopify-alternative-premium">Paso 2: Utilizar los Proxies de Aplicación de Shopify (Alternative Premium)</h3>
-<p>If you do not have access to modify the external server, you can use Shopify&#39;s App Proxy. This makes your script query Shopify&#39;s own servers directly, and they make the request on the backend, completely bypassing browser CORS restrictions.</p>
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended safety practices:</p>
-<ul>
-<li>Never use the wildcard asterisk <code>Access-Control-Allow-Origin: *</code> on production servers that handle confidential user data or paid digital downloads. Doing so opens the door for any malicious website to make requests on behalf of your users and steal information from your database.</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -312,23 +277,6 @@ app.use(cors({
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -340,6 +288,23 @@ app.use(cors({
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'fatal: cannot lock ref' in Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

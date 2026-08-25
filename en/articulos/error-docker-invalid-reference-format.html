@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'invalid reference format' in Docker",
   "description": "Getting 'docker: invalid reference format' running docker run or build? Learn how to fix quote syntax, capitalization, and volume paths.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Docker, DevOps, Sysadmin, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-18",
   "dateModified": "2026-08-18",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error 'invalid reference format' in Docker",
-  "description": "Getting 'docker: invalid reference format' running docker run or build? Learn how to fix quote syntax, capitalization, and volume paths.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error 'invalid reference format' in Docker",
+      "item": "https://soportecero.com/en/articulos/error-docker-invalid-reference-format.html"
+    }
+  ]
 }
   </script>
     
@@ -148,170 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error docker: invalid reference format (or invalid reference format: repository name must be lowercase) occurs when executing docker run, docker pull, or docker build commands with malformed quotes, uppercase characters in image names, or invalid volume syntax (-v).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-use-lowercase-repository-amp-image-names">Step 1: Use Lowercase Repository &amp; Image Names</a></li>
-        <li class="toc-subitem"><a href="#step-2-fix-volume-mounting-syntax-across-os-shells">Step 2: Fix Volume Mounting Syntax Across OS Shells</a></li>
-        <li class="toc-subitem"><a href="#step-3-check-multiline-backslash-escapes">Step 3: Check Multiline Backslash Escapes</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Syntax error in image name or flags of docker run command</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure image tag is lowercase and free of illegal characters</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Unquoted volume mount paths containing spaces</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Enclose paths in quotes: <code>-v &quot;/local path:/container path&quot;</code></div>
-          </div></div></div>
-<p>The error <strong><code>docker: invalid reference format</code></strong> (or <code>invalid reference format: repository name must be lowercase</code>) occurs when executing <code>docker run</code>, <code>docker pull</code>, or <code>docker build</code> commands with malformed quotes, uppercase characters in image names, or invalid volume syntax (<code>-v</code>).</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Ensure image names use <strong>lowercase</strong> letters exclusively (<code>my-app:latest</code>, not <code>My-App:latest</code>).</li>
-<li>On Windows PowerShell, use <code>&quot;${PWD}&quot;</code> quotes instead of <code>&#39;$(pwd)&#39;</code>.</li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-use-lowercase-repository-amp-image-names">Step 1: Use Lowercase Repository &amp; Image Names</h3>
-<p>Docker strictly enforces lowercase names for image repositories:</p>
-<ul>
-<li>❌ <strong>Incorrect:</strong> <code>docker run -d MyCompany/Backend:v1</code></li>
-<li>✅ <strong>Correct:</strong> <code>docker run -d mycompany/backend:v1</code></li>
-</ul>
-<h3 id="step-2-fix-volume-mounting-syntax-across-os-shells">Step 2: Fix Volume Mounting Syntax Across OS Shells</h3>
-<p>Copying Linux commands directly into Windows shell environments often triggers this error:</p>
-<ul>
-<li><strong>Linux / macOS (Bash / Zsh):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v $(pwd):/app my-image:latest
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>Windows PowerShell:</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">POWERSHELL</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v &quot;${PWD}:/app&quot; my-image:latest
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>Windows CMD:</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">CMD</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v &quot;%cd%:/app&quot; my-image:latest
-</code></pre>
-    </div>
-    
-</li>
-</ul>
-<h3 id="step-3-check-multiline-backslash-escapes">Step 3: Check Multiline Backslash Escapes</h3>
-<p>In multiline shell scripts, trailing whitespace after a backslash <code>\</code> breaks the command:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -d \
-  --name my-container \
-  -p 8080:80 \
-  nginx:alpine
-</code></pre>
-    </div>
-    
-<p>Ensure no spaces follow any trailing <code>\</code> escape character.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -343,6 +207,23 @@
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -354,23 +235,6 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

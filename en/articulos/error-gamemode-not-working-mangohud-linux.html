@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix GameMode and MangoHud Not Working in Linux Gaming",
   "description": "Fix common issues where Feral GameMode or MangoHud fails to activate, display overlay stats, or boost performance in Linux gaming.",
+  "inLanguage": "en",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Linux, Gaming, Performance",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,85 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/en/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix GameMode and MangoHud Not Working in Linux Gaming",
+      "item": "https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix GameMode and MangoHud Not Working in Linux Gaming",
   "description": "Fix common issues where Feral GameMode or MangoHud fails to activate, display overlay stats, or boost performance in Linux gaming.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html#verify-and-enable-the-gamemode-daemon-gamemoded",
+      "name": "Verify and Enable the GameMode Daemon (gamemoded)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ensure that the gamemoded daemon is installed and running under your current user session:\n\n    \n      \n        BASH\n        Copy\n      \n      # Check the systemd user service status\nsystemctl --user status gamemoded.service\n\n# Enable and start the user service if it is inactive\nsystemctl --user enable --now gamemoded.service\n\n# Run the official GameMode self-diagnostic tool\ngamemoded -t\n\n    \n    \n(If the CPU governor test fails, ensure dbus and cpupower utilities are installed on your distribu"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html#install-both-32-bit-and-64-bit-mangohud-libraries",
+      "name": "Install Both 32-bit and 64-bit MangoHud Libraries",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Legacy titles and 32-bit Windows games running through Proton require MangoHud libraries compiled for both architectures (x86 and x86_64):\n\n    \n      \n        BASH\n        Copy\n      \n      # On Arch Linux / CachyOS / Manjaro:\nsudo pacman -S mangohud lib32-mangohud gamemode lib32-gamemode\n\n# On Ubuntu / Debian / Pop!_OS:\nsudo apt install mangohud gamemode mangohud:i386"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html#configure-steam-and-lutris-launch-options",
+      "name": "Configure Steam and Lutris Launch Options",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In Steam, right-click your game &gt; Properties &gt; General &gt; Launch Options, and input the following command string:\n\n    \n      \n        BASH\n        Copy\n      \n      # Recommended command combination for GameMode + MangoHud\ngamemoderun mangohud %command%\n\n# Force inline MangoHud configuration using environment variables\nMANGOHUD=1 MANGOHUD_CONFIG=cpu_temp,gpu_temp,fps,fps_limit=144 gamemoderun %command%"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-gamemode-not-working-mangohud-linux.html#create-and-tune-mangohud-configuration-file",
+      "name": "Create and Tune MangoHud Configuration File",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Customize layout settings and fix Wayland overlay glitches by managing the user config file:\n\n    \n      \n        BASH\n        Copy\n      \n      # Create configuration directory\nmkdir -p ~/.config/MangoHud/\n\n# Edit or create MangoHud.conf\nnano ~/.config/MangoHud/MangoHud.conf\n\n    \n    \nAdd the following optimized configuration settings:\n\n    \n      \n        INI\n        Copy\n      \n      legacy_layout=false\ngpu_stats\ngpu_temp\ncpu_stats\ncpu_temp\nfps\nframetime=1\ntoggle_hud=Shift_R+F12\nno_display\n\n"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,202 +233,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>Feral GameMode (gamemoded) and MangoHud are essential tools for gaming on Linux: GameMode dynamically tweaks CPU governors, I/O priorities, and GPU power states, while MangoHud provides a customizable Vulkan/OpenGL overlay to monitor FPS, frame times, temperatures, and hardware load. However, missing 32-bit libraries, systemd DBus session mismatches, or invalid launch syntax can cause either tool to fail silently.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-and-enable-the-gamemode-daemon-gamemoded">Step 1: Verify and Enable the GameMode Daemon (gamemoded)</a></li>
-        <li class="toc-subitem"><a href="#step-2-install-both-32-bit-and-64-bit-mangohud-libraries">Step 2: Install Both 32-bit and 64-bit MangoHud Libraries</a></li>
-        <li class="toc-subitem"><a href="#step-3-configure-steam-and-lutris-launch-options">Step 3: Configure Steam and Lutris Launch Options</a></li>
-        <li class="toc-subitem"><a href="#step-4-create-and-tune-mangohud-configuration-file">Step 4: Create and Tune MangoHud Configuration File</a></li>
-      </ol>
-    </nav>
-    
-      <p>Feral GameMode (<code>gamemoded</code>) and MangoHud are essential tools for gaming on Linux: GameMode dynamically tweaks CPU governors, I/O priorities, and GPU power states, while MangoHud provides a customizable Vulkan/OpenGL overlay to monitor FPS, frame times, temperatures, and hardware load. However, missing 32-bit libraries, systemd DBus session mismatches, or invalid launch syntax can cause either tool to fail silently.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>MangoHud overlay does not display in Steam games</strong>: Missing 32-bit multilib MangoHud packages (<code>lib32-mangohud</code>) or improper launch options</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Use <code>mangohud %command%</code> and install 32-bit compatibility libraries</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong><code>gamemoded</code> fails to set the CPU governor to <code>performance</code></strong>: <code>gamemoded.service</code> user unit is disabled or missing DBus permissions</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Enable <code>gamemoded</code> user service via systemd and verify with <code>gamemoded -t</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Game crashes on startup with MangoHud under Wayland compositors</strong>: Vulkan implicit layer incompatibility or conflicting overlay hooks</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set explicit Vulkan layers and clean up <code>MangoHud.conf</code> settings</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-verify-and-enable-the-gamemode-daemon-gamemoded">Step 1: Verify and Enable the GameMode Daemon (<code>gamemoded</code>)</h3>
-<p>Ensure that the <code>gamemoded</code> daemon is installed and running under your current user session:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Check the systemd user service status
-systemctl --user status gamemoded.service
-
-# Enable and start the user service if it is inactive
-systemctl --user enable --now gamemoded.service
-
-# Run the official GameMode self-diagnostic tool
-gamemoded -t
-</code></pre>
-    </div>
-    
-<p><em>(If the CPU governor test fails, ensure <code>dbus</code> and <code>cpupower</code> utilities are installed on your distribution).</em></p>
-<h3 id="step-2-install-both-32-bit-and-64-bit-mangohud-libraries">Step 2: Install Both 32-bit and 64-bit MangoHud Libraries</h3>
-<p>Legacy titles and 32-bit Windows games running through Proton require MangoHud libraries compiled for both architectures (<code>x86</code> and <code>x86_64</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># On Arch Linux / CachyOS / Manjaro:
-sudo pacman -S mangohud lib32-mangohud gamemode lib32-gamemode
-
-# On Ubuntu / Debian / Pop!_OS:
-sudo apt install mangohud gamemode mangohud:i386
-</code></pre>
-    </div>
-    
-<h3 id="step-3-configure-steam-and-lutris-launch-options">Step 3: Configure Steam and Lutris Launch Options</h3>
-<p>In Steam, right-click your game &gt; <em>Properties</em> &gt; <em>General</em> &gt; <em>Launch Options</em>, and input the following command string:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Recommended command combination for GameMode + MangoHud
-gamemoderun mangohud %command%
-
-# Force inline MangoHud configuration using environment variables
-MANGOHUD=1 MANGOHUD_CONFIG=cpu_temp,gpu_temp,fps,fps_limit=144 gamemoderun %command%
-</code></pre>
-    </div>
-    
-<h3 id="step-4-create-and-tune-mangohud-configuration-file">Step 4: Create and Tune MangoHud Configuration File</h3>
-<p>Customize layout settings and fix Wayland overlay glitches by managing the user config file:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Create configuration directory
-mkdir -p ~/.config/MangoHud/
-
-# Edit or create MangoHud.conf
-nano ~/.config/MangoHud/MangoHud.conf
-</code></pre>
-    </div>
-    
-<p>Add the following optimized configuration settings:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>legacy_layout=false
-gpu_stats
-gpu_temp
-cpu_stats
-cpu_temp
-fps
-frametime=1
-toggle_hud=Shift_R+F12
-no_display
-</code></pre>
-    </div>
-    
-<p><em>(Note: The <code>no_display</code> option launches MangoHud hidden by default; press <code>Right Shift + F12</code> in-game to toggle the overlay).</em></p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Avoid Overlapping Overlays</strong>: Running Discord overlays (Vencord), VKBasalt, or OBS game capture simultaneously with MangoHud can cause micro-stuttering or Vulkan surface creation errors.</li>
-<li><strong>Flatpak Permission Overrides</strong>: If running Steam or Heroic Launcher via Flatpak, grant DBus permissions so applications can communicate with GameMode: <code>flatpak override --user --talk-name=org.freedesktop.gamemode com.valvesoftware.Steam</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -358,6 +248,23 @@ no_display
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Fix Counter-Strike 2 crashing and FPS stutter on Linux (Vulkan / Mesa) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -387,23 +294,6 @@ no_display
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

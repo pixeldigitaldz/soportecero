@@ -1,55 +1,73 @@
 ---
-title: 'Troubleshooting: Error (auth/admin-restricted-operation) en Firebase'
-description: 'Cómo solucionar el error de Firebase Auth cuando intentas crear o eliminar usuarios y recibes admin-restricted-operation.'
-category: 'Web y Código'
-date: '2026-08-17'
-readTime: '3 min'
-tags: ['Firebase', 'Autenticación', 'Web']
+title: "Troubleshooting: Error (auth/admin-restricted-operation) en Firebase"
+description: "Aprende a solucionar el error auth/admin-restricted-operation en Firebase Authentication habilitando proveedores y configurando Identity Platform."
+category: "Web y Código"
+tags: ["Firebase", "Authentication", "JavaScript", "Seguridad", "Cloud"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Uso de SDK Admin en el Cliente** | Usar Firebase Admin SDK desde un entorno de servidor (Node.js/Cloud Functions) |
-| **Operación bloqueada en frontend** | Evitar usar `deleteUser` o acciones masivas de creación desde el navegador |
+| **El método de autenticación invocado (ej. Anónimo o Correo/Contraseña) está deshabilitado en Firebase Console** | Habilitar el proveedor correspondiente en Firebase Console > Authentication > Sign-in method |
+| **Operación administrativa restringida ejecutada desde el SDK cliente sin privilegios de Admin SDK** | Mover la operación sensible (como borrado masivo o creación de usuarios con claims) a Cloud Functions o Node.js con Firebase Admin SDK |
 
-## La Solución Paso a Paso
+La excepción `FirebaseError: Firebase: Error (auth/admin-restricted-operation)` en Firebase Authentication ocurre cuando tu aplicación cliente intenta ejecutar una acción de autenticación que no ha sido activada en la consola de Firebase o que está reservada exclusivamente para credenciales de administrador con privilegios de cuenta de servicio.
 
-**Comprende por qué ocurre el error**
-El error `auth/admin-restricted-operation` salta cuando intentas ejecutar una operación privilegiada directamente desde el lado del cliente (Frontend: React, Angular, Vue, iOS, Android). Firebase prohíbe crear cuentas masivamente, listar todos los usuarios, o borrar cuentas arbitrarias desde el cliente por seguridad.
+## 🚀 Cómo solucionar el error paso a paso
 
-**Mueve la lógica al Backend o Cloud Functions**
-Para realizar estas acciones (como tener un panel de administrador web que crea cuentas para empleados), debes utilizar el **Firebase Admin SDK**.
-Crea una Cloud Function (o un endpoint en tu backend en Node.js, Python, etc.) para manejar la solicitud.
-Ejemplo en Node.js con Firebase Admin:
+### Paso 1: Habilitar el proveedor de autenticación en Firebase Console
+Si el error ocurre al llamar a `signInAnonymously()` o `createUserWithEmailAndPassword()`:
+1. Ingresa a [Firebase Console](https://console.firebase.google.com/).
+2. Selecciona tu proyecto y dirígete a **Build > Authentication > Sign-in method** (Métodos de inicio de sesión).
+3. Localiza el proveedor que estás invocando (por ejemplo, **Anónimo** o **Correo electrónico/Contraseña**).
+4. Haz clic en el proveedor, marca la casilla **Habilitar** (Enable) y pulsa **Guardar**.
+
+### Paso 2: Ejecutar operaciones administrativas en un entorno seguro (Admin SDK)
+Si intentas modificar Custom Claims, deshabilitar usuarios o gestionar roles de seguridad desde el frontend, Firebase bloqueará la llamada:
 ```javascript
-const admin = require('firebase-admin');
-admin.initializeApp();
+// ❌ INCORRECTO: No intentes asignar claims desde el frontend
+// ✔️ CORRECTO: Ejecutar en Node.js Backend o Cloud Functions con Firebase Admin:
+import admin from 'firebase-admin';
 
-// Función de servidor
-async function crearUsuarioAdmin(email, password) {
-  try {
-    const userRecord = await admin.auth().createUser({
-      email: email,
-      password: password,
-    });
-    console.log('Usuario creado:', userRecord.uid);
-  } catch (error) {
-    console.error('Error al crear usuario:', error);
-  }
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault()
+  });
+}
+
+// Asignar rol de administrador a un usuario de forma segura
+export async function setUserAsAdmin(uid) {
+  await admin.auth().setCustomUserClaims(uid, { admin: true });
+  console.log(`Rol de administrador asignado exitosamente a ${uid}`);
 }
 ```
 
-**Llama a la función desde tu Frontend**
-En lugar de llamar a `createUser` de Firebase Auth en el frontend, llama a tu nueva Cloud Function (o API) usando fetch o HTTPS Callables:
-```javascript
-import { getFunctions, httpsCallable } from "firebase/functions";
+### Paso 3: Revisar la configuración de Google Cloud Identity Platform
+Si tu proyecto de Firebase está vinculado a Google Cloud Platform:
+1. Accede a **Google Cloud Console > Identity Platform > Settings**.
+2. En la pestaña **Security**, verifica que la creación de usuarios no esté bloqueada por directivas de acceso condicional o políticas de organización.
 
-const functions = getFunctions();
-const crearUsuario = httpsCallable(functions, 'crearUsuarioAdminEndpoint');
-crearUsuario({ email: 'nuevo@correo.com', password: '123' });
+### Paso 4: Validar la clave de API de Firebase
+Asegúrate de que la clave de API web (`apiKey`) en tu configuración de inicialización de Firebase no tenga restricciones de API que bloqueen *Identity Toolkit API*:
+```javascript
+// firebaseConfig.js
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "tu-proyecto.firebaseapp.com",
+  projectId: "tu-proyecto"
+};
 ```
 
-## Prevención
-- **Privilegios mínimos:** Nunca incluyas las credenciales de servicio (Service Account Keys) de Firebase Admin SDK dentro de tu código frontend. Eso comprometería toda tu base de datos y autenticación.
-- **Custom Claims:** Usa 'Custom Claims' para asignar un rol de "admin" a ciertos usuarios y verifica ese rol dentro de tus Cloud Functions antes de permitirles borrar o crear usuarios.
+## 🛡️ Consejos de Prevención
+- **No expongas credenciales de servicio en el frontend:** El archivo de claves privadas `serviceAccountKey.json` nunca debe incluirse en código público de cliente o repositorios Git.
+- **Implementa reglas de seguridad en Firestore/Storage:** Valida siempre los tokens de usuario mediante `request.auth != null` en las reglas de seguridad.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué signInAnonymously arroja admin-restricted-operation?
+Porque la autenticación anónima viene deshabilitada por defecto en todos los proyectos nuevos de Firebase para prevenir abusos de cuotas.
+
+### ¿Puedo habilitar la creación de usuarios solo para administradores?
+Sí. En la configuración avanzada de Authentication puedes desactivar el registro público de nuevos usuarios y gestionarlos únicamente mediante el Admin SDK.

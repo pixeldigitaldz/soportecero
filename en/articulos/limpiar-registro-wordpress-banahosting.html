@@ -7,7 +7,7 @@
   <title>How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting.">
+  <meta name="description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero">
-  <meta property="og:description" content="Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting.">
+  <meta property="og:description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to clean and optimize a bloated WordPress database in BanaHosting - SoporteCero">
-  <meta name="twitter:description" content="Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting.">
+  <meta name="twitter:description" content="Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "How to clean and optimize a bloated WordPress database in BanaHosting",
-  "description": "Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting.",
-  "category": "Web & Code",
+  "description": "Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.",
+  "inLanguage": "en",
+  "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "WordPress, BanaHosting, MySQL, cPanel, Optimization",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to clean and optimize a bloated WordPress database in BanaHosting",
+      "item": "https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to clean and optimize a bloated WordPress database in BanaHosting",
-  "description": "Learn how to clean WordPress and optimize your website's database to speed up load times and reduce CPU usage in BanaHosting.",
-  "step": []
+  "description": "Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html#limit-post-revisions-in-wp-configphp",
+      "name": "Limit Post Revisions in wp-config.php",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Prevent WordPress from creating unlimited revision rows by adding configuration limits to wp-config.php:\n\n    \n      \n        PHP\n        Copy\n      \n      // Limit post revisions to 3 versions\ndefine(&#39;WP_POST_REVISIONS&#39;, 3);\n\n// Increase autosave interval to 120 seconds\ndefine(&#39;AUTOSAVE_INTERVAL&#39;, 120);\n\n// Empty trash automatically every 7 days\ndefine(&#39;EMPTY_TRASH_DAYS&#39;, 7);"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html#clean-expired-transients-in-wpoptions-via-phpmyadmin",
+      "name": "Clean Expired Transients in wp_options via phpMyAdmin",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Open cPanel &gt; phpMyAdmin, select your database, and run this query under the SQL tab:\n\n    \n      \n        SQL\n        Copy\n      \n      -- Remove transient records from options table\nDELETE FROM wp_options WHERE option_name LIKE (&#39;_transient_%&#39;);\nDELETE FROM wp_options WHERE option_name LIKE (&#39;_site_transient_%&#39;);"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html#remove-orphan-revisions-and-post-meta",
+      "name": "Remove Orphan Revisions and Post Meta",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Delete old draft revisions and their detached metadata entries:\n\n    \n      \n        SQL\n        Copy\n      \n      -- 1. Remove revision entries\nDELETE a,b,c\nFROM wp_posts a\nLEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)\nLEFT JOIN wp_postmeta c ON (a.ID = c.post_id)\nWHERE a.post_type = &#39;revision&#39;;\n\n-- 2. Clean orphan postmeta rows\nDELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE wp.ID IS NULL;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/limpiar-registro-wordpress-banahosting.html#defragment-and-optimize-database-tables",
+      "name": "Defragment and Optimize Database Tables",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Reclaim unallocated disk space and rebuild index trees:\n\n    \n      \n        SQL\n        Copy\n      \n      OPTIMIZE TABLE wp_options, wp_posts, wp_postmeta, wp_comments;"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is deleting transient rows safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, completely safe. Transients are temporary cached values that plugins will transparently re-populate upon the next request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will removing revisions affect my live published posts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Only historical intermediate drafts are pruned. Live articles remain untouched."
+      }
+    }
+  ]
 }
   </script>
     
@@ -130,14 +239,14 @@
       </div>
 
       <header class="post-header">
-        <span class="card-category">Web & Code</span>
+        <span class="card-category">Systems & Servers</span>
         <h1 id="post-title">How to clean and optimize a bloated WordPress database in BanaHosting</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 3 min
+            Read Time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -148,138 +257,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>Knowing how to clean WordPress and optimize your website&#39;s database on shared servers (like BanaHosting) is essential when the web gets slow or the control panel throws memory limit errors. This happens because WordPress defaults to accumulating thousands of rows of &quot;post revisions&quot; (old saved versions of your posts) and cache junk (transients) in the wp_options table, bloating SQL queries.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-limitar-las-revisiones-de-entradas-en-wp-configphp">Paso 1: Limitar las revisiones de entradas en wp-config.php</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ejecutar-una-limpieza-sql-directa-via-phpmyadmin">Paso 2: Ejecutar una limpieza SQL directa (Vía phpMyAdmin)</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>WordPress database bloated by post revisions and transients</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Optimize database via WP-CLI: <code>wp transient delete --all</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Database size or storage quota exceeded on BanaHosting</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Clear stale transients from <code>wp_options</code> table via phpMyAdmin</div>
-          </div></div></div>
-<p>Knowing how to <strong>clean WordPress</strong> and optimize your website&#39;s database on shared servers (like BanaHosting) is essential when the web gets slow or the control panel throws memory limit errors. This happens because WordPress defaults to accumulating thousands of rows of &quot;post revisions&quot; (old saved versions of your posts) and cache junk (<em>transients</em>) in the <code>wp_options</code> table, bloating SQL queries.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-limitar-las-revisiones-de-entradas-en-wp-configphp">Paso 1: Limitar las revisiones de entradas en wp-config.php</h3>
-<p>By default, WordPress saves infinite copies of every change you make. We are going to cap it to a maximum of 3 versions so it stops bloating the database.</p>
-<ol>
-<li>Enter the File Manager of your cPanel in BanaHosting.</li>
-<li>Open the <code>wp-config.php</code> file and add the following line just before the text that says <em>That&#39;s all, stop editing!</em>:</li>
-</ol>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PHP</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>define(&#39;WP_POST_REVISIONS&#39;, 3);
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-ejecutar-una-limpieza-sql-directa-via-phpmyadmin">Paso 2: Ejecutar una limpieza SQL directa (Vía phpMyAdmin)</h3>
-<p>Enter phpMyAdmin from your cPanel, select your WordPress database, go to the SQL tab and run this command to delete all stored old revisions in one go:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">SQL</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>DELETE FROM wp_posts WHERE post_type = &#39;revision&#39;;
-</code></pre>
-    </div>
-    
-<p>You will see how the size of your database drops drastically, speeding up searches and server response times.</p>
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended security practices:</p>
-<ul>
-<li>Make a full backup of your database in <code>.sql</code> format before running any direct deletion command. If you make a syntax error in the SQL query without having a prior backup, you could delete the actual articles of your blog or corrupt permanent link relationships irreversibly.</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -294,51 +272,51 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js -->
+      <!-- Related Card: [FIXED] Error 521 Web Server Is Down in Cloudflare -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-postgresql-too-many-clients-already-connection-pool.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to solve FATAL: sorry, too many clients already in PostgreSQL and Node.js</a>
+              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 521 Web Server Is Down in Cloudflare</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">PostgreSQL</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
+            <span class="card-tag">Cloudflare</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nextjs-api-resolved-without-response.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Guide: Fix API resolved without sending a response for /api/ in Next.js</a>
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Next.js</span>
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: iptables failed: No chain/target/match by that name in Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

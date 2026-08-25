@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Free Disk Space in Proxmox VE by Cleaning Caches and LXC Templates",
   "description": "Learn how to resolve out-of-disk-space errors in Proxmox VE by safely removing duplicated ISOs and orphaned backups.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Proxmox, Sysadmin, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Free Disk Space in Proxmox VE by Cleaning Caches and LXC Templates",
+      "item": "https://soportecero.com/en/articulos/error-proxmox-disk-no-space-clean-local.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Free Disk Space in Proxmox VE by Cleaning Caches and LXC Templates",
   "description": "Learn how to resolve out-of-disk-space errors in Proxmox VE by safely removing duplicated ISOs and orphaned backups.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-proxmox-disk-no-space-clean-local.html#analyze-disk-space-distribution",
+      "name": "Analyze disk space distribution",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Connect to your Proxmox VE node via SSH and execute a disk space usage check on your local partitions:\n\n    \n      \n        BASH\n        Copy\n      \n      # Check disk space on system partitions\ndf -h\n\n# Identify directory sizes in default storage locations\ndu -sh /var/lib/pve/local-bgs/* /var/lib/vz/*"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-proxmox-disk-no-space-clean-local.html#remove-unused-installation-isos-and-lxc-templates",
+      "name": "Remove unused installation ISOs and LXC templates",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "You can safely clean up operating system installation ISO files and downloaded container templates to recover space instantly:\n\n    \n      \n        BASH\n        Copy\n      \n      # Delete obsolete ISOs from the vz storage pool\nrm -f /var/lib/vz/template/iso/*.iso\n\n# Delete unused LXC container template tarballs\nrm -f /var/lib/vz/template/cache/*.tar.xz"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-proxmox-disk-no-space-clean-local.html#vacuum-bloated-systemd-journal-logs",
+      "name": "Vacuum bloated systemd journal logs",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "System logs on Proxmox VE can grow to several gigabytes if your virtual machines generate continuous alerts due to hardware or internal network service warnings:\n\n    \n      \n        BASH\n        Copy\n      \n      # Force rotation and limit persistent logs to 100 Megabytes\nsudo journalctl --vacuum-size=100M"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,149 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The disk space exhausted error on Proxmox VE local storage (No space left on device or VM startup failures) occurs due to the accumulation of obsolete OS installation ISOs, unused LXC templates, old backup dumps, and bloated persistent system logs under the /var/log directory.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-analyze-disk-space-distribution">Step 1: Analyze disk space distribution</a></li>
-        <li class="toc-subitem"><a href="#step-2-remove-unused-installation-isos-and-lxc-templates">Step 2: Remove unused installation ISOs and LXC templates</a></li>
-        <li class="toc-subitem"><a href="#step-3-vacuum-bloated-systemd-journal-logs">Step 3: Vacuum bloated systemd journal logs</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Proxmox local (root) storage at 100% preventing VM startup</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Delete old ISO images and backups under <code>/var/lib/vz/template/iso/</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Saturated Proxmox log files under /var/log/</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Clean old compressed log files: <code>rm -f /var/log/*.gz /var/log/pve/tasks/*</code></div>
-          </div></div></div>
-<p>The disk space exhausted error on Proxmox VE local storage (<code>No space left on device</code> or VM startup failures) occurs due to the accumulation of obsolete OS installation ISOs, unused LXC templates, old backup dumps, and bloated persistent system logs under the <code>/var/log</code> directory.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-analyze-disk-space-distribution">Step 1: Analyze disk space distribution</h3>
-<p>Connect to your Proxmox VE node via SSH and execute a disk space usage check on your local partitions:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Check disk space on system partitions
-df -h
-
-# Identify directory sizes in default storage locations
-du -sh /var/lib/pve/local-bgs/* /var/lib/vz/*
-</code></pre>
-    </div>
-    
-<h3 id="step-2-remove-unused-installation-isos-and-lxc-templates">Step 2: Remove unused installation ISOs and LXC templates</h3>
-<p>You can safely clean up operating system installation ISO files and downloaded container templates to recover space instantly:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Delete obsolete ISOs from the vz storage pool
-rm -f /var/lib/vz/template/iso/*.iso
-
-# Delete unused LXC container template tarballs
-rm -f /var/lib/vz/template/cache/*.tar.xz
-</code></pre>
-    </div>
-    
-<h3 id="step-3-vacuum-bloated-systemd-journal-logs">Step 3: Vacuum bloated systemd journal logs</h3>
-<p>System logs on Proxmox VE can grow to several gigabytes if your virtual machines generate continuous alerts due to hardware or internal network service warnings:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Force rotation and limit persistent logs to 100 Megabytes
-sudo journalctl --vacuum-size=100M
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Do not manually delete virtual disk images (<code>.raw</code> or <code>.qcow2</code>) located directly in the data paths <code>/var/lib/vz/images/</code> without first removing or detaching them from the Proxmox VE web GUI. Deleting raw disk descriptors manually corrupts the cluster database (<code>pve-cluster</code>), creating logical inconsistencies that block server migration and restore processes.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -322,6 +253,23 @@ sudo journalctl --vacuum-size=100M
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -333,23 +281,6 @@ sudo journalctl --vacuum-size=100M
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

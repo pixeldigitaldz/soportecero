@@ -7,7 +7,7 @@
   <title>[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod.">
+  <meta name="description" content="Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB - SoporteCero">
-  <meta property="og:description" content="¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod.">
+  <meta property="og:description" content="Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB - SoporteCero">
-  <meta name="twitter:description" content="¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod.">
+  <meta name="twitter:description" content="Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB",
-  "description": "¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod.",
+  "description": "Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp.",
+  "inLanguage": "es",
   "category": "Web y Código",
-  "datePublished": "2026-08-22",
-  "dateModified": "2026-08-22",
+  "articleSection": "Web y Código",
+  "keywords": "MongoDB, Node.js, Mongoose, Bases de Datos, Linux, DevOps",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB",
+      "item": "https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB",
-  "description": "¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod.",
-  "step": []
+  "description": "Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html#comprobar-el-estado-del-servicio-mongodb",
+      "name": "Comprobar el estado del servicio MongoDB",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba si el proceso mongod está en ejecución o falló al arrancar:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar estado del servicio\nsudo systemctl status mongod\n\n# Si el servicio está inactivo (dead), inícialo:\nsudo systemctl start mongod\n\n# Habilitar para que inicie automáticamente tras reiniciar el servidor:\nsudo systemctl enable mongod"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html#corregir-permisos-en-los-directorios-de-datos-y-logs",
+      "name": "Corregir permisos en los directorios de datos y logs",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si MongoDB se apagó abruptamente, los permisos de los archivos de base de datos pueden quedar corruptos:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Asignar la propiedad correcta al usuario del sistema &#39;mongodb&#39;\nsudo chown -R mongodb:mongodb /var/lib/mongodb\nsudo chown -R mongodb:mongodb /var/log/mongodb\n\n# Asegurar permisos de lectura y escritura\nsudo chmod -R 755 /var/lib/mongodb"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html#verificar-la-configuracion-de-red-en-mongodconf",
+      "name": "Verificar la configuración de red en mongod.conf",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre el archivo de configuración principal (/etc/mongod.conf):\n\n    \n      \n        YAML\n        Copiar\n      \n      # /etc/mongod.conf\nnet:\n  port: 27017\n  bindIp: 127.0.0.1  # Escucha en localhost. Usa 0.0.0.0 solo si necesitas acceso remoto seguro.\n\n    \n    \nSi realizas cambios, reinicia el daemon:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl restart mongod"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html#validar-la-conexion-con-mongosh",
+      "name": "Validar la conexión con mongosh",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba que puedes interactuar con el motor de base de datos desde la terminal:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Abrir la consola interactiva de MongoDB\nmongosh &quot;mongodb://127.0.0.1:27017&quot;"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué hago si mongod falla con código de salida status=14/EXIT_FAILURE?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El error 14 suele deberse a archivos de bloqueo (mongod.lock) huérfanos. Repara la base de datos ejecutando sudo mongod --repair --dbpath /var/lib/mongodb y reinicia el servicio."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué mi aplicación en Docker no conecta a 127.0.0.1:27017?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Dentro de un contenedor Docker, 127.0.0.1 apunta al propio contenedor. Utiliza host.docker.internal o el nombre del servicio definido en tu docker-compose.yml."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,192 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 4 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-08-22
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error connect ECONNREFUSED 127.0.0.1:27017 o MongooseServerSelectionError: connect ECONNREFUSED ocurre cuando tu aplicación en Node.js, Python o cliente GUI (Compass) intenta establecer conexión con MongoDB, pero el servicio mongod no está en ejecución o está escuchando en una interfaz de red diferente.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-econnrefused-27017-paso-a-paso">Cómo solucionar el error ECONNREFUSED 27017 paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-el-estado-del-servicio-mongod">Paso 1: Verificar el estado del servicio mongod</a></li>
-        <li class="toc-subitem"><a href="#paso-2-cambiar-localhost-por-127001-en-mongoose">Paso 2: Cambiar localhost por 127.0.0.1 en Mongoose</a></li>
-        <li class="toc-subitem"><a href="#paso-3-revisar-la-interfaz-de-escucha-en-mongodconf">Paso 3: Revisar la interfaz de escucha en mongod.conf</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Servidor MongoDB (mongod) no está en ejecución</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Iniciar el servicio de base de datos: <code>sudo systemctl start mongod</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>MongoDB escuchando solo en la interfaz local o puerto cambiado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Ajustar la directiva <code>bindIp: 0.0.0.0</code> en <code>/etc/mongod.conf</code> si se requiere acceso remoto</div>
-          </div></div></div>
-<p>El error <strong><code>connect ECONNREFUSED 127.0.0.1:27017</code></strong> o <code>MongooseServerSelectionError: connect ECONNREFUSED</code> ocurre cuando tu aplicación en Node.js, Python o cliente GUI (Compass) intenta establecer conexión con MongoDB, pero el servicio <strong><code>mongod</code> no está en ejecución</strong> o está escuchando en una interfaz de red diferente.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Inicia el servicio de MongoDB en Linux:
-<code>sudo systemctl enable --now mongod</code></li>
-<li>Si usas MongoDB 6/7, prueba cambiando la cadena de conexión de <code>localhost</code> a la IP <code>127.0.0.1</code>:
-<code>mongodb://127.0.0.1:27017/midatabase</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-econnrefused-27017-paso-a-paso">🚀 Cómo solucionar el error ECONNREFUSED 27017 paso a paso</h2>
-<h3 id="paso-1-verificar-el-estado-del-servicio-mongod">Paso 1: Verificar el estado del servicio <code>mongod</code></h3>
-<p>En muchas instalaciones recientes de Linux (Ubuntu, Debian, Arch), el servicio de MongoDB no se inicia automáticamente tras reiniciar el servidor.</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Comprobar estado del servicio
-sudo systemctl status mongod
-</code></pre>
-    </div>
-    
-<p>Si el estado indica <code>inactive (dead)</code>, inicia el demonio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl enable --now mongod
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-cambiar-localhost-por-127001-en-mongoose">Paso 2: Cambiar <code>localhost</code> por <code>127.0.0.1</code> en Mongoose</h3>
-<p>En Node.js v17+, <code>localhost</code> se resuelve preferentemente por IPv6 (<code>::1</code>). Si MongoDB solo está configurado para escuchar en la pila IPv4 (<code>127.0.0.1</code>), la conexión fallará.</p>
-<p>Modifica tu archivo de conexión en Mongoose:</p>
-<ul>
-<li>❌ <strong>Antes:</strong> <code>mongoose.connect(&#39;mongodb://localhost:27017/mi_app&#39;);</code></li>
-<li>✅ <strong>Ahora:</strong> <code>mongoose.connect(&#39;mongodb://127.0.0.1:27017/mi_app&#39;);</code></li>
-</ul>
-<h3 id="paso-3-revisar-la-interfaz-de-escucha-en-mongodconf">Paso 3: Revisar la interfaz de escucha en <code>mongod.conf</code></h3>
-<p>Abre el archivo de configuración de MongoDB en <code>/etc/mongod.conf</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nano /etc/mongod.conf
-</code></pre>
-    </div>
-    
-<p>Busca la sección <code>net</code> y verifica la variable <code>bindIp</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>net:
-  port: 27017
-  bindIp: 127.0.0.1
-</code></pre>
-    </div>
-    
-<p><em>(Si estás conectando desde un contenedor de Docker o servidor remoto, añade la IP del contenedor o usa <code>0.0.0.0</code>).</em></p>
-<p>Reinicia el servicio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart mongod
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Elimina archivos lock corruptos en <code>/var/lib/mongodb/mongod.lock</code> si el servicio rehusara iniciar tras un apago forzado del servidor.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>

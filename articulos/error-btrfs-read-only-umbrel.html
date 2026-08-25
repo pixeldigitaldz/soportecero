@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor",
   "description": "Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "BTRFS, Linux, Storage",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor",
+      "item": "https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor",
   "description": "Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html#desmontar-la-unidad-afectada",
+      "name": "Desmontar la unidad afectada",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "No intentes forzar la escritura de datos sobre un disco bloqueado. Primero, detén los servicios de Docker que lo estén usando y desmonta la ruta:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl stop docker\nsudo umount /dev/sdb1\n\n    \n    \n(Reemplaza /dev/sdb1 por la nomenclatura exacta de tu disco detectado)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html#ejecutar-una-verificacion-de-errores-limpia-check-scratch",
+      "name": "Ejecutar una verificación de errores limpia (Check Scratch)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Usaremos las herramientas internas de BTRFS para escanear el árbol de metadatos del almacenamiento sin modificar los bloques:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo btrfs check --readonly /dev/sdb1\n\n    \n    \nLee las últimas líneas de la terminal. Si el sistema te reporta errores menores en el mapa de espacio libre (free space cache), podemos ordenar una reparación segura de los descriptores de archivos ejecutando:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo bt"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html#remontar-el-disco-en-modo-de-rescate-limpio",
+      "name": "Remontar el disco en modo de rescate limpio",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el volumen sigue dando problemas, fuérzalo a arrancar limpiando los registros de transiciones corruptas antiguas:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo mount -o remount,clear_cache,rw /dev/sdb1 /mnt/storage"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,154 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a Read-Only (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-desmontar-la-unidad-afectada">Paso 1: Desmontar la unidad afectada</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ejecutar-una-verificacion-de-errores-limpia-check-scratch">Paso 2: Ejecutar una verificación de errores limpia (Check Scratch)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-remontar-el-disco-en-modo-de-rescate-limpio">Paso 3: Remontar el disco en modo de rescate limpio</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Errores en el sistema de archivos Btrfs por corte de energía inesperado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Verificar el log de kernel <code>dmesg</code> y ejecutar <code>btrfs check --repair /dev/sdX</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Unidad de almacenamiento dañada o en modo de protección contra fallas</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Remontar la unidad en modo lectura/escritura: <code>mount -o remount,rw /data</code></div>
-          </div></div></div>
-<p>Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a <code>Read-Only</code> (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-desmontar-la-unidad-afectada">Paso 1: Desmontar la unidad afectada</h3>
-<p>No intentes forzar la escritura de datos sobre un disco bloqueado. Primero, detén los servicios de Docker que lo estén usando y desmonta la ruta:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl stop docker
-sudo umount /dev/sdb1
-</code></pre>
-    </div>
-    
-<p><em>(Reemplaza <code>/dev/sdb1</code> por la nomenclatura exacta de tu disco detectado).</em></p>
-<h3 id="paso-2-ejecutar-una-verificacion-de-errores-limpia-check-scratch">Paso 2: Ejecutar una verificación de errores limpia (Check Scratch)</h3>
-<p>Usaremos las herramientas internas de BTRFS para escanear el árbol de metadatos del almacenamiento sin modificar los bloques:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo btrfs check --readonly /dev/sdb1
-</code></pre>
-    </div>
-    
-<p>Lee las últimas líneas de la terminal. Si el sistema te reporta errores menores en el mapa de espacio libre (<em>free space cache</em>), podemos ordenar una reparación segura de los descriptores de archivos ejecutando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo btrfs check --repair /dev/sdb1
-</code></pre>
-    </div>
-    
-<p><em>(Nota: Ejecuta la reparación únicamente si el check previo te lo sugiere explícitamente).</em></p>
-<h3 id="paso-3-remontar-el-disco-en-modo-de-rescate-limpio">Paso 3: Remontar el disco en modo de rescate limpio</h3>
-<p>Si el volumen sigue dando problemas, fuérzalo a arrancar limpiando los registros de transiciones corruptas antiguas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo mount -o remount,clear_cache,rw /dev/sdb1 /mnt/storage
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Las caídas de tensión eléctrica son el enemigo número uno de los servidores basados en Linux. Si tienes tu servidor conectado directamente al tomacorriente de la pared sin un sistema de alimentación ininterrumpida (UPS/No-Break), corres el riesgo latente de perder particiones enteras por culpa de un apagón. Configurar tus discos duros con parámetros de montaje seguros como <code>noatime</code> reduce los ciclos de escritura constantes y protege la vida del hardware.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -327,6 +253,23 @@ sudo umount /dev/sdb1
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -338,23 +281,6 @@ sudo umount /dev/sdb1
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar el error ENOENT 'no such file or directory' en npm e npx",
   "description": "Guía completa para corregir el fallo npm ERR! code ENOENT eliminando archivos corruptos de caché, regenerando package-lock.json y resolviendo rutas faltantes.",
+  "inLanguage": "es",
   "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "Nodejs, npm, Programming",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-01",
   "dateModified": "2026-08-01",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,85 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar el error ENOENT 'no such file or directory' en npm e npx",
+      "item": "https://soportecero.com/articulos/error-npm-err-code-enoent-file-not-found.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar el error ENOENT 'no such file or directory' en npm e npx",
   "description": "Guía completa para corregir el fallo npm ERR! code ENOENT eliminando archivos corruptos de caché, regenerando package-lock.json y resolviendo rutas faltantes.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-npm-err-code-enoent-file-not-found.html#verificar-el-directorio-de-trabajo-actual",
+      "name": "Verificar el directorio de trabajo actual",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Uno de los desencadenantes más comunes es ejecutar npm install fuera de la carpeta raíz del proyecto donde reside package.json. Verifica tu ruta actual:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar la carpeta actual en Linux/macOS\npwd\n\n# Listar archivos para verificar la presencia de package.json\nls -la package.json\n\n    \n    \nSi no existe un archivo package.json en el directorio, muévete al directorio correcto o inicializa un nuevo proyecto Node.js:\n\n    \n      \n        BAS"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-npm-err-code-enoent-file-not-found.html#limpiar-la-cache-de-npm",
+      "name": "Limpiar la caché de npm",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Los datos persistentes o fragmentados dentro de la caché global de npm pueden hacer que busque archivos en ubicaciones temporales inexistentes. Ejecuta el comando de limpieza de caché:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Forzar la limpieza de la caché de npm\nnpm cache clean --force"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-npm-err-code-enoent-file-not-found.html#eliminar-nodemodules-y-regenerar-package-lockjson",
+      "name": "Eliminar node_modules y regenerar package-lock.json",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el archivo package-lock.json contiene rutas relativas rotas o referencias a versiones antiguas de binarios instalados en node_modules, lo ideal es realizar una reinstalación limpia:\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Linux / macOS: eliminar la carpeta de módulos y el archivo lockfile\nrm -rf node_modules package-lock.json\n\n# En Windows (PowerShell):\n# Remove-Item -Recurse -Force node_modules, package-lock.json\n\n# Reinstalar todas las dependencias\nnpm install"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-npm-err-code-enoent-file-not-found.html#corregir-permisos-y-carpetas-globales-de-npm-para-npx",
+      "name": "Corregir permisos y carpetas globales de npm (para npx)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el error ENOENT se produce al ejecutar herramientas globales mediante npx (por ejemplo npx create-react-app), puede deberse a que el directorio temporal npm-cache carezca de la estructura adecuada. Restablece la ruta temporal ejecutando:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Verificar la ruta global de npm\nnpm config get prefix\n\n# Reconfigurar permisos si experimentas bloqueos de acceso en Linux/macOS\nsudo chown -R $(whoami) ~/.npm"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,185 +233,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El mensaje npm ERR! code ENOENT (Error NO ENtity) indica que el gestor de paquetes de Node.js intentó abrir o modificar un archivo o directorio que no existe en la ruta especificada. Ocurre comúnmente durante npm install, npx o la ejecución de scripts al faltar el archivo package.json, existir referencias obsoletas en package-lock.json o haber una caché corrupta.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-el-directorio-de-trabajo-actual">Paso 1: Verificar el directorio de trabajo actual</a></li>
-        <li class="toc-subitem"><a href="#paso-2-limpiar-la-cache-de-npm">Paso 2: Limpiar la caché de npm</a></li>
-        <li class="toc-subitem"><a href="#paso-3-eliminar-nodemodules-y-regenerar-package-lockjson">Paso 3: Eliminar node_modules y regenerar package-lock.json</a></li>
-        <li class="toc-subitem"><a href="#paso-4-corregir-permisos-y-carpetas-globales-de-npm-para-npx">Paso 4: Corregir permisos y carpetas globales de npm (para npx)</a></li>
-      </ol>
-    </nav>
-    
-      <p>El mensaje <strong>npm ERR! code ENOENT</strong> (Error NO ENtity) indica que el gestor de paquetes de Node.js intentó abrir o modificar un archivo o directorio que no existe en la ruta especificada. Ocurre comúnmente durante <code>npm install</code>, <code>npx</code> o la ejecución de scripts al faltar el archivo <code>package.json</code>, existir referencias obsoletas en <code>package-lock.json</code> o haber una caché corrupta.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong><code>npm ERR! code ENOENT syscall open</code> al ejecutar comandos de npm</strong>: Falta <code>package.json</code> en el directorio actual, versión desincronizada de <code>package-lock.json</code> o datos corruptos en la caché local</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Verificar la ubicación actual con <code>pwd</code>, limpiar la caché de npm con <code>--force</code> y regenerar los módulos y el lockfile</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-verificar-el-directorio-de-trabajo-actual">Paso 1: Verificar el directorio de trabajo actual</h3>
-<p>Uno de los desencadenantes más comunes es ejecutar <code>npm install</code> fuera de la carpeta raíz del proyecto donde reside <code>package.json</code>. Verifica tu ruta actual:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Comprobar la carpeta actual en Linux/macOS
-pwd
-
-# Listar archivos para verificar la presencia de package.json
-ls -la package.json
-</code></pre>
-    </div>
-    
-<p>Si no existe un archivo <code>package.json</code> en el directorio, muévete al directorio correcto o inicializa un nuevo proyecto Node.js:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Crear un package.json básico si estás iniciando un nuevo proyecto
-npm init -y
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-limpiar-la-cache-de-npm">Paso 2: Limpiar la caché de npm</h3>
-<p>Los datos persistentes o fragmentados dentro de la caché global de npm pueden hacer que busque archivos en ubicaciones temporales inexistentes. Ejecuta el comando de limpieza de caché:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Forzar la limpieza de la caché de npm
-npm cache clean --force
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-eliminar-nodemodules-y-regenerar-package-lockjson">Paso 3: Eliminar node_modules y regenerar package-lock.json</h3>
-<p>Si el archivo <code>package-lock.json</code> contiene rutas relativas rotas o referencias a versiones antiguas de binarios instalados en <code>node_modules</code>, lo ideal es realizar una reinstalación limpia:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># En Linux / macOS: eliminar la carpeta de módulos y el archivo lockfile
-rm -rf node_modules package-lock.json
-
-# En Windows (PowerShell):
-# Remove-Item -Recurse -Force node_modules, package-lock.json
-
-# Reinstalar todas las dependencias
-npm install
-</code></pre>
-    </div>
-    
-<h3 id="paso-4-corregir-permisos-y-carpetas-globales-de-npm-para-npx">Paso 4: Corregir permisos y carpetas globales de npm (para npx)</h3>
-<p>Si el error <code>ENOENT</code> se produce al ejecutar herramientas globales mediante <code>npx</code> (por ejemplo <code>npx create-react-app</code>), puede deberse a que el directorio temporal <code>npm-cache</code> carezca de la estructura adecuada. Restablece la ruta temporal ejecutando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Verificar la ruta global de npm
-npm config get prefix
-
-# Reconfigurar permisos si experimentas bloqueos de acceso en Linux/macOS
-sudo chown -R $(whoami) ~/.npm
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Evitar usar <code>sudo npm install</code></strong>: Ejecutar comandos de npm con <code>sudo</code> altera la propiedad de los archivos en <code>~/.npm</code> y genera errores <code>ENOENT</code> o permisos denegados en ejecuciones posteriores.</li>
-<li><strong>Mantener npm actualizado</strong>: Actualiza periódicamente el cliente oficial de npm para beneficiarte de correcciones en el manejo del sistema de archivos:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>npm install -g npm@latest
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>Incluir <code>package-lock.json</code> en Git</strong>: Sube siempre el lockfile al repositorio para asegurar que todo el equipo trabaje con las mismas versiones e índices de archivos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -358,23 +265,6 @@ sudo chown -R $(whoami) ~/.npm
       </article>
       
 
-      <!-- Related Card: [SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guía: API resolved without sending a response for /api/ en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -386,6 +276,23 @@ sudo chown -R $(whoami) ~/.npm
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 'fatal: cannot lock ref' en Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 'fatal: cannot lock ref' en Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

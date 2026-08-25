@@ -1,56 +1,76 @@
 ---
-title: 'Error: Error starting userland proxy: bind: address already in use en Docker'
-description: 'Cómo solucionar el error de puerto ocupado en Docker (address already in use) paso a paso en Linux y Windows.'
-category: 'Sistemas y Servidores'
-date: '2026-08-12'
-readTime: '3 min'
-tags: ['Docker', 'Linux', 'Redes']
+title: "Error: Error starting userland proxy: bind: address already in use en Docker"
+description: "Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose."
+category: "Sistemas y Servidores"
+tags: ["Docker", "Linux", "Puertos", "SysAdmin", "Networking", "DevOps"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Otro servicio usa el puerto (ej. Nginx/Apache)** | Detener el servicio o cambiar el puerto en Docker (`docker-compose.yml`) |
-| **Contenedor zombi reteniendo el puerto** | Reiniciar el servicio de Docker o matar el proceso |
-| **Conflicto con Docker Desktop (Windows/Mac)** | Reiniciar Docker Desktop o WSL2 |
+| **Otro servicio en el host (como Nginx, Apache o Node.js) ya está escuchando en el puerto requerido** | Identificar el PID con `sudo lsof -i :<puerto>` o `ss -tulpn` y detener el proceso en conflicto |
+| **Un contenedor Docker huérfano o en segundo plano sigue reteniendo el puerto en iptables** | Detener el contenedor antiguo con `docker stop <id>` o reiniciar el daemon `systemctl restart docker` |
 
-## La Solución Paso a Paso
+Al iniciar un contenedor mediante `docker run` o `docker compose up`, el error `driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use` indica que el puerto de red solicitado en el sistema anfitrión ya está reservado por otro proceso activo.
 
-**Encuentra qué proceso está usando el puerto**
-En Linux, ejecuta el siguiente comando para ver qué aplicación está ocupando el puerto (cambia `80` por tu puerto en conflicto):
+## 🚀 Cómo solucionar el error paso a paso
+
+### Paso 1: Localizar qué proceso está utilizando el puerto en conflicto
+Utiliza herramientas de red de Linux para descubrir el Process ID (PID) exacto del servicio bloqueante:
 ```bash
-sudo netstat -tulpn | grep :80
-```
-O usando `lsof`:
-```bash
+# Opción 1: Usando lsof (ejemplo para puerto 80 u 8080)
 sudo lsof -i :80
+
+# Opción 2: Usando ss (Socket Statistics)
+sudo ss -tulpn | grep :80
 ```
 
-**Detén el servicio conflictivo**
-Si descubres que Apache o Nginx están corriendo nativamente y ocupando el puerto 80, detenlos:
+### Paso 2: Detener el servicio o proceso del sistema operativo
+Si el puerto está ocupado por un servidor web instalado en el sistema anfitrión:
 ```bash
+# Si es Apache o Nginx en el host:
+sudo systemctl stop nginx
 sudo systemctl stop apache2
-sudo systemctl disable apache2
-```
 
-**Mata el proceso si es necesario**
-Si es un proceso zombi, puedes matarlo usando su PID (el número que te dio el comando anterior):
-```bash
+# Si es un proceso genérico, finalízalo mediante su PID:
+sudo kill -15 <PID>
+# Si no responde de inmediato:
 sudo kill -9 <PID>
 ```
 
-**Cambia el puerto en tu Docker Compose**
-Si no puedes detener el servicio nativo, simplemente cambia el puerto que expone Docker editando tu `docker-compose.yml`:
-```yaml
-ports:
-  - "8080:80" # Cambia el puerto izquierdo (host)
-```
-Luego vuelve a levantar el contenedor:
+### Paso 3: Identificar contenedores Docker ocultos reteniendo el puerto
+A menudo un contenedor anterior se quedó en estado detached o en bucle de reinicio:
 ```bash
-docker-compose up -d
+# Listar todos los contenedores (incluyendo detenidos)
+docker ps -a --filter "publish=80"
+
+# Detener y eliminar el contenedor en conflicto
+docker stop <container_id>
+docker rm <container_id>
 ```
 
-## Prevención
-- **Asignación de puertos:** Usa un proxy inverso como Traefik o Nginx Proxy Manager en los puertos 80/443 y expón el resto de contenedores de forma interna.
-- **Monitoreo:** Revisa qué puertos están en uso en tu servidor antes de desplegar un nuevo stack usando `netstat` o `ss`.
-- **Limpieza regular:** Ejecuta `docker system prune` para limpiar redes y contenedores huérfanos que podrían estar bloqueando recursos.
+### Paso 4: Cambiar el puerto en el mapeo de docker-compose.yml
+Si necesitas que ambos servicios coexistan, cambia el puerto del host en tu archivo de composición:
+```yaml
+services:
+  mi-aplicacion:
+    image: nginx:alpine
+    ports:
+      # Mapear el puerto 8080 del host al puerto 80 interno del contenedor
+      - "8080:80"
+    restart: unless-stopped
+```
+
+## 🛡️ Consejos de Prevención
+- **Evita exponer puertos innecesarios al host:** Si utilizas redes Docker internas (`networks`), comunícate entre contenedores usando sus nombres de servicio sin mapear puertos a `0.0.0.0`.
+- **Comprueba antes de desplegar:** En scripts de automatización CI/CD, añade una comprobación previa con `nc -zv localhost <puerto>`.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué lsof no muestra nada pero Docker sigue dando error de bind?
+A veces el módulo `docker-proxy` en iptables queda desincronizado tras un cuelgue del sistema. Reiniciar el daemon de Docker (`sudo systemctl restart docker`) limpia las tablas NAT huérfanas.
+
+### ¿Puedo enlazar dos contenedores al mismo puerto interno?
+Sí. Cada contenedor tiene su propia pila de red aislada. Lo que no puedes hacer es mapear ambos al mismo puerto de la máquina host.

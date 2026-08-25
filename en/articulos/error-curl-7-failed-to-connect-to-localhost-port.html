@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'curl: (7) Failed to connect to localhost port'",
   "description": "Getting curl connection refused error (7) testing local web APIs? Step-by-step resolution for IPv6 binding and localhost port listening.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "cURL, Node.js, API, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-14",
   "dateModified": "2026-08-14",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error 'curl: (7) Failed to connect to localhost port'",
-  "description": "Getting curl connection refused error (7) testing local web APIs? Step-by-step resolution for IPv6 binding and localhost port listening.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error 'curl: (7) Failed to connect to localhost port'",
+      "item": "https://soportecero.com/en/articulos/error-curl-7-failed-to-connect-to-localhost-port.html"
+    }
+  ]
 }
   </script>
     
@@ -148,177 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error curl: (7) Failed to connect to localhost port 3000: Connection refused occurs when the curl CLI tool attempts to reach a local service endpoint, but no process is actively listening on that port or the server is bound strictly to IPv6 (::1) rather than IPv4 (127.0.0.1).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-port-listening-status">Step 1: Verify Port Listening Status</a></li>
-        <li class="toc-subitem"><a href="#step-2-resolve-ipv6-vs-ipv4-hostname-conflict">Step 2: Resolve IPv6 vs IPv4 Hostname Conflict</a></li>
-        <li class="toc-subitem"><a href="#step-3-configure-host-binding-in-your-backend-code">Step 3: Configure Host Binding in Your Backend Code</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Service on the specified port is not listening</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Verify listening ports: `netstat -tulnp</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Docker container binding exclusively to 127.0.0.1 inside container</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Bind service to <code>0.0.0.0</code> to accept external traffic</div>
-          </div></div></div>
-<p>The error <strong><code>curl: (7) Failed to connect to localhost port 3000: Connection refused</code></strong> occurs when the <code>curl</code> CLI tool attempts to reach a local service endpoint, but no process is actively listening on that port or the server is bound strictly to IPv6 (<code>::1</code>) rather than IPv4 (<code>127.0.0.1</code>).</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Ensure your backend app is active in a separate terminal.</li>
-<li>Pass the explicit IPv4 address instead of the hostname <code>localhost</code>:
-<code>curl http://127.0.0.1:3000</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-verify-port-listening-status">Step 1: Verify Port Listening Status</h3>
-<p>Check if your target port is open using <code>ss</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo ss -tulpn | grep :3000
-</code></pre>
-    </div>
-    
-<p>If nothing returns, your backend process (Node.js, Python, Go) is not running. Start your dev server before issuing cURL requests.</p>
-<h3 id="step-2-resolve-ipv6-vs-ipv4-hostname-conflict">Step 2: Resolve IPv6 vs IPv4 Hostname Conflict</h3>
-<p>On modern Linux distributions, <code>localhost</code> resolves to <code>::1</code> (IPv6) first. If your server app listens exclusively on <code>127.0.0.1</code> (IPv4), cURL fails upon trying IPv6.</p>
-<p><strong>Option A: Force cURL IPv4 mode:</strong></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>curl -4 http://localhost:3000
-</code></pre>
-    </div>
-    
-<p><strong>Option B: Use loopback IP directly:</strong></p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>curl http://127.0.0.1:3000
-</code></pre>
-    </div>
-    
-<h3 id="step-3-configure-host-binding-in-your-backend-code">Step 3: Configure Host Binding in Your Backend Code</h3>
-<p>Ensure your application binds to <code>0.0.0.0</code> or <code>127.0.0.1</code>:</p>
-<ul>
-<li><strong>Express.js (Node.js):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>app.listen(3000, &#39;0.0.0.0&#39;, () =&gt; {
-  console.log(&#39;Server running on port 3000&#39;);
-});
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>FastAPI / Uvicorn (Python):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>uvicorn main:app --host 0.0.0.0 --port 3000
-</code></pre>
-    </div>
-    
-</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -350,23 +207,6 @@
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -378,6 +218,23 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'fatal: cannot lock ref' in Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

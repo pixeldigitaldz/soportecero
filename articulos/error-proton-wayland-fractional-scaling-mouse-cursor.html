@@ -50,21 +50,57 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland",
   "description": "Guía para reparar la desalineación del cursor del ratón, clics fuera de objetivo y desenfoque por escalado fraccional en juegos ejecutados con Steam Proton en Wayland.",
+  "inLanguage": "es",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Proton, Wayland, Gaming",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-04",
   "dateModified": "2026-08-04",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://soportecero.com/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html"
   }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland",
+      "item": "https://soportecero.com/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html"
+    }
+  ]
 }
   </script>
   <script type="application/ld+json">
@@ -76,6 +112,7 @@
   "step": [
     {
       "@type": "HowToStep",
+      "position": 1,
       "url": "https://soportecero.com/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html#paso-1",
       "name": "Paso 1",
       "itemListElement": [
@@ -87,6 +124,7 @@
     },
     {
       "@type": "HowToStep",
+      "position": 2,
       "url": "https://soportecero.com/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html#paso-2",
       "name": "Paso 2",
       "itemListElement": [
@@ -171,210 +209,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Al ejecutar juegos de Windows en Linux utilizando Steam Proton bajo un servidor de pantalla Wayland con escalado fraccional activado (por ejemplo, 125%, 150% o 175% en monitores 1440p o 4K), es habitual experimentar desincronía del cursor del ratón. Los síntomas incluyen un cursor de ratón desalineado que hace clic varios centímetros al lado de los botones de la interfaz del juego, una imagen borrosa por reescalado de Xwayland o la imposibilidad de atrapar (mouse confinement) el ratón dentro de la ventana del juego.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-configurar-el-comportamiento-de-escalado-de-xwayland-en-el-escritorio">Paso 1: Configurar el comportamiento de escalado de Xwayland en el escritorio</a></li>
-        <li class="toc-subitem"><a href="#paso-2-habilitar-el-driver-nativo-de-wayland-en-proton-experimental-proton-ge">Paso 2: Habilitar el Driver Nativo de Wayland en Proton Experimental / Proton GE</a></li>
-        <li class="toc-subitem"><a href="#paso-3-configurar-captura-de-raton-en-el-registro-de-wine-wineprefix">Paso 3: Configurar captura de ratón en el registro de Wine (Wineprefix)</a></li>
-      </ol>
-    </nav>
-    
-      <p>Al ejecutar juegos de Windows en Linux utilizando Steam Proton bajo un servidor de pantalla Wayland con <strong>escalado fraccional</strong> activado (por ejemplo, 125%, 150% o 175% en monitores 1440p o 4K), es habitual experimentar desincronía del cursor del ratón. Los síntomas incluyen un cursor de ratón desalineado que hace clic varios centímetros al lado de los botones de la interfaz del juego, una imagen borrosa por reescalado de Xwayland o la imposibilidad de atrapar (<em>mouse confinement</em>) el ratón dentro de la ventana del juego.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>El ratón hace clic en una posición desplazada respecto a la ubicación del puntero visible en pantalla</strong>: Xwayland aplica un escalado por software a la ventana del juego mientras Wine lee las coordenadas del ratón sin escalar</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Desactivar el escalado de Xwayland por el sistema o habilitar la captura nativa de ratón en Proton</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>La ventana del juego se ve borrosa a resolución nativa cuando el escalado de pantalla no es 100%</strong>: El compositor fuerza a Xwayland a renderizar a menor resolución y escalar el mapa de píxeles</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Configurar <code>WAYLAND_DISPLAY</code> y utilizar el nuevo driver nativo Wayland en Wine (Wine 9.0+ / Proton Experimental)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>El puntero del ratón se escapa de la pantalla del juego en configuraciones multimonitor</strong>: Falta la implementación del protocolo <code>relative-pointer</code> o <code>pointer-constraints</code> en Xwayland</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Activar <code>PROTON_ENABLE_WAYLAND=1</code> o ajustar el bloqueo de cursor en Wine Explorer</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="la-solucion-paso-a-paso">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
-          </svg>
-          La Solución Paso a Paso
-        </h2>
-
-<h3 id="paso-1-configurar-el-comportamiento-de-escalado-de-xwayland-en-el-escritorio">Paso 1: Configurar el comportamiento de escalado de Xwayland en el escritorio</h3>
-<p>En entornos como KDE Plasma o GNOME, asegúrate de que las aplicaciones X11/Xwayland sean escaladas por la propia aplicación y no por el compositor:</p>
-<p>En <strong>KDE Plasma</strong>:</p>
-<ol class="steps-list">
-
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4>Paso 1</h4>
-            Ve a <em>Preferencias del Sistema &gt; Pantalla y Monitor &gt; Escalado</em>.
-          </div>
-        </li>
-        
-
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4>Paso 2</h4>
-            En la opción <strong>&quot;Escalado para aplicaciones legacy (X11)&quot;</strong>, selecciona <strong>&quot;Aplicadas por las propias aplicaciones&quot;</strong> (Apply scaling themselves) en lugar de &quot;Escaladas por el sistema&quot;.
-          </div>
-        </li>
-        
-
-        <div class="adsense-placeholder" id="ad-in-feed">
-          Anuncio Google AdSense (En medio del artículo)
-          <span>Anuncio de Contenido / In-Article Ad</span>
-        </div>
-        
-</ol>
-<p>En <strong>GNOME / Hyprland</strong>:
-Para Hyprland, añade la regla de ventana o deshabilita la escala forzada de Xwayland en tu archivo de configuración:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># En hyprland.conf
-xwayland {
-    force_zero_scaling = true
-}
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-habilitar-el-driver-nativo-de-wayland-en-proton-experimental-proton-ge">Paso 2: Habilitar el Driver Nativo de Wayland en Proton Experimental / Proton GE</h3>
-<p>A partir de Wine 9.0 y versiones recientes de Proton (Proton Experimental o GE-Proton 9+), es posible prescindir totalmente de Xwayland y ejecutar la ventana del juego usando la ventana nativa de Wayland, eliminando por completo la desalineación del ratón:</p>
-<p>Abre las <strong>Propiedades del juego en Steam &gt; Parámetros de lanzamiento</strong> e introduce las siguientes variables de entorno:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Para versiones recientes de Proton GE o Wine 9.0+ con soporte Wayland nativo:
-PROTON_ENABLE_WAYLAND=1 %command%
-
-# Opcional: Para evitar que el juego altere la resolución del escritorio en pantallas primarias:
-DISPLAY= PROTON_ENABLE_WAYLAND=1 %command%
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-configurar-captura-de-raton-en-el-registro-de-wine-wineprefix">Paso 3: Configurar captura de ratón en el registro de Wine (Wineprefix)</h3>
-<p>Si un juego específico continúa perdiendo el foco o desalineando el cursor al pasar entre menús y pantalla completa, fuerza el confinamiento del puntero modificando las claves de registro de Wine dentro de la carpeta <code>compatdata</code> de Steam:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Asumiendo AppID del juego (ejemplo: 1086940 para Baldur&#39;s Gate 3)
-WINEPREFIX=~/.steam/steam/steamapps/compatdata/1086940/pfx winecfg
-</code></pre>
-    </div>
-    
-<p>En la pestaña <strong>Gráficos</strong> de <code>winecfg</code>:</p>
-<ol>
-<li>Marca <strong>&quot;Capturar automáticamente el ratón en ventanas a pantalla completa&quot;</strong>.</li>
-<li>Desmarca <strong>&quot;Permitir al gestor de ventanas controlar las ventanas&quot;</strong> si el cursor no puede atrapar los bordes.</li>
-</ol>
-<p>Alternativamente, puedes inyectarlo vía script en el prefijo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>WINEPREFIX=~/.steam/steam/steamapps/compatdata/&lt;APPID&gt;/pfx reg add &quot;HKCU\\Software\\Wine\\DirectInput&quot; /v &quot;MouseWarpOverride&quot; /d &quot;force&quot; /f
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Usa resoluciones nativas dentro del juego</strong>: Cuando uses escalado fraccional en el escritorio (ej. 150%), selecciona la resolución física nativa del monitor (ej. 3840x2160) dentro de las opciones gráficas del juego y ajusta el tamaño de la UI con tecnologías de reescalado como FSR o DLSS.</li>
-<li><strong>Utiliza Proton-GE reciente</strong>: Mantén tus versiones de Proton-GE actualizadas mediante herramientas como <code>ProtonUp-Qt</code> para obtener los últimos parches para los protocolos <code>relative-pointer-v1</code> y <code>pointer-constraints-v1</code> de Wayland.</li>
-<li><strong>Desactiva capas de Overlays incompatibles</strong>: Desactiva overlays de terceros que usen ganchos X11 obsoletos, ya que pueden interferir con las coordenadas del cursor proyectadas en Xwayland.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -389,6 +224,23 @@ WINEPREFIX=~/.steam/steam/steamapps/compatdata/1086940/pfx winecfg
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -418,23 +270,6 @@ WINEPREFIX=~/.steam/steam/steamapps/compatdata/1086940/pfx winecfg
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>

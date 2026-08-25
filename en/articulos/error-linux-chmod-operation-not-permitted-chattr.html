@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to fix: chmod Operation not permitted (Even as Root) in Linux - SoporteCero</title>
+  <title>Guide: chmod Operation not permitted (Even as Root) in Linux - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).">
+  <meta name="description" content="Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html">
   
@@ -20,15 +20,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to fix: chmod Operation not permitted (Even as Root) in Linux - SoporteCero">
-  <meta property="og:description" content="How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).">
+  <meta property="og:title" content="Guide: chmod Operation not permitted (Even as Root) in Linux - SoporteCero">
+  <meta property="og:description" content="Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to fix: chmod Operation not permitted (Even as Root) in Linux - SoporteCero">
-  <meta name="twitter:description" content="How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).">
+  <meta name="twitter:title" content="Guide: chmod Operation not permitted (Even as Root) in Linux - SoporteCero">
+  <meta name="twitter:description" content="Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -48,18 +48,28 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to fix: chmod Operation not permitted (Even as Root) in Linux",
-  "description": "How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).",
+  "headline": "Guide: chmod Operation not permitted (Even as Root) in Linux",
+  "description": "Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
-  "datePublished": "2026-08-13",
-  "dateModified": "2026-08-13",
+  "articleSection": "Systems & Servers",
+  "keywords": "Linux, Permissions, SysAdmin, Security, Ubuntu, Debian",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Guide: chmod Operation not permitted (Even as Root) in Linux",
+      "item": "https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to fix: chmod Operation not permitted (Even as Root) in Linux",
-  "description": "How to fix the Operation not permitted error when using chmod or chown in Linux, caused by immutable attributes (chattr).",
-  "step": []
+  "name": "Guide: chmod Operation not permitted (Even as Root) in Linux",
+  "description": "Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html#inspect-extended-attributes-with-lsattr",
+      "name": "Inspect Extended Attributes with lsattr",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Standard ls -l commands only expose conventional POSIX permission bits. Extended kernel flags require lsattr:\n\n    \n      \n        BASH\n        Copy\n      \n      # Inspect extended filesystem attributes\nlsattr /path/to/file\n\n# Typical output showing immutable bit:\n# ----i---------e---- /path/to/file  (Letter &#39;i&#39; denotes immutable)"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html#clear-immutable-flags-with-chattr",
+      "name": "Clear Immutable Flags with chattr",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "As superuser, strip the immutable and append-only flags:\n\n    \n      \n        BASH\n        Copy\n      \n      # Remove immutable (-i) and append-only (-a) flags\nsudo chattr -i /path/to/file\nsudo chattr -a /path/to/file\n\n# Recursively clear across an entire directory tree:\nsudo chattr -R -i /path/to/directory"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html#apply-desired-permissions-via-chmod-chown",
+      "name": "Apply Desired Permissions via chmod / chown",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "With the kernel lock removed, mutate permissions normally:\n\n    \n      \n        BASH\n        Copy\n      \n      # Grant standard file read/write permissions\nsudo chmod 644 /path/to/file\n\n# Update ownership\nsudo chown user:group /path/to/file"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-linux-chmod-operation-not-permitted-chattr.html#check-filesystem-mount-status",
+      "name": "Check Filesystem Mount Status",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If lsattr reports no flags yet modification is denied, verify partition write availability:\n\n    \n      \n        BASH\n        Copy\n      \n      # Inspect root partition mount options\nmount | grep -i &quot; / &quot;\n\n# Remount filesystem read-write\nsudo mount -o remount,rw /"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the immutable flag (+i) block root?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The immutable flag is enforced directly by the Linux kernel VFS layer. No process—even UID 0—can delete or mutate the file until chattr -i is issued."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does chattr work on FAT32 or NTFS mounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Extended attributes are exclusive to native Linux filesystems such as ext4, XFS, and Btrfs."
+      }
+    }
+  ]
 }
   </script>
     
@@ -126,181 +235,29 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
-        <span style="color: var(--text-secondary);">How to fix: chmod Operation not permitted (Even as Root) in Linux</span>
+        <span style="color: var(--text-secondary);">Guide: chmod Operation not permitted (Even as Root) in Linux</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">How to fix: chmod Operation not permitted (Even as Root) in Linux</h1>
+        <h1 id="post-title">Guide: chmod Operation not permitted (Even as Root) in Linux</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 2 min
+            Read Time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Updated: 2026-08-13
+            Updated: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>Check the extended attributes of the file
-If you are root but still get &quot;Operation not permitted&quot;, the file probably has the i (immutable) attribute. Check it with:</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>File marked as Immutable</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Use <code>chattr -i</code> to remove the attribute</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Read-Only File System</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Remount with <code>mount -o remount,rw /</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>SELinux or AppArmor issues</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Check security contexts</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Check the extended attributes of the file</strong>
-If you are root but still get &quot;Operation not permitted&quot;, the file probably has the <code>i</code> (immutable) attribute. Check it with:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>lsattr filename
-</code></pre>
-    </div>
-    
-<p>You will see an output similar to <code>----i---------e--- filename</code>. The <code>i</code> indicates it is immutable.</p>
-<p><strong>Remove the immutable attribute</strong>
-Use the <code>chattr</code> command to remove this lock:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo chattr -i filename
-</code></pre>
-    </div>
-    
-<p><strong>Apply your permission changes</strong>
-Now that the file is no longer locked at the file system level, you can use <code>chmod</code> or <code>chown</code> normally:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo chmod 755 filename
-</code></pre>
-    </div>
-    
-<p><strong>Restore the attribute if necessary</strong>
-If the file was immutable for security reasons (like <code>/etc/resolv.conf</code> or an <code>authorized_keys</code> file), make sure to protect it again:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo chattr +i filename
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Documentation:</strong> If you use <code>chattr +i</code> on servers, document it to avoid headaches for other administrators.</li>
-<li><strong>Auditing:</strong> Use <code>lsattr</code> routinely when trying to modify critical system files that resist <code>chmod</code> changes.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -332,6 +289,23 @@ If the file was immutable for security reasons (like <code>/etc/resolv.conf</cod
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -343,23 +317,6 @@ If the file was immutable for security reasons (like <code>/etc/resolv.conf</cod
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

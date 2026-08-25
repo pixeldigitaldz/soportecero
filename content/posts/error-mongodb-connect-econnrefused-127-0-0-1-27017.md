@@ -1,66 +1,74 @@
 ---
 title: "[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB"
-description: "¿Mongoose o tu backend en Node.js no puede conectarse a MongoDB por ECONNREFUSED 27017? Solución paso a paso para el demonio mongod."
+description: "Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp."
 category: "Web y Código"
-tags: ["MongoDB", "Node.js", "Express", "Database"]
-readTime: "4 min"
-date: "2026-08-22"
+tags: ["MongoDB", "Node.js", "Mongoose", "Bases de Datos", "Linux", "DevOps"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Servidor MongoDB (mongod) no está en ejecución** | Iniciar el servicio de base de datos: `sudo systemctl start mongod` |
-| **MongoDB escuchando solo en la interfaz local o puerto cambiado** | Ajustar la directiva `bindIp: 0.0.0.0` en `/etc/mongod.conf` si se requiere acceso remoto |
+| **El daemon del servidor MongoDB (mongod) está detenido o no se inicia automáticamente** | Iniciar el servicio con `sudo systemctl start mongod` y habilitarlo en el arranque (`enable`) |
+| **La directiva bindIp en mongod.conf solo escucha en localhost o permisos corruptos en /var/lib/mongodb** | Configurar `bindIp: 127.0.0.1` y reparar la propiedad de datos con `sudo chown -R mongodb:mongodb /var/lib/mongodb` |
 
+El error `MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017` o `MongoNetworkError: failed to connect to server [localhost:27017]` en aplicaciones Node.js y Express ocurre cuando el cliente de base de datos intenta establecer un socket TCP en el puerto 27017 pero no encuentra ningún proceso de MongoDB escuchando en esa interfaz.
 
-El error **`connect ECONNREFUSED 127.0.0.1:27017`** o `MongooseServerSelectionError: connect ECONNREFUSED` ocurre cuando tu aplicación en Node.js, Python o cliente GUI (Compass) intenta establecer conexión con MongoDB, pero el servicio **`mongod` no está en ejecución** o está escuchando en una interfaz de red diferente.
+## 🚀 Cómo solucionar el error paso a paso
 
-> **Solución Rápida (1 Minuto):**
-> 1. Inicia el servicio de MongoDB en Linux:
->    `sudo systemctl enable --now mongod`
-> 2. Si usas MongoDB 6/7, prueba cambiando la cadena de conexión de `localhost` a la IP `127.0.0.1`:
->    `mongodb://127.0.0.1:27017/midatabase`
-
-## 🚀 Cómo solucionar el error ECONNREFUSED 27017 paso a paso
-
-### Paso 1: Verificar el estado del servicio `mongod`
-En muchas instalaciones recientes de Linux (Ubuntu, Debian, Arch), el servicio de MongoDB no se inicia automáticamente tras reiniciar el servidor.
-
+### Paso 1: Comprobar el estado del servicio MongoDB
+Comprueba si el proceso `mongod` está en ejecución o falló al arrancar:
 ```bash
 # Comprobar estado del servicio
 sudo systemctl status mongod
+
+# Si el servicio está inactivo (dead), inícialo:
+sudo systemctl start mongod
+
+# Habilitar para que inicie automáticamente tras reiniciar el servidor:
+sudo systemctl enable mongod
 ```
-Si el estado indica `inactive (dead)`, inicia el demonio:
+
+### Paso 2: Corregir permisos en los directorios de datos y logs
+Si MongoDB se apagó abruptamente, los permisos de los archivos de base de datos pueden quedar corruptos:
 ```bash
-sudo systemctl enable --now mongod
+# Asignar la propiedad correcta al usuario del sistema 'mongodb'
+sudo chown -R mongodb:mongodb /var/lib/mongodb
+sudo chown -R mongodb:mongodb /var/log/mongodb
+
+# Asegurar permisos de lectura y escritura
+sudo chmod -R 755 /var/lib/mongodb
 ```
 
-### Paso 2: Cambiar `localhost` por `127.0.0.1` en Mongoose
-En Node.js v17+, `localhost` se resuelve preferentemente por IPv6 (`::1`). Si MongoDB solo está configurado para escuchar en la pila IPv4 (`127.0.0.1`), la conexión fallará.
-
-Modifica tu archivo de conexión en Mongoose:
-
-* ❌ **Antes:** `mongoose.connect('mongodb://localhost:27017/mi_app');`
-* ✅ **Ahora:** `mongoose.connect('mongodb://127.0.0.1:27017/mi_app');`
-
-### Paso 3: Revisar la interfaz de escucha en `mongod.conf`
-Abre el archivo de configuración de MongoDB en `/etc/mongod.conf`:
-```bash
-sudo nano /etc/mongod.conf
-```
-Busca la sección `net` y verifica la variable `bindIp`:
+### Paso 3: Verificar la configuración de red en mongod.conf
+Abre el archivo de configuración principal (`/etc/mongod.conf`):
 ```yaml
+# /etc/mongod.conf
 net:
   port: 27017
-  bindIp: 127.0.0.1
+  bindIp: 127.0.0.1  # Escucha en localhost. Usa 0.0.0.0 solo si necesitas acceso remoto seguro.
 ```
-*(Si estás conectando desde un contenedor de Docker o servidor remoto, añade la IP del contenedor o usa `0.0.0.0`).*
-
-Reinicia el servicio:
+Si realizas cambios, reinicia el daemon:
 ```bash
 sudo systemctl restart mongod
 ```
 
-## 🛡️ Consejo de Prevención
-* Elimina archivos lock corruptos en `/var/lib/mongodb/mongod.lock` si el servicio rehusara iniciar tras un apago forzado del servidor.
+### Paso 4: Validar la conexión con mongosh
+Comprueba que puedes interactuar con el motor de base de datos desde la terminal:
+```bash
+# Abrir la consola interactiva de MongoDB
+mongosh "mongodb://127.0.0.1:27017"
+```
+
+## 🛡️ Consejos de Prevención
+- **No uses bindIp: 0.0.0.0 sin autenticación:** Exponer el puerto 27017 a internet sin contraseñas fuertes (`security.authorization: enabled`) deja tu base de datos expuesta a ataques de ransomware automatizados.
+- **Supervisa el espacio en disco:** MongoDB detiene el motor de almacenamiento WiredTiger si el disco principal tiene menos de 100MB libres.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Qué hago si mongod falla con código de salida status=14/EXIT_FAILURE?
+El error 14 suele deberse a archivos de bloqueo (`mongod.lock`) huérfanos. Repara la base de datos ejecutando `sudo mongod --repair --dbpath /var/lib/mongodb` y reinicia el servicio.
+
+### ¿Por qué mi aplicación en Docker no conecta a 127.0.0.1:27017?
+Dentro de un contenedor Docker, `127.0.0.1` apunta al propio contenedor. Utiliza `host.docker.internal` o el nombre del servicio definido en tu `docker-compose.yml`.

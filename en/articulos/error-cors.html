@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Fix CORS Access-Control-Allow-Origin Error - SoporteCero</title>
+  <title>How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Learn how to configure allow cors and fix CORS Access-Control-Allow-Origin errors on your backend step-by-step.">
+  <meta name="description" content="Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-cors.html">
   
@@ -20,15 +20,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
-  <meta property="og:title" content="How to Fix CORS Access-Control-Allow-Origin Error - SoporteCero">
-  <meta property="og:description" content="Learn how to configure allow cors and fix CORS Access-Control-Allow-Origin errors on your backend step-by-step.">
+  <meta property="og:title" content="How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide - SoporteCero">
+  <meta property="og:description" content="Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-cors.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Fix CORS Access-Control-Allow-Origin Error - SoporteCero">
-  <meta name="twitter:description" content="Learn how to configure allow cors and fix CORS Access-Control-Allow-Origin errors on your backend step-by-step.">
+  <meta name="twitter:title" content="How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide - SoporteCero">
+  <meta name="twitter:description" content="Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -48,18 +48,28 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to Fix CORS Access-Control-Allow-Origin Error",
-  "description": "Learn how to configure allow cors and fix CORS Access-Control-Allow-Origin errors on your backend step-by-step.",
+  "headline": "How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide",
+  "description": "Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx.",
+  "inLanguage": "en",
   "category": "Web & Code",
-  "datePublished": "2026-06-26",
-  "dateModified": "2026-06-26",
+  "articleSection": "Web & Code",
+  "keywords": "CORS, JavaScript, Express, Node.js, APIs, Security",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide",
+      "item": "https://soportecero.com/en/articulos/error-cors.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Fix CORS Access-Control-Allow-Origin Error",
-  "description": "Learn how to configure allow cors and fix CORS Access-Control-Allow-Origin errors on your backend step-by-step.",
-  "step": []
+  "name": "How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide",
+  "description": "Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-cors.html#configure-cors-middleware-in-express-nodejs",
+      "name": "Configure CORS Middleware in Express (Node.js)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In Node.js applications, apply the official cors package:\n\n    \n      \n        JAVASCRIPT\n        Copy\n      \n      import express from &#39;express&#39;;\nimport cors from &#39;cors&#39;;\n\nconst app = express();\n\nconst allowedOrigins = [\n  &#39;https://app.yourdomain.com&#39;,\n  &#39;http://localhost:3000&#39;\n];\n\napp.use(cors({\n  origin: function(origin, callback) {\n    if (!origin || allowedOrigins.indexOf(origin) !== -1) {\n      callback(null, true);\n    } else {\n      callback(new Error(&#39"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-cors.html#handle-cors-in-nginx-reverse-proxy",
+      "name": "Handle CORS in Nginx Reverse Proxy",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If running behind an Nginx proxy layer, inject appropriate headers directly:\n\n    \n      \n        NGINX\n        Copy\n      \n      location /api/ {\n    if ($request_method = &#39;OPTIONS&#39;) {\n        add_header &#39;Access-Control-Allow-Origin&#39; &#39;https://app.yourdomain.com&#39; always;\n        add_header &#39;Access-Control-Allow-Methods&#39; &#39;GET, POST, OPTIONS, PUT, DELETE&#39; always;\n        add_header &#39;Access-Control-Allow-Headers&#39; &#39;Authorization, Content-Type&#39; "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-cors.html#implement-in-python-fastapi-django",
+      "name": "Implement in Python (FastAPI / Django)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In FastAPI or Django REST Framework:\n\n    \n      \n        PYTHON\n        Copy\n      \n      # FastAPI implementation:\nfrom fastapi.middleware.cors import CORSMiddleware\n\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[&quot;https://app.yourdomain.com&quot;, &quot;http://localhost:3000&quot;],\n    allow_credentials=True,\n    allow_methods=[&quot;*&quot;],\n    allow_headers=[&quot;*&quot;],\n)"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-cors.html#test-preflight-headers-with-curl",
+      "name": "Test Preflight Headers with cURL",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Verify headers from your terminal:\n\n    \n      \n        BASH\n        Copy\n      \n      curl -I -X OPTIONS https://api.yourdomain.com/data \\\n  -H &quot;Origin: https://app.yourdomain.com&quot; \\\n  -H &quot;Access-Control-Request-Method: POST&quot;"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does Postman succeed while my web browser fails?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Postman is a standalone HTTP client that does not execute a browser engine; hence, it does not enforce the browser Same-Origin Policy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is an OPTIONS preflight request?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It is an automated probe dispatched by the browser before complex HTTP methods to confirm that the destination server explicitly allows the request origin, method, and headers."
+      }
+    }
+  ]
 }
   </script>
     
@@ -126,171 +235,29 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
-        <span style="color: var(--text-secondary);">How to Fix CORS Access-Control-Allow-Origin Error</span>
+        <span style="color: var(--text-secondary);">How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Web & Code</span>
-        <h1 id="post-title">How to Fix CORS Access-Control-Allow-Origin Error</h1>
+        <h1 id="post-title">How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide</h1>
         <div class="post-meta">
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read Time: 4 min
+            Read Time: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Updated: 2026-06-26
+            Updated: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The CORS (Cross-Origin Resource Sharing) error occurs strictly in the client&#39;s browser. It happens when a web application on one domain (e.g., localhost:3000) tries to consume resources from an API hosted on another domain, and the API server does not include the necessary HTTP headers to authorize the request.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-nodejs-express-solution">Step 1: Node.js (Express) Solution</a></li>
-        <li class="toc-subitem"><a href="#step-2-native-http-headers-solution">Step 2: Native HTTP Headers Solution</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Missing CORS policy on the backend server</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Add CORS middleware to backend (e.g. <code>app.use(cors())</code> in Express)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Preflight (OPTIONS) requests rejected due to missing allowed headers</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Allow <code>GET, POST, PUT, DELETE</code> methods and <code>Content-Type, Authorization</code> headers</div>
-          </div></div></div>
-<p>The CORS (Cross-Origin Resource Sharing) error occurs strictly in the client&#39;s browser. It happens when a web application on one domain (e.g., <code>localhost:3000</code>) tries to consume resources from an API hosted on another domain, and the API server does not include the necessary HTTP headers to authorize the request.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<p>The correct way to solve this is to configure the <strong>Backend (server)</strong> to accept requests from your client. Never use browser extensions in production environments.</p>
-<h3 id="step-1-nodejs-express-solution">Step 1: Node.js (Express) Solution</h3>
-<p>Install the official CORS middleware in your project:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>npm install cors
-</code></pre>
-    </div>
-    
-<p>Then, implement it by restricting access only to your trusted domains:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>const express = require(&#39;express&#39;);
-const cors = require(&#39;cors&#39;);
-const app = express();
-
-const corsOptions = {
-  origin: &#39;https://yourwebsite.com&#39;, // Your frontend domain
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-</code></pre>
-    </div>
-    
-<h3 id="step-2-native-http-headers-solution">Step 2: Native HTTP Headers Solution</h3>
-<p>If you handle server responses manually, make sure to inject the following header into the response headers:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">HTTP</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>Access-Control-Allow-Origin: https://yourwebsite.com
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Avoid using the wildcard * in production environments as it exposes your API publicly.</li>
-<li>Properly configure allowed methods (GET, POST, PUT, DELETE).</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -322,23 +289,6 @@ app.use(cors(corsOptions));
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -350,6 +300,23 @@ app.use(cors(corsOptions));
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'fatal: cannot lock ref' in Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

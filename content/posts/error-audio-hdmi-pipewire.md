@@ -1,38 +1,68 @@
 ---
 title: "Cómo reparar la pérdida de audio por HDMI en Linux usando PipeWire"
-description: "Aprende a restablecer la salida de sonido digital de tu monitor o televisor conectado por HDMI sin necesidad de reiniciar tu computadora."
-category: "Sistemas y Servidores"
-tags: ["Linux", "PipeWire", "Audio"]
-readTime: "3 min"
-date: "2026-06-27"
+description: "Aprende a solucionar la falta de sonido o perfil ausente por HDMI/DisplayPort en Linux usando PipeWire y WirePlumber paso a paso."
+category: "Gaming Tech"
+tags: ["PipeWire", "Audio", "Linux", "WirePlumber", "HDMI", "SysAdmin"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Perfil de salida HDMI desactivado o deshabilitado en WirePlumber** | Seleccionar el perfil HDMI adecuado mediante `pavucontrol` o `wpctl` |
-| **Frecuencia de muestreo (sample rate) incompatible con el receptor** | Configurar `default.clock.rate = 48000` en `/etc/pipewire/pipewire.conf` |
+| **Perfil de audio HDMI/DisplayPort marcado como 'Off' o no detectado por WirePlumber** | Cambiar el perfil de la tarjeta de sonido a Digital Stereo (HDMI) con `pactl` o `pavucontrol` |
+| **Daemon de PipeWire bloqueado o en conflicto con ALSA/PulseAudio heredado** | Reiniciar los servicios de usuario: `systemctl --user restart pipewire pipewire-pulse wireplumber` |
 
-
-La pérdida repentina de salida de sonido a través del puerto HDMI (quedando el televisor o monitor mudo) suele ocurrir tras suspender y despertar el equipo, o al cambiar de pantalla. Esto sucede porque el servidor de sonido PipeWire pierde la sincronización del descriptor de enlace digital del puerto HDMI con el controlador gráfico ALSA del kernel.
+En distribuciones Linux modernas con PipeWire, es habitual que al conectar un monitor por HDMI o DisplayPort, el sistema no emita sonido o el dispositivo no aparezca en la lista de salidas de audio. Esto ocurre cuando el gestor de sesiones WirePlumber no activa automáticamente la salida digital de la tarjeta gráfica o el subsistema ALSA mantiene el endpoint en estado suspendido.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Reiniciar el servidor de sonido PipeWire y su gestor de enlaces
-No es necesario reiniciar la computadora para restablecer el canal de audio. Puedes forzar a PipeWire a escanear nuevamente las salidas de video ejecutando los siguientes comandos en tu terminal de usuario (sin usar sudo):
+### Paso 1: Reiniciar los servicios de usuario de PipeWire y WirePlumber
+Reinicia los daemons de audio para forzar un re-escaneo de todos los dispositivos conectados por hardware:
 ```bash
-# Reiniciar el servicio principal de PipeWire y el subsistema de compatibilidad de PulseAudio
-systemctl --user restart pipewire pipewire-pulse
+# Reiniciar el stack de audio PipeWire para la sesión de usuario actual
+systemctl --user restart pipewire pipewire-pulse wireplumber
 
-# Reiniciar el planificador de rutas de audio (WirePlumber o Media Session)
-systemctl --user restart wireplumber
+# Verificar que todos los servicios estén activos (active/running)
+systemctl --user status pipewire wireplumber --no-pager
 ```
-*(Nota: Transcurridos un par de segundos, los controladores gráficos volverán a detectar la interfaz de sonido HDMI activa).*
 
-### Paso 2: Forzar la salida de audio digital correcta
-Abre tu mezclador de volumen o panel de sonido del sistema y asegúrate de que el puerto HDMI esté seleccionado bajo la salida de perfil correspondiente (típicamente *Digital Stereo (HDMI) Output* o *Digital Surround*).
+### Paso 2: Listar tarjetas de audio y activar el perfil HDMI correcto
+Identifica el identificador de la tarjeta gráfica y cambia su perfil a estéreo digital:
+```bash
+# Listar todas las tarjetas de audio y sus perfiles disponibles
+pactl list cards
 
-## 🛡️ Consejo de Prevención
+# Forzar el perfil Digital Stereo HDMI (reemplaza <numero_tarjeta> y <perfil_hdmi>)
+# Ejemplo: pactl set-card-profile alsa_card.pci-0000_01_00.1 output:hdmi-stereo
+pactl set-card-profile 0 output:hdmi-stereo
+```
 
-Prácticas de seguridad recomendadas:
-- Evita la existencia de perfiles de audio duplicados o conflictivos que confundan al enrutador de sonido de PipeWire. Te recomendamos instalar la herramienta gráfica `pavucontrol` y, en la pestaña de **Configuración**, cambiar a la opción **Apagado (Off)** todas las tarjetas de audio internas analógicas, salidas de audífonos u otros perfiles de audio digital que no estés utilizando. Esto asegura que la salida HDMI sea priorizada y permanezca estable ante reconexiones de hardware.
+### Paso 3: Desmutear canales HDMI mediante ALSAmixer
+En ocasiones, el driver del kernel ALSA silencia la salida digital por defecto:
+1. Ejecuta `alsamixer` en tu terminal.
+2. Presiona `F6` y selecciona tu tarjeta gráfica (HDA NVidia / HDA ATI / Intel HDMI).
+3. Desplázate hasta las salidas **S/PDIF** o **HDMI**.
+4. Si aparecen con las letras `MM` (Mute), presiona la tecla `M` para desmutearlas (cambiarán a `00`).
+
+### Paso 4: Establecer el sink de salida HDMI como predeterminado
+Asegura que las aplicaciones dirijan su flujo de audio al endpoint HDMI:
+```bash
+# Listar los sinks (salidas) disponibles
+pactl list short sinks
+
+# Establecer la salida HDMI como predeterminada
+pactl set-default-sink alsa_output.pci-0000_01_00.1.hdmi-stereo
+```
+
+## 🛡️ Consejos de Prevención
+- **No instales pulseaudio junto con pipewire-pulse:** Tener ambos paquetes instalados genera condiciones de carrera (race conditions) en el puerto de control de audio.
+- **Mantén actualizadas las reglas de WirePlumber:** En `~/.config/wireplumber/` puedes definir reglas personalizadas para fijar el perfil HDMI cada vez que se detecte una pantalla externa.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué mi televisor HDMI se desconecta al suspender el equipo?
+Las pantallas HDMI suspenden su receptor de audio al entrar en reposo. Para forzar a PipeWire a mantener el enlace abierto, desactiva el autosuspend de ALSA en las configuraciones de WirePlumber.
+
+### ¿Cómo pruebo el sonido desde la terminal?
+Ejecuta: `speaker-test -t wav -c 2` para comprobar la reproducción estéreo directa en los altavoces.

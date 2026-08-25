@@ -1,41 +1,71 @@
 ---
 title: "Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting"
-description: "Aprende cómo limpiar wordpress y optimizar la base de datos de tu sitio web para acelerar la velocidad de carga y reducir el uso de CPU en BanaHosting."
-category: "Web y Código"
-tags: ["WordPress", "Base de Datos", "Mantenimiento"]
-readTime: "3 min"
+description: "Guía práctica para eliminar transitorios, revisiones huérfanas y reducir el consumo de disco MySQL en cPanel BanaHosting."
+category: "Sistemas y Servidores"
+tags: ["WordPress", "BanaHosting", "MySQL", "cPanel", "Optimización"]
+readTime: "5 min"
 date: "2026-06-27"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Base de datos de WordPress saturada por revisiones de entradas y transitorios** | Optimizar la base de datos desde WP-CLI: `wp transient delete --all` |
-| **Límite de tamaño de base de datos o almacenamiento superado en BanaHosting** | Vaciar la tabla `wp_options` de datos temporales obsoletos mediante phpMyAdmin |
+| **Tabla wp_options sobrecargada por transitorios expirados y logs huérfanos** | Ejecutar consulta SQL de limpieza de transitorios expirados en phpMyAdmin |
+| **Exceso de revisiones de entradas y auto-guardados acumulados en wp_posts** | Limitar revisiones en `wp-config.php` y optimizar tablas MySQL con comando OPTIMIZE TABLE |
 
-
-Saber cómo **limpiar wordpress** y optimizar la base de datos de tu sitio web en servidores compartidos (como BanaHosting) es fundamental cuando la web se pone lenta o el panel de control arroja errores de límite de memoria. Esto sucede porque WordPress acumula por defecto miles de filas de "revisiones de entradas" (versiones guardadas viejas de tus posts) y basura de caché (*transients*) en la tabla `wp_options`, saturando las consultas SQL.
+El crecimiento descontrolado de la base de datos MySQL en alojamientos como BanaHosting o servidores cPanel provoca que tu sitio web supere los límites de inodes, alcance el tope de CPU/IOPS y experimente lentitud general o errores 500/503. Esto suele deberse a millones de transitorios no eliminados en `wp_options` y miles de revisiones antiguas en `wp_posts`.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
 ### Paso 1: Limitar las revisiones de entradas en wp-config.php
-Por defecto, WordPress guarda infinitas copias de cada cambio que haces. Vamos a caparlo a un máximo de 3 versiones para que deje de inflar la base de datos.
-1. Entra al Administrador de Archivos de tu cPanel en BanaHosting.
-2. Abre el archivo `wp-config.php` y añade la siguiente línea justo antes del texto que dice *That's all, stop editing!*:
-  ```php
-  define('WP_POST_REVISIONS', 3);
-  ```
+Evita que WordPress guarde copias ilimitadas de cada borrador añadiendo estas directivas en tu archivo `wp-config.php` (antes de la línea */* That's all, stop editing! */*):
+```php
+// Limitar revisiones a un máximo de 3 por entrada
+define('WP_POST_REVISIONS', 3);
 
-### Paso 2: Ejecutar una limpieza SQL directa (Vía phpMyAdmin)
+// Aumentar el intervalo de autoguardado a 120 segundos
+define('AUTOSAVE_INTERVAL', 120);
 
-Entra a phpMyAdmin desde tu cPanel, selecciona la base de datos de tu WordPress, ve a la pestaña SQL y ejecuta este comando para borrar de un solo golpe todas las revisiones antiguas almacenadas:
-```sql
-DELETE FROM wp_posts WHERE post_type = 'revision';
+// Forzar el vaciado de la papelera cada 7 días
+define('EMPTY_TRASH_DAYS', 7);
 ```
 
-Verás cómo el peso de tu base de datos cae drásticamente, acelerando las búsquedas y el tiempo de respuesta del servidor.
+### Paso 2: Limpiar transitorios huérfanos en wp_options (Vía phpMyAdmin)
+Accede a **cPanel > phpMyAdmin**, selecciona tu base de datos de WordPress y ejecuta la siguiente consulta en la pestaña SQL:
+```sql
+-- Eliminar transitorios y transients expirados
+DELETE FROM wp_options WHERE option_name LIKE ('_transient_%');
+DELETE FROM wp_options WHERE option_name LIKE ('_site_transient_%');
+```
 
-## 🛡️ Consejo de Prevención
+### Paso 3: Eliminar revisiones antiguas y metadatos huérfanos
+Limpia todas las revisiones anteriores acumuladas en la tabla de posts y sus metadatos asociados:
+```sql
+-- 1. Eliminar todas las revisiones de artículos
+DELETE a,b,c
+FROM wp_posts a
+LEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)
+LEFT JOIN wp_postmeta c ON (a.ID = c.post_id)
+WHERE a.post_type = 'revision';
 
-Prácticas de seguridad recomendadas:
-- Haz un respaldo completo (Backup) de tu base de datos en formato `.sql` antes de ejecutar cualquier comando de eliminación directa. Si cometes un error en la sintaxis de la consulta SQL sin tener una copia de seguridad previa, podrías eliminar los artículos reales de tu blog o corromper las relaciones de los enlaces permanentes de forma irreversible.
+-- 2. Eliminar metadatos huérfanos
+DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE wp.ID IS NULL;
+```
+
+### Paso 4: Desfragmentar y optimizar las tablas MySQL
+Tras eliminar miles de registros, desfragmenta el espacio en disco con el comando de optimización:
+```sql
+OPTIMIZE TABLE wp_options, wp_posts, wp_postmeta, wp_comments;
+```
+
+## 🛡️ Consejos de Prevención
+- **Cuidado con plugins de analítica interna:** Evita plugins que guarden estadísticas de visitas o logs de seguridad dentro de las tablas de WordPress (como WP-Statistics o plugins de redirección pesados). Utiliza Cloudflare o Google Analytics para métricas.
+- **Programa mantenimientos semanales:** Puedes utilizar herramientas como WP-Optimize o comandos WP-CLI en tareas cron para automatizar la desfragmentación.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Es seguro borrar las filas _transient_ de wp_options?
+Sí, totalmente seguro. Los transitorios son datos en caché temporal. Si un plugin necesita un transitorio activo, WordPress lo regenerará automáticamente en la próxima visita.
+
+### ¿Afecta borrar revisiones a los artículos publicados?
+No. Solo se eliminan los borradores históricos intermedios. El contenido público y activo de tus entradas permanece 100% intacto.

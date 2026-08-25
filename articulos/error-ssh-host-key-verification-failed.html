@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'Host key verification failed' en SSH",
   "description": "¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "SSH, Linux, Sysadmin, Seguridad",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
   "dateModified": "2026-08-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'Host key verification failed' en SSH",
+      "item": "https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'Host key verification failed' en SSH",
   "description": "¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html#eliminar-la-huella-digital-obsoleta-del-servidor",
+      "name": "Eliminar la huella digital obsoleta del servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ejecuta la herramienta nativa de ssh-keygen indicando la IP o nombre de host del servidor remoto:\n\n    \n      \n        BASH\n        Copiar\n      \n      ssh-keygen -R 192.168.1.100\n\n    \n    \n(Reemplaza 192.168.1.100 por la IP o dominio de tu servidor).\nEste comando busca y elimina automáticamente la línea en conflicto dentro de tu archivo ~/.ssh/known_hosts y genera un respaldo de seguridad (known_hosts.old)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html#volver-a-conectar-y-aceptar-la-nueva-huella-digital",
+      "name": "Volver a conectar y aceptar la nueva huella digital",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Intenta conectar nuevamente por SSH:\n\n    \n      \n        BASH\n        Copiar\n      \n      ssh usuario@192.168.1.100\n\n    \n    \nLa terminal mostrará la nueva huella criptográfica SHA256 e interactuará preguntando:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      Are you sure you want to continue connecting (yes/no/[fingerprint])?\n\n    \n    \nEscribe yes y presiona Enter. SSH registrará la nueva firma en known_hosts y establecerá la conexión normalmente."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html#limpieza-manual-en-knownhosts-alternativa",
+      "name": "Limpieza manual en known_hosts (Alternativa)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si la advertencia indica el número de línea exacto (por ejemplo: Offending RSA key in /home/usuario/.ssh/known_hosts:42):\nPuedes abrir el archivo en tu editor de texto y eliminar la línea 42:\n\n    \n      \n        BASH\n        Copiar\n      \n      nano +42 ~/.ssh/known_hosts\n\n    \n    \nGuarda los cambios (Ctrl + O -&gt; Enter) y sal (Ctrl + X)."
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,167 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error Host key verification failed (acompañado de la advertencia en rojo WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local ~/.ssh/known_hosts.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-eliminar-la-huella-digital-obsoleta-del-servidor">Paso 1: Eliminar la huella digital obsoleta del servidor</a></li>
-        <li class="toc-subitem"><a href="#paso-2-volver-a-conectar-y-aceptar-la-nueva-huella-digital">Paso 2: Volver a conectar y aceptar la nueva huella digital</a></li>
-        <li class="toc-subitem"><a href="#paso-3-limpieza-manual-en-knownhosts-alternativa">Paso 3: Limpieza manual en known_hosts (Alternativa)</a></li>
-        <li class="toc-item"><a href="#advertencia-de-seguridad-importante">️ Advertencia de Seguridad Importante</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>La clave pública de la máquina remota cambió en el archivo known_hosts</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Eliminar la entrada antigua del host: <code>ssh-keygen -R IP_O_HOST</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Ataque Man-in-the-Middle o reinstalación del sistema operativo del servidor</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Confirmar el nuevo huella digital de la clave e ingresar nuevamente mediante SSH</div>
-          </div></div></div>
-<p>El error <strong><code>Host key verification failed</code></strong> (acompañado de la advertencia en rojo <code>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</code>) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local <code>~/.ssh/known_hosts</code>.</p>
-<p>Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong>
-Elimina la clave antigua del servidor ejecutando:
-<code>ssh-keygen -R tu-direccion-ip-o-dominio</code></p>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-eliminar-la-huella-digital-obsoleta-del-servidor">Paso 1: Eliminar la huella digital obsoleta del servidor</h3>
-<p>Ejecuta la herramienta nativa de <code>ssh-keygen</code> indicando la IP o nombre de host del servidor remoto:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>ssh-keygen -R 192.168.1.100
-</code></pre>
-    </div>
-    
-<p><em>(Reemplaza <code>192.168.1.100</code> por la IP o dominio de tu servidor).</em></p>
-<p>Este comando busca y elimina automáticamente la línea en conflicto dentro de tu archivo <code>~/.ssh/known_hosts</code> y genera un respaldo de seguridad (<code>known_hosts.old</code>).</p>
-<h3 id="paso-2-volver-a-conectar-y-aceptar-la-nueva-huella-digital">Paso 2: Volver a conectar y aceptar la nueva huella digital</h3>
-<p>Intenta conectar nuevamente por SSH:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>ssh usuario@192.168.1.100
-</code></pre>
-    </div>
-    
-<p>La terminal mostrará la nueva huella criptográfica SHA256 e interactuará preguntando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>Are you sure you want to continue connecting (yes/no/[fingerprint])?
-</code></pre>
-    </div>
-    
-<p>Escribe <code>yes</code> y presiona <strong>Enter</strong>. SSH registrará la nueva firma en <code>known_hosts</code> y establecerá la conexión normalmente.</p>
-<h3 id="paso-3-limpieza-manual-en-knownhosts-alternativa">Paso 3: Limpieza manual en <code>known_hosts</code> (Alternativa)</h3>
-<p>Si la advertencia indica el número de línea exacto (por ejemplo: <code>Offending RSA key in /home/usuario/.ssh/known_hosts:42</code>):</p>
-<p>Puedes abrir el archivo en tu editor de texto y eliminar la línea 42:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>nano +42 ~/.ssh/known_hosts
-</code></pre>
-    </div>
-    
-<p>Guarda los cambios (<code>Ctrl + O</code> -&gt; <code>Enter</code>) y sal (<code>Ctrl + X</code>).</p>
-<h2 id="advertencia-de-seguridad-importante">🛡️ Advertencia de Seguridad Importante</h2>
-<ul>
-<li>Si <strong>NO</strong> has reinstalado el servidor ni cambiado su configuración y este error aparece de la nada en un servidor remoto de producción, <strong>no elimines la clave a ciegas</strong>. Podrías estar sufriendo un ataque de interceptación en la red conocido como <strong>Man-in-the-Middle (MITM)</strong>. Contacta primero al administrador de red o soporte de tu proveedor de hosting.</li>
-</ul>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -340,6 +253,23 @@ Elimina la clave antigua del servidor ejecutando:
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -351,23 +281,6 @@ Elimina la clave antigua del servidor ejecutando:
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo configurar la velocidad del ventilador (Active Cooler) mediante consola de comandos",
   "description": "Aprende a controlar los umbrales de temperatura y ajustar la velocidad del ventilador en Mini PCs y placas de desarrollo mediante la terminal para evitar sobrecalentamientos.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Hardware, Linux, Raspberry Pi",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-26",
   "dateModified": "2026-06-26",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,85 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo configurar la velocidad del ventilador (Active Cooler) mediante consola de comandos",
+      "item": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo configurar la velocidad del ventilador (Active Cooler) mediante consola de comandos",
   "description": "Aprende a controlar los umbrales de temperatura y ajustar la velocidad del ventilador en Mini PCs y placas de desarrollo mediante la terminal para evitar sobrecalentamientos.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html#verificar-la-temperatura-actual-por-consola",
+      "name": "Verificar la temperatura actual por consola",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre la terminal de tu sistema operativo basado en Linux y ejecuta el siguiente comando para conocer la temperatura exacta del procesador en tiempo real:\n\n    \n      \n        BASH\n        Copiar\n      \n      vcgencmd measure_temp"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html#editar-el-archivo-de-configuracion-de-arranque",
+      "name": "Editar el archivo de configuración de arranque",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En sistemas basados en Raspberry Pi OS, podemos modificar los parámetros de activación editando el archivo config.txt. Abre el editor con privilegios de administrador:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo nano /boot/firmware/config.txt\n\n    \n    \n(Nota: En versiones antiguas de sistemas operativos, la ruta puede ser simplemente /boot/config.txt)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html#definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points",
+      "name": "Definir los nuevos umbrales de temperatura (Cooling Trip Points)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Desplázate hasta el final del archivo y añade las siguientes líneas para personalizar los grados exactos a los que el ventilador cambiará de velocidad (los valores corresponden a miligrados Celsius, por ejemplo 50000 equivale a 50°C):\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      # Ajuste personalizado del Active Cooler\ndtparam=fan_temp0=45000\ndtparam=fan_temp0_hyst=5000\ndtparam=fan_temp1=52000\ndtparam=fan_temp1_hyst=5000\ndtparam=fan_temp2=60000\ndtparam=fan_temp2_hyst=5000\n\n    \n   "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html#reiniciar-el-sistema",
+      "name": "Reiniciar el sistema",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para aplicar los cambios de hardware en las tablas de configuración internas, aplica un reinicio limpio:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo reboot"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,162 +233,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Las placas de desarrollo y Mini PCs modernos (como la Raspberry Pi 5) ofrecen un rendimiento increíble, pero disipan mucho calor cuando ejecutas servicios pesados de Docker o servidores multimedia. El uso de un Active Cooler (disipador activo con ventilador) es obligatorio para evitar el thermal throttling (reducción automática de potencia por exceso de temperatura).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</a></li>
-        <li class="toc-subitem"><a href="#paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</a></li>
-        <li class="toc-subitem"><a href="#paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</a></li>
-        <li class="toc-subitem"><a href="#paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Overlay de control PWM del ventilador no activado en config.txt</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Agregar <code>dtparam=fan_temp0=60000</code> en <code>/boot/firmware/config.txt</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Servicio de monitoreo térmico inactivo</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reorganizar los umbrales térmicos en <code>raspi-config</code> o verificar la conexión JST</div>
-          </div></div></div>
-<p>Las placas de desarrollo y Mini PCs modernos (como la Raspberry Pi 5) ofrecen un rendimiento increíble, pero disipan mucho calor cuando ejecutas servicios pesados de Docker o servidores multimedia. El uso de un <strong>Active Cooler (disipador activo con ventilador)</strong> es obligatorio para evitar el <em>thermal throttling</em> (reducción automática de potencia por exceso de temperatura).</p>
-<p>Por defecto, el sistema operativo gestiona el ventilador de forma automática, pero muchas veces los umbrales de fábrica son muy altos, permitiendo que la placa alcance los 60°C antes de encender el aire, acortando la vida útil del hardware.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</h3>
-<p>Abre la terminal de tu sistema operativo basado en Linux y ejecuta el siguiente comando para conocer la temperatura exacta del procesador en tiempo real:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>vcgencmd measure_temp
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</h3>
-<p>En sistemas basados en Raspberry Pi OS, podemos modificar los parámetros de activación editando el archivo config.txt. Abre el editor con privilegios de administrador:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nano /boot/firmware/config.txt
-</code></pre>
-    </div>
-    
-<p>(Nota: En versiones antiguas de sistemas operativos, la ruta puede ser simplemente <code>/boot/config.txt</code>).</p>
-<h3 id="paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</h3>
-<p>Desplázate hasta el final del archivo y añade las siguientes líneas para personalizar los grados exactos a los que el ventilador cambiará de velocidad (los valores corresponden a miligrados Celsius, por ejemplo 50000 equivale a 50°C):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Ajuste personalizado del Active Cooler
-dtparam=fan_temp0=45000
-dtparam=fan_temp0_hyst=5000
-dtparam=fan_temp1=52000
-dtparam=fan_temp1_hyst=5000
-dtparam=fan_temp2=60000
-dtparam=fan_temp2_hyst=5000
-</code></pre>
-    </div>
-    
-<p>Guarda el archivo presionando <code>Ctrl + O</code>, confirma con <code>Enter</code> y sal con <code>Ctrl + X</code>.</p>
-<h3 id="paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</h3>
-<p>Para aplicar los cambios de hardware en las tablas de configuración internas, aplica un reinicio limpio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo reboot
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Evita conexiones directas de ventiladores genéricos a los pines GPIO de 5V/GND sin control PWM, ya que si el ventilador consume demasiada corriente o intentas cablearlo de forma incorrecta, puedes provocar un cortocircuito letal que dañe la placa permanentemente (dejándola con un LED rojo fijo de muerte). Usa siempre accesorios oficiales conectados al conector dedicado de ventilador JST.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -335,6 +265,23 @@ dtparam=fan_temp2_hyst=5000
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -346,23 +293,6 @@ dtparam=fan_temp2_hyst=5000
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

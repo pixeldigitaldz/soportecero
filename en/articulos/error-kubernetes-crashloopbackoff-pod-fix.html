@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix CrashLoopBackOff Pod Status in Kubernetes",
   "description": "Learn how to diagnose and resolve CrashLoopBackOff status in Kubernetes Pods by inspecting logs, fixing OOMKilled issues, and configuring health probes.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Kubernetes, DevOps, Docker",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-31",
   "dateModified": "2026-07-31",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,85 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix CrashLoopBackOff Pod Status in Kubernetes",
+      "item": "https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix CrashLoopBackOff Pod Status in Kubernetes",
   "description": "Learn how to diagnose and resolve CrashLoopBackOff status in Kubernetes Pods by inspecting logs, fixing OOMKilled issues, and configuring health probes.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html#inspect-the-failure-reason-with-kubectl-describe",
+      "name": "Inspect the failure reason with kubectl describe",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "The primary command for gathering lifecycle details about the failing Pod is kubectl describe:\n\n    \n      \n        BASH\n        Copy\n      \n      # Fetch detailed status of the target Pod\nkubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;\n\n    \n    \nIn the Containers &gt; State and Last State sections, pay close attention to the following indicators:\n\nExit Code 1 or 127: Application failure (unhandled runtime exception, missing file, or broken CMD path).\nExit Code 137 (OOMKilled): The c"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html#extract-logs-from-the-crashed-container",
+      "name": "Extract logs from the crashed container",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To inspect standard output (stdout/stderr) right before the container crashed on its previous attempt, add the --previous flag:\n\n    \n      \n        BASH\n        Copy\n      \n      # View logs from the previous container instance\nkubectl logs &lt;pod-name&gt; --previous -n &lt;namespace&gt;\n\n# If the Pod has multiple containers, specify the container name:\nkubectl logs &lt;pod-name&gt; -c &lt;container-name&gt; --previous -n &lt;namespace&gt;"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html#adjust-container-memory-limits-oomkilled",
+      "name": "Adjust container memory limits (OOMKilled)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources:\n\n    \n      \n        YAML\n        Copy\n      \n      apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: my-service\nspec:\n  template:\n    spec:\n      containers:\n      - name: my-app\n        image: my-image:latest\n        resources:\n          requests:\n            memory: &quot;256Mi&quot;\n            cpu: &quot;250m&quot;\n          limits:\n            "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-kubernetes-crashloopbackoff-pod-fix.html#adjust-or-delay-liveness-and-readiness-probes",
+      "name": "Adjust or delay Liveness and Readiness Probes",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your application takes a long time to boot (such as performing database migrations on startup), the livenessProbe might kill the Pod prematurely. Increase initialDelaySeconds:\n\n    \n      \n        YAML\n        Copy\n      \n      livenessProbe:\n  httpGet:\n    path: /healthz\n    port: 8080\n  initialDelaySeconds: 30 # Give the application time to complete initialization\n  periodSeconds: 10\n  failureThreshold: 3"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,191 +233,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The CrashLoopBackOff status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#how-to-fix-the-error-step-by-step">How to Fix the Error Step-by-Step</a></li>
-        <li class="toc-subitem"><a href="#step-1-inspect-the-failure-reason-with-kubectl-describe">Step 1: Inspect the failure reason with kubectl describe</a></li>
-        <li class="toc-subitem"><a href="#step-2-extract-logs-from-the-crashed-container">Step 2: Extract logs from the crashed container</a></li>
-        <li class="toc-subitem"><a href="#step-3-adjust-container-memory-limits-oomkilled">Step 3: Adjust container memory limits (OOMKilled)</a></li>
-        <li class="toc-subitem"><a href="#step-4-adjust-or-delay-liveness-and-readiness-probes">Step 4: Adjust or delay Liveness and Readiness Probes</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <strong>CrashLoopBackOff</strong> status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Pod stuck in <code>CrashLoopBackOff</code> status with high <code>RESTARTS</code> counter</strong>: Application crash, missing environment variables, Out of Memory (<code>OOMKilled</code>), or failing <code>livenessProbe</code></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Inspect previous container logs with <code>kubectl logs --previous</code> and check events with <code>kubectl describe pod</code></div>
-          </div></div></div>
-
-    </section>
-    <h2 id="how-to-fix-the-error-step-by-step">🚀 How to Fix the Error Step-by-Step</h2>
-<h3 id="step-1-inspect-the-failure-reason-with-kubectl-describe">Step 1: Inspect the failure reason with kubectl describe</h3>
-<p>The primary command for gathering lifecycle details about the failing Pod is <code>kubectl describe</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Fetch detailed status of the target Pod
-kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;
-</code></pre>
-    </div>
-    
-<p>In the <strong>Containers &gt; State</strong> and <strong>Last State</strong> sections, pay close attention to the following indicators:</p>
-<ul>
-<li><strong>Exit Code 1 or 127</strong>: Application failure (unhandled runtime exception, missing file, or broken <code>CMD</code> path).</li>
-<li><strong>Exit Code 137 (OOMKilled)</strong>: The container exceeded its strict memory limit (<code>limits.memory</code>) configured in the YAML manifest.</li>
-<li><strong>Liveness probe failed</strong>: The configured health check failed to respond within the specified timeout.</li>
-</ul>
-<h3 id="step-2-extract-logs-from-the-crashed-container">Step 2: Extract logs from the crashed container</h3>
-<p>To inspect standard output (<code>stdout</code>/<code>stderr</code>) right before the container crashed on its previous attempt, add the <code>--previous</code> flag:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># View logs from the previous container instance
-kubectl logs &lt;pod-name&gt; --previous -n &lt;namespace&gt;
-
-# If the Pod has multiple containers, specify the container name:
-kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt; --previous -n &lt;namespace&gt;
-</code></pre>
-    </div>
-    
-<h3 id="step-3-adjust-container-memory-limits-oomkilled">Step 3: Adjust container memory limits (OOMKilled)</h3>
-<p>If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-service
-spec:
-  template:
-    spec:
-      containers:
-      - name: my-app
-        image: my-image:latest
-        resources:
-          requests:
-            memory: &quot;256Mi&quot;
-            cpu: &quot;250m&quot;
-          limits:
-            memory: &quot;512Mi&quot; # Increase limit if OOMKilled occurs
-            cpu: &quot;500m&quot;
-</code></pre>
-    </div>
-    
-<p>Apply the changes:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>kubectl apply -f deployment.yaml
-</code></pre>
-    </div>
-    
-<h3 id="step-4-adjust-or-delay-liveness-and-readiness-probes">Step 4: Adjust or delay Liveness and Readiness Probes</h3>
-<p>If your application takes a long time to boot (such as performing database migrations on startup), the <code>livenessProbe</code> might kill the Pod prematurely. Increase <code>initialDelaySeconds</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>livenessProbe:
-  httpGet:
-    path: /healthz
-    port: 8080
-  initialDelaySeconds: 30 # Give the application time to complete initialization
-  periodSeconds: 10
-  failureThreshold: 3
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Test container images locally</strong>: Run the container locally using <code>docker run -it --rm &lt;image&gt;</code> with identical environment variables to verify that the entrypoint script executes cleanly.</li>
-<li><strong>Set realistic startup delays</strong>: Heavy frameworks or Java applications require higher <code>initialDelaySeconds</code> (30-60s) to prevent false-positive restarts.</li>
-<li><strong>Validate ConfigMaps and Secrets</strong>: Ensure all required environment variables and configuration files exist prior to triggering deployments.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -364,6 +265,23 @@ spec:
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -375,23 +293,6 @@ spec:
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux",
   "description": "Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.",
+  "inLanguage": "es",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Gaming, Linux, Performance",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-06",
   "dateModified": "2026-07-06",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux",
+      "item": "https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux",
   "description": "Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html#configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos",
+      "name": "Configurar la frecuencia de sondeo (polling rate) de tus periféricos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para que tu ratón y teclado competitivo respondan instantáneamente, fuerza al controlador del kernel a usar una tasa de refresco constante de 1000 Hz en los puertos USB:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Crear un archivo de reglas para el módulo del ratón USB\necho &quot;options usbhid mousepoll=1&quot; | sudo tee /etc/modprobe.d/usbhid.conf\n\n# Recargar el módulo HID para aplicar los cambios de inmediato\nsudo rmmod usbhid &amp;&amp; sudo modprobe usbhid"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html#desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland",
+      "name": "Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si usas entornos KDE Plasma o GNOME bajo Wayland, la sincronización vertical añade latencia. Permite el desgarro de pantalla en juegos a pantalla completa para eliminar el retraso de dibujado:\n\n    \n      \n        BASH\n        Copiar\n      \n      # En KDE Plasma 6, añade esta regla a tu configuración local para permitir Tearing\nkwriteconfig6 --file kwinrc --group Wayland --key AllowTearing true\n\n# Reiniciar el compositor gráfico para aplicar\nsystemctl --user restart plasma-kwin_wayland"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html#configurar-el-daemon-de-energia-en-modo-rendimiento",
+      "name": "Configurar el daemon de energía en modo Rendimiento",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Evita que el regulador del procesador de Linux reduzca la frecuencia de reloj del bus de datos del sistema durante tus partidas de juego:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Cambiar el perfil de energía del sistema a alto rendimiento\npowerprofilesctl set performance\n\n# Verificar que el perfil se haya activado correctamente\npowerprofilesctl get"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,152 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El retraso de entrada o input lag excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos">Paso 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</a></li>
-        <li class="toc-subitem"><a href="#paso-2-desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland">Paso 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</a></li>
-        <li class="toc-subitem"><a href="#paso-3-configurar-el-daemon-de-energia-en-modo-rendimiento">Paso 3: Configurar el daemon de energía en modo Rendimiento</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Composición de ventanas activada generando retardo de fotogramas (VSync)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Desactivar la composición de pantalla o utilizar una sesión Wayland nativa</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Regulador de frecuencia de CPU en modo powersave</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Establecer la CPU en modo rendimiento: <code>gamemoded -r</code> o <code>powerprofilesctl set performance</code></div>
-          </div></div></div>
-<p>El retraso de entrada o <em>input lag</em> excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos">Paso 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</h3>
-<p>Para que tu ratón y teclado competitivo respondan instantáneamente, fuerza al controlador del kernel a usar una tasa de refresco constante de 1000 Hz en los puertos USB:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Crear un archivo de reglas para el módulo del ratón USB
-echo &quot;options usbhid mousepoll=1&quot; | sudo tee /etc/modprobe.d/usbhid.conf
-
-# Recargar el módulo HID para aplicar los cambios de inmediato
-sudo rmmod usbhid &amp;&amp; sudo modprobe usbhid
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland">Paso 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</h3>
-<p>Si usas entornos KDE Plasma o GNOME bajo Wayland, la sincronización vertical añade latencia. Permite el desgarro de pantalla en juegos a pantalla completa para eliminar el retraso de dibujado:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># En KDE Plasma 6, añade esta regla a tu configuración local para permitir Tearing
-kwriteconfig6 --file kwinrc --group Wayland --key AllowTearing true
-
-# Reiniciar el compositor gráfico para aplicar
-systemctl --user restart plasma-kwin_wayland
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-configurar-el-daemon-de-energia-en-modo-rendimiento">Paso 3: Configurar el daemon de energía en modo Rendimiento</h3>
-<p>Evita que el regulador del procesador de Linux reduzca la frecuencia de reloj del bus de datos del sistema durante tus partidas de juego:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar el perfil de energía del sistema a alto rendimiento
-powerprofilesctl set performance
-
-# Verificar que el perfil se haya activado correctamente
-powerprofilesctl get
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No configures frecuencias de sondeo superiores a 1000 Hz (como ratones de 4000 Hz u 8000 Hz) si tu procesador no cuenta con al menos 6 núcleos físicos modernos dedicados. Una tasa de sondeo sobredimensionada consumirá ciclos masivos del procesador para atender las interrupciones del puerto USB de manera constante, lo que resultará en tirones gráficos repentinos (<em>frame drops</em>) y una menor tasa media de FPS durante tus partidas de juego.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -308,6 +236,23 @@ powerprofilesctl get
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -337,23 +282,6 @@ powerprofilesctl get
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>

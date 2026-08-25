@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr",
   "description": "Aprende a recuperar tus series y configuraciones reparando el error 'database disk image is malformed' de SQLite mediante herramientas de consola en Linux.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Sonarr, Radarr, Database, SQLite",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr",
+      "item": "https://soportecero.com/articulos/error-sqlite-corrupt-sonarr.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr",
   "description": "Aprende a recuperar tus series y configuraciones reparando el error 'database disk image is malformed' de SQLite mediante herramientas de consola en Linux.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-sqlite-corrupt-sonarr.html#detener-el-contenedor-o-servicio-afectado",
+      "name": "Detener el contenedor o servicio afectado",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Antes de manipular la base de datos, debes asegurarte de que no haya ningún proceso escribiendo en ella. Detén el contenedor de Docker correspondiente:\n\n    \n      \n        BASH\n        Copiar\n      \n      docker stop sonarr"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-sqlite-corrupt-sonarr.html#ejecutar-los-comandos-de-recuperacion-de-sqlite",
+      "name": "Ejecutar los comandos de recuperación de SQLite",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Accede al directorio donde se guardan las configuraciones del contenedor (típicamente /docker/sonarr/ o /home/usuario/appdata/sonarr/) y ejecuta las herramientas de rescate de SQLite en tu terminal:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Exportar los datos sanos del archivo corrupto a una plantilla de recuperación\nsqlite3 sonarr.db &quot;.recover&quot; | sqlite3 clean.db\n\n# Respaldar la base de datos corrupta original\nmv sonarr.db sonarr.db.bak\n\n# Reemplazar la base de datos por"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-sqlite-corrupt-sonarr.html#reiniciar-el-servicio",
+      "name": "Reiniciar el servicio",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Vuelve a iniciar el contenedor o servicio. Sonarr leerá el archivo restaurado sin problemas:\n\n    \n      \n        BASH\n        Copiar\n      \n      docker start sonarr"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,150 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje database disk image is malformed) ocurre cuando el archivo interno SQLite (sonarr.db o radarr.db) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-detener-el-contenedor-o-servicio-afectado">Paso 1: Detener el contenedor o servicio afectado</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ejecutar-los-comandos-de-recuperacion-de-sqlite">Paso 2: Ejecutar los comandos de recuperación de SQLite</a></li>
-        <li class="toc-subitem"><a href="#paso-3-reiniciar-el-servicio">Paso 3: Reiniciar el servicio</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Base de datos SQLite de Sonarr/Radarr corrupta por apagado repentino del contenedor</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Restaurar un respaldo automático de la carpeta <code>Backups/scheduled/</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Integridad de la base de datos sqlite3 dañada</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reparar exportando e importando datos: `sqlite3 sonarr.db &quot;.recover&quot;</div>
-          </div></div></div>
-<p>El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje <code>database disk image is malformed</code>) ocurre cuando el archivo interno SQLite (<code>sonarr.db</code> o <code>radarr.db</code>) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-detener-el-contenedor-o-servicio-afectado">Paso 1: Detener el contenedor o servicio afectado</h3>
-<p>Antes de manipular la base de datos, debes asegurarte de que no haya ningún proceso escribiendo en ella. Detén el contenedor de Docker correspondiente:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker stop sonarr
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-ejecutar-los-comandos-de-recuperacion-de-sqlite">Paso 2: Ejecutar los comandos de recuperación de SQLite</h3>
-<p>Accede al directorio donde se guardan las configuraciones del contenedor (típicamente <code>/docker/sonarr/</code> o <code>/home/usuario/appdata/sonarr/</code>) y ejecuta las herramientas de rescate de SQLite en tu terminal:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Exportar los datos sanos del archivo corrupto a una plantilla de recuperación
-sqlite3 sonarr.db &quot;.recover&quot; | sqlite3 clean.db
-
-# Respaldar la base de datos corrupta original
-mv sonarr.db sonarr.db.bak
-
-# Reemplazar la base de datos por la versión limpia recuperada
-mv clean.db sonarr.db
-
-# Verificar que los permisos del archivo sean correctos (ejemplo para Docker)
-chmod 664 sonarr.db
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-reiniciar-el-servicio">Paso 3: Reiniciar el servicio</h3>
-<p>Vuelve a iniciar el contenedor o servicio. Sonarr leerá el archivo restaurado sin problemas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker start sonarr
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Jamás montes las bases de datos de tus contenedores multimedia (<code>sonarr.db</code>, <code>radarr.db</code> o <code>plex.db</code>) sobre rutas de red compartidas mediante protocolos como NFS o SMB/CIFS. SQLite no está diseñado para coordinar accesos simultáneos con latencia de red. La falta de consistencia en el bloqueo de archivos a través de la red corromperá el índice de indexación de inmediato ante la mínima fluctuación de conexión, destruyendo tus configuraciones de forma irreversible.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -323,6 +253,23 @@ chmod 664 sonarr.db
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -334,23 +281,6 @@ chmod 664 sonarr.db
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -1,48 +1,74 @@
 ---
-title: How to Free Disk Space by Properly Cleaning Pacman Cache in CachyOS
-description: >-
-  Avoid running out of space on your SSD by recovering gigabytes of data
-  accumulated by the Pacman package manager in Arch Linux distributions.
-category: Systems & Servers
-tags:
-  - CachyOS
-  - Linux
-  - Maintenance
-readTime: 3 min
-date: '2026-07-27'
+title: "How to Safely Clean Pacman Package Cache in CachyOS and Arch Linux"
+description: "Learn how to free disk space in CachyOS and Arch Linux by pruning Pacman and Yay cache using paccache, pacman -Sc, and systemd automation."
+category: "Systems & Servers"
+tags: ["CachyOS", "Arch Linux", "Pacman", "Linux", "SysAdmin", "Storage"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **Uncontrolled accumulation of old packages in /var/cache/pacman/pkg/** | Clean old package cache: `sudo paccache -r` |
-| **Uncleaned orphaned packages with no active dependencies** | Remove orphan packages: `sudo pacman -Rns $(pacman -Qtdq)` |
+| **/var/lib/pacman and /var/cache/pacman/pkg directories accumulating dozens of package revisions** | Prune obsolete package tarballs while retaining the latest 2 versions via `sudo paccache -r` |
+| **AUR build cache bloating user directories (~/.cache/yay or ~/.cache/paru)** | Clean AUR cache using `yay -Sc --aur` or purge `~/.cache/yay` |
 
+In CachyOS and Arch Linux environments, the Pacman package manager never automatically purges downloaded `.pkg.tar.zst` archive binaries from `/var/cache/pacman/pkg/`. Over time, this directory routinely swells to 20GB-50GB, triggering low storage warnings on root partitions.
 
-Unlike other operating systems, Arch Linux-based distributions (such as CachyOS) do not automatically delete old packages that you download during updates. The `pacman` manager accumulates them indefinitely in the `/var/cache/pacman/pkg/` path in case you need to do a *downgrade*. Over time, this folder can consume 20GB or 30GB of your SSD storage.
+## 🚀 Step-by-Step Solution
 
-## 🚀 Cómo solucionar el error paso a paso
-
-### Paso 1: Medir el tamaño actual de la basura
-Run this command in your terminal to see exactly how much space the accumulated download cache is consuming:
+### Step 1: Measure Current Pacman Cache Footprint
+Evaluate exact disk utilization:
 ```bash
+# Inspect storage footprint of the Pacman cache
 du -sh /var/cache/pacman/pkg/
 ```
 
-### Paso 2: Limpieza selectiva usando paccache (Recomendado)
-Do not delete the entire folder by hand, as it is dangerous. We will use the official paccache tool to remove all old program versions, keeping only the currently installed version and the immediately preceding one for safety:
+### Step 2: Prune Obsolete Versions Safely Using paccache
+The official `paccache` utility (from `pacman-contrib`) clears obsolete revisions while preserving safety rollbacks:
 ```bash
-sudo paccache -r
+# 1. Ensure pacman-contrib is installed
+sudo pacman -S pacman-contrib --noconfirm
+
+# 2. Retain only the 2 most recent package versions
+sudo paccache -r -k 2
+
+# 3. Purge cached files for uninstalled packages
+sudo paccache -ruk0
 ```
 
-### Paso 3: Eliminar paquetes huérfanos del sistema
-Orphan packages are libraries that were installed as dependencies of a program you already deleted, so they remain floating on the disk without any purpose. Delete them with this command:
+### Step 3: Comprehensive Cache Flush (For Emergency Space Reclamation)
+When immediate disk recovery is mandatory:
 ```bash
-sudo pacman -Rns $(pacman -Qdtq)
+# Purge uninstalled package archives
+sudo pacman -Sc --noconfirm
+
+# Purge ALL cached archives completely
+sudo pacman -Scc --noconfirm
 ```
-If the system responds that there are no targets to remove, it means your dependency tree is completely clean.
 
-## 🛡️ Consejo de Prevención
+### Step 4: Clear AUR Build Repositories (Yay / Paru)
+AUR helpers compile binaries inside user home directories:
+```bash
+# If using Yay:
+yay -Sc --aur --noconfirm
+rm -rf ~/.cache/yay/*
 
-Recommended security practices:
-* You can automate this maintenance so you do not have to remember it. Ask your system to run an automatic cleanup every week by scheduling a "Systemd Timer" executing the command: `sudo systemctl enable --now paccache.timer`.
+# If using Paru:
+paru -Scc --noconfirm
+```
+
+## 🛡️ Prevention Advice
+- **Enable automated systemd cache cleanup:** Activate the built-in systemd timer for automated weekly pruning:
+```bash
+sudo systemctl enable --now paccache.timer
+```
+- **Prune orphaned dependencies regularly:** Remove detached packages via `sudo pacman -Rns $(pacman -Qtdq)`.
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### Why does Pacman retain all downloaded tarballs?
+To allow instant offline package downgrades (`pacman -U /var/cache/pacman/pkg/pkgname-old.pkg.tar.zst`) if an upstream package update introduces regressions.
+
+### Is paccache.timer safe for production machines?
+Yes. The service runs weekly in the background, keeping the 3 most recent package versions intact for stability.

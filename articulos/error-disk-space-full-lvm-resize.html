@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo redimensionar un volumen LVM en Linux cuando el disco se queda sin espacio",
   "description": "Aprende a extender de forma segura un volumen lógico LVM y su sistema de archivos EXT4 o XFS sin perder datos y sin apagar el servidor.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Linux, Sysadmin, LVM",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-06",
   "dateModified": "2026-07-06",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo redimensionar un volumen LVM en Linux cuando el disco se queda sin espacio",
+      "item": "https://soportecero.com/articulos/error-disk-space-full-lvm-resize.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo redimensionar un volumen LVM en Linux cuando el disco se queda sin espacio",
   "description": "Aprende a extender de forma segura un volumen lógico LVM y su sistema de archivos EXT4 o XFS sin perder datos y sin apagar el servidor.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-disk-space-full-lvm-resize.html#identificar-el-volumen-logico-y-el-espacio-disponible",
+      "name": "Identificar el volumen lógico y el espacio disponible",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Primero, verifica qué partición está saturada y localiza la ruta de tu volumen lógico:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Ver el uso de disco de todas las particiones\ndf -h\n\n# Listar los volúmenes lógicos activos\nsudo lvdisplay\n\n    \n    \n(Anota la ruta del volumen que quieres extender, por ejemplo /dev/mapper/vg_system-lv_root)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-disk-space-full-lvm-resize.html#escanear-el-nuevo-almacenamiento-fisico",
+      "name": "Escanear el nuevo almacenamiento físico",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si has ampliado el disco virtual en tu hipervisor (Proxmox, VMware, KVM), debes indicarle al núcleo de Linux que detecte el cambio de tamaño del disco físico (por ejemplo, /dev/sda):\n\n    \n      \n        BASH\n        Copiar\n      \n      # Forzar un re-escaneo del bus SCSI para detectar la nueva capacidad\necho 1 | sudo tee /sys/class/block/sda/device/rescan\n\n# Notificar a LVM que el volumen físico ha cambiado de tamaño\nsudo pvresize /dev/sda"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-disk-space-full-lvm-resize.html#extender-el-volumen-logico-y-el-sistema-de-archivos",
+      "name": "Extender el volumen lógico y el sistema de archivos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Una vez que el volumen físico reconoce el nuevo espacio, procede a ampliar el volumen lógico y a redimensionar su estructura interna en un solo paso:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Para sistemas con formato EXT4 (extiende volumen lógico y sistema de archivos simultáneamente)\nsudo lvextend -r -l +100%FREE /dev/mapper/vg_system-lv_root\n\n# Si el sistema de archivos usa XFS, ejecuta la extensión de forma explícita\nsudo lvextend -l +100%FREE /dev/mapper/vg_system-lv_root\nsudo"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,154 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error de disco lleno (No space left on device) en un servidor Linux que utiliza LVM (Logical Volume Manager) puede paralizar bases de datos y servicios. La ventaja de LVM es que permite expandir el almacenamiento en caliente, sumando espacio físico al volumen lógico y extendiendo el sistema de archivos sin necesidad de reiniciar.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-identificar-el-volumen-logico-y-el-espacio-disponible">Paso 1: Identificar el volumen lógico y el espacio disponible</a></li>
-        <li class="toc-subitem"><a href="#paso-2-escanear-el-nuevo-almacenamiento-fisico">Paso 2: Escanear el nuevo almacenamiento físico</a></li>
-        <li class="toc-subitem"><a href="#paso-3-extender-el-volumen-logico-y-el-sistema-de-archivos">Paso 3: Extender el volumen lógico y el sistema de archivos</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Volumen Lógico (LV) sin espacio libre pero con espacio disponible en Volume Group (VG)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Extender el volumen lógico: <code>lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Sistema de archivos no redimensionado tras extender el volumen</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Redimensionar el sistema de archivos ext4 o xfs con <code>resize2fs</code> o <code>xfs_growfs</code></div>
-          </div></div></div>
-<p>El error de disco lleno (<code>No space left on device</code>) en un servidor Linux que utiliza LVM (Logical Volume Manager) puede paralizar bases de datos y servicios. La ventaja de LVM es que permite expandir el almacenamiento en caliente, sumando espacio físico al volumen lógico y extendiendo el sistema de archivos sin necesidad de reiniciar.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-identificar-el-volumen-logico-y-el-espacio-disponible">Paso 1: Identificar el volumen lógico y el espacio disponible</h3>
-<p>Primero, verifica qué partición está saturada y localiza la ruta de tu volumen lógico:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Ver el uso de disco de todas las particiones
-df -h
-
-# Listar los volúmenes lógicos activos
-sudo lvdisplay
-</code></pre>
-    </div>
-    
-<p><em>(Anota la ruta del volumen que quieres extender, por ejemplo <code>/dev/mapper/vg_system-lv_root</code>).</em></p>
-<h3 id="paso-2-escanear-el-nuevo-almacenamiento-fisico">Paso 2: Escanear el nuevo almacenamiento físico</h3>
-<p>Si has ampliado el disco virtual en tu hipervisor (Proxmox, VMware, KVM), debes indicarle al núcleo de Linux que detecte el cambio de tamaño del disco físico (por ejemplo, <code>/dev/sda</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Forzar un re-escaneo del bus SCSI para detectar la nueva capacidad
-echo 1 | sudo tee /sys/class/block/sda/device/rescan
-
-# Notificar a LVM que el volumen físico ha cambiado de tamaño
-sudo pvresize /dev/sda
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-extender-el-volumen-logico-y-el-sistema-de-archivos">Paso 3: Extender el volumen lógico y el sistema de archivos</h3>
-<p>Una vez que el volumen físico reconoce el nuevo espacio, procede a ampliar el volumen lógico y a redimensionar su estructura interna en un solo paso:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Para sistemas con formato EXT4 (extiende volumen lógico y sistema de archivos simultáneamente)
-sudo lvextend -r -l +100%FREE /dev/mapper/vg_system-lv_root
-
-# Si el sistema de archivos usa XFS, ejecuta la extensión de forma explícita
-sudo lvextend -l +100%FREE /dev/mapper/vg_system-lv_root
-sudo xfs_growfs /
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Nunca reduzcas el tamaño de un volumen lógico LVM (<code>lvreduce</code>) en caliente o sin haber realizado un respaldo completo previo de tu base de datos. Mientras que la extensión de almacenamiento es una tarea segura que se ejecuta en milisegundos, la reducción de volumen es altamente destructiva y puede corromper los descriptores de archivos de forma permanente si el tamaño lógico asignado queda por debajo del volumen real de tus datos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -327,6 +253,23 @@ sudo xfs_growfs /
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -338,23 +281,6 @@ sudo xfs_growfs /
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

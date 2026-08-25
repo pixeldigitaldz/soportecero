@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)",
   "description": "Learn how to resolve the network block where your containers in Umbrel lose access to the outside due to conflicts with the internal DNS resolver.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Umbrel, Docker, DNS",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)",
+      "item": "https://soportecero.com/en/articulos/error-docker-dns-umbrel.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)",
   "description": "Learn how to resolve the network block where your containers in Umbrel lose access to the outside due to conflicts with the internal DNS resolver.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-docker-dns-umbrel.html#verify-the-internal-network-block",
+      "name": "Verify the internal network block",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Access your Umbrel server via SSH and enter the affected container to check if it responds to a direct numerical ping but fails to resolve text names:\n\n    \n      \n        BASH\n        Copy\n      \n      # Test direct Google IP (If it responds, there is internet but no DNS)\ndocker exec -it nombre_contenedor ping -c 3 8.8.8.8"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-docker-dns-umbrel.html#force-global-public-dns-in-the-docker-configuration",
+      "name": "Force global public DNS in the Docker configuration",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To bypass Umbrel&#39;s routing blocks, we can define static and immutable DNS servers for the entire Docker engine. Edit the global configuration file:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo nano /etc/docker/daemon.json\n\n    \n    \nAdd or merge the following lines with the stable DNS of Cloudflare and Google inside the JSON object:\n\n    \n      \n        JSON\n        Copy\n      \n      {\n  &quot;dns&quot;: [&quot;1.1.1.1&quot;, &quot;8.8.8.8&quot;]\n}\n\n    \n    \nSave the file (Ctrl "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-docker-dns-umbrel.html#restart-the-docker-service",
+      "name": "Restart the Docker service",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Apply a forced restart to the system service so it brings up all network interfaces with the new injected DNS:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo systemctl restart docker"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,155 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>A very common critical failure in home servers based on the Umbrel OS ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing Temporary failure in name resolution errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-the-internal-network-block">Step 1: Verify the internal network block</a></li>
-        <li class="toc-subitem"><a href="#step-2-force-global-public-dns-in-the-docker-configuration">Step 2: Force global public DNS in the Docker configuration</a></li>
-        <li class="toc-subitem"><a href="#step-3-restart-the-docker-service">Step 3: Restart the Docker service</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Internal Docker DNS resolver failing on Umbrel OS</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set public DNS in <code>/etc/docker/daemon.json</code> (e.g. <code>&quot;dns&quot;: [&quot;1.1.1.1&quot;]</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Port 53 conflict with systemd-resolved service</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Set <code>DNSStubListener=no</code> in <code>/etc/systemd/resolved.conf</code></div>
-          </div></div></div>
-<p>A very common critical failure in home servers based on the <strong>Umbrel OS</strong> ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing <code>Temporary failure in name resolution</code> errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-verify-the-internal-network-block">Step 1: Verify the internal network block</h3>
-<p>Access your Umbrel server via SSH and enter the affected container to check if it responds to a direct numerical ping but fails to resolve text names:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Test direct Google IP (If it responds, there is internet but no DNS)
-docker exec -it nombre_contenedor ping -c 3 8.8.8.8
-</code></pre>
-    </div>
-    
-<h3 id="step-2-force-global-public-dns-in-the-docker-configuration">Step 2: Force global public DNS in the Docker configuration</h3>
-<p>To bypass Umbrel&#39;s routing blocks, we can define static and immutable DNS servers for the entire Docker engine. Edit the global configuration file:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nano /etc/docker/daemon.json
-</code></pre>
-    </div>
-    
-<p>Add or merge the following lines with the stable DNS of Cloudflare and Google inside the JSON object:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JSON</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>{
-  &quot;dns&quot;: [&quot;1.1.1.1&quot;, &quot;8.8.8.8&quot;]
-}
-</code></pre>
-    </div>
-    
-<p>Save the file (<code>Ctrl + O</code>, <code>Enter</code>) and close the editor (<code>Ctrl + X</code>).</p>
-<h3 id="step-3-restart-the-docker-service">Step 3: Restart the Docker service</h3>
-<p>Apply a forced restart to the system service so it brings up all network interfaces with the new injected DNS:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart docker
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Avoid manually modifying the <code>/etc/resolv.conf</code> file directly in Umbrel OS, as this file is dynamically managed by the system and will be completely overwritten upon every physical reboot of your Mini PC or Raspberry Pi, erasing your fixes.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -328,6 +253,23 @@ docker exec -it nombre_contenedor ping -c 3 8.8.8.8
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -339,23 +281,6 @@ docker exec -it nombre_contenedor ping -c 3 8.8.8.8
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

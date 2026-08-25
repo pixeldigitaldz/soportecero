@@ -7,7 +7,7 @@
   <title>Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Guía paso a paso para identificar y resolver el error 504 Gateway Timeout en Nginx y PHP-FPM ajustando los tiempos de espera (timeouts) en la configuración.">
+  <meta name="description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero">
-  <meta property="og:description" content="Guía paso a paso para identificar y resolver el error 504 Gateway Timeout en Nginx y PHP-FPM ajustando los tiempos de espera (timeouts) en la configuración.">
+  <meta property="og:description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido) - SoporteCero">
-  <meta name="twitter:description" content="Guía paso a paso para identificar y resolver el error 504 Gateway Timeout en Nginx y PHP-FPM ajustando los tiempos de espera (timeouts) en la configuración.">
+  <meta name="twitter:description" content="Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)",
-  "description": "Guía paso a paso para identificar y resolver el error 504 Gateway Timeout en Nginx y PHP-FPM ajustando los tiempos de espera (timeouts) en la configuración.",
+  "description": "Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Nginx, PHP-FPM, Linux, SysAdmin, Servidores, WordPress",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-26",
   "dateModified": "2026-07-26",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)",
+      "item": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)",
-  "description": "Guía paso a paso para identificar y resolver el error 504 Gateway Timeout en Nginx y PHP-FPM ajustando los tiempos de espera (timeouts) en la configuración.",
-  "step": []
+  "description": "Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html#aumentar-los-tiempos-de-espera-en-la-configuracion-de-nginx",
+      "name": "Aumentar los tiempos de espera en la configuración de Nginx",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre el archivo de configuración de tu sitio web (por ejemplo, /etc/nginx/sites-available/mi-sitio.conf o /etc/nginx/nginx.conf):\n\n    \n      \n        NGINX\n        Copiar\n      \n      server {\n    listen 80;\n    server_name misitio.com;\n    root /var/www/misitio;\n\n    location ~ \\.php$ {\n        include snippets/fastcgi-php.conf;\n        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;\n\n        # Aumentar tiempos de espera a 300 segundos (5 minutos)\n        fastcgi_connect_timeout 300s;\n        "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html#ajustar-los-limites-de-ejecucion-en-phpini",
+      "name": "Ajustar los límites de ejecución en php.ini",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Modifica el archivo php.ini correspondiente a tu versión de PHP-FPM (ej. /etc/php/8.3/fpm/php.ini):\n\n    \n      \n        INI\n        Copiar\n      \n      ; Tiempo máximo de ejecución en segundos\nmax_execution_time = 300\n\n; Tiempo máximo de análisis de datos de entrada\nmax_input_time = 300\n\n; Límite de memoria para scripts pesados\nmemory_limit = 512M"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html#configurar-el-pool-de-php-fpm-wwwconf",
+      "name": "Configurar el pool de PHP-FPM (www.conf)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Edita el archivo de configuración del pool (/etc/php/8.3/fpm/pool.d/www.conf):\n\n    \n      \n        INI\n        Copiar\n      \n      ; Tiempo de espera antes de terminar un proceso PHP colgado\nrequest_terminate_timeout = 300s\n\n; Asegurar suficientes procesos hijos para atender peticiones concurrentes\npm = dynamic\npm.max_children = 50\npm.start_servers = 10\npm.min_spare_servers = 5\npm.max_spare_servers = 20"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html#validar-la-sintaxis-y-reiniciar-los-servicios",
+      "name": "Validar la sintaxis y reiniciar los servicios",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba que no existen errores de sintaxis antes de reiniciar:\n\n    \n      \n        BASH\n        Copiar\n      \n      # 1. Comprobar configuración de Nginx\nsudo nginx -t\n\n# 2. Reiniciar PHP-FPM y Nginx\nsudo systemctl restart php8.3-fpm\nsudo systemctl restart nginx"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué diferencia hay entre el error 502 Bad Gateway y el 504 Gateway Timeout?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El error 502 ocurre cuando PHP-FPM está completamente caído o el socket no responde de inmediato. El error 504 ocurre cuando PHP-FPM sí está activo, pero la tarea tarda demasiado tiempo en completarse y supera el límite de tiempo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cloudflare puede generar un error 504?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Si utilizas Cloudflare con proxy activo (nube naranja), Cloudflare tiene un timeout estricto de 100 segundos para planes gratuitos. Si tu backend tarda más de 100 segundos, Cloudflare mostrará su propia pantalla 504."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,7 +246,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 4 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -148,173 +257,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error 504 Gateway Timeout ocurre cuando Nginx actúa como proxy inverso frente a un servidor backend (como PHP-FPM) y este último no responde a tiempo antes de que expire el límite de espera configurado en el servidor web.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-aumentar-los-timeouts-en-la-configuracion-de-nginx">Paso 1: Aumentar los timeouts en la configuración de Nginx</a></li>
-        <li class="toc-subitem"><a href="#paso-2-configurar-los-limites-de-ejecucion-en-php-fpm">Paso 2: Configurar los límites de ejecución en PHP-FPM</a></li>
-        <li class="toc-subitem"><a href="#paso-3-validar-y-reiniciar-los-servicios">Paso 3: Validar y reiniciar los servicios</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <strong>504 Gateway Timeout</strong> ocurre cuando Nginx actúa como proxy inverso frente a un servidor backend (como PHP-FPM) y este último no responde a tiempo antes de que expire el límite de espera configurado en el servidor web.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>HTTP 504 Gateway Timeout al procesar scripts PHP pesados</strong>: Nginx o PHP-FPM interrumpe la conexión porque el script tarda más que <code>fastcgi_read_timeout</code> o <code>max_execution_time</code></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Aumentar los valores de timeout en <code>nginx.conf</code> y en los archivos de configuración de PHP-FPM</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-aumentar-los-timeouts-en-la-configuracion-de-nginx">Paso 1: Aumentar los timeouts en la configuración de Nginx</h3>
-<p>Abre el archivo de configuración del sitio en Nginx (por ejemplo <code>/etc/nginx/sites-available/default</code> o <code>/etc/nginx/conf.d/default.conf</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">NGINX</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>server {
-    listen 80;
-    server_name example.com;
-
-    location ~ \.php$ {
-        include fastcgi_params;
-        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-
-        # Aumentar el tiempo límite de lectura e interconexión con FastCGI
-        fastcgi_connect_timeout 300s;
-        fastcgi_send_timeout 300s;
-        fastcgi_read_timeout 300s;
-    }
-}
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-configurar-los-limites-de-ejecucion-en-php-fpm">Paso 2: Configurar los límites de ejecución en PHP-FPM</h3>
-<p>Ajusta la directiva de tiempo de ejecución en tu archivo <code>php.ini</code> (<code>/etc/php/8.2/fpm/php.ini</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>max_execution_time = 300
-max_input_time = 300
-memory_limit = 256M
-</code></pre>
-    </div>
-    
-<p>Además, asegúrate de actualizar el archivo del pool de PHP-FPM (<code>/etc/php/8.2/fpm/pool.d/www.conf</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>request_terminate_timeout = 300s
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-validar-y-reiniciar-los-servicios">Paso 3: Validar y reiniciar los servicios</h3>
-<p>Verifica que la sintaxis de Nginx sea correcta antes de aplicar los cambios:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo nginx -t
-</code></pre>
-    </div>
-    
-<p>Si el resultado es exitoso, reinicia Nginx y PHP-FPM:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart php8.2-fpm
-sudo systemctl restart nginx
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Delegar procesos pesados a colas en segundo plano</strong>: Utiliza herramientas como Redis y Celery/Supervisor o Laravel Queues para tareas como generación de reportes o procesamiento de imágenes.</li>
-<li><strong>Monitorear el registro de consultas lentas</strong>: Activa el <code>request_slowlog_timeout</code> en PHP-FPM para detectar consultas SQL o funciones que ralentizan las peticiones web.</li>
-<li><strong>Optimizar consultas a la base de datos</strong>: Agrega índices en MySQL/PostgreSQL para evitar bloqueos prolongados durante peticiones HTTP.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -346,6 +289,23 @@ sudo systemctl restart nginx
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -357,23 +317,6 @@ sudo systemctl restart nginx
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

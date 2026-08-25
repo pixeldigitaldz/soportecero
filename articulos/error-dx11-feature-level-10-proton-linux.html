@@ -7,7 +7,7 @@
   <title>Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Cómo solucionar el error de DirectX 11 en Linux usando Steam Play (Proton), Lutris o Heroic Games Launcher.">
+  <meta name="description" content="Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) - SoporteCero">
-  <meta property="og:description" content="Cómo solucionar el error de DirectX 11 en Linux usando Steam Play (Proton), Lutris o Heroic Games Launcher.">
+  <meta property="og:description" content="Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) - SoporteCero">
-  <meta name="twitter:description" content="Cómo solucionar el error de DirectX 11 en Linux usando Steam Play (Proton), Lutris o Heroic Games Launcher.">
+  <meta name="twitter:description" content="Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)",
-  "description": "Cómo solucionar el error de DirectX 11 en Linux usando Steam Play (Proton), Lutris o Heroic Games Launcher.",
+  "description": "Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.",
+  "inLanguage": "es",
   "category": "Gaming Tech",
-  "datePublished": "2026-08-14",
-  "dateModified": "2026-08-14",
+  "articleSection": "Gaming Tech",
+  "keywords": "Proton, Linux, Vulkan, DXVK, Gaming, Mesa",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)",
+      "item": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)",
-  "description": "Cómo solucionar el error de DirectX 11 en Linux usando Steam Play (Proton), Lutris o Heroic Games Launcher.",
-  "step": []
+  "description": "Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html#validar-el-soporte-de-vulkan-en-el-sistema-operativo",
+      "name": "Validar el soporte de Vulkan en el sistema operativo",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba que el controlador de tu tarjeta gráfica expone correctamente la API de Vulkan:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Instalar utilidades de diagnóstico de Vulkan si no están presentes\n# En Arch/CachyOS: sudo pacman -S vulkan-tools\n# En Ubuntu/Debian: sudo apt install vulkan-tools\n\n# Ejecutar el resumen de información de Vulkan\nvulkaninfo --summary\n\n    \n    \nSi el comando devuelve Cannot create Vulkan instance o vkCreateInstance failed, tus drivers gráficos carecen d"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html#instalar-los-paquetes-completos-de-vulkan-32-y-64-bits",
+      "name": "Instalar los paquetes completos de Vulkan (32 y 64 bits)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Los juegos en Steam requieren bibliotecas tanto de 64 bits como de 32 bits (multilib):\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Arch Linux / CachyOS (para AMD):\nsudo pacman -S vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader\n\n# En Arch Linux / CachyOS (para NVIDIA):\nsudo pacman -S nvidia-utils lib32-nvidia-utils vulkan-icd-loader lib32-vulkan-icd-loader\n\n# En Ubuntu / Debian (para AMD):\nsudo apt install libvulkan1 libvulkan1:i386 mesa-vulkan-drivers m"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html#forzar-el-uso-de-la-gpu-dedicada-en-portatiles-hibridos",
+      "name": "Forzar el uso de la GPU dedicada en portátiles híbridos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En equipos con doble gráfica (Intel/Nvidia o AMD/Nvidia), asegúrate de que el juego no intente abrirse con la GPU integrada:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Parámetro de lanzamiento en Steam para forzar GPU dedicada:\n# Para Nvidia (Prime offload):\n__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia %command%\n\n# O usando GameMode y MangoHud:\ngamemoderun %command%"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html#configurar-fallback-a-wined3d-solo-para-gpus-muy-antiguas-sin-vulkan",
+      "name": "Configurar fallback a WineD3D (Solo para GPUs muy antiguas sin Vulkan)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si tu tarjeta gráfica no soporta Vulkan por hardware (GPUs de más de 10 años):\n\n    \n      \n        BASH\n        Copiar\n      \n      # Traducir DirectX 11 a OpenGL en lugar de Vulkan:\nPROTON_USE_WINED3D=1 %command%"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué mi GPU soporta DirectX 11 en Windows pero da este error en Linux?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque en Linux Proton no ejecuta DirectX nativo; traduce las llamadas a Vulkan. Si tu driver en Linux no tiene soporte Vulkan 1.3 instalado, el juego no podrá inicializar Direct3D."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo sé qué GPU está usando el juego?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Instala MangoHud (mangohud %command%) para visualizar en pantalla el nombre de la GPU activa y el uso de VRAM en tiempo real."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,173 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 3 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-08-14
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Actualiza la versión de Proton a Proton GE
-El error suele ocurrir porque el juego intenta buscar librerías nativas de DirectX. Proton usa DXVK para traducir DX11 a Vulkan. Primero, prueba forzar la compatibilidad. Usa la aplicación ProtonUp-Qt para instalar la última versión de Proton GE. Luego reinicia Steam y asígnala al juego desde Propiedades &gt; Compatibilidad.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Vulkan/DXVK no instalado o inactivo</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Usar la variable de entorno <code>PROTON_USE_WINED3D=1</code> o instalar dependencias de Vulkan</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Drivers gráficos obsoletos</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Actualizar Mesa (AMD/Intel) o Nvidia Drivers</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Versión de Proton antigua</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Cambiar a Proton GE o a la última versión experimental de Steam</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
-<p><strong>Actualiza la versión de Proton a Proton GE</strong>
-El error suele ocurrir porque el juego intenta buscar librerías nativas de DirectX. Proton usa DXVK para traducir DX11 a Vulkan. Primero, prueba forzar la compatibilidad. Usa la aplicación <strong>ProtonUp-Qt</strong> para instalar la última versión de <strong>Proton GE</strong>. Luego reinicia Steam y asígnala al juego desde <em>Propiedades &gt; Compatibilidad</em>.</p>
-<p><strong>Prueba usar WINED3D como alternativa</strong>
-Si tu tarjeta gráfica no soporta Vulkan correctamente (GPUs muy antiguas), puedes forzar a Proton a usar OpenGL en lugar de Vulkan:
-En Steam, ve a las propiedades del juego, y en <em>Opciones de Lanzamiento</em> escribe:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>PROTON_USE_WINED3D=1 %command%
-</code></pre>
-    </div>
-    
-<p><strong>Instala los paquetes de Vulkan (Usuarios de Arch/Ubuntu)</strong>
-Es posible que falten las librerías de 32-bit de Vulkan en tu sistema.
-Para Ubuntu/Mint:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo apt install libvulkan1 libvulkan1:i386 mesa-vulkan-drivers mesa-vulkan-drivers:i386
-</code></pre>
-    </div>
-    
-<p>Para Arch Linux:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo pacman -S vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader
-</code></pre>
-    </div>
-    
-<p><em>(Usa <code>nvidia-utils lib32-nvidia-utils</code> si usas NVIDIA).</em></p>
-<p><strong>Verifica el soporte de Vulkan de tu gráfica</strong>
-Si ejecutas el siguiente comando y obtienes errores, significa que tu GPU no está renderizando Vulkan correctamente:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>vulkaninfo | grep &quot;GPU id&quot;
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Actualizaciones constantes:</strong> Mantén siempre tus drivers Mesa o NVIDIA al día mediante un PPA (en Ubuntu) o actualizaciones regulares (Arch/Fedora).</li>
-<li><strong>Herramientas de diagnóstico:</strong> Usa <code>mangohud</code> para verificar si un juego se está ejecutando bajo DXVK o OpenGL.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -318,6 +272,23 @@ Si ejecutas el siguiente comando y obtienes errores, significa que tu GPU no est
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -346,23 +317,6 @@ Si ejecutas el siguiente comando y obtienes errores, significa que tu GPU no est
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

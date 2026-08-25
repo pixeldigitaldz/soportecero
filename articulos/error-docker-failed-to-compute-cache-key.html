@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'failed to compute cache key' en Docker Build",
   "description": "¿Recibes el error 'failed to compute cache key' al construir una imagen con docker build? Solución paso a paso para corregir rutas y Dockerfile.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, DevOps, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
   "dateModified": "2026-08-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'failed to compute cache key' en Docker Build",
+      "item": "https://soportecero.com/articulos/error-docker-failed-to-compute-cache-key.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'failed to compute cache key' en Docker Build",
   "description": "¿Recibes el error 'failed to compute cache key' al construir una imagen con docker build? Solución paso a paso para corregir rutas y Dockerfile.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-compute-cache-key.html#entender-el-contexto-de-construccion-de-docker-build-context",
+      "name": "Entender el contexto de construcción de Docker (Build Context)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Cuando ejecutas docker build -t mi-imagen ., el punto final . define el contexto. Docker empaqueta y envía todos los archivos de esa carpeta al daemon de Docker.\nSi tu Dockerfile contiene:\n\n    \n      \n        DOCKERFILE\n        Copiar\n      \n      COPY package.json ./\n\n    \n    \nPero ejecutas docker build desde un directorio padre donde package.json no está en la raíz, Docker arrojará el error failed to compute cache key.\nSolución: Múdate a la carpeta raíz de tu proyecto o ajusta la ruta en el "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-compute-cache-key.html#verificar-reglas-en-dockerignore",
+      "name": "Verificar reglas en .dockerignore",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre el archivo .dockerignore ubicado en la raíz del proyecto. Si por accidente añadiste una regla que ignora el archivo que intentas copiar con COPY:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      # Si tienes esto en .dockerignore:\nsrc/config.json\n\n    \n    \nDocker no incluirá src/config.json en el contexto y fallará con failed to compute cache key.\nSolución: Elimina la regla del .dockerignore o añade una excepción usando !:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n     "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-compute-cache-key.html#mayusculas-y-minusculas-en-sistemas-linux",
+      "name": "Mayúsculas y minúsculas en sistemas Linux",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En sistemas operativos Linux, los nombres de archivos distinguen entre mayúsculas y minúsculas (case-sensitive). Si en tu código el archivo se llama App.js pero en el Dockerfile escribiste:\n\n    \n      \n        DOCKERFILE\n        Copiar\n      \n      COPY app.js ./\n\n    \n    \nEl motor de Docker no encontrará app.js y cancelará la construcción. Corrige el nombre para que coincida exactamente."
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,177 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error failed to compute cache key: failed to walk: lstat ...: no such file or directory durante el comando docker build ocurre cuando la instrucción COPY o ADD dentro del Dockerfile hace referencia a un archivo o directorio local que no existe dentro del contexto de construcción de Docker.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-entender-el-contexto-de-construccion-de-docker-build-context">Paso 1: Entender el contexto de construcción de Docker (Build Context)</a></li>
-        <li class="toc-subitem"><a href="#paso-2-verificar-reglas-en-dockerignore">Paso 2: Verificar reglas en .dockerignore</a></li>
-        <li class="toc-subitem"><a href="#paso-3-mayusculas-y-minusculas-en-sistemas-linux">Paso 3: Mayúsculas y minúsculas en sistemas Linux</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Ruta de origen especificada en el comando COPY/ADD del Dockerfile no existe</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Verificar la ruta exacta en la estructura de archivos local y el archivo <code>.dockerignore</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Contexto de compilación de Docker apuntando a una carpeta incorrecta</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Ejecutar el comando <code>docker build</code> asegurando la sintaxis <code>.</code> al final del comando</div>
-          </div></div></div>
-<p>El error <strong><code>failed to compute cache key: failed to walk: lstat ...: no such file or directory</code></strong> durante el comando <code>docker build</code> ocurre cuando la instrucción <code>COPY</code> o <code>ADD</code> dentro del <code>Dockerfile</code> hace referencia a un archivo o directorio local que no existe dentro del <strong>contexto de construcción</strong> de Docker.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Revisa que la ruta del archivo copiado exista dentro de la carpeta actual donde ejecutas <code>docker build .</code></li>
-<li>Comprueba que el archivo no esté excluido en el archivo <code>.dockerignore</code>.</li>
-<li>Si usas subcarpetas, ejecuta la compilación especificando el contexto correcto: <code>docker build -f docker/Dockerfile .</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-entender-el-contexto-de-construccion-de-docker-build-context">Paso 1: Entender el contexto de construcción de Docker (Build Context)</h3>
-<p>Cuando ejecutas <code>docker build -t mi-imagen .</code>, el punto final <code>.</code> define el <strong>contexto</strong>. Docker empaqueta y envía todos los archivos de esa carpeta al daemon de Docker.</p>
-<p>Si tu <code>Dockerfile</code> contiene:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">DOCKERFILE</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>COPY package.json ./
-</code></pre>
-    </div>
-    
-<p>Pero ejecutas <code>docker build</code> desde un directorio padre donde <code>package.json</code> no está en la raíz, Docker arrojará el error <code>failed to compute cache key</code>.</p>
-<p><strong>Solución:</strong> Múdate a la carpeta raíz de tu proyecto o ajusta la ruta en el comando de compilación:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Ejecutar desde la raíz del proyecto indicando la ubicación del Dockerfile
-docker build -t mi-app:latest -f ./docker/Dockerfile .
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-verificar-reglas-en-dockerignore">Paso 2: Verificar reglas en <code>.dockerignore</code></h3>
-<p>Abre el archivo <code>.dockerignore</code> ubicado en la raíz del proyecto. Si por accidente añadiste una regla que ignora el archivo que intentas copiar con <code>COPY</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Si tienes esto en .dockerignore:
-src/config.json
-</code></pre>
-    </div>
-    
-<p>Docker no incluirá <code>src/config.json</code> en el contexto y fallará con <code>failed to compute cache key</code>.</p>
-<p><strong>Solución:</strong> Elimina la regla del <code>.dockerignore</code> o añade una excepción usando <code>!</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>!src/config.json
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-mayusculas-y-minusculas-en-sistemas-linux">Paso 3: Mayúsculas y minúsculas en sistemas Linux</h3>
-<p>En sistemas operativos Linux, los nombres de archivos distinguen entre mayúsculas y minúsculas (<em>case-sensitive</em>). Si en tu código el archivo se llama <code>App.js</code> pero en el <code>Dockerfile</code> escribiste:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">DOCKERFILE</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>COPY app.js ./
-</code></pre>
-    </div>
-    
-<p>El motor de Docker no encontrará <code>app.js</code> y cancelará la construcción. Corrige el nombre para que coincida exactamente.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Utiliza Builds multi-etapa (<em>Multi-stage builds</em>) limpias para evitar copiar archivos innecesarios.</li>
-<li>Mantén un archivo <code>.dockerignore</code> ordenado que solo excluya <code>.git</code>, <code>node_modules</code>, y archivos de entorno <code>.env</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -350,6 +253,23 @@ src/config.json
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -361,23 +281,6 @@ src/config.json
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

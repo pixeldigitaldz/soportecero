@@ -7,7 +7,7 @@
   <title>Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Evita quedarte sin espacio en tu SSD recuperando gigabytes de datos acumulados por el gestor de paquetes Pacman en distribuciones Arch Linux.">
+  <meta name="description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero">
-  <meta property="og:description" content="Evita quedarte sin espacio en tu SSD recuperando gigabytes de datos acumulados por el gestor de paquetes Pacman en distribuciones Arch Linux.">
+  <meta property="og:description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS - SoporteCero">
-  <meta name="twitter:description" content="Evita quedarte sin espacio en tu SSD recuperando gigabytes de datos acumulados por el gestor de paquetes Pacman en distribuciones Arch Linux.">
+  <meta name="twitter:description" content="Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS",
-  "description": "Evita quedarte sin espacio en tu SSD recuperando gigabytes de datos acumulados por el gestor de paquetes Pacman en distribuciones Arch Linux.",
+  "description": "Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
-  "datePublished": "2026-06-26",
-  "dateModified": "2026-06-26",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "CachyOS, Arch Linux, Pacman, Linux, SysAdmin, Almacenamiento",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-06-25",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS",
+      "item": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS",
-  "description": "Evita quedarte sin espacio en tu SSD recuperando gigabytes de datos acumulados por el gestor de paquetes Pacman en distribuciones Arch Linux.",
-  "step": []
+  "description": "Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html#comprobar-el-tamano-actual-de-la-cache-de-pacman",
+      "name": "Comprobar el tamaño actual de la caché de Pacman",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Inspecciona cuánto espacio en disco está ocupando la carpeta de paquetes:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Ver el tamaño exacto del directorio de caché de Pacman\ndu -sh /var/cache/pacman/pkg/"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html#limpieza-segura-manteniendo-versiones-de-respaldo-con-paccache",
+      "name": "Limpieza segura manteniendo versiones de respaldo con paccache",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "La herramienta oficial paccache (del paquete pacman-contrib) permite eliminar versiones antiguas conservando las últimas 2 versiones por si necesitas hacer rollback:\n\n    \n      \n        BASH\n        Copiar\n      \n      # 1. Instalar pacman-contrib si no está presente\nsudo pacman -S pacman-contrib --noconfirm\n\n# 2. Eliminar todas las versiones anteriores excepto las 2 más recientes\nsudo paccache -r -k 2\n\n# 3. Eliminar paquetes desinstalados que aún quedaron en caché\nsudo paccache -ruk0"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html#limpieza-total-de-paquetes-solo-cuando-necesitas-espacio-urgente",
+      "name": "Limpieza total de paquetes (Solo cuando necesitas espacio urgente)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si requieres liberar todo el espacio posible de inmediato:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Limpiar paquetes no instalados\nsudo pacman -Sc --noconfirm\n\n# Limpiar por completo TODA la caché de Pacman (0 archivos residuales)\nsudo pacman -Scc --noconfirm"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html#limpiar-la-cache-de-compilaciones-aur-yay-paru",
+      "name": "Limpiar la caché de compilaciones AUR (Yay / Paru)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Los paquetes descargados y compilados desde AUR se guardan en la carpeta de usuario:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Si usas Yay:\nyay -Sc --aur --noconfirm\nrm -rf ~/.cache/yay/*\n\n# Si usas Paru:\nparu -Scc --noconfirm"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué Pacman guarda todas las versiones descargadas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para permitir volver a una versión anterior (pacman -U /var/cache/pacman/pkg/paquete-antiguo.pkg.tar.zst) de forma offline si una actualización reciente rompe alguna aplicación."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Es seguro activar paccache.timer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, es completamente seguro. Por defecto, el temporizador conserva las últimas 3 versiones de cada paquete y elimina versiones obsoletas cada semana."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,152 +246,18 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 3 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Actualizado: 2026-06-26
+            Actualizado: 2026-06-25
           </span>
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>A diferencia de otros sistemas operativos, las distribuciones basadas en Arch Linux (como CachyOS) no eliminan de forma automática los paquetes antiguos que descargas durante las actualizaciones. El gestor pacman los acumula indefinidamente en la ruta /var/cache/pacman/pkg/ por si necesitas hacer un downgrade. Con el tiempo, esta carpeta puede devorarse 20GB o 30GB de tu almacenamiento SSD.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-medir-el-tamano-actual-de-la-basura">Paso 1: Medir el tamaño actual de la basura</a></li>
-        <li class="toc-subitem"><a href="#paso-2-limpieza-selectiva-usando-paccache-recomendado">Paso 2: Limpieza selectiva usando paccache (Recomendado)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-eliminar-paquetes-huerfanos-del-sistema">Paso 3: Eliminar paquetes huérfanos del sistema</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Acumulación descontrolada de paquetes antiguos en /var/cache/pacman/pkg/</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Eliminar versiones antiguas del caché: <code>sudo paccache -r</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Falta de limpieza de paquetes huérfanos sin dependencias activas</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Eliminar paquetes huérfanos con <code>sudo pacman -Rns $(pacman -Qtdq)</code></div>
-          </div></div></div>
-<p>A diferencia de otros sistemas operativos, las distribuciones basadas en Arch Linux (como CachyOS) no eliminan de forma automática los paquetes antiguos que descargas durante las actualizaciones. El gestor <code>pacman</code> los acumula indefinidamente en la ruta <code>/var/cache/pacman/pkg/</code> por si necesitas hacer un <em>downgrade</em>. Con el tiempo, esta carpeta puede devorarse 20GB o 30GB de tu almacenamiento SSD.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-medir-el-tamano-actual-de-la-basura">Paso 1: Medir el tamaño actual de la basura</h3>
-<p>Ejecuta este comando en tu terminal para ver exactamente cuánto espacio está consumiendo la caché acumulada de descargas:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>du -sh /var/cache/pacman/pkg/
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-limpieza-selectiva-usando-paccache-recomendado">Paso 2: Limpieza selectiva usando paccache (Recomendado)</h3>
-<p>No borres la carpeta entera a mano, ya que es peligroso. Usaremos la herramienta oficial paccache para eliminar todas las versiones viejas de los programas, manteniendo únicamente la versión actual instalada y la inmediatamente anterior por seguridad:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo paccache -r
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-eliminar-paquetes-huerfanos-del-sistema">Paso 3: Eliminar paquetes huérfanos del sistema</h3>
-<p>Los paquetes huérfanos son librerías que se instalaron como dependencias de un programa que ya borraste, por lo que quedan flotando en el disco sin ninguna utilidad. Bórralos con este comando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo pacman -Rns $(pacman -Qdtq)
-</code></pre>
-    </div>
-    
-<p>Si el sistema te responde que no hay objetivos para eliminar, significa que tu árbol de dependencias está completamente limpio.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Puedes automatizar este mantenimiento para no tener que recordarlo. Pídele a tu sistema que ejecute una limpieza automática cada semana programando un &quot;Systemd Timer&quot; ejecutando el comando: sudo systemctl enable --now paccache.timer.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -314,6 +289,23 @@
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -325,23 +317,6 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

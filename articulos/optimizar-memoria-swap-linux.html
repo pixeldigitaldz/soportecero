@@ -7,7 +7,7 @@
   <title>Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
+  <meta name="description" content="Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html">
   
@@ -21,14 +21,14 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:title" content="Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero">
-  <meta property="og:description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
+  <meta property="og:description" content="Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux.">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="og:url" content="https://soportecero.com/articulos/optimizar-memoria-swap-linux.html">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap - SoporteCero">
-  <meta name="twitter:description" content="Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.">
+  <meta name="twitter:description" content="Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
 
   <!-- Stylesheet -->
@@ -49,17 +49,27 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap",
-  "description": "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.",
+  "description": "Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Linux, SysAdmin, Swap, Rendimiento, Ubuntu, Debian",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,109 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap",
+      "item": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap",
-  "description": "Aprende a crear un archivo swapfile para evitar la caída de tus aplicaciones por falta de memoria RAM y optimiza el valor de swappiness.",
-  "step": []
+  "description": "Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html#crear-e-inicializar-un-archivo-swap-seguro-swapfile",
+      "name": "Crear e inicializar un archivo Swap seguro (Swapfile)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si tu servidor carece de partición Swap, crea un archivo de intercambio en la raíz del sistema:\n\n    \n      \n        BASH\n        Copiar\n      \n      # 1. Comprobar si ya existe swap activa\nsudo swapon --show\nfree -h\n\n# 2. Crear un archivo preasignado de 4GB (o 8GB según tu RAM)\nsudo fallocate -l 4G /swapfile\n\n# Si fallocate no es compatible con tu sistema de archivos (ej. Btrfs o XFS antiguo):\n# sudo dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress\n\n# 3. Asignar permisos estrictos "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html#configurar-la-persistencia-del-montaje-en-etcfstab",
+      "name": "Configurar la persistencia del montaje en /etc/fstab",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegura que el archivo Swap se monte automáticamente tras cada reinicio del sistema:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Hacer una copia de seguridad de fstab\nsudo cp /etc/fstab /etc/fstab.bak\n\n# Añadir la entrada persistente\necho &#39;/swapfile none swap sw 0 0&#39; | sudo tee -a /etc/fstab"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html#optimizar-los-parametros-del-kernel-swappiness-y-vfscachepressure",
+      "name": "Optimizar los parámetros del kernel (swappiness y vfs_cache_pressure)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Por defecto, muchas distribuciones tienen vm.swappiness=60, lo que hace que el kernel utilice el disco antes de lo necesario. Para servidores y equipos de escritorio con SSD:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar el valor actual\ncat /proc/sys/vm/swappiness\n\n# Establecer temporalmente swappiness a 10 (solo usa swap bajo presión real)\nsudo sysctl vm.swappiness=10\nsudo sysctl vm.vfs_cache_pressure=50\n\n# Hacer la configuración permanente en /etc/sysctl.d/99-swap.conf\necho"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html#verificar-el-estado-de-la-memoria",
+      "name": "Verificar el estado de la memoria",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Comprueba con free -h que el nuevo espacio Swap aparece activo y disponible."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánta memoria Swap debo asignar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Como regla general: para sistemas con menos de 4GB de RAM, asigna el doble de RAM en Swap. Para sistemas con 8GB a 16GB, asigna entre 4GB y 8GB de Swap. Para más de 32GB de RAM, 4GB a 8GB suelen ser suficientes para amortiguar picos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El archivo Swap desgasta los discos SSD?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Con un swappiness bajo (10 a 20), la escritura en Swap es mínima y no afectará la vida útil de los SSD modernos con nivelación de desgaste (wear leveling)."
+      }
+    }
+  ]
 }
   </script>
     
@@ -137,7 +246,7 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Lectura: 4 min
+            Lectura: 5 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -148,154 +257,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El desbordamiento de memoria RAM en servidores en la nube sin particiones de intercambio (Swap) provoca que el kernel de Linux active el proceso asesino OOM Killer (Out of Memory Killer), deteniendo de inmediato aplicaciones críticas como bases de datos MySQL, servidores web Nginx o procesos de Node.js.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-configurar-la-memoria-virtual-en-linux-paso-a-paso">Cómo configurar la memoria virtual en Linux paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-crear-e-inicializar-un-archivo-swap-seguro-swapfile">Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)</a></li>
-        <li class="toc-subitem"><a href="#paso-2-configurar-la-persistencia-del-montaje">Paso 2: Configurar la persistencia del montaje</a></li>
-        <li class="toc-subitem"><a href="#paso-3-optimizar-el-umbral-de-activacion-swappiness">Paso 3: Optimizar el umbral de activación (Swappiness)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Uso agresivo del espacio swap en disco lento causando tirones (stuttering)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reducir la agresividad de swappiness: <code>sudo sysctl vm.swappiness=10</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Falta de compresión de memoria RAM en tiempo real</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Habilitar el módulo zRAM en Linux para comprimir la memoria en lugar de usar swap en disco</div>
-          </div></div></div>
-<p>El desbordamiento de memoria RAM en servidores en la nube sin particiones de intercambio (Swap) provoca que el kernel de Linux active el proceso asesino <code>OOM Killer</code> (Out of Memory Killer), deteniendo de inmediato aplicaciones críticas como bases de datos MySQL, servidores web Nginx o procesos de Node.js.</p>
-
-    </section>
-    <h2 id="como-configurar-la-memoria-virtual-en-linux-paso-a-paso">🚀 Cómo configurar la memoria virtual en Linux paso a paso</h2>
-<h3 id="paso-1-crear-e-inicializar-un-archivo-swap-seguro-swapfile">Paso 1: Crear e inicializar un archivo Swap seguro (Swapfile)</h3>
-<p>Si tu servidor VPS no cuenta con memoria de intercambio asignada, puedes generar un archivo dinámico de 4GB para mitigar picos de consumo:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Crear un archivo vacío preasignado
-sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
-
-# Asignar permisos estrictos de superusuario
-sudo chmod 600 /swapfile
-
-# Dar formato de intercambio al archivo
-sudo mkswap /swapfile
-
-# Activar el archivo como memoria Swap en el sistema
-sudo swapon /swapfile
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-configurar-la-persistencia-del-montaje">Paso 2: Configurar la persistencia del montaje</h3>
-<p>Edita la tabla de sistemas de archivos del kernel (<code>/etc/fstab</code>) para asegurar que el sistema cargue la memoria de intercambio automáticamente al encenderse:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>echo &quot;/swapfile none swap sw 0 0&quot; | sudo tee -a /etc/fstab
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-optimizar-el-umbral-de-activacion-swappiness">Paso 3: Optimizar el umbral de activación (Swappiness)</h3>
-<p>El valor predeterminado de <code>swappiness</code> (normalmente 60) obliga al kernel a escribir en el disco demasiado pronto, lo que puede ralentizar servidores. Para optimizar el uso de memoria física RAM al máximo, baja el valor a <code>10</code> o <code>20</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Cambiar el valor temporalmente en memoria
-sudo sysctl vm.swappiness=10
-
-# Fijar la configuración en los parámetros del sistema
-echo &quot;vm.swappiness=10&quot; | sudo tee -a /etc/sysctl.conf
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Evita ubicar archivos de memoria Swap en almacenamiento SSD secundario de baja calidad o discos externos compartidos. El ciclo constante de lecturas y escrituras intensivas puede desgastar físicamente las celdas de almacenamiento SSD de grado de consumo antes de tiempo, degradando de forma irreversible las tasas de transferencia de datos de tu disco duro principal.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -327,6 +289,23 @@ echo &quot;vm.swappiness=10&quot; | sudo tee -a /etc/sysctl.conf
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -338,23 +317,6 @@ echo &quot;vm.swappiness=10&quot; | sudo tee -a /etc/sysctl.conf
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'failed to compute cache key' in Docker Build",
   "description": "Getting the 'failed to compute cache key' error during docker build? Step-by-step guide to fix file path resolution and Dockerfile build contexts.",
+  "inLanguage": "en",
   "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Docker, DevOps, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
   "dateModified": "2026-08-03",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,27 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "[FIXED] Error 'failed to compute cache key' in Docker Build",
-  "description": "Getting the 'failed to compute cache key' error during docker build? Step-by-step guide to fix file path resolution and Dockerfile build contexts.",
-  "step": []
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[FIXED] Error 'failed to compute cache key' in Docker Build",
+      "item": "https://soportecero.com/en/articulos/error-docker-failed-to-compute-cache-key.html"
+    }
+  ]
 }
   </script>
     
@@ -148,174 +175,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error failed to compute cache key: failed to walk: lstat ...: no such file or directory during docker build occurs when a COPY or ADD instruction in your Dockerfile references a local file or directory that does not exist within the Docker build context.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-troubleshooting">Step-by-Step Troubleshooting</a></li>
-        <li class="toc-subitem"><a href="#step-1-understand-the-docker-build-context">Step 1: Understand the Docker Build Context</a></li>
-        <li class="toc-subitem"><a href="#step-2-check-dockerignore-exclusions">Step 2: Check .dockerignore Exclusions</a></li>
-        <li class="toc-subitem"><a href="#step-3-check-file-case-sensitivity-linux">Step 3: Check File Case Sensitivity (Linux)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Source path in Dockerfile COPY/ADD instruction does not exist</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Verify exact local file path and check <code>.dockerignore</code> file</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Docker build context pointing to incorrect working directory</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Run <code>docker build</code> ensuring proper trailing <code>.</code> context syntax</div>
-          </div></div></div>
-<p>The error <strong><code>failed to compute cache key: failed to walk: lstat ...: no such file or directory</code></strong> during <code>docker build</code> occurs when a <code>COPY</code> or <code>ADD</code> instruction in your <code>Dockerfile</code> references a local file or directory that does not exist within the <strong>Docker build context</strong>.</p>
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Verify the source file path exists inside the directory where you run <code>docker build .</code></li>
-<li>Check if the file is ignored in <code>.dockerignore</code>.</li>
-<li>Specify the root context explicitly when building from subfolders: <code>docker build -f docker/Dockerfile .</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="step-by-step-troubleshooting">🚀 Step-by-Step Troubleshooting</h2>
-<h3 id="step-1-understand-the-docker-build-context">Step 1: Understand the Docker Build Context</h3>
-<p>When you execute <code>docker build -t my-image .</code>, the trailing dot <code>.</code> defines the <strong>build context</strong>. Docker packages and sends files in that directory to the Docker daemon.</p>
-<p>If your <code>Dockerfile</code> has:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">DOCKERFILE</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>COPY package.json ./
-</code></pre>
-    </div>
-    
-<p>Targeting a file outside the current working folder will cause <code>failed to compute cache key</code>.</p>
-<p><strong>Fix:</strong> Move to your project root or adjust your build command context:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>docker build -t my-app:latest -f ./docker/Dockerfile .
-</code></pre>
-    </div>
-    
-<h3 id="step-2-check-dockerignore-exclusions">Step 2: Check <code>.dockerignore</code> Exclusions</h3>
-<p>Open the <code>.dockerignore</code> file in your root folder. If an ignored rule matches a file targeted by <code>COPY</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>src/config.json
-</code></pre>
-    </div>
-    
-<p>Docker excludes it from the context, throwing the <code>failed to compute cache key</code> error.</p>
-<p><strong>Fix:</strong> Remove the rule or add an exception prefix <code>!</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>!src/config.json
-</code></pre>
-    </div>
-    
-<h3 id="step-3-check-file-case-sensitivity-linux">Step 3: Check File Case Sensitivity (Linux)</h3>
-<p>Linux filesystems are case-sensitive. If your file is named <code>App.js</code> but your <code>Dockerfile</code> has:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">DOCKERFILE</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>COPY app.js ./
-</code></pre>
-    </div>
-    
-<p>Docker fails to locate <code>app.js</code>. Update the filename to match exact capitalization.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -347,6 +207,23 @@
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error: iptables failed: No chain/target/match by that name in Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -358,23 +235,6 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: How to fix and understand active (exited) or failed services in Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix and understand active (exited) or failed services in Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

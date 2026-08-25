@@ -42,6 +42,19 @@ function copyDirSync(src, dest) {
   }
 }
 
+// Slugify helper for anchor link IDs and category paths
+function slugify(text) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
 // Helper to inject hreflang and lang_selector into static files
 function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn, lang = 'es') {
   let content = fs.readFileSync(srcPath, 'utf-8');
@@ -81,12 +94,12 @@ function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn, lang = 'es')
 function postProcessHtml(rawHtml, lang = 'es') {
   let html = rawHtml;
   let parsedSteps = [];
+  let parsedFaqs = [];
   const isEn = lang === 'en';
 
   // 0. Extract GEO / AI Summary (TL;DR)
   const firstParagraphMatch = html.match(/<p>([\s\S]*?)<\/p>/i);
   if (firstParagraphMatch) {
-    // Strip internal HTML tags for a clean AI text snippet
     const summaryText = firstParagraphMatch[1].replace(/<[^>]*>/g, '').trim(); 
     if (summaryText.length > 30) {
       const summaryTitle = isEn ? '✨ Quick Answer' : '✨ Respuesta Rápida';
@@ -98,7 +111,6 @@ function postProcessHtml(rawHtml, lang = 'es') {
         <p>${summaryText}</p>
       </section>
       `;
-      // Inject right at the beginning of the article content
       html = aiSummaryHtml + html;
     }
   }
@@ -192,11 +204,11 @@ function postProcessHtml(rawHtml, lang = 'es') {
     }
   }
 
-  // 3. Extraction of the Prevention Tips section to populate the Sidebar
+  // 3. Extraction of Prevention Tips section to populate Callout
   let preventionListHtml = '';
   const prevRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Prevention Advice|Prevention|Prevention Tips)[^<]*<\/h2>([\s\S]*)$/i
-    : /<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion)[^<]*<\/h2>([\s\S]*)$/i;
+    ? /<h2[^>]*>[^<]*(?:Prevention Advice|Prevention|Prevention Tips|Best Practices)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    : /<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion|Buenas Prácticas)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const preventionMatch = html.match(prevRegex);
   if (preventionMatch) {
@@ -211,17 +223,18 @@ function postProcessHtml(rawHtml, lang = 'es') {
     html = html.replace(prevRegex, '');
   }
 
-  // 4. Solution Steps list formatting
+  // 4. Solution Steps list formatting & extraction
   const solTitle = isEn ? 'Step-by-Step Solution' : 'La Solución Paso a Paso';
   const solRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix)[^<]*<\/h2>([\s\S]*)$/i
-    : /<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*)$/i;
+    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    : /<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const solutionMatch = html.match(solRegex);
   if (solutionMatch) {
     let solutionContent = solutionMatch[1];
     const olMatch = solutionContent.match(/<ol[^>]*>([\s\S]*?)<\/ol>/i);
-    
+    const h3Matches = [...solutionContent.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3|$)/gi)];
+
     if (olMatch) {
       const olContent = olMatch[1];
       const rawLis = olContent.split(/<li[^>]*>/i).slice(1);
@@ -241,7 +254,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
         }
 
         parsedSteps.push({
-          title: stepTitle,
+          title: stepTitle.replace(/<[^>]*>/g, '').trim(),
           body: stepBody
         });
         
@@ -258,36 +271,81 @@ function postProcessHtml(rawHtml, lang = 'es') {
         return formatted;
       });
 
-      if (formattedLis.length >= 2) {
-        formattedLis.splice(2, 0, `
-        <div class="adsense-placeholder" id="ad-in-feed">
-          ${isEn ? 'Google AdSense Ad (In-Article)' : 'Anuncio Google AdSense (En medio del artículo)'}
-          <span>${isEn ? 'In-Article Ad' : 'Anuncio de Contenido / In-Article Ad'}</span>
-        </div>
-        `);
-      }
-
       const newOl = `<ol class="steps-list">\n${formattedLis.join('\n')}\n</ol>`;
       const newSolutionContent = solutionContent.replace(/<ol[^>]*>[\s\S]*?<\/ol>/i, newOl);
       
-      html = html.replace(solRegex, 
+      html = html.replace(solutionMatch[0], 
         `<h2 style="display: flex; align-items: center; gap: 0.5rem;">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
           </svg>
           ${solTitle}
         </h2>\n${newSolutionContent}`);
+    } else if (h3Matches.length > 0) {
+      let stepIndex = 1;
+      const formattedSteps = h3Matches.map(m => {
+        const rawTitle = m[1].replace(/<[^>]*>/g, '').trim();
+        const stepBody = m[2].trim();
+        const cleanTitle = rawTitle.replace(/^Paso\s+\d+:\s*|^Step\s+\d+:\s*/i, '').trim() || rawTitle;
+
+        parsedSteps.push({
+          title: cleanTitle,
+          body: stepBody
+        });
+
+        const formatted = `
+        <li class="step-item">
+          <div class="step-number">${stepIndex}</div>
+          <div class="step-body">
+            <h4>${rawTitle}</h4>
+            ${stepBody}
+          </div>
+        </li>
+        `;
+        stepIndex++;
+        return formatted;
+      });
+
+      const newOl = `<ol class="steps-list">\n${formattedSteps.join('\n')}\n</ol>`;
+      html = html.replace(solutionMatch[0],
+        `<h2 style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          ${solTitle}
+        </h2>\n${newOl}\n`);
     }
   }
 
-  // 5. Automated Table of Contents (ToC) heading parser & Injector
+  // 5. FAQ Section Extraction (for FAQ Schema)
+  const faqRegex = isEn
+    ? /<h2[^>]*>[^<]*(?:Frequently Asked Questions|FAQ|Common Questions)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    : /<h2[^>]*>[^<]*(?:Preguntas Frecuentes|FAQ|Dudas Frecuentes)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
+
+  const faqMatch = html.match(faqRegex);
+  if (faqMatch) {
+    const faqContent = faqMatch[1];
+    const qMatches = [...faqContent.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3|$)/gi)];
+    for (const qm of qMatches) {
+      const qText = qm[1].replace(/<[^>]*>/g, '').trim();
+      const aText = qm[2].replace(/<[^>]*>/g, '').trim();
+      if (qText && aText) {
+        parsedFaqs.push({
+          question: qText,
+          answer: aText
+        });
+      }
+    }
+  }
+
+  // 6. Automated Table of Contents (ToC) heading parser & Injector
   let tocItems = [];
   let headingCount = 0;
   
   html = html.replace(/<(h[23])[^>]*>([\s\S]*?)<\/h[23]>/gi, (match, tag, titleText) => {
     const cleanText = titleText
-      .replace(/<[^>]*>/g, '') // remove inline tags
-      .replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '') // remove emojis
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '')
       .trim();
 
     const id = slugify(cleanText) || `seccion-${headingCount++}`;
@@ -328,20 +386,9 @@ function postProcessHtml(rawHtml, lang = 'es') {
   return {
     contentHtml: html,
     preventionHtml: preventionListHtml,
-    steps: parsedSteps
+    steps: parsedSteps,
+    faqs: parsedFaqs
   };
-}
-
-// Slugify helper for anchor link IDs
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
 }
 
 function build() {
@@ -399,7 +446,7 @@ function build() {
   const postsEs = [];
   const filesEs = fs.readdirSync(CONTENT_DIR);
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(23, 59, 59, 999);
 
   for (let file of filesEs) {
     if (!file.endsWith('.md')) continue;
@@ -457,9 +504,9 @@ function build() {
   postsEs.sort((a, b) => new Date(b.date) - new Date(a.date));
   postsEn.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // 7. Compile Spanish article pages (with Hreflang)
+  // 7. Compile Spanish article pages (with Hreflang and Rich Schemas)
   for (let post of postsEs) {
-    const { contentHtml, preventionHtml, steps } = postProcessHtml(post.rawHtml, 'es');
+    const { contentHtml, preventionHtml, steps, faqs } = postProcessHtml(post.rawHtml, 'es');
     
     // Check if English translation exists
     const hasEnTranslation = postsEn.some(p => p.filename === post.filename);
@@ -497,43 +544,113 @@ function build() {
       `;
     }).join('\n');
 
-    // JSON-LD Schemas
+    const categorySlug = CATEGORY_MAP_ES[post.category] || 'sistemas';
+    const pageUrl = `https://soportecero.com/articulos/${post.filename}.html`;
+
+    // Rich JSON-LD TechArticle Schema
     const techArticleSchema = {
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
+      "inLanguage": "es",
       "category": post.category,
+      "articleSection": post.category,
+      "keywords": post.tags ? post.tags.join(', ') : '',
+      "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
       "dateModified": post.date,
-      "author": { "@type": "Organization", "name": "SoporteCero" },
-      "publisher": { "@type": "Organization", "name": "SoporteCero" },
+      "author": {
+        "@type": "Organization",
+        "name": "SoporteCero",
+        "url": "https://soportecero.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SoporteCero",
+        "url": "https://soportecero.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://soportecero.com/favicon.svg"
+        }
+      },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": `https://soportecero.com/articulos/${post.filename}.html`
+        "@id": pageUrl
       }
     };
 
-    const howToSchema = {
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
       "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": post.title,
-      "description": post.description,
-      "step": steps.map(s => ({
-        "@type": "HowToStep",
-        "url": `https://soportecero.com/articulos/${post.filename}.html#${slugify(s.title)}`,
-        "name": s.title,
-        "itemListElement": [{ "@type": "HowToDirection", "text": s.body.replace(/<[^>]*>/g, '').trim() }]
-      }))
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://soportecero.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": post.category,
+          "item": `https://soportecero.com/?cat=${categorySlug}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": post.title,
+          "item": pageUrl
+        }
+      ]
     };
+
+    let howToSchemaScript = '';
+    if (steps && steps.length > 0) {
+      const howToSchema = {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": post.title,
+        "description": post.description,
+        "step": steps.map((s, idx) => ({
+          "@type": "HowToStep",
+          "position": idx + 1,
+          "url": `${pageUrl}#${slugify(s.title)}`,
+          "name": s.title,
+          "itemListElement": [{
+            "@type": "HowToDirection",
+            "text": s.body.replace(/<[^>]*>/g, '').trim().substring(0, 500)
+          }]
+        }))
+      };
+      howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
+    }
+
+    let faqSchemaScript = '';
+    if (faqs && faqs.length > 0) {
+      const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(f => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": f.answer
+          }
+        }))
+      };
+      faqSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(faqSchema, null, 2)}\n  </script>`;
+    }
 
     const schemaScriptHtml = `
   <script type="application/ld+json">
   ${JSON.stringify(techArticleSchema, null, 2)}
   </script>
   <script type="application/ld+json">
-  ${JSON.stringify(howToSchema, null, 2)}
-  </script>
+  ${JSON.stringify(breadcrumbSchema, null, 2)}
+  </script>${howToSchemaScript}${faqSchemaScript}
     `;
 
     const langSelectorLink = hasEnTranslation 
@@ -565,9 +682,9 @@ function build() {
     console.log(`[POST ES] Compilado: articulos/${post.filename}.html`);
   }
 
-  // 8. Compile English article pages (with Hreflang)
+  // 8. Compile English article pages (with Hreflang and Rich Schemas)
   for (let post of postsEn) {
-    const { contentHtml, preventionHtml, steps } = postProcessHtml(post.rawHtml, 'en');
+    const { contentHtml, preventionHtml, steps, faqs } = postProcessHtml(post.rawHtml, 'en');
     
     // Check if Spanish counterpart exists
     const hasEsCounterpart = postsEs.some(p => p.filename === post.filename);
@@ -605,43 +722,113 @@ function build() {
       `;
     }).join('\n');
 
-    // JSON-LD Schemas
+    const categorySlug = CATEGORY_MAP_EN[post.category] || 'sistemas';
+    const pageUrl = `https://soportecero.com/en/articulos/${post.filename}.html`;
+
+    // Rich JSON-LD TechArticle Schema
     const techArticleSchema = {
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
+      "inLanguage": "en",
       "category": post.category,
+      "articleSection": post.category,
+      "keywords": post.tags ? post.tags.join(', ') : '',
+      "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
       "dateModified": post.date,
-      "author": { "@type": "Organization", "name": "SoporteCero" },
-      "publisher": { "@type": "Organization", "name": "SoporteCero" },
+      "author": {
+        "@type": "Organization",
+        "name": "SoporteCero",
+        "url": "https://soportecero.com/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "SoporteCero",
+        "url": "https://soportecero.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://soportecero.com/favicon.svg"
+        }
+      },
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": `https://soportecero.com/en/articulos/${post.filename}.html`
+        "@id": pageUrl
       }
     };
 
-    const howToSchema = {
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
       "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": post.title,
-      "description": post.description,
-      "step": steps.map(s => ({
-        "@type": "HowToStep",
-        "url": `https://soportecero.com/en/articulos/${post.filename}.html#${slugify(s.title)}`,
-        "name": s.title,
-        "itemListElement": [{ "@type": "HowToDirection", "text": s.body.replace(/<[^>]*>/g, '').trim() }]
-      }))
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://soportecero.com/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": post.category,
+          "item": `https://soportecero.com/en/?cat=${categorySlug}`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": post.title,
+          "item": pageUrl
+        }
+      ]
     };
+
+    let howToSchemaScript = '';
+    if (steps && steps.length > 0) {
+      const howToSchema = {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": post.title,
+        "description": post.description,
+        "step": steps.map((s, idx) => ({
+          "@type": "HowToStep",
+          "position": idx + 1,
+          "url": `${pageUrl}#${slugify(s.title)}`,
+          "name": s.title,
+          "itemListElement": [{
+            "@type": "HowToDirection",
+            "text": s.body.replace(/<[^>]*>/g, '').trim().substring(0, 500)
+          }]
+        }))
+      };
+      howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
+    }
+
+    let faqSchemaScript = '';
+    if (faqs && faqs.length > 0) {
+      const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(f => ({
+          "@type": "Question",
+          "name": f.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": f.answer
+          }
+        }))
+      };
+      faqSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(faqSchema, null, 2)}\n  </script>`;
+    }
 
     const schemaScriptHtml = `
   <script type="application/ld+json">
   ${JSON.stringify(techArticleSchema, null, 2)}
   </script>
   <script type="application/ld+json">
-  ${JSON.stringify(howToSchema, null, 2)}
-  </script>
+  ${JSON.stringify(breadcrumbSchema, null, 2)}
+  </script>${howToSchemaScript}${faqSchemaScript}
     `;
 
     const langSelectorLink = hasEsCounterpart
@@ -770,7 +957,7 @@ function build() {
   `;
   const indexHtmlEn = indexTemplateEn
     .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEn)
-    .replace('{{hreflang}}', indexHreflangEs) // Reuse the same hreflang links
+    .replace('{{hreflang}}', indexHreflangEs)
     .replace('{{lang_selector}}', indexLangSelectorEn);
 
   fs.writeFileSync(path.join(DIST_DIR, 'en', 'index.html'), indexHtmlEn, 'utf-8');

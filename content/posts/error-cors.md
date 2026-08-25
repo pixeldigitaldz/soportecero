@@ -1,50 +1,102 @@
 ---
-title: "Solución Error CORS Access-Control-Allow-Origin"
-description: "Aprende cómo configurar allow cors y solucionar el error de CORS 'Access-Control-Allow-Origin' en tu backend paso a paso."
+title: "Solución Error CORS Access-Control-Allow-Origin: Guía Definitiva"
+description: "Aprende a solucionar el error 'No Access-Control-Allow-Origin header is present' en Express, Next.js, Django, FastAPI y Nginx."
 category: "Web y Código"
-tags: ["CORS", "JS", "Express"]
-readTime: "4 min"
-date: "2026-06-26"
+tags: ["CORS", "JavaScript", "Express", "Node.js", "APIs", "Seguridad"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Falta de política CORS en el servidor backend** | Agregar middleware CORS en backend (ej. `app.use(cors())` en Express) |
-| **Peticiones preflight (OPTIONS) rechazadas por falta de encabezados permitidos** | Permitir los métodos `GET, POST, PUT, DELETE` y encabezados `Content-Type, Authorization` |
+| **El navegador bloquea la petición fetch/axios porque el backend no envía la cabecera Access-Control-Allow-Origin** | Añadir el middleware CORS correspondiente en el backend permitiendo el origen del frontend |
+| **La petición preflight OPTIONS falla o retorna un código HTTP distinto de 200/204** | Configurar el servidor para responder exitosamente a las solicitudes preflight con método OPTIONS |
 
-
-Aprender **cómo configurar allow cors** para resolver el error de CORS (Cross-Origin Resource Sharing) es esencial, ya que este problema ocurre estrictamente en el navegador del cliente. Sucede cuando una aplicación web en un dominio (ej. `localhost:3000`) intenta consumir recursos de una API alojada en otro dominio, y el servidor de la API no incluye las cabeceras HTTP necesarias para autorizar la petición.
+El error `Access to XMLHttpRequest at 'https://api.ejemplo.com' from origin 'https://app.ejemplo.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource` es un mecanismo de seguridad implementado por los navegadores web para evitar que scripts maliciosos de un dominio lean datos protegidos de otro origen distinto (mismo protocolo, dominio o puerto).
 
 ## 🚀 Cómo solucionar el error paso a paso
-La forma correcta de solucionar esto es configurar el **Backend (servidor)** para que acepte las peticiones de tu cliente. Jamás uses extensiones del navegador en entornos de producción.
 
-### Paso 1: Solución en Node.js (Express)
-Instala el middleware oficial de CORS en tu proyecto:
-```bash
-npm install cors
-```
-Luego, impleméntalo restringiendo el acceso únicamente a tus dominios de confianza:
+### Paso 1: Configurar CORS en Node.js con Express
+Si tu backend está construido con Express, utiliza el middleware oficial `cors`:
 ```javascript
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+
 const app = express();
 
-const corsOptions = {
-  origin: 'https://tusitioweb.com', // Tu dominio frontend
-  optionsSuccessStatus: 200
-};
+// Lista de dominios autorizados
+const allowedOrigins = [
+  'https://app.tudominio.com',
+  'http://localhost:3000'
+];
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Bloqueado por política CORS'));
+    }
+  },
+  credentials: true, // Permitir envío de cookies y tokens Authorization
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 ```
 
-### Paso 2: Solución mediante cabeceras HTTP nativas
-Si manejas las respuestas del servidor manualmente, asegúrate de inyectar la siguiente cabecera en los encabezados de respuesta:
-```http
-Access-Control-Allow-Origin: https://tusitioweb.com
+### Paso 2: Solución en Nginx como Proxy Inverso
+Si gestionas tus APIs detrás de un servidor web Nginx, puedes inyectar las cabeceras directamente:
+```nginx
+location /api/ {
+    if ($request_method = 'OPTIONS') {
+        add_header 'Access-Control-Allow-Origin' 'https://app.tudominio.com' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Content-Length' 0;
+        add_header 'Content-Type' 'text/plain charset=UTF-8';
+        return 204;
+    }
+
+    add_header 'Access-Control-Allow-Origin' 'https://app.tudominio.com' always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+
+    proxy_pass http://localhost:5000;
+}
 ```
 
-## 🛡️ Consejo de Prevención
-Prácticas de seguridad recomendadas:
-* Evita usar el comodín * en entornos de producción ya que expone tu API de forma pública.
-* Configura correctamente los métodos permitidos (GET, POST, PUT, DELETE).
+### Paso 3: Solución en Python (FastAPI / Django)
+En frameworks modernos de Python:
+```python
+# En FastAPI:
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://app.tudominio.com", "http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+### Paso 4: Validar las cabeceras con cURL
+Comprueba que tu servidor responde adecuadamente a una solicitud preflight de prueba:
+```bash
+curl -I -X OPTIONS https://api.tudominio.com/datos \
+  -H "Origin: https://app.tudominio.com" \
+  -H "Access-Control-Request-Method: POST"
+```
+
+## 🛡️ Consejos de Prevención
+- **No utilices comodines (*) si envías credenciales:** Si configuras `Access-Control-Allow-Origin: *` y tu frontend envía cookies o cabeceras de autorización (`credentials: 'include'`), el navegador rechazará la conexión por motivos de seguridad.
+- **Configura CORS en el backend, no en el frontend:** CORS es una restricción impuesta por el navegador que solo el servidor de destino puede autorizar.
+
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Por qué Postman o cURL funcionan pero mi navegador falla?
+Porque Postman y cURL son clientes de terminal y no ejecutan motores de navegador web; por lo tanto, no aplican la política de seguridad del mismo origen (Same-Origin Policy).
+
+### ¿Qué es una petición preflight (OPTIONS)?
+Es una consulta preliminar que el navegador envía de forma automática antes de peticiones complejas (como aquellas con JSON o cabeceras personalizadas) para verificar si el servidor admite la operación.

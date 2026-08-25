@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima",
   "description": "Guía técnica para solucionar el error OOM (Out Of Memory) en Redis configurando políticas de desalojo (maxmemory-policy) y optimizando el uso de RAM.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Redis, Databases, Sysadmin",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima",
+      "item": "https://soportecero.com/articulos/error-redis-maxmemory-eviction-policy.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima",
   "description": "Guía técnica para solucionar el error OOM (Out Of Memory) en Redis configurando políticas de desalojo (maxmemory-policy) y optimizando el uso de RAM.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-redis-maxmemory-eviction-policy.html#diagnosticar-el-estado-de-memoria-en-redis-cli",
+      "name": "Diagnosticar el estado de memoria en Redis CLI",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Conéctate a tu instancia de Redis y ejecuta el comando de información de memoria para auditar la memoria consumida y la política actual:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Conectar mediante redis-cli\nredis-cli -h 127.0.0.1 -p 6379\n\n# Consultar métricas de memoria\n127.0.0.1:6379&gt; INFO memory\n\n# Salida relevante a verificar:\n# used_memory_human:1.95G\n# maxmemory_human:2.00G\n# maxmemory_policy:noeviction"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-redis-maxmemory-eviction-policy.html#cambiar-la-politica-de-desalojo-maxmemory-policy-en-caliente",
+      "name": "Cambiar la política de desalojo (maxmemory-policy) en caliente",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para restaurar el servicio inmediatamente sin reiniciar el servidor Redis, aplica una política de desalojo (eviction policy) en tiempo de ejecución:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Configurar la política para desahuciar las claves menos utilizadas (LRU)\n127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru\n\n# Opcional: Aumentar el límite de memoria asignada a la instancia si dispones de RAM libre\n127.0.0.1:6379&gt; CONFIG SET maxmemory 3gb\n\n    \n    \nLas políticas pr"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-redis-maxmemory-eviction-policy.html#persistir-los-cambios-en-la-configuracion-redisconf",
+      "name": "Persistir los cambios en la configuración (redis.conf)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para evitar que los ajustes se pierdan al reiniciar la instancia o el contenedor Docker, actualiza el archivo de configuración principal de Redis:\n\n    \n      \n        INI\n        Copiar\n      \n      # En /etc/redis/redis.conf o redis.conf del contenedor:\n\n# Límite máximo de memoria (ejemplo: 2 Gigabytes)\nmaxmemory 2048mb\n\n# Política de desalojo recomendada para cachés de producción\nmaxmemory-policy allkeys-lru\n\n# Activar la desfragmentación automática en segundo plano\nactivedefrag yes\n\n    \n   "
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,190 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error OOM command not allowed when used memory &gt; &#39;maxmemory&#39; ocurre en instancias de Redis cuando el uso de memoria RAM alcanza el límite estipulado en el parámetro maxmemory y la política de desalojo (eviction policy) por defecto está configurada como noeviction. Bajo estas condiciones, Redis rechaza cualquier comando que intente agregar o modificar datos (SET, HSET, LPUSH), respondiendo con una excepción de falta de memoria (Out of Memory).</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-diagnosticar-el-estado-de-memoria-en-redis-cli">Paso 1: Diagnosticar el estado de memoria en Redis CLI</a></li>
-        <li class="toc-subitem"><a href="#paso-2-cambiar-la-politica-de-desalojo-maxmemory-policy-en-caliente">Paso 2: Cambiar la política de desalojo (maxmemory-policy) en caliente</a></li>
-        <li class="toc-subitem"><a href="#paso-3-persistir-los-cambios-en-la-configuracion-redisconf">Paso 3: Persistir los cambios en la configuración (redis.conf)</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <code>OOM command not allowed when used memory &gt; &#39;maxmemory&#39;</code> ocurre en instancias de Redis cuando el uso de memoria RAM alcanza el límite estipulado en el parámetro <code>maxmemory</code> y la política de desalojo (<em>eviction policy</em>) por defecto está configurada como <code>noeviction</code>. Bajo estas condiciones, Redis rechaza cualquier comando que intente agregar o modificar datos (<code>SET</code>, <code>HSET</code>, <code>LPUSH</code>), respondiendo con una excepción de falta de memoria (<em>Out of Memory</em>).</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Comandos de escritura fallan con <code>OOM command not allowed</code></strong>: La memoria alcanzó el límite <code>maxmemory</code> bajo la política por defecto <code>noeviction</code></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Configurar una política de desalojo automática (<code>allkeys-lru</code> o <code>volatile-lru</code>) o aumentar <code>maxmemory</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>El proceso de Redis es eliminado por el Kernel (<em>Linux OOM Killer</em>)</strong>: El archivo <code>redis.conf</code> no define un límite <code>maxmemory</code>, consumiendo toda la RAM del host</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Establecer un tope en <code>maxmemory</code> equivalente al 70-80% de la RAM del servidor</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Alto ratio de fragmentación de memoria (<code>mem_fragmentation_ratio &gt; 1.5</code>)</strong>: El asignador de memoria Jemalloc conserva páginas liberadas tras borrar claves masivas</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Habilitar la desfragmentación activa en Redis (<code>activedefrag yes</code>)</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-diagnosticar-el-estado-de-memoria-en-redis-cli">Paso 1: Diagnosticar el estado de memoria en Redis CLI</h3>
-<p>Conéctate a tu instancia de Redis y ejecuta el comando de información de memoria para auditar la memoria consumida y la política actual:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Conectar mediante redis-cli
-redis-cli -h 127.0.0.1 -p 6379
-
-# Consultar métricas de memoria
-127.0.0.1:6379&gt; INFO memory
-
-# Salida relevante a verificar:
-# used_memory_human:1.95G
-# maxmemory_human:2.00G
-# maxmemory_policy:noeviction
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-cambiar-la-politica-de-desalojo-maxmemory-policy-en-caliente">Paso 2: Cambiar la política de desalojo (<code>maxmemory-policy</code>) en caliente</h3>
-<p>Para restaurar el servicio inmediatamente sin reiniciar el servidor Redis, aplica una política de desalojo (<em>eviction policy</em>) en tiempo de ejecución:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Configurar la política para desahuciar las claves menos utilizadas (LRU)
-127.0.0.1:6379&gt; CONFIG SET maxmemory-policy allkeys-lru
-
-# Opcional: Aumentar el límite de memoria asignada a la instancia si dispones de RAM libre
-127.0.0.1:6379&gt; CONFIG SET maxmemory 3gb
-</code></pre>
-    </div>
-    
-<p>Las políticas principales de desalojo disponibles son:</p>
-<ul>
-<li><strong><code>allkeys-lru</code></strong>: Elimina las claves menos recientemente usadas (<em>Least Recently Used</em>) entre todos los registros. Ideal para caché web.</li>
-<li><strong><code>volatile-lru</code></strong>: Elimina solo las claves que tienen un tiempo de expiración (TTL) configurado.</li>
-<li><strong><code>allkeys-lfu</code></strong>: Elimina las claves usadas con menor frecuencia (<em>Least Frequently Used</em>).</li>
-<li><strong><code>noeviction</code></strong>: Retorna error en comandos de escritura (comportamiento predeterminado).</li>
-</ul>
-<h3 id="paso-3-persistir-los-cambios-en-la-configuracion-redisconf">Paso 3: Persistir los cambios en la configuración (<code>redis.conf</code>)</h3>
-<p>Para evitar que los ajustes se pierdan al reiniciar la instancia o el contenedor Docker, actualiza el archivo de configuración principal de Redis:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">INI</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># En /etc/redis/redis.conf o redis.conf del contenedor:
-
-# Límite máximo de memoria (ejemplo: 2 Gigabytes)
-maxmemory 2048mb
-
-# Política de desalojo recomendada para cachés de producción
-maxmemory-policy allkeys-lru
-
-# Activar la desfragmentación automática en segundo plano
-activedefrag yes
-</code></pre>
-    </div>
-    
-<p>Guarda los cambios y aplica una relectura limpia o reinicio del servicio:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl restart redis-server
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Asigna siempre un TTL a las claves de caché</strong>: Asegúrate de que las operaciones de guardado en el código de tu aplicación especifiquen expiración (<code>SET key value EX 3600</code>) para permitir la limpieza natural de registros vetustos.</li>
-<li><strong>Escanea claves pesadas periódicamente</strong>: Utiliza la herramienta de línea de comandos para identificar claves de datos sobredimensionadas: <code>redis-cli --bigkeys</code> o <code>redis-cli --memkeys</code>.</li>
-<li><strong>Establece alertas de monitoreo</strong>: Configura métricas en Prometheus/Grafana o Datadog para recibir notificaciones cuando <code>used_memory</code> supere el 85% de <code>maxmemory</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -363,6 +253,23 @@ activedefrag yes
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -374,23 +281,6 @@ activedefrag yes
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

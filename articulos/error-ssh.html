@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)",
   "description": "¿Te sale 'connection refused ssh' al conectar al puerto 22 de tu servidor? Soluciona el error de SSH en menos de 5 minutos con esta guía práctica.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "SSH, Linux, Firewall",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-26",
   "dateModified": "2026-06-26",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)",
+      "item": "https://soportecero.com/articulos/error-ssh.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)",
   "description": "¿Te sale 'connection refused ssh' al conectar al puerto 22 de tu servidor? Soluciona el error de SSH en menos de 5 minutos con esta guía práctica.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-ssh.html#verificar-el-estado-del-servicio-openssh-en-el-servidor",
+      "name": "Verificar el estado del servicio OpenSSH en el servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si tienes acceso local o mediante la consola KVM / Web Console de tu VPS, comprueba si el demonio SSH está ejecutándose:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl status ssh || sudo systemctl status sshd\n\n    \n    \nSi el estado es inactive o dead, inicialízalo y habilítalo para que inicie automáticamente con el sistema:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl enable --now ssh"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-ssh.html#comprobar-el-puerto-ssh-activo-puerto-22-u-otro",
+      "name": "Comprobar el puerto SSH activo (Puerto 22 u otro)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el servicio está activo pero sigues recibiendo el error, revisa si se cambió el puerto 22 por defecto en el archivo de configuración:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo grep -i &quot;Port&quot; /etc/ssh/sshd_config\n\n    \n    \nSi el archivo muestra un puerto alternativo (por ejemplo Port 2222), debes especificarlo en tu cliente SSH:\n\n    \n      \n        BASH\n        Copiar\n      \n      ssh usuario@tu-ip -p 2222"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-ssh.html#configurar-reglas-del-firewall-ufw-iptables-firewalld",
+      "name": "Configurar reglas del Firewall (UFW / iptables / Firewalld)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegúrate de que el cortafuegos permita las conexiones entrantes en el puerto de SSH (puerto 22):\n\n    \n      \n        BASH\n        Copiar\n      \n      # Para UFW (Ubuntu / Debian)\nsudo ufw allow ssh\nsudo ufw reload\n\n# Para Firewalld (RHEL / CentOS / AlmaLinux)\nsudo firewall-cmd --permanent --add-service=ssh\nsudo firewall-cmd --reload"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,178 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error SSH Connection Refused (o connection refused ssh) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio OpenSSH está detenido, el puerto SSH fue cambiado o el firewall (UFW/iptables) bloquea el puerto 22.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-ssh-connection-refused-paso-a-paso">Cómo solucionar el error SSH Connection Refused paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-el-estado-del-servicio-openssh-en-el-servidor">Paso 1: Verificar el estado del servicio OpenSSH en el servidor</a></li>
-        <li class="toc-subitem"><a href="#paso-2-comprobar-el-puerto-ssh-activo-puerto-22-u-otro">Paso 2: Comprobar el puerto SSH activo (Puerto 22 u otro)</a></li>
-        <li class="toc-subitem"><a href="#paso-3-configurar-reglas-del-firewall-ufw-iptables-firewalld">Paso 3: Configurar reglas del Firewall (UFW / iptables / Firewalld)</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Servicio SSH (sshd) detenido en el servidor de destino</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Iniciar el servicio SSH: <code>sudo systemctl start sshd</code></div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Filtro de seguridad o puerto por defecto bloqueado</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Verificar conexión en el puerto asignado con <code>ssh -p PUERTO usuario@host</code></div>
-          </div></div></div>
-<p>El error <strong>SSH Connection Refused</strong> (o <code>connection refused ssh</code>) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio <strong>OpenSSH está detenido</strong>, el <strong>puerto SSH fue cambiado</strong> o el <strong>firewall (UFW/iptables)</strong> bloquea el puerto 22.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Inicia SSH: <code>sudo systemctl enable --now sshd</code></li>
-<li>Abre el puerto en el firewall: <code>sudo ufw allow 22/tcp &amp;&amp; sudo ufw reload</code></li>
-<li>Verifica el puerto actual: <code>grep -i &quot;port&quot; /etc/ssh/sshd_config</code></li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-ssh-connection-refused-paso-a-paso">🚀 Cómo solucionar el error SSH Connection Refused paso a paso</h2>
-<h3 id="paso-1-verificar-el-estado-del-servicio-openssh-en-el-servidor">Paso 1: Verificar el estado del servicio OpenSSH en el servidor</h3>
-<p>Si tienes acceso local o mediante la consola KVM / Web Console de tu VPS, comprueba si el demonio SSH está ejecutándose:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl status ssh || sudo systemctl status sshd
-</code></pre>
-    </div>
-    
-<p>Si el estado es <code>inactive</code> o <code>dead</code>, inicialízalo y habilítalo para que inicie automáticamente con el sistema:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo systemctl enable --now ssh
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-comprobar-el-puerto-ssh-activo-puerto-22-u-otro">Paso 2: Comprobar el puerto SSH activo (Puerto 22 u otro)</h3>
-<p>Si el servicio está activo pero sigues recibiendo el error, revisa si se cambió el puerto 22 por defecto en el archivo de configuración:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo grep -i &quot;Port&quot; /etc/ssh/sshd_config
-</code></pre>
-    </div>
-    
-<p>Si el archivo muestra un puerto alternativo (por ejemplo <code>Port 2222</code>), debes especificarlo en tu cliente SSH:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>ssh usuario@tu-ip -p 2222
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-configurar-reglas-del-firewall-ufw-iptables-firewalld">Paso 3: Configurar reglas del Firewall (UFW / iptables / Firewalld)</h3>
-<p>Asegúrate de que el cortafuegos permita las conexiones entrantes en el puerto de SSH (puerto 22):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Para UFW (Ubuntu / Debian)
-sudo ufw allow ssh
-sudo ufw reload
-
-# Para Firewalld (RHEL / CentOS / AlmaLinux)
-sudo firewall-cmd --permanent --add-service=ssh
-sudo firewall-cmd --reload
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No uses el puerto 22 por defecto en servidores de producción expuestos a internet.</li>
-<li>Deshabilita el acceso directo al usuario root modificando <code>/etc/ssh/sshd_config</code> (<code>PermitRootLogin no</code>).</li>
-<li>Configura la autenticación mediante Llaves SSH (<code>SSH Keys</code>) y deshabilita el acceso por contraseña.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -351,6 +253,23 @@ sudo firewall-cmd --reload
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -362,23 +281,6 @@ sudo firewall-cmd --reload
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

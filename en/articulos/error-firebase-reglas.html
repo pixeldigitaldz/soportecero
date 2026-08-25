@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Guide: Firebase Error Denying Database Reads (Security Rules)",
   "description": "Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.",
+  "inLanguage": "en",
   "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "Firebase, Database, Security",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Web & Code",
+      "item": "https://soportecero.com/en/?cat=web"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Guide: Firebase Error Denying Database Reads (Security Rules)",
+      "item": "https://soportecero.com/en/articulos/error-firebase-reglas.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Guide: Firebase Error Denying Database Reads (Security Rules)",
   "description": "Learn how to fix the annoying 'Firebase Error: [code=permission-denied]: Missing or insufficient permissions' error in Firestore or Realtime Database without compromising your security.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-firebase-reglas.html#identify-the-database-environment",
+      "name": "Identify the database environment",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Go to your Firebase console, select your project, and navigate to the Cloud Firestore or Realtime Database section in the left menu, then click on the Rules tab."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-firebase-reglas.html#configure-secure-rules-for-firestore",
+      "name": "Configure secure rules (For Firestore)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your database was in test mode, you will see a rule that blocked access after a specific date. Never use rules that allow global public read and write access (allow read, write: if true;) in production, as anyone could delete your entire database.\nImplement a conditional structure that requires the user to be authenticated to modify data:\n\n    \n      \n        JAVASCRIPT\n        Copy\n      \n      rules_version = &#39;2&#39;;\nservice cloud.firestore {\n  match /databases/{database}/documents {\n "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-firebase-reglas.html#publish-changes",
+      "name": "Publish changes",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Click the Publish button in the Firebase console. Security rule changes take 1 to 2 minutes to propagate globally. Restart your client application and the permission errors will disappear."
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,137 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The Firebase Error: [code=permission-denied] error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project&#39;s Security Rules do not grant the necessary permissions.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-identify-the-database-environment">Step 1: Identify the database environment</a></li>
-        <li class="toc-subitem"><a href="#step-2-configure-secure-rules-for-firestore">Step 2: Configure secure rules (For Firestore)</a></li>
-        <li class="toc-subitem"><a href="#step-3-publish-changes">Step 3: Publish changes</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Firestore/Storage security rules blocking requests (Permission Denied)</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Review and update rules in Firebase Console or <code>firestore.rules</code> file</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Request sent without a valid authentication token</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Ensure user is authenticated (<code>request.auth != null</code>)</div>
-          </div></div></div>
-<p>The <code>Firebase Error: [code=permission-denied]</code> error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project&#39;s <strong>Security Rules</strong> do not grant the necessary permissions.</p>
-<p>This failure is extremely common when moving a project from local development to production, or when the &quot;Test mode&quot; grace period (which typically lasts 30 days) expires.</p>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-identify-the-database-environment">Step 1: Identify the database environment</h3>
-<p>Go to your Firebase console, select your project, and navigate to the <strong>Cloud Firestore</strong> or <strong>Realtime Database</strong> section in the left menu, then click on the <strong>Rules</strong> tab.</p>
-<h3 id="step-2-configure-secure-rules-for-firestore">Step 2: Configure secure rules (For Firestore)</h3>
-<p>If your database was in test mode, you will see a rule that blocked access after a specific date. <strong>Never use rules that allow global public read and write access (<code>allow read, write: if true;</code>) in production</strong>, as anyone could delete your entire database.</p>
-<p>Implement a conditional structure that requires the user to be authenticated to modify data:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>rules_version = &#39;2&#39;;
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Allow any web user to read the product catalog or public content
-    match /public_content/{document} {
-      allow read: if true;
-      allow write: if request.auth != null; // Only registered users can write
-    }
-    
-    // Restrict private user collections (e.g. carts, orders, personal data)
-    match /users/{userId} {
-      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == userId;
-    }
-  }
-}
-</code></pre>
-    </div>
-    
-<h3 id="step-3-publish-changes">Step 3: Publish changes</h3>
-<p>Click the <strong>Publish</strong> button in the Firebase console. Security rule changes take 1 to 2 minutes to propagate globally. Restart your client application and the permission errors will disappear.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li>Use the built-in Rules Playground in the Firebase console before releasing changes to production.</li>
-<li>Monitor the &quot;Usage&quot; tab to detect abnormal spikes in denied reads, which could indicate a bug in your client code or an external scanning attempt.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -310,23 +253,6 @@ service cloud.firestore {
       </article>
       
 
-      <!-- Related Card: [FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-mongodb-connect-econnrefused-127-0-0-1-27017.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'connect ECONNREFUSED 127.0.0.1:27017' in MongoDB</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">MongoDB</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Guide: Fix API resolved without sending a response for /api/ in Next.js -->
       <article class="related-card">
         <div class="related-card-content">
@@ -338,6 +264,23 @@ service cloud.firestore {
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [FIXED] Error 'fatal: cannot lock ref' in Git -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-git-fatal-cannot-lock-ref-head.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Error 'fatal: cannot lock ref' in Git</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Git</span>
             <span>Read Time: 3 min</span>
           </div>
         </div>

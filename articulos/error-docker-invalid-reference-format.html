@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "[SOLUCIONADO] Error 'invalid reference format' en Docker",
   "description": "¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o docker build? Aprende a corregir sintaxis de comillas y rutas.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, DevOps, Sysadmin, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-18",
   "dateModified": "2026-08-18",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error 'invalid reference format' en Docker",
+      "item": "https://soportecero.com/articulos/error-docker-invalid-reference-format.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "[SOLUCIONADO] Error 'invalid reference format' en Docker",
   "description": "¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o docker build? Aprende a corregir sintaxis de comillas y rutas.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-docker-invalid-reference-format.html#usar-nombres-de-imagen-en-minusculas",
+      "name": "Usar nombres de imagen en minúsculas",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Docker impone estrictamente que los nombres de los repositorios e imágenes estén escritos en letras minúsculas:\n\n❌ Incorrecto: docker run -d MiEmpresa/Backend:v1\n✅ Correcto: docker run -d miempresa/backend:v1"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-docker-invalid-reference-format.html#corregir-el-formateo-de-volumenes-segun-tu-sistema-operativo",
+      "name": "Corregir el formateo de volúmenes según tu sistema operativo",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "El error suele generarse al intentar montar volúmenes del sistema operativo anfitrión usando comandos copiados de tutoriales diseñados para otra terminal:\n\nEn Linux / macOS (Bash o Zsh):\n    \n      \n        BASH\n        Copiar\n      \n      docker run -v $(pwd):/app mi-imagen:latest\n\n    \n    \n\nEn Windows PowerShell:\n    \n      \n        POWERSHELL\n        Copiar\n      \n      docker run -v &quot;${PWD}:/app&quot; mi-imagen:latest\n\n    \n    \n\nEn Windows CMD (Símbolo del sistema):\n    \n      \n      "
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-invalid-reference-format.html#evitar-saltos-de-linea-mal-formateados-en-scripts",
+      "name": "Evitar saltos de línea mal formateados en scripts",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si ejecutas un comando multilínea con barras invertidas (\\) en Linux/macOS, asegúrate de que no haya espacios en blanco ocultos después de la barra:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Correcto (sin espacios despues de la barra invertida):\ndocker run -d \\\n  --name mi-contenedor \\\n  -p 8080:80 \\\n  nginx:alpine"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,170 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error docker: invalid reference format (o invalid reference format: repository name must be lowercase) ocurre al ejecutar comandos docker run, docker pull o docker build cuando la sintaxis de los nombres de imagen, banderas de volumen (-v) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-invalid-reference-format-paso-a-paso">Cómo solucionar el error invalid reference format paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-usar-nombres-de-imagen-en-minusculas">Paso 1: Usar nombres de imagen en minúsculas</a></li>
-        <li class="toc-subitem"><a href="#paso-2-corregir-el-formateo-de-volumenes-segun-tu-sistema-operativo">Paso 2: Corregir el formateo de volúmenes según tu sistema operativo</a></li>
-        <li class="toc-subitem"><a href="#paso-3-evitar-saltos-de-linea-mal-formateados-en-scripts">Paso 3: Evitar saltos de línea mal formateados en scripts</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Error sintáctico en el nombre de la imagen o banderas del comando docker run</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Asegurar que el tag de la imagen esté en minúsculas y sin caracteres no válidos</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Rutas de volúmenes con espacios sin comillas en la sintaxis del comando</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Encerrar las rutas entre comillas dobles: <code>-v &quot;/ruta local:/ruta contenedor&quot;</code></div>
-          </div></div></div>
-<p>El error <strong><code>docker: invalid reference format</code></strong> (o <code>invalid reference format: repository name must be lowercase</code>) ocurre al ejecutar comandos <code>docker run</code>, <code>docker pull</code> o <code>docker build</code> cuando la sintaxis de los nombres de imagen, banderas de volumen (<code>-v</code>) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.</p>
-<blockquote>
-<p><strong>Solución Rápida (1 Minuto):</strong></p>
-<ol>
-<li>Asegúrate de que el nombre de la imagen esté completamente en <strong>minúsculas</strong> (ej. <code>mi-app:latest</code> en lugar de <code>Mi-App:latest</code>).</li>
-<li>Si usas PowerShell en Windows, usa comillas dobles <code>&quot;$PWD&quot;</code> en lugar de <code>&#39;$(pwd)&#39;</code>.</li>
-</ol>
-</blockquote>
-
-    </section>
-    <h2 id="como-solucionar-el-error-invalid-reference-format-paso-a-paso">🚀 Cómo solucionar el error invalid reference format paso a paso</h2>
-<h3 id="paso-1-usar-nombres-de-imagen-en-minusculas">Paso 1: Usar nombres de imagen en minúsculas</h3>
-<p>Docker impone estrictamente que los nombres de los repositorios e imágenes estén escritos en letras minúsculas:</p>
-<ul>
-<li>❌ <strong>Incorrecto:</strong> <code>docker run -d MiEmpresa/Backend:v1</code></li>
-<li>✅ <strong>Correcto:</strong> <code>docker run -d miempresa/backend:v1</code></li>
-</ul>
-<h3 id="paso-2-corregir-el-formateo-de-volumenes-segun-tu-sistema-operativo">Paso 2: Corregir el formateo de volúmenes según tu sistema operativo</h3>
-<p>El error suele generarse al intentar montar volúmenes del sistema operativo anfitrión usando comandos copiados de tutoriales diseñados para otra terminal:</p>
-<ul>
-<li><strong>En Linux / macOS (Bash o Zsh):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v $(pwd):/app mi-imagen:latest
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>En Windows PowerShell:</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">POWERSHELL</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v &quot;${PWD}:/app&quot; mi-imagen:latest
-</code></pre>
-    </div>
-    
-</li>
-<li><strong>En Windows CMD (Símbolo del sistema):</strong>
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">CMD</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>docker run -v &quot;%cd%:/app&quot; mi-imagen:latest
-</code></pre>
-    </div>
-    
-</li>
-</ul>
-<h3 id="paso-3-evitar-saltos-de-linea-mal-formateados-en-scripts">Paso 3: Evitar saltos de línea mal formateados en scripts</h3>
-<p>Si ejecutas un comando multilínea con barras invertidas (<code>\</code>) en Linux/macOS, asegúrate de que no haya espacios en blanco ocultos después de la barra:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Correcto (sin espacios despues de la barra invertida):
-docker run -d \
-  --name mi-contenedor \
-  -p 8080:80 \
-  nginx:alpine
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>Utiliza archivos <code>docker-compose.yml</code> en lugar de comandos <code>docker run</code> muy largos para evitar errores de sintaxis en terminales de diferentes sistemas operativos.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -343,6 +253,23 @@ docker run -d \
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -354,23 +281,6 @@ docker run -d \
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

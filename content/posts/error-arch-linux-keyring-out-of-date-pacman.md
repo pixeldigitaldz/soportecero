@@ -1,83 +1,74 @@
 ---
-title: Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes
-description: >-
-  Guía de solución rápida para corregir errores de firmas PGP inválidas o desconocidas y actualizar archlinux-keyring en Arch Linux, Manjaro y CachyOS.
-category: Sistemas y Servidores
-tags:
-  - Arch Linux
-  - Pacman
-  - Sysadmin
-readTime: 4 min
-date: '2026-08-04'
+title: "Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes"
+description: "Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales."
+category: "Sistemas y Servidores"
+tags: ["Arch Linux", "Pacman", "Linux", "CachyOS", "SysAdmin"]
+readTime: "5 min"
+date: "2026-08-04"
 ---
 
-Al intentar actualizar el sistema o instalar nuevos paquetes en Arch Linux o distribuciones derivadas (como CachyOS, EndeavourOS o Manjaro) mediante `pacman -Syu`, es muy común enfrentarse a errores como `error: signature from "Developer Name <email>" is unknown trust` o `error: el paquete es inválido o está dañado (firma PGP inválida)`. Esto ocurre porque las claves GPG del proyecto Arch Linux expiran o cambian con el tiempo, y el llavero local (`archlinux-keyring`) no puede validar los paquetes firmados por los mantenedores oficiales.
-
 ## Diagnóstico Rápido
-
 | Causa | Solución |
 |---|---|
-| **`error: signature from "..." is unknown trust` o `invalid or corrupted package` al usar pacman**: Las claves PGP de los desarrolladores cambiaron o el llavero local lleva meses sin actualizarse | Actualizar primero `archlinux-keyring` de forma aislada y reiniciar la base de datos de GPG |
-| **Pacman falla al descargar las firmas `.sig` de los repositorios espejo**: Espejos (mirrors) desactualizados o hora del sistema fuera de sincronía | Sincronizar el reloj del sistema mediante `systemd-timesyncd` y actualizar la lista de mirrors |
-| **El comando `pacman -Sy archlinux-keyring` también falla por firmas corruptas**: La base de datos de claves PGP local (`/etc/pacman.d/gnupg`) se encuentra corrupta | Eliminar la carpeta de claves GPG, re-inicializar el keyring y poblar las claves master |
+| **Paquete archlinux-keyring desactualizado en una instalación inactiva por semanas** | Actualizar exclusivamente el llavero con `sudo pacman -Sy archlinux-keyring` antes de la actualización general |
+| **Directorio de firmas criptográficas corrupto en /etc/pacman.d/gnupg** | Reconstruir el llavero GPG con `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init && sudo pacman-key --populate archlinux` |
+
+El fallo recurrente `error: archlinux-keyring: signature is marginal trust` o `error: failed to commit transaction (invalid or corrupted package (PGP signature))` ocurre cuando los desarrolladores y empaquetadores de Arch Linux rotan o renuevan sus certificados criptográficos mientras tu sistema conserva un llavero antiguo, impidiendo que Pacman confíe en los nuevos paquetes oficiales.
 
 ## 🚀 Cómo solucionar el error paso a paso
 
-### Paso 1: Sincronizar el reloj del sistema (NTP)
-Las claves PGP dependen de marcas de tiempo precisas para verificar su validez. Si el reloj del sistema está desfasado, pacman rechazará todas las firmas:
-
+### Paso 1: Sincronizar la hora del sistema
+Un reloj del sistema desfasado causará que todas las firmas PGP válidas sean rechazadas de inmediato:
 ```bash
-# Activar la sincronización de hora en Linux
-sudo systemctl enable --now systemd-timesyncd
-
-# Verificar que la hora local y el reloj de red coincidan
+# Forzar la sincronización horaria con los servidores NTP
+sudo timedatectl set-ntp true
 timedatectl status
 ```
 
-### Paso 2: Actualizar `archlinux-keyring` de forma aislada
-Antes de intentar una actualización completa del sistema (`pacman -Syu`), fuerza la actualización única del llavero oficial:
-
+### Paso 2: Actualizar el paquete archlinux-keyring de forma aislada
+Antes de ejecutar una actualización general con `pacman -Syu`, fuerza la descarga e instalación del paquete de firmas más reciente:
 ```bash
 # Sincronizar repositorios e instalar únicamente archlinux-keyring
-sudo pacman -Sy archlinux-keyring
+sudo pacman -Sy archlinux-keyring --noconfirm
 
-# Si utilizas CachyOS o Manjaro, actualiza también sus llaveros específicos:
-# sudo pacman -Sy cachyos-keyring
-# sudo pacman -Sy manjaro-keyring
-
-# Tras actualizar el keyring exitosamente, procede con la actualización general:
-sudo pacman -Syu
+# En sistemas derivados como CachyOS o Manjaro, actualiza también sus llaveros:
+# sudo pacman -Sy cachyos-keyring manjaro-keyring --noconfirm
 ```
 
-### Paso 3: Regenerar y limpiar el llavero de GPG (En caso de corrupción grave)
-Si la actualización aislada falla con errores de clave de confianza desconocida, debes eliminar y reconstruir la base de datos de claves `/etc/pacman.d/gnupg`:
-
+### Paso 3: Regenerar el llavero GPG de Pacman si persiste el error
+Si el paso anterior arroja fallos de base de datos o confianza marginal corrupta, reinicializa el subsistema de claves:
 ```bash
-# 1. Eliminar la carpeta de claves corrupta
+# 1. Eliminar el directorio de claves corrupto
 sudo rm -rf /etc/pacman.d/gnupg
 
-# 2. Re-inicializar el llavero de Pacman
+# 2. Inicializar la configuración criptográfica
 sudo pacman-key --init
 
-# 3. Poblar el llavero con las claves de los desarrolladores oficiales de Arch Linux
+# 3. Poblar las firmas de los desarrolladores oficiales
 sudo pacman-key --populate archlinux
 
-# En CachyOS / Manjaro añadir también:
-# sudo pacman-key --populate cachyos
-
-# 4. Refrescar las claves con los servidores de claves PGP
+# 4. Refrescar las claves con los servidores públicos
 sudo pacman-key --refresh-keys
+```
 
-# 5. Limpiar la caché de paquetes y ejecutar la actualización
-sudo pacman -Sc --noconfirm
+### Paso 4: Limpiar la caché de paquetes y actualizar el sistema
+Elimina los paquetes que fallaron durante la descarga y procede con la actualización total:
+```bash
+# Limpiar archivos corruptos de /var/cache/pacman/pkg/
+sudo pacman -Scc --noconfirm
+
+# Ejecutar la actualización completa del sistema
 sudo pacman -Syu
 ```
 
 ## 🛡️ Consejos de Prevención
+- **Actualiza con regularidad:** Si utilizas una distribución rolling-release como Arch Linux o CachyOS, realiza actualizaciones al menos cada 1 o 2 semanas para evitar que los llaveros de seguridad queden desfasados.
+- **No modifiques SigLevel a TrustAll:** Desactivar la verificación de firmas en /etc/pacman.conf elimina la protección contra ataques de suplantación y paquetes adulterados.
 
-- **Actualiza el sistema periódicamente**: En distribuciones *rolling release* como Arch Linux, dejar el sistema sin actualizar durante varios meses incrementa exponencialmente las probabilidades de desfase en el llavero PGP.
-- **Habilita el temporizador de actualización de keyring**: Mantén `archlinux-keyring-wkd-sync.timer` activo si existe en tu distribución para refrescar claves en segundo plano:
-  ```bash
-  sudo systemctl enable --now archlinux-keyring-wkd-sync.timer
-  ```
-- **Nunca deshabilites `SigLevel = Never` en `/etc/pacman.conf`**: Desactivar la comprobación de firmas digitales para resolver el error expone el sistema a la instalación de paquetes manipulados o maliciosos.
+## ❓ Preguntas Frecuentes (FAQ)
+
+### ¿Qué significa marginal trust en Pacman?
+Significa que la clave pública con la que se firmó el paquete no tiene suficientes firmas de desarrolladores principales (Master Keys) en tu base de datos local para considerarse 100% de confianza.
+
+### ¿Puedo actualizar paquetes individuales si el keyring está roto?
+No de forma segura, ya que Pacman abortará la transacción completa antes de modificar cualquier archivo en el disco para proteger el sistema.

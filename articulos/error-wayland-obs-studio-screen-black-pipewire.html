@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo solucionar la pantalla negra en OBS Studio bajo Wayland y PipeWire",
   "description": "Guía completa para reparar la pantalla negra al capturar pantalla o ventanas en OBS Studio usando Wayland, PipeWire y XDG Desktop Portal en Linux.",
+  "inLanguage": "es",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "OBS, Wayland, Linux",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-02",
   "dateModified": "2026-08-02",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar la pantalla negra en OBS Studio bajo Wayland y PipeWire",
+      "item": "https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo solucionar la pantalla negra en OBS Studio bajo Wayland y PipeWire",
   "description": "Guía completa para reparar la pantalla negra al capturar pantalla o ventanas en OBS Studio usando Wayland, PipeWire y XDG Desktop Portal en Linux.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html#instalar-xdg-desktop-portal-y-el-backend-de-tu-escritorio",
+      "name": "Instalar XDG Desktop Portal y el backend de tu escritorio",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para que OBS pueda solicitar captura de pantalla a Wayland, necesitas tener el portal base y el backend específico de tu compositor:\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Arch Linux / Manjaro / CachyOS\nsudo pacman -S xdg-desktop-portal pipewire wireplumber\n\n# Instala el backend de tu entorno de escritorio:\n# Para GNOME:\nsudo pacman -S xdg-desktop-portal-gnome\n# Para KDE Plasma:\nsudo pacman -S xdg-desktop-portal-kde\n# Para Hyprland / Sway / wlroots:\nsudo pacman -S xdg-desktop"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html#reiniciar-los-servicios-de-portal-y-pipewire",
+      "name": "Reiniciar los servicios de Portal y PipeWire",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si los portales fueron instalados recientemente o sufrieron una desconexión, reinstancia las unidades de systemd del usuario:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Reiniciar el demonio de PipeWire y el gestor de sesiones WirePlumber\nsystemctl --user restart pipewire wireplumber\n\n# Detener e iniciar limpiamente XDG Desktop Portal\nsystemctl --user stop xdg-desktop-portal\nsystemctl --user start xdg-desktop-portal"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html#verificar-la-ejecucion-nativa-de-obs-studio-en-wayland",
+      "name": "Verificar la ejecución nativa de OBS Studio en Wayland",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si inicias OBS Studio con variables de entorno que fuerzan X11 (QT_QPA_PLATFORM=xcb), la captura PipeWire no funcionará correctamente. Asegúrate de forzar la plataforma Qt para Wayland:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Ejecutar OBS con backend nativo Wayland\nQT_QPA_PLATFORM=wayland obs\n\n# Si utilizas la versión Flatpak de OBS Studio:\nflatpak override --user --socket=wayland com.obsproject.Studio\n\n    \n    \nDentro de OBS Studio, elimina cualquier fuente antigua de &quot;Cap"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,172 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>Al ejecutar OBS Studio en distribuciones Linux modernas con entornos de escritorio basados en Wayland (como GNOME, KDE Plasma, Hyprland o Sway), es común encontrarse con una pantalla negra al intentar añadir una fuente de &quot;Captura de pantalla&quot; o &quot;Captura de ventana&quot;. A diferencia de X11, Wayland prohíbe por diseño que las aplicaciones lean directamente el framebuffer de otras ventanas, delegando la captura al servidor de streaming de medios PipeWire a través de XDG Desktop Portal.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-instalar-xdg-desktop-portal-y-el-backend-de-tu-escritorio">Paso 1: Instalar XDG Desktop Portal y el backend de tu escritorio</a></li>
-        <li class="toc-subitem"><a href="#paso-2-reiniciar-los-servicios-de-portal-y-pipewire">Paso 2: Reiniciar los servicios de Portal y PipeWire</a></li>
-        <li class="toc-subitem"><a href="#paso-3-verificar-la-ejecucion-nativa-de-obs-studio-en-wayland">Paso 3: Verificar la ejecución nativa de OBS Studio en Wayland</a></li>
-      </ol>
-    </nav>
-    
-      <p>Al ejecutar OBS Studio en distribuciones Linux modernas con entornos de escritorio basados en Wayland (como GNOME, KDE Plasma, Hyprland o Sway), es común encontrarse con una pantalla negra al intentar añadir una fuente de &quot;Captura de pantalla&quot; o &quot;Captura de ventana&quot;. A diferencia de X11, Wayland prohíbe por diseño que las aplicaciones lean directamente el framebuffer de otras ventanas, delegando la captura al servidor de streaming de medios <strong>PipeWire</strong> a través de <strong>XDG Desktop Portal</strong>.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>La fuente &quot;Captura de pantalla (PipeWire)&quot; aparece totalmente negra o no muestra selector de ventana</strong>: El servicio <code>xdg-desktop-portal</code> o el backend del entorno de escritorio no está instalado o falló</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Instalar el backend portal correspondiente (GNOME/KDE/Hyprland) y reiniciar el servicio de usuario</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>La opción de captura PipeWire no aparece en la lista de fuentes de OBS Studio</strong>: Falta el módulo <code>obs-xdg-portal</code> o se está forzando a OBS a ejecutarse en modo Xwayland/X11</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Instalar la extensión portal de OBS e iniciar OBS nativamente en Wayland</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>El cuadro de diálogo para seleccionar la pantalla aparece, pero OBS muestra un marco negro congelado</strong>: Permisos denegados en PipeWire o sesión de portal colgada por cambios de resolución</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Reiniciar los daemon <code>pipewire</code> y <code>wireplumber</code> sin reiniciar el sistema</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-instalar-xdg-desktop-portal-y-el-backend-de-tu-escritorio">Paso 1: Instalar XDG Desktop Portal y el backend de tu escritorio</h3>
-<p>Para que OBS pueda solicitar captura de pantalla a Wayland, necesitas tener el portal base y el backend específico de tu compositor:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># En Arch Linux / Manjaro / CachyOS
-sudo pacman -S xdg-desktop-portal pipewire wireplumber
-
-# Instala el backend de tu entorno de escritorio:
-# Para GNOME:
-sudo pacman -S xdg-desktop-portal-gnome
-# Para KDE Plasma:
-sudo pacman -S xdg-desktop-portal-kde
-# Para Hyprland / Sway / wlroots:
-sudo pacman -S xdg-desktop-portal-hyprland # o xdg-desktop-portal-wlr
-
-# En Ubuntu / Debian / Pop!_OS
-sudo apt install xdg-desktop-portal pipewire xdg-desktop-portal-gnome
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-reiniciar-los-servicios-de-portal-y-pipewire">Paso 2: Reiniciar los servicios de Portal y PipeWire</h3>
-<p>Si los portales fueron instalados recientemente o sufrieron una desconexión, reinstancia las unidades de <code>systemd</code> del usuario:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Reiniciar el demonio de PipeWire y el gestor de sesiones WirePlumber
-systemctl --user restart pipewire wireplumber
-
-# Detener e iniciar limpiamente XDG Desktop Portal
-systemctl --user stop xdg-desktop-portal
-systemctl --user start xdg-desktop-portal
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-verificar-la-ejecucion-nativa-de-obs-studio-en-wayland">Paso 3: Verificar la ejecución nativa de OBS Studio en Wayland</h3>
-<p>Si inicias OBS Studio con variables de entorno que fuerzan X11 (<code>QT_QPA_PLATFORM=xcb</code>), la captura PipeWire no funcionará correctamente. Asegúrate de forzar la plataforma Qt para Wayland:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Ejecutar OBS con backend nativo Wayland
-QT_QPA_PLATFORM=wayland obs
-
-# Si utilizas la versión Flatpak de OBS Studio:
-flatpak override --user --socket=wayland com.obsproject.Studio
-</code></pre>
-    </div>
-    
-<p>Dentro de OBS Studio, elimina cualquier fuente antigua de &quot;Captura de pantalla (XSHM)&quot; o &quot;Captura de ventana (Xcomposite)&quot; e inserta una nueva fuente llamada <strong>Screen Capture (PipeWire)</strong> / <strong>Captura de pantalla (PipeWire)</strong>. Al hacerlo, el sistema operativo mostrará una ventana emergente nativa para seleccionar qué monitor o ventana deseas transmitir.</p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Evita forzar Xwayland en OBS</strong>: Mantén OBS ejecutándose bajo el cliente nativo Wayland/Qt6 para evitar problemas de sincronización de frames y duplicación de cursores.</li>
-<li><strong>Mantén un solo backend portal activo</strong>: Si usas compositores basados en wlroots (Sway, Hyprland), evita tener activos simultáneamente <code>xdg-desktop-portal-gnome</code> y <code>xdg-desktop-portal-wlr</code> sin una configuración explícita en <code>~/.config/xdg-desktop-portal/portals.conf</code>.</li>
-<li><strong>Verifica la integración con Flatpak</strong>: Si usas OBS en versión Flatpak, asegúrate de que el paquete <code>org.freedesktop.portal.Desktop</code> tenga permisos de acceso ejecutando <code>flatpak update</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -328,6 +236,23 @@ flatpak override --user --socket=wayland com.obsproject.Studio
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -357,23 +282,6 @@ flatpak override --user --socket=wayland com.obsproject.Studio
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>

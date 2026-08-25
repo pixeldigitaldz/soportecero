@@ -1,38 +1,67 @@
 ---
-title: "How to Fix HDMI Audio Loss in Linux Using PipeWire"
-description: "Learn how to restore digital sound output from your HDMI-connected monitor or TV without having to restart your computer."
-category: "Systems & Servers"
-tags: ["Linux", "PipeWire", "Audio"]
-readTime: "3 min"
-date: "2026-07-22"
+title: "How to Fix Missing HDMI Audio in Linux Using PipeWire"
+description: "Step-by-step guide to resolving missing sound and unrecognized HDMI/DisplayPort audio profiles in Linux using PipeWire and WirePlumber."
+category: "Gaming Tech"
+tags: ["PipeWire", "Audio", "Linux", "WirePlumber", "HDMI", "SysAdmin"]
+readTime: "5 min"
+date: "2026-06-25"
 ---
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **HDMI output profile disabled or unselected in WirePlumber** | Select proper HDMI output profile via `pavucontrol` or `wpctl` |
-| **Incompatible sample rate with audio receiver** | Set `default.clock.rate = 48000` in `/etc/pipewire/pipewire.conf` |
+| **HDMI/DisplayPort audio profile marked as 'Off' or unrecognized by WirePlumber** | Switch soundcard profile to Digital Stereo (HDMI) using `pactl` or `pavucontrol` |
+| **PipeWire daemon stalled or in race condition with legacy ALSA/PulseAudio** | Restart user service stack: `systemctl --user restart pipewire pipewire-pulse wireplumber` |
 
+In modern Linux distributions utilizing the PipeWire multimedia framework, plugging in an external monitor or TV via HDMI/DisplayPort frequently results in no audio output. This happens when the WirePlumber session manager fails to dynamically switch the graphics card ALSA subdevice into an active digital playback profile.
 
-The sudden loss of sound output through the HDMI port (leaving the TV or monitor muted) typically occurs after suspending and waking up the machine, or when changing screens. This happens because the PipeWire sound server loses synchronization of the HDMI port's digital link descriptor with the kernel's ALSA graphic controller.
+## 🚀 Step-by-Step Solution
 
-## 🚀 Cómo solucionar el error paso a paso
-
-### Paso 1: Reiniciar el servidor de sonido PipeWire y su gestor de enlaces
-It is not necessary to restart your computer to restore the audio channel. You can force PipeWire to rescan the video outputs by running the following commands in your user terminal (without using sudo):
+### Step 1: Restart PipeWire and WirePlumber User Services
+Force an immediate hardware rescan across all connected display endpoints:
 ```bash
-# Reiniciar el servicio principal de PipeWire y el subsistema de compatibilidad de PulseAudio
-systemctl --user restart pipewire pipewire-pulse
+# Restart the PipeWire audio stack for the active user session
+systemctl --user restart pipewire pipewire-pulse wireplumber
 
-# Reiniciar el planificador de rutas de audio (WirePlumber o Media Session)
-systemctl --user restart wireplumber
+# Confirm active running status
+systemctl --user status pipewire wireplumber --no-pager
 ```
-*(Nota: Transcurridos un par de segundos, los controladores gráficos volverán a detectar la interfaz de sonido HDMI activa).*
 
-### Paso 2: Forzar la salida de audio digital correcta
-Open your system volume mixer or sound settings panel and make sure that the HDMI port is selected under the corresponding profile output (typically *Digital Stereo (HDMI) Output* or *Digital Surround*).
+### Step 2: List Soundcards and Assign HDMI Profiles
+Enumerate your audio hardware and assign the digital output profile:
+```bash
+# Inspect all audio cards and available profiles
+pactl list cards
 
-## 🛡️ Consejo de Prevención
+# Apply Digital Stereo HDMI profile to target GPU sound card
+pactl set-card-profile alsa_card.pci-0000_01_00.1 output:hdmi-stereo
+```
 
-Recommended safety practices:
-- Avoid duplicate or conflicting audio profiles that confuse the PipeWire sound router. We recommend installing the graphical tool `pavucontrol` and, in the **Configuration** tab, disabling (changing to **Off**) all internal analog audio cards, headphone outputs, or other digital audio profiles that you are not using. This ensures that the HDMI output is prioritized and remains stable during hardware reconnections.
+### Step 3: Unmute HDMI Channels in ALSAmixer
+Low-level ALSA driver defaults often initialize digital audio ports in a muted state:
+1. Run `alsamixer` in your terminal.
+2. Press `F6` to choose your graphics card (HDA NVidia / HDA ATI / Intel HDMI).
+3. Navigate to the **S/PDIF** or **HDMI** outputs.
+4. If marked as `MM` (Muted), hit the `M` key to toggle to `00` (Unmuted).
+
+### Step 4: Set HDMI Sink as Global Default
+Direct application audio streams to the HDMI endpoint:
+```bash
+# List available audio sinks
+pactl list short sinks
+
+# Set HDMI sink as system default
+pactl set-default-sink alsa_output.pci-0000_01_00.1.hdmi-stereo
+```
+
+## 🛡️ Prevention Advice
+- **Avoid concurrent PulseAudio daemon packages:** Ensure `pulseaudio-server` is completely uninstalled to prevent port conflicts with `pipewire-pulse`.
+- **Configure WirePlumber persistence:** Add custom scripts in `~/.config/wireplumber/` to automatically enforce preferred profiles on display hotplug events.
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### Why does HDMI audio vanish after waking from sleep?
+Displays sleep their internal DACs when entering standby. Disable ALSA node autosuspension in WirePlumber configuration to maintain a persistent connection.
+
+### How do I test sound from the command line?
+Run `speaker-test -t wav -c 2` to verify immediate multi-channel stereo playback.

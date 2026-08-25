@@ -2,7 +2,7 @@
 title: 'Troubleshooting: kex_exchange_identification: Connection closed by remote host in SSH'
 description: 'How to troubleshoot and fix kex_exchange_identification Connection closed by remote host in SSH caused by Fail2ban, MaxStartups limits, or TCP Wrappers.'
 category: 'Systems & Servers'
-date: '2026-08-25'
+date: '2026-08-24'
 readTime: '3 min'
 tags: ['SSH', 'Linux', 'Security']
 ---

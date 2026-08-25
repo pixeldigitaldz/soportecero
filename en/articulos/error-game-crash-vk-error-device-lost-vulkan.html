@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "How to Fix VK_ERROR_DEVICE_LOST Crash in Vulkan Games under Proton",
   "description": "A comprehensive technical guide to resolve the VK_ERROR_DEVICE_LOST GPU hang error in Vulkan, DXVK, and Steam Proton games.",
+  "inLanguage": "en",
   "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Vulkan, Gaming, Proton",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/en/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix VK_ERROR_DEVICE_LOST Crash in Vulkan Games under Proton",
+      "item": "https://soportecero.com/en/articulos/error-game-crash-vk-error-device-lost-vulkan.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix VK_ERROR_DEVICE_LOST Crash in Vulkan Games under Proton",
   "description": "A comprehensive technical guide to resolve the VK_ERROR_DEVICE_LOST GPU hang error in Vulkan, DXVK, and Steam Proton games.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-game-crash-vk-error-device-lost-vulkan.html#clear-dxvk-and-steam-proton-shader-cache",
+      "name": "Clear DXVK and Steam Proton Shader Cache",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Corrupted state or shader cache files are one of the most common triggers for Vulkan device resets. Wipe the cached shader data to force a clean pipeline compilation:\n\n    \n      \n        BASH\n        Copy\n      \n      # Wipe Steam shader cache for all games or a specific AppID\nrm -rf ~/.steam/steam/steamapps/shadercache/*\n\n# Temporarily disable state caching in DXVK if crashes persist\nexport DXVK_STATE_CACHE=0"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-game-crash-vk-error-device-lost-vulkan.html#configure-proton-launch-options-in-steam",
+      "name": "Configure Proton Launch Options in Steam",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "For DirectX 11 and DirectX 12 games translated to Vulkan via DXVK or VKD3D-Proton, add stability environment variables in Steam (Properties &gt; Launch Options):\n\n    \n      \n        BASH\n        Copy\n      \n      # For NVIDIA GPUs (ensures NVAPI stability and proper device exposed)\nPROTON_HIDE_NVIDIA_GPU=0 PROTON_ENABLE_NVAPI=1 %command%\n\n# For AMD Radeon GPUs (enforces ACO compiler in Mesa RADV)\nRADV_PERFTEST=aco VKD3D_CONFIG=dxr11 %command%"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-game-crash-vk-error-device-lost-vulkan.html#adjust-gpu-driver-timeout-gpu-recovery-amp-tdr",
+      "name": "Adjust GPU Driver Timeout (GPU Recovery &amp; TDR)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If a heavy rendering workload takes longer than expected, the operating system assumes the GPU has frozen and forces a driver reset.\nOn Linux (AMDGPU / NVIDIA Kernel Modules), ensure hardware recovery is enabled:\n\n    \n      \n        BASH\n        Copy\n      \n      # Verify AMDGPU recovery status\ncat /sys/class/drm/card0/device/gpu_recovery\n\n# For NVIDIA GPUs, enforce persistence mode to prevent power state changes\nnvidia-smi -pm 1\nnvidia-smi --auto-boost-default=0\n\n    \n    \nOn Windows, adjust t"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,180 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The VK_ERROR_DEVICE_LOST (-4) error code in the Vulkan API indicates that the graphics processing unit (GPU) has stopped responding to the display driver or experienced a hardware context reset (GPU Hang / TDR). When running Vulkan or Proton-translated games on Linux and Windows, this issue immediately halts rendering and terminates the process.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-subitem"><a href="#step-1-clear-dxvk-and-steam-proton-shader-cache">Step 1: Clear DXVK and Steam Proton Shader Cache</a></li>
-        <li class="toc-subitem"><a href="#step-2-configure-proton-launch-options-in-steam">Step 2: Configure Proton Launch Options in Steam</a></li>
-        <li class="toc-subitem"><a href="#step-3-adjust-gpu-driver-timeout-gpu-recovery-amp-tdr">Step 3: Adjust GPU Driver Timeout (GPU Recovery &amp; TDR)</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <code>VK_ERROR_DEVICE_LOST</code> (-4) error code in the Vulkan API indicates that the graphics processing unit (GPU) has stopped responding to the display driver or experienced a hardware context reset (<em>GPU Hang / TDR</em>). When running Vulkan or Proton-translated games on Linux and Windows, this issue immediately halts rendering and terminates the process.</p>
-
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="quick-diagnostics">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        Quick Diagnostics
-      </h3>
       
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Game freezes and crashes suddenly with <code>VK_ERROR_DEVICE_LOST</code> error log</strong>: GPU Hang or TDR timeout triggered by thermal throttling or unstable overclock</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Reset GPU clock/voltage settings to stock and increase TDR timeout values</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Sporadic crashes under Proton when loading heavy areas or enabling Ray Tracing</strong>: Corrupted DXVK/VKD3D pipeline shader cache or VRAM overcommit</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Clear shader cache directories and configure DXVK environment variables</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Instant crash when launching DirectX 12 or Vulkan titles on AMD/NVIDIA GPUs</strong>: Outdated graphics drivers (Mesa RADV / NVIDIA) or conflicting Vulkan layers</div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solution</div>
-            <div class="diag-value">Update GPU drivers and disable unnecessary Vulkan implicit layers</div>
-          </div></div></div>
-
-    </section>
-    <h2 id="step-by-step-solution">🚀 Step-by-Step Solution</h2>
-<h3 id="step-1-clear-dxvk-and-steam-proton-shader-cache">Step 1: Clear DXVK and Steam Proton Shader Cache</h3>
-<p>Corrupted state or shader cache files are one of the most common triggers for Vulkan device resets. Wipe the cached shader data to force a clean pipeline compilation:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Wipe Steam shader cache for all games or a specific AppID
-rm -rf ~/.steam/steam/steamapps/shadercache/*
-
-# Temporarily disable state caching in DXVK if crashes persist
-export DXVK_STATE_CACHE=0
-</code></pre>
-    </div>
-    
-<h3 id="step-2-configure-proton-launch-options-in-steam">Step 2: Configure Proton Launch Options in Steam</h3>
-<p>For DirectX 11 and DirectX 12 games translated to Vulkan via DXVK or VKD3D-Proton, add stability environment variables in Steam (<em>Properties &gt; Launch Options</em>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># For NVIDIA GPUs (ensures NVAPI stability and proper device exposed)
-PROTON_HIDE_NVIDIA_GPU=0 PROTON_ENABLE_NVAPI=1 %command%
-
-# For AMD Radeon GPUs (enforces ACO compiler in Mesa RADV)
-RADV_PERFTEST=aco VKD3D_CONFIG=dxr11 %command%
-</code></pre>
-    </div>
-    
-<h3 id="step-3-adjust-gpu-driver-timeout-gpu-recovery-amp-tdr">Step 3: Adjust GPU Driver Timeout (GPU Recovery &amp; TDR)</h3>
-<p>If a heavy rendering workload takes longer than expected, the operating system assumes the GPU has frozen and forces a driver reset.</p>
-<p>On <strong>Linux (AMDGPU / NVIDIA Kernel Modules)</strong>, ensure hardware recovery is enabled:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code># Verify AMDGPU recovery status
-cat /sys/class/drm/card0/device/gpu_recovery
-
-# For NVIDIA GPUs, enforce persistence mode to prevent power state changes
-nvidia-smi -pm 1
-nvidia-smi --auto-boost-default=0
-</code></pre>
-    </div>
-    
-<p>On <strong>Windows</strong>, adjust the Timeout Detection and Recovery (TDR) registry keys:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">REG</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers]
-&quot;TdrDelay&quot;=dword:0000000a
-&quot;TdrDdiDelay&quot;=dword:0000000a
-</code></pre>
-    </div>
-    
-<p><em>(This extends the GPU timeout threshold to 10 seconds before initiating a driver reset).</em></p>
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Prevention Advice
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Recommended security practices:
-            </p>
-            <ul class="prevention-list">
-              <li><strong>Avoid Unstable Overclocks and Undervolts</strong>: Vulkan interacts directly with hardware pipelines without driver-level buffer padding. Overclocks that pass synthetic benchmarks can still trigger <code>VK_ERROR_DEVICE_LOST</code> under heavy Vulkan compute loads.</li>
-<li><strong>Keep Graphics Drivers Updated</strong>: On Linux systems with AMD or Intel graphics, ensure you are running up-to-date Mesa packages (<code>mesa-vulkan-drivers</code> / <code>vulkan-radeon</code>).</li>
-<li><strong>Monitor VRAM Usage</strong>: Exceeding dedicated video memory forces system RAM paging, which can destabilize Vulkan buffers. Lower texture resolution settings if crashes occur during long gaming sessions.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -336,6 +236,23 @@ nvidia-smi --auto-boost-default=0
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Fix Counter-Strike 2 crashing and FPS stutter on Linux (Vulkan / Mesa) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -365,23 +282,6 @@ nvidia-smi --auto-boost-default=0
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-dx11-feature-level-10-proton-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solved: DX11 feature level 10.0 is required to run the engine (Proton/Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Proton</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

@@ -50,16 +50,26 @@
   "@type": "TechArticle",
   "headline": "Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron",
   "description": "Aprende a empaquetar directorios de configuración de forma automática utilizando scripts en Bash comprimidos y programando su ejecución con Cron.",
+  "inLanguage": "es",
   "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Linux, Sysadmin, Cron",
+  "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
   "author": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "SoporteCero"
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -70,10 +80,73 @@
   <script type="application/ld+json">
   {
   "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron",
+      "item": "https://soportecero.com/articulos/automatizar-respaldos-tar-cron.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron",
   "description": "Aprende a empaquetar directorios de configuración de forma automática utilizando scripts en Bash comprimidos y programando su ejecución con Cron.",
-  "step": []
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/automatizar-respaldos-tar-cron.html#escribir-el-script-de-empaquetado-en-bash",
+      "name": "Escribir el script de empaquetado en Bash",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Crea un script en tu directorio de usuario que automatice la compresión de los datos agregando la fecha del día al nombre del archivo resultante:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Crear el script de respaldo\nnano ~/auto_backup.sh\n\n    \n    \nPega el siguiente código en el editor:\n\n    \n      \n        BASH\n        Copiar\n      \n      #!/bin/bash\n# Definir variables de rutas absolutas\nBACKUP_DIR=&quot;/var/backups/my_app&quot;\nSOURCE_DIR=&quot;/var/www/html/my_app_data&quot;\nF"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/automatizar-respaldos-tar-cron.html#otorgar-permisos-de-ejecucion-al-script",
+      "name": "Otorgar permisos de ejecución al script",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegura que el sistema pueda invocar el script que acabas de programar:\n\n    \n      \n        BASH\n        Copiar\n      \n      chmod +x ~/auto_backup.sh"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/automatizar-respaldos-tar-cron.html#programar-la-ejecucion-en-el-programador-de-tareas-cron",
+      "name": "Programar la ejecución en el programador de tareas Cron",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre la tabla de tareas de tu usuario:\n\n    \n      \n        BASH\n        Copiar\n      \n      crontab -e\n\n    \n    \nAgrega la siguiente regla para ejecutar el empaquetado automático de seguridad de forma diaria (por ejemplo, a las 02:00 de la madrugada):\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      0 2 * * * /usr/bin/bash /home/usuario/auto_backup.sh &gt;&gt; /home/usuario/auto_backup.log 2&gt;&amp;1"
+        }
+      ]
+    }
+  ]
 }
   </script>
     
@@ -148,177 +221,7 @@
         </div>
       </header>
 
-      <!-- GOOGLE_ADSENSE_HEADER_PLACEHOLDER -->
-      <div class="adsense-container" id="ad-header" style="margin: 2rem auto; max-width: 100%; min-height: 90px; text-align: center;">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6956525438386645"
-             data-ad-slot="4943572587"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <!-- Main Layout: Content and Sidebar Grid -->
-      <div class="post-layout">
-        
-        <!-- Main Column -->
-        <div class="post-article">
-          
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error más grave en la gestión de servidores locales o domésticos es no disponer de respaldos automatizados e íntegros frente a fallos de hardware o corrupción de archivos. Crear una tarea programada que empaquete tus archivos esenciales de configuración te garantizará tranquilidad.</p>
-      </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-escribir-el-script-de-empaquetado-en-bash">Paso 1: Escribir el script de empaquetado en Bash</a></li>
-        <li class="toc-subitem"><a href="#paso-2-otorgar-permisos-de-ejecucion-al-script">Paso 2: Otorgar permisos de ejecución al script</a></li>
-        <li class="toc-subitem"><a href="#paso-3-programar-la-ejecucion-en-el-programador-de-tareas-cron">Paso 3: Programar la ejecución en el programador de tareas Cron</a></li>
-      </ol>
-    </nav>
-    
       
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="el-diagnostico-rapido">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        El Diagnóstico Rápido
-      </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Cronjob no ejecuta por rutas relativas o variables de entorno</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Especificar rutas absolutas en el script (<code>/bin/tar</code>, <code>/usr/bin/crontab</code>)</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">Causa</div>
-            <div class="diag-value"><strong>Permisos insuficientes en el directorio de destino</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">Solución</div>
-            <div class="diag-value">Asegurar permisos de escritura con <code>chmod 755</code> o ejecutar cron como root</div>
-          </div></div></div>
-<p>El error más grave en la gestión de servidores locales o domésticos es no disponer de respaldos automatizados e íntegros frente a fallos de hardware o corrupción de archivos. Crear una tarea programada que empaquete tus archivos esenciales de configuración te garantizará tranquilidad.</p>
-
-    </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-escribir-el-script-de-empaquetado-en-bash">Paso 1: Escribir el script de empaquetado en Bash</h3>
-<p>Crea un script en tu directorio de usuario que automatice la compresión de los datos agregando la fecha del día al nombre del archivo resultante:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code># Crear el script de respaldo
-nano ~/auto_backup.sh
-</code></pre>
-    </div>
-    
-<p>Pega el siguiente código en el editor:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>#!/bin/bash
-# Definir variables de rutas absolutas
-BACKUP_DIR=&quot;/var/backups/my_app&quot;
-SOURCE_DIR=&quot;/var/www/html/my_app_data&quot;
-FECHA=$(date +%Y-%m-%d_%H%M%S)
-FILE_NAME=&quot;backup_$FECHA.tar.gz&quot;
-
-# Crear directorio de respaldo si no existe
-mkdir -p &quot;$BACKUP_DIR&quot;
-
-# Comprimir la carpeta de origen usando exclusión de temporales si es necesario
-/usr/bin/tar -czf &quot;$BACKUP_DIR/$FILE_NAME&quot; &quot;$SOURCE_DIR&quot;
-
-# Opcional: Eliminar archivos de respaldo más antiguos de 30 días para evitar saturar el disco
-/usr/bin/find &quot;$BACKUP_DIR&quot; -name &quot;backup_*.tar.gz&quot; -mtime +30 -delete
-</code></pre>
-    </div>
-    
-<h3 id="paso-2-otorgar-permisos-de-ejecucion-al-script">Paso 2: Otorgar permisos de ejecución al script</h3>
-<p>Asegura que el sistema pueda invocar el script que acabas de programar:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>chmod +x ~/auto_backup.sh
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-programar-la-ejecucion-en-el-programador-de-tareas-cron">Paso 3: Programar la ejecución en el programador de tareas Cron</h3>
-<p>Abre la tabla de tareas de tu usuario:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>crontab -e
-</code></pre>
-    </div>
-    
-<p>Agrega la siguiente regla para ejecutar el empaquetado automático de seguridad de forma diaria (por ejemplo, a las 02:00 de la madrugada):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
-      </div>
-      <pre class="formatted-pre"><code>0 2 * * * /usr/bin/bash /home/usuario/auto_backup.sh &gt;&gt; /home/usuario/auto_backup.log 2&gt;&amp;1
-</code></pre>
-    </div>
-    
-
-
-          <!-- Prevention Callout Card -->
-          <div class="prevention-callout-card">
-            <h3 id="prev-heading">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
-              </svg>
-              Consejo de Prevención
-            </h3>
-            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
-              Prácticas de seguridad recomendadas:
-            </p>
-            <ul class="prevention-list">
-              <li>No almacenes de forma exclusiva los archivos de respaldo comprimidos dentro de la misma unidad física del servidor de producción. Si el disco duro sufre un colapso mecánico general, perderás tanto los datos en producción como los respaldos. Configura siempre una tarea secundaria en tu script que replique el archivo empaquetado hacia un almacenamiento en la nube, un servidor secundario local o un NAS externo mediante utilidades de transmisión seguras como <code>rsync</code> o <code>rclone</code>.</li>
-            </ul>
-          </div>
-
-          <!-- GOOGLE_ADSENSE_FOOTER_PLACEHOLDER -->
-          <div class="adsense-container" id="ad-footer-bottom" style="margin: 2.5rem auto 0; max-width: 100%; min-height: 90px; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6956525438386645"
-                 data-ad-slot="4943572587"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-          </div>
-        </div>
       </div>
       
     </article>
@@ -350,6 +253,23 @@ mkdir -p &quot;$BACKUP_DIR&quot;
       </article>
       
 
+      <!-- Related Card: Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Troubleshooting: kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">SSH</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -361,23 +281,6 @@ mkdir -p &quot;$BACKUP_DIR&quot;
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo entender y reparar el estado active (exited) o failed en Systemd -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-systemctl-status-active-exited-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

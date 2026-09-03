@@ -559,11 +559,12 @@ function build() {
       "keywords": post.tags ? post.tags.join(', ') : '',
       "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
-      "dateModified": post.date,
+      "dateModified": new Date().toISOString().split('T')[0],
       "author": {
-        "@type": "Organization",
-        "name": "SoporteCero",
-        "url": "https://soportecero.com/"
+        "@type": "Person",
+        "name": "Rodolfo Castro",
+        "jobTitle": "Editor Técnico Principal & Especialista DevOps",
+        "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
       },
       "publisher": {
         "@type": "Organization",
@@ -671,6 +672,7 @@ function build() {
       .replace(/\{\{readTime\}\}/g, post.readTime)
       .replace(/\{\{date\}\}/g, post.date)
       .replace(/\{\{filename\}\}/g, post.filename)
+      .replace(/\{\{slug\}\}/g, post.filename)
       .replace(/\{\{content\}\}/g, contentHtml)
       .replace(/\{\{prevention\}\}/g, preventionHtml)
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
@@ -737,11 +739,12 @@ function build() {
       "keywords": post.tags ? post.tags.join(', ') : '',
       "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
-      "dateModified": post.date,
+      "dateModified": new Date().toISOString().split('T')[0],
       "author": {
-        "@type": "Organization",
-        "name": "SoporteCero",
-        "url": "https://soportecero.com/"
+        "@type": "Person",
+        "name": "Rodolfo Castro",
+        "jobTitle": "Lead Technical Editor & DevOps Specialist",
+        "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro"
       },
       "publisher": {
         "@type": "Organization",
@@ -849,6 +852,7 @@ function build() {
       .replace(/\{\{readTime\}\}/g, post.readTime)
       .replace(/\{\{date\}\}/g, post.date)
       .replace(/\{\{filename\}\}/g, post.filename)
+      .replace(/\{\{slug\}\}/g, post.filename)
       .replace(/\{\{content\}\}/g, contentHtml)
       .replace(/\{\{prevention\}\}/g, preventionHtml)
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
@@ -1044,14 +1048,13 @@ function build() {
 
   // Add Spanish posts to sitemap
   for (let post of postsEs) {
-    const postDate = post.date || todayStr;
     const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
     ${hasEn ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
-    <lastmod>${postDate}</lastmod>
+    <lastmod>${todayStr}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1060,14 +1063,13 @@ function build() {
 
   // Add English posts to sitemap
   for (let post of postsEn) {
-    const postDate = post.date || todayStr;
     const hasEs = postsEs.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>
     ${hasEs ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
-    <lastmod>${postDate}</lastmod>
+    <lastmod>${todayStr}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -7,7 +7,7 @@
   <title>Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor | SoporteCero</title>
   <meta name="description" content="Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html">
   
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html" />
@@ -19,8 +19,9 @@
   <meta property="og:title" content="Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor">
   <meta property="og:description" content="Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:url" content="https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html">
   <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-06-27">
   <meta property="article:section" content="Sistemas y Servidores">
   
@@ -28,6 +29,7 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor">
   <meta name="twitter:description" content="Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
   
   <link rel="stylesheet" href="../css/style.css">
   
@@ -55,11 +57,12 @@
   "keywords": "BTRFS, Linux, Storage",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
-  "dateModified": "2026-06-27",
+  "dateModified": "2026-09-03",
   "author": {
-    "@type": "Organization",
-    "name": "SoporteCero",
-    "url": "https://soportecero.com/"
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Editor Técnico Principal & Especialista DevOps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
   },
   "publisher": {
     "@type": "Organization",
@@ -207,6 +210,18 @@
         <span class="card-category">Sistemas y Servidores</span>
         <h1 id="post-title">Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor</h1>
         <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
@@ -367,6 +382,31 @@ sudo umount /dev/sdb1
               <li>Las caídas de tensión eléctrica son el enemigo número uno de los servidores basados en Linux. Si tienes tu servidor conectado directamente al tomacorriente de la pared sin un sistema de alimentación ininterrumpida (UPS/No-Break), corres el riesgo latente de perder particiones enteras por culpa de un apagón. Configurar tus discos duros con parámetros de montaje seguros como <code>noatime</code> reduce los ciclos de escritura constantes y protege la vida del hardware.</li>
             </ul>
           </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor & Administrador de Sistemas</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Especialista en administración de servidores Linux, infraestructura Docker y redes. Cada tutorial de SoporteCero es reproducido y testeado en entornos de laboratorio para certificar soluciones directas, seguras y libres de comandos obsoletos.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
@@ -382,6 +422,23 @@ sudo umount /dev/sdb1
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-exit-code-137-oomkiller.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare -->
       <article class="related-card">
         <div class="related-card-content">
@@ -410,23 +467,6 @@ sudo umount /dev/sdb1
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">SSH</span>
-            <span>Lectura: 3 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Error iptables failed: No chain/target/match by that name en Docker -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error iptables failed: No chain/target/match by that name en Docker</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
             <span>Lectura: 3 min</span>
           </div>
         </div>

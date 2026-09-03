@@ -7,7 +7,7 @@
   <title>La guía definitiva de permisos de archivos y carpetas para asegurar WordPress | SoporteCero</title>
   <meta name="description" content="Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/articulos/{{slug}}.html">
+  <link rel="canonical" href="https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html">
   
   
   <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html" />
@@ -19,8 +19,9 @@
   <meta property="og:title" content="La guía definitiva de permisos de archivos y carpetas para asegurar WordPress">
   <meta property="og:description" content="Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://soportecero.com/articulos/{{slug}}.html">
+  <meta property="og:url" content="https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html">
   <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-06-27">
   <meta property="article:section" content="Web y Código">
   
@@ -28,6 +29,7 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="La guía definitiva de permisos de archivos y carpetas para asegurar WordPress">
   <meta name="twitter:description" content="Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
   
   <link rel="stylesheet" href="../css/style.css">
   
@@ -55,11 +57,12 @@
   "keywords": "WordPress, Seguridad, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
-  "dateModified": "2026-06-27",
+  "dateModified": "2026-09-03",
   "author": {
-    "@type": "Organization",
-    "name": "SoporteCero",
-    "url": "https://soportecero.com/"
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Editor Técnico Principal & Especialista DevOps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
   },
   "publisher": {
     "@type": "Organization",
@@ -207,6 +210,18 @@
         <span class="card-category">Web y Código</span>
         <h1 id="post-title">La guía definitiva de permisos de archivos y carpetas para asegurar WordPress</h1>
         <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
@@ -358,6 +373,31 @@ chmod 600 /var/www/html/wordpress/wp-config.php
             <ul class="prevention-list">
               <li><strong>Nunca apliques permisos 777 (lectura, escritura y ejecución para todo el mundo) a ninguna carpeta o archivo de tu sitio web bajo ninguna circunstancia</strong>, ni siquiera de manera temporal para solucionar problemas de subida de imágenes en la carpeta <code>wp-content/uploads</code>. Si un plugin tiene problemas para guardar archivos, esto se debe a un conflicto de propiedad del usuario del sistema de archivos (<code>chown</code>) y no a la falta de permisos de escritura globales; abrir las puertas por completo permitirá que cualquier script inyectado en el servidor tome el control total de tu host.</li>
             </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor & Administrador de Sistemas</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Especialista en administración de servidores Linux, infraestructura Docker y redes. Cada tutorial de SoporteCero es reproducido y testeado en entornos de laboratorio para certificar soluciones directas, seguras y libres de comandos obsoletos.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

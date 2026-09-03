@@ -563,7 +563,7 @@ function build() {
       "author": {
         "@type": "Person",
         "name": "Rodolfo Castro",
-        "jobTitle": "Editor Técnico Principal & Especialista DevOps",
+        "jobTitle": "Diseñador Web & Creador de Apps",
         "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
       },
       "publisher": {
@@ -743,7 +743,7 @@ function build() {
       "author": {
         "@type": "Person",
         "name": "Rodolfo Castro",
-        "jobTitle": "Lead Technical Editor & DevOps Specialist",
+        "jobTitle": "Web Designer & App Creator",
         "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro"
       },
       "publisher": {

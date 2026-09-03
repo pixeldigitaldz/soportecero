@@ -374,8 +374,10 @@ nav a:hover::after, nav a.active::after {
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Article Card Component */
@@ -387,6 +389,8 @@ nav a:hover::after, nav a.active::after {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  box-sizing: border-box;
   transition: transform var(--transition-speed) ease, border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
   will-change: transform;
 }
@@ -507,13 +511,16 @@ nav a:hover::after, nav a.active::after {
 }
 
 .post-container {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .post-layout {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .post-article {
@@ -522,6 +529,9 @@ nav a:hover::after, nav a.active::after {
   border-radius: 16px;
   padding: 2.5rem;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Strict containment: prevents any child from leaking outside */
 }
 
 /* Headings Inside Content */
@@ -749,6 +759,9 @@ nav a:hover::after, nav a.active::after {
 /* Steps list */
 .solution-steps {
   margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .steps-list {
@@ -758,18 +771,25 @@ nav a:hover::after, nav a.active::after {
   gap: 2.25rem;
   padding-left: 0;
   margin-bottom: 2.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .step-item {
   display: flex;
   gap: 1.5rem;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0; /* CRITICAL: Prevents flex child from overflowing parent */
+  box-sizing: border-box;
 }
 
 .step-number {
   flex-shrink: 0;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.6rem;
+  height: 2.6rem;
   border-radius: 50%;
   background-color: var(--accent-transparent);
   border: 2px solid var(--accent-color);
@@ -778,12 +798,15 @@ nav a:hover::after, nav a.active::after {
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 
 .step-body {
-  padding-top: 0.25rem;
-  flex: 1;
+  padding-top: 0.2rem;
+  flex: 1 1 0%;
+  min-width: 0; /* CRITICAL FIX: Allows flex child to shrink below intrinsic code width */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .step-body h4 {
@@ -792,10 +815,12 @@ nav a:hover::after, nav a.active::after {
   color: var(--text-primary);
   margin-top: 0;
   margin-bottom: 0.75rem;
+  overflow-wrap: break-word;
 }
 
 .step-body p {
   margin-bottom: 1.25rem;
+  overflow-wrap: break-word;
 }
 
 /* High Contrast Code Containers */
@@ -805,6 +830,9 @@ nav a:hover::after, nav a.active::after {
   border-radius: 8px;
   overflow: hidden;
   margin: 1.5rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .code-header {
@@ -814,6 +842,9 @@ nav a:hover::after, nav a.active::after {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .code-lang {
@@ -847,12 +878,40 @@ nav a:hover::after, nav a.active::after {
   margin: 0;
   padding: 1.25rem 1.5rem; /* Ample horizontal padding */
   overflow-x: auto;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
 .code-container code {
   font-family: var(--font-mono);
   font-size: 0.9rem;
   color: #e2e8f0; /* White/grey text for contrast */
+  display: inline-block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.code-container pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-container pre::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+
+.code-container pre::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.code-container pre::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
 }
 
 /* Sidebar & Prevention Card */
@@ -1326,34 +1385,73 @@ footer {
 
 /* Mobile Responsive Improvements & Tap Targets Usability */
 @media (max-width: 768px) {
-  /* Layout Stacking */
+  .main-content {
+    padding: 0 1rem 3rem !important;
+  }
+
+  /* Layout Stacking & Containment */
+  .post-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
   .post-layout {
     width: 100% !important;
+    max-width: 100% !important;
     margin: 0 auto !important;
   }
   
   .post-article {
-    padding: 1.25rem 1rem !important;
+    padding: 1.5rem 1.15rem !important;
     width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
   
   .post-sidebar {
     display: none !important;
   }
 
+  /* Steps Symmetry on Mobile */
+  .step-item {
+    gap: 0.85rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .step-number {
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+    font-size: 0.95rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .step-body {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .prevention-callout-card {
     padding: 16px !important;
     margin-top: 24px;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Typography Scales */
   .post-header h1, h1 {
-    font-size: 1.6rem !important;
-    line-height: 1.2 !important;
+    font-size: 1.55rem !important;
+    line-height: 1.25 !important;
   }
   
   h2, .post-article h2, .section-title {
-    font-size: 1.3rem !important;
+    font-size: 1.25rem !important;
   }
   
   h3, .post-article h3, .diagnostic-box h3 {
@@ -1363,8 +1461,11 @@ footer {
   /* The Diagnostics Table Fix */
   .diagnostic-table {
     width: 100%;
+    max-width: 100%;
     border-collapse: collapse;
     margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
   }
 
   .diagnostic-table th,
@@ -1373,7 +1474,6 @@ footer {
     text-align: left;
     font-size: 0.88rem;
   }
-
 
   /* List Alignment */
   .post-article ul, .post-article ol {
@@ -1391,11 +1491,20 @@ footer {
   }
 
   /* Safe touchscreen scrolling for code blocks */
+  .code-container {
+    margin: 1.15rem 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .code-container pre {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    padding: 1rem;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 0.82rem !important;
+    box-sizing: border-box !important;
   }
 
   .code-container code {
@@ -1403,6 +1512,38 @@ footer {
     word-break: normal;
     word-wrap: normal;
   }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0 0.65rem 2.5rem !important;
+  }
+
+  .post-article {
+    padding: 1.25rem 0.85rem !important;
+    border-radius: 10px !important;
+  }
+
+  .step-item {
+    gap: 0.65rem !important;
+  }
+
+  .step-number {
+    width: 1.9rem !important;
+    height: 1.9rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .code-container pre {
+    padding: 0.75rem 0.75rem !important;
+    font-size: 0.76rem !important;
+  }
+
+  .post-header h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+  }
+}
 
   /* Tap Targets Accessibility for Mobile Usability (Lighthouse standard >= 44px) */
   .filter-btn {

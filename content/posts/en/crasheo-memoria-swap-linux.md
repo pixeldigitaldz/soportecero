@@ -18,16 +18,16 @@ When running demanding titles on modern hardware under high-performance Linux di
 
 This happens because the system runs out of physical RAM and, failing to find enough virtual memory (**SWAP space**) configured on local storage, freezes or kills the application to protect the operating system.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Comprobar tu estado actual de SWAP
+### Step 1: Comprobar tu estado actual de SWAP
 Open your terminal and run the following command to see if you have virtual memory active:
 ```bash
 swapon --show
 ```
 If no response line appears, your system completely lacks swap memory.
 
-### Paso 2: Crear un archivo SWAP seguro de 8 Gigabytes
+### Step 2: Crear un archivo SWAP seguro de 8 Gigabytes
 For gaming and editing, an 8GB file allocated on your SSD is ideal for supporting spikes in RAM consumption. Run the following commands in order:
 ```bash
 # 1. Crear el archivo asignando el espacio
@@ -43,7 +43,7 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 ```
 
-### Paso 3: Hacer el cambio permanente para cada reinicio
+### Step 3: Hacer el cambio permanente para cada reinicio
 To prevent the configuration from being erased when shutting down the PC, add the file to the system partition table:
 1. Open the configuration file:
 ```bash
@@ -55,6 +55,6 @@ sudo nano /etc/fstab
 ```
 Save (Ctrl + O, Enter) and exit (Ctrl + X).
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevention Tips
 Recommended safety practices:
 - If you use modern systems, look into using zRAM instead of a traditional SWAP file. zRAM compresses data directly in your physical RAM, being up to 10 times faster than reading and writing to a solid-state drive (SSD).

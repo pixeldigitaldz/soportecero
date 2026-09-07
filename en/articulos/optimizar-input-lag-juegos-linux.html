@@ -105,6 +105,52 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to reduce input lag for competitive gaming in Linux",
+  "description": "Optimize latency and the response of your peripherals by configuring the Wayland or X11 graphics server and system power profiles.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/optimizar-input-lag-juegos-linux.html#configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos",
+      "name": "Configurar la frecuencia de sondeo (polling rate) de tus periféricos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To make your competitive mouse and keyboard respond instantly, force the kernel driver to use a constant refresh rate of 1000 Hz on the USB ports:\n\n    \n      \n        BASH\n        Copy\n      \n      # Crear un archivo de reglas para el módulo del ratón USB\necho &quot;options usbhid mousepoll=1&quot; | sudo tee /etc/modprobe.d/usbhid.conf\n\n# Recargar el módulo HID para aplicar los cambios de inmediato\nsudo rmmod usbhid &amp;&amp; sudo modprobe usbhid"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/optimizar-input-lag-juegos-linux.html#desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland",
+      "name": "Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If you use KDE Plasma or GNOME environments under Wayland, vertical synchronization adds latency. Allow screen tearing in full-screen games to eliminate render delay:\n\n    \n      \n        BASH\n        Copy\n      \n      # En KDE Plasma 6, añade esta regla a tu configuración local para permitir Tearing\nkwriteconfig6 --file kwinrc --group Wayland --key AllowTearing true\n\n# Reiniciar el compositor gráfico para aplicar\nsystemctl --user restart plasma-kwin_wayland"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/optimizar-input-lag-juegos-linux.html#configurar-el-daemon-de-energia-en-modo-rendimiento",
+      "name": "Configurar el daemon de energía en modo Rendimiento",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Prevent the Linux processor regulator from reducing the clock frequency of the system data bus during your game sessions:\n\n    \n      \n        BASH\n        Copy\n      \n      # Cambiar el perfil de energía del sistema a alto rendimiento\npowerprofilesctl set performance\n\n# Verificar que el perfil se haya activado correctamente\npowerprofilesctl get"
+        }
+      ]
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -208,11 +254,7 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos">Paso 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</a></li>
-        <li class="toc-subitem"><a href="#paso-2-desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland">Paso 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</a></li>
-        <li class="toc-subitem"><a href="#paso-3-configurar-el-daemon-de-energia-en-modo-rendimiento">Paso 3: Configurar el daemon de energía en modo Rendimiento</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
       </ol>
     </nav>
     
@@ -245,9 +287,19 @@
 <p>Excessive input delay or <em>input lag</em> when playing competitive titles on Linux occurs due to the accumulation of buffers in the graphics composition server (especially in Wayland with forced vertical synchronization) and due to the default active power saving configuration that suspends or slows down the response frequency of USB ports.</p>
 
     </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-configurar-la-frecuencia-de-sondeo-polling-rate-de-tus-perifericos">Paso 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</h3>
-<p>To make your competitive mouse and keyboard respond instantly, force the kernel driver to use a constant refresh rate of 1000 Hz on the USB ports:</p>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Configurar la frecuencia de sondeo (polling rate) de tus periféricos</h4>
+            <p>To make your competitive mouse and keyboard respond instantly, force the kernel driver to use a constant refresh rate of 1000 Hz on the USB ports:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -261,9 +313,15 @@ echo &quot;options usbhid mousepoll=1&quot; | sudo tee /etc/modprobe.d/usbhid.co
 sudo rmmod usbhid &amp;&amp; sudo modprobe usbhid
 </code></pre>
     </div>
-    
-<h3 id="paso-2-desactivar-la-sincronizacion-vertical-y-activar-desgarro-tearing-en-wayland">Paso 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</h3>
-<p>If you use KDE Plasma or GNOME environments under Wayland, vertical synchronization adds latency. Allow screen tearing in full-screen games to eliminate render delay:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Desactivar la sincronización vertical y activar desgarro (tearing) en Wayland</h4>
+            <p>If you use KDE Plasma or GNOME environments under Wayland, vertical synchronization adds latency. Allow screen tearing in full-screen games to eliminate render delay:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -277,9 +335,15 @@ kwriteconfig6 --file kwinrc --group Wayland --key AllowTearing true
 systemctl --user restart plasma-kwin_wayland
 </code></pre>
     </div>
-    
-<h3 id="paso-3-configurar-el-daemon-de-energia-en-modo-rendimiento">Paso 3: Configurar el daemon de energía en modo Rendimiento</h3>
-<p>Prevent the Linux processor regulator from reducing the clock frequency of the system data bus during your game sessions:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Configurar el daemon de energía en modo Rendimiento</h4>
+            <p>Prevent the Linux processor regulator from reducing the clock frequency of the system data bus during your game sessions:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -293,12 +357,10 @@ powerprofilesctl set performance
 powerprofilesctl get
 </code></pre>
     </div>
-    
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended security practices:</p>
-<ul>
-<li>Do not configure polling rates higher than 1000 Hz (like 4000 Hz or 8000 Hz mice) if your processor does not have at least 6 modern dedicated physical cores. An oversized polling rate will consume massive processor cycles to constantly handle USB port interrupts, which will result in sudden graphic stutters (<em>frame drops</em>) and a lower average FPS rate during your game sessions.</li>
-</ul>
+          </div>
+        </li>
+        
+</ol>
 
 
           <!-- Prevention Callout Card -->
@@ -313,7 +375,7 @@ powerprofilesctl get
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Do not configure polling rates higher than 1000 Hz (like 4000 Hz or 8000 Hz mice) if your processor does not have at least 6 modern dedicated physical cores. An oversized polling rate will consume massive processor cycles to constantly handle USB port interrupts, which will result in sudden graphic stutters (<em>frame drops</em>) and a lower average FPS rate during your game sessions.</li>
             </ul>
           </div>
 

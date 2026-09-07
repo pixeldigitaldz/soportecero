@@ -105,6 +105,52 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Fix Permission Denied (publickey) Error in SSH Connections",
+  "description": "Learn how to repair public key authentication failures in SSH by adjusting directory permissions and the authorized_keys file.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#corregir-los-permisos-de-tu-clave-privada-en-el-cliente",
+      "name": "Corregir los permisos de tu clave privada en el cliente",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "The private key must never be readable by other users of the local machine. Adjust the permissions of the .pem or id_rsa file:\n\n    \n      \n        BASH\n        Copy\n      \n      # Cambiar permisos para que solo el propietario pueda leer el archivo\nchmod 600 ~/.ssh/id_rsa"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor",
+      "name": "Ajustar los permisos del directorio .ssh y autorizaciones en el servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Access the server console (through TTY or the hosting provider&#39;s console) and run the following fixes on your home directory:\n\n    \n      \n        BASH\n        Copy\n      \n      # Asegurar el directorio de configuración de SSH\nchmod 700 ~/.ssh\n\n# Asegurar el archivo que almacena las claves autorizadas\nchmod 600 ~/.ssh/authorized_keys\n\n# Restablecer la propiedad de los archivos a tu usuario actual\nchown -R $USER:$USER ~/.ssh"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#comprobar-la-directiva-de-autenticacion-en-el-servidor",
+      "name": "Comprobar la directiva de autenticación en el servidor",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If the error persists, edit the SSH service configuration file on the server /etc/ssh/sshd_config and verify that public key authentication is enabled:\n\n    \n      \n        PLAINTEXT\n        Copy\n      \n      PubkeyAuthentication yes\nAuthorizedKeysFile .ssh/authorized_keys\n\n    \n    \nRestart the service to apply the changes:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo systemctl restart sshd"
+        }
+      ]
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -208,11 +254,7 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-corregir-los-permisos-de-tu-clave-privada-en-el-cliente">Paso 1: Corregir los permisos de tu clave privada en el cliente</a></li>
-        <li class="toc-subitem"><a href="#paso-2-ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor">Paso 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor</a></li>
-        <li class="toc-subitem"><a href="#paso-3-comprobar-la-directiva-de-autenticacion-en-el-servidor">Paso 3: Comprobar la directiva de autenticación en el servidor</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
       </ol>
     </nav>
     
@@ -245,9 +287,19 @@
 <p>The <code>Permission denied (publickey)</code> error when trying to connect to a remote server via SSH occurs because the SSH daemon (<code>sshd</code>) on the remote server rejects the private key presented by your client. This is usually due to file permissions being too permissive, which invalidates the security of the connection and forces the server to discard the attempt for protection.</p>
 
     </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-corregir-los-permisos-de-tu-clave-privada-en-el-cliente">Paso 1: Corregir los permisos de tu clave privada en el cliente</h3>
-<p>The private key must never be readable by other users of the local machine. Adjust the permissions of the <code>.pem</code> or <code>id_rsa</code> file:</p>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Corregir los permisos de tu clave privada en el cliente</h4>
+            <p>The private key must never be readable by other users of the local machine. Adjust the permissions of the <code>.pem</code> or <code>id_rsa</code> file:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -258,9 +310,15 @@
 chmod 600 ~/.ssh/id_rsa
 </code></pre>
     </div>
-    
-<h3 id="paso-2-ajustar-los-permisos-del-directorio-ssh-y-autorizaciones-en-el-servidor">Paso 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor</h3>
-<p>Access the server console (through TTY or the hosting provider&#39;s console) and run the following fixes on your home directory:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor</h4>
+            <p>Access the server console (through TTY or the hosting provider&#39;s console) and run the following fixes on your home directory:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -277,9 +335,15 @@ chmod 600 ~/.ssh/authorized_keys
 chown -R $USER:$USER ~/.ssh
 </code></pre>
     </div>
-    
-<h3 id="paso-3-comprobar-la-directiva-de-autenticacion-en-el-servidor">Paso 3: Comprobar la directiva de autenticación en el servidor</h3>
-<p>If the error persists, edit the SSH service configuration file on the server <code>/etc/ssh/sshd_config</code> and verify that public key authentication is enabled:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Comprobar la directiva de autenticación en el servidor</h4>
+            <p>If the error persists, edit the SSH service configuration file on the server <code>/etc/ssh/sshd_config</code> and verify that public key authentication is enabled:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -301,12 +365,10 @@ AuthorizedKeysFile .ssh/authorized_keys
       <pre class="formatted-pre"><code>sudo systemctl restart sshd
 </code></pre>
     </div>
-    
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended security practices:</p>
-<ul>
-<li>Avoid sharing your private key through insecure means or using lax permissions on the local host. Always maintain the principle of least privilege in your SSH configuration. Setting the <code>StrictModes yes</code> directive on the server forces SSHD to proactively reject connections if the home directory or authorized file permissions are insecure, preventing accidental intrusions due to filesystem oversights.</li>
-</ul>
+          </div>
+        </li>
+        
+</ol>
 
 
           <!-- Prevention Callout Card -->
@@ -321,7 +383,7 @@ AuthorizedKeysFile .ssh/authorized_keys
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Avoid sharing your private key through insecure means or using lax permissions on the local host. Always maintain the principle of least privilege in your SSH configuration. Setting the <code>StrictModes yes</code> directive on the server forces SSHD to proactively reject connections if the home directory or authorized file permissions are insecure, preventing accidental intrusions due to filesystem oversights.</li>
             </ul>
           </div>
 

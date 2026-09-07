@@ -105,6 +105,64 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Configure Fan Speed (Active Cooler) via Command Console",
+  "description": "Learn how to control temperature thresholds and adjust fan speed on Mini PCs and development boards using the terminal to prevent overheating.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#verificar-la-temperatura-actual-por-consola",
+      "name": "Verificar la temperatura actual por consola",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Open the terminal of your Linux-based operating system and run the following command to know the exact processor temperature in real time:\n\n    \n      \n        BASH\n        Copy\n      \n      vcgencmd measure_temp"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#editar-el-archivo-de-configuracion-de-arranque",
+      "name": "Editar el archivo de configuración de arranque",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "On systems based on Raspberry Pi OS, we can modify the activation parameters by editing the config.txt file. Open the editor with administrator privileges:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo nano /boot/firmware/config.txt\n\n    \n    \n(Nota: En versiones antiguas de sistemas operativos, la ruta puede ser simplemente /boot/config.txt)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points",
+      "name": "Definir los nuevos umbrales de temperatura (Cooling Trip Points)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Scroll to the end of the file and add the following lines to customize the exact degrees at which the fan will change speed (the values correspond to millidegrees Celsius, for example 50000 is equivalent to 50°C):\n\n    \n      \n        PLAINTEXT\n        Copy\n      \n      # Ajuste personalizado del Active Cooler\ndtparam=fan_temp0=45000\ndtparam=fan_temp0_hyst=5000\ndtparam=fan_temp1=52000\ndtparam=fan_temp1_hyst=5000\ndtparam=fan_temp2=60000\ndtparam=fan_temp2_hyst=5000\n\n    \n    \nSave the file by pres"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#reiniciar-el-sistema",
+      "name": "Reiniciar el sistema",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "To apply hardware changes in the internal configuration tables, perform a clean reboot:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo reboot"
+        }
+      ]
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -208,12 +266,7 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</a></li>
-        <li class="toc-subitem"><a href="#paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</a></li>
-        <li class="toc-subitem"><a href="#paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</a></li>
-        <li class="toc-subitem"><a href="#paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
       </ol>
     </nav>
     
@@ -247,9 +300,19 @@
 <p>By default, the operating system manages the fan automatically, but often the factory thresholds are very high, allowing the board to reach 60°C before turning on the air, shortening the life of the hardware.</p>
 
     </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-verificar-la-temperatura-actual-por-consola">Paso 1: Verificar la temperatura actual por consola</h3>
-<p>Open the terminal of your Linux-based operating system and run the following command to know the exact processor temperature in real time:</p>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1: Verificar la temperatura actual por consola</h4>
+            <p>Open the terminal of your Linux-based operating system and run the following command to know the exact processor temperature in real time:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -259,9 +322,15 @@
       <pre class="formatted-pre"><code>vcgencmd measure_temp
 </code></pre>
     </div>
-    
-<h3 id="paso-2-editar-el-archivo-de-configuracion-de-arranque">Paso 2: Editar el archivo de configuración de arranque</h3>
-<p>On systems based on Raspberry Pi OS, we can modify the activation parameters by editing the config.txt file. Open the editor with administrator privileges:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2: Editar el archivo de configuración de arranque</h4>
+            <p>On systems based on Raspberry Pi OS, we can modify the activation parameters by editing the config.txt file. Open the editor with administrator privileges:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -273,8 +342,15 @@
     </div>
     
 <p>(Nota: En versiones antiguas de sistemas operativos, la ruta puede ser simplemente <code>/boot/config.txt</code>).</p>
-<h3 id="paso-3-definir-los-nuevos-umbrales-de-temperatura-cooling-trip-points">Paso 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</h3>
-<p>Scroll to the end of the file and add the following lines to customize the exact degrees at which the fan will change speed (the values correspond to millidegrees Celsius, for example 50000 is equivalent to 50°C):</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Step 3: Definir los nuevos umbrales de temperatura (Cooling Trip Points)</h4>
+            <p>Scroll to the end of the file and add the following lines to customize the exact degrees at which the fan will change speed (the values correspond to millidegrees Celsius, for example 50000 is equivalent to 50°C):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -292,8 +368,15 @@ dtparam=fan_temp2_hyst=5000
     </div>
     
 <p>Save the file by pressing <code>Ctrl + O</code>, confirm with <code>Enter</code> and exit with <code>Ctrl + X</code>.</p>
-<h3 id="paso-4-reiniciar-el-sistema">Paso 4: Reiniciar el sistema</h3>
-<p>To apply hardware changes in the internal configuration tables, perform a clean reboot:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4>Step 4: Reiniciar el sistema</h4>
+            <p>To apply hardware changes in the internal configuration tables, perform a clean reboot:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -303,12 +386,10 @@ dtparam=fan_temp2_hyst=5000
       <pre class="formatted-pre"><code>sudo reboot
 </code></pre>
     </div>
-    
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended safety practices:</p>
-<ul>
-<li>Avoid direct connections of generic fans to the 5V/GND GPIO pins without PWM control, because if the fan consumes too much current or you try to wire it incorrectly, you can cause a lethal short circuit that damages the board permanently (leaving it with a solid red LED of death). Always use official accessories connected to the dedicated JST fan connector.</li>
-</ul>
+          </div>
+        </li>
+        
+</ol>
 
 
           <!-- Prevention Callout Card -->
@@ -323,7 +404,7 @@ dtparam=fan_temp2_hyst=5000
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Avoid direct connections of generic fans to the 5V/GND GPIO pins without PWM control, because if the fan consumes too much current or you try to wire it incorrectly, you can cause a lethal short circuit that damages the board permanently (leaving it with a solid red LED of death). Always use official accessories connected to the dedicated JST fan connector.</li>
             </ul>
           </div>
 

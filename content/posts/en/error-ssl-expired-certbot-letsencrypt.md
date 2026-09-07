@@ -22,9 +22,9 @@ date: '2026-07-27'
 
 The expired SSL certificate error when accessing your website, despite using Let's Encrypt's Certbot, typically occurs because the automatic renewal service failed silently due to port 80 being blocked by your conflicting web server, or due to changes in your DNS records.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Identificar y liberar puertos bloqueados
+### Step 1: Identificar y liberar puertos bloqueados
 Let's Encrypt uses the HTTP-01 challenge to verify that you own the domain, which requires free access on port `80`. Temporarily stop the conflicting web server:
 ```bash
 # Si utilizas Nginx
@@ -34,7 +34,7 @@ sudo systemctl stop nginx
 sudo systemctl stop apache2
 ```
 
-### Paso 2: Ejecutar la renovación forzada de Certbot
+### Step 2: Ejecutar la renovación forzada de Certbot
 Start the forced manual renewal to ignore previous expiration cache policies:
 ```bash
 # Forzar la renovación en consola
@@ -42,14 +42,14 @@ sudo certbot renew --force-renewal
 ```
 *(Verify that the console returns a success message: `Congratulations, all renewals succeeded`).*
 
-### Paso 3: Volver a iniciar los servidores web y verificar
+### Step 3: Volver a iniciar los servidores web y verificar
 Restart your production services to apply the new cryptographic keys:
 ```bash
 sudo systemctl start nginx
 sudo systemctl start apache2
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevention Tips
 
 Recommended security practices:
 - Do not rely solely on periodic manual renewals for the security of your sites. Make sure to verify that Certbot's internal automatic renewal timer is active in the system, which will validate the certificate status twice a day:

@@ -21,13 +21,13 @@ date: '2026-07-27'
 
 Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Acceder e interceptar el cargador de arranque GRUB
+### Step 1: Acceder e interceptar el cargador de arranque GRUB
 1. Restart the server.
 2. When the **GRUB** operating system selection menu screen appears, immediately press the `e` key on your keyboard to edit the boot variables of the selected kernel.
 
-### Paso 2: Modificar los parámetros del kernel
+### Step 2: Modificar los parámetros del kernel
 1. Scroll down using the arrow keys to locate the line starting with the word `linux` or `linux16`.
 2. Go to the end of that line, delete the silent boot words (such as `rhgb quiet`) and add the following command to force the kernel to open a secure command prompt instead of the login interface:
 ```plaintext
@@ -35,7 +35,7 @@ init=/bin/bash
 ```
 3. Press the `Ctrl + X` or `F10` key combination to boot the server with this new temporary configuration.
 
-### Paso 3: Montar el disco en modo escritura y cambiar la clave
+### Step 3: Montar el disco en modo escritura y cambiar la clave
 The system will boot directly as superuser without asking for a password, but with the disk configured in read-only mode. Enable write access to save changes:
 ```bash
 # Remontar la partición raíz con privilegios de escritura
@@ -51,7 +51,7 @@ touch /.autorelabel
 exec /sbin/init
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevention Tips
 
 Recommended security practices:
 - The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system's bootloader by setting an access password for the GRUB console (`grub-mkpasswd-pbkdf2`), which will prevent unauthorized users from editing kernel parameters without prior authentication.

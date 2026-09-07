@@ -207,7 +207,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   // 3. Extraction of Prevention Tips section to populate Callout
   let preventionListHtml = '';
   const prevRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Prevention Advice|Prevention|Prevention Tips|Best Practices)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    ? /<h2[^>]*>[^<]*(?:Prevention Advice|Prevention|Prevention Tips|Best Practices|Consejo de Prevención|Consejos de Prevención|Prevención)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
     : /<h2[^>]*>[^<]*(?:Consejo de Prevención|Consejos de Prevención|Prevención|Prevencion|Buenas Prácticas)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const preventionMatch = html.match(prevRegex);
@@ -226,7 +226,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   // 4. Solution Steps list formatting & extraction
   const solTitle = isEn ? 'Step-by-Step Solution' : 'La Solución Paso a Paso';
   const solRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix|La Solución Paso a Paso|Solución Paso a Paso|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
     : /<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const solutionMatch = html.match(solRegex);
@@ -1048,13 +1048,14 @@ function build() {
 
   // Add Spanish posts to sitemap
   for (let post of postsEs) {
+    const postDate = post.date || todayStr;
     const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
     ${hasEn ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${postDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1063,13 +1064,14 @@ function build() {
 
   // Add English posts to sitemap
   for (let post of postsEn) {
+    const postDate = post.date || todayStr;
     const hasEs = postsEs.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>
     ${hasEs ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${postDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

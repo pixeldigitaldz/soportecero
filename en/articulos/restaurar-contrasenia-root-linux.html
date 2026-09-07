@@ -105,6 +105,40 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to reset a forgotten root user password in Linux systems",
+  "description": "Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html#step-1",
+      "name": "Step 1",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Restart the server."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html#step-2",
+      "name": "Step 2",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "When the GRUB operating system selection menu screen appears, immediately press the e key on your keyboard to edit the boot variables of the selected kernel."
+        }
+      ]
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -208,11 +242,10 @@
       <div class="toc-title">📌 Guide Contents</div>
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#como-solucionar-el-error-paso-a-paso">Cómo solucionar el error paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Paso 1: Acceder e interceptar el cargador de arranque GRUB</a></li>
-        <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
-        <li class="toc-subitem"><a href="#paso-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Paso 3: Montar el disco en modo escritura y cambiar la clave</a></li>
-        <li class="toc-item"><a href="#consejo-de-prevencion">️ Consejo de Prevención</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-subitem"><a href="#step-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Step 1: Acceder e interceptar el cargador de arranque GRUB</a></li>
+        <li class="toc-subitem"><a href="#step-2-modificar-los-parametros-del-kernel">Step 2: Modificar los parámetros del kernel</a></li>
+        <li class="toc-subitem"><a href="#step-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Step 3: Montar el disco en modo escritura y cambiar la clave</a></li>
       </ol>
     </nav>
     
@@ -245,13 +278,35 @@
 <p>Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.</p>
 
     </section>
-    <h2 id="como-solucionar-el-error-paso-a-paso">🚀 Cómo solucionar el error paso a paso</h2>
-<h3 id="paso-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Paso 1: Acceder e interceptar el cargador de arranque GRUB</h3>
-<ol>
-<li>Restart the server.</li>
-<li>When the <strong>GRUB</strong> operating system selection menu screen appears, immediately press the <code>e</code> key on your keyboard to edit the boot variables of the selected kernel.</li>
+    <h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+
+<h3 id="step-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Step 1: Acceder e interceptar el cargador de arranque GRUB</h3>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Step 1</h4>
+            Restart the server.
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Step 2</h4>
+            When the <strong>GRUB</strong> operating system selection menu screen appears, immediately press the <code>e</code> key on your keyboard to edit the boot variables of the selected kernel.
+          </div>
+        </li>
+        
 </ol>
-<h3 id="paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</h3>
+<h3 id="step-2-modificar-los-parametros-del-kernel">Step 2: Modificar los parámetros del kernel</h3>
 <ol>
 <li>Scroll down using the arrow keys to locate the line starting with the word <code>linux</code> or <code>linux16</code>.</li>
 <li>Go to the end of that line, delete the silent boot words (such as <code>rhgb quiet</code>) and add the following command to force the kernel to open a secure command prompt instead of the login interface:</li>
@@ -269,7 +324,7 @@
 <ol start="3">
 <li>Press the <code>Ctrl + X</code> or <code>F10</code> key combination to boot the server with this new temporary configuration.</li>
 </ol>
-<h3 id="paso-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Paso 3: Montar el disco en modo escritura y cambiar la clave</h3>
+<h3 id="step-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Step 3: Montar el disco en modo escritura y cambiar la clave</h3>
 <p>The system will boot directly as superuser without asking for a password, but with the disk configured in read-only mode. Enable write access to save changes:</p>
 
     <div class="code-container">
@@ -291,11 +346,6 @@ exec /sbin/init
 </code></pre>
     </div>
     
-<h2 id="consejo-de-prevencion">🛡️ Consejo de Prevención</h2>
-<p>Recommended security practices:</p>
-<ul>
-<li>The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system&#39;s bootloader by setting an access password for the GRUB console (<code>grub-mkpasswd-pbkdf2</code>), which will prevent unauthorized users from editing kernel parameters without prior authentication.</li>
-</ul>
 
 
           <!-- Prevention Callout Card -->
@@ -310,7 +360,7 @@ exec /sbin/init
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system&#39;s bootloader by setting an access password for the GRUB console (<code>grub-mkpasswd-pbkdf2</code>), which will prevent unauthorized users from editing kernel parameters without prior authentication.</li>
             </ul>
           </div>
 

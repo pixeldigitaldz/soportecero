@@ -20,9 +20,9 @@ This problem occurs because modern versions of Windows no longer include legacy 
 
 ---
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Instalar el Instalador Web de Tiempos de Ejecución del Usuario Final de DirectX
+### Step 1: Instalar el Instalador Web de Tiempos de Ejecución del Usuario Final de DirectX
 The definitive solution is not to download a loose `.dll` file from the internet (which is dangerous), but rather to install the official Microsoft package that adds compatibility for legacy games.
 
 1. Download the official wizard from the Microsoft website by searching for **"DirectX End-User Runtime Web Installer"**.
@@ -30,7 +30,7 @@ The definitive solution is not to download a loose `.dll` file from the internet
 3. Uncheck the box to install the Bing Bar (to avoid unnecessary advertising).
 4. Follow the wizard to let it download and install the legacy DirectX 9, 10, and 11 libraries.
 
-### Paso 2: Forzar el modo ventana (Si el instalador no basta)
+### Step 2: Forzar el modo ventana (Si el instalador no basta)
 If the error persists, the problem is that the game does not know how to scale to your current screen resolution (for example, 1080p or 4K screens).
 
 1. Find the executable `.exe` file of your game.
@@ -40,5 +40,5 @@ If the error persists, the problem is that the game does not know how to scale t
 
 ---
 
-## 🛡️ Consejo de Prevención para Gamers
+## 🛡️ Prevention Tips for Gamers
 If you use Linux-based systems or play a lot of classic titles, consider using modern wrappers like **dgVoodoo2** or **DXVK**. These tools intercept legacy DirectX 9 instructions and translate them into Vulkan or DirectX 11/12 commands, making the games not only launch without errors, but also run with much more stable performance on modern hardware.

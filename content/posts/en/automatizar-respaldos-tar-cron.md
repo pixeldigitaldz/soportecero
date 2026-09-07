@@ -16,9 +16,9 @@ date: "2026-07-16"
 
 The most serious mistake in managing local or home servers is not having automated and intact backups against hardware failures or file corruption. Creating a scheduled task that packages your essential configuration files will guarantee peace of mind.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Escribir el script de empaquetado en Bash
+### Step 1: Escribir el script de empaquetado en Bash
 Create a script in your user directory that automates the data compression by adding the current date to the name of the resulting file:
 ```bash
 # Crear el script de respaldo
@@ -43,13 +43,13 @@ mkdir -p "$BACKUP_DIR"
 /usr/bin/find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +30 -delete
 ```
 
-### Paso 2: Otorgar permisos de ejecución al script
+### Step 2: Otorgar permisos de ejecución al script
 Ensure that the system can invoke the script you just scheduled:
 ```bash
 chmod +x ~/auto_backup.sh
 ```
 
-### Paso 3: Programar la ejecución en el programador de tareas Cron
+### Step 3: Programar la ejecución en el programador de tareas Cron
 Open your user's task table:
 ```bash
 crontab -e
@@ -59,7 +59,7 @@ Add the following rule to run the automatic security packaging daily (for exampl
 0 2 * * * /usr/bin/bash /home/usuario/auto_backup.sh >> /home/usuario/auto_backup.log 2>&1
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevention Tips
 
 Recommended safety practices:
 - Do not store your compressed backup files exclusively within the same physical drive of the production server. If the hard drive suffers a general mechanical collapse, you will lose both production data and backups. Always configure a secondary task in your script that replicates the packaged file to cloud storage, a local secondary server, or an external NAS using secure transmission utilities such as `rsync` or `rclone`.

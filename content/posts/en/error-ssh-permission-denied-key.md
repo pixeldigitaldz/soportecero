@@ -21,16 +21,16 @@ date: '2026-07-27'
 
 The `Permission denied (publickey)` error when trying to connect to a remote server via SSH occurs because the SSH daemon (`sshd`) on the remote server rejects the private key presented by your client. This is usually due to file permissions being too permissive, which invalidates the security of the connection and forces the server to discard the attempt for protection.
 
-## 🚀 Cómo solucionar el error paso a paso
+## 🚀 Step-by-Step Solution
 
-### Paso 1: Corregir los permisos de tu clave privada en el cliente
+### Step 1: Corregir los permisos de tu clave privada en el cliente
 The private key must never be readable by other users of the local machine. Adjust the permissions of the `.pem` or `id_rsa` file:
 ```bash
 # Cambiar permisos para que solo el propietario pueda leer el archivo
 chmod 600 ~/.ssh/id_rsa
 ```
 
-### Paso 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor
+### Step 2: Ajustar los permisos del directorio .ssh y autorizaciones en el servidor
 Access the server console (through TTY or the hosting provider's console) and run the following fixes on your home directory:
 ```bash
 # Asegurar el directorio de configuración de SSH
@@ -43,7 +43,7 @@ chmod 600 ~/.ssh/authorized_keys
 chown -R $USER:$USER ~/.ssh
 ```
 
-### Paso 3: Comprobar la directiva de autenticación en el servidor
+### Step 3: Comprobar la directiva de autenticación en el servidor
 If the error persists, edit the SSH service configuration file on the server `/etc/ssh/sshd_config` and verify that public key authentication is enabled:
 ```plaintext
 PubkeyAuthentication yes
@@ -54,7 +54,7 @@ Restart the service to apply the changes:
 sudo systemctl restart sshd
 ```
 
-## 🛡️ Consejo de Prevención
+## 🛡️ Prevention Tips
 
 Recommended security practices:
 - Avoid sharing your private key through insecure means or using lax permissions on the local host. Always maintain the principle of least privilege in your SSH configuration. Setting the `StrictModes yes` directive on the server forces SSHD to proactively reject connections if the home directory or authorized file permissions are insecure, preventing accidental intrusions due to filesystem oversights.

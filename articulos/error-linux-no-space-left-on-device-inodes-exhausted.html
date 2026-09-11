@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) | SoporteCero</title>
+  <meta name="description" content="¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)">
+  <meta property="og:description" content="¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-09-11">
+  <meta property="article:section" content="Sistemas y Servidores">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)">
+  <meta name="twitter:description" content="¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)",
+  "description": "¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.",
+  "inLanguage": "es",
+  "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Linux, Sysadmin, Almacenamiento, Bash",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-09-11",
+  "dateModified": "2026-09-11",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)",
+      "item": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)",
+  "description": "¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html#comprobar-el-consumo-real-de-inodos-en-las-particiones",
+      "name": "Comprobar el consumo real de inodos en las particiones",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Ejecuta el comando df -ih para inspeccionar el porcentaje de uso de inodos (campo IUse%) en lugar del espacio de almacenamiento en bytes:\n\n    \n      \n        BASH\n        Copiar\n      \n      df -ih\n\n    \n    \nSi la partición raíz (/) o /var muestra un 100% en IUse%, has confirmado que el problema es el agotamiento de inodos."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html#localizar-el-directorio-que-satura-los-inodos",
+      "name": "Localizar el directorio que satura los inodos",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Para encontrar qué subdirectorio dentro de /var contiene una cantidad astronómica de ficheros diminutos, ejecuta este análisis rápido:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo du --inodes -d 2 /var | sort -rn | head -n 15\n\n    \n    \nLos sospechosos habituales suelen ser:\n\n/var/lib/php/sessions/ (sesiones PHP caducadas no recolectadas por garbage collection).\n/var/spool/postfix/maildrop/ (correos de cron rebotados).\n/var/log/ (registros rotados no comprimidos ni eliminados)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html#eliminar-los-ficheros-masivos-sin-bloquear-la-terminal",
+      "name": "Eliminar los ficheros masivos sin bloquear la terminal",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "No utilices rm -rf * en una carpeta con millones de archivos porque la shell arrojará el error Argument list too long. Utiliza find con la directiva -delete:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Limpiar sesiones huérfanas de PHP\nsudo find /var/lib/php/sessions/ -type f -cmin +1440 -delete\n\n# Limpiar archivos de log antiguos\nsudo find /var/log/ -type f -name &quot;*.gz&quot; -mtime +30 -delete\n\n    \n    \nComprueba inmediatamente después con df -ih cómo el porcentaje de uso de i"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Se puede ampliar el número de inodos de una partición ext4 existente?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En sistemas de archivos ext4, el número total de inodos se define al formatear la partición (con mkfs.ext4 -N). Para aumentarlo es necesario reformatear o migrar a sistemas con inodos dinámicos como XFS o Btrfs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué lsof muestra archivos eliminados ocupando inodos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Si un proceso mantiene abierto un archivo que fue borrado del disco, el sistema operativo no libera el inodo ni los bloques hasta que el proceso finaliza. Identifícalos con lsof +L1 y reinicia el servicio con systemctl."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
+        <span style="color: var(--text-secondary);">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Sistemas y Servidores</span>
+        <h1 id="post-title">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Lectura: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Actualizado: 2026-09-11
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>El error No space left on device en Linux no solo ocurre cuando los gigabytes del disco duro se llenan. Cada archivo, enlace simbólico y directorio requiere una estructura de metadatos llamada inodo. Si tu sistema crea millones de archivos diminutos (como sesiones de PHP, logs o ficheros de caché), la tabla de inodos se agota al 100% aunque df -h muestre gigabytes de espacio disponible.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#se-puede-ampliar-el-numero-de-inodos-de-una-particion-ext4-existente">¿Se puede ampliar el número de inodos de una partición ext4 existente?</a></li>
+        <li class="toc-subitem"><a href="#por-que-lsof-muestra-archivos-eliminados-ocupando-inodos">¿Por qué lsof muestra archivos eliminados ocupando inodos?</a></li>
+      </ol>
+    </nav>
+    
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Millones de archivos temporales pequeños o sesiones PHP/Docker sin limpiar</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Buscar directorios con más inodos mediante find y eliminarlos</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Archivos eliminados que siguen retenidos por procesos en ejecución</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Identificar descriptores con lsof +L1 y reiniciar los servicios responsables</div>
+          </div></div></div>
+<p>El error <code>No space left on device</code> en Linux no solo ocurre cuando los gigabytes del disco duro se llenan. Cada archivo, enlace simbólico y directorio requiere una estructura de metadatos llamada <strong>inodo</strong>. Si tu sistema crea millones de archivos diminutos (como sesiones de PHP, logs o ficheros de caché), la tabla de inodos se agota al 100% aunque <code>df -h</code> muestre gigabytes de espacio disponible.</p>
+<blockquote>
+<p><strong>Solución Rápida (1 Minuto):</strong></p>
+<ol>
+<li>Comprueba si los inodos están al 100%:
+<code>df -ih</code></li>
+<li>Localiza la carpeta con más archivos acumulados:
+<code>for d in /var/*; do echo -n &quot;$d: &quot;; find &quot;$d&quot; -xdev | wc -l; done | sort -k2 -n</code></li>
+</ol>
+</blockquote>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Comprobar el consumo real de inodos en las particiones</h4>
+            <p>Ejecuta el comando <code>df -ih</code> para inspeccionar el porcentaje de uso de inodos (campo <em>IUse%</em>) en lugar del espacio de almacenamiento en bytes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>df -ih
+</code></pre>
+    </div>
+    
+<p>Si la partición raíz (<code>/</code>) o <code>/var</code> muestra un 100% en <em>IUse%</em>, has confirmado que el problema es el agotamiento de inodos.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Localizar el directorio que satura los inodos</h4>
+            <p>Para encontrar qué subdirectorio dentro de <code>/var</code> contiene una cantidad astronómica de ficheros diminutos, ejecuta este análisis rápido:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo du --inodes -d 2 /var | sort -rn | head -n 15
+</code></pre>
+    </div>
+    
+<p>Los sospechosos habituales suelen ser:</p>
+<ul>
+<li><code>/var/lib/php/sessions/</code> (sesiones PHP caducadas no recolectadas por garbage collection).</li>
+<li><code>/var/spool/postfix/maildrop/</code> (correos de cron rebotados).</li>
+<li><code>/var/log/</code> (registros rotados no comprimidos ni eliminados).</li>
+</ul>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Eliminar los ficheros masivos sin bloquear la terminal</h4>
+            <p>No utilices <code>rm -rf *</code> en una carpeta con millones de archivos porque la shell arrojará el error <code>Argument list too long</code>. Utiliza <code>find</code> con la directiva <code>-delete</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Limpiar sesiones huérfanas de PHP
+sudo find /var/lib/php/sessions/ -type f -cmin +1440 -delete
+
+# Limpiar archivos de log antiguos
+sudo find /var/log/ -type f -name &quot;*.gz&quot; -mtime +30 -delete
+</code></pre>
+    </div>
+    
+<p>Comprueba inmediatamente después con <code>df -ih</code> cómo el porcentaje de uso de inodos desciende.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="se-puede-ampliar-el-numero-de-inodos-de-una-particion-ext4-existente">¿Se puede ampliar el número de inodos de una partición ext4 existente?</h3>
+<p>En sistemas de archivos ext4, el número total de inodos se define al formatear la partición (con mkfs.ext4 -N). Para aumentarlo es necesario reformatear o migrar a sistemas con inodos dinámicos como XFS o Btrfs.</p>
+<h3 id="por-que-lsof-muestra-archivos-eliminados-ocupando-inodos">¿Por qué lsof muestra archivos eliminados ocupando inodos?</h3>
+<p>Si un proceso mantiene abierto un archivo que fue borrado del disco, el sistema operativo no libera el inodo ni los bloques hasta que el proceso finaliza. Identifícalos con <code>lsof +L1</code> y reinicia el servicio con systemctl.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Configura tareas periódicas de rotación de logs con <code>logrotate</code> estableciendo un límite estricto en la directiva <code>rotate</code> y activando <code>compress</code>.</li>
+<li>Automatiza la limpieza de sesiones huérfanas y ficheros temporales con un cronjob en <code>/etc/cron.daily/</code>.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web. Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: [SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-exit-code-137-oomkiller.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Cloudflare</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

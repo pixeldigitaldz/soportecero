@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed | SoporteCero</title>
+  <meta name="description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed">
+  <meta property="og:description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-09-11">
+  <meta property="article:section" content="Sistemas y Servidores">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed">
+  <meta name="twitter:description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed",
+  "description": "Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.",
+  "inLanguage": "es",
+  "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, DevOps, Contenedores, Linux",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-09-11",
+  "dateModified": "2026-09-11",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed",
+      "item": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed",
+  "description": "Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#comprobar-saltos-de-linea-crlf-en-scripts-de-inicio",
+      "name": "Comprobar saltos de línea CRLF en scripts de inicio",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si editaste el archivo entrypoint.sh o scripts shell en Windows o con git autocrlf activo, el archivo contendrá caracteres de retorno de carro \\r. Linux intentará ejecutar /bin/sh\\r, lo cual falla inmediatamente:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Instalar dos2unix y convertir el archivo a formato Unix\nsudo apt-get install -y dos2unix\ndos2unix entrypoint.sh"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#garantizar-permisos-de-ejecucion-en-el-dockerfile",
+      "name": "Garantizar permisos de ejecución en el Dockerfile",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Verifica que el script tenga permisos de ejecución tanto en tu máquina como dentro de la imagen Docker:\n\n    \n      \n        DOCKERFILE\n        Copiar\n      \n      # En tu Dockerfile\nCOPY entrypoint.sh /usr/local/bin/entrypoint.sh\nRUN chmod +x /usr/local/bin/entrypoint.sh\nENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#verificar-la-ruta-absoluta-y-el-interprete-shebang",
+      "name": "Verificar la ruta absoluta y el intérprete (Shebang)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Asegúrate de que la primera línea de tu script contenga un intérprete válido que realmente exista en la imagen base (por ejemplo, en imágenes Alpine no existe /bin/bash, debes usar /bin/sh):\n\n    \n      \n        BASH\n        Copiar\n      \n      #!/bin/sh\nset -e\nexec &quot;$@&quot;\n\n    \n    \nSi utilizas ENTRYPOINT [&quot;entrypoint.sh&quot;] en formato exec (corchetes), debes asegurarte de que la ruta esté en el $PATH o especificar la ruta completa [&quot;/usr/local/bin/entrypoint.sh&quot;]."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Alpine Linux utiliza musl libc y ash en lugar de GNU libc y bash. Si un binario compilado o script hace referencia a /bin/bash o librerías dinámicas glibc, fallará con executable file not found."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo puedo depurar el contenedor si no llega a arrancar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sobrescribe el punto de entrada desde la terminal ejecutando docker run --rm -it --entrypoint /bin/sh mi-imagen para inspeccionar los archivos internos interactivamente."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
+        <span style="color: var(--text-secondary);">[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Sistemas y Servidores</span>
+        <h1 id="post-title">[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Lectura: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Actualizado: 2026-09-11
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          
+      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+        <div class="ai-summary-header">
+          ✨ Respuesta Rápida
+        </div>
+        <p>Al ejecutar docker run o docker compose up, el demonio de containerd puede abortar con el error failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: &quot;...&quot;: executable file not found in $PATH. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el ENTRYPOINT o CMD.</p>
+      </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#por-que-ocurre-este-error-al-usar-imagenes-docker-basadas-en-alpine-linux">¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?</a></li>
+        <li class="toc-subitem"><a href="#como-puedo-depurar-el-contenedor-si-no-llega-a-arrancar">¿Cómo puedo depurar el contenedor si no llega a arrancar?</a></li>
+      </ol>
+    </nav>
+    
+      
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      
+<div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>El binario del ENTRYPOINT o CMD no existe dentro de la imagen o no tiene permisos de ejecución</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Verificar la ruta absoluta del binario y aplicar chmod +x en el Dockerfile</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Finales de línea de Windows (CRLF) en el script de arranque entrypoint.sh</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Convertir el script a formato Unix LF con dos2unix entrypoint.sh</div>
+          </div></div></div>
+<p>Al ejecutar <code>docker run</code> o <code>docker compose up</code>, el demonio de containerd puede abortar con el error <code>failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: &quot;...&quot;: executable file not found in $PATH</code>. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el <code>ENTRYPOINT</code> o <code>CMD</code>.</p>
+<blockquote>
+<p><strong>Solución Rápida (1 Minuto):</strong></p>
+<ol>
+<li>Revisa los saltos de línea de tu script de inicio:
+<code>dos2unix entrypoint.sh</code></li>
+<li>Asegura permisos de ejecución antes de construir la imagen:
+<code>chmod +x entrypoint.sh &amp;&amp; docker build -t mi-app .</code></li>
+</ol>
+</blockquote>
+
+    </section>
+    <h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4>Paso 1: Comprobar saltos de línea CRLF en scripts de inicio</h4>
+            <p>Si editaste el archivo <code>entrypoint.sh</code> o scripts shell en Windows o con git autocrlf activo, el archivo contendrá caracteres de retorno de carro <code>\r</code>. Linux intentará ejecutar <code>/bin/sh\r</code>, lo cual falla inmediatamente:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Instalar dos2unix y convertir el archivo a formato Unix
+sudo apt-get install -y dos2unix
+dos2unix entrypoint.sh
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4>Paso 2: Garantizar permisos de ejecución en el Dockerfile</h4>
+            <p>Verifica que el script tenga permisos de ejecución tanto en tu máquina como dentro de la imagen Docker:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># En tu Dockerfile
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4>Paso 3: Verificar la ruta absoluta y el intérprete (Shebang)</h4>
+            <p>Asegúrate de que la primera línea de tu script contenga un intérprete válido que realmente exista en la imagen base (por ejemplo, en imágenes Alpine no existe <code>/bin/bash</code>, debes usar <code>/bin/sh</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>#!/bin/sh
+set -e
+exec &quot;$@&quot;
+</code></pre>
+    </div>
+    
+<p>Si utilizas <code>ENTRYPOINT [&quot;entrypoint.sh&quot;]</code> en formato exec (corchetes), debes asegurarte de que la ruta esté en el <code>$PATH</code> o especificar la ruta completa <code>[&quot;/usr/local/bin/entrypoint.sh&quot;]</code>.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="por-que-ocurre-este-error-al-usar-imagenes-docker-basadas-en-alpine-linux">¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?</h3>
+<p>Alpine Linux utiliza musl libc y ash en lugar de GNU libc y bash. Si un binario compilado o script hace referencia a /bin/bash o librerías dinámicas glibc, fallará con executable file not found.</p>
+<h3 id="como-puedo-depurar-el-contenedor-si-no-llega-a-arrancar">¿Cómo puedo depurar el contenedor si no llega a arrancar?</h3>
+<p>Sobrescribe el punto de entrada desde la terminal ejecutando <code>docker run --rm -it --entrypoint /bin/sh mi-imagen</code> para inspeccionar los archivos internos interactivamente.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Añade un archivo <code>.gitattributes</code> con <code>* text eol=lf</code> en la raíz de tu proyecto para evitar que Git convierta finales de línea en Windows.</li>
+<li>Comprueba siempre la disponibilidad de <code>/bin/bash</code> vs <code>/bin/sh</code> al cambiar entre imágenes base como Ubuntu y Alpine.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web. Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-exit-code-137-oomkiller.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Cloudflare</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

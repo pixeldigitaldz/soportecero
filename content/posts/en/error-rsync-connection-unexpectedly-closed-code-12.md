@@ -4,7 +4,7 @@ description: "Fix rsync error code 12 connection unexpectedly closed when copyin
 category: "Systems & Servers"
 tags: ["rsync","SSH","Linux","Backup"]
 readTime: "4 min"
-date: "2026-09-21"
+date: "2026-09-17"
 ---
 
 ## Quick Diagnostics

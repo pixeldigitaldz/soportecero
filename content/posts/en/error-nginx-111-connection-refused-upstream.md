@@ -4,7 +4,7 @@ description: "Fix Nginx error 111: Connection refused on proxy_pass routes conne
 category: "Systems & Servers"
 tags: ["Nginx","DevOps","Nodejs","Sysadmin"]
 readTime: "4 min"
-date: "2026-09-19"
+date: "2026-09-17"
 ---
 
 ## Quick Diagnostics

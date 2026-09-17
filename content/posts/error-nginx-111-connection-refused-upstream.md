@@ -4,7 +4,7 @@ description: "Soluciona el error de Nginx 111: Connection refused en proxy_pass 
 category: "Sistemas y Servidores"
 tags: ["Nginx","DevOps","Nodejs","Sysadmin"]
 readTime: "4 min"
-date: "2026-09-19"
+date: "2026-09-17"
 ---
 
 ## Diagnóstico Rápido

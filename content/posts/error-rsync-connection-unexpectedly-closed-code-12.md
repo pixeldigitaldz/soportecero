@@ -4,7 +4,7 @@ description: "Soluciona el fallo rsync error code 12 connection unexpectedly clo
 category: "Sistemas y Servidores"
 tags: ["rsync","SSH","Linux","Backup"]
 readTime: "4 min"
-date: "2026-09-21"
+date: "2026-09-17"
 ---
 
 ## Diagnóstico Rápido

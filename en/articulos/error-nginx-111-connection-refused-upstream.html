@@ -4,31 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Why Is My Cron Job Not Running? Step-by-Step Diagnosis | SoporteCero</title>
-  <meta name="description" content="Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts.">
+  <title>[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream | SoporteCero</title>
+  <meta name="description" content="Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://soportecero.com/en/articulos/error-cron-job-not-running.html">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html">
   
   
-  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-cron-job-not-running.html" />
-  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-cron-job-not-running.html" />
-  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-cron-job-not-running.html" />
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-nginx-111-connection-refused-upstream.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-nginx-111-connection-refused-upstream.html" />
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="Why Is My Cron Job Not Running? Step-by-Step Diagnosis">
-  <meta property="og:description" content="Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts.">
+  <meta property="og:title" content="[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream">
+  <meta property="og:description" content="Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends.">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://soportecero.com/en/articulos/error-cron-job-not-running.html">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html">
   <meta property="og:site_name" content="SoporteCero">
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
-  <meta property="article:published_time" content="2026-07-24">
+  <meta property="article:published_time" content="2026-09-17">
   <meta property="article:section" content="Systems & Servers">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Why Is My Cron Job Not Running? Step-by-Step Diagnosis">
-  <meta name="twitter:description" content="Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts.">
+  <meta name="twitter:title" content="[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream">
+  <meta name="twitter:description" content="Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends.">
   <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
   
   <link rel="stylesheet" href="../../css/style.css">
@@ -49,15 +49,15 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Why Is My Cron Job Not Running? Step-by-Step Diagnosis",
-  "description": "Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts.",
+  "headline": "[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream",
+  "description": "Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends.",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
-  "keywords": "Linux, Sysadmin, Cron",
+  "keywords": "Nginx, DevOps, Nodejs, Sysadmin",
   "proficiencyLevel": "Intermediate",
-  "datePublished": "2026-07-24",
-  "dateModified": "2026-07-24",
+  "datePublished": "2026-09-17",
+  "dateModified": "2026-09-17",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -75,7 +75,7 @@
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://soportecero.com/en/articulos/error-cron-job-not-running.html"
+    "@id": "https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html"
   }
 }
   </script>
@@ -99,8 +99,8 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Why Is My Cron Job Not Running? Step-by-Step Diagnosis",
-      "item": "https://soportecero.com/en/articulos/error-cron-job-not-running.html"
+      "name": "[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream",
+      "item": "https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html"
     }
   ]
 }
@@ -109,44 +109,68 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Why Is My Cron Job Not Running? Step-by-Step Diagnosis",
-  "description": "Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts.",
+  "name": "[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream",
+  "description": "Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-cron-job-not-running.html#forzar-el-uso-de-rutas-absolutas-en-comandos-y-scripts",
-      "name": "Forzar el uso de rutas absolutas en comandos y scripts",
+      "url": "https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html#verify-upstream-backend-process-and-port-binding",
+      "name": "Verify Upstream Backend Process and Port Binding",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Cron does not load the environment variables from your .bashrc file or inherit the PATH variable from your interactive session. Therefore, it will not know where binaries like python3, node, or git are unless you use full paths:"
+          "text": "Run socket inspection to confirm your application is bound to the expected port: If Nginx expects a backend at http://127.0.0.1:3000 but ss shows no service bound to port 3000, your application crashed or failed during initial boot."
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-cron-job-not-running.html#redirigir-errores-y-logs-de-ejecucion-a-un-archivo-fisico",
-      "name": "Redirigir errores y logs de ejecución a un archivo físico",
+      "url": "https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html#eliminate-localhost-ipv6-collision-use-127001",
+      "name": "Eliminate localhost IPv6 Collision (Use 127.0.0.1)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Since background tasks do not have a physical terminal to display error messages, you must force the system to write them to a log file in order to audit the exact reason for the failure:"
+          "text": "In modern Linux distributions, localhost resolves to IPv6 [::1] first. If your Node.js or Python backend only listens on IPv4 (127.0.0.1), Nginx encounters immediate connection refusal on IPv6:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-cron-job-not-running.html#verificar-que-el-demonio-de-cron-este-activo",
-      "name": "Verificar que el demonio de Cron esté activo",
+      "url": "https://soportecero.com/en/articulos/error-nginx-111-connection-refused-upstream.html#verify-unix-socket-permissions-gunicorn-php-fpm",
+      "name": "Verify UNIX Socket Permissions (Gunicorn / PHP-FPM)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Make sure that the service responsible for coordinating the scheduled task queue is running on your server:"
+          "text": "If proxying to a UNIX socket file (unix:/run/app.sock), verify filesystem ownership: The socket must be readable and writable by Nginx&#39;s worker user (www-data or nginx):"
         }
       ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does error 111 trigger specifically after a machine reboot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nginx often boots faster than complex Dockerized apps or databases. Add After=docker.service or your backend unit in systemd to ensure proper boot sequencing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the technical difference between error 111 and error 110 in Nginx logs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Error 111 (Connection refused) means a TCP RST packet was actively returned because no daemon is listening. Error 110 (Connection timed out) means packets were dropped by a firewall or routing loop."
+      }
     }
   ]
 }
@@ -180,7 +204,7 @@
       </nav>
       
     <div class="lang-selector">
-      <a href="../../articulos/error-cron-job-not-running.html" class="lang-inactive">ES</a>
+      <a href="../../articulos/error-nginx-111-connection-refused-upstream.html" class="lang-inactive">ES</a>
       <span class="lang-separator">|</span>
       <span class="lang-active">EN</span>
     </div>
@@ -203,12 +227,12 @@
     <article class="post-container">
       <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
         <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
-        <span style="color: var(--text-secondary);">Why Is My Cron Job Not Running? Step-by-Step Diagnosis</span>
+        <span style="color: var(--text-secondary);">[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream</span>
       </div>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">Why Is My Cron Job Not Running? Step-by-Step Diagnosis</h1>
+        <h1 id="post-title">[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -226,13 +250,13 @@
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
             </svg>
-            Read time: 3 min
+            Read time: 4 min
           </span>
           <span>
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
             </svg>
-            Updated: 2026-07-24
+            Updated: 2026-09-17
           </span>
         </div>
       </header>
@@ -247,7 +271,7 @@
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
-        <p>The most common failure with automated Cron tasks is that the script or command runs perfectly when you execute it manually in your terminal, but fails silently when invoked by the system daemon (cron). This occurs due to critical differences between your user session and the isolated environment of Cron.</p>
+        <p>When using Nginx as a reverse proxy in front of web applications (Next.js, Express, Django, FastAPI), users are frequently met with HTTP 502 Bad Gateway and the following line logged in /var/log/nginx/error.log: connect() failed (111: Connection refused) while connecting to upstream, upstream: &quot;http://127.0.0.1:3000/...&quot;. This indicates Nginx dispatched a client request to the upstream target, but no process was listening on the designated socket or TCP port.</p>
       </section>
       
 
@@ -262,21 +286,30 @@
 <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Cron daemon service disabled or stopped</strong></div>
+            <div class="diag-value"><strong>Upstream application process (Node.js, Gunicorn, Docker) is stopped or crashed</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">Solution</div>
-            <div class="diag-value">Start cron daemon: <code>systemctl enable --now cron</code> (or <code>crond</code>)</div>
+            <div class="diag-value">Inspect backend daemon status via systemctl status or docker ps</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
-            <div class="diag-value"><strong>Missing trailing newline in crontab file or relative paths used</strong></div>
+            <div class="diag-value"><strong>Port mismatch or IPv4 vs IPv6 loopback binding collision in Nginx proxy_pass</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">Solution</div>
-            <div class="diag-value">Use absolute paths for all commands and executables in crontab</div>
+            <div class="diag-value">Point proxy_pass directly to 127.0.0.1:<port> rather than localhost</div>
           </div></div></div>
 
+<blockquote>
+<p><strong>Quick Solution (1 Minute):</strong></p>
+<ol>
+<li>Check listening sockets on local ports:
+<code>sudo ss -tulpn | grep -E &#39;3000|8000|8080|9000&#39;</code></li>
+<li>Check backend service status:
+<code>sudo systemctl status my-backend</code></li>
+</ol>
+</blockquote>
 
     </section>
 
@@ -285,6 +318,9 @@
       <ol class="toc-list">
             <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
         <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+        <li class="toc-subitem"><a href="#why-does-error-111-trigger-specifically-after-a-machine-reboot">Why does error 111 trigger specifically after a machine reboot?</a></li>
+        <li class="toc-subitem"><a href="#what-is-the-technical-difference-between-error-111-and-error-110-in-nginx-logs">What is the technical difference between error 111 and error 110 in Nginx logs?</a></li>
       </ol>
     </nav>
     
@@ -296,66 +332,88 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="forzar-el-uso-de-rutas-absolutas-en-comandos-y-scripts">
+        <li class="step-item" id="verify-upstream-backend-process-and-port-binding">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="forzar-el-uso-de-rutas-absolutas-en-comandos-y-scripts-heading">Step 1: Forzar el uso de rutas absolutas en comandos y scripts</h4>
-            <p>Cron does not load the environment variables from your <code>.bashrc</code> file or inherit the <code>PATH</code> variable from your interactive session. Therefore, it will not know where binaries like <code>python3</code>, <code>node</code>, or <code>git</code> are unless you use full paths:</p>
+            <h4 id="verify-upstream-backend-process-and-port-binding-heading">Step 1: Verify Upstream Backend Process and Port Binding</h4>
+            <p>Run socket inspection to confirm your application is bound to the expected port:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code># INCORRECTO:
-* * * * * python3 /home/usuario/script.py
-
-# CORRECTO (Usa &quot;which python3&quot; para verificar la ruta en tu sistema):
-* * * * * /usr/bin/python3 /home/usuario/script.py
+      <pre class="formatted-pre"><code>sudo ss -tulpn | grep LISTEN
 </code></pre>
     </div>
+    
+<p>If Nginx expects a backend at <code>http://127.0.0.1:3000</code> but <code>ss</code> shows no service bound to port 3000, your application crashed or failed during initial boot.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="redirigir-errores-y-logs-de-ejecucion-a-un-archivo-fisico">
+        <li class="step-item" id="eliminate-localhost-ipv6-collision-use-127001">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="redirigir-errores-y-logs-de-ejecucion-a-un-archivo-fisico-heading">Step 2: Redirigir errores y logs de ejecución a un archivo físico</h4>
-            <p>Since background tasks do not have a physical terminal to display error messages, you must force the system to write them to a log file in order to audit the exact reason for the failure:</p>
+            <h4 id="eliminate-localhost-ipv6-collision-use-127001-heading">Step 2: Eliminate localhost IPv6 Collision (Use 127.0.0.1)</h4>
+            <p>In modern Linux distributions, <code>localhost</code> resolves to IPv6 <code>[::1]</code> first. If your Node.js or Python backend only listens on IPv4 (<code>127.0.0.1</code>), Nginx encounters immediate connection refusal on IPv6:</p>
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">BASH</span>
+        <span class="code-lang">NGINX</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code># Redirigir la salida estándar (1) y el canal de errores (2) a un log
-0 5 * * * /usr/bin/bash /home/usuario/backup.sh &gt;&gt; /home/usuario/backup.log 2&gt;&amp;1
+      <pre class="formatted-pre"><code># In your Nginx server block configuration
+location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection &#39;upgrade&#39;;
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+}
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="verificar-que-el-demonio-de-cron-este-activo">
+        <li class="step-item" id="verify-unix-socket-permissions-gunicorn-php-fpm">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="verificar-que-el-demonio-de-cron-este-activo-heading">Step 3: Verificar que el demonio de Cron esté activo</h4>
-            <p>Make sure that the service responsible for coordinating the scheduled task queue is running on your server:</p>
+            <h4 id="verify-unix-socket-permissions-gunicorn-php-fpm-heading">Step 3: Verify UNIX Socket Permissions (Gunicorn / PHP-FPM)</h4>
+            <p>If proxying to a UNIX socket file (<code>unix:/run/app.sock</code>), verify filesystem ownership:</p>
 
     <div class="code-container">
       <div class="code-header">
         <span class="code-lang">BASH</span>
         <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
       </div>
-      <pre class="formatted-pre"><code>sudo systemctl status cron   # En Debian/Ubuntu
-sudo systemctl status crond  # En Arch/RHEL/CentOS
+      <pre class="formatted-pre"><code>ls -la /run/app.sock
+</code></pre>
+    </div>
+    
+<p>The socket must be readable and writable by Nginx&#39;s worker user (<code>www-data</code> or <code>nginx</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo chown www-data:www-data /run/app.sock
+sudo chmod 660 /run/app.sock
+sudo systemctl reload nginx
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-error-111-trigger-specifically-after-a-machine-reboot">Why does error 111 trigger specifically after a machine reboot?</h3>
+<p>Nginx often boots faster than complex Dockerized apps or databases. Add <code>After=docker.service</code> or your backend unit in systemd to ensure proper boot sequencing.</p>
+<h3 id="what-is-the-technical-difference-between-error-111-and-error-110-in-nginx-logs">What is the technical difference between error 111 and error 110 in Nginx logs?</h3>
+<p>Error 111 (Connection refused) means a TCP RST packet was actively returned because no daemon is listening. Error 110 (Connection timed out) means packets were dropped by a firewall or routing loop.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -370,18 +428,8 @@ sudo systemctl status crond  # En Arch/RHEL/CentOS
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Always declare the <code>PATH</code> variable and the preferred shell explicitly at the top of your crontab configuration file (<code>crontab -e</code>) to ensure that execution does not rely on inherited external variables:
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">PLAINTEXT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>SHELL=/bin/bash
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-</code></pre>
-    </div>
-    
-</li>
+              <li>Deploy backend applications under systemd or PM2 with <code>Restart=always</code> to recover from unhandled exceptions.</li>
+<li>Configure active health checking upstream blocks to route traffic away from degraded backend instances.</li>
             </ul>
           </div>
 
@@ -424,23 +472,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nginx-111-connection-refused-upstream.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Nginx</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
       <article class="related-card">
         <div class="related-card-content">
@@ -470,6 +501,23 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
             <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-failed-to-mount-cgroup-systemd-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Read Time: 4 min</span>
           </div>
         </div>
       </article>

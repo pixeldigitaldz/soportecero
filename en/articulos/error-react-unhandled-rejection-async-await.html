@@ -57,7 +57,7 @@
   "keywords": "React, JavaScript, Web",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-03",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-03",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "The primary cause of unhandled rejections is executing asynchronous logic without catching potential failures. Refactor your API handlers:\n\n    \n      \n        JAVASCRIPT\n        Copy\n      \n      // ❌ INCORRECT: If network fails or res.json() throws, the promise rejects unhandled\nconst handleFetchData = async () =&gt; {\n  const res = await fetch(&#39;/api/user-data&#39;);\n  const data = await res.json();\n  setUser(data);\n};\n\n// ✅ CORRECT: Clean error interception and state management\nconst hand"
+          "text": "The primary cause of unhandled rejections is executing asynchronous logic without catching potential failures. Refactor your API handlers:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "In React, callback functions passed to useEffect cannot be directly marked as async because effects must return clean-up functions or undefined. Declare an internal async function:\n\n    \n      \n        JSX\n        Copy\n      \n      import React, { useState, useEffect } from &#39;react&#39;;\n\nexport const UserProfile = ({ userId }) =&gt; {\n  const [user, setUser] = useState(null);\n  const [error, setError] = useState(null);\n\n  useEffect(() =&gt; {\n    let isMounted = true; // Prevents state updat"
+          "text": "In React, callback functions passed to useEffect cannot be directly marked as async because effects must return clean-up functions or undefined. Declare an internal async function:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "To prevent uncaught promise errors from polluting your application logs unnoticed in production, attach a fallback listener to the window object:\n\n    \n      \n        JAVASCRIPT\n        Copy\n      \n      // In index.js / main.jsx / App.jsx\nif (typeof window !== &#39;undefined&#39;) {\n  window.addEventListener(&#39;unhandledrejection&#39;, (event) =&gt; {\n    console.warn(`[Unhandled Rejection Captured]: ${event.reason}`);\n    // Optional: Log error details to Sentry or monitoring service\n    // "
+          "text": "To prevent uncaught promise errors from polluting your application logs unnoticed in production, attach a fallback listener to the window object:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The &quot;Unhandled Promise Rejection&quot; (or Uncaught (in promise)) error occurs in React and JavaScript applications whenever a Promise is rejected—due to a network glitch, bad HTTP response, or runtime exception—without an attached .catch() block or an enclosing try...catch statement. In React apps, unhandled rejections can cause silent UI freezes, stale state, or component crashes in production.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <strong>&quot;Unhandled Promise Rejection&quot;</strong> (or <code>Uncaught (in promise)</code>) error occurs in React and JavaScript applications whenever a Promise is rejected—due to a network glitch, bad HTTP response, or runtime exception—without an attached <code>.catch()</code> block or an enclosing <code>try...catch</code> statement. In React apps, unhandled rejections can cause silent UI freezes, stale state, or component crashes in production.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -295,6 +287,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -303,10 +304,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="wrap-asyncawait-calls-in-trycatchfinally-blocks">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Wrap async/await Calls in try...catch...finally Blocks</h4>
+            <h4 id="wrap-asyncawait-calls-in-trycatchfinally-blocks-heading">Step 1: Wrap async/await Calls in try...catch...finally Blocks</h4>
             <p>The primary cause of unhandled rejections is executing asynchronous logic without catching potential failures. Refactor your API handlers:</p>
 
     <div class="code-container">
@@ -345,10 +346,10 @@ const handleFetchData = async () =&gt; {
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="handle-promises-properly-inside-useeffect">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Handle Promises Properly Inside useEffect</h4>
+            <h4 id="handle-promises-properly-inside-useeffect-heading">Step 2: Handle Promises Properly Inside useEffect</h4>
             <p>In React, callback functions passed to <code>useEffect</code> cannot be directly marked as <code>async</code> because effects must return clean-up functions or <code>undefined</code>. Declare an internal async function:</p>
 
     <div class="code-container">
@@ -399,10 +400,10 @@ export const UserProfile = ({ userId }) =&gt; {
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="register-a-global-fallback-for-unhandled-rejections">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Register a Global Fallback for Unhandled Rejections</h4>
+            <h4 id="register-a-global-fallback-for-unhandled-rejections-heading">Step 3: Register a Global Fallback for Unhandled Rejections</h4>
             <p>To prevent uncaught promise errors from polluting your application logs unnoticed in production, attach a fallback listener to the <code>window</code> object:</p>
 
     <div class="code-container">

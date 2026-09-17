@@ -57,7 +57,7 @@
   "keywords": "Linux, Sysadmin, Networking",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Use command-line networking tools to find which application process is bound to the target port (e.g., port 3000 or 8080):\n\n    \n      \n        BASH\n        Copy\n      \n      # Method 1: Using lsof (LiSt Open Files)\nsudo lsof -i :3000\n\n# Sample output:\n# COMMAND   PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME\n# node    14205 user   23u  IPv6 128941      0t0  TCP *:3000 (LISTEN)\n\n# Method 2: Using ss (Socket Statistics)\nsudo ss -tulpn | grep :3000\n\n# Method 3: Using fuser\nsudo fuser 3000/tcp"
+          "text": "Use command-line networking tools to find which application process is bound to the target port (e.g., port 3000 or 8080):"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Once you have the PID (e.g., 14205), send a graceful termination signal (SIGTERM) to release network sockets cleanly. If the process is unresponsive, issue a forceful SIGKILL:\n\n    \n      \n        BASH\n        Copy\n      \n      # Terminate gracefully (SIGTERM)\nkill 14205\n\n# Force immediate termination if unresponsive (SIGKILL)\nkill -9 14205\n\n# Or kill the port occupant directly in one command using fuser:\nsudo fuser -k 3000/tcp"
+          "text": "Once you have the PID (e.g., 14205), send a graceful termination signal (SIGTERM) to release network sockets cleanly. If the process is unresponsive, issue a forceful SIGKILL:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If the process respawns automatically, it is managed by a supervisor service.\nFor systemd services:\n\n    \n      \n        BASH\n        Copy\n      \n      # Inspect service controlling the port\nsudo systemctl status &lt;service-name&gt;\n\n# Stop the service\nsudo systemctl stop &lt;service-name&gt;\n\n    \n    \nFor Docker containers:\n\n    \n      \n        BASH\n        Copy\n      \n      # List containers binding local ports\ndocker ps --format &quot;table {{.ID}}\\t{{.Names}}\\t{{.Ports}}&quot;\n\n# Stop the "
+          "text": "If the process respawns automatically, it is managed by a supervisor service. For systemd services: For Docker containers:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The EADDRINUSE: address already in use error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <code>EADDRINUSE: address already in use</code> error occurs when a web server (Nginx, Apache), application runtime (Node.js, Python, Go), or Docker container attempts to bind to a TCP/UDP network port that is already held by another running process.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -295,6 +287,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -303,10 +304,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="locate-the-process-id-pid-holding-the-port">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Locate the Process ID (PID) Holding the Port</h4>
+            <h4 id="locate-the-process-id-pid-holding-the-port-heading">Step 1: Locate the Process ID (PID) Holding the Port</h4>
             <p>Use command-line networking tools to find which application process is bound to the target port (e.g., port <code>3000</code> or <code>8080</code>):</p>
 
     <div class="code-container">
@@ -332,10 +333,10 @@ sudo fuser 3000/tcp
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="gracefully-or-forcefully-terminate-the-process">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Gracefully or Forcefully Terminate the Process</h4>
+            <h4 id="gracefully-or-forcefully-terminate-the-process-heading">Step 2: Gracefully or Forcefully Terminate the Process</h4>
             <p>Once you have the PID (e.g., <code>14205</code>), send a graceful termination signal (<code>SIGTERM</code>) to release network sockets cleanly. If the process is unresponsive, issue a forceful <code>SIGKILL</code>:</p>
 
     <div class="code-container">
@@ -357,10 +358,10 @@ sudo fuser -k 3000/tcp
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="handle-auto-restarting-services-systemd-amp-docker">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Handle Auto-Restarting Services (systemd &amp; Docker)</h4>
+            <h4 id="handle-auto-restarting-services-systemd-amp-docker-heading">Step 3: Handle Auto-Restarting Services (systemd &amp; Docker)</h4>
             <p>If the process respawns automatically, it is managed by a supervisor service.</p>
 <p>For <strong>systemd</strong> services:</p>
 
@@ -454,6 +455,23 @@ docker stop &lt;container-name&gt;
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -482,23 +500,6 @@ docker stop &lt;container-name&gt;
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

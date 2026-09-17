@@ -57,7 +57,7 @@
   "keywords": "Git, GitHub, DevOps",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Instead of executing a standard merge that creates an unnecessary merge commit, use git pull --rebase to replay your new local commits on top of the updated remote history:\n\n    \n      \n        BASH\n        Copy\n      \n      # Replace &#39;main&#39; with your branch name (e.g., dev or feature/auth)\ngit pull --rebase origin main\n\n    \n    \nIf you prefer inspecting remote changes before rebasing:\n\n    \n      \n        BASH\n        Copy\n      \n      git fetch origin\ngit rebase origin/main"
+          "text": "Instead of executing a standard merge that creates an unnecessary merge commit, use git pull --rebase to replay your new local commits on top of the updated remote history: If you prefer inspecting remote changes before rebasing:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If files were modified concurrently in both local and remote commits, Git will pause the rebase process. Open the conflicting files, resolve the markers, and run:\n\n    \n      \n        BASH\n        Copy\n      \n      # Stage resolved files\ngit add .\n\n# Continue the rebase operation\ngit rebase --continue"
+          "text": "If files were modified concurrently in both local and remote commits, Git will pause the rebase process. Open the conflicting files, resolve the markers, and run:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Once your local branch is synchronized and cleanly rebased on top of the remote tip, push your commits:\n\n    \n      \n        BASH\n        Copy\n      \n      git push origin main\n\n    \n    \nIf you rebased existing local commits on a personal feature branch and need to update the remote, avoid destructive git push --force and use the safer option:\n\n    \n      \n        BASH\n        Copy\n      \n      git push origin main --force-with-lease"
+          "text": "Once your local branch is synchronized and cleanly rebased on top of the remote tip, push your commits: If you rebased existing local commits on a personal feature branch and need to update the remote, avoid destructive git push --force and use the safer option:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The error [rejected - non-fast-forward] or updates were rejected because the remote contains work that you do not have locally occurs when you attempt to push local commits to a remote branch in Git, but the remote repository contains newer commits that your local branch lacks.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The error <code>[rejected - non-fast-forward]</code> or <code>updates were rejected because the remote contains work that you do not have locally</code> occurs when you attempt to push local commits to a remote branch in Git, but the remote repository contains newer commits that your local branch lacks.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -279,6 +271,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -287,10 +288,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="fetch-and-integrate-remote-updates-with-rebase">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Fetch and Integrate Remote Updates with Rebase</h4>
+            <h4 id="fetch-and-integrate-remote-updates-with-rebase-heading">Step 1: Fetch and Integrate Remote Updates with Rebase</h4>
             <p>Instead of executing a standard merge that creates an unnecessary merge commit, use <code>git pull --rebase</code> to replay your new local commits on top of the updated remote history:</p>
 
     <div class="code-container">
@@ -318,10 +319,10 @@ git rebase origin/main
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="resolve-merge-conflicts-if-prompted">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Resolve Merge Conflicts If Prompted</h4>
+            <h4 id="resolve-merge-conflicts-if-prompted-heading">Step 2: Resolve Merge Conflicts If Prompted</h4>
             <p>If files were modified concurrently in both local and remote commits, Git will pause the rebase process. Open the conflicting files, resolve the markers, and run:</p>
 
     <div class="code-container">
@@ -340,10 +341,10 @@ git rebase --continue
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="push-your-changes-safely">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Push Your Changes Safely</h4>
+            <h4 id="push-your-changes-safely-heading">Step 3: Push Your Changes Safely</h4>
             <p>Once your local branch is synchronized and cleanly rebased on top of the remote tip, push your commits:</p>
 
     <div class="code-container">

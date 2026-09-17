@@ -57,7 +57,7 @@
   "keywords": "Nginx, PHP-FPM, Linux, SysAdmin, Servidores, WordPress",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-26",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-26",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Abre el archivo de configuración de tu sitio web (por ejemplo, /etc/nginx/sites-available/mi-sitio.conf o /etc/nginx/nginx.conf):\n\n    \n      \n        NGINX\n        Copiar\n      \n      server {\n    listen 80;\n    server_name misitio.com;\n    root /var/www/misitio;\n\n    location ~ \\.php$ {\n        include snippets/fastcgi-php.conf;\n        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;\n\n        # Aumentar tiempos de espera a 300 segundos (5 minutos)\n        fastcgi_connect_timeout 300s;\n        "
+          "text": "Abre el archivo de configuración de tu sitio web (por ejemplo, /etc/nginx/sites-available/mi-sitio.conf o /etc/nginx/nginx.conf):"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Modifica el archivo php.ini correspondiente a tu versión de PHP-FPM (ej. /etc/php/8.3/fpm/php.ini):\n\n    \n      \n        INI\n        Copiar\n      \n      ; Tiempo máximo de ejecución en segundos\nmax_execution_time = 300\n\n; Tiempo máximo de análisis de datos de entrada\nmax_input_time = 300\n\n; Límite de memoria para scripts pesados\nmemory_limit = 512M"
+          "text": "Modifica el archivo php.ini correspondiente a tu versión de PHP-FPM (ej. /etc/php/8.3/fpm/php.ini):"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Edita el archivo de configuración del pool (/etc/php/8.3/fpm/pool.d/www.conf):\n\n    \n      \n        INI\n        Copiar\n      \n      ; Tiempo de espera antes de terminar un proceso PHP colgado\nrequest_terminate_timeout = 300s\n\n; Asegurar suficientes procesos hijos para atender peticiones concurrentes\npm = dynamic\npm.max_children = 50\npm.start_servers = 10\npm.min_spare_servers = 5\npm.max_spare_servers = 20"
+          "text": "Edita el archivo de configuración del pool (/etc/php/8.3/fpm/pool.d/www.conf):"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Comprueba que no existen errores de sintaxis antes de reiniciar:\n\n    \n      \n        BASH\n        Copiar\n      \n      # 1. Comprobar configuración de Nginx\nsudo nginx -t\n\n# 2. Reiniciar PHP-FPM y Nginx\nsudo systemctl restart php8.3-fpm\nsudo systemctl restart nginx"
+          "text": "Comprueba que no existen errores de sintaxis antes de reiniciar:"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error 504 Gateway Timeout en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-el-error-502-bad-gateway-y-el-504-gateway-timeout">¿Qué diferencia hay entre el error 502 Bad Gateway y el 504 Gateway Timeout?</a></li>
-        <li class="toc-subitem"><a href="#cloudflare-puede-generar-un-error-504">¿Cloudflare puede generar un error 504?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Aumentar <code>max_execution_time = 300</code> en <code>php.ini</code> y <code>request_terminate_timeout = 300s</code> en <code>www.conf</code></div>
           </div></div></div>
-<p>El error <code>504 Gateway Timeout</code> en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-el-error-502-bad-gateway-y-el-504-gateway-timeout">¿Qué diferencia hay entre el error 502 Bad Gateway y el 504 Gateway Timeout?</a></li>
+        <li class="toc-subitem"><a href="#cloudflare-puede-generar-un-error-504">¿Cloudflare puede generar un error 504?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="aumentar-los-tiempos-de-espera-en-la-configuracion-de-nginx">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Aumentar los tiempos de espera en la configuración de Nginx</h4>
+            <h4 id="aumentar-los-tiempos-de-espera-en-la-configuracion-de-nginx-heading">Paso 1: Aumentar los tiempos de espera en la configuración de Nginx</h4>
             <p>Abre el archivo de configuración de tu sitio web (por ejemplo, <code>/etc/nginx/sites-available/mi-sitio.conf</code> o <code>/etc/nginx/nginx.conf</code>):</p>
 
     <div class="code-container">
@@ -371,10 +372,10 @@
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="ajustar-los-limites-de-ejecucion-en-phpini">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Ajustar los límites de ejecución en php.ini</h4>
+            <h4 id="ajustar-los-limites-de-ejecucion-en-phpini-heading">Paso 2: Ajustar los límites de ejecución en php.ini</h4>
             <p>Modifica el archivo <code>php.ini</code> correspondiente a tu versión de PHP-FPM (ej. <code>/etc/php/8.3/fpm/php.ini</code>):</p>
 
     <div class="code-container">
@@ -396,10 +397,10 @@ memory_limit = 512M
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-el-pool-de-php-fpm-wwwconf">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Configurar el pool de PHP-FPM (www.conf)</h4>
+            <h4 id="configurar-el-pool-de-php-fpm-wwwconf-heading">Paso 3: Configurar el pool de PHP-FPM (www.conf)</h4>
             <p>Edita el archivo de configuración del pool (<code>/etc/php/8.3/fpm/pool.d/www.conf</code>):</p>
 
     <div class="code-container">
@@ -422,10 +423,10 @@ pm.max_spare_servers = 20
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="validar-la-sintaxis-y-reiniciar-los-servicios">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Paso 4: Validar la sintaxis y reiniciar los servicios</h4>
+            <h4 id="validar-la-sintaxis-y-reiniciar-los-servicios-heading">Paso 4: Validar la sintaxis y reiniciar los servicios</h4>
             <p>Comprueba que no existen errores de sintaxis antes de reiniciar:</p>
 
     <div class="code-container">
@@ -508,6 +509,23 @@ sudo systemctl restart nginx
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -536,23 +554,6 @@ sudo systemctl restart nginx
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

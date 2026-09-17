@@ -57,7 +57,7 @@
   "keywords": "Kubernetes, DevOps, Docker",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-31",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-31",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "The primary command for gathering lifecycle details about the failing Pod is kubectl describe:\n\n    \n      \n        BASH\n        Copy\n      \n      # Fetch detailed status of the target Pod\nkubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;\n\n    \n    \nIn the Containers &gt; State and Last State sections, pay close attention to the following indicators:\n\nExit Code 1 or 127: Application failure (unhandled runtime exception, missing file, or broken CMD path).\nExit Code 137 (OOMKilled): The c"
+          "text": "The primary command for gathering lifecycle details about the failing Pod is kubectl describe: In the Containers &gt; State and Last State sections, pay close attention to the following indicators: Exit Code 1 or 127: Application failure (unhandled runtime exception, missing file, or broken CMD path). Exit Code 137 (OOMKilled): The container exceeded its strict memory limit (limits.memory) configured in the YAML manifest. Liveness probe failed: The configured health check failed to respond within the specified timeout."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "To inspect standard output (stdout/stderr) right before the container crashed on its previous attempt, add the --previous flag:\n\n    \n      \n        BASH\n        Copy\n      \n      # View logs from the previous container instance\nkubectl logs &lt;pod-name&gt; --previous -n &lt;namespace&gt;\n\n# If the Pod has multiple containers, specify the container name:\nkubectl logs &lt;pod-name&gt; -c &lt;container-name&gt; --previous -n &lt;namespace&gt;"
+          "text": "To inspect standard output (stdout/stderr) right before the container crashed on its previous attempt, add the --previous flag:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources:\n\n    \n      \n        YAML\n        Copy\n      \n      apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: my-service\nspec:\n  template:\n    spec:\n      containers:\n      - name: my-app\n        image: my-image:latest\n        resources:\n          requests:\n            memory: &quot;256Mi&quot;\n            cpu: &quot;250m&quot;\n          limits:\n            "
+          "text": "If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources: Apply the changes:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If your application takes a long time to boot (such as performing database migrations on startup), the livenessProbe might kill the Pod prematurely. Increase initialDelaySeconds:\n\n    \n      \n        YAML\n        Copy\n      \n      livenessProbe:\n  httpGet:\n    path: /healthz\n    port: 8080\n  initialDelaySeconds: 30 # Give the application time to complete initialization\n  periodSeconds: 10\n  failureThreshold: 3"
+          "text": "If your application takes a long time to boot (such as performing database migrations on startup), the livenessProbe might kill the Pod prematurely. Increase initialDelaySeconds:"
         }
       ]
     }
@@ -255,22 +255,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The CrashLoopBackOff status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The <strong>CrashLoopBackOff</strong> status in Kubernetes indicates that a container inside a Pod fails to start, crashes immediately, and enters a continuous loop of automatic restarts where Kubernetes exponentially increases the back-off delay between restart attempts.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -291,6 +283,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -299,10 +300,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="inspect-the-failure-reason-with-kubectl-describe">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Inspect the failure reason with kubectl describe</h4>
+            <h4 id="inspect-the-failure-reason-with-kubectl-describe-heading">Step 1: Inspect the failure reason with kubectl describe</h4>
             <p>The primary command for gathering lifecycle details about the failing Pod is <code>kubectl describe</code>:</p>
 
     <div class="code-container">
@@ -325,10 +326,10 @@ kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="extract-logs-from-the-crashed-container">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Extract logs from the crashed container</h4>
+            <h4 id="extract-logs-from-the-crashed-container-heading">Step 2: Extract logs from the crashed container</h4>
             <p>To inspect standard output (<code>stdout</code>/<code>stderr</code>) right before the container crashed on its previous attempt, add the <code>--previous</code> flag:</p>
 
     <div class="code-container">
@@ -347,10 +348,10 @@ kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt; --previous -n &lt;namesp
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="adjust-container-memory-limits-oomkilled">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Adjust container memory limits (OOMKilled)</h4>
+            <h4 id="adjust-container-memory-limits-oomkilled-heading">Step 3: Adjust container memory limits (OOMKilled)</h4>
             <p>If the container was killed due to memory exhaustion (exit code 137), update your deployment manifest to allocate additional memory resources:</p>
 
     <div class="code-container">
@@ -392,10 +393,10 @@ spec:
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="adjust-or-delay-liveness-and-readiness-probes">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Step 4: Adjust or delay Liveness and Readiness Probes</h4>
+            <h4 id="adjust-or-delay-liveness-and-readiness-probes-heading">Step 4: Adjust or delay Liveness and Readiness Probes</h4>
             <p>If your application takes a long time to boot (such as performing database migrations on startup), the <code>livenessProbe</code> might kill the Pod prematurely. Increase <code>initialDelaySeconds</code>:</p>
 
     <div class="code-container">
@@ -475,6 +476,23 @@ spec:
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -503,23 +521,6 @@ spec:
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

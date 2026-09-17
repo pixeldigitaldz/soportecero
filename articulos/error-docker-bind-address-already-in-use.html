@@ -57,7 +57,7 @@
   "keywords": "Docker, Linux, Puertos, SysAdmin, Networking, DevOps",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-25",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Utiliza herramientas de red de Linux para descubrir el Process ID (PID) exacto del servicio bloqueante:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Opción 1: Usando lsof (ejemplo para puerto 80 u 8080)\nsudo lsof -i :80\n\n# Opción 2: Usando ss (Socket Statistics)\nsudo ss -tulpn | grep :80"
+          "text": "Utiliza herramientas de red de Linux para descubrir el Process ID (PID) exacto del servicio bloqueante:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si el puerto está ocupado por un servidor web instalado en el sistema anfitrión:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Si es Apache o Nginx en el host:\nsudo systemctl stop nginx\nsudo systemctl stop apache2\n\n# Si es un proceso genérico, finalízalo mediante su PID:\nsudo kill -15 &lt;PID&gt;\n# Si no responde de inmediato:\nsudo kill -9 &lt;PID&gt;"
+          "text": "Si el puerto está ocupado por un servidor web instalado en el sistema anfitrión:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "A menudo un contenedor anterior se quedó en estado detached o en bucle de reinicio:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Listar todos los contenedores (incluyendo detenidos)\ndocker ps -a --filter &quot;publish=80&quot;\n\n# Detener y eliminar el contenedor en conflicto\ndocker stop &lt;container_id&gt;\ndocker rm &lt;container_id&gt;"
+          "text": "A menudo un contenedor anterior se quedó en estado detached o en bucle de reinicio:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si necesitas que ambos servicios coexistan, cambia el puerto del host en tu archivo de composición:\n\n    \n      \n        YAML\n        Copiar\n      \n      services:\n  mi-aplicacion:\n    image: nginx:alpine\n    ports:\n      # Mapear el puerto 8080 del host al puerto 80 interno del contenedor\n      - &quot;8080:80&quot;\n    restart: unless-stopped"
+          "text": "Si necesitas que ambos servicios coexistan, cambia el puerto del host en tu archivo de composición:"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>Al iniciar un contenedor mediante docker run o docker compose up, el error driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use indica que el puerto de red solicitado en el sistema anfitrión ya está reservado por otro proceso activo.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#por-que-lsof-no-muestra-nada-pero-docker-sigue-dando-error-de-bind">¿Por qué lsof no muestra nada pero Docker sigue dando error de bind?</a></li>
-        <li class="toc-subitem"><a href="#puedo-enlazar-dos-contenedores-al-mismo-puerto-interno">¿Puedo enlazar dos contenedores al mismo puerto interno?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Detener el contenedor antiguo con <code>docker stop &lt;id&gt;</code> o reiniciar el daemon <code>systemctl restart docker</code></div>
           </div></div></div>
-<p>Al iniciar un contenedor mediante <code>docker run</code> o <code>docker compose up</code>, el error <code>driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use</code> indica que el puerto de red solicitado en el sistema anfitrión ya está reservado por otro proceso activo.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-lsof-no-muestra-nada-pero-docker-sigue-dando-error-de-bind">¿Por qué lsof no muestra nada pero Docker sigue dando error de bind?</a></li>
+        <li class="toc-subitem"><a href="#puedo-enlazar-dos-contenedores-al-mismo-puerto-interno">¿Puedo enlazar dos contenedores al mismo puerto interno?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="localizar-que-proceso-esta-utilizando-el-puerto-en-conflicto">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Localizar qué proceso está utilizando el puerto en conflicto</h4>
+            <h4 id="localizar-que-proceso-esta-utilizando-el-puerto-en-conflicto-heading">Paso 1: Localizar qué proceso está utilizando el puerto en conflicto</h4>
             <p>Utiliza herramientas de red de Linux para descubrir el Process ID (PID) exacto del servicio bloqueante:</p>
 
     <div class="code-container">
@@ -356,10 +357,10 @@ sudo ss -tulpn | grep :80
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="detener-el-servicio-o-proceso-del-sistema-operativo">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Detener el servicio o proceso del sistema operativo</h4>
+            <h4 id="detener-el-servicio-o-proceso-del-sistema-operativo-heading">Paso 2: Detener el servicio o proceso del sistema operativo</h4>
             <p>Si el puerto está ocupado por un servidor web instalado en el sistema anfitrión:</p>
 
     <div class="code-container">
@@ -381,10 +382,10 @@ sudo kill -9 &lt;PID&gt;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="identificar-contenedores-docker-ocultos-reteniendo-el-puerto">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Identificar contenedores Docker ocultos reteniendo el puerto</h4>
+            <h4 id="identificar-contenedores-docker-ocultos-reteniendo-el-puerto-heading">Paso 3: Identificar contenedores Docker ocultos reteniendo el puerto</h4>
             <p>A menudo un contenedor anterior se quedó en estado detached o en bucle de reinicio:</p>
 
     <div class="code-container">
@@ -404,10 +405,10 @@ docker rm &lt;container_id&gt;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="cambiar-el-puerto-en-el-mapeo-de-docker-composeyml">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Paso 4: Cambiar el puerto en el mapeo de docker-compose.yml</h4>
+            <h4 id="cambiar-el-puerto-en-el-mapeo-de-docker-composeyml-heading">Paso 4: Cambiar el puerto en el mapeo de docker-compose.yml</h4>
             <p>Si necesitas que ambos servicios coexistan, cambia el puerto del host en tu archivo de composición:</p>
 
     <div class="code-container">
@@ -491,6 +492,23 @@ docker rm &lt;container_id&gt;
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -519,23 +537,6 @@ docker rm &lt;container_id&gt;
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

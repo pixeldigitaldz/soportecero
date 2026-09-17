@@ -57,7 +57,7 @@
   "keywords": "Nginx, PHP-FPM, Sysadmin, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-12",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-12",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar el servicio (ajusta según tu versión: 8.1, 8.2, 8.3)\nsudo systemctl status php8.2-fpm\n\n    \n    \nSi el estado indica inactive (dead) o failed, inicialízalo:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl enable --now php8.2-fpm"
+          "text": "Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor: Si el estado indica inactive (dead) o failed, inicialízalo:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Comprueba la ruta real donde PHP-FPM está escuchando las conexiones:\n\n    \n      \n        BASH\n        Copiar\n      \n      ls -la /run/php/\n\n    \n    \nSalida esperada: php8.2-fpm.sock o php8.3-fpm.sock.\nAbre el archivo de configuración del bloque de servidor de tu sitio en /etc/nginx/sites-available/tudominio.conf:\n\n    \n      \n        NGINX\n        Copiar\n      \n      location ~ \\.php$ {\n    include snippets/fastcgi-php.conf;\n    # La ruta DEBE coincidir exactamente con el archivo .sock de tu s"
+          "text": "Comprueba la ruta real donde PHP-FPM está escuchando las conexiones: Salida esperada: php8.2-fpm.sock o php8.3-fpm.sock. Abre el archivo de configuración del bloque de servidor de tu sitio en /etc/nginx/sites-available/tudominio.conf:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si el archivo .sock existe pero Nginx muestra Permission denied en sus registros:\nAbre la configuración del pool de usuarios de PHP-FPM:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo nano /etc/php/8.2/fpm/pool.d/www.conf\n\n    \n    \nAsegúrate de que el propietario del socket sea el mismo usuario que ejecuta Nginx (www-data):\n\n    \n      \n        INI\n        Copiar\n      \n      listen.owner = www-data\nlisten.group = www-data\nlisten.mode = 0660\n\n    \n    \nReinicia PHP-FPM y Nginx:\n\n   "
+          "text": "Si el archivo .sock existe pero Nginx muestra Permission denied en sus registros: Abre la configuración del pool de usuarios de PHP-FPM: Asegúrate de que el propietario del socket sea el mismo usuario que ejecuta Nginx (www-data): Reinicia PHP-FPM y Nginx:"
         }
       ]
     }
@@ -243,23 +243,15 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error 502 Bad Gateway en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en /var/log/nginx/error.log es:
 connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory) o Connection refused.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -285,8 +277,7 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
             <div class="diag-label">Solución</div>
             <div class="diag-value">Cambiar propietario del socket a <code>www-data:www-data</code> en <code>/etc/php/fpm/pool.d/www.conf</code></div>
           </div></div></div>
-<p>El error <strong><code>502 Bad Gateway</code></strong> en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en <code>/var/log/nginx/error.log</code> es:
-<code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> o <code>Connection refused</code>.</p>
+
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -297,6 +288,15 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -305,10 +305,10 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="verificar-el-estado-del-demonio-php-fpm">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Verificar el estado del demonio PHP-FPM</h4>
+            <h4 id="verificar-el-estado-del-demonio-php-fpm-heading">Paso 1: Verificar el estado del demonio PHP-FPM</h4>
             <p>Asegúrate de que el servicio de PHP-FPM esté activo en tu servidor:</p>
 
     <div class="code-container">
@@ -335,10 +335,10 @@ sudo systemctl status php8.2-fpm
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="verificar-la-ubicacion-exacta-del-archivo-socket-sock">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Verificar la ubicación exacta del archivo Socket (.sock)</h4>
+            <h4 id="verificar-la-ubicacion-exacta-del-archivo-socket-sock-heading">Paso 2: Verificar la ubicación exacta del archivo Socket (.sock)</h4>
             <p>Comprueba la ruta real donde PHP-FPM está escuchando las conexiones:</p>
 
     <div class="code-container">
@@ -369,10 +369,10 @@ sudo systemctl status php8.2-fpm
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="corregir-permisos-en-el-socket-de-php-fpm">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Corregir permisos en el socket de PHP-FPM</h4>
+            <h4 id="corregir-permisos-en-el-socket-de-php-fpm-heading">Paso 3: Corregir permisos en el socket de PHP-FPM</h4>
             <p>Si el archivo <code>.sock</code> existe pero Nginx muestra <code>Permission denied</code> en sus registros:</p>
 <p>Abre la configuración del pool de usuarios de PHP-FPM:</p>
 
@@ -470,6 +470,23 @@ sudo systemctl restart nginx
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -498,23 +515,6 @@ sudo systemctl restart nginx
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

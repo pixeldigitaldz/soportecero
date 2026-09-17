@@ -57,7 +57,7 @@
   "keywords": "Docker, DevOps, Sysadmin, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-18",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-18",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Docker impone estrictamente que los nombres de los repositorios e imágenes estén escritos en letras minúsculas:\n\n❌ Incorrecto: docker run -d MiEmpresa/Backend:v1\n✅ Correcto: docker run -d miempresa/backend:v1"
+          "text": "Docker impone estrictamente que los nombres de los repositorios e imágenes estén escritos en letras minúsculas: ❌ Incorrecto: docker run -d MiEmpresa/Backend:v1 ✅ Correcto: docker run -d miempresa/backend:v1"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "El error suele generarse al intentar montar volúmenes del sistema operativo anfitrión usando comandos copiados de tutoriales diseñados para otra terminal:\n\nEn Linux / macOS (Bash o Zsh):\n    \n      \n        BASH\n        Copiar\n      \n      docker run -v $(pwd):/app mi-imagen:latest\n\n    \n    \n\nEn Windows PowerShell:\n    \n      \n        POWERSHELL\n        Copiar\n      \n      docker run -v &quot;${PWD}:/app&quot; mi-imagen:latest\n\n    \n    \n\nEn Windows CMD (Símbolo del sistema):\n    \n      \n      "
+          "text": "El error suele generarse al intentar montar volúmenes del sistema operativo anfitrión usando comandos copiados de tutoriales diseñados para otra terminal: En Linux / macOS (Bash o Zsh): En Windows PowerShell: En Windows CMD (Símbolo del sistema):"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si ejecutas un comando multilínea con barras invertidas (\\) en Linux/macOS, asegúrate de que no haya espacios en blanco ocultos después de la barra:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Correcto (sin espacios despues de la barra invertida):\ndocker run -d \\\n  --name mi-contenedor \\\n  -p 8080:80 \\\n  nginx:alpine"
+          "text": "Si ejecutas un comando multilínea con barras invertidas (\\) en Linux/macOS, asegúrate de que no haya espacios en blanco ocultos después de la barra:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error docker: invalid reference format (o invalid reference format: repository name must be lowercase) ocurre al ejecutar comandos docker run, docker pull o docker build cuando la sintaxis de los nombres de imagen, banderas de volumen (-v) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -284,7 +276,7 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Encerrar las rutas entre comillas dobles: <code>-v &quot;/ruta local:/ruta contenedor&quot;</code></div>
           </div></div></div>
-<p>El error <strong><code>docker: invalid reference format</code></strong> (o <code>invalid reference format: repository name must be lowercase</code>) ocurre al ejecutar comandos <code>docker run</code>, <code>docker pull</code> o <code>docker build</code> cuando la sintaxis de los nombres de imagen, banderas de volumen (<code>-v</code>) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.</p>
+
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -294,6 +286,15 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -302,10 +303,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="usar-nombres-de-imagen-en-minusculas">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Usar nombres de imagen en minúsculas</h4>
+            <h4 id="usar-nombres-de-imagen-en-minusculas-heading">Paso 1: Usar nombres de imagen en minúsculas</h4>
             <p>Docker impone estrictamente que los nombres de los repositorios e imágenes estén escritos en letras minúsculas:</p>
 <ul>
 <li>❌ <strong>Incorrecto:</strong> <code>docker run -d MiEmpresa/Backend:v1</code></li>
@@ -315,10 +316,10 @@
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="corregir-el-formateo-de-volumenes-segun-tu-sistema-operativo">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Corregir el formateo de volúmenes según tu sistema operativo</h4>
+            <h4 id="corregir-el-formateo-de-volumenes-segun-tu-sistema-operativo-heading">Paso 2: Corregir el formateo de volúmenes según tu sistema operativo</h4>
             <p>El error suele generarse al intentar montar volúmenes del sistema operativo anfitrión usando comandos copiados de tutoriales diseñados para otra terminal:</p>
 <ul>
 <li><strong>En Linux / macOS (Bash o Zsh):</strong>
@@ -359,10 +360,10 @@
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="evitar-saltos-de-linea-mal-formateados-en-scripts">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Evitar saltos de línea mal formateados en scripts</h4>
+            <h4 id="evitar-saltos-de-linea-mal-formateados-en-scripts-heading">Paso 3: Evitar saltos de línea mal formateados en scripts</h4>
             <p>Si ejecutas un comando multilínea con barras invertidas (<code>\</code>) en Linux/macOS, asegúrate de que no haya espacios en blanco ocultos después de la barra:</p>
 
     <div class="code-container">
@@ -438,6 +439,23 @@ docker run -d \
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -466,23 +484,6 @@ docker run -d \
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

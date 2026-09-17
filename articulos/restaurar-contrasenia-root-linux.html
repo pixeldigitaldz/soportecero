@@ -57,7 +57,7 @@
   "keywords": "Linux, Sysadmin, Seguridad",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-06-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,25 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>Perder la contraseña de root en Linux (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de GRUB.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#como-restablecer-la-contrasena-de-root-paso-a-paso">Cómo restablecer la contraseña de root paso a paso</a></li>
-        <li class="toc-subitem"><a href="#paso-1-interceptar-el-cargador-de-arranque-grub">Paso 1: Interceptar el cargador de arranque GRUB</a></li>
-        <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
-        <li class="toc-subitem"><a href="#paso-3-montar-la-particion-en-modo-lectura-escritura-y-cambiar-la-contrasena-de-root">Paso 3: Montar la partición en modo lectura-escritura y cambiar la contraseña de root</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -241,7 +230,7 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Remontar en modo lectura/escritura: <code>mount -o remount,rw /</code> y cambiar clave con <code>passwd</code></div>
           </div></div></div>
-<p>Perder la <strong>contraseña de root en Linux</strong> (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de <strong>GRUB</strong>.</p>
+
 <blockquote>
 <p><strong>Resumen de la Solución (3 Pasos):</strong></p>
 <ol>
@@ -252,6 +241,18 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#como-restablecer-la-contrasena-de-root-paso-a-paso">Cómo restablecer la contraseña de root paso a paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-interceptar-el-cargador-de-arranque-grub">Paso 1: Interceptar el cargador de arranque GRUB</a></li>
+        <li class="toc-subitem"><a href="#paso-2-modificar-los-parametros-del-kernel">Paso 2: Modificar los parámetros del kernel</a></li>
+        <li class="toc-subitem"><a href="#paso-3-montar-la-particion-en-modo-lectura-escritura-y-cambiar-la-contrasena-de-root">Paso 3: Montar la partición en modo lectura-escritura y cambiar la contraseña de root</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="como-restablecer-la-contrasena-de-root-paso-a-paso">🚀 Cómo restablecer la contraseña de root paso a paso</h2>
 <h3 id="paso-1-interceptar-el-cargador-de-arranque-grub">Paso 1: Interceptar el cargador de arranque GRUB</h3>
 <ol>
@@ -355,6 +356,23 @@ exec /sbin/init
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -383,23 +401,6 @@ exec /sbin/init
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

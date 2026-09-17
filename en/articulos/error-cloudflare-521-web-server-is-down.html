@@ -57,7 +57,7 @@
   "keywords": "Cloudflare, Nginx, Apache, Sysadmin",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-24",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-24",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,25 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The Error 521: Web server is down returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</a></li>
-        <li class="toc-subitem"><a href="#step-2-whitelist-cloudflare-ip-ranges-in-firewall">Step 2: Whitelist Cloudflare IP Ranges in Firewall</a></li>
-        <li class="toc-subitem"><a href="#step-3-check-cloudflare-ssltls-mode-settings">Step 3: Check Cloudflare SSL/TLS Mode Settings</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -241,7 +230,7 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Whitelist official Cloudflare IP ranges in server firewall</div>
           </div></div></div>
-<p>The <strong><code>Error 521: Web server is down</code></strong> returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
+
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
 <ol>
@@ -253,6 +242,18 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
+        <li class="toc-subitem"><a href="#step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</a></li>
+        <li class="toc-subitem"><a href="#step-2-whitelist-cloudflare-ip-ranges-in-firewall">Step 2: Whitelist Cloudflare IP Ranges in Firewall</a></li>
+        <li class="toc-subitem"><a href="#step-3-check-cloudflare-ssltls-mode-settings">Step 3: Check Cloudflare SSL/TLS Mode Settings</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</h3>
 <p>SSH into your origin VPS and check web server status:</p>
@@ -360,6 +361,23 @@ sudo ufw reload
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -388,23 +406,6 @@ sudo ufw reload
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

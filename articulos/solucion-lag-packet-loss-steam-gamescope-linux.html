@@ -57,7 +57,7 @@
   "keywords": "Gaming, Linux, Steam Deck, Gamescope, Vulkan",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-09-05",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-09-05",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "En tus parámetros de lanzamiento de Steam o script de ejecución, añade los parámetros optimizados para latencia mínima:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Parámetros de lanzamiento recomendados para juegos en Steam\ngamescope -W 1920 -H 1080 -w 1920 -h 1080 -r 144 --adaptive-sync --immediate-flips --force-grab-cursor -- %command%\n\n    \n    \n\n--adaptive-sync: Habilita VRR / FreeSync / G-Sync directamente dentro del microcompositor.\n--immediate-flips: Desactiva la sincronizació"
+          "text": "En tus parámetros de lanzamiento de Steam o script de ejecución, añade los parámetros optimizados para latencia mínima: --adaptive-sync: Habilita VRR / FreeSync / G-Sync directamente dentro del microcompositor. --immediate-flips: Desactiva la sincronización vertical forzada (VSync) en la capa de composición para permitir que el juego envíe fotogramas tan pronto como se rendericen."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Para evitar picos de ping y retraso en juegos multijugador, cambia el algoritmo de control de congestión de red a BBR:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Comprobar la configuración de red actual\nsysctl net.ipv4.tcp_congestion_control net.core.default_qdisc\n\n# Activar BBR y fq_codel de forma inmediata\nsudo sysctl -w net.core.default_qdisc=fq_codel\nsudo sysctl -w net.ipv4.tcp_congestion_control=bbr\n\n    \n    \nPara hacer que estos cambios sean permanentes tras reiniciar:\n\n    \n"
+          "text": "Para evitar picos de ping y retraso en juegos multijugador, cambia el algoritmo de control de congestión de red a BBR: Para hacer que estos cambios sean permanentes tras reiniciar:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Asegúrate de que el planificador de la CPU otorgue prioridad de tiempo real a los procesos de Gamescope y al juego:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Lanzar el juego junto a Feral GameMode\ngamemoderun gamescope -W 1920 -H 1080 -f -- %command%"
+          "text": "Asegúrate de que el planificador de la CPU otorgue prioridad de tiempo real a los procesos de Gamescope y al juego:"
         }
       ]
     }
@@ -267,25 +267,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El uso del microcompositor Gamescope en distribuciones Linux para gaming y Steam Deck ofrece ventajas como escalado FSR integrado e isolación de resolución, pero una mala configuración puede introducir latencia de entrada (input lag), micro-tirones (stuttering) y pérdida de fluidez visual. A su vez, problemas en la cola de red del kernel pueden manifestarse como pérdida de paquetes y retraso en títulos multijugador competitivos.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#el-parametro-immediate-flips-causa-tearing-visual">¿El parámetro --immediate-flips causa tearing visual?</a></li>
-        <li class="toc-subitem"><a href="#bbr-funciona-en-todas-las-distribuciones-linux">¿BBR funciona en todas las distribuciones Linux?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -311,9 +300,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Activar el algoritmo de congestión TCP BBR y el programador FQ_Codel</div>
           </div></div></div>
-<p>El uso del microcompositor Gamescope en distribuciones Linux para gaming y Steam Deck ofrece ventajas como escalado FSR integrado e isolación de resolución, pero una mala configuración puede introducir latencia de entrada (input lag), micro-tirones (stuttering) y pérdida de fluidez visual. A su vez, problemas en la cola de red del kernel pueden manifestarse como pérdida de paquetes y retraso en títulos multijugador competitivos.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#el-parametro-immediate-flips-causa-tearing-visual">¿El parámetro --immediate-flips causa tearing visual?</a></li>
+        <li class="toc-subitem"><a href="#bbr-funciona-en-todas-las-distribuciones-linux">¿BBR funciona en todas las distribuciones Linux?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -322,10 +323,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-gamescope-con-tearing-adaptativo-y-baja-latencia">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Configurar Gamescope con Tearing Adaptativo y Baja Latencia</h4>
+            <h4 id="configurar-gamescope-con-tearing-adaptativo-y-baja-latencia-heading">Paso 1: Configurar Gamescope con Tearing Adaptativo y Baja Latencia</h4>
             <p>En tus parámetros de lanzamiento de Steam o script de ejecución, añade los parámetros optimizados para latencia mínima:</p>
 
     <div class="code-container">
@@ -346,10 +347,10 @@ gamescope -W 1920 -H 1080 -w 1920 -h 1080 -r 144 --adaptive-sync --immediate-fli
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="optimizar-la-pila-de-red-del-kernel-para-erradicar-el-bufferbloat">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Optimizar la pila de red del Kernel para erradicar el Bufferbloat</h4>
+            <h4 id="optimizar-la-pila-de-red-del-kernel-para-erradicar-el-bufferbloat-heading">Paso 2: Optimizar la pila de red del Kernel para erradicar el Bufferbloat</h4>
             <p>Para evitar picos de ping y retraso en juegos multijugador, cambia el algoritmo de control de congestión de red a BBR:</p>
 
     <div class="code-container">
@@ -382,10 +383,10 @@ sudo sysctl --system
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="priorizar-el-hilo-de-gamescope-con-gamemode">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Priorizar el hilo de Gamescope con GameMode</h4>
+            <h4 id="priorizar-el-hilo-de-gamescope-con-gamemode-heading">Paso 3: Priorizar el hilo de Gamescope con GameMode</h4>
             <p>Asegúrate de que el planificador de la CPU otorgue prioridad de tiempo real a los procesos de Gamescope y al juego:</p>
 
     <div class="code-container">

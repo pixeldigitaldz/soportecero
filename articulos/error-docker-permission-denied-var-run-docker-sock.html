@@ -57,7 +57,7 @@
   "keywords": "Docker, Linux, Permissions",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-26",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-26",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Comprueba si el grupo docker existe en tu sistema y agrega tu usuario actual a dicho grupo mediante usermod:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Crear el grupo docker si no existe\nsudo groupadd docker\n\n# Agregar el usuario actual ($USER) al grupo docker\nsudo usermod -aG docker $USER"
+          "text": "Comprueba si el grupo docker existe en tu sistema y agrega tu usuario actual a dicho grupo mediante usermod:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Para que el cambio de grupo surta efecto sin necesidad de reiniciar el servidor o cerrar sesión por completo, ejecuta:\n\n    \n      \n        BASH\n        Copiar\n      \n      newgrp docker\n\n    \n    \nAlternativamente, si estás en una sesión SSH o terminal de escritorio, puedes cerrar la sesión y volver a iniciarla."
+          "text": "Para que el cambio de grupo surta efecto sin necesidad de reiniciar el servidor o cerrar sesión por completo, ejecuta: Alternativamente, si estás en una sesión SSH o terminal de escritorio, puedes cerrar la sesión y volver a iniciarla."
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Asegúrate de que el archivo de socket /var/run/docker.sock pertenezca al grupo docker:\n\n    \n      \n        BASH\n        Copiar\n      \n      ls -l /var/run/docker.sock\n\n    \n    \n(Debería mostrar un propietario como root:docker con permisos srw-rw----).\nPrueba la ejecución de Docker sin anteponer sudo:\n\n    \n      \n        BASH\n        Copiar\n      \n      docker run hello-world"
+          "text": "Asegúrate de que el archivo de socket /var/run/docker.sock pertenezca al grupo docker: (Debería mostrar un propietario como root:docker con permisos srw-rw----). Prueba la ejecución de Docker sin anteponer sudo:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El mensaje permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock aparece cuando intentas ejecutar comandos de Docker sin privilegios de superusuario (sudo) y tu cuenta de Linux no pertenece al grupo con acceso al socket UNIX del demonio de Docker.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El mensaje <code>permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</code> aparece cuando intentas ejecutar comandos de Docker sin privilegios de superusuario (<code>sudo</code>) y tu cuenta de Linux no pertenece al grupo con acceso al socket UNIX del demonio de Docker.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
@@ -279,6 +271,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -287,10 +288,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="crear-el-grupo-docker-y-agregar-tu-usuario">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Crear el grupo docker y agregar tu usuario</h4>
+            <h4 id="crear-el-grupo-docker-y-agregar-tu-usuario-heading">Paso 1: Crear el grupo docker y agregar tu usuario</h4>
             <p>Comprueba si el grupo <code>docker</code> existe en tu sistema y agrega tu usuario actual a dicho grupo mediante <code>usermod</code>:</p>
 
     <div class="code-container">
@@ -309,10 +310,10 @@ sudo usermod -aG docker $USER
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="actualizar-la-membresia-de-grupos-en-la-sesion-activa">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Actualizar la membresía de grupos en la sesión activa</h4>
+            <h4 id="actualizar-la-membresia-de-grupos-en-la-sesion-activa-heading">Paso 2: Actualizar la membresía de grupos en la sesión activa</h4>
             <p>Para que el cambio de grupo surta efecto sin necesidad de reiniciar el servidor o cerrar sesión por completo, ejecuta:</p>
 
     <div class="code-container">
@@ -329,10 +330,10 @@ sudo usermod -aG docker $USER
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="verificar-los-permisos-de-varrundockersock-y-probar">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Verificar los permisos de /var/run/docker.sock y probar</h4>
+            <h4 id="verificar-los-permisos-de-varrundockersock-y-probar-heading">Paso 3: Verificar los permisos de /var/run/docker.sock y probar</h4>
             <p>Asegúrate de que el archivo de socket <code>/var/run/docker.sock</code> pertenezca al grupo <code>docker</code>:</p>
 
     <div class="code-container">
@@ -418,6 +419,23 @@ sudo usermod -aG docker $USER
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -446,23 +464,6 @@ sudo usermod -aG docker $USER
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

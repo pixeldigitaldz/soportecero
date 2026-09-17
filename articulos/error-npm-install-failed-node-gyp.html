@@ -57,7 +57,7 @@
   "keywords": "NPM, NodeJS, Programación",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Instala los compiladores de C++ (make, g++, gcc) y las dependencias nativas requeridas para la compilación de addons de Node.js:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Para sistemas basados en Debian / Ubuntu\nsudo apt update &amp;&amp; sudo apt install -y build-essential python3\n\n# Para sistemas basados en Arch Linux / CachyOS\nsudo pacman -Syu base-devel python"
+          "text": "Instala los compiladores de C++ (make, g++, gcc) y las dependencias nativas requeridas para la compilación de addons de Node.js:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Una caché de compilación corrupta o desactualizada de Node.js puede provocar fallos al reconstruir los archivos binarios locales:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Limpiar el historial de node-gyp\nnpm cache clean --force\n\n# Forzar la reconstrucción específica de los módulos nativos\nnpm rebuild"
+          "text": "Una caché de compilación corrupta o desactualizada de Node.js puede provocar fallos al reconstruir los archivos binarios locales:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si node-gyp no localiza el intérprete de Python correcto en tu sistema, indícalo de forma explícita en la configuración de tu gestor de paquetes de Node:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Establecer la ruta global del intérprete de Python para NPM\nnpm config set python /usr/bin/python3"
+          "text": "Si node-gyp no localiza el intérprete de Python correcto en tu sistema, indícalo de forma explícita en la configuración de tu gestor de paquetes de Node:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error de instalación de paquetes NPM como node-gyp rebuild failed o make: *** [addon.target.mk] Error 1 ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -284,9 +276,18 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Utilizar NVM para cambiar temporalmente a una versión LTS de Node.js</div>
           </div></div></div>
-<p>El error de instalación de paquetes NPM como <code>node-gyp rebuild failed</code> o <code>make: *** [addon.target.mk] Error 1</code> ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -295,10 +296,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="instalar-las-herramientas-de-desarrollo-en-tu-sistema-operativo">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Instalar las herramientas de desarrollo en tu sistema operativo</h4>
+            <h4 id="instalar-las-herramientas-de-desarrollo-en-tu-sistema-operativo-heading">Paso 1: Instalar las herramientas de desarrollo en tu sistema operativo</h4>
             <p>Instala los compiladores de C++ (<code>make</code>, <code>g++</code>, <code>gcc</code>) y las dependencias nativas requeridas para la compilación de addons de Node.js:</p>
 
     <div class="code-container">
@@ -317,10 +318,10 @@ sudo pacman -Syu base-devel python
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="limpiar-y-reconfigurar-la-cache-de-node-gyp">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Limpiar y reconfigurar la caché de node-gyp</h4>
+            <h4 id="limpiar-y-reconfigurar-la-cache-de-node-gyp-heading">Paso 2: Limpiar y reconfigurar la caché de node-gyp</h4>
             <p>Una caché de compilación corrupta o desactualizada de Node.js puede provocar fallos al reconstruir los archivos binarios locales:</p>
 
     <div class="code-container">
@@ -339,10 +340,10 @@ npm rebuild
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-python-para-node-gyp">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Configurar Python para node-gyp</h4>
+            <h4 id="configurar-python-para-node-gyp-heading">Paso 3: Configurar Python para node-gyp</h4>
             <p>Si node-gyp no localiza el intérprete de Python correcto en tu sistema, indícalo de forma explícita en la configuración de tu gestor de paquetes de Node:</p>
 
     <div class="code-container">

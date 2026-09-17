@@ -57,7 +57,7 @@
   "keywords": "Git, GitHub, DevOps",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "En lugar de realizar un merge convencional que crea un commit de cruce desordenado, utiliza git pull --rebase para colocar tus nuevos commits locales encima del historial remoto actualizado:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Reemplaza &#39;main&#39; por el nombre de tu rama (p. ej., dev o feature/login)\ngit pull --rebase origin main\n\n    \n    \nSi prefieres hacerlo en dos pasos separados para inspeccionar las diferencias antes de fusionar:\n\n    \n      \n        BASH\n        C"
+          "text": "En lugar de realizar un merge convencional que crea un commit de cruce desordenado, utiliza git pull --rebase para colocar tus nuevos commits locales encima del historial remoto actualizado: Si prefieres hacerlo en dos pasos separados para inspeccionar las diferencias antes de fusionar:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si existen archivos modificados simultáneamente en local y remoto, Git pausará el proceso de rebase. Abre los archivos marcados con conflicto, resuelve las diferencias y ejecuta:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Marcar los archivos resueltos\ngit add .\n\n# Continuar el proceso de rebase\ngit rebase --continue"
+          "text": "Si existen archivos modificados simultáneamente en local y remoto, Git pausará el proceso de rebase. Abre los archivos marcados con conflicto, resuelve las diferencias y ejecuta:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Una vez que tu rama local esté sincronizada y rebasada sobre el último commit remoto, realiza el envío de tus cambios de forma segura:\n\n    \n      \n        BASH\n        Copiar\n      \n      git push origin main\n\n    \n    \nSi reescribiste commits locales existentes y necesitas actualizar el remoto en una rama de trabajo personal, evita git push --force y utiliza la opción segura:\n\n    \n      \n        BASH\n        Copiar\n      \n      git push origin main --force-with-lease"
+          "text": "Una vez que tu rama local esté sincronizada y rebasada sobre el último commit remoto, realiza el envío de tus cambios de forma segura: Si reescribiste commits locales existentes y necesitas actualizar el remoto en una rama de trabajo personal, evita git push --force y utiliza la opción segura:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error [rejected - non-fast-forward] o updates were rejected because the remote contains work that you do not have locally ocurre cuando intentas enviar commits locales a una rama remota en Git, pero el servidor remoto contiene commits más recientes que tu rama local no posee.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <code>[rejected - non-fast-forward]</code> o <code>updates were rejected because the remote contains work that you do not have locally</code> ocurre cuando intentas enviar commits locales a una rama remota en Git, pero el servidor remoto contiene commits más recientes que tu rama local no posee.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
@@ -279,6 +271,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -287,10 +288,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="obtener-e-integrar-las-actualizaciones-remotas-con-rebase">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Obtener e integrar las actualizaciones remotas con Rebase</h4>
+            <h4 id="obtener-e-integrar-las-actualizaciones-remotas-con-rebase-heading">Paso 1: Obtener e integrar las actualizaciones remotas con Rebase</h4>
             <p>En lugar de realizar un merge convencional que crea un commit de cruce desordenado, utiliza <code>git pull --rebase</code> para colocar tus nuevos commits locales encima del historial remoto actualizado:</p>
 
     <div class="code-container">
@@ -318,10 +319,10 @@ git rebase origin/main
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="resolver-posibles-conflictos-de-codigo">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Resolver posibles conflictos de código</h4>
+            <h4 id="resolver-posibles-conflictos-de-codigo-heading">Paso 2: Resolver posibles conflictos de código</h4>
             <p>Si existen archivos modificados simultáneamente en local y remoto, Git pausará el proceso de rebase. Abre los archivos marcados con conflicto, resuelve las diferencias y ejecuta:</p>
 
     <div class="code-container">
@@ -340,10 +341,10 @@ git rebase --continue
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="enviar-tus-cambios-al-servidor-remoto">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Enviar tus cambios al servidor remoto</h4>
+            <h4 id="enviar-tus-cambios-al-servidor-remoto-heading">Paso 3: Enviar tus cambios al servidor remoto</h4>
             <p>Una vez que tu rama local esté sincronizada y rebasada sobre el último commit remoto, realiza el envío de tus cambios de forma segura:</p>
 
     <div class="code-container">

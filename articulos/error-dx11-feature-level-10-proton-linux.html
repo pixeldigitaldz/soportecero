@@ -57,7 +57,7 @@
   "keywords": "Proton, Linux, Vulkan, DXVK, Gaming, Mesa",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-25",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Comprueba que el controlador de tu tarjeta gráfica expone correctamente la API de Vulkan:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Instalar utilidades de diagnóstico de Vulkan si no están presentes\n# En Arch/CachyOS: sudo pacman -S vulkan-tools\n# En Ubuntu/Debian: sudo apt install vulkan-tools\n\n# Ejecutar el resumen de información de Vulkan\nvulkaninfo --summary\n\n    \n    \nSi el comando devuelve Cannot create Vulkan instance o vkCreateInstance failed, tus drivers gráficos carecen d"
+          "text": "Comprueba que el controlador de tu tarjeta gráfica expone correctamente la API de Vulkan: Si el comando devuelve Cannot create Vulkan instance o vkCreateInstance failed, tus drivers gráficos carecen de las bibliotecas ICD de Vulkan."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Los juegos en Steam requieren bibliotecas tanto de 64 bits como de 32 bits (multilib):\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Arch Linux / CachyOS (para AMD):\nsudo pacman -S vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader\n\n# En Arch Linux / CachyOS (para NVIDIA):\nsudo pacman -S nvidia-utils lib32-nvidia-utils vulkan-icd-loader lib32-vulkan-icd-loader\n\n# En Ubuntu / Debian (para AMD):\nsudo apt install libvulkan1 libvulkan1:i386 mesa-vulkan-drivers m"
+          "text": "Los juegos en Steam requieren bibliotecas tanto de 64 bits como de 32 bits (multilib):"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "En equipos con doble gráfica (Intel/Nvidia o AMD/Nvidia), asegúrate de que el juego no intente abrirse con la GPU integrada:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Parámetro de lanzamiento en Steam para forzar GPU dedicada:\n# Para Nvidia (Prime offload):\n__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia %command%\n\n# O usando GameMode y MangoHud:\ngamemoderun %command%"
+          "text": "En equipos con doble gráfica (Intel/Nvidia o AMD/Nvidia), asegúrate de que el juego no intente abrirse con la GPU integrada:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si tu tarjeta gráfica no soporta Vulkan por hardware (GPUs de más de 10 años):\n\n    \n      \n        BASH\n        Copiar\n      \n      # Traducir DirectX 11 a OpenGL en lugar de Vulkan:\nPROTON_USE_WINED3D=1 %command%"
+          "text": "Si tu tarjeta gráfica no soporta Vulkan por hardware (GPUs de más de 10 años):"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El mensaje de error DX11 feature level 10.0 is required to run the engine en títulos desarrollados con Unreal Engine o Unity al ejecutarse en Linux mediante Steam Proton ocurre cuando la capa de traducción DXVK no puede inicializar una instancia válida de Vulkan con compatibilidad para los niveles de características de Direct3D 10/11.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#por-que-mi-gpu-soporta-directx-11-en-windows-pero-da-este-error-en-linux">¿Por qué mi GPU soporta DirectX 11 en Windows pero da este error en Linux?</a></li>
-        <li class="toc-subitem"><a href="#como-se-que-gpu-esta-usando-el-juego">¿Cómo sé qué GPU está usando el juego?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Forzar traducción WINE D3D con <code>PROTON_USE_WINED3D=1</code> o actualizar controlador Mesa</div>
           </div></div></div>
-<p>El mensaje de error <code>DX11 feature level 10.0 is required to run the engine</code> en títulos desarrollados con Unreal Engine o Unity al ejecutarse en Linux mediante Steam Proton ocurre cuando la capa de traducción DXVK no puede inicializar una instancia válida de Vulkan con compatibilidad para los niveles de características de Direct3D 10/11.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#por-que-mi-gpu-soporta-directx-11-en-windows-pero-da-este-error-en-linux">¿Por qué mi GPU soporta DirectX 11 en Windows pero da este error en Linux?</a></li>
+        <li class="toc-subitem"><a href="#como-se-que-gpu-esta-usando-el-juego">¿Cómo sé qué GPU está usando el juego?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="validar-el-soporte-de-vulkan-en-el-sistema-operativo">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Validar el soporte de Vulkan en el sistema operativo</h4>
+            <h4 id="validar-el-soporte-de-vulkan-en-el-sistema-operativo-heading">Paso 1: Validar el soporte de Vulkan en el sistema operativo</h4>
             <p>Comprueba que el controlador de tu tarjeta gráfica expone correctamente la API de Vulkan:</p>
 
     <div class="code-container">
@@ -359,10 +360,10 @@ vulkaninfo --summary
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="instalar-los-paquetes-completos-de-vulkan-32-y-64-bits">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Instalar los paquetes completos de Vulkan (32 y 64 bits)</h4>
+            <h4 id="instalar-los-paquetes-completos-de-vulkan-32-y-64-bits-heading">Paso 2: Instalar los paquetes completos de Vulkan (32 y 64 bits)</h4>
             <p>Los juegos en Steam requieren bibliotecas tanto de 64 bits como de 32 bits (multilib):</p>
 
     <div class="code-container">
@@ -384,10 +385,10 @@ sudo apt install libvulkan1 libvulkan1:i386 mesa-vulkan-drivers mesa-vulkan-driv
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="forzar-el-uso-de-la-gpu-dedicada-en-portatiles-hibridos">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Forzar el uso de la GPU dedicada en portátiles híbridos</h4>
+            <h4 id="forzar-el-uso-de-la-gpu-dedicada-en-portatiles-hibridos-heading">Paso 3: Forzar el uso de la GPU dedicada en portátiles híbridos</h4>
             <p>En equipos con doble gráfica (Intel/Nvidia o AMD/Nvidia), asegúrate de que el juego no intente abrirse con la GPU integrada:</p>
 
     <div class="code-container">
@@ -407,10 +408,10 @@ gamemoderun %command%
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-fallback-a-wined3d-solo-para-gpus-muy-antiguas-sin-vulkan">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Paso 4: Configurar fallback a WineD3D (Solo para GPUs muy antiguas sin Vulkan)</h4>
+            <h4 id="configurar-fallback-a-wined3d-solo-para-gpus-muy-antiguas-sin-vulkan-heading">Paso 4: Configurar fallback a WineD3D (Solo para GPUs muy antiguas sin Vulkan)</h4>
             <p>Si tu tarjeta gráfica no soporta Vulkan por hardware (GPUs de más de 10 años):</p>
 
     <div class="code-container">

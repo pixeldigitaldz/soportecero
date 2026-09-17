@@ -57,7 +57,7 @@
   "keywords": "PostgreSQL, Node.js, Databases",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-24",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-24",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,22 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error FATAL: sorry, too many clients already en PostgreSQL ocurre cuando el número de conexiones simultáneas abiertas hacia el servidor de base de datos supera el límite configurado en la directiva max_connections (que por defecto suele ser 100 en instancias estándar).</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <code>FATAL: sorry, too many clients already</code> en PostgreSQL ocurre cuando el número de conexiones simultáneas abiertas hacia el servidor de base de datos supera el límite configurado en la directiva <code>max_connections</code> (que por defecto suele ser 100 en instancias estándar).</p>
 <p>En entornos web modernos con Node.js, Next.js, microservicios o arquitecturas Serverless (AWS Lambda, Vercel), abrir conexiones directas en cada solicitud sin un gestor de pool satura rápidamente la memoria del motor PostgreSQL.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -250,6 +242,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
 <p><strong>Inspecciona las conexiones activas e inactivas en tiempo real</strong>
 Conéctate a PostgreSQL con <code>psql</code> y consulta el estado de las sesiones para identificar qué aplicación está reteniendo las conexiones:</p>

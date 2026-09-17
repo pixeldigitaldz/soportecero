@@ -98,20 +98,22 @@ function postProcessHtml(rawHtml, lang = 'es') {
   const isEn = lang === 'en';
 
   // 0. Extract GEO / AI Summary (TL;DR)
+  let aiSummaryHtml = '';
   const firstParagraphMatch = html.match(/<p>([\s\S]*?)<\/p>/i);
   if (firstParagraphMatch) {
     const summaryText = firstParagraphMatch[1].replace(/<[^>]*>/g, '').trim(); 
     if (summaryText.length > 30) {
       const summaryTitle = isEn ? '✨ Quick Answer' : '✨ Respuesta Rápida';
-      const aiSummaryHtml = `
-      <section class="ai-summary" role="doc-abstract" aria-label="${summaryTitle}">
+      aiSummaryHtml = `
+      <section class="ai-summary" aria-label="${summaryTitle}">
         <div class="ai-summary-header">
           ${summaryTitle}
         </div>
         <p>${summaryText}</p>
       </section>
       `;
-      html = aiSummaryHtml + html;
+      // Remove original paragraph to prevent duplication on the page
+      html = html.replace(firstParagraphMatch[0], '');
     }
   }
 
@@ -253,16 +255,20 @@ function postProcessHtml(rawHtml, lang = 'es') {
           stepTitle = isEn ? `Step ${stepIndex}` : `Paso ${stepIndex}`;
         }
 
+        const cleanTitle = stepTitle.replace(/<[^>]*>/g, '').trim();
+        const stepSlug = slugify(cleanTitle) || `step-${stepIndex}`;
+
         parsedSteps.push({
-          title: stepTitle.replace(/<[^>]*>/g, '').trim(),
-          body: stepBody
+          title: cleanTitle,
+          body: stepBody,
+          slug: stepSlug
         });
         
         const formatted = `
-        <li class="step-item">
+        <li class="step-item" id="${stepSlug}">
           <div class="step-number">${stepIndex}</div>
           <div class="step-body">
-            <h4>${stepTitle}</h4>
+            <h4 id="${stepSlug}-heading">${stepTitle}</h4>
             ${stepBody}
           </div>
         </li>
@@ -287,17 +293,19 @@ function postProcessHtml(rawHtml, lang = 'es') {
         const rawTitle = m[1].replace(/<[^>]*>/g, '').trim();
         const stepBody = m[2].trim();
         const cleanTitle = rawTitle.replace(/^Paso\s+\d+:\s*|^Step\s+\d+:\s*/i, '').trim() || rawTitle;
+        const stepSlug = slugify(cleanTitle) || `step-${stepIndex}`;
 
         parsedSteps.push({
           title: cleanTitle,
-          body: stepBody
+          body: stepBody,
+          slug: stepSlug
         });
 
         const formatted = `
-        <li class="step-item">
+        <li class="step-item" id="${stepSlug}">
           <div class="step-number">${stepIndex}</div>
           <div class="step-body">
-            <h4>${rawTitle}</h4>
+            <h4 id="${stepSlug}-heading">${rawTitle}</h4>
             ${stepBody}
           </div>
         </li>
@@ -381,6 +389,10 @@ function postProcessHtml(rawHtml, lang = 'es') {
     } else {
       html = tocHtml + html;
     }
+  }
+
+  if (aiSummaryHtml) {
+    html = aiSummaryHtml + '\n' + html;
   }
 
   return {
@@ -559,7 +571,7 @@ function build() {
       "keywords": post.tags ? post.tags.join(', ') : '',
       "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
-      "dateModified": new Date().toISOString().split('T')[0],
+      "dateModified": post.dateModified || post.date,
       "author": {
         "@type": "Person",
         "name": "Rodolfo Castro",
@@ -614,16 +626,29 @@ function build() {
         "@type": "HowTo",
         "name": post.title,
         "description": post.description,
-        "step": steps.map((s, idx) => ({
-          "@type": "HowToStep",
-          "position": idx + 1,
-          "url": `${pageUrl}#${slugify(s.title)}`,
-          "name": s.title,
-          "itemListElement": [{
-            "@type": "HowToDirection",
-            "text": s.body.replace(/<[^>]*>/g, '').trim().substring(0, 500)
-          }]
-        }))
+        "step": steps.map((s, idx) => {
+          let cleanText = s.body
+            .replace(/<div class="code-container"[\s\S]*?<\/div>\s*<\/div>/gi, '')
+            .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
+            .replace(/<pre[\s\S]*?<\/pre>/gi, '')
+            .replace(/<button[\s\S]*?<\/button>/gi, '')
+            .replace(/<[^>]*>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (!cleanText || cleanText.length < 5) {
+            cleanText = s.title;
+          }
+          return {
+            "@type": "HowToStep",
+            "position": idx + 1,
+            "url": `${pageUrl}#${s.slug || slugify(s.title)}`,
+            "name": s.title,
+            "itemListElement": [{
+              "@type": "HowToDirection",
+              "text": cleanText
+            }]
+          };
+        })
       };
       howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
     }
@@ -739,7 +764,7 @@ function build() {
       "keywords": post.tags ? post.tags.join(', ') : '',
       "proficiencyLevel": "Intermediate",
       "datePublished": post.date,
-      "dateModified": new Date().toISOString().split('T')[0],
+      "dateModified": post.dateModified || post.date,
       "author": {
         "@type": "Person",
         "name": "Rodolfo Castro",
@@ -794,16 +819,29 @@ function build() {
         "@type": "HowTo",
         "name": post.title,
         "description": post.description,
-        "step": steps.map((s, idx) => ({
-          "@type": "HowToStep",
-          "position": idx + 1,
-          "url": `${pageUrl}#${slugify(s.title)}`,
-          "name": s.title,
-          "itemListElement": [{
-            "@type": "HowToDirection",
-            "text": s.body.replace(/<[^>]*>/g, '').trim().substring(0, 500)
-          }]
-        }))
+        "step": steps.map((s, idx) => {
+          let cleanText = s.body
+            .replace(/<div class="code-container"[\s\S]*?<\/div>\s*<\/div>/gi, '')
+            .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
+            .replace(/<pre[\s\S]*?<\/pre>/gi, '')
+            .replace(/<button[\s\S]*?<\/button>/gi, '')
+            .replace(/<[^>]*>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (!cleanText || cleanText.length < 5) {
+            cleanText = s.title;
+          }
+          return {
+            "@type": "HowToStep",
+            "position": idx + 1,
+            "url": `${pageUrl}#${s.slug || slugify(s.title)}`,
+            "name": s.title,
+            "itemListElement": [{
+              "@type": "HowToDirection",
+              "text": cleanText
+            }]
+          };
+        })
       };
       howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
     }
@@ -1048,7 +1086,7 @@ function build() {
 
   // Add Spanish posts to sitemap
   for (let post of postsEs) {
-    const postDate = post.date || todayStr;
+    const postDate = post.dateModified || post.date || todayStr;
     const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
@@ -1064,7 +1102,7 @@ function build() {
 
   // Add English posts to sitemap
   for (let post of postsEn) {
-    const postDate = post.date || todayStr;
+    const postDate = post.dateModified || post.date || todayStr;
     const hasEs = postsEs.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>

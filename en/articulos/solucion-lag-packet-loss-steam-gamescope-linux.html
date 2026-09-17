@@ -57,7 +57,7 @@
   "keywords": "Gaming, Linux, Steam Deck, Gamescope, Vulkan",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-09-05",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-09-05",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Add optimized low-latency flags to your Steam launch options or execution script:\n\n    \n      \n        BASH\n        Copy\n      \n      # Recommended Steam launch command for high refresh rate displays\ngamescope -W 1920 -H 1080 -w 1920 -h 1080 -r 144 --adaptive-sync --immediate-flips --force-grab-cursor -- %command%\n\n    \n    \n\n--adaptive-sync: Enables VRR / FreeSync / G-Sync directly inside the compositor window.\n--immediate-flips: Bypasses compositor vertical synchronization to deliver frames im"
+          "text": "Add optimized low-latency flags to your Steam launch options or execution script: --adaptive-sync: Enables VRR / FreeSync / G-Sync directly inside the compositor window. --immediate-flips: Bypasses compositor vertical synchronization to deliver frames immediately upon render completion."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "To prevent ping spikes during intense network load, activate BBR congestion control and the FQ_Codel queue discipline:\n\n    \n      \n        BASH\n        Copy\n      \n      # Check current network queue configuration\nsysctl net.ipv4.tcp_congestion_control net.core.default_qdisc\n\n# Enable BBR and FQ_Codel immediately\nsudo sysctl -w net.core.default_qdisc=fq_codel\nsudo sysctl -w net.ipv4.tcp_congestion_control=bbr\n\n    \n    \nTo make these network optimizations permanent across system reboots:\n\n    \n"
+          "text": "To prevent ping spikes during intense network load, activate BBR congestion control and the FQ_Codel queue discipline: To make these network optimizations permanent across system reboots:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Ensure CPU process scheduler gives real-time priority to Gamescope and game rendering threads:\n\n    \n      \n        BASH\n        Copy\n      \n      # Launch game under GameMode optimization wrapper\ngamemoderun gamescope -W 1920 -H 1080 -f -- %command%"
+          "text": "Ensure CPU process scheduler gives real-time priority to Gamescope and game rendering threads:"
         }
       ]
     }
@@ -267,25 +267,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The Gamescope microcompositor on Linux gaming systems and Steam Deck provides outstanding features like native FSR scaling and resolution isolation. However, default buffer queue settings can introduce noticeable input latency, frame pacing jitter, and micro-stuttering. In multiplayer games, kernel queue latency often manifests as packet loss and irregular ping spikes.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#does-immediate-flips-cause-screen-tearing">Does --immediate-flips cause screen tearing?</a></li>
-        <li class="toc-subitem"><a href="#is-tcp-bbr-available-on-all-linux-distributions">Is TCP BBR available on all Linux distributions?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -311,9 +300,21 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Enable TCP BBR congestion control algorithm and FQ_Codel packet scheduler</div>
           </div></div></div>
-<p>The Gamescope microcompositor on Linux gaming systems and Steam Deck provides outstanding features like native FSR scaling and resolution isolation. However, default buffer queue settings can introduce noticeable input latency, frame pacing jitter, and micro-stuttering. In multiplayer games, kernel queue latency often manifests as packet loss and irregular ping spikes.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#does-immediate-flips-cause-screen-tearing">Does --immediate-flips cause screen tearing?</a></li>
+        <li class="toc-subitem"><a href="#is-tcp-bbr-available-on-all-linux-distributions">Is TCP BBR available on all Linux distributions?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -322,10 +323,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="configure-gamescope-for-adaptive-tearing-and-low-latency">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Configure Gamescope for Adaptive Tearing and Low Latency</h4>
+            <h4 id="configure-gamescope-for-adaptive-tearing-and-low-latency-heading">Step 1: Configure Gamescope for Adaptive Tearing and Low Latency</h4>
             <p>Add optimized low-latency flags to your Steam launch options or execution script:</p>
 
     <div class="code-container">
@@ -346,10 +347,10 @@ gamescope -W 1920 -H 1080 -w 1920 -h 1080 -r 144 --adaptive-sync --immediate-fli
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="optimize-linux-kernel-network-stack-against-bufferbloat">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Optimize Linux Kernel Network Stack Against Bufferbloat</h4>
+            <h4 id="optimize-linux-kernel-network-stack-against-bufferbloat-heading">Step 2: Optimize Linux Kernel Network Stack Against Bufferbloat</h4>
             <p>To prevent ping spikes during intense network load, activate BBR congestion control and the FQ_Codel queue discipline:</p>
 
     <div class="code-container">
@@ -382,10 +383,10 @@ sudo sysctl --system
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="prioritize-gamescope-threads-with-feral-gamemode">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Prioritize Gamescope Threads with Feral GameMode</h4>
+            <h4 id="prioritize-gamescope-threads-with-feral-gamemode-heading">Step 3: Prioritize Gamescope Threads with Feral GameMode</h4>
             <p>Ensure CPU process scheduler gives real-time priority to Gamescope and game rendering threads:</p>
 
     <div class="code-container">

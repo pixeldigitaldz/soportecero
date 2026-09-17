@@ -57,7 +57,7 @@
   "keywords": "Git, GitHub, DevOps",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-20",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-20",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "En la mayoría de los casos, este error se debe a ramas remotas eliminadas en GitHub/GitLab que siguen existiendo en la caché local:\n\n    \n      \n        BASH\n        Copiar\n      \n      git remote prune origin\n\n    \n    \nLuego intenta hacer fetch de nuevo:\n\n    \n      \n        BASH\n        Copiar\n      \n      git fetch origin"
+          "text": "En la mayoría de los casos, este error se debe a ramas remotas eliminadas en GitHub/GitLab que siguen existiendo en la caché local: Luego intenta hacer fetch de nuevo:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si el comando Git fue interrumpido repentinamente (por un corte de energía o cierre de terminal), Git deja un archivo de bloqueo de seguridad que impide escrituras posteriores:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Eliminar archivo lock de la rama principal\nrm -f .git/refs/remotes/origin/main.lock\n\n# O eliminar todos los locks de referencias si no estás seguro de cuál es:\nfind .git/refs -name &quot;*.lock&quot; -type f -delete"
+          "text": "Si el comando Git fue interrumpido repentinamente (por un corte de energía o cierre de terminal), Git deja un archivo de bloqueo de seguridad que impide escrituras posteriores:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si una rama se llama Feature y otra feature, sistemas de archivos insensibles a mayúsculas (como Windows o macOS por defecto) fallarán al crear los archivos de referencia correspondientes.\nFuerza la limpieza del embalaje de referencias de Git:\n\n    \n      \n        BASH\n        Copiar\n      \n      git pack-refs --all --prune"
+          "text": "Si una rama se llama Feature y otra feature, sistemas de archivos insensibles a mayúsculas (como Windows o macOS por defecto) fallarán al crear los archivos de referencia correspondientes. Fuerza la limpieza del embalaje de referencias de Git:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ... o fatal: cannot lock ref ocurre al intentar hacer git pull, git fetch o git checkout cuando el puntero de referencia local de Git se corrompe debido a un cierre inesperado del proceso de Git o a un conflicto entre nombres de ramas con mayúsculas y minúsculas.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -284,7 +276,7 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Finalizar otros procesos activos de Git o IDEs antes de reintentar el comando</div>
           </div></div></div>
-<p>El error <strong><code>error: cannot lock ref &#39;refs/remotes/origin/main&#39;: is at ... but expected ...</code></strong> o <code>fatal: cannot lock ref</code> ocurre al intentar hacer <code>git pull</code>, <code>git fetch</code> o <code>git checkout</code> cuando el puntero de referencia local de Git se corrompe debido a un cierre inesperado del proceso de Git o a un conflicto entre nombres de ramas con mayúsculas y minúsculas.</p>
+
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -296,6 +288,15 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -304,10 +305,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="podar-referencias-remotas-git-remote-prune">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Podar referencias remotas (Git Remote Prune)</h4>
+            <h4 id="podar-referencias-remotas-git-remote-prune-heading">Paso 1: Podar referencias remotas (Git Remote Prune)</h4>
             <p>En la mayoría de los casos, este error se debe a ramas remotas eliminadas en GitHub/GitLab que siguen existiendo en la caché local:</p>
 
     <div class="code-container">
@@ -333,10 +334,10 @@
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="eliminar-manualmente-el-archivo-de-bloqueo-lock">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Eliminar manualmente el archivo de bloqueo .lock</h4>
+            <h4 id="eliminar-manualmente-el-archivo-de-bloqueo-lock-heading">Paso 2: Eliminar manualmente el archivo de bloqueo .lock</h4>
             <p>Si el comando Git fue interrumpido repentinamente (por un corte de energía o cierre de terminal), Git deja un archivo de bloqueo de seguridad que impide escrituras posteriores:</p>
 
     <div class="code-container">
@@ -355,10 +356,10 @@ find .git/refs -name &quot;*.lock&quot; -type f -delete
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="resolver-conflictos-de-nombres-de-ramas-case-sensitivity">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Resolver conflictos de nombres de ramas (Case-Sensitivity)</h4>
+            <h4 id="resolver-conflictos-de-nombres-de-ramas-case-sensitivity-heading">Paso 3: Resolver conflictos de nombres de ramas (Case-Sensitivity)</h4>
             <p>Si una rama se llama <code>Feature</code> y otra <code>feature</code>, sistemas de archivos insensibles a mayúsculas (como Windows o macOS por defecto) fallarán al crear los archivos de referencia correspondientes.</p>
 <p>Fuerza la limpieza del embalaje de referencias de Git:</p>
 

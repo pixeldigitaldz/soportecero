@@ -57,7 +57,7 @@
   "keywords": "Python, Virtualenv, Programming",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Comprueba si tu entorno virtual está activo y verifica cuál intérprete de Python se está ejecutando:\n\n    \n      \n        BASH\n        Copiar\n      \n      # En Linux / macOS: activar entorno virtual\nsource venv/bin/activate\n\n# En Windows (PowerShell):\n.\\venv\\Scripts\\Activate.ps1\n\n# Verificar qué intérprete está respondiendo\nwhich python    # En Linux/macOS\nwhere python    # En Windows\n\n    \n    \n(La salida debe apuntar a la ruta interna de tu carpeta venv/bin/python, no a /usr/bin/python)."
+          "text": "Comprueba si tu entorno virtual está activo y verifica cuál intérprete de Python se está ejecutando: (La salida debe apuntar a la ruta interna de tu carpeta venv/bin/python, no a /usr/bin/python)."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Para garantizar que los paquetes se instalen dentro del entorno virtual correspondiente y no en el sistema global, instala siempre usando python -m pip:\n\n    \n      \n        BASH\n        Copiar\n      \n      python -m pip install nombre_modulo\n\n    \n    \nPara verificar que la librería se instaló correctamente en el entorno activo:\n\n    \n      \n        BASH\n        Copiar\n      \n      python -m pip list"
+          "text": "Para garantizar que los paquetes se instalen dentro del entorno virtual correspondiente y no en el sistema global, instala siempre usando python -m pip: Para verificar que la librería se instaló correctamente en el entorno activo:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si el script funciona desde la consola pero falla dentro de tu editor de código:\n\nVS Code: Presiona Ctrl + Shift + P (o Cmd + Shift + P en Mac), escribe Python: Select Interpreter y selecciona el binario localizado dentro de la carpeta venv/bin/python.\nPyCharm: Ve a Settings &gt; Project &gt; Python Interpreter y selecciona el entorno virtual creado en el proyecto."
+          "text": "Si el script funciona desde la consola pero falla dentro de tu editor de código: VS Code: Presiona Ctrl + Shift + P (o Cmd + Shift + P en Mac), escribe Python: Select Interpreter y selecciona el binario localizado dentro de la carpeta venv/bin/python. PyCharm: Ve a Settings &gt; Project &gt; Python Interpreter y selecciona el entorno virtual creado en el proyecto."
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error ModuleNotFoundError: No module named &#39;nombre_modulo&#39; es una de las excepciones más comunes en Python. Ocurre cuando el intérprete intenta importar una librería externa o módulo interno que no está presente en la ruta de búsqueda de paquetes (sys.path) de la instancia activa de Python.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error <code>ModuleNotFoundError: No module named &#39;nombre_modulo&#39;</code> es una de las excepciones más comunes en Python. Ocurre cuando el intérprete intenta importar una librería externa o módulo interno que no está presente en la ruta de búsqueda de paquetes (<code>sys.path</code>) de la instancia activa de Python.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
@@ -279,6 +271,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -287,10 +288,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="confirmar-la-activacion-del-entorno-virtual">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Confirmar la activación del entorno virtual</h4>
+            <h4 id="confirmar-la-activacion-del-entorno-virtual-heading">Paso 1: Confirmar la activación del entorno virtual</h4>
             <p>Comprueba si tu entorno virtual está activo y verifica cuál intérprete de Python se está ejecutando:</p>
 
     <div class="code-container">
@@ -315,10 +316,10 @@ where python    # En Windows
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="instalar-la-dependencia-usando-la-sintaxis-del-modulo-pip">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Instalar la dependencia usando la sintaxis del módulo pip</h4>
+            <h4 id="instalar-la-dependencia-usando-la-sintaxis-del-modulo-pip-heading">Paso 2: Instalar la dependencia usando la sintaxis del módulo pip</h4>
             <p>Para garantizar que los paquetes se instalen dentro del entorno virtual correspondiente y no en el sistema global, instala siempre usando <code>python -m pip</code>:</p>
 
     <div class="code-container">
@@ -344,10 +345,10 @@ where python    # En Windows
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-el-interprete-de-python-en-tu-ide-vs-code-pycharm">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Configurar el intérprete de Python en tu IDE (VS Code / PyCharm)</h4>
+            <h4 id="configurar-el-interprete-de-python-en-tu-ide-vs-code-pycharm-heading">Paso 3: Configurar el intérprete de Python en tu IDE (VS Code / PyCharm)</h4>
             <p>Si el script funciona desde la consola pero falla dentro de tu editor de código:</p>
 <ul>
 <li><strong>VS Code</strong>: Presiona <code>Ctrl + Shift + P</code> (o <code>Cmd + Shift + P</code> en Mac), escribe <code>Python: Select Interpreter</code> y selecciona el binario localizado dentro de la carpeta <code>venv/bin/python</code>.</li>

@@ -57,7 +57,7 @@
   "keywords": "PostgreSQL, Node.js, Databases",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-24",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-24",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,22 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The error FATAL: sorry, too many clients already in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the max_connections parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The error <code>FATAL: sorry, too many clients already</code> in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the <code>max_connections</code> parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
 <p>In modern web stacks using Node.js, Next.js, or Serverless functions (AWS Lambda, Vercel), instantiating direct database clients on every HTTP request rapidly exhausts the database process pool and memory.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -250,6 +242,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
 <p><strong>Inspect active and idle connection distribution</strong>
 Connect to PostgreSQL using <code>psql</code> and execute the following diagnostic query:</p>

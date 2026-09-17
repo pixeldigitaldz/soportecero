@@ -57,7 +57,7 @@
   "keywords": "WordPress, BanaHosting, MySQL, cPanel, Optimización",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-06-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Evita que WordPress guarde copias ilimitadas de cada borrador añadiendo estas directivas en tu archivo wp-config.php (antes de la línea / That&#39;s all, stop editing! /):\n\n    \n      \n        PHP\n        Copiar\n      \n      // Limitar revisiones a un máximo de 3 por entrada\ndefine(&#39;WP_POST_REVISIONS&#39;, 3);\n\n// Aumentar el intervalo de autoguardado a 120 segundos\ndefine(&#39;AUTOSAVE_INTERVAL&#39;, 120);\n\n// Forzar el vaciado de la papelera cada 7 días\ndefine(&#39;EMPTY_TRASH_DAYS&#39;, 7"
+          "text": "Evita que WordPress guarde copias ilimitadas de cada borrador añadiendo estas directivas en tu archivo wp-config.php (antes de la línea / That&#39;s all, stop editing! /):"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Accede a cPanel &gt; phpMyAdmin, selecciona tu base de datos de WordPress y ejecuta la siguiente consulta en la pestaña SQL:\n\n    \n      \n        SQL\n        Copiar\n      \n      -- Eliminar transitorios y transients expirados\nDELETE FROM wp_options WHERE option_name LIKE (&#39;_transient_%&#39;);\nDELETE FROM wp_options WHERE option_name LIKE (&#39;_site_transient_%&#39;);"
+          "text": "Accede a cPanel &gt; phpMyAdmin, selecciona tu base de datos de WordPress y ejecuta la siguiente consulta en la pestaña SQL:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Limpia todas las revisiones anteriores acumuladas en la tabla de posts y sus metadatos asociados:\n\n    \n      \n        SQL\n        Copiar\n      \n      -- 1. Eliminar todas las revisiones de artículos\nDELETE a,b,c\nFROM wp_posts a\nLEFT JOIN wp_term_relationships b ON (a.ID = b.object_id)\nLEFT JOIN wp_postmeta c ON (a.ID = c.post_id)\nWHERE a.post_type = &#39;revision&#39;;\n\n-- 2. Eliminar metadatos huérfanos\nDELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE wp.ID IS NU"
+          "text": "Limpia todas las revisiones anteriores acumuladas en la tabla de posts y sus metadatos asociados:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Tras eliminar miles de registros, desfragmenta el espacio en disco con el comando de optimización:\n\n    \n      \n        SQL\n        Copiar\n      \n      OPTIMIZE TABLE wp_options, wp_posts, wp_postmeta, wp_comments;"
+          "text": "Tras eliminar miles de registros, desfragmenta el espacio en disco con el comando de optimización:"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El crecimiento descontrolado de la base de datos MySQL en alojamientos como BanaHosting o servidores cPanel provoca que tu sitio web supere los límites de inodes, alcance el tope de CPU/IOPS y experimente lentitud general o errores 500/503. Esto suele deberse a millones de transitorios no eliminados en wp_options y miles de revisiones antiguas en wp_posts.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#es-seguro-borrar-las-filas-transient-de-wpoptions">¿Es seguro borrar las filas transient de wp_options?</a></li>
-        <li class="toc-subitem"><a href="#afecta-borrar-revisiones-a-los-articulos-publicados">¿Afecta borrar revisiones a los artículos publicados?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Limitar revisiones en <code>wp-config.php</code> y optimizar tablas MySQL con comando OPTIMIZE TABLE</div>
           </div></div></div>
-<p>El crecimiento descontrolado de la base de datos MySQL en alojamientos como BanaHosting o servidores cPanel provoca que tu sitio web supere los límites de inodes, alcance el tope de CPU/IOPS y experimente lentitud general o errores 500/503. Esto suele deberse a millones de transitorios no eliminados en <code>wp_options</code> y miles de revisiones antiguas en <code>wp_posts</code>.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#es-seguro-borrar-las-filas-transient-de-wpoptions">¿Es seguro borrar las filas transient de wp_options?</a></li>
+        <li class="toc-subitem"><a href="#afecta-borrar-revisiones-a-los-articulos-publicados">¿Afecta borrar revisiones a los artículos publicados?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="limitar-las-revisiones-de-entradas-en-wp-configphp">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Limitar las revisiones de entradas en wp-config.php</h4>
+            <h4 id="limitar-las-revisiones-de-entradas-en-wp-configphp-heading">Paso 1: Limitar las revisiones de entradas en wp-config.php</h4>
             <p>Evita que WordPress guarde copias ilimitadas de cada borrador añadiendo estas directivas en tu archivo <code>wp-config.php</code> (antes de la línea <em>/</em> That&#39;s all, stop editing! <em>/</em>):</p>
 
     <div class="code-container">
@@ -359,10 +360,10 @@ define(&#39;EMPTY_TRASH_DAYS&#39;, 7);
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="limpiar-transitorios-huerfanos-en-wpoptions-via-phpmyadmin">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Limpiar transitorios huérfanos en wp_options (Vía phpMyAdmin)</h4>
+            <h4 id="limpiar-transitorios-huerfanos-en-wpoptions-via-phpmyadmin-heading">Paso 2: Limpiar transitorios huérfanos en wp_options (Vía phpMyAdmin)</h4>
             <p>Accede a <strong>cPanel &gt; phpMyAdmin</strong>, selecciona tu base de datos de WordPress y ejecuta la siguiente consulta en la pestaña SQL:</p>
 
     <div class="code-container">
@@ -379,10 +380,10 @@ DELETE FROM wp_options WHERE option_name LIKE (&#39;_site_transient_%&#39;);
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="eliminar-revisiones-antiguas-y-metadatos-huerfanos">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Eliminar revisiones antiguas y metadatos huérfanos</h4>
+            <h4 id="eliminar-revisiones-antiguas-y-metadatos-huerfanos-heading">Paso 3: Eliminar revisiones antiguas y metadatos huérfanos</h4>
             <p>Limpia todas las revisiones anteriores acumuladas en la tabla de posts y sus metadatos asociados:</p>
 
     <div class="code-container">
@@ -405,10 +406,10 @@ DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE 
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="desfragmentar-y-optimizar-las-tablas-mysql">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Paso 4: Desfragmentar y optimizar las tablas MySQL</h4>
+            <h4 id="desfragmentar-y-optimizar-las-tablas-mysql-heading">Paso 4: Desfragmentar y optimizar las tablas MySQL</h4>
             <p>Tras eliminar miles de registros, desfragmenta el espacio en disco con el comando de optimización:</p>
 
     <div class="code-container">
@@ -486,6 +487,23 @@ DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE 
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -514,23 +532,6 @@ DELETE pm FROM wp_postmeta pm LEFT JOIN wp_posts wp ON wp.ID = pm.post_id WHERE 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

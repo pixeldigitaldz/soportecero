@@ -18,21 +18,21 @@ Intermittent network speed issues, interrupted downloads, or the inability to lo
 
 ## 🚀 Step-by-Step Solution
 
-### Step 1: Diagnosticar la fragmentación de paquetes mediante pruebas de Ping
+### Step 1: Diagnose packet fragmentation using ping tests
 We are going to find the maximum packet size that your network can transfer without needing to split the data. Run the test by subtracting the 28-byte IP/ICMP header from your target:
 ```bash
-# Probar el tamaño de paquete en Linux (ejemplo para 1472 bytes de datos)
+# Test packet size on Linux (example for 1472 bytes of payload)
 ping -M do -s 1472 8.8.8.8
 ```
-*(Si la terminal te responde `Packet needs to be fragmented but DF set`, significa que el paquete es demasiado grande. Reduce el número en incrementos de 10 hasta encontrar el valor exacto que responda sin fragmentar, por ejemplo 1420 bytes, y súmale los 28 bytes de cabecera: `1420 + 28 = 1448 MTU`).*
+*(If the terminal returns `Packet needs to be fragmented but DF set`, the packet is too large. Reduce the size in increments of 10 until finding the exact payload that does not fragment, e.g., 1420 bytes, then add the 28-byte header: `1420 + 28 = 1448 MTU`).*
 
-### Step 2: Aplicar el tamaño de MTU óptimo en tu tarjeta de red
+### Step 2: Apply optimal MTU size to your network interface
 Once the correct value is detected, configure your operating system's network interface (replace `eth0` with your active card):
 ```bash
-# Cambiar el MTU temporalmente en Linux
+# Temporarily set MTU on Linux
 sudo ip link set dev eth0 mtu 1448
 
-# Verificar que los parámetros de red se hayan actualizado
+# Verify updated network parameters
 ip link show eth0
 ```
 

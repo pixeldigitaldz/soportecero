@@ -57,7 +57,7 @@
   "keywords": "cURL, Node.js, API, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-14",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-14",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,25 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The error curl: (7) Failed to connect to localhost port 3000: Connection refused occurs when the curl CLI tool attempts to reach a local service endpoint, but no process is actively listening on that port or the server is bound strictly to IPv6 (::1) rather than IPv4 (127.0.0.1).</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-verify-port-listening-status">Step 1: Verify Port Listening Status</a></li>
-        <li class="toc-subitem"><a href="#step-2-resolve-ipv6-vs-ipv4-hostname-conflict">Step 2: Resolve IPv6 vs IPv4 Hostname Conflict</a></li>
-        <li class="toc-subitem"><a href="#step-3-configure-host-binding-in-your-backend-code">Step 3: Configure Host Binding in Your Backend Code</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -241,7 +230,7 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Bind service to <code>0.0.0.0</code> to accept external traffic</div>
           </div></div></div>
-<p>The error <strong><code>curl: (7) Failed to connect to localhost port 3000: Connection refused</code></strong> occurs when the <code>curl</code> CLI tool attempts to reach a local service endpoint, but no process is actively listening on that port or the server is bound strictly to IPv6 (<code>::1</code>) rather than IPv4 (<code>127.0.0.1</code>).</p>
+
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
 <ol>
@@ -252,6 +241,18 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
+        <li class="toc-subitem"><a href="#step-1-verify-port-listening-status">Step 1: Verify Port Listening Status</a></li>
+        <li class="toc-subitem"><a href="#step-2-resolve-ipv6-vs-ipv4-hostname-conflict">Step 2: Resolve IPv6 vs IPv4 Hostname Conflict</a></li>
+        <li class="toc-subitem"><a href="#step-3-configure-host-binding-in-your-backend-code">Step 3: Configure Host Binding in Your Backend Code</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-verify-port-listening-status">Step 1: Verify Port Listening Status</h3>
 <p>Check if your target port is open using <code>ss</code>:</p>

@@ -57,7 +57,7 @@
   "keywords": "systemd, DNS, Linux, SysAdmin, Ubuntu, Networking",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-25",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-06-25",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If your server cannot fetch packages due to missing nameservers, inject temporary fallback resolvers:\n\n    \n      \n        BASH\n        Copy\n      \n      # Direct public Cloudflare and Google nameservers\necho -e &quot;nameserver 1.1.1.1\\nnameserver 8.8.8.8&quot; | sudo tee /etc/resolv.conf\n\n    \n    \nVerify connectivity:\n\n    \n      \n        BASH\n        Copy\n      \n      ping -c 3 google.com"
+          "text": "If your server cannot fetch packages due to missing nameservers, inject temporary fallback resolvers: Verify connectivity:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "On modern Linux distributions, /etc/resolv.conf must link directly to the runtime stub resolver:\n\n    \n      \n        BASH\n        Copy\n      \n      # 1. Remove broken symlink or stale file\nsudo rm -f /etc/resolv.conf\n\n# 2. Re-establish official stub symlink\nsudo ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf\n\n# 3. Restart and enable resolver daemon\nsudo systemctl restart systemd-resolved\nsudo systemctl enable systemd-resolved"
+          "text": "On modern Linux distributions, /etc/resolv.conf must link directly to the runtime stub resolver:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Open your master configuration file (/etc/systemd/resolved.conf):\n\n    \n      \n        INI\n        Copy\n      \n      [Resolve]\nDNS=1.1.1.1 8.8.8.8\nFallbackDNS=1.0.0.1 8.8.4.4\nDomains=~.\nDNSSEC=allow-downgrade\n\n    \n    \nRestart daemon to load new nameserver bindings:\n\n    \n      \n        BASH\n        Copy\n      \n      sudo systemctl restart systemd-resolved"
+          "text": "Open your master configuration file (/etc/systemd/resolved.conf): Restart daemon to load new nameserver bindings:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Confirm that active network interfaces hold valid DNS assignments:\n\n    \n      \n        BASH\n        Copy\n      \n      # Query active DNS resolver telemetry\nresolvectl status"
+          "text": "Confirm that active network interfaces hold valid DNS assignments:"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The systemic failure Temporary failure in name resolution, Could not resolve host: google.com or Failed to start Network Name Resolution in Linux occurs when the local domain resolver daemon or /etc/resolv.conf loses valid upstream nameserver configurations, halting outbound network connections requiring hostname resolution.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#why-does-ping-8888-succeed-while-ping-googlecom-fails">Why does ping 8.8.8.8 succeed while ping google.com fails?</a></li>
-        <li class="toc-subitem"><a href="#what-is-the-role-of-1270053-in-resolvconf">What is the role of 127.0.0.53 in resolv.conf?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Restart daemon with <code>sudo systemctl restart systemd-resolved</code> and declare upstream DNS</div>
           </div></div></div>
-<p>The systemic failure <code>Temporary failure in name resolution</code>, <code>Could not resolve host: google.com</code> or <code>Failed to start Network Name Resolution</code> in Linux occurs when the local domain resolver daemon or <code>/etc/resolv.conf</code> loses valid upstream nameserver configurations, halting outbound network connections requiring hostname resolution.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#why-does-ping-8888-succeed-while-ping-googlecom-fails">Why does ping 8.8.8.8 succeed while ping google.com fails?</a></li>
+        <li class="toc-subitem"><a href="#what-is-the-role-of-1270053-in-resolvconf">What is the role of 127.0.0.53 in resolv.conf?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="restore-immediate-connectivity-via-static-nameservers">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Restore Immediate Connectivity via Static Nameservers</h4>
+            <h4 id="restore-immediate-connectivity-via-static-nameservers-heading">Step 1: Restore Immediate Connectivity via Static Nameservers</h4>
             <p>If your server cannot fetch packages due to missing nameservers, inject temporary fallback resolvers:</p>
 
     <div class="code-container">
@@ -364,10 +365,10 @@ echo -e &quot;nameserver 1.1.1.1\nnameserver 8.8.8.8&quot; | sudo tee /etc/resol
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="reconstruct-official-systemd-resolved-symlink">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Reconstruct Official systemd-resolved Symlink</h4>
+            <h4 id="reconstruct-official-systemd-resolved-symlink-heading">Step 2: Reconstruct Official systemd-resolved Symlink</h4>
             <p>On modern Linux distributions, <code>/etc/resolv.conf</code> must link directly to the runtime stub resolver:</p>
 
     <div class="code-container">
@@ -390,10 +391,10 @@ sudo systemctl enable systemd-resolved
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configure-upstream-resolvers-in-resolvedconf">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Configure Upstream Resolvers in resolved.conf</h4>
+            <h4 id="configure-upstream-resolvers-in-resolvedconf-heading">Step 3: Configure Upstream Resolvers in resolved.conf</h4>
             <p>Open your master configuration file (<code>/etc/systemd/resolved.conf</code>):</p>
 
     <div class="code-container">
@@ -423,10 +424,10 @@ DNSSEC=allow-downgrade
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="verify-resolution-state-with-resolvectl">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Step 4: Verify Resolution State with resolvectl</h4>
+            <h4 id="verify-resolution-state-with-resolvectl-heading">Step 4: Verify Resolution State with resolvectl</h4>
             <p>Confirm that active network interfaces hold valid DNS assignments:</p>
 
     <div class="code-container">
@@ -505,6 +506,23 @@ resolvectl status
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -533,23 +551,6 @@ resolvectl status
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

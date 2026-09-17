@@ -57,7 +57,7 @@
   "keywords": "NPM, NodeJS, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "You should not use sudo to install global packages, as this can allow the execution of malicious scripts with root privileges. Instead, configure a local directory in your personal folder:\n\n    \n      \n        BASH\n        Copy\n      \n      # Crear la carpeta de instalación en tu directorio de usuario\nmkdir -p ~/.npm-global\n\n# Indicar a NPM que use esta ruta para los paquetes globales\nnpm config set prefix &#39;~/.npm-global&#39;"
+          "text": "You should not use sudo to install global packages, as this can allow the execution of malicious scripts with root privileges. Instead, configure a local directory in your personal folder:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "To be able to run the installed binaries from anywhere, add the new directory to your PATH variable:\n\n    \n      \n        BASH\n        Copy\n      \n      # Agregar la línea de exportación a tu perfil de shell (.bashrc o .zshrc)\necho &#39;export PATH=~/.npm-global/bin:$PATH&#39; &gt;&gt; ~/.bashrc\n\n# Recargar la configuración del shell actual en memoria\nsource ~/.bashrc"
+          "text": "To be able to run the installed binaries from anywhere, add the new directory to your PATH variable:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Install any global tool (for example, the Firebase CLI) to confirm that you no longer need to use sudo:\n\n    \n      \n        BASH\n        Copy\n      \n      npm install -g firebase-tools"
+          "text": "Install any global tool (for example, the Firebase CLI) to confirm that you no longer need to use sudo:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The insufficient permission error (EACCES: permission denied) when trying to install Node.js packages globally (with the npm install -g command) occurs because NPM&#39;s default directory (/usr/local/lib/node_modules/) is owned exclusively by the root user of your operating system&#39;s filesystem.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -284,9 +276,18 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Clean and repair global cache: <code>npm cache clean --force</code></div>
           </div></div></div>
-<p>The insufficient permission error (<code>EACCES: permission denied</code>) when trying to install Node.js packages globally (with the <code>npm install -g</code> command) occurs because NPM&#39;s default directory (<code>/usr/local/lib/node_modules/</code>) is owned exclusively by the root user of your operating system&#39;s filesystem.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -295,10 +296,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-una-ruta-de-instalacion-local-para-npm">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Step 1: Configurar una ruta de instalación local para NPM</h4>
+            <h4 id="configurar-una-ruta-de-instalacion-local-para-npm-heading">Step 1: Configurar una ruta de instalación local para NPM</h4>
             <p>You should not use <code>sudo</code> to install global packages, as this can allow the execution of malicious scripts with root privileges. Instead, configure a local directory in your personal folder:</p>
 
     <div class="code-container">
@@ -317,10 +318,10 @@ npm config set prefix &#39;~/.npm-global&#39;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="exportar-la-nueva-ruta-a-tu-entorno-de-terminal">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Step 2: Exportar la nueva ruta a tu entorno de terminal</h4>
+            <h4 id="exportar-la-nueva-ruta-a-tu-entorno-de-terminal-heading">Step 2: Exportar la nueva ruta a tu entorno de terminal</h4>
             <p>To be able to run the installed binaries from anywhere, add the new directory to your <code>PATH</code> variable:</p>
 
     <div class="code-container">
@@ -339,10 +340,10 @@ source ~/.bashrc
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="probar-la-instalacion-limpia-sin-privilegios-de-root">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Step 3: Probar la instalación limpia sin privilegios de root</h4>
+            <h4 id="probar-la-instalacion-limpia-sin-privilegios-de-root-heading">Step 3: Probar la instalación limpia sin privilegios de root</h4>
             <p>Install any global tool (for example, the Firebase CLI) to confirm that you no longer need to use <code>sudo</code>:</p>
 
     <div class="code-container">

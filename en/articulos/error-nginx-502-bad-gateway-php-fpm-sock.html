@@ -57,7 +57,7 @@
   "keywords": "Nginx, PHP-FPM, Sysadmin, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-12",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-12",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,26 +197,15 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The 502 Bad Gateway error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at /var/log/nginx/error.log usually states:
 connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory) or Connection refused.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
-        <li class="toc-subitem"><a href="#step-1-check-php-fpm-daemon-status">Step 1: Check PHP-FPM Daemon Status</a></li>
-        <li class="toc-subitem"><a href="#step-2-verify-exact-socket-sock-path">Step 2: Verify Exact Socket (.sock) Path</a></li>
-        <li class="toc-subitem"><a href="#step-3-fix-php-fpm-socket-permissions">Step 3: Fix PHP-FPM Socket Permissions</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -242,8 +231,7 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
             <div class="diag-label">Solution</div>
             <div class="diag-value">Change socket owner to <code>www-data:www-data</code> in <code>/etc/php/fpm/pool.d/www.conf</code></div>
           </div></div></div>
-<p>The <strong><code>502 Bad Gateway</code></strong> error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at <code>/var/log/nginx/error.log</code> usually states:
-<code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> or <code>Connection refused</code>.</p>
+
 <blockquote>
 <p><strong>Quick Solution (1 Minute):</strong></p>
 <ol>
@@ -254,6 +242,18 @@ connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
+        <li class="toc-subitem"><a href="#step-1-check-php-fpm-daemon-status">Step 1: Check PHP-FPM Daemon Status</a></li>
+        <li class="toc-subitem"><a href="#step-2-verify-exact-socket-sock-path">Step 2: Verify Exact Socket (.sock) Path</a></li>
+        <li class="toc-subitem"><a href="#step-3-fix-php-fpm-socket-permissions">Step 3: Fix PHP-FPM Socket Permissions</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-check-php-fpm-daemon-status">Step 1: Check PHP-FPM Daemon Status</h3>
 <p>Verify that PHP-FPM is active and running:</p>
@@ -401,6 +401,23 @@ sudo systemctl restart nginx
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -429,23 +446,6 @@ sudo systemctl restart nginx
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

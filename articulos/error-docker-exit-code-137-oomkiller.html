@@ -57,7 +57,7 @@
   "keywords": "Docker, Linux, DevOps, Docker Compose",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-09-02",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-09-02",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Antes de modificar configuraciones, comprueba los metadatos de estado del contenedor:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Inspeccionar el estado de salida y la bandera OOMKilled\ndocker inspect &lt;nombre_o_id_contenedor&gt; --format=&quot;{{.State.ExitCode}} - OOMKilled: {{.State.OOMKilled}}&quot;\n\n    \n    \nSi la salida devuelve 137 - OOMKilled: true, el fallo es definitivamente por falta de memoria RAM. También puedes consultar el registro del kernel:\n\n    \n      \n        B"
+          "text": "Antes de modificar configuraciones, comprueba los metadatos de estado del contenedor: Si la salida devuelve 137 - OOMKilled: true, el fallo es definitivamente por falta de memoria RAM. También puedes consultar el registro del kernel:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si tu servicio está definido en un archivo docker-compose.yml, ajusta la asignación de recursos aumentando el límite o añadiendo una reserva:\n\n    \n      \n        YAML\n        Copiar\n      \n      services:\n  mi-servicio:\n    image: mi-app:latest\n    deploy:\n      resources:\n        limits:\n          memory: 2048M\n        reservations:\n          memory: 512M\n    # Para sintaxis Compose v2 estándar sin modo swarm:\n    mem_limit: 2g\n    mem_reservation: 512m"
+          "text": "Si tu servicio está definido en un archivo docker-compose.yml, ajusta la asignación de recursos aumentando el límite o añadiendo una reserva:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si ejecutas aplicaciones sobre máquinas virtuales o runtimes gestionados, asegúrate de que el runtime conozca los límites de memoria del contenedor:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Para Node.js: Fijar el tamaño máximo del heap (ejemplo 1536MB en contenedor de 2GB)\nNODE_OPTIONS=&quot;--max-old-space-size=1536&quot;\n\n# Para Java/JVM: Utilizar detección automática de memoria en cgroups\nJAVA_TOOL_OPTIONS=&quot;-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0&quot;"
+          "text": "Si ejecutas aplicaciones sobre máquinas virtuales o runtimes gestionados, asegúrate de que el runtime conozca los límites de memoria del contenedor:"
         }
       ]
     },
@@ -156,7 +156,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Aplica los cambios y comprueba las estadísticas de consumo de memoria:\n\n    \n      \n        BASH\n        Copiar\n      \n      # Reiniciar el stack de contenedores\ndocker compose up -d --force-recreate\n\n# Monitorear el uso de memoria en vivo\ndocker stats --no-stream"
+          "text": "Aplica los cambios y comprueba las estadísticas de consumo de memoria:"
         }
       ]
     }
@@ -279,25 +279,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El código de salida Exit Code 137 en Docker indica que el contenedor fue terminado forzosamente por la señal del sistema SIGKILL (señal estándar 9, donde 128 + 9 = 137). En el 95% de los entornos de producción, esto ocurre cuando el proceso dentro del contenedor consume más memoria RAM de la configurada o agota la memoria del host, obligando al mecanismo Out Of Memory (OOM) Killer del kernel de Linux a finalizarlo para proteger la estabilidad del servidor.</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
-        <li class="toc-subitem"><a href="#el-exit-code-137-siempre-significa-falta-de-memoria">¿El Exit Code 137 siempre significa falta de memoria?</a></li>
-        <li class="toc-subitem"><a href="#como-puedo-evitar-que-docker-mate-un-contenedor-critico">¿Cómo puedo evitar que Docker mate un contenedor crítico?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,9 +312,21 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Optimizar el recolector de basura de la app y verificar logs con <code>dmesg -T</code></div>
           </div></div></div>
-<p>El código de salida <code>Exit Code 137</code> en Docker indica que el contenedor fue terminado forzosamente por la señal del sistema <code>SIGKILL</code> (señal estándar 9, donde 128 + 9 = 137). En el 95% de los entornos de producción, esto ocurre cuando el proceso dentro del contenedor consume más memoria RAM de la configurada o agota la memoria del host, obligando al mecanismo <strong>Out Of Memory (OOM) Killer</strong> del kernel de Linux a finalizarlo para proteger la estabilidad del servidor.</p>
+
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes-faq">Preguntas Frecuentes (FAQ)</a></li>
+        <li class="toc-subitem"><a href="#el-exit-code-137-siempre-significa-falta-de-memoria">¿El Exit Code 137 siempre significa falta de memoria?</a></li>
+        <li class="toc-subitem"><a href="#como-puedo-evitar-que-docker-mate-un-contenedor-critico">¿Cómo puedo evitar que Docker mate un contenedor crítico?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -334,10 +335,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="verificar-si-el-contenedor-fue-eliminado-por-oomkilled">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Verificar si el contenedor fue eliminado por OOMKilled</h4>
+            <h4 id="verificar-si-el-contenedor-fue-eliminado-por-oomkilled-heading">Paso 1: Verificar si el contenedor fue eliminado por OOMKilled</h4>
             <p>Antes de modificar configuraciones, comprueba los metadatos de estado del contenedor:</p>
 
     <div class="code-container">
@@ -365,10 +366,10 @@ sudo dmesg -T | grep -i -E &quot;oom[- ]killer|killed process&quot;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="ajustar-los-limites-de-memoria-en-docker-compose">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Ajustar los límites de memoria en Docker Compose</h4>
+            <h4 id="ajustar-los-limites-de-memoria-en-docker-compose-heading">Paso 2: Ajustar los límites de memoria en Docker Compose</h4>
             <p>Si tu servicio está definido en un archivo <code>docker-compose.yml</code>, ajusta la asignación de recursos aumentando el límite o añadiendo una reserva:</p>
 
     <div class="code-container">
@@ -394,10 +395,10 @@ sudo dmesg -T | grep -i -E &quot;oom[- ]killer|killed process&quot;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="optimizar-el-limite-de-memoria-del-runtime-nodejs-java-python">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Optimizar el límite de memoria del runtime (Node.js / Java / Python)</h4>
+            <h4 id="optimizar-el-limite-de-memoria-del-runtime-nodejs-java-python-heading">Paso 3: Optimizar el límite de memoria del runtime (Node.js / Java / Python)</h4>
             <p>Si ejecutas aplicaciones sobre máquinas virtuales o runtimes gestionados, asegúrate de que el runtime conozca los límites de memoria del contenedor:</p>
 
     <div class="code-container">
@@ -416,10 +417,10 @@ JAVA_TOOL_OPTIONS=&quot;-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0&quot;
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="reiniciar-y-monitorear-el-consumo-de-recursos-en-tiempo-real">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4>Paso 4: Reiniciar y monitorear el consumo de recursos en tiempo real</h4>
+            <h4 id="reiniciar-y-monitorear-el-consumo-de-recursos-en-tiempo-real-heading">Paso 4: Reiniciar y monitorear el consumo de recursos en tiempo real</h4>
             <p>Aplica los cambios y comprueba las estadísticas de consumo de memoria:</p>
 
     <div class="code-container">
@@ -501,6 +502,23 @@ docker stats --no-stream
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
       <article class="related-card">
         <div class="related-card-content">
@@ -529,23 +547,6 @@ docker stats --no-stream
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
           </div>
         </div>

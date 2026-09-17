@@ -57,7 +57,7 @@
   "keywords": "Next.js, Node.js, React",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-08-21",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-08-21",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -197,22 +197,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Quick Answer">
+      <section class="ai-summary" aria-label="✨ Quick Answer">
         <div class="ai-summary-header">
           ✨ Quick Answer
         </div>
         <p>The warning API resolved without sending a response for /api/... in Next.js occurs when an API Route Handler or Pages API endpoint executes asynchronous logic (such as database queries, third-party APIs, or webhooks) without await or without resolving a returned Promise before the handler function finishes execution.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Table of contents">
-      <div class="toc-title">📌 Guide Contents</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
-        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
-      </ol>
-    </nav>
-    
-      <p>The warning <code>API resolved without sending a response for /api/...</code> in Next.js occurs when an API Route Handler or Pages API endpoint executes asynchronous logic (such as database queries, third-party APIs, or webhooks) without <code>await</code> or without resolving a returned Promise before the handler function finishes execution.</p>
 <p>This issue can cause Node.js server connections to hang, resulting in frontend request timeouts, memory leaks, and dropped HTTP responses.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -250,6 +242,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="step-by-step-solution">Step-by-Step Solution</h2>
 <p><strong>Ensure proper async/await flow in your handler</strong>
 If you are using the Pages Router (<code>pages/api/...</code>), every asynchronous database call must be completed before returning the response:</p>

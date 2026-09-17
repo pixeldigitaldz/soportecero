@@ -57,7 +57,7 @@
   "keywords": "Nodejs, Express, CORS",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
-  "dateModified": "2026-09-14",
+  "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
     "name": "Rodolfo Castro",
@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "La solución más limpia en Express es utilizar el paquete oficial cors. Instálalo ejecutando:\n\n    \n      \n        BASH\n        Copiar\n      \n      npm install cors\n\n    \n    \nLuego, en tu archivo principal de la API (server.js o app.js), habilita la configuración básica:\n\n    \n      \n        JAVASCRIPT\n        Copiar\n      \n      const express = require(&#39;express&#39;);\nconst cors = require(&#39;cors&#39;);\n\nconst app = express();\n\n// Permitir solicitudes desde tu frontend\nconst corsOptions ="
+          "text": "La solución más limpia en Express es utilizar el paquete oficial cors. Instálalo ejecutando: Luego, en tu archivo principal de la API (server.js o app.js), habilita la configuración básica:"
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si necesitas permitir peticiones desde localhost durante el desarrollo y desde tu dominio en producción, utiliza una función dinámica en el campo origin:\n\n    \n      \n        JAVASCRIPT\n        Copiar\n      \n      const allowedOrigins = [&#39;http://localhost:3000&#39;, &#39;https://soportecero.com&#39;];\n\napp.use(cors({\n  origin: function (origin, callback) {\n    if (!origin || allowedOrigins.indexOf(origin) !== -1) {\n      callback(null, true);\n    } else {\n      callback(new Error(&#39;Bloque"
+          "text": "Si necesitas permitir peticiones desde localhost durante el desarrollo y desde tu dominio en producción, utiliza una función dinámica en el campo origin:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Para peticiones HTTP con encabezados personalizados o métodos de modificación, el navegador envía primero una petición OPTIONS. Asegúrate de responder correctamente:\n\n    \n      \n        JAVASCRIPT\n        Copiar\n      \n      // Responder a todas las solicitudes preflight\napp.options(&#39;*&#39;, cors(corsOptions));"
+          "text": "Para peticiones HTTP con encabezados personalizados o métodos de modificación, el navegador envía primero una petición OPTIONS. Asegúrate de responder correctamente:"
         }
       ]
     }
@@ -243,22 +243,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>El error de navegadores &quot;Access to XMLHttpRequest at &#39;...&#39; from origin &#39;...&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource&quot; es uno de los fallos más comunes al conectar una aplicación frontend (React, Vue, Next.js) con una API REST en Node.js y Express.</p>
       </section>
+      
 
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-      </ol>
-    </nav>
-    
-      <p>El error de navegadores <strong>&quot;Access to XMLHttpRequest at &#39;...&#39; from origin &#39;...&#39; has been blocked by CORS policy: No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource&quot;</strong> es uno de los fallos más comunes al conectar una aplicación frontend (React, Vue, Next.js) con una API REST en Node.js y Express.</p>
 <p>Este bloqueo lo ejecuta el navegador web por seguridad cuando el origen (dominio o puerto) del cliente es distinto al del servidor.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -296,6 +288,15 @@
           </div></div></div>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -304,10 +305,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="instalar-y-configurar-el-paquete-cors-en-express">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Instalar y configurar el paquete cors en Express</h4>
+            <h4 id="instalar-y-configurar-el-paquete-cors-en-express-heading">Paso 1: Instalar y configurar el paquete cors en Express</h4>
             <p>La solución más limpia en Express es utilizar el paquete oficial <code>cors</code>. Instálalo ejecutando:</p>
 
     <div class="code-container">
@@ -346,10 +347,10 @@ app.use(cors(corsOptions));
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="permitir-multiples-origenes-entornos-de-desarrollo-y-staging">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Permitir múltiples orígenes (Entornos de Desarrollo y Staging)</h4>
+            <h4 id="permitir-multiples-origenes-entornos-de-desarrollo-y-staging-heading">Paso 2: Permitir múltiples orígenes (Entornos de Desarrollo y Staging)</h4>
             <p>Si necesitas permitir peticiones desde localhost durante el desarrollo y desde tu dominio en producción, utiliza una función dinámica en el campo <code>origin</code>:</p>
 
     <div class="code-container">
@@ -375,10 +376,10 @@ app.use(cors({
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="asegurar-la-respuesta-a-solicitudes-preflight-options">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Asegurar la respuesta a solicitudes Preflight (OPTIONS)</h4>
+            <h4 id="asegurar-la-respuesta-a-solicitudes-preflight-options-heading">Paso 3: Asegurar la respuesta a solicitudes Preflight (OPTIONS)</h4>
             <p>Para peticiones HTTP con encabezados personalizados o métodos de modificación, el navegador envía primero una petición <code>OPTIONS</code>. Asegúrate de responder correctamente:</p>
 
     <div class="code-container">

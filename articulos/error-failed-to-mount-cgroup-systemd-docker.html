@@ -120,7 +120,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Ejecuta este comando para comprobar si tu sistema está utilizando la jerarquía v1 tradicional o v2 unificada:\n\n    \n      \n        BASH\n        Copiar\n      \n      stat -fc %T /sys/fs/cgroup/\n\n    \n    \n\nSi la respuesta es cgroup2fs, el kernel opera en cgroup v2.\nSi la respuesta es tmpfs, opera en el modo tradicional cgroup v1."
+          "text": "Ejecuta este comando para comprobar si tu sistema está utilizando la jerarquía v1 tradicional o v2 unificada: Si la respuesta es cgroup2fs, el kernel opera en cgroup v2. Si la respuesta es tmpfs, opera en el modo tradicional cgroup v1."
         }
       ]
     },
@@ -132,7 +132,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si utilizas software o versiones de Docker antiguas incompatibles con cgroup v2, puedes forzar la compatibilidad heredada:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo nano /etc/default/grub\n\n    \n    \nLocaliza la variable GRUB_CMDLINE_LINUX_DEFAULT y añade el parámetro:\n\n    \n      \n        PLAINTEXT\n        Copiar\n      \n      GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash systemd.unified_cgroup_hierarchy=0&quot;\n\n    \n    \nActualiza la configuración de GRUB y reinicia:\n\n    \n    "
+          "text": "Si utilizas software o versiones de Docker antiguas incompatibles con cgroup v2, puedes forzar la compatibilidad heredada: Localiza la variable GRUB_CMDLINE_LINUX_DEFAULT y añade el parámetro: Actualiza la configuración de GRUB y reinicia:"
         }
       ]
     },
@@ -144,7 +144,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "La solución recomendada a largo plazo es actualizar Docker y configurar el controlador nativo systemd en /etc/docker/daemon.json:\n\n    \n      \n        JSON\n        Copiar\n      \n      {\n  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]\n}\n\n    \n    \nAplica el cambio reiniciando el servicio:\n\n    \n      \n        BASH\n        Copiar\n      \n      sudo systemctl daemon-reload\nsudo systemctl restart docker"
+          "text": "La solución recomendada a largo plazo es actualizar Docker y configurar el controlador nativo systemd en /etc/docker/daemon.json: Aplica el cambio reiniciando el servicio:"
         }
       ]
     }
@@ -267,25 +267,14 @@
         <!-- Main Column -->
         <div class="post-article">
           
-      <section class="ai-summary" role="doc-abstract" aria-label="✨ Respuesta Rápida">
+      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
         <div class="ai-summary-header">
           ✨ Respuesta Rápida
         </div>
         <p>Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux), es habitual encontrarse con el error Failed to mount cgroup: No such file or directory o OCI runtime error: unable to apply cgroup configuration. Esto sucede por el cambio de la jerarquía heredada (cgroup v1) al árbol unificado moderno (cgroup v2).</p>
       </section>
-
-    <nav class="toc-container" aria-label="Tabla de contenidos">
-      <div class="toc-title">📌 Contenido de esta guía</div>
-      <ol class="toc-list">
-            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
-        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
-        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
-        <li class="toc-subitem"><a href="#cual-es-la-diferencia-entre-cgroup-v1-y-cgroup-v2-en-linux">¿Cuál es la diferencia entre cgroup v1 y cgroup v2 en Linux?</a></li>
-        <li class="toc-subitem"><a href="#como-soluciono-este-fallo-dentro-de-contenedores-lxc-en-proxmox">¿Cómo soluciono este fallo dentro de contenedores LXC en Proxmox?</a></li>
-      </ol>
-    </nav>
-    
       
+
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="el-diagnostico-rapido">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -311,7 +300,7 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Configurar systemd.unified_cgroup_hierarchy=0 o montar cgroups con volumen rw</div>
           </div></div></div>
-<p>Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux), es habitual encontrarse con el error <code>Failed to mount cgroup: No such file or directory</code> o <code>OCI runtime error: unable to apply cgroup configuration</code>. Esto sucede por el cambio de la jerarquía heredada (cgroup v1) al árbol unificado moderno (cgroup v2).</p>
+
 <blockquote>
 <p><strong>Solución Rápida (1 Minuto):</strong></p>
 <ol>
@@ -323,6 +312,18 @@
 </blockquote>
 
     </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#cual-es-la-diferencia-entre-cgroup-v1-y-cgroup-v2-en-linux">¿Cuál es la diferencia entre cgroup v1 y cgroup v2 en Linux?</a></li>
+        <li class="toc-subitem"><a href="#como-soluciono-este-fallo-dentro-de-contenedores-lxc-en-proxmox">¿Cómo soluciono este fallo dentro de contenedores LXC en Proxmox?</a></li>
+      </ol>
+    </nav>
+    
     <h2 id="la-solucion-paso-a-paso">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -331,10 +332,10 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item">
+        <li class="step-item" id="identificar-la-version-de-cgroup-activa-en-el-sistema">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4>Paso 1: Identificar la versión de cgroup activa en el sistema</h4>
+            <h4 id="identificar-la-version-de-cgroup-activa-en-el-sistema-heading">Paso 1: Identificar la versión de cgroup activa en el sistema</h4>
             <p>Ejecuta este comando para comprobar si tu sistema está utilizando la jerarquía v1 tradicional o v2 unificada:</p>
 
     <div class="code-container">
@@ -354,10 +355,10 @@
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="ajustar-la-jerarquia-de-cgroups-en-el-gestor-de-arranque-grub">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4>Paso 2: Ajustar la jerarquía de cgroups en el gestor de arranque GRUB</h4>
+            <h4 id="ajustar-la-jerarquia-de-cgroups-en-el-gestor-de-arranque-grub-heading">Paso 2: Ajustar la jerarquía de cgroups en el gestor de arranque GRUB</h4>
             <p>Si utilizas software o versiones de Docker antiguas incompatibles con cgroup v2, puedes forzar la compatibilidad heredada:</p>
 
     <div class="code-container">
@@ -395,10 +396,10 @@ sudo reboot
         </li>
         
 
-        <li class="step-item">
+        <li class="step-item" id="configurar-docker-daemon-para-soporte-nativo-de-cgroup-v2">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4>Paso 3: Configurar Docker daemon para soporte nativo de cgroup v2</h4>
+            <h4 id="configurar-docker-daemon-para-soporte-nativo-de-cgroup-v2-heading">Paso 3: Configurar Docker daemon para soporte nativo de cgroup v2</h4>
             <p>La solución recomendada a largo plazo es actualizar Docker y configurar el controlador nativo <code>systemd</code> en <code>/etc/docker/daemon.json</code>:</p>
 
     <div class="code-container">
@@ -490,6 +491,23 @@ sudo systemctl restart docker
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed -->
       <article class="related-card">
         <div class="related-card-content">
@@ -519,23 +537,6 @@ sudo systemctl restart docker
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
             <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled) -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-exit-code-137-oomkiller.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
-            <span>Lectura: 5 min</span>
           </div>
         </div>
       </article>

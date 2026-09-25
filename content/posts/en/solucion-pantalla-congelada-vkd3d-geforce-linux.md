@@ -1,24 +1,25 @@
 ---
-title: "[SOLVED] Screen Freezing in DirectX 12 Games with NVIDIA & VKD3D on Linux"
-description: "Resolve hard screen freezes and desktop crashes in DirectX 12 games running through VKD3D-Proton on NVIDIA GeForce graphics cards on Linux."
-category: "Gaming Tech"
-tags: ["NVIDIA","Gaming","Linux","Vulkan"]
-readTime: "4 min"
-date: "2026-10-05"
+title: '[SOLVED] Screen Freezing in DirectX 12 Games with NVIDIA & VKD3D on Linux'
+description: >-
+  Resolve hard screen freezes and desktop crashes in DirectX 12 games running
+  through VKD3D-Proton on NVIDIA GeForce graphics cards on Linux.
+category: Gaming Tech
+tags:
+  - NVIDIA
+  - Gaming
+  - Linux
+  - Vulkan
+readTime: 4 min
+date: '2026-10-05'
 ---
+
+When launching modern DirectX 12 games (Cyberpunk 2077, Forza Horizon 5, Elden Ring) on Linux with NVIDIA GeForce hardware, players often endure hard screen freezes where graphics completely lock up while game background music and ambient audio continue playing. This condition is triggered by Vulkan queue stalls inside VKD3D-Proton when communicating with NVIDIA proprietary drivers.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Implicit synchronization stalls prior to NVIDIA 555 driver series** | Update to NVIDIA 555/560+ drivers featuring native Explicit Sync architecture |
 | **GPU command queue contention during parallel compute/graphics dispatches** | Enforce VKD3D_CONFIG=single_queue in Steam game launch parameters |
-
-When launching modern DirectX 12 games (Cyberpunk 2077, Forza Horizon 5, Elden Ring) on Linux with NVIDIA GeForce hardware, players often endure hard screen freezes where graphics completely lock up while game background music and ambient audio continue playing. This condition is triggered by Vulkan queue stalls inside VKD3D-Proton when communicating with NVIDIA proprietary drivers.
-
-> **Quick Solution (1 Minute):**
-> 1. Ensure NVIDIA drivers are 555.58 or newer.
-> 2. Add single queue constraint in Steam launch parameters:
->    `VKD3D_CONFIG=single_queue %command%`
 
 ## 🚀 Step-by-Step Solution
 

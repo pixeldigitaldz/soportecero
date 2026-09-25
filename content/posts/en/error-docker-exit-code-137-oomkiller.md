@@ -1,19 +1,25 @@
 ---
-title: "How to Fix Docker Exit Code 137 and OOMKilled Container Errors"
-description: "Learn how to diagnose and resolve Docker exit code 137 caused by the Linux Out-Of-Memory (OOM) Killer and container memory limits."
-category: "Systems & Servers"
-tags: ["Docker", "Linux", "DevOps", "Docker Compose"]
-readTime: "5 min"
-date: "2026-09-02"
+title: How to Fix Docker Exit Code 137 and OOMKilled Container Errors
+description: >-
+  Learn how to diagnose and resolve Docker exit code 137 caused by the Linux
+  Out-Of-Memory (OOM) Killer and container memory limits.
+category: Systems & Servers
+tags:
+  - Docker
+  - Linux
+  - DevOps
+  - Docker Compose
+readTime: 5 min
+date: '2026-09-02'
 ---
+
+Docker `Exit Code 137` indicates that a container was forcefully terminated by the system signal `SIGKILL` (signal 9, where 128 + 9 = 137). In 95% of production server environments, this occurs when a process inside the container consumes more RAM than allotted or exhausts system memory, forcing the Linux kernel **Out-Of-Memory (OOM) Killer** to terminate the container process.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Container exceeded memory limit set in Docker** | Increase `mem_limit` in `docker-compose.yml` or add swap memory to host |
 | **Process terminated by Linux kernel (OOM Killer SIGKILL 9)** | Optimize application garbage collector and inspect logs using `dmesg -T` |
-
-Docker `Exit Code 137` indicates that a container was forcefully terminated by the system signal `SIGKILL` (signal 9, where 128 + 9 = 137). In 95% of production server environments, this occurs when a process inside the container consumes more RAM than allotted or exhausts system memory, forcing the Linux kernel **Out-Of-Memory (OOM) Killer** to terminate the container process.
 
 ## 🚀 Step-by-Step Solution
 

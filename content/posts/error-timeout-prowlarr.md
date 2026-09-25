@@ -1,22 +1,29 @@
 ---
-title: "Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers privados"
-description: "Solución definitiva al error de conexión y tiempo de espera agotado (Timeout) entre gestores multimedia automatizados e indexers privados de torrents o Usenet."
-category: "Sistemas y Servidores"
-tags: ["Prowlarr", "Radarr", "Docker"]
-readTime: "4 min"
-date: "2026-06-26"
+title: >-
+  Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers
+  privados
+description: >-
+  Solución definitiva al error de conexión y tiempo de espera agotado (Timeout)
+  entre gestores multimedia automatizados e indexers privados de torrents o
+  Usenet.
+category: Sistemas y Servidores
+tags:
+  - Prowlarr
+  - Radarr
+  - Docker
+readTime: 4 min
+date: '2026-06-26'
 ---
+
+El error de `Timeout` o tiempo de espera agotado en herramientas como Prowlarr, Radarr o Sonarr ocurre cuando los gestores intentan sincronizar o realizar una búsqueda en un indexer privado y la solicitud no recibe respuesta en el tiempo límite (usualmente 30 segundos). 
+
+Esto se debe principalmente a bloqueos por el desafío de seguridad de Cloudflare en el tracker indexer, o a problemas de resolución de nombres (DNS) dentro de la red interna de tus contenedores Docker.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Conexión a indexadores bloqueada por la protección Cloudflare / Cloudflare Turnstile** | Vincular Prowlarr con un contenedor de FlareSolverr configurado |
 | **Latencia excesiva o DNS del servidor fallando al resolver dominios de indexadores** | Aumentar el tiempo límite de timeout en la configuración del indexador en Prowlarr |
-
-
-El error de `Timeout` o tiempo de espera agotado en herramientas como Prowlarr, Radarr o Sonarr ocurre cuando los gestores intentan sincronizar o realizar una búsqueda en un indexer privado y la solicitud no recibe respuesta en el tiempo límite (usualmente 30 segundos). 
-
-Esto se debe principalmente a bloqueos por el desafío de seguridad de Cloudflare en el tracker indexer, o a problemas de resolución de nombres (DNS) dentro de la red interna de tus contenedores Docker.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

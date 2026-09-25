@@ -1,24 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error TypeScript TS2339: Property does not exist on type"
-description: "Guía para solucionar el error de TypeScript TS2339 Property does not exist on type en objetos, interfaces, window y eventos de React."
-category: "Web y Código"
-tags: ["TypeScript","JavaScript","React","Frontend"]
-readTime: "4 min"
-date: "2026-10-17"
+title: '[SOLUCIONADO] Error TypeScript TS2339: Property does not exist on type'
+description: >-
+  Guía para solucionar el error de TypeScript TS2339 Property does not exist on
+  type en objetos, interfaces, window y eventos de React.
+category: Web y Código
+tags:
+  - TypeScript
+  - JavaScript
+  - React
+  - Frontend
+readTime: 4 min
+date: '2026-10-17'
 ---
+
+Uno de los errores más comunes y frustrantes al compilar código con TypeScript es `error TS2339: Property '...' does not exist on type '...'`. El comprobador de tipos estático detecta que estás intentando acceder a una propiedad que no fue declarada explícitamente en la interfaz o tipo del objeto, deteniendo la compilación.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Acceso a propiedades dinámicas en objetos tipados estrictamente sin firmas de índice** | Definir una interfaz con tipos opcionales o usar firmas de índice [key: string]: any |
 | **Añadir variables globales al objeto window sin extender la interfaz global de Window** | Declarar la propiedad en un archivo global.d.ts extendiendo interface Window |
-
-Uno de los errores más comunes y frustrantes al compilar código con TypeScript es `error TS2339: Property '...' does not exist on type '...'`. El comprobador de tipos estático detecta que estás intentando acceder a una propiedad que no fue declarada explícitamente en la interfaz o tipo del objeto, deteniendo la compilación.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Para objetos dinámicos, añade una firma de índice:
->    `interface MiObjeto { [key: string]: unknown; }`
-> 2. Para propiedades globales en window, extiéndelo en un archivo .d.ts.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

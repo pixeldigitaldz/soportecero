@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] Audio Crackling, Popping & Stuttering with PipeWire & Gamescope on Linux"
-description: "Fix audio crackling, popping, and static stuttering when gaming with PipeWire, Gamescope, and Proton on Steam Deck and Linux PCs."
-category: "Gaming Tech"
-tags: ["PipeWire","Audio","SteamDeck","Linux"]
-readTime: "4 min"
-date: "2026-09-29"
+title: >-
+  [SOLVED] Audio Crackling, Popping & Stuttering with PipeWire & Gamescope on
+  Linux
+description: >-
+  Fix audio crackling, popping, and static stuttering when gaming with PipeWire,
+  Gamescope, and Proton on Steam Deck and Linux PCs.
+category: Gaming Tech
+tags:
+  - PipeWire
+  - Audio
+  - SteamDeck
+  - Linux
+readTime: 4 min
+date: '2026-09-29'
 ---
+
+When gaming on Linux (Steam Deck, Bazzite, Fedora, Arch) through Gamescope or Proton, players often notice metallic clicking, static pops, or sound cutting out (*audio crackling*). This annoyance is rooted in **xruns** (buffer underruns), where PipeWire fails to deliver rendered audio buffers within the tight deadline demanded by the sound card.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Audio buffer quantum is configured too aggressively, inducing buffer underruns (xruns)** | Enforce a stable 1024 quantum buffer size in PipeWire user settings |
 | **Sampling rate mismatch between the PipeWire graph (48kHz) and the game process** | Standardize clock rate and disable aggressive ALSA resampling in pipewire.conf.d |
-
-When gaming on Linux (Steam Deck, Bazzite, Fedora, Arch) through Gamescope or Proton, players often notice metallic clicking, static pops, or sound cutting out (*audio crackling*). This annoyance is rooted in **xruns** (buffer underruns), where PipeWire fails to deliver rendered audio buffers within the tight deadline demanded by the sound card.
-
-> **Quick Solution (1 Minute):**
-> 1. Enforce a resilient audio quantum in runtime:
->    `pw-metadata -n settings 0 clock.force-quantum 1024`
-> 2. Restart user audio services:
->    `systemctl --user restart pipewire pipewire-pulse`
 
 ## 🚀 Step-by-Step Solution
 

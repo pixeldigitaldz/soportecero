@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed"
-description: "Fix rsync error code 12 connection unexpectedly closed when copying large files or automated backups over SSH."
-category: "Systems & Servers"
-tags: ["rsync","SSH","Linux","Backup"]
-readTime: "4 min"
-date: "2026-09-17"
+title: >-
+  [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection
+  unexpectedly closed
+description: >-
+  Fix rsync error code 12 connection unexpectedly closed when copying large
+  files or automated backups over SSH.
+category: Systems & Servers
+tags:
+  - rsync
+  - SSH
+  - Linux
+  - Backup
+readTime: 4 min
+date: '2026-09-17'
 ---
+
+While transferring backups or replicating directory trees over SSH, your transfer abruptly aborts with `rsync: connection unexpectedly closed (0 bytes received so far) [sender]` followed by `rsync error: error in rsync protocol data stream (code 12) at io.c`. Exit code 12 signifies that the bidirectional data stream between the local sender and remote receiver process collapsed prematurely.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **rsync binary is missing or not in $PATH on the destination remote server** | Install rsync on the remote host with sudo apt install rsync |
 | **SSH connection timeout or stateful NAT firewall killing idle TCP pipes** | Configure ServerAliveInterval and leverage -P --partial in rsync commands |
-
-While transferring backups or replicating directory trees over SSH, your transfer abruptly aborts with `rsync: connection unexpectedly closed (0 bytes received so far) [sender]` followed by `rsync error: error in rsync protocol data stream (code 12) at io.c`. Exit code 12 signifies that the bidirectional data stream between the local sender and remote receiver process collapsed prematurely.
-
-> **Quick Solution (1 Minute):**
-> 1. Verify remote rsync binary availability:
->    `ssh user@server "which rsync"`
-> 2. Run transfer with resilient TCP keepalive options:
->    `rsync -avzP -e "ssh -o ServerAliveInterval=30" src/ user@server:/dest/`
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,19 +1,29 @@
 ---
-title: "[SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved"
-description: "Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso."
-category: "Sistemas y Servidores"
-tags: ["systemd", "DNS", "Linux", "SysAdmin", "Ubuntu", "Redes"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  [SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' /
+  systemd-resolved
+description: >-
+  Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en
+  Ubuntu, Debian y Arch Linux paso a paso.
+category: Sistemas y Servidores
+tags:
+  - systemd
+  - DNS
+  - Linux
+  - SysAdmin
+  - Ubuntu
+  - Redes
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El fallo generalizado `Temporary failure in name resolution`, `Could not resolve host: google.com` o `Failed to start Network Name Resolution` en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo `/etc/resolv.conf`) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Enlace simbólico roto en /etc/resolv.conf apuntando a un stub de systemd-resolved inactivo** | Recrear el enlace simbólico a `/run/systemd/resolve/stub-resolv.conf` o restaurar archivo estático |
 | **Daemon systemd-resolved caído con estado failed (status=failed)** | Reiniciar el servicio con `sudo systemctl restart systemd-resolved` y configurar DNS públicos |
-
-El fallo generalizado `Temporary failure in name resolution`, `Could not resolve host: google.com` o `Failed to start Network Name Resolution` en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo `/etc/resolv.conf`) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

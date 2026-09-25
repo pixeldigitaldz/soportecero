@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Error Docker: failed to create shim task: OCI runtime create failed"
-description: "How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers."
-category: "Systems & Servers"
-tags: ["Docker","DevOps","Containers","Linux"]
-readTime: "4 min"
-date: "2026-09-11"
+title: '[SOLVED] Error Docker: failed to create shim task: OCI runtime create failed'
+description: >-
+  How to fix failed to create shim task OCI runtime create failed executable
+  file not found when launching Docker containers.
+category: Systems & Servers
+tags:
+  - Docker
+  - DevOps
+  - Containers
+  - Linux
+readTime: 4 min
+date: '2026-09-11'
 ---
+
+When running `docker run` or `docker compose up`, containerd may abort container execution with `failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "...": executable file not found in $PATH`. This fatal error prevents container startup because the Linux host kernel cannot invoke the binary or script defined in `ENTRYPOINT` or `CMD`.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **ENTRYPOINT or CMD binary missing inside container image or lacks execution rights** | Verify absolute binary path and apply chmod +x in Dockerfile |
 | **Windows CRLF line endings present in entrypoint.sh shell script** | Convert entrypoint script to Unix LF format with dos2unix entrypoint.sh |
-
-When running `docker run` or `docker compose up`, containerd may abort container execution with `failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "...": executable file not found in $PATH`. This fatal error prevents container startup because the Linux host kernel cannot invoke the binary or script defined in `ENTRYPOINT` or `CMD`.
-
-> **Quick Solution (1 Minute):**
-> 1. Strip Windows CRLF line endings from your startup script:
->    `dos2unix entrypoint.sh`
-> 2. Ensure executable permissions before building image:
->    `chmod +x entrypoint.sh && docker build -t my-app .`
 
 ## 🚀 Step-by-Step Solution
 

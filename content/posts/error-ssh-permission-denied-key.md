@@ -1,20 +1,24 @@
 ---
-title: "Cómo solucionar el error Permission Denied (publickey) en conexiones SSH"
-description: "Aprende a reparar los fallos de autenticación por clave pública en SSH ajustando los permisos de directorios y del archivo authorized_keys."
-category: "Sistemas y Servidores"
-tags: ["SSH", "Linux", "Seguridad"]
-readTime: "4 min"
-date: "2026-06-27"
+title: Cómo solucionar el error Permission Denied (publickey) en conexiones SSH
+description: >-
+  Aprende a reparar los fallos de autenticación por clave pública en SSH
+  ajustando los permisos de directorios y del archivo authorized_keys.
+category: Sistemas y Servidores
+tags:
+  - SSH
+  - Linux
+  - Seguridad
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El error `Permission denied (publickey)` al intentar conectarte a un servidor remoto mediante SSH ocurre porque el demonio SSH (`sshd`) en el servidor remoto rechaza la clave privada presentada por tu cliente. Esto se debe habitualmente a permisos de archivos demasiado permisivos, lo cual invalida la seguridad de la conexión y obliga al servidor a descartar el intento por protección.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Permisos excesivamente abiertos en el archivo de clave privada (~/.ssh/id_rsa)** | Asignar permisos estrictos a la clave privada: `chmod 600 ~/.ssh/id_rsa` |
 | **Clave pública no agregada al archivo authorized_keys del servidor remoto** | Copiar la clave pública al servidor con `ssh-copy-id usuario@servidor` |
-
-
-El error `Permission denied (publickey)` al intentar conectarte a un servidor remoto mediante SSH ocurre porque el demonio SSH (`sshd`) en el servidor remoto rechaza la clave privada presentada por tu cliente. Esto se debe habitualmente a permisos de archivos demasiado permisivos, lo cual invalida la seguridad de la conexión y obliga al servidor a descartar el intento por protección.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

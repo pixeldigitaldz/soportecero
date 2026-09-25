@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] fatal: unable to access: SSL certificate problem: unable to get local issuer certificate in Git"
-description: "Fix Git SSL certificate problem: unable to get local issuer certificate when cloning or pushing to GitHub, GitLab, or corporate self-hosted repos."
-category: "Web & Code"
-tags: ["Git","SSL","DevOps","Security"]
-readTime: "4 min"
-date: "2026-10-07"
+title: >-
+  [SOLVED] fatal: unable to access: SSL certificate problem: unable to get local
+  issuer certificate in Git
+description: >-
+  Fix Git SSL certificate problem: unable to get local issuer certificate when
+  cloning or pushing to GitHub, GitLab, or corporate self-hosted repos.
+category: Web & Code
+tags:
+  - Git
+  - SSL
+  - DevOps
+  - Security
+readTime: 4 min
+date: '2026-10-07'
 ---
+
+When running `git clone`, `git fetch`, or `git push` against remote endpoints (GitHub, GitLab, Bitbucket), Git frequently halts with: `fatal: unable to access "https://...": SSL certificate problem: unable to get local issuer certificate`. This security exception indicates that the underlying cURL transport library inside Git cannot verify the remote certificate against trusted local root authorities.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Local Git CA bundle is missing, corrupted, or out of sync with upstream certificate chains** | Reinstall system ca-certificates and link path using git config --global http.sslCAInfo |
 | **Corporate proxy, enterprise VPN, or antivirus performing SSL man-in-the-middle decryption** | Import corporate root certificate into Git configuration using http.sslCAInfo |
-
-When running `git clone`, `git fetch`, or `git push` against remote endpoints (GitHub, GitLab, Bitbucket), Git frequently halts with: `fatal: unable to access "https://...": SSL certificate problem: unable to get local issuer certificate`. This security exception indicates that the underlying cURL transport library inside Git cannot verify the remote certificate against trusted local root authorities.
-
-> **Quick Solution (1 Minute):**
-> 1. On Linux, refresh system trust anchors:
->    `sudo apt update && sudo apt install --reinstall ca-certificates`
-> 2. Point Git to valid local CA bundle:
->    `git config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt`
 
 ## 🚀 Step-by-Step Solution
 

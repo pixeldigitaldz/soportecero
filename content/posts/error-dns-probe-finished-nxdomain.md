@@ -1,19 +1,27 @@
 ---
-title: "Cómo solucionar el error DNS_PROBE_FINISHED_NXDOMAIN en tu red local"
-description: "Aprende a corregir el error DNS_PROBE_FINISHED_NXDOMAIN en Windows, Linux y macOS vaciando la caché DNS y cambiando los servidores DNS."
-category: "Web y Código"
-tags: ["DNS", "Redes", "Windows", "Linux", "Chrome", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: Cómo solucionar el error DNS_PROBE_FINISHED_NXDOMAIN en tu red local
+description: >-
+  Aprende a corregir el error DNS_PROBE_FINISHED_NXDOMAIN en Windows, Linux y
+  macOS vaciando la caché DNS y cambiando los servidores DNS.
+category: Web y Código
+tags:
+  - DNS
+  - Redes
+  - Windows
+  - Linux
+  - Chrome
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `DNS_PROBE_FINISHED_NXDOMAIN` (Non-Existent Domain) significa que el Resolvedor de Nombres de Dominio no pudo traducir el nombre de host solicitado (ej. `misitio.com`) a una dirección IP numérica válida. Esto sucede comúnmente por registros obsoletos en la caché DNS local, desconfiguración del archivo `hosts` o caídas temporales en los servidores DNS asignados por tu router.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Caché DNS del sistema operativo o del navegador corrupta o desactualizada** | Vaciar la caché DNS con `ipconfig /flushdns` en Windows o `resolvectl flush-caches` en Linux |
 | **Servidores DNS del proveedor de internet (ISP) caídos o bloqueando el dominio** | Cambiar los servidores DNS primarios a Cloudflare (`1.1.1.1`) o Google (`8.8.8.8`) |
-
-El error `DNS_PROBE_FINISHED_NXDOMAIN` (Non-Existent Domain) significa que el Resolvedor de Nombres de Dominio no pudo traducir el nombre de host solicitado (ej. `misitio.com`) a una dirección IP numérica válida. Esto sucede comúnmente por registros obsoletos en la caché DNS local, desconfiguración del archivo `hosts` o caídas temporales en los servidores DNS asignados por tu router.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

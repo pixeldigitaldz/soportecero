@@ -1,20 +1,24 @@
 ---
-title: "La guía definitiva de permisos de archivos y carpetas para asegurar WordPress"
-description: "Protege tu sitio web WordPress de inyecciones de código y accesos no autorizados aplicando el esquema de permisos de seguridad óptimo."
-category: "Web y Código"
-tags: ["WordPress", "Seguridad", "Linux"]
-readTime: "4 min"
-date: "2026-06-27"
+title: La guía definitiva de permisos de archivos y carpetas para asegurar WordPress
+description: >-
+  Protege tu sitio web WordPress de inyecciones de código y accesos no
+  autorizados aplicando el esquema de permisos de seguridad óptimo.
+category: Web y Código
+tags:
+  - WordPress
+  - Seguridad
+  - Linux
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Permisos excesivamente abiertos (ej. 777) en archivos o carpetas de WordPress** | Asignar permisos seguros: `find . -type d -exec chmod 755 {} \;` y `644` para archivos |
 | **Archivo wp-config.php accesible o editable por otros usuarios del servidor** | Establecer permisos estrictos en wp-config.php: `chmod 600 wp-config.php` |
-
-
-Los fallos de seguridad en WordPress que permiten a atacantes subir scripts maliciosos o modificar archivos de configuración suelen ocurrir por tener permisos demasiado permisivos en los directorios de tu hosting. Mantener la configuración por defecto de algunos instaladores automáticos es el vector de ataque más explotado.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

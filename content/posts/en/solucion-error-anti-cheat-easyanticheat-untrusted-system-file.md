@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] Easy Anti-Cheat Error: Untrusted system file in Windows & Linux Proton"
-description: "How to fix the Untrusted system file crash from Easy Anti-Cheat when launching Apex Legends, Fortnite, or Elden Ring."
-category: "Gaming Tech"
-tags: ["Gaming","AntiCheat","Steam","Windows"]
-readTime: "4 min"
-date: "2026-10-01"
+title: >-
+  [SOLVED] Easy Anti-Cheat Error: Untrusted system file in Windows & Linux
+  Proton
+description: >-
+  How to fix the Untrusted system file crash from Easy Anti-Cheat when launching
+  Apex Legends, Fortnite, or Elden Ring.
+category: Gaming Tech
+tags:
+  - Gaming
+  - AntiCheat
+  - Steam
+  - Windows
+readTime: 4 min
+date: '2026-10-01'
 ---
+
+When launching multiplayer titles defended by Easy Anti-Cheat (EAC), the boot process halts with a popup warning: `Easy Anti-Cheat - Untrusted system file (C:\...\file.dll)`. The anticheat kernel driver detected an unrecognized checksum or missing digital signature on the specified library and blocked execution to prevent memory injection attacks.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Modified or unsigned third-party DLLs injected by overlay software (ReShade, RTSS, recording tools)** | Disable active capture overlays or remove injected DLL wrappers from game binaries |
 | **Corrupted system DLLs in Windows or outdated Proton EasyAntiCheat Runtime on Linux** | Run sfc /scannow on Windows or verify integrity of game files inside Steam |
-
-When launching multiplayer titles defended by Easy Anti-Cheat (EAC), the boot process halts with a popup warning: `Easy Anti-Cheat - Untrusted system file (C:\...\file.dll)`. The anticheat kernel driver detected an unrecognized checksum or missing digital signature on the specified library and blocked execution to prevent memory injection attacks.
-
-> **Quick Solution (1 Minute):**
-> 1. On Windows, run system integrity verification:
->    `sfc /scannow`
-> 2. Inside Steam, verify game assets:
->    *Properties -> Installed Files -> Verify integrity of game files*
 
 ## 🚀 Step-by-Step Solution
 

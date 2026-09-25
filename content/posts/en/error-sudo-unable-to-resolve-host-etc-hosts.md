@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian"
-description: "Fix the annoying sudo: unable to resolve host warning in Linux. Fast guide to reconciling /etc/hostname with /etc/hosts on cloud servers."
-category: "Systems & Servers"
-tags: ["Linux","Ubuntu","Sysadmin","Bash"]
-readTime: "3 min"
-date: "2026-09-16"
+title: '[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian'
+description: >-
+  Fix the annoying sudo: unable to resolve host warning in Linux. Fast guide to
+  reconciling /etc/hostname with /etc/hosts on cloud servers.
+category: Systems & Servers
+tags:
+  - Linux
+  - Ubuntu
+  - Sysadmin
+  - Bash
+readTime: 3 min
+date: '2026-09-16'
 ---
+
+Whenever running commands with `sudo`, the terminal stutters and prints `sudo: unable to resolve host <server-name>: Name or service not known`. While the requested command often completes, this DNS resolution timeout adds annoying delays to CLI interactions, breaks CI/CD automated runners, and can disrupt daemons dependent on local hostname validation.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **System hostname in /etc/hostname is missing from local loopback mapping in /etc/hosts** | Add 127.0.1.1 mapped to the exact system hostname in /etc/hosts |
 | **VPS or cloud instance hostname was changed without updating local hosts resolution** | Sync hostnamectl configuration with /etc/hosts |
-
-Whenever running commands with `sudo`, the terminal stutters and prints `sudo: unable to resolve host <server-name>: Name or service not known`. While the requested command often completes, this DNS resolution timeout adds annoying delays to CLI interactions, breaks CI/CD automated runners, and can disrupt daemons dependent on local hostname validation.
-
-> **Quick Solution (1 Minute):**
-> 1. Check system hostname:
->    `hostname`
-> 2. Append local loopback resolver to /etc/hosts:
->    `echo "127.0.1.1 $(hostname)" | sudo tee -a /etc/hosts`
 
 ## 🚀 Step-by-Step Solution
 

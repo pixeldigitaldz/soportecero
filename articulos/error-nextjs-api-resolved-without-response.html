@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>Guía: API resolved without sending a response for /api/ en Next.js | SoporteCero</title>
   <meta name="description" content="Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.">
+  <meta name="keywords" content="Next.js, Node.js, React">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-nextjs-api-resolved-without-response.html">
   
@@ -24,6 +25,9 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-21">
   <meta property="article:section" content="Web y Código">
+  <meta property="article:tag" content="Next.js">
+  <meta property="article:tag" content="Node.js">
+  <meta property="article:tag" content="React">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +55,7 @@
   "@type": "TechArticle",
   "headline": "Guía: API resolved without sending a response for /api/ en Next.js",
   "description": "Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "es",
   "category": "Web y Código",
   "articleSection": "Web y Código",
@@ -196,15 +201,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error y advertencia API resolved without sending a response for /api/... en Next.js ocurre cuando un endpoint de API (Route Handler o Pages API) ejecuta operaciones asíncronas como consultas a bases de datos o llamadas externas con promesas sin utilizar await o sin retornar una promesa explícita antes de que finalice la función controladora.</p>
-      </section>
-      
-
+          <p>El error y advertencia <code>API resolved without sending a response for /api/...</code> en Next.js ocurre cuando un endpoint de API (Route Handler o Pages API) ejecuta operaciones asíncronas como consultas a bases de datos o llamadas externas con promesas sin utilizar <code>await</code> o sin retornar una promesa explícita antes de que finalice la función controladora.</p>
 <p>Este fallo provoca que el servidor de Node.js cierre prematuramente el contexto de la solicitud o genere fugas de memoria y respuestas colgadas (timeouts) en el cliente.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -214,8 +211,7 @@
         </svg>
         El Diagnóstico Rápido
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Causa</div>
             <div class="diag-value"><strong>Promesa asíncrona no esperada (<code>missing await</code>)</strong></div>
@@ -240,7 +236,6 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Verificar que todas las rutas de código envíen una respuesta HTTP válida</div>
           </div></div></div>
-
     </section>
 
     <nav class="toc-container" aria-label="Tabla de contenidos">
@@ -251,7 +246,8 @@
       </ol>
     </nav>
     
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+    
+<h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
 <p><strong>Asegura el uso de async/await en tu controlador</strong>
 Si estás usando el Pages Router (<code>pages/api/...</code>), cada promesa ejecutada dentro del handler debe ser esperada antes de invocar <code>res.json()</code> o <code>res.send()</code>:</p>
 

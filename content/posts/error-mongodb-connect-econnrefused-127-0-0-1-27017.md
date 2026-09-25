@@ -1,19 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error 'connect ECONNREFUSED 127.0.0.1:27017' en MongoDB"
-description: "Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el servicio mongod, reparando permisos y configurando bindIp."
-category: "Web y Código"
-tags: ["MongoDB", "Node.js", "Mongoose", "Bases de Datos", "Linux", "DevOps"]
-readTime: "5 min"
-date: "2026-06-25"
+title: '[SOLUCIONADO] Error ''connect ECONNREFUSED 127.0.0.1:27017'' en MongoDB'
+description: >-
+  Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el
+  servicio mongod, reparando permisos y configurando bindIp.
+category: Web y Código
+tags:
+  - MongoDB
+  - Node.js
+  - Mongoose
+  - Bases de Datos
+  - Linux
+  - DevOps
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017` o `MongoNetworkError: failed to connect to server [localhost:27017]` en aplicaciones Node.js y Express ocurre cuando el cliente de base de datos intenta establecer un socket TCP en el puerto 27017 pero no encuentra ningún proceso de MongoDB escuchando en esa interfaz.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El daemon del servidor MongoDB (mongod) está detenido o no se inicia automáticamente** | Iniciar el servicio con `sudo systemctl start mongod` y habilitarlo en el arranque (`enable`) |
 | **La directiva bindIp en mongod.conf solo escucha en localhost o permisos corruptos en /var/lib/mongodb** | Configurar `bindIp: 127.0.0.1` y reparar la propiedad de datos con `sudo chown -R mongodb:mongodb /var/lib/mongodb` |
-
-El error `MongooseServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017` o `MongoNetworkError: failed to connect to server [localhost:27017]` en aplicaciones Node.js y Express ocurre cuando el cliente de base de datos intenta establecer un socket TCP en el puerto 27017 pero no encuentra ningún proceso de MongoDB escuchando en esa interfaz.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

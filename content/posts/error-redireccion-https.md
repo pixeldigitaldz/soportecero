@@ -1,19 +1,29 @@
 ---
-title: "Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio propio"
-description: "Aprende a solucionar el bucle ERR_TOO_MANY_REDIRECTS entre Cloudflare, Nginx, Apache y WordPress al forzar HTTPS."
-category: "Web y Código"
-tags: ["HTTPS", "SSL", "Cloudflare", "Nginx", "WordPress", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo solucionar el error de redirección infinita HTTP a HTTPS en tu dominio
+  propio
+description: >-
+  Aprende a solucionar el bucle ERR_TOO_MANY_REDIRECTS entre Cloudflare, Nginx,
+  Apache y WordPress al forzar HTTPS.
+category: Web y Código
+tags:
+  - HTTPS
+  - SSL
+  - Cloudflare
+  - Nginx
+  - WordPress
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `ERR_TOO_MANY_REDIRECTS` (Redirección infinita) ocurre cuando el navegador del usuario entra en un bucle cerrado de peticiones HTTP/HTTPS que nunca llega a completarse. La causa principal es una desincronización entre un proxy inverso perimetral (como Cloudflare o un CDN) y el servidor de origen (Nginx/Apache/WordPress).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Modo de cifrado SSL en Cloudflare configurado en 'Flexible' mientras el servidor redirige a HTTPS** | Cambiar el modo de cifrado en Cloudflare a 'Full (Strict)' |
 | **Bucle de redirección en .htaccess o Nginx por no evaluar la cabecera X-Forwarded-Proto** | Configurar `fastcgi_param HTTPS on;` y verificar `$_SERVER['HTTP_X_FORWARDED_PROTO']` |
-
-El error `ERR_TOO_MANY_REDIRECTS` (Redirección infinita) ocurre cuando el navegador del usuario entra en un bucle cerrado de peticiones HTTP/HTTPS que nunca llega a completarse. La causa principal es una desincronización entre un proxy inverso perimetral (como Cloudflare o un CDN) y el servidor de origen (Nginx/Apache/WordPress).
 
 ## 🚀 Cómo solucionar el error paso a paso
 

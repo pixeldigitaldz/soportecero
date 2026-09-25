@@ -1,19 +1,27 @@
 ---
-title: "Error: Quota exceeded for quota metric Read requests en Firestore"
-description: "Aprende a solucionar el error de cuota excedida de lecturas en Cloud Firestore implementando caché local, paginación y agregaciones."
-category: "Web y Código"
-tags: ["Firebase", "Cloud Firestore", "JavaScript", "Optimización", "NoSQL", "Cloud"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Error: Quota exceeded for quota metric Read requests en Firestore'
+description: >-
+  Aprende a solucionar el error de cuota excedida de lecturas en Cloud Firestore
+  implementando caché local, paginación y agregaciones.
+category: Web y Código
+tags:
+  - Firebase
+  - Cloud Firestore
+  - JavaScript
+  - Optimización
+  - NoSQL
+  - Cloud
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `RESOURCE_EXHAUSTED: Quota exceeded for quota metric 'Read requests' and limit 'Read requests per day' of service 'firestore.googleapis.com'` ocurre cuando tu aplicación supera el límite diario de 50.000 lecturas gratuitas del plan Spark o la cuota configurada en tu cuenta de Cloud Firestore. Esto bloquea inmediatamente todas las consultas de lectura en tu base de datos hasta el siguiente ciclo de 24 horas.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Consumo masivo de lecturas por listeners en tiempo real (`onSnapshot`) descontrolados o consultas sin paginar** | Reemplazar consultas masivas por paginación con `limit()` y `startAfter()` y activar persistencia local en caché |
 | **Límite del plan gratuito Spark (50,000 lecturas/día) superado por bucles en desarrollo** | Identificar la consulta causante en Firebase Console y migrar a plan Blaze con alertas de presupuesto |
-
-El error `RESOURCE_EXHAUSTED: Quota exceeded for quota metric 'Read requests' and limit 'Read requests per day' of service 'firestore.googleapis.com'` ocurre cuando tu aplicación supera el límite diario de 50.000 lecturas gratuitas del plan Spark o la cuota configurada en tu cuenta de Cloud Firestore. Esto bloquea inmediatamente todas las consultas de lectura en tu base de datos hasta el siguiente ciclo de 24 horas.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

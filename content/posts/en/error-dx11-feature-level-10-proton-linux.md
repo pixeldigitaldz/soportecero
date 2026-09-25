@@ -1,19 +1,27 @@
 ---
-title: "Fix: DX11 feature level 10.0 is required to run the engine (Proton/Linux)"
-description: "Learn how to resolve DX11 feature level 10.0 errors in Unreal Engine and Unity games running on Linux with DXVK, Vulkan, and Mesa drivers."
-category: "Gaming Tech"
-tags: ["Proton", "Linux", "Vulkan", "DXVK", "Gaming", "Mesa"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Fix: DX11 feature level 10.0 is required to run the engine (Proton/Linux)'
+description: >-
+  Learn how to resolve DX11 feature level 10.0 errors in Unreal Engine and Unity
+  games running on Linux with DXVK, Vulkan, and Mesa drivers.
+category: Gaming Tech
+tags:
+  - Proton
+  - Linux
+  - Vulkan
+  - DXVK
+  - Gaming
+  - Mesa
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The dialog `DX11 feature level 10.0 is required to run the engine` in Unreal Engine and Unity games running via Steam Proton occurs when the DXVK translation runtime fails to initialize an underlying Vulkan graphics device capable of exposing Direct3D 10/11 feature levels.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Missing or incomplete 32-bit and 64-bit Vulkan ICD loader drivers on host OS** | Install `vulkan-icd-loader` along with `vulkan-radeon` or `nvidia-utils` packages |
 | **Legacy integrated GPU lacking Vulkan 1.3 support or hybrid laptop GPU offload failure** | Enforce dedicated GPU offload or fallback to OpenGL via `PROTON_USE_WINED3D=1` |
-
-The dialog `DX11 feature level 10.0 is required to run the engine` in Unreal Engine and Unity games running via Steam Proton occurs when the DXVK translation runtime fails to initialize an underlying Vulkan graphics device capable of exposing Direct3D 10/11 feature levels.
 
 ## 🚀 Step-by-Step Solution
 

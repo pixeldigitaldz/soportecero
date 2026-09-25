@@ -1,19 +1,27 @@
 ---
-title: "How to Optimize Vulkan Shader Precompilation in Steam Proton"
-description: "Eliminate stuttering and accelerate shader compilation in DirectX 11 & 12 games using Proton, DXVK, and RADV/Nvidia on Linux."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Proton", "Vulkan", "DXVK", "Steam Deck"]
-readTime: "5 min"
-date: "2026-07-27"
+title: How to Optimize Vulkan Shader Precompilation in Steam Proton
+description: >-
+  Eliminate stuttering and accelerate shader compilation in DirectX 11 & 12
+  games using Proton, DXVK, and RADV/Nvidia on Linux.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Proton
+  - Vulkan
+  - DXVK
+  - Steam Deck
+readTime: 5 min
+date: '2026-07-27'
 ---
+
+When gaming on Linux via Steam Proton, frame drops and micro-stuttering during early gameplay sessions occur because the graphics driver translates DirectX API instructions into Vulkan SPIR-V binary representations in real time. If the GPU must pause frame delivery while awaiting CPU compilation, a frame hitch occurs.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Micro-stuttering in new game areas due to synchronous just-in-time shader compilation** | Enable background shader pre-caching in Steam and verify Graphics Pipeline Library (GPL) |
 | **Corrupted or bloated Vulkan shader cache on disk** | Delete local `shadercache` folder and configure `RADV_PERFTEST=gpl` or expanded cache limits |
-
-When gaming on Linux via Steam Proton, frame drops and micro-stuttering during early gameplay sessions occur because the graphics driver translates DirectX API instructions into Vulkan SPIR-V binary representations in real time. If the GPU must pause frame delivery while awaiting CPU compilation, a frame hitch occurs.
 
 ## 🚀 Step-by-Step Solution
 

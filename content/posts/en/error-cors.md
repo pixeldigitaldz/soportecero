@@ -1,19 +1,27 @@
 ---
-title: "How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide"
-description: "Learn how to resolve 'No Access-Control-Allow-Origin header is present' in Express, Next.js, Django, FastAPI, and Nginx."
-category: "Web & Code"
-tags: ["CORS", "JavaScript", "Express", "Node.js", "APIs", "Security"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide'
+description: >-
+  Learn how to resolve 'No Access-Control-Allow-Origin header is present' in
+  Express, Next.js, Django, FastAPI, and Nginx.
+category: Web & Code
+tags:
+  - CORS
+  - JavaScript
+  - Express
+  - Node.js
+  - APIs
+  - Security
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The error `Access to XMLHttpRequest at 'https://api.example.com' from origin 'https://app.example.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource` is a browser-enforced security mechanism (Same-Origin Policy) designed to prevent malicious scripts on one origin from accessing sensitive data on another origin without explicit authorization.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Browser blocks fetch/axios request because backend lacks Access-Control-Allow-Origin header** | Add CORS middleware in backend authorizing frontend origin domain |
 | **Preflight OPTIONS request fails or returns non-200/204 HTTP status code** | Configure server to intercept OPTIONS preflights with appropriate access control headers |
-
-The error `Access to XMLHttpRequest at 'https://api.example.com' from origin 'https://app.example.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource` is a browser-enforced security mechanism (Same-Origin Policy) designed to prevent malicious scripts on one origin from accessing sensitive data on another origin without explicit authorization.
 
 ## 🚀 Step-by-Step Solution
 

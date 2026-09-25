@@ -1,19 +1,27 @@
 ---
-title: "Cómo reparar la pérdida de audio por HDMI en Linux usando PipeWire"
-description: "Aprende a solucionar la falta de sonido o perfil ausente por HDMI/DisplayPort en Linux usando PipeWire y WirePlumber paso a paso."
-category: "Gaming Tech"
-tags: ["PipeWire", "Audio", "Linux", "WirePlumber", "HDMI", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: Cómo reparar la pérdida de audio por HDMI en Linux usando PipeWire
+description: >-
+  Aprende a solucionar la falta de sonido o perfil ausente por HDMI/DisplayPort
+  en Linux usando PipeWire y WirePlumber paso a paso.
+category: Gaming Tech
+tags:
+  - PipeWire
+  - Audio
+  - Linux
+  - WirePlumber
+  - HDMI
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+En distribuciones Linux modernas con PipeWire, es habitual que al conectar un monitor por HDMI o DisplayPort, el sistema no emita sonido o el dispositivo no aparezca en la lista de salidas de audio. Esto ocurre cuando el gestor de sesiones WirePlumber no activa automáticamente la salida digital de la tarjeta gráfica o el subsistema ALSA mantiene el endpoint en estado suspendido.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Perfil de audio HDMI/DisplayPort marcado como 'Off' o no detectado por WirePlumber** | Cambiar el perfil de la tarjeta de sonido a Digital Stereo (HDMI) con `pactl` o `pavucontrol` |
 | **Daemon de PipeWire bloqueado o en conflicto con ALSA/PulseAudio heredado** | Reiniciar los servicios de usuario: `systemctl --user restart pipewire pipewire-pulse wireplumber` |
-
-En distribuciones Linux modernas con PipeWire, es habitual que al conectar un monitor por HDMI o DisplayPort, el sistema no emita sonido o el dispositivo no aparezca en la lista de salidas de audio. Esto ocurre cuando el gestor de sesiones WirePlumber no activa automáticamente la salida digital de la tarjeta gráfica o el subsistema ALSA mantiene el endpoint en estado suspendido.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

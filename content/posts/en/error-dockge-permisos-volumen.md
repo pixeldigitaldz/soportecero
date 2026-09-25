@@ -1,19 +1,27 @@
 ---
-title: "Resolving: Permission Denied Error in Docker Compose Volumes"
-description: "Learn how to solve EACCES and Permission Denied errors in Docker Compose and Dockge shared volume binds step by step."
-category: "Systems & Servers"
-tags: ["Docker", "Dockge", "Linux", "Permissions", "Docker Compose", "DevOps"]
-readTime: "5 min"
-date: "2026-07-27"
+title: 'Resolving: Permission Denied Error in Docker Compose Volumes'
+description: >-
+  Learn how to solve EACCES and Permission Denied errors in Docker Compose and
+  Dockge shared volume binds step by step.
+category: Systems & Servers
+tags:
+  - Docker
+  - Dockge
+  - Linux
+  - Permissions
+  - Docker Compose
+  - DevOps
+readTime: 5 min
+date: '2026-07-27'
 ---
+
+The recurring error `EACCES: permission denied`, `touch: cannot touch '/data/...': Permission denied` or `failed to open stream: Permission denied` in applications managed via Dockge or Docker Compose arises when the container internal runtime user (such as `node` UID 1000 or `www-data` UID 33) lacks write permissions on the mounted host filesystem path.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Container internal process UID/GID does not match directory ownership on host** | Adjust host folder ownership via `sudo chown -R 1000:1000 /path/data` or set `user: "1000:1000"` |
 | **SELinux / AppArmor security context blocking write access to bind mount** | Append volume flag `:z` or `:Z` in `docker-compose.yml` |
-
-The recurring error `EACCES: permission denied`, `touch: cannot touch '/data/...': Permission denied` or `failed to open stream: Permission denied` in applications managed via Dockge or Docker Compose arises when the container internal runtime user (such as `node` UID 1000 or `www-data` UID 33) lacks write permissions on the mounted host filesystem path.
 
 ## 🚀 Step-by-Step Solution
 

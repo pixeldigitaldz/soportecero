@@ -1,19 +1,27 @@
 ---
-title: "Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python"
-description: "Soluciona el error SSL: CERTIFICATE_VERIFY_FAILED en Python requests, urllib y pip en macOS, Linux y Windows paso a paso."
-category: "Web y Código"
-tags: ["Python", "SSL", "Seguridad", "Requests", "macOS", "Linux"]
-readTime: "5 min"
-date: "2026-08-03"
+title: Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python
+description: >-
+  Soluciona el error SSL: CERTIFICATE_VERIFY_FAILED en Python requests, urllib y
+  pip en macOS, Linux y Windows paso a paso.
+category: Web y Código
+tags:
+  - Python
+  - SSL
+  - Seguridad
+  - Requests
+  - macOS
+  - Linux
+readTime: 5 min
+date: '2026-08-03'
 ---
+
+El error ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate en Python (requests, urllib3, aiohttp o pip) ocurre cuando la librería no puede validar la cadena de confianza del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación (CA).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Python en macOS sin certificados raíz de OpenSSL instalados** | Ejecutar el script Install Certificates.command en la carpeta de Python en Aplicaciones |
 | **Paquete certifi desactualizado o certificado CA corporativo/intermedio no reconocido** | Actualizar certifi con `pip install --upgrade certifi` o pasar la ruta del certificado CA en verify='/ruta/ca.crt' |
-
-El error ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate en Python (requests, urllib3, aiohttp o pip) ocurre cuando la librería no puede validar la cadena de confianza del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación (CA).
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Chasquidos y cortes de audio en PipeWire y Gamescope en Steam Deck y Linux"
-description: "Aprende a solucionar el audio crackling, chasquidos y retrasos de sonido al jugar con PipeWire, Gamescope y Proton en Linux."
-category: "Gaming Tech"
-tags: ["PipeWire","Audio","SteamDeck","Linux"]
-readTime: "4 min"
-date: "2026-09-29"
+title: >-
+  [SOLUCIONADO] Chasquidos y cortes de audio en PipeWire y Gamescope en Steam
+  Deck y Linux
+description: >-
+  Aprende a solucionar el audio crackling, chasquidos y retrasos de sonido al
+  jugar con PipeWire, Gamescope y Proton en Linux.
+category: Gaming Tech
+tags:
+  - PipeWire
+  - Audio
+  - SteamDeck
+  - Linux
+readTime: 4 min
+date: '2026-09-29'
 ---
+
+Al jugar en Linux con Steam Deck, ordenadores portátiles gaming o distribuciones de escritorio modernas (Fedora, Arch, Bazzite), es muy común escuchar chasquidos metálicos, ruidos de estática o pequeños saltos en el sonido (*audio crackling / popping*). Este fallo ocurre por la aparición de **xruns** (buffer underruns), donde el servidor de sonido PipeWire no recibe paquetes de audio a tiempo debido a la latencia del renderizado.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Tamaño del búfer de audio (quantum) demasiado bajo para la carga del juego, causando sobrecargas de búfer (xruns)** | Configurar un quantum fijo de 1024 o 2048 en la configuración de PipeWire |
 | **Discordancia de frecuencia de muestreo entre el servidor PipeWire (48kHz) y el juego (44.1kHz)** | Establecer la tasa de muestreo fija en pipewire.conf y alsa.conf |
-
-Al jugar en Linux con Steam Deck, ordenadores portátiles gaming o distribuciones de escritorio modernas (Fedora, Arch, Bazzite), es muy común escuchar chasquidos metálicos, ruidos de estática o pequeños saltos en el sonido (*audio crackling / popping*). Este fallo ocurre por la aparición de **xruns** (buffer underruns), donde el servidor de sonido PipeWire no recibe paquetes de audio a tiempo debido a la latencia del renderizado.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Fija el quantum de latencia de PipeWire para evitar xruns:
->    `pw-metadata -n settings 0 clock.force-quantum 1024`
-> 2. Reinicia los servicios de audio de usuario:
->    `systemctl --user restart pipewire pipewire-pulse`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

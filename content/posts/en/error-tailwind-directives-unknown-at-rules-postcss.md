@@ -1,24 +1,25 @@
 ---
-title: "[SOLVED] Unknown at rule @tailwind & @apply Warning in VS Code & PostCSS"
-description: "Eliminate Unknown at rule @tailwind, @apply, and @layer CSS linter warnings in Visual Studio Code and Tailwind CSS projects."
-category: "Web & Code"
-tags: ["TailwindCSS","CSS","Frontend","VSCode"]
-readTime: "3 min"
-date: "2026-10-15"
+title: '[SOLVED] Unknown at rule @tailwind & @apply Warning in VS Code & PostCSS'
+description: >-
+  Eliminate Unknown at rule @tailwind, @apply, and @layer CSS linter warnings in
+  Visual Studio Code and Tailwind CSS projects.
+category: Web & Code
+tags:
+  - TailwindCSS
+  - CSS
+  - Frontend
+  - VSCode
+readTime: 3 min
+date: '2026-10-15'
 ---
+
+Upon opening `globals.css` or `style.css` in projects utilizing Tailwind CSS, Visual Studio Code paints squiggly warnings under `@tailwind base;`, `@apply`, and `@layer` stating: `Unknown at rule @tailwind(unknownAtRules)` or `Unknown at rule @apply`. While production builds compile cleanly, these false alarms clutter the editor and distract from actual CSS defects.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **VS Code built-in standard CSS language server does not recognize custom Tailwind @-rules** | Install the official Tailwind CSS IntelliSense extension and map file associations |
 | **Default CSS linter settings flagging valid preprocessor at-rules as syntax errors** | Configure css.lint.unknownAtRules to "ignore" inside VS Code settings.json |
-
-Upon opening `globals.css` or `style.css` in projects utilizing Tailwind CSS, Visual Studio Code paints squiggly warnings under `@tailwind base;`, `@apply`, and `@layer` stating: `Unknown at rule @tailwind(unknownAtRules)` or `Unknown at rule @apply`. While production builds compile cleanly, these false alarms clutter the editor and distract from actual CSS defects.
-
-> **Quick Solution (1 Minute):**
-> 1. Inside VS Code settings.json, suppress unknown at-rule warnings:
->    `"css.lint.unknownAtRules": "ignore"`
-> 2. Install the official 'Tailwind CSS IntelliSense' extension.
 
 ## 🚀 Step-by-Step Solution
 

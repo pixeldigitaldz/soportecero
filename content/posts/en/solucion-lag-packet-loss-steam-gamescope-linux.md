@@ -1,19 +1,26 @@
 ---
-title: "How to Fix Lag, Packet Loss and Micro-Stuttering in Gamescope on Linux"
-description: "Guide to optimizing the Gamescope compositor, eliminating bufferbloat, and reducing input lag on Linux and SteamOS."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Steam Deck", "Gamescope", "Vulkan"]
-readTime: "5 min"
-date: "2026-09-05"
+title: 'How to Fix Lag, Packet Loss and Micro-Stuttering in Gamescope on Linux'
+description: >-
+  Guide to optimizing the Gamescope compositor, eliminating bufferbloat, and
+  reducing input lag on Linux and SteamOS.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Steam Deck
+  - Gamescope
+  - Vulkan
+readTime: 5 min
+date: '2026-09-05'
 ---
+
+The Gamescope microcompositor on Linux gaming systems and Steam Deck provides outstanding features like native FSR scaling and resolution isolation. However, default buffer queue settings can introduce noticeable input latency, frame pacing jitter, and micro-stuttering. In multiplayer games, kernel queue latency often manifests as packet loss and irregular ping spikes.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Double composition and forced VSync in Gamescope** | Add `--immediate-flips` and `--adaptive-sync` flags to Gamescope launch options |
 | **Bufferbloat and queue congestion in Linux kernel network stack** | Enable TCP BBR congestion control algorithm and FQ_Codel packet scheduler |
-
-The Gamescope microcompositor on Linux gaming systems and Steam Deck provides outstanding features like native FSR scaling and resolution isolation. However, default buffer queue settings can introduce noticeable input latency, frame pacing jitter, and micro-stuttering. In multiplayer games, kernel queue latency often manifests as packet loss and irregular ping spikes.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,25 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error 'curl: (7) Failed to connect to localhost port'"
-description: "¿Recibes el fallo de conexión curl (7) al probar APIs o servicios web locales? Solución paso a paso para resolver la escucha de puertos."
-category: "Web y Código"
-tags: ["cURL", "Node.js", "API", "Linux"]
-readTime: "4 min"
-date: "2026-08-14"
+title: '[SOLUCIONADO] Error ''curl: (7) Failed to connect to localhost port'''
+description: >-
+  ¿Recibes el fallo de conexión curl (7) al probar APIs o servicios web locales?
+  Solución paso a paso para resolver la escucha de puertos.
+category: Web y Código
+tags:
+  - cURL
+  - Node.js
+  - API
+  - Linux
+readTime: 4 min
+date: '2026-08-14'
 ---
+
+El error **`curl: (7) Failed to connect to localhost port 3000: Connection refused`** ocurre cuando la utilidad de línea de comandos `curl` intenta enviar una petición a un servicio web en tu máquina local, pero no hay ningún proceso escuchando en ese puerto o el servicio solo está enlazado a IPv6 (`::1`) en lugar de IPv4 (`127.0.0.1`).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El servicio en el puerto especificado no está escuchando peticiones** | Verificar puertos abiertos en la máquina: `netstat -tulnp | grep puerto` |
 | **Contenedor Docker escuchando solo en 127.0.0.1 dentro del contenedor** | Vincular el servicio a `0.0.0.0` para recibir tráfico externo |
-
-
-El error **`curl: (7) Failed to connect to localhost port 3000: Connection refused`** ocurre cuando la utilidad de línea de comandos `curl` intenta enviar una petición a un servicio web en tu máquina local, pero no hay ningún proceso escuchando en ese puerto o el servicio solo está enlazado a IPv6 (`::1`) en lugar de IPv4 (`127.0.0.1`).
-
-> **Solución Rápida (1 Minuto):**
-> 1. Comprueba si tu servidor local está encendido en otra terminal.
-> 2. Prueba conectando a la IP explícita `127.0.0.1` en lugar del nombre `localhost`:
->    `curl http://127.0.0.1:3000`
 
 ## 🚀 Cómo solucionar el error curl (7) paso a paso
 

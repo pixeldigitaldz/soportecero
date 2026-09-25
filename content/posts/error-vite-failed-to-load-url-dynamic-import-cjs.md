@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error Vite: Failed to load url / Dynamic import cannot load CommonJS module"
-description: "Aprende a solucionar los fallos Failed to load url y Dynamic import cannot load CommonJS en proyectos Vite, React y Vue."
-category: "Web y Código"
-tags: ["Vite","JavaScript","React","Frontend"]
-readTime: "4 min"
-date: "2026-10-09"
+title: >-
+  [SOLUCIONADO] Error Vite: Failed to load url / Dynamic import cannot load
+  CommonJS module
+description: >-
+  Aprende a solucionar los fallos Failed to load url y Dynamic import cannot
+  load CommonJS en proyectos Vite, React y Vue.
+category: Web y Código
+tags:
+  - Vite
+  - JavaScript
+  - React
+  - Frontend
+readTime: 4 min
+date: '2026-10-09'
 ---
+
+Durante el desarrollo de aplicaciones con Vite (en React, Vue o Svelte), la consola del navegador arroja errores como: `[vite] Internal server error: Failed to load url /src/... (does it exist?)` o `TypeError: Dynamic import cannot load CommonJS module`. Esto ocurre porque Vite sirve módulos directamente en formato ESM nativo y choca con dependencias que aún utilizan la sintaxis CommonJS (`require` / `module.exports`).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Importación de paquetes antiguos empaquetados en CommonJS (CJS) que Vite espera como ESM** | Configurar optimizeDeps.include en vite.config.js o instalar @rollup/plugin-commonjs |
 | **Rutas dinámicas con import() que no pueden ser resueltas por el optimizador de dependencias** | Utilizar import.meta.glob para cargar módulos dinámicos de forma compatible con ESM |
-
-Durante el desarrollo de aplicaciones con Vite (en React, Vue o Svelte), la consola del navegador arroja errores como: `[vite] Internal server error: Failed to load url /src/... (does it exist?)` o `TypeError: Dynamic import cannot load CommonJS module`. Esto ocurre porque Vite sirve módulos directamente en formato ESM nativo y choca con dependencias que aún utilizan la sintaxis CommonJS (`require` / `module.exports`).
-
-> **Solución Rápida (1 Minuto):**
-> 1. Fuerza a Vite a preempaquetar la librería en vite.config.js:
->    `optimizeDeps: { include: ['nombre-libreria'] }`
-> 2. Borra la caché local de Vite y reinicia:
->    `rm -rf node_modules/.vite && npm run dev`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

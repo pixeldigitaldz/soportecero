@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>[FIXED] cloud-init Slow Booting in Proxmox / Ubuntu Server | SoporteCero</title>
   <meta name="description" content="Proxmox VM or Ubuntu Server taking minutes to boot due to 'cloud-init waiting for network config'? Step-by-step optimization guide.">
+  <meta name="keywords" content="Proxmox, Cloud-Init, Ubuntu, Sysadmin">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/solucion-cloud-init-slow-boot-proxmox-ubuntu.html">
   
@@ -24,6 +25,10 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-03">
   <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Proxmox">
+  <meta property="article:tag" content="Cloud-Init">
+  <meta property="article:tag" content="Ubuntu">
+  <meta property="article:tag" content="Sysadmin">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +56,7 @@
   "@type": "TechArticle",
   "headline": "[FIXED] cloud-init Slow Booting in Proxmox / Ubuntu Server",
   "description": "Proxmox VM or Ubuntu Server taking minutes to boot due to 'cloud-init waiting for network config'? Step-by-step optimization guide.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
@@ -196,14 +202,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The message cloud-init: waiting for network config or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on Proxmox VE, KVM, or Cloud VPS occurs when cloud-init stalls waiting for DHCP responses on unconfigured secondary network interfaces.</p>
-      </section>
-      
+          <p>The message <strong><code>cloud-init: waiting for network config</code></strong> or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on <strong>Proxmox VE, KVM, or Cloud VPS</strong> occurs when <code>cloud-init</code> stalls waiting for DHCP responses on unconfigured secondary network interfaces.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -212,8 +211,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>cloud-init process waiting for network response during VM boot</strong></div>
@@ -230,23 +228,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Disable unused modules: <code>systemctl disable cloud-init</code></div>
           </div></div></div>
-
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong>
-Disable post-provisioning cloud-init network waiting services:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>sudo touch /etc/cloud/cloud-init.disabled
-sudo systemctl disable cloud-init.service
-</code></pre>
-    </div>
-    
-</blockquote>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -260,7 +241,8 @@ sudo systemctl disable cloud-init.service
       </ol>
     </nav>
     
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+    
+<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-diagnose-boot-bottlenecks">Step 1: Diagnose Boot Bottlenecks</h3>
 <p>Inspect boot time duration per service using <code>systemd-analyze</code>:</p>
 
@@ -378,6 +360,40 @@ sudo systemctl disable cloud-final.service
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
       <article class="related-card">
         <div class="related-card-content">
@@ -390,40 +406,6 @@ sudo systemctl disable cloud-final.service
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

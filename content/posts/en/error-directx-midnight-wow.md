@@ -1,20 +1,26 @@
 ---
-title: "How to Fix 3D Initialization Error in World of Warcraft When Changing Expansions"
-description: "Quick guide to resolve WoW's graphics engine lock when trying to load advanced DirectX libraries on dedicated and integrated graphics card systems."
-category: "Gaming Tech"
-tags: ["Gaming", "World of Warcraft", "DirectX"]
-readTime: "3 min"
-date: "2026-07-25"
+title: >-
+  How to Fix 3D Initialization Error in World of Warcraft When Changing
+  Expansions
+description: >-
+  Quick guide to resolve WoW's graphics engine lock when trying to load advanced
+  DirectX libraries on dedicated and integrated graphics card systems.
+category: Gaming Tech
+tags:
+  - Gaming
+  - World of Warcraft
+  - DirectX
+readTime: 3 min
+date: '2026-07-25'
 ---
+
+The `World of Warcraft was unable to start up 3D acceleration` error typically appears after major patches of modern expansions such as *The War Within* or *Midnight* content. It occurs because the game attempts to launch by forcing DirectX 12 mode on older hardware, or because the local configuration files save obsolete full-screen resolutions that your current monitor does not support.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **DirectX 12 API incompatibility with current GPU driver version** | Switch in-game graphics API to DirectX 11 via `Config.wtf` file |
 | **Third-party overlay (Discord, GeForce Experience, MangoHud) conflict** | Disable third-party screen overlays before launching client |
-
-
-The `World of Warcraft was unable to start up 3D acceleration` error typically appears after major patches of modern expansions such as *The War Within* or *Midnight* content. It occurs because the game attempts to launch by forcing DirectX 12 mode on older hardware, or because the local configuration files save obsolete full-screen resolutions that your current monitor does not support.
 
 ## 🚀 Step-by-Step Solution
 

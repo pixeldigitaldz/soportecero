@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux | SoporteCero</title>
+  <meta name="description" content="¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y parámetros de kernel.">
+  <meta name="keywords" content="Linux Gaming, AMDGPU, Mesa, Vulkan, Steam">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux">
+  <meta property="og:description" content="¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y parámetros de kernel.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-09-24">
+  <meta property="article:section" content="Gaming Tech">
+  <meta property="article:tag" content="Linux Gaming">
+  <meta property="article:tag" content="AMDGPU">
+  <meta property="article:tag" content="Mesa">
+  <meta property="article:tag" content="Vulkan">
+  <meta property="article:tag" content="Steam">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux">
+  <meta name="twitter:description" content="¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y parámetros de kernel.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux",
+  "description": "¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y parámetros de kernel.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "es",
+  "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Linux Gaming, AMDGPU, Mesa, Vulkan, Steam",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-09-24",
+  "dateModified": "2026-09-24",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Gaming Tech",
+      "item": "https://soportecero.com/?cat=gaming"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux",
+      "item": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux",
+  "description": "¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y parámetros de kernel.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html#paso-1",
+      "name": "Paso 1",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Abre el archivo de configuración del gestor de arranque con privilegios de administrador:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html#paso-2",
+      "name": "Paso 2",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Localiza la directiva GRUB_CMDLINE_LINUX_DEFAULT y añade al final de las comillas los siguientes parámetros:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html#paso-3",
+      "name": "Paso 3",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "amdgpu.dpm=1: Fuerza una gestión de energía dinámica controlada."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html#paso-4",
+      "name": "Paso 4",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "amdgpu.runpm=0: Desactiva la administración de energía en tiempo de ejecución (Run-time Power Management) que causa desincronización de voltaje en tarjetas dedicadas de escritorio."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html#paso-5",
+      "name": "Paso 5",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Actualiza el gestor de arranque según tu distribución:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Este error significa que mi tarjeta gráfica está físicamente dañada?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "En la inmensa mayoría de casos (más del 95%), este problema es estrictamente de software: desincronización de controladores, límites de tiempo de espera del scheduler de Linux o parámetros de ahorro energético del PCIe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Ocurre este problema tanto en Wayland como en X11?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, aunque en entornos Wayland recientes el uso de Explicit Sync (sincronización explícita introducida en Linux 6.8+ y Wayland Protocols 1.34) ha reducido drásticamente los cuelgues causados por sincronización implícita en controladores Mesa."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
+        <span style="color: var(--text-secondary);">Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Gaming Tech</span>
+        <h1 id="post-title">Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Lectura: 5 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Actualizado: 2026-09-24
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>Durante sesiones intensas de juego en Linux bajo Proton, Wine o títulos nativos con <strong>Vulkan</strong>, muchos usuarios de tarjetas gráficas AMD Radeon (series RX 5000, 6000, 7000 o Steam Deck) experimentan congelamientos repentinos de pantalla seguidos del cierre inesperado del juego (<em>crash to desktop</em>). Al inspeccionar los registros del kernel mediante <code>dmesg</code>, el fallo queda registrado con el mensaje <strong><code>[drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout</code></strong> seguido de un intento fallido de reinicio de hardware (<em>GPU reset failed</em>).</p>
+<p>Este error ocurre cuando un trabajo gráfico encolado en los anillos de ejecución de la GPU excede el tiempo límite de respuesta del programador DRM del kernel Linux. Las causas más comunes incluyen inestabilidad en los perfiles de energía dinámica DPM de AMDGPU, desajustes de sincronización entre el compositor Wayland y los controladores Mesa RADV, o micro-caídas de voltaje durante picos de carga en trazado de rayos o shaders pesados.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Gestión agresiva de frecuencias dinámicas (DPM) provocando cuelgues del anillo gfx</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Establecer el perfil de energía de la GPU en modo de rendimiento estable (<code>amdgpu.ppfeaturemask=0xffffffff</code>) y desactivar estados de suspensión profunda</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa</div>
+            <div class="diag-value"><strong>Conflicto de compilación de shaders en el driver Vulkan RADV</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución</div>
+            <div class="diag-value">Forzar el uso del compilador ACO de Mesa mediante la variable de entorno <code>RADV_DEBUG=nofastclears</code> o actualizar a la versión más reciente de controladores Mesa</div>
+          </div></div></div>
+    </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-subitem"><a href="#paso-1-confirmar-el-error-exacto-en-los-registros-del-kernel">Paso 1: Confirmar el error exacto en los registros del Kernel</a></li>
+        <li class="toc-subitem"><a href="#paso-2-ajustar-parametros-del-kernel-para-estabilizar-amdgpu">Paso 2: Ajustar parámetros del Kernel para estabilizar AMDGPU</a></li>
+        <li class="toc-subitem"><a href="#paso-3-configurar-variables-de-entorno-para-steam-y-vulkan-mesa-radv">Paso 3: Configurar variables de entorno para Steam y Vulkan (Mesa RADV)</a></li>
+        <li class="toc-subitem"><a href="#paso-4-desactivar-la-suspension-de-enlace-pcie-aspm">Paso 4: Desactivar la suspensión de enlace PCIe ASPM</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#este-error-significa-que-mi-tarjeta-grafica-esta-fisicamente-danada">¿Este error significa que mi tarjeta gráfica está físicamente dañada?</a></li>
+        <li class="toc-subitem"><a href="#ocurre-este-problema-tanto-en-wayland-como-en-x11">¿Ocurre este problema tanto en Wayland como en X11?</a></li>
+      </ol>
+    </nav>
+    
+    
+<h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+
+<h3 id="paso-1-confirmar-el-error-exacto-en-los-registros-del-kernel">Paso 1: Confirmar el error exacto en los registros del Kernel</h3>
+<p>Para comprobar si el bloqueo de tu sistema corresponde a un fallo del programador de AMDGPU, abre una terminal inmediatamente después del crasheo y filtra los mensajes del kernel:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Filtrar registros de dmesg relacionados con amdgpu
+sudo dmesg -T | grep -E &quot;amdgpu_job_timedout|GPU reset|ring gfx&quot;
+</code></pre>
+    </div>
+    
+<p>Si el registro muestra salidas como:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>[drm:amdgpu_job_timedout [amdgpu]] *ERROR* ring gfx_0.0.0 timeout, signaled seq=...
+[drm:amdgpu_device_gpu_recover [amdgpu]] *ERROR* GPU reset failed
+</code></pre>
+    </div>
+    
+<p>Has confirmado que el hardware gráfico sufrió un GPU Hang y el kernel no pudo reiniciar el chip sin interrumpir la sesión gráfica.</p>
+<h3 id="paso-2-ajustar-parametros-del-kernel-para-estabilizar-amdgpu">Paso 2: Ajustar parámetros del Kernel para estabilizar AMDGPU</h3>
+<p>En distribuciones como Arch Linux, Fedora, Ubuntu o Bazzite, los estados de suspensión dinámica agresiva (<em>clock gating</em>) pueden desestabilizar la tarjeta gráfica durante cambios bruscos de carga:</p>
+<ol class="steps-list">
+
+        <li class="step-item" id="paso-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="paso-1-heading">Paso 1</h4>
+            <p>Abre el archivo de configuración del gestor de arranque con privilegios de administrador:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>sudo nano /etc/default/grub
+</code></pre>
+    </div>
+    
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="paso-2-heading">Paso 2</h4>
+            <p>Localiza la directiva <code>GRUB_CMDLINE_LINUX_DEFAULT</code> y añade al final de las comillas los siguientes parámetros:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>amdgpu.dpm=1 amdgpu.runpm=0
+</code></pre>
+    </div>
+    
+<ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="paso-3-heading">Paso 3</h4>
+            <code>amdgpu.dpm=1</code>: Fuerza una gestión de energía dinámica controlada.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-4">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="paso-4-heading">Paso 4</h4>
+            <code>amdgpu.runpm=0</code>: Desactiva la administración de energía en tiempo de ejecución (Run-time Power Management) que causa desincronización de voltaje en tarjetas dedicadas de escritorio.</li>
+</ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-5">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="paso-5-heading">Paso 5</h4>
+            <p>Actualiza el gestor de arranque según tu distribución:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># En Debian, Ubuntu y derivados:
+sudo update-grub
+
+# En Arch Linux, EndeavourOS y CachyOS:
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# En Fedora (sistemas UEFI):
+sudo grub2-mkconfig -o /etc/grub2-efi.cfg
+</code></pre>
+    </div>
+    
+
+          </div>
+        </li>
+        
+</ol>
+<h3 id="paso-3-configurar-variables-de-entorno-para-steam-y-vulkan-mesa-radv">Paso 3: Configurar variables de entorno para Steam y Vulkan (Mesa RADV)</h3>
+<p>El compilador de shaders por defecto de Mesa (ACO) es extremadamente rápido, pero en ciertos juegos exigentes bajo DirectX 12 (VKD3D-Proton) puede generar primitivas gráficas complejas que disparan el tiempo de espera del shader engine.</p>
+<p>Añade los siguientes parámetros de lanzamiento en las propiedades del juego en <strong>Steam</strong> (<code>Propiedades</code> -&gt; <code>Parámetros de lanzamiento</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>RADV_DEBUG=noaccel,llvm %command%
+</code></pre>
+    </div>
+    
+<p>O si buscas máxima estabilidad de renderizado en títulos DirectX 12:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>VKD3D_CONFIG=no_upload_hwwrite,dxr11 %command%
+</code></pre>
+    </div>
+    
+<h3 id="paso-4-desactivar-la-suspension-de-enlace-pcie-aspm">Paso 4: Desactivar la suspensión de enlace PCIe ASPM</h3>
+<p>Active State Power Management (ASPM) es una función de ahorro de energía del bus PCIe que reduce el voltaje del puerto cuando la tarjeta gráfica disminuye su uso. En placas base con configuraciones PCIe agresivas, el tiempo que tarda la GPU en volver al estado de pleno rendimiento puede exceder el límite del scheduler de AMDGPU:</p>
+<p>Añade también a los parámetros del kernel en <code>/etc/default/grub</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>pcie_aspm=off
+</code></pre>
+    </div>
+    
+<p>Regenera la configuración de GRUB y reinicia el ordenador. Esto mantendrá el canal de comunicación del bus PCI Express despierto y receptivo al 100%.</p>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="este-error-significa-que-mi-tarjeta-grafica-esta-fisicamente-danada">¿Este error significa que mi tarjeta gráfica está físicamente dañada?</h3>
+<p>En la inmensa mayoría de casos (más del 95%), este problema es estrictamente de software: desincronización de controladores, límites de tiempo de espera del scheduler de Linux o parámetros de ahorro energético del PCIe.</p>
+<h3 id="ocurre-este-problema-tanto-en-wayland-como-en-x11">¿Ocurre este problema tanto en Wayland como en X11?</h3>
+<p>Sí, aunque en entornos Wayland recientes el uso de <em>Explicit Sync</em> (sincronización explícita introducida en Linux 6.8+ y Wayland Protocols 1.34) ha reducido drásticamente los cuelgues causados por sincronización implícita en controladores Mesa.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Actualiza periódicamente los paquetes de <code>mesa</code> y <code>vulkan-radeon</code> desde los repositorios oficiales o repositorios optimizados (como Kisak PPA en Ubuntu o Mesa-git).</li>
+<li>Comprueba que la fuente de alimentación (PSU) suministre cables PCIe independientes (12V) para cada conector de 8 pines de la GPU, evitando cables en puente (<em>pigtail</em>).</li>
+<li>Si realizaste overclock o undervolt con utilidades como CoreCtrl o TuxClocker, restablece las curvas de voltaje a valores de fábrica para descartar inestabilidad eléctrica.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web. Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y Steam Deck -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-lag-packet-loss-steam-gamescope-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y Steam Deck</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Gaming</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Elden Ring</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-crasheo-cs2-vulkan-shader-compilation-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux Gaming</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

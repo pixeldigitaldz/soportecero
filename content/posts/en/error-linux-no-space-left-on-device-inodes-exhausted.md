@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted in Linux)"
-description: "Does your Linux server show No Space Left on Device while df -h shows free storage? Learn how to detect and clear exhausted inodes step by step."
-category: "Systems & Servers"
-tags: ["Linux","Sysadmin","Storage","Bash"]
-readTime: "4 min"
-date: "2026-09-11"
+title: >-
+  [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted
+  in Linux)
+description: >-
+  Does your Linux server show No Space Left on Device while df -h shows free
+  storage? Learn how to detect and clear exhausted inodes step by step.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - Storage
+  - Bash
+readTime: 4 min
+date: '2026-09-11'
 ---
+
+The `No space left on device` error in Linux does not only trigger when storage gigabytes fill up. Every file, symlink, and directory requires a metadata structure known as an **inode**. If your system generates millions of tiny files (such as PHP session files, mail queue items, or application cache), the filesystem inode table reaches 100% capacity even when `df -h` reports plenty of free disk space.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Millions of small temporary files or uncollected PHP/Docker sessions** | Find directories with the highest inode count via find and delete them |
 | **Deleted files still held open by active system processes** | Inspect unlinked open file descriptors with lsof +L1 and restart services |
-
-The `No space left on device` error in Linux does not only trigger when storage gigabytes fill up. Every file, symlink, and directory requires a metadata structure known as an **inode**. If your system generates millions of tiny files (such as PHP session files, mail queue items, or application cache), the filesystem inode table reaches 100% capacity even when `df -h` reports plenty of free disk space.
-
-> **Quick Solution (1 Minute):**
-> 1. Check if inodes are at 100%:
->    `df -ih`
-> 2. Locate the folder with the highest file density:
->    `sudo du --inodes -d 2 /var | sort -rn | head -n 15`
 
 ## 🚀 Step-by-Step Solution
 

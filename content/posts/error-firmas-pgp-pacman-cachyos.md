@@ -1,19 +1,25 @@
 ---
-title: "Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS"
-description: "Aprende a restablecer y actualizar las claves del llavero de Pacman para corregir fallos de firma inválida en CachyOS y Arch Linux."
-category: "Sistemas y Servidores"
-tags: ["CachyOS", "Arch Linux", "Pacman", "Linux"]
-readTime: "5 min"
-date: "2026-07-18"
+title: Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS
+description: >-
+  Aprende a restablecer y actualizar las claves del llavero de Pacman para
+  corregir fallos de firma inválida en CachyOS y Arch Linux.
+category: Sistemas y Servidores
+tags:
+  - CachyOS
+  - Arch Linux
+  - Pacman
+  - Linux
+readTime: 5 min
+date: '2026-07-18'
 ---
+
+El error crítico de Pacman `error: key "..." could not be looked up remotely` o `error: signature from "..." is invalid (corrupted package)` en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado, el reloj del sistema está desfasado o la base de datos local de GnuPG se corrompe durante una descarga interrumpida. Esto bloquea la instalación y actualización de cualquier paquete por motivos de seguridad.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Claves PGP del llavero de pacman expiradas o desactualizadas en Arch/CachyOS** | Actualizar el keyring de pacman: `sudo pacman -Sy cachyos-keyring archlinux-keyring` |
 | **Base de datos de firmas de repositorios corrupta en /etc/pacman.d/gnupg** | Reiniciar el llavero de llaves gpg: `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init` |
-
-El error crítico de Pacman `error: key "..." could not be looked up remotely` o `error: signature from "..." is invalid (corrupted package)` en CachyOS y distribuciones basadas en Arch Linux ocurre cuando el llavero local de firmas criptográficas de los desarrolladores queda desactualizado, el reloj del sistema está desfasado o la base de datos local de GnuPG se corrompe durante una descarga interrumpida. Esto bloquea la instalación y actualización de cualquier paquete por motivos de seguridad.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

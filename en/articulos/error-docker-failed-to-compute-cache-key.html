@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>[FIXED] Error 'failed to compute cache key' in Docker Build | SoporteCero</title>
   <meta name="description" content="Getting the 'failed to compute cache key' error during docker build? Step-by-step guide to fix file path resolution and Dockerfile build contexts.">
+  <meta name="keywords" content="Docker, DevOps, Sysadmin">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-docker-failed-to-compute-cache-key.html">
   
@@ -24,6 +25,9 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-03">
   <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Docker">
+  <meta property="article:tag" content="DevOps">
+  <meta property="article:tag" content="Sysadmin">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +55,7 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'failed to compute cache key' in Docker Build",
   "description": "Getting the 'failed to compute cache key' error during docker build? Step-by-step guide to fix file path resolution and Dockerfile build contexts.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
@@ -196,14 +201,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error failed to compute cache key: failed to walk: lstat ...: no such file or directory during docker build occurs when a COPY or ADD instruction in your Dockerfile references a local file or directory that does not exist within the Docker build context.</p>
-      </section>
-      
+          <p>The error <strong><code>failed to compute cache key: failed to walk: lstat ...: no such file or directory</code></strong> during <code>docker build</code> occurs when a <code>COPY</code> or <code>ADD</code> instruction in your <code>Dockerfile</code> references a local file or directory that does not exist within the <strong>Docker build context</strong>.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -212,8 +210,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>Source path in Dockerfile COPY/ADD instruction does not exist</strong></div>
@@ -230,16 +227,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Run <code>docker build</code> ensuring proper trailing <code>.</code> context syntax</div>
           </div></div></div>
-
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Verify the source file path exists inside the directory where you run <code>docker build .</code></li>
-<li>Check if the file is ignored in <code>.dockerignore</code>.</li>
-<li>Specify the root context explicitly when building from subfolders: <code>docker build -f docker/Dockerfile .</code></li>
-</ol>
-</blockquote>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -253,7 +240,8 @@
       </ol>
     </nav>
     
-    <h2 id="step-by-step-troubleshooting">🚀 Step-by-Step Troubleshooting</h2>
+    
+<h2 id="step-by-step-troubleshooting">🚀 Step-by-Step Troubleshooting</h2>
 <h3 id="step-1-understand-the-docker-build-context">Step 1: Understand the Docker Build Context</h3>
 <p>When you execute <code>docker build -t my-image .</code>, the trailing dot <code>.</code> defines the <strong>build context</strong>. Docker packages and sends files in that directory to the Docker daemon.</p>
 <p>If your <code>Dockerfile</code> has:</p>
@@ -373,6 +361,40 @@
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
       <article class="related-card">
         <div class="related-card-content">
@@ -385,40 +407,6 @@
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

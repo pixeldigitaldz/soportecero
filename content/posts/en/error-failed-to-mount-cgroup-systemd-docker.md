@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux"
-description: "Fix Failed to mount cgroup cgroup2 or cgroup hierarchy v2 in Docker, LXC, and systemd environments across modern Linux systems."
-category: "Systems & Servers"
-tags: ["Docker","systemd","Linux","DevOps"]
-readTime: "4 min"
-date: "2026-09-14"
+title: '[SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux'
+description: >-
+  Fix Failed to mount cgroup cgroup2 or cgroup hierarchy v2 in Docker, LXC, and
+  systemd environments across modern Linux systems.
+category: Systems & Servers
+tags:
+  - Docker
+  - systemd
+  - Linux
+  - DevOps
+readTime: 4 min
+date: '2026-09-14'
 ---
+
+When booting containers with Docker, Podman, or inside LXC containers on modern distributions (Ubuntu 24.04, Debian 12, Arch), users often hit `Failed to mount cgroup: No such file or directory` or `unable to apply cgroup configuration`. This friction stems from Linux transitioning from the legacy split cgroup v1 architecture to the unified cgroup v2 hierarchy.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Mismatch between legacy Docker/runc and unified cgroup v2 hierarchy in newer Linux kernels** | Upgrade Docker engine or enable hybrid cgroup parameters via GRUB |
 | **Nested containerization or systemd inside LXC/Docker missing cgroup mounts** | Configure systemd.unified_cgroup_hierarchy=0 or configure systemd cgroup driver |
-
-When booting containers with Docker, Podman, or inside LXC containers on modern distributions (Ubuntu 24.04, Debian 12, Arch), users often hit `Failed to mount cgroup: No such file or directory` or `unable to apply cgroup configuration`. This friction stems from Linux transitioning from the legacy split cgroup v1 architecture to the unified cgroup v2 hierarchy.
-
-> **Quick Solution (1 Minute):**
-> 1. Check your active cgroup version:
->    `stat -fc %T /sys/fs/cgroup/`
-> 2. If cgroup2fs breaks legacy container shims, set in /etc/default/grub:
->    `systemd.unified_cgroup_hierarchy=0`
 
 ## 🚀 Step-by-Step Solution
 

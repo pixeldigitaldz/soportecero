@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>[FIXED] Error Certbot 'Failed authorization procedure (http-01)' | SoporteCero</title>
   <meta name="description" content="Let's Encrypt / Certbot failing SSL certificate generation due to HTTP-01 challenge failure? Fix port 80 blocks and Nginx location routes.">
+  <meta name="keywords" content="Certbot, SSL, Nginx, Apache, Sysadmin">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-certbot-failed-authorization-procedure-http-01.html">
   
@@ -24,6 +25,11 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-03">
   <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Certbot">
+  <meta property="article:tag" content="SSL">
+  <meta property="article:tag" content="Nginx">
+  <meta property="article:tag" content="Apache">
+  <meta property="article:tag" content="Sysadmin">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +57,7 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error Certbot 'Failed authorization procedure (http-01)'",
   "description": "Let's Encrypt / Certbot failing SSL certificate generation due to HTTP-01 challenge failure? Fix port 80 blocks and Nginx location routes.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
@@ -196,14 +203,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
-      </section>
-      
+          <p>The error <strong><code>Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout</code></strong> occurs when issuing or renewing a free Let&#39;s Encrypt SSL certificate if Let&#39;s Encrypt validation servers cannot access the temporary token file generated on your web server.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -212,8 +212,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>Port 80 blocked by firewall or misconfigured web server</strong></div>
@@ -230,16 +229,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Ensure web root directory matches Nginx/Apache configuration block</div>
           </div></div></div>
-
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Open port 80 in your firewall: <code>sudo ufw allow 80/tcp</code></li>
-<li>Stop Nginx temporarily to issue via standalone mode:
-<code>sudo systemctl stop nginx &amp;&amp; sudo certbot certonly --standalone -d yourdomain.com</code></li>
-</ol>
-</blockquote>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -253,7 +242,8 @@
       </ol>
     </nav>
     
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+    
+<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-verify-port-80-accessibility">Step 1: Verify Port 80 Accessibility</h3>
 <p>Let&#39;s Encrypt strictly requires <strong>port 80</strong> to be accessible over the public internet to validate domain ownership via the <code>http-01</code> challenge, even if your site redirects traffic to HTTPS (port 443).</p>
 <ol>
@@ -385,6 +375,40 @@ sudo systemctl start nginx || sudo systemctl start apache2
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
       <article class="related-card">
         <div class="related-card-content">
@@ -397,40 +421,6 @@ sudo systemctl start nginx || sudo systemctl start apache2
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

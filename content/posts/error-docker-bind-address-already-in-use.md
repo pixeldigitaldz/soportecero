@@ -1,19 +1,27 @@
 ---
-title: "Error: Error starting userland proxy: bind: address already in use en Docker"
-description: "Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose."
-category: "Sistemas y Servidores"
-tags: ["Docker", "Linux", "Puertos", "SysAdmin", "Networking", "DevOps"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Error: Error starting userland proxy: bind: address already in use en Docker'
+description: >-
+  Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80,
+  443, 3000, 8080) en Linux y Docker Compose.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - Linux
+  - Puertos
+  - SysAdmin
+  - Networking
+  - DevOps
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Al iniciar un contenedor mediante `docker run` o `docker compose up`, el error `driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use` indica que el puerto de red solicitado en el sistema anfitrión ya está reservado por otro proceso activo.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Otro servicio en el host (como Nginx, Apache o Node.js) ya está escuchando en el puerto requerido** | Identificar el PID con `sudo lsof -i :<puerto>` o `ss -tulpn` y detener el proceso en conflicto |
 | **Un contenedor Docker huérfano o en segundo plano sigue reteniendo el puerto en iptables** | Detener el contenedor antiguo con `docker stop <id>` o reiniciar el daemon `systemctl restart docker` |
-
-Al iniciar un contenedor mediante `docker run` o `docker compose up`, el error `driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use` indica que el puerto de red solicitado en el sistema anfitrión ya está reservado por otro proceso activo.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

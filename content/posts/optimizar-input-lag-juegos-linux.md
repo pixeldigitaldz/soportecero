@@ -1,20 +1,26 @@
 ---
-title: "Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux"
-description: "Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Performance"]
-readTime: "4 min"
-date: "2026-07-06"
+title: >-
+  Cómo reducir el retraso de entrada (input lag) para gaming competitivo en
+  Linux
+description: >-
+  Optimiza la latencia y la respuesta de tus periféricos configurando el
+  servidor gráfico Wayland o X11 y los perfiles de energía del sistema.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Performance
+readTime: 4 min
+date: '2026-07-06'
 ---
+
+El retraso de entrada o *input lag* excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Composición de ventanas activada generando retardo de fotogramas (VSync)** | Desactivar la composición de pantalla o utilizar una sesión Wayland nativa |
 | **Regulador de frecuencia de CPU en modo powersave** | Establecer la CPU en modo rendimiento: `gamemoded -r` o `powerprofilesctl set performance` |
-
-
-El retraso de entrada o *input lag* excesivo al jugar títulos competitivos en Linux ocurre por la acumulación de búferes en el servidor de composición gráfica (especialmente en Wayland con sincronización vertical forzada) y por la configuración de ahorro de energía activa por defecto que suspende o ralentiza la frecuencia de respuesta de los puertos USB.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

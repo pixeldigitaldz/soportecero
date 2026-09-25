@@ -1,19 +1,27 @@
 ---
-title: "Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap"
-description: "Aprende a crear un archivo Swapfile, configurar persistencia en fstab y ajustar swappiness y vfs_cache_pressure en Linux."
-category: "Sistemas y Servidores"
-tags: ["Linux", "SysAdmin", "Swap", "Rendimiento", "Ubuntu", "Debian"]
-readTime: "5 min"
-date: "2026-06-27"
+title: 'Memoria virtual en Linux: Cómo configurar y optimizar el uso de Swap'
+description: >-
+  Aprende a crear un archivo Swapfile, configurar persistencia en fstab y
+  ajustar swappiness y vfs_cache_pressure en Linux.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - SysAdmin
+  - Swap
+  - Rendimiento
+  - Ubuntu
+  - Debian
+readTime: 5 min
+date: '2026-06-27'
 ---
+
+En sistemas operativos Linux, la memoria Swap (espacio de intercambio) permite al kernel descargar páginas de memoria RAM inactivas hacia el disco de almacenamiento, liberando memoria física de alta velocidad para la caché del sistema de archivos y aplicaciones activas. Un sistema sin Swap o con un valor de `swappiness` inadecuado sufrirá congelamientos o cierres forzados por el OOM Killer.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Servidor o PC sin memoria Swap configurada sufriendo cierres por OOM Killer** | Crear un swapfile de 4GB a 8GB con `fallocate` o `dd` y activarlo con `swapon` |
 | **Uso excesivo y lento de Swap con RAM libre disponible (swappiness alto)** | Reducir el parámetro `vm.swappiness` a 10 o 20 en `/etc/sysctl.conf` |
-
-En sistemas operativos Linux, la memoria Swap (espacio de intercambio) permite al kernel descargar páginas de memoria RAM inactivas hacia el disco de almacenamiento, liberando memoria física de alta velocidad para la caché del sistema de archivos y aplicaciones activas. Un sistema sin Swap o con un valor de `swappiness` inadecuado sufrirá congelamientos o cierres forzados por el OOM Killer.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

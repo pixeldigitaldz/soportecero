@@ -1,20 +1,25 @@
 ---
-title: "Cómo solucionar micro-tirones en World of Warcraft usando Proton-GE en Linux"
-description: "Aprende a optimizar el rendimiento y eliminar los micro-tirones de imagen en WoW configurando Proton-GE y activando la compilación asíncrona de shaders."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "World of Warcraft", "Proton"]
-readTime: "3 min"
-date: "2026-06-27"
+title: Cómo solucionar micro-tirones en World of Warcraft usando Proton-GE en Linux
+description: >-
+  Aprende a optimizar el rendimiento y eliminar los micro-tirones de imagen en
+  WoW configurando Proton-GE y activando la compilación asíncrona de shaders.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - World of Warcraft
+  - Proton
+readTime: 3 min
+date: '2026-06-27'
 ---
+
+Los micro-tirones (*stuttering*) en World of Warcraft al recorrer zonas de expansiones recientes como *The War Within* o *Midnight* bajo Linux ocurren principalmente por la compilación tardía de sombreadores de texturas (Shaders). Cuando el cliente oficial de Steam o Lutris traduce las instrucciones de DirectX 12 a Vulkan en tiempo real, el rendimiento del procesador se satura momentáneamente, provocando caídas severas de FPS por milisegundos.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Caché de Shaders DXVK corrupta o saturada** | Borrar la carpeta `shadercache` en la prefix del juego en Steam/Lutris |
 | **Versión de Proton-GE incompatible con el parche de WoW** | Actualizar a la versión más reciente de Proton-GE mediante GE-Protonup |
-
-
-Los micro-tirones (*stuttering*) en World of Warcraft al recorrer zonas de expansiones recientes como *The War Within* o *Midnight* bajo Linux ocurren principalmente por la compilación tardía de sombreadores de texturas (Shaders). Cuando el cliente oficial de Steam o Lutris traduce las instrucciones de DirectX 12 a Vulkan en tiempo real, el rendimiento del procesador se satura momentáneamente, provocando caídas severas de FPS por milisegundos.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

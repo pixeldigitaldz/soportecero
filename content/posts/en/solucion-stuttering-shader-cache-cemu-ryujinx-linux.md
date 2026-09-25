@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Fix Shader Cache Stuttering & Lag in Cemu & Ryujinx on Linux"
-description: "Eliminate frame drops and micro-stutter during live shader compilation in Ryujinx, Cemu, and RPCS3 emulators on Linux using Mesa and Vulkan."
-category: "Gaming Tech"
-tags: ["Gaming","Linux","Vulkan","Emulation"]
-readTime: "4 min"
-date: "2026-09-25"
+title: '[SOLVED] Fix Shader Cache Stuttering & Lag in Cemu & Ryujinx on Linux'
+description: >-
+  Eliminate frame drops and micro-stutter during live shader compilation in
+  Ryujinx, Cemu, and RPCS3 emulators on Linux using Mesa and Vulkan.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Vulkan
+  - Emulation
+readTime: 4 min
+date: '2026-09-25'
 ---
+
+When playing emulation titles through modern software like Ryujinx, Cemu, or RPCS3 on Linux (Steam Deck, Arch, Bazzite, Fedora), players frequently endure disruptive micro-stutters whenever encountering new visual effects or entering new game areas. This performance hitching is caused by real-time shader compilation stalling the graphics render pipeline.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Real-time compilation of graphics pipelines when new assets/effects appear on screen** | Enable Asynchronous Shader Compilation in emulator graphics preferences |
 | **Driver-level shader cache size limits in Mesa or Nvidia forcing cache evictions** | Set MESA_SHADER_CACHE_MAX_SIZE=10G and leverage the RADV/ACO backend |
-
-When playing emulation titles through modern software like Ryujinx, Cemu, or RPCS3 on Linux (Steam Deck, Arch, Bazzite, Fedora), players frequently endure disruptive micro-stutters whenever encountering new visual effects or entering new game areas. This performance hitching is caused by real-time shader compilation stalling the graphics render pipeline.
-
-> **Quick Solution (1 Minute):**
-> 1. Enable high-speed ACO compiler on AMD GPUs:
->    `export RADV_PERFTEST=aco`
-> 2. Expand driver shader cache disk limits:
->    `export MESA_SHADER_CACHE_MAX_SIZE=10G`
 
 ## 🚀 Step-by-Step Solution
 

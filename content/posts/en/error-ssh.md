@@ -1,20 +1,24 @@
 ---
-title: "How to Fix SSH Connection Refused Error (Quick & Easy)"
-description: "Get locked out of your server? Fix the frustrating SSH connection refused error in under 5 minutes with our proven step-by-step diagnostic guide."
-category: "Systems & Servers"
-tags: ["SSH", "Linux", "Firewall"]
-readTime: "3 min"
-date: "2026-06-26"
+title: How to Fix SSH Connection Refused Error (Quick & Easy)
+description: >-
+  Get locked out of your server? Fix the frustrating SSH connection refused
+  error in under 5 minutes with our proven step-by-step diagnostic guide.
+category: Systems & Servers
+tags:
+  - SSH
+  - Linux
+  - Firewall
+readTime: 3 min
+date: '2026-06-26'
 ---
+
+The `Connection Refused` error when trying to connect via SSH means that the client successfully reached the host server, but the server actively rejected the request on port 22. This usually happens because the OpenSSH service is not active, the port was changed, or a firewall is blocking access.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **SSH daemon service (sshd) stopped on target server** | Start SSH service daemon: `sudo systemctl start sshd` |
 | **Security filter or custom port blocked** | Test connection on custom port: `ssh -p PORT user@host` |
-
-
-The `Connection Refused` error when trying to connect via SSH means that the client successfully reached the host server, but the server actively rejected the request on port 22. This usually happens because the OpenSSH service is not active, the port was changed, or a firewall is blocking access.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,26 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare"
-description: "¿Tus usuarios ven el Error 521 de Cloudflare al entrar a tu sitio web? Solución paso a paso para Nginx, Apache y reglas de Firewall de origen."
-category: "Sistemas y Servidores"
-tags: ["Cloudflare", "Nginx", "Apache", "Sysadmin"]
-readTime: "4 min"
-date: "2026-08-24"
+title: '[SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare'
+description: >-
+  ¿Tus usuarios ven el Error 521 de Cloudflare al entrar a tu sitio web?
+  Solución paso a paso para Nginx, Apache y reglas de Firewall de origen.
+category: Sistemas y Servidores
+tags:
+  - Cloudflare
+  - Nginx
+  - Apache
+  - Sysadmin
+readTime: 4 min
+date: '2026-08-24'
 ---
+
+El **`Error 521: Web server is down`** devuelto por la pantalla de protección de Cloudflare ocurre cuando los servidores proxy de Cloudflare intentaron conectarse a la dirección IP de tu servidor de origen (en los puertos 80 o 443), pero el servidor web (Nginx / Apache) rechazó la conexión o la rechazó un cortafuegos.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Servidor web de origen apagado o caído** | Iniciar el servidor web local (Nginx/Apache): `systemctl restart nginx` |
 | **Firewall del servidor bloqueando las IPs de Cloudflare** | Agregar el rango de IPs oficiales de Cloudflare a la lista blanca del firewall |
-
-
-El **`Error 521: Web server is down`** devuelto por la pantalla de protección de Cloudflare ocurre cuando los servidores proxy de Cloudflare intentaron conectarse a la dirección IP de tu servidor de origen (en los puertos 80 o 443), pero el servidor web (Nginx / Apache) rechazó la conexión o la rechazó un cortafuegos.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Inicia tu servidor web de origen:
->    `sudo systemctl restart nginx` o `sudo systemctl restart apache2`
-> 2. Permite las IPs de Cloudflare en tu firewall (UFW/iptables):
->    `sudo ufw allow from 103.21.244.0/22 to any port 80,443 proto tcp`
 
 ## 🚀 Cómo solucionar el Error 521 de Cloudflare paso a paso
 

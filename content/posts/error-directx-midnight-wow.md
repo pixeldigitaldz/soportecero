@@ -1,20 +1,27 @@
 ---
-title: "Cómo solucionar el error de inicialización 3D en World of Warcraft al cambiar de expansión"
-description: "Guía rápida para resolver el bloqueo del motor gráfico de WoW al intentar cargar librerías avanzadas de DirectX en sistemas de tarjetas gráficas dedicadas e integradas."
-category: "Gaming Tech"
-tags: ["Gaming", "World of Warcraft", "DirectX"]
-readTime: "3 min"
-date: "2026-06-27"
+title: >-
+  Cómo solucionar el error de inicialización 3D en World of Warcraft al cambiar
+  de expansión
+description: >-
+  Guía rápida para resolver el bloqueo del motor gráfico de WoW al intentar
+  cargar librerías avanzadas de DirectX en sistemas de tarjetas gráficas
+  dedicadas e integradas.
+category: Gaming Tech
+tags:
+  - Gaming
+  - World of Warcraft
+  - DirectX
+readTime: 3 min
+date: '2026-06-27'
 ---
+
+El error `World of Warcraft was unable to start up 3D acceleration` suele aparecer tras parches grandes de expansiones modernas como *The War Within* o el contenido de *Midnight*. Ocurre porque el juego intenta arrancar forzando el modo DirectX 12 en hardware antiguo, o porque los archivos de configuración local guardan resoluciones de pantalla completa obsoletas que tu monitor actual no tolera.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Incompatibilidad de la API DirectX 12 con la versión de controladores GPU** | Cambiar la API gráfica del juego a DirectX 11 mediante el archivo `Config.wtf` |
 | **Overlay de terceros (Discord, GeForce Experience, MangoHud) interfiriendo** | Desactivar overlays de pantalla durante la ejecución del cliente |
-
-
-El error `World of Warcraft was unable to start up 3D acceleration` suele aparecer tras parches grandes de expansiones modernas como *The War Within* o el contenido de *Midnight*. Ocurre porque el juego intenta arrancar forzando el modo DirectX 12 en hardware antiguo, o porque los archivos de configuración local guardan resoluciones de pantalla completa obsoletas que tu monitor actual no tolera.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

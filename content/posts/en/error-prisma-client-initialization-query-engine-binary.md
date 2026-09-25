@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] PrismaClientInitializationError: Query engine binary could not be found"
-description: "Fix Prisma error Query engine binary could not be found or executed in Docker, Alpine Linux, and production cloud containers."
-category: "Web & Code"
-tags: ["Prisma","Nodejs","Docker","PostgreSQL"]
-readTime: "4 min"
-date: "2026-10-19"
+title: >-
+  [SOLVED] PrismaClientInitializationError: Query engine binary could not be
+  found
+description: >-
+  Fix Prisma error Query engine binary could not be found or executed in Docker,
+  Alpine Linux, and production cloud containers.
+category: Web & Code
+tags:
+  - Prisma
+  - Nodejs
+  - Docker
+  - PostgreSQL
+readTime: 4 min
+date: '2026-10-19'
 ---
+
+When deploying Node.js web services powered by Prisma ORM onto Docker containers or cloud hosts (AWS ECS, Render, Railway, Fly.io), the process abruptly crashes upon startup with: `PrismaClientInitializationError: Query engine binary for current platform "linux-musl" could not be found` or `Prisma Client could not locate the Query Engine for runtime "debian-openssl-3.0.x"`. This occurs when the precompiled Rust query engine matching the container OS architecture was not packaged into the runtime image.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Architecture or C-library mismatch between development host (macOS/Windows) and container runtime (Linux musl/glibc)** | Specify target platforms under binaryTargets in schema.prisma |
 | **Missing OpenSSL runtime libraries in lightweight Alpine Linux base Docker images** | Install openssl and libc6-compat via apk in your container Dockerfile |
-
-When deploying Node.js web services powered by Prisma ORM onto Docker containers or cloud hosts (AWS ECS, Render, Railway, Fly.io), the process abruptly crashes upon startup with: `PrismaClientInitializationError: Query engine binary for current platform "linux-musl" could not be found` or `Prisma Client could not locate the Query Engine for runtime "debian-openssl-3.0.x"`. This occurs when the precompiled Rust query engine matching the container OS architecture was not packaged into the runtime image.
-
-> **Quick Solution (1 Minute):**
-> 1. In schema.prisma, specify cross-platform binaryTargets:
->    `binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]`
-> 2. Re-generate client binaries:
->    `npx prisma generate`
 
 ## 🚀 Step-by-Step Solution
 

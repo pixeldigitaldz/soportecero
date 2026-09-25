@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux"
-description: "Repara el fallo Failed to mount cgroup cgroup2 o cgroup hierarchy v2 en Docker, LXC y entornos systemd en distribuciones Linux modernas."
-category: "Sistemas y Servidores"
-tags: ["Docker","systemd","Linux","DevOps"]
-readTime: "4 min"
-date: "2026-09-14"
+title: >-
+  [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y
+  Linux
+description: >-
+  Repara el fallo Failed to mount cgroup cgroup2 o cgroup hierarchy v2 en
+  Docker, LXC y entornos systemd en distribuciones Linux modernas.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - systemd
+  - Linux
+  - DevOps
+readTime: 4 min
+date: '2026-09-14'
 ---
+
+Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux), es habitual encontrarse con el error `Failed to mount cgroup: No such file or directory` o `OCI runtime error: unable to apply cgroup configuration`. Esto sucede por el cambio de la jerarquía heredada (cgroup v1) al árbol unificado moderno (cgroup v2).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Incompatibilidad entre Docker daemon y la jerarquía unificada cgroup v2 en kernels recientes** | Actualizar Docker a la última versión o habilitar compatibilidad híbrida en GRUB |
 | **Contenedores privilegiados o systemd anidado en LXC/Docker sin permisos de cgroup** | Configurar systemd.unified_cgroup_hierarchy=0 o montar cgroups con volumen rw |
-
-Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux), es habitual encontrarse con el error `Failed to mount cgroup: No such file or directory` o `OCI runtime error: unable to apply cgroup configuration`. Esto sucede por el cambio de la jerarquía heredada (cgroup v1) al árbol unificado moderno (cgroup v2).
-
-> **Solución Rápida (1 Minuto):**
-> 1. Revisa la versión de cgroups activa en tu kernel:
->    `stat -fc %T /sys/fs/cgroup/`
-> 2. Si devuelve 'cgroup2fs' y tu software antiguo falla, agrega a /etc/default/grub:
->    `systemd.unified_cgroup_hierarchy=0`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

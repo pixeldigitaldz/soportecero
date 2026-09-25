@@ -1,19 +1,25 @@
 ---
-title: "How to Fix Corrupt PGP Signature and Invalid Key Errors in CachyOS"
-description: "Learn how to reset and update Pacman keyring keys to fix invalid PGP signature errors in CachyOS and Arch Linux."
-category: "Systems & Servers"
-tags: ["CachyOS", "Arch Linux", "Pacman", "Linux"]
-readTime: "5 min"
-date: "2026-07-18"
+title: How to Fix Corrupt PGP Signature and Invalid Key Errors in CachyOS
+description: >-
+  Learn how to reset and update Pacman keyring keys to fix invalid PGP signature
+  errors in CachyOS and Arch Linux.
+category: Systems & Servers
+tags:
+  - CachyOS
+  - Arch Linux
+  - Pacman
+  - Linux
+readTime: 5 min
+date: '2026-07-18'
 ---
+
+The critical Pacman error `error: key "..." could not be looked up remotely` or `error: signature from "..." is invalid (corrupted package)` in CachyOS and Arch Linux distributions happens when developer cryptographic signatures expire, local system clocks drift out of sync, or the local GnuPG trust database becomes corrupted during an interrupted package transaction.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Expired or outdated PGP keys in Pacman keyring on Arch/CachyOS** | Update keyring packages: `sudo pacman -Sy cachyos-keyring archlinux-keyring` |
 | **Corrupted GPG repository database in /etc/pacman.d/gnupg** | Reset GPG keyring: `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init` |
-
-The critical Pacman error `error: key "..." could not be looked up remotely` or `error: signature from "..." is invalid (corrupted package)` in CachyOS and Arch Linux distributions happens when developer cryptographic signatures expire, local system clocks drift out of sync, or the local GnuPG trust database becomes corrupted during an interrupted package transaction.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] PrismaClientInitializationError: Query engine binary could not be found"
-description: "Soluciona el fallo de Prisma Query engine binary could not be found or executed en Docker, Alpine Linux y despliegues en producción."
-category: "Web y Código"
-tags: ["Prisma","Nodejs","Docker","PostgreSQL"]
-readTime: "4 min"
-date: "2026-10-19"
+title: >-
+  [SOLUCIONADO] PrismaClientInitializationError: Query engine binary could not
+  be found
+description: >-
+  Soluciona el fallo de Prisma Query engine binary could not be found or
+  executed en Docker, Alpine Linux y despliegues en producción.
+category: Web y Código
+tags:
+  - Prisma
+  - Nodejs
+  - Docker
+  - PostgreSQL
+readTime: 4 min
+date: '2026-10-19'
 ---
+
+Al desplegar aplicaciones de Node.js con Prisma ORM en contenedores Docker o plataformas cloud (AWS ECS, Render, Railway, Vercel), la aplicación crashea al iniciar arrojando: `PrismaClientInitializationError: Query engine binary for current platform "linux-musl" could not be found` o `Prisma Client could not locate the Query Engine for runtime "debian-openssl-3.0.x"`. Prisma no encuentra el motor nativo precompilado para el sistema operativo en el que se está ejecutando.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Discordancia de arquitectura o libc entre la máquina de desarrollo (macOS/Windows) y el contenedor Docker (Linux/musl)** | Configurar binaryTargets en schema.prisma incluyendo "native", "linux-musl" o "debian-openssl" |
 | **Falta de ejecución de npx prisma generate tras instalar dependencias en el Dockerfile** | Ejecutar npx prisma generate en la fase de construcción de la imagen Docker |
-
-Al desplegar aplicaciones de Node.js con Prisma ORM en contenedores Docker o plataformas cloud (AWS ECS, Render, Railway, Vercel), la aplicación crashea al iniciar arrojando: `PrismaClientInitializationError: Query engine binary for current platform "linux-musl" could not be found` o `Prisma Client could not locate the Query Engine for runtime "debian-openssl-3.0.x"`. Prisma no encuentra el motor nativo precompilado para el sistema operativo en el que se está ejecutando.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En schema.prisma, añade los binaryTargets necesarios:
->    `binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]`
-> 2. Regenera el cliente de Prisma:
->    `npx prisma generate`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

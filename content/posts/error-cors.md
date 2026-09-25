@@ -1,19 +1,27 @@
 ---
-title: "Solución Error CORS Access-Control-Allow-Origin: Guía Definitiva"
-description: "Aprende a solucionar el error 'No Access-Control-Allow-Origin header is present' en Express, Next.js, Django, FastAPI y Nginx."
-category: "Web y Código"
-tags: ["CORS", "JavaScript", "Express", "Node.js", "APIs", "Seguridad"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Solución Error CORS Access-Control-Allow-Origin: Guía Definitiva'
+description: >-
+  Aprende a solucionar el error 'No Access-Control-Allow-Origin header is
+  present' en Express, Next.js, Django, FastAPI y Nginx.
+category: Web y Código
+tags:
+  - CORS
+  - JavaScript
+  - Express
+  - Node.js
+  - APIs
+  - Seguridad
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `Access to XMLHttpRequest at 'https://api.ejemplo.com' from origin 'https://app.ejemplo.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource` es un mecanismo de seguridad implementado por los navegadores web para evitar que scripts maliciosos de un dominio lean datos protegidos de otro origen distinto (mismo protocolo, dominio o puerto).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El navegador bloquea la petición fetch/axios porque el backend no envía la cabecera Access-Control-Allow-Origin** | Añadir el middleware CORS correspondiente en el backend permitiendo el origen del frontend |
 | **La petición preflight OPTIONS falla o retorna un código HTTP distinto de 200/204** | Configurar el servidor para responder exitosamente a las solicitudes preflight con método OPTIONS |
-
-El error `Access to XMLHttpRequest at 'https://api.ejemplo.com' from origin 'https://app.ejemplo.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource` es un mecanismo de seguridad implementado por los navegadores web para evitar que scripts maliciosos de un dominio lean datos protegidos de otro origen distinto (mismo protocolo, dominio o puerto).
 
 ## 🚀 Cómo solucionar el error paso a paso
 

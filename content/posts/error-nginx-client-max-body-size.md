@@ -1,20 +1,24 @@
 ---
-title: "Cómo solucionar el error 413 Request Entity Too Large en Nginx (Rápido)"
-description: "¿No puedes subir archivos o plugins a tu servidor Nginx? Soluciona el error 413 Request Entity Too Large en 3 simples pasos con esta guía práctica."
-category: "Sistemas y Servidores"
-tags: ["Nginx", "Sysadmin", "Web"]
-readTime: "3 min"
-date: "2026-07-03"
+title: Cómo solucionar el error 413 Request Entity Too Large en Nginx (Rápido)
+description: >-
+  ¿No puedes subir archivos o plugins a tu servidor Nginx? Soluciona el error
+  413 Request Entity Too Large en 3 simples pasos con esta guía práctica.
+category: Sistemas y Servidores
+tags:
+  - Nginx
+  - Sysadmin
+  - Web
+readTime: 3 min
+date: '2026-07-03'
 ---
+
+El error **413 request entity too large** en un servidor web Nginx ocurre cuando un cliente intenta subir un archivo (como una imagen, un plugin de WordPress o un backup pesado) cuyo tamaño supera el límite máximo de carga permitido en la directiva de configuración del proxy web.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Directiva client_max_body_size en Nginx con límite inferior al tamaño del archivo subido** | Aumentar el límite en `nginx.conf`: `client_max_body_size 64M;` |
 | **Límite upload_max_filesize o post_max_size en php.ini restringiendo el tamaño** | Actualizar `upload_max_filesize = 64M` en el archivo de configuración de PHP |
-
-
-El error **413 request entity too large** en un servidor web Nginx ocurre cuando un cliente intenta subir un archivo (como una imagen, un plugin de WordPress o un backup pesado) cuyo tamaño supera el límite máximo de carga permitido en la directiva de configuración del proxy web.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

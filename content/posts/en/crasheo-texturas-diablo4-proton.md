@@ -1,19 +1,27 @@
 ---
-title: "Fixing Texture Load Crashes in Diablo IV on Linux with Proton"
-description: "Learn how to fix Out of Memory and texture loading crashes in Diablo IV on Linux using Steam Proton, Lutris, and VKD3D."
-category: "Gaming Tech"
-tags: ["Diablo 4", "Proton", "Linux", "Gaming", "Vulkan", "VKD3D"]
-readTime: "5 min"
-date: "2026-06-25"
+title: Fixing Texture Load Crashes in Diablo IV on Linux with Proton
+description: >-
+  Learn how to fix Out of Memory and texture loading crashes in Diablo IV on
+  Linux using Steam Proton, Lutris, and VKD3D.
+category: Gaming Tech
+tags:
+  - Diablo 4
+  - Proton
+  - Linux
+  - Gaming
+  - Vulkan
+  - VKD3D
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Unexpected crashes in Diablo IV on Linux (frequently accompanied by the `Fenris Error` or `Out of Memory - The application ran out of video memory`) happen because Blizzard engine demands heavy allocations during zone transitions, exhausting memory pools when translating DirectX 12 calls to Vulkan via VKD3D-Proton.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **VRAM fragmentation and host memory exhaustion loading Ultra textures with VKD3D** | Lower texture quality to High/Medium and apply `VKD3D_CONFIG=no_upload_hvv` |
 | **Insufficient Linux system memory mappings (max_map_count) or missing Swap space** | Increase kernel `vm.max_map_count` to 1048576 and provision at least 8GB Swap |
-
-Unexpected crashes in Diablo IV on Linux (frequently accompanied by the `Fenris Error` or `Out of Memory - The application ran out of video memory`) happen because Blizzard engine demands heavy allocations during zone transitions, exhausting memory pools when translating DirectX 12 calls to Vulkan via VKD3D-Proton.
 
 ## 🚀 Step-by-Step Solution
 

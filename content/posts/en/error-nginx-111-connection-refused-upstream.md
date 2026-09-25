@@ -1,25 +1,27 @@
 ---
-title: "[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream"
-description: "Fix Nginx error 111: Connection refused on proxy_pass routes connecting to Node.js, PHP-FPM, Docker, or Python Gunicorn backends."
-category: "Systems & Servers"
-tags: ["Nginx","DevOps","Nodejs","Sysadmin"]
-readTime: "4 min"
-date: "2026-09-17"
+title: >-
+  [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to
+  upstream
+description: >-
+  Fix Nginx error 111: Connection refused on proxy_pass routes connecting to
+  Node.js, PHP-FPM, Docker, or Python Gunicorn backends.
+category: Systems & Servers
+tags:
+  - Nginx
+  - DevOps
+  - Nodejs
+  - Sysadmin
+readTime: 4 min
+date: '2026-09-17'
 ---
+
+When using Nginx as a reverse proxy in front of web applications (Next.js, Express, Django, FastAPI), users are frequently met with HTTP 502 Bad Gateway and the following line logged in `/var/log/nginx/error.log`: `connect() failed (111: Connection refused) while connecting to upstream, upstream: "http://127.0.0.1:3000/..."`. This indicates Nginx dispatched a client request to the upstream target, but no process was listening on the designated socket or TCP port.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Upstream application process (Node.js, Gunicorn, Docker) is stopped or crashed** | Inspect backend daemon status via systemctl status or docker ps |
 | **Port mismatch or IPv4 vs IPv6 loopback binding collision in Nginx proxy_pass** | Point proxy_pass directly to 127.0.0.1:<port> rather than localhost |
-
-When using Nginx as a reverse proxy in front of web applications (Next.js, Express, Django, FastAPI), users are frequently met with HTTP 502 Bad Gateway and the following line logged in `/var/log/nginx/error.log`: `connect() failed (111: Connection refused) while connecting to upstream, upstream: "http://127.0.0.1:3000/..."`. This indicates Nginx dispatched a client request to the upstream target, but no process was listening on the designated socket or TCP port.
-
-> **Quick Solution (1 Minute):**
-> 1. Check listening sockets on local ports:
->    `sudo ss -tulpn | grep -E '3000|8000|8080|9000'`
-> 2. Check backend service status:
->    `sudo systemctl status my-backend`
 
 ## 🚀 Step-by-Step Solution
 

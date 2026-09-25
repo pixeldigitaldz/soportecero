@@ -1,19 +1,30 @@
 ---
-title: "Cómo solucionar la caída de FPS en juegos online tras la última actualización del driver de video"
-description: "Aprende a diagnosticar y revertir controladores gráficos corruptos, limpiar cachés de shaders y restablecer el rendimiento de tus juegos en Windows y Linux."
-category: "Gaming Tech"
-tags: ["GPU", "Drivers", "Nvidia", "AMD", "Gaming", "FPS Drop"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo solucionar la caída de FPS en juegos online tras la última actualización
+  del driver de video
+description: >-
+  Aprende a diagnosticar y revertir controladores gráficos corruptos, limpiar
+  cachés de shaders y restablecer el rendimiento de tus juegos en Windows y
+  Linux.
+category: Gaming Tech
+tags:
+  - GPU
+  - Drivers
+  - Nvidia
+  - AMD
+  - Gaming
+  - FPS Drop
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Experimentar una caída drástica de fotogramas por segundo (FPS) o micro-tirones constantes en títulos competitivos después de actualizar los controladores de NVIDIA (GeForce Game Ready) o AMD (Adrenalin Edition) es un problema frecuente. Ocurre cuando los nuevos archivos binarios entran en conflicto con configuraciones previas del registro, perfiles de energía modificados o cachés de sombreadores incompatibles generadas con versiones anteriores.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Controlador gráfico recién instalado con perfiles corruptos o conflicto de registros previos** | Realizar una desinstalación limpia con DDU (Display Driver Uninstaller) y reinstalar driver WHQL |
 | **Caché de shaders obsoleta o saturada tras la actualización del compilador de la GPU** | Purgar los directorios DirectX / Vulkan shader cache y regenerar los perfiles de sombreado |
-
-Experimentar una caída drástica de fotogramas por segundo (FPS) o micro-tirones constantes en títulos competitivos después de actualizar los controladores de NVIDIA (GeForce Game Ready) o AMD (Adrenalin Edition) es un problema frecuente. Ocurre cuando los nuevos archivos binarios entran en conflicto con configuraciones previas del registro, perfiles de energía modificados o cachés de sombreadores incompatibles generadas con versiones anteriores.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

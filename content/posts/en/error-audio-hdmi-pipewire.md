@@ -1,19 +1,27 @@
 ---
-title: "How to Fix Missing HDMI Audio in Linux Using PipeWire"
-description: "Step-by-step guide to resolving missing sound and unrecognized HDMI/DisplayPort audio profiles in Linux using PipeWire and WirePlumber."
-category: "Gaming Tech"
-tags: ["PipeWire", "Audio", "Linux", "WirePlumber", "HDMI", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: How to Fix Missing HDMI Audio in Linux Using PipeWire
+description: >-
+  Step-by-step guide to resolving missing sound and unrecognized
+  HDMI/DisplayPort audio profiles in Linux using PipeWire and WirePlumber.
+category: Gaming Tech
+tags:
+  - PipeWire
+  - Audio
+  - Linux
+  - WirePlumber
+  - HDMI
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+In modern Linux distributions utilizing the PipeWire multimedia framework, plugging in an external monitor or TV via HDMI/DisplayPort frequently results in no audio output. This happens when the WirePlumber session manager fails to dynamically switch the graphics card ALSA subdevice into an active digital playback profile.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **HDMI/DisplayPort audio profile marked as 'Off' or unrecognized by WirePlumber** | Switch soundcard profile to Digital Stereo (HDMI) using `pactl` or `pavucontrol` |
 | **PipeWire daemon stalled or in race condition with legacy ALSA/PulseAudio** | Restart user service stack: `systemctl --user restart pipewire pipewire-pulse wireplumber` |
-
-In modern Linux distributions utilizing the PipeWire multimedia framework, plugging in an external monitor or TV via HDMI/DisplayPort frequently results in no audio output. This happens when the WirePlumber session manager fails to dynamically switch the graphics card ALSA subdevice into an active digital playback profile.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,18 +1,16 @@
 ---
-title: "[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)"
-description: "¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB."
-category: "Sistemas y Servidores"
-tags: ["Linux", "Sysadmin", "Seguridad"]
-readTime: "4 min"
-date: "2026-06-27"
+title: '[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)'
+description: >-
+  ¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del
+  usuario root en menos de 3 minutos modificando GRUB.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Sysadmin
+  - Seguridad
+readTime: 4 min
+date: '2026-06-27'
 ---
-
-## Diagnóstico Rápido
-| Causa | Solución |
-|---|---|
-| **Contraseña de superusuario root olvidada o bloqueada** | Iniciar en modo monousuario (single-user) agregando `init=/bin/bash` en GRUB |
-| **Sistema de archivos montado en modo lectura (read-only) durante la recuperación** | Remontar en modo lectura/escritura: `mount -o remount,rw /` y cambiar clave con `passwd` |
-
 
 Perder la **contraseña de root en Linux** (o contraseña de administrador superusuario) bloquea el acceso total a tu servidor o máquina virtual. Afortunadamente, no necesitas formatear: si tienes acceso físico o consola web KVM / IPMI, puedes recuperar o cambiar la clave de root editando los parámetros de inicio de **GRUB**.
 
@@ -20,6 +18,12 @@ Perder la **contraseña de root en Linux** (o contraseña de administrador super
 > 1. En el menú de **GRUB**, presiona `e`.
 > 2. Añade `init=/bin/bash` al final de la línea `linux`. Presiona `Ctrl + X`.
 > 3. Ejecuta: `mount -o remount,rw /` y luego `passwd root`.
+
+## Diagnóstico Rápido
+| Causa | Solución |
+|---|---|
+| **Contraseña de superusuario root olvidada o bloqueada** | Iniciar en modo monousuario (single-user) agregando `init=/bin/bash` en GRUB |
+| **Sistema de archivos montado en modo lectura (read-only) durante la recuperación** | Remontar en modo lectura/escritura: `mount -o remount,rw /` y cambiar clave con `passwd` |
 
 ## 🚀 Cómo restablecer la contraseña de root paso a paso
 
@@ -53,4 +57,3 @@ exec /sbin/init
 
 ## 🛡️ Consejo de Prevención y Seguridad
 - Si utilizas servidores en la nube o en producción local, protege la consola de GRUB asignando una contraseña en el gestor de arranque (`grub-mkpasswd-pbkdf2`) para evitar que personas con acceso físico modifiquen los parámetros del kernel sin autorización.
-

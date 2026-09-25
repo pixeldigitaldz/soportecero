@@ -1,27 +1,25 @@
 ---
-title: "[FIXED] cloud-init Slow Booting in Proxmox / Ubuntu Server"
-description: "Proxmox VM or Ubuntu Server taking minutes to boot due to 'cloud-init waiting for network config'? Step-by-step optimization guide."
-category: "Systems & Servers"
-tags: ["Proxmox", "Cloud-Init", "Ubuntu", "Sysadmin"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[FIXED] cloud-init Slow Booting in Proxmox / Ubuntu Server'
+description: >-
+  Proxmox VM or Ubuntu Server taking minutes to boot due to 'cloud-init waiting
+  for network config'? Step-by-step optimization guide.
+category: Systems & Servers
+tags:
+  - Proxmox
+  - Cloud-Init
+  - Ubuntu
+  - Sysadmin
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+The message **`cloud-init: waiting for network config`** or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on **Proxmox VE, KVM, or Cloud VPS** occurs when `cloud-init` stalls waiting for DHCP responses on unconfigured secondary network interfaces.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **cloud-init process waiting for network response during VM boot** | Disable unused network metadata lookup in `/etc/cloud/cloud.cfg` |
 | **cloud-init services delaying systemd startup** | Disable unused modules: `systemctl disable cloud-init` |
-
-
-The message **`cloud-init: waiting for network config`** or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on **Proxmox VE, KVM, or Cloud VPS** occurs when `cloud-init` stalls waiting for DHCP responses on unconfigured secondary network interfaces.
-
-> **Quick Solution (1 Minute):**
-> Disable post-provisioning cloud-init network waiting services:
-> ```bash
-> sudo touch /etc/cloud/cloud-init.disabled
-> sudo systemctl disable cloud-init.service
-> ```
 
 ## 🚀 Step-by-Step Fixes
 

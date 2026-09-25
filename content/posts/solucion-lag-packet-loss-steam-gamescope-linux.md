@@ -1,19 +1,28 @@
 ---
-title: "Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y Steam Deck"
-description: "Guía para optimizar el compositor Gamescope, resolver bufferbloat y reducir el lag en juegos bajo Linux y SteamOS."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Steam Deck", "Gamescope", "Vulkan"]
-readTime: "5 min"
-date: "2026-09-05"
+title: >-
+  Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y
+  Steam Deck
+description: >-
+  Guía para optimizar el compositor Gamescope, resolver bufferbloat y reducir el
+  lag en juegos bajo Linux y SteamOS.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Steam Deck
+  - Gamescope
+  - Vulkan
+readTime: 5 min
+date: '2026-09-05'
 ---
+
+El uso del microcompositor Gamescope en distribuciones Linux para gaming y Steam Deck ofrece ventajas como escalado FSR integrado e isolación de resolución, pero una mala configuración puede introducir latencia de entrada (input lag), micro-tirones (stuttering) y pérdida de fluidez visual. A su vez, problemas en la cola de red del kernel pueden manifestarse como pérdida de paquetes y retraso en títulos multijugador competitivos.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Composición doble y vsync forzado en Gamescope** | Añadir directivas `--immediate-flips` y `--adaptive-sync` a los parámetros de Gamescope |
 | **Bufferbloat y congestión en la pila de red del kernel Linux** | Activar el algoritmo de congestión TCP BBR y el programador FQ_Codel |
-
-El uso del microcompositor Gamescope en distribuciones Linux para gaming y Steam Deck ofrece ventajas como escalado FSR integrado e isolación de resolución, pero una mala configuración puede introducir latencia de entrada (input lag), micro-tirones (stuttering) y pérdida de fluidez visual. A su vez, problemas en la cola de red del kernel pueden manifestarse como pérdida de paquetes y retraso en títulos multijugador competitivos.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) | SoporteCero</title>
+  <meta name="description" content="Experiencing high ping spikes above 200ms or slow transfer speeds in Tailscale? Learn how to fix DERP relay fallback and force direct WireGuard P2P tunnels.">
+  <meta name="keywords" content="Tailscale, WireGuard, VPN, Linux, Sysadmin">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-tailscale-derp-relay-direct-connection.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-tailscale-derp-relay-direct-connection.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-tailscale-derp-relay-direct-connection.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-tailscale-derp-relay-direct-connection.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)">
+  <meta property="og:description" content="Experiencing high ping spikes above 200ms or slow transfer speeds in Tailscale? Learn how to fix DERP relay fallback and force direct WireGuard P2P tunnels.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-tailscale-derp-relay-direct-connection.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-09-24">
+  <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Tailscale">
+  <meta property="article:tag" content="WireGuard">
+  <meta property="article:tag" content="VPN">
+  <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="Sysadmin">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)">
+  <meta name="twitter:description" content="Experiencing high ping spikes above 200ms or slow transfer speeds in Tailscale? Learn how to fix DERP relay fallback and force direct WireGuard P2P tunnels.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)",
+  "description": "Experiencing high ping spikes above 200ms or slow transfer speeds in Tailscale? Learn how to fix DERP relay fallback and force direct WireGuard P2P tunnels.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "en",
+  "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Tailscale, WireGuard, VPN, Linux, Sysadmin",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-09-24",
+  "dateModified": "2026-09-24",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Web Designer & App Creator",
+    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-tailscale-derp-relay-direct-connection.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Systems & Servers",
+      "item": "https://soportecero.com/en/?cat=sistemas"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)",
+      "item": "https://soportecero.com/en/articulos/error-tailscale-derp-relay-direct-connection.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does routing through DERP relays compromise my data encryption?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. DERP relays are blind forwarders handling end-to-end encrypted WireGuard packets. Neither Tailscale nor relay server operators hold the private cryptographic keys of your nodes, ensuring zero decryption capability."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do peers on the same local subnet route through DERP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This commonly happens when the router has &quot;Client Isolation&quot; or &quot;AP Isolation&quot; enabled on Wi-Fi networks, preventing devices on the same subnet from talking directly over their private LAN IP addresses."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="../?cat=sistemas">Systems & Servers</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-tailscale-derp-relay-direct-connection.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
+        <span style="color: var(--text-secondary);">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Systems & Servers</span>
+        <h1 id="post-title">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Replicated and tested in laboratory environment">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Lab Verified
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Read time: 5 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Updated: 2026-09-24
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>When connecting your Linux servers, development workstations, or mobile devices using <strong>Tailscale</strong>, the mesh network is engineered to establish direct, peer-to-peer (P2P) tunnels encrypted with <strong>WireGuard</strong>. However, when operating behind restrictive home firewalls, symmetric NAT, or ISP-level CGNAT, Tailscale&#39;s NAT traversal process may fail to negotiate a direct UDP path, causing connections to fall back onto centralized relay servers known as <strong>DERP (Designated Encrypted Relay for Packets)</strong>.</p>
+<p>While DERP relays ensure your infrastructure maintains continuous connectivity even under difficult network topologies, routing traffic through third-party servers causes major performance degradation: network latency surges to 150-300ms+ and throughput drops significantly, impacting SSH responsiveness, remote database synchronization, and file backups.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Host firewall or cloud security group blocking inbound UDP packets</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Allow UDP port <code>41641</code> in UFW/iptables and update cloud network security group rules</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Cause</div>
+            <div class="diag-value"><strong>Symmetric NAT or CGNAT preventing STUN port mapping</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solution</div>
+            <div class="diag-value">Enable UPnP / NAT-PMP in your router settings or configure static port forwarding for <code>41641/udp</code></div>
+          </div></div></div>
+    </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-fixes">Step-by-Step Fixes</a></li>
+        <li class="toc-subitem"><a href="#step-1-diagnose-if-your-traffic-is-routed-through-derp-relays">Step 1: Diagnose if your traffic is routed through DERP relays</a></li>
+        <li class="toc-subitem"><a href="#step-2-allow-inbound-traffic-on-udp-port-41641">Step 2: Allow inbound traffic on UDP Port 41641</a></li>
+        <li class="toc-subitem"><a href="#step-3-configure-port-forwarding-or-upnp-on-your-router">Step 3: Configure Port Forwarding or UPnP on your router</a></li>
+        <li class="toc-subitem"><a href="#step-4-restart-the-tailscale-daemon-and-verify-direct-transport">Step 4: Restart the Tailscale daemon and verify direct transport</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+        <li class="toc-subitem"><a href="#does-routing-through-derp-relays-compromise-my-data-encryption">Does routing through DERP relays compromise my data encryption?</a></li>
+        <li class="toc-subitem"><a href="#why-do-peers-on-the-same-local-subnet-route-through-derp">Why do peers on the same local subnet route through DERP?</a></li>
+      </ol>
+    </nav>
+    
+    
+<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+<h3 id="step-1-diagnose-if-your-traffic-is-routed-through-derp-relays">Step 1: Diagnose if your traffic is routed through DERP relays</h3>
+<p>Before altering system firewall configurations, inspect the exact route Tailscale uses between your local node and the target peer. Run:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Ping the target machine over Tailscale IP
+tailscale ping 100.x.y.z
+</code></pre>
+    </div>
+    
+<p>If the terminal output returns lines such as <code>via DERP(mad) in 184ms</code>, your packets are traversing through an external relay server (e.g. Madrid) rather than a direct socket connection.</p>
+<p>To view the connection status across all configured peers:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>tailscale status
+</code></pre>
+    </div>
+    
+<p>Relayed connections will display a <code>; relay &quot;...&quot;</code> annotation alongside the peer entry.</p>
+<h3 id="step-2-allow-inbound-traffic-on-udp-port-41641">Step 2: Allow inbound traffic on UDP Port 41641</h3>
+<p>Tailscale defaults to listening on UDP port <code>41641</code> for WireGuard handshakes and packet transport. If your host firewall denies incoming unsolicited UDP traffic on this port, Tailscale will fail NAT traversal.</p>
+<p>On Linux machines using <strong>UFW</strong>, allow the port:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Whitelist default WireGuard/Tailscale port
+sudo ufw allow 41641/udp
+sudo ufw reload
+</code></pre>
+    </div>
+    
+<p>If you manage firewall rules via <strong>iptables</strong> or firewalld:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># For iptables
+sudo iptables -A INPUT -p udp --dport 41641 -j ACCEPT
+
+# For firewalld (RHEL/Rocky/Fedora)
+sudo firewall-cmd --permanent --add-port=41641/udp
+sudo firewall-cmd --reload
+</code></pre>
+    </div>
+    
+<h3 id="step-3-configure-port-forwarding-or-upnp-on-your-router">Step 3: Configure Port Forwarding or UPnP on your router</h3>
+<p>If your target host is behind a residential gateway or strict NAT router, Tailscale&#39;s STUN discovery mechanism might struggle to puncture the firewall without port mapping:</p>
+<ol>
+<li>Access your router management dashboard (usually <code>192.168.1.1</code> or <code>192.168.0.1</code>).</li>
+<li>Navigate to <strong>Port Forwarding / Virtual Servers</strong>.</li>
+<li>Create a port forwarding rule:<ul>
+<li><strong>Protocol:</strong> UDP</li>
+<li><strong>External Port:</strong> <code>41641</code></li>
+<li><strong>Internal Port:</strong> <code>41641</code></li>
+<li><strong>Internal IP:</strong> Your server&#39;s local LAN address (e.g., <code>192.168.1.50</code>).</li>
+</ul>
+</li>
+<li>Alternatively, verify that <strong>UPnP</strong> or <strong>NAT-PMP</strong> is enabled on the router to allow the <code>tailscaled</code> daemon to negotiate dynamic port bindings automatically.</li>
+</ol>
+<h3 id="step-4-restart-the-tailscale-daemon-and-verify-direct-transport">Step 4: Restart the Tailscale daemon and verify direct transport</h3>
+<p>After modifying firewall and network rules, restart the Tailscale daemon to trigger an immediate STUN re-evaluation:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Restart the background daemon
+sudo systemctl restart tailscaled
+
+# Verify direct peer latency
+tailscale ping 100.x.y.z
+</code></pre>
+    </div>
+    
+<p>You should now receive an immediate response similar to:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>pong from my-server (100.x.y.z) via 198.51.100.24:41641 in 14ms (direct)
+</code></pre>
+    </div>
+    
+<p>The <strong><code>(direct)</code></strong> indicator confirms that end-to-end P2P WireGuard communication is active with minimal latency.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="does-routing-through-derp-relays-compromise-my-data-encryption">Does routing through DERP relays compromise my data encryption?</h3>
+<p>No. DERP relays are blind forwarders handling end-to-end encrypted WireGuard packets. Neither Tailscale nor relay server operators hold the private cryptographic keys of your nodes, ensuring zero decryption capability.</p>
+<h3 id="why-do-peers-on-the-same-local-subnet-route-through-derp">Why do peers on the same local subnet route through DERP?</h3>
+<p>This commonly happens when the router has &quot;Client Isolation&quot; or &quot;AP Isolation&quot; enabled on Wi-Fi networks, preventing devices on the same subnet from talking directly over their private LAN IP addresses.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li>Regularly update Tailscale (<code>sudo apt update &amp;&amp; sudo apt install tailscale</code>) to benefit from updated NAT traversal heuristics and disco improvements.</li>
+<li>In cloud environments (AWS, Hetzner, GCP), ensure security groups allow bidirectional UDP traffic on port <code>41641</code>.</li>
+<li>If running Docker on the host, ensure Docker&#39;s automatic iptables chains do not conflict with the <code>tailscale0</code> network interface.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="author">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Author • Web Designer & App Creator</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments. Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Editorial Methodology
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Report an issue
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nginx-111-connection-refused-upstream.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nginx</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">rsync</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+        <li><a href="../contacto.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

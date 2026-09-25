@@ -1,24 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error 'invalid reference format' en Docker"
-description: "¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o docker build? Aprende a corregir sintaxis de comillas y rutas."
-category: "Sistemas y Servidores"
-tags: ["Docker", "DevOps", "Sysadmin", "Linux"]
-readTime: "3 min"
-date: "2026-08-18"
+title: '[SOLUCIONADO] Error ''invalid reference format'' en Docker'
+description: >-
+  ¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o
+  docker build? Aprende a corregir sintaxis de comillas y rutas.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - DevOps
+  - Sysadmin
+  - Linux
+readTime: 3 min
+date: '2026-08-18'
 ---
+
+El error **`docker: invalid reference format`** (o `invalid reference format: repository name must be lowercase`) ocurre al ejecutar comandos `docker run`, `docker pull` o `docker build` cuando la sintaxis de los nombres de imagen, banderas de volumen (`-v`) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Error sintáctico en el nombre de la imagen o banderas del comando docker run** | Asegurar que el tag de la imagen esté en minúsculas y sin caracteres no válidos |
 | **Rutas de volúmenes con espacios sin comillas en la sintaxis del comando** | Encerrar las rutas entre comillas dobles: `-v "/ruta local:/ruta contenedor"` |
-
-
-El error **`docker: invalid reference format`** (o `invalid reference format: repository name must be lowercase`) ocurre al ejecutar comandos `docker run`, `docker pull` o `docker build` cuando la sintaxis de los nombres de imagen, banderas de volumen (`-v`) o variables de entorno contiene comillas mal formateadas, espacios o letras mayúsculas.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Asegúrate de que el nombre de la imagen esté completamente en **minúsculas** (ej. `mi-app:latest` en lugar de `Mi-App:latest`).
-> 2. Si usas PowerShell en Windows, usa comillas dobles `"$PWD"` en lugar de `'$(pwd)'`.
 
 ## 🚀 Cómo solucionar el error invalid reference format paso a paso
 

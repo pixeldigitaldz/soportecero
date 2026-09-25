@@ -1,19 +1,27 @@
 ---
-title: "Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)"
-description: "Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos."
-category: "Sistemas y Servidores"
-tags: ["Nginx", "PHP-FPM", "Linux", "SysAdmin", "Servidores", "WordPress"]
-readTime: "5 min"
-date: "2026-07-26"
+title: Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)
+description: >-
+  Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM
+  aumentando timeouts y optimizando procesos.
+category: Sistemas y Servidores
+tags:
+  - Nginx
+  - PHP-FPM
+  - Linux
+  - SysAdmin
+  - Servidores
+  - WordPress
+readTime: 5 min
+date: '2026-07-26'
 ---
+
+El error `504 Gateway Timeout` en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Script PHP tarda más tiempo en responder que el límite fastcgi_read_timeout en Nginx** | Aumentar `fastcgi_read_timeout 300s;` en la configuración del bloque server de Nginx |
 | **Límites max_execution_time y request_terminate_timeout bajos en php.ini y pool PHP-FPM** | Aumentar `max_execution_time = 300` en `php.ini` y `request_terminate_timeout = 300s` en `www.conf` |
-
-El error `504 Gateway Timeout` en un servidor web Nginx con PHP-FPM indica que Nginx actuó como proxy inverso o pasarela y no recibió una respuesta oportuna del servicio PHP-FPM antes de que expirara el tiempo de espera (timeout) configurado. Esto es frecuente durante importaciones pesadas, consultas lentas a bases de datos o subida de archivos grandes.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Solución a tirones y stuttering por Shader Cache en Cemu y Ryujinx en Linux"
-description: "Elimina los microtirones y congelamientos al compilar shaders en emuladores como Ryujinx, Cemu y RPCS3 en Linux con controladores Mesa y Vulkan."
-category: "Gaming Tech"
-tags: ["Gaming","Linux","Vulkan","Emuladores"]
-readTime: "4 min"
-date: "2026-09-25"
+title: >-
+  [SOLUCIONADO] Solución a tirones y stuttering por Shader Cache en Cemu y
+  Ryujinx en Linux
+description: >-
+  Elimina los microtirones y congelamientos al compilar shaders en emuladores
+  como Ryujinx, Cemu y RPCS3 en Linux con controladores Mesa y Vulkan.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Vulkan
+  - Emuladores
+readTime: 4 min
+date: '2026-09-25'
 ---
+
+Al ejecutar títulos exigentes en emuladores modernos (como Ryujinx, Cemu o RPCS3) sobre distribuciones Linux (Steam Deck, Arch Linux, Bazzite, Ubuntu), es habitual experimentar microcongelamientos (*stuttering*) cada vez que un personaje lanza una habilidad o aparece una cinemática. Esto se debe a la compilación en tiempo real de pipelines de sombreado (*shader compilation stutter*).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Compilación de sombreadores en tiempo real al renderizar nuevos efectos por primera vez** | Habilitar compilación asíncrona de shaders (Async Shader Compilation) en los ajustes gráficos |
 | **Límite de tamaño en la caché de shaders del controlador Mesa o Nvidia saturada** | Configurar MESA_SHADER_CACHE_MAX_SIZE y habilitar el backend RADV/ACO |
-
-Al ejecutar títulos exigentes en emuladores modernos (como Ryujinx, Cemu o RPCS3) sobre distribuciones Linux (Steam Deck, Arch Linux, Bazzite, Ubuntu), es habitual experimentar microcongelamientos (*stuttering*) cada vez que un personaje lanza una habilidad o aparece una cinemática. Esto se debe a la compilación en tiempo real de pipelines de sombreado (*shader compilation stutter*).
-
-> **Solución Rápida (1 Minuto):**
-> 1. En GPUs AMD/Intel, habilita la compilación ACO ultrarrápida:
->    `export RADV_PERFTEST=aco`
-> 2. Amplía el tamaño del caché de shaders en tu ~/.bashrc:
->    `export MESA_SHADER_CACHE_MAX_SIZE=10G`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

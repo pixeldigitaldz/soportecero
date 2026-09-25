@@ -1,20 +1,26 @@
 ---
-title: "Solución al retraso en el arranque de Linux por error de timeout en montajes de red NFS"
-description: "Evita que tu sistema operativo se quede congelado por 90 segundos al encenderse cuando tu servidor de almacenamiento NAS o local está apagado."
-category: "Sistemas y Servidores"
-tags: ["NFS", "Network", "Sysadmin"]
-readTime: "3 min"
-date: "2026-06-27"
+title: >-
+  Solución al retraso en el arranque de Linux por error de timeout en montajes
+  de red NFS
+description: >-
+  Evita que tu sistema operativo se quede congelado por 90 segundos al
+  encenderse cuando tu servidor de almacenamiento NAS o local está apagado.
+category: Sistemas y Servidores
+tags:
+  - NFS
+  - Network
+  - Sysadmin
+readTime: 3 min
+date: '2026-06-27'
 ---
+
+Cuando configuras carpetas compartidas por red mediante el protocolo NFS (Network File System) para mover películas o respaldos entre tu computadora principal y tu servidor casero, el archivo `/etc/fstab` intenta conectarse al servidor externo durante el arranque del sistema. Si el servidor de almacenamiento está apagado o no hay señal de red local, Linux congela la pantalla de carga por un tiempo límite estricto de **90 segundos** antes de permitirte iniciar sesión.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Puerto NFS (2049) o rpcbind bloqueado por firewall en el servidor de destino** | Permitir el tráfico de NFS en el firewall: `ufw allow 2049/tcp` |
 | **Servicio NFS server no activo o exportación no declarada en /etc/exports** | Verificar la ruta exportada con `showmount -e IP_SERVIDOR` |
-
-
-Cuando configuras carpetas compartidas por red mediante el protocolo NFS (Network File System) para mover películas o respaldos entre tu computadora principal y tu servidor casero, el archivo `/etc/fstab` intenta conectarse al servidor externo durante el arranque del sistema. Si el servidor de almacenamiento está apagado o no hay señal de red local, Linux congela la pantalla de carga por un tiempo límite estricto de **90 segundos** antes de permitirte iniciar sesión.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

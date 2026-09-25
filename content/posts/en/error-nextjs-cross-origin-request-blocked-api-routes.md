@@ -1,24 +1,25 @@
 ---
-title: "[SOLVED] Cross-Origin Request Blocked in Next.js Route Handlers & API Routes"
-description: "How to fix CORS errors in Next.js App Router (route.js) and Pages Router when consumed by external web clients or mobile apps."
-category: "Web & Code"
-tags: ["Nextjs","React","CORS","Webdev"]
-readTime: "4 min"
-date: "2026-10-11"
+title: '[SOLVED] Cross-Origin Request Blocked in Next.js Route Handlers & API Routes'
+description: >-
+  How to fix CORS errors in Next.js App Router (route.js) and Pages Router when
+  consumed by external web clients or mobile apps.
+category: Web & Code
+tags:
+  - Nextjs
+  - React
+  - CORS
+  - Webdev
+readTime: 4 min
+date: '2026-10-11'
 ---
+
+When accessing Next.js API endpoints (via modern App Router `app/api/.../route.ts` or legacy `pages/api/...`) from third-party client apps (React Native, Flutter, external web subdomains), modern browsers abort requests with: `Access to fetch at ... from origin ... has been blocked by CORS policy: Response to preflight request doesn't pass access control check`.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Missing Access-Control-Allow-Origin headers on Next.js App Router Response objects** | Define global headers in next.config.js or implement CORS response middleware |
 | **Browser preflight OPTIONS requests receiving 405 Method Not Allowed inside route.js** | Export an explicit OPTIONS handler function in app/api/.../route.js |
-
-When accessing Next.js API endpoints (via modern App Router `app/api/.../route.ts` or legacy `pages/api/...`) from third-party client apps (React Native, Flutter, external web subdomains), modern browsers abort requests with: `Access to fetch at ... from origin ... has been blocked by CORS policy: Response to preflight request doesn't pass access control check`.
-
-> **Quick Solution (1 Minute):**
-> 1. In Next.js App Router, export an explicit OPTIONS preflight handler:
->    `export async function OPTIONS() { return new Response(null, { status: 204, headers: corsHeaders }); }`
-> 2. Or configure cross-origin rules inside next.config.js via async headers().
 
 ## 🚀 Step-by-Step Solution
 

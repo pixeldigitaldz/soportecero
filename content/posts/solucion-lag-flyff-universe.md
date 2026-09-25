@@ -1,19 +1,29 @@
 ---
-title: "Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)"
-description: "Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE."
-category: "Gaming Tech"
-tags: ["Flyff Universe", "Gaming", "WebGL", "Chrome", "Navegador", "FPS Drop"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y
+  Cliente)
+description: >-
+  Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe
+  activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE.
+category: Gaming Tech
+tags:
+  - Flyff Universe
+  - Gaming
+  - WebGL
+  - Chrome
+  - Navegador
+  - FPS Drop
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Flyff Universe es un MMORPG que se ejecuta directamente sobre el motor WebGL del navegador. Cuando los jugadores experimentan caídas severas de FPS, tirones constantes o congelamientos en ciudades concurridas (como Flaris o Saint Morning), la causa principal suele ser una renderización por software en el navegador o una saturación de llamadas de dibujo (draw calls) en la GPU.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Aceleración por hardware desactivada en el navegador web o WebGL ejecutándose por software** | Habilitar aceleración por hardware y cambiar el backend gráfico ANGLE a D3D11 o Vulkan en `chrome://flags` |
 | **Saturación de memoria por renderizado de cientos de modelos de personajes y sombras en ciudades** | Limitar el rango de dibujado de jugadores a 'Cercano' y desactivar sombras dinámicas en ajustes del juego |
-
-Flyff Universe es un MMORPG que se ejecuta directamente sobre el motor WebGL del navegador. Cuando los jugadores experimentan caídas severas de FPS, tirones constantes o congelamientos en ciudades concurridas (como Flaris o Saint Morning), la causa principal suele ser una renderización por software en el navegador o una saturación de llamadas de dibujo (draw calls) en la GPU.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

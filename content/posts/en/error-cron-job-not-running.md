@@ -1,20 +1,24 @@
 ---
-title: "Why Is My Cron Job Not Running? Step-by-Step Diagnosis"
-description: "Learn how to diagnose why your scheduled Cron jobs are not running and how to debug failures in background automation scripts."
-category: "Systems & Servers"
-tags: ["Linux", "Sysadmin", "Cron"]
-readTime: "3 min"
-date: "2026-07-24"
+title: Why Is My Cron Job Not Running? Step-by-Step Diagnosis
+description: >-
+  Learn how to diagnose why your scheduled Cron jobs are not running and how to
+  debug failures in background automation scripts.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - Cron
+readTime: 3 min
+date: '2026-07-24'
 ---
+
+The most common failure with automated Cron tasks is that the script or command runs perfectly when you execute it manually in your terminal, but fails silently when invoked by the system daemon (`cron`). This occurs due to critical differences between your user session and the isolated environment of Cron.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Cron daemon service disabled or stopped** | Start cron daemon: `systemctl enable --now cron` (or `crond`) |
 | **Missing trailing newline in crontab file or relative paths used** | Use absolute paths for all commands and executables in crontab |
-
-
-The most common failure with automated Cron tasks is that the script or command runs perfectly when you execute it manually in your terminal, but fails silently when invoked by the system daemon (`cron`). This occurs due to critical differences between your user session and the isolated environment of Cron.
 
 ## 🚀 Step-by-Step Solution
 

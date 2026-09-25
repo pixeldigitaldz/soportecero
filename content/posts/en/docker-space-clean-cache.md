@@ -1,19 +1,26 @@
 ---
-title: "How to Free Disk Space by Cleaning Docker Cache and Orphaned Containers"
-description: "Complete guide to reclaiming gigabytes in /var/lib/docker by pruning BuildKit cache, unused images, and dangling volumes."
-category: "Systems & Servers"
-tags: ["Docker", "Linux", "DevOps", "SysAdmin", "Storage"]
-readTime: "5 min"
-date: "2026-06-25"
+title: How to Free Disk Space by Cleaning Docker Cache and Orphaned Containers
+description: >-
+  Complete guide to reclaiming gigabytes in /var/lib/docker by pruning BuildKit
+  cache, unused images, and dangling volumes.
+category: Systems & Servers
+tags:
+  - Docker
+  - Linux
+  - DevOps
+  - SysAdmin
+  - Storage
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Unchecked growth of `/var/lib/docker` on Linux hosts frequently results in catastrophic `no space left on device` errors. Docker retains unreferenced intermediate build layers, cached BuildKit state, stopped containers, and unattached anonymous volumes by default.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **/var/lib/docker directory bloated by stale BuildKit layers and dangling container images** | Execute `docker system prune -a --volumes` to reclaim unallocated storage |
 | **Massive container JSON log files accumulating inside /var/lib/docker/containers/** | Configure log rotation limits in `/etc/docker/daemon.json` and truncate logs |
-
-Unchecked growth of `/var/lib/docker` on Linux hosts frequently results in catastrophic `no space left on device` errors. Docker retains unreferenced intermediate build layers, cached BuildKit state, stopped containers, and unattached anonymous volumes by default.
 
 ## 🚀 Step-by-Step Solution
 

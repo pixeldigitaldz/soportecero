@@ -1,19 +1,26 @@
 ---
-title: "Cómo resolver: The query requires an index en Cloud Firestore"
-description: "Aprende a solucionar el error de índice compuesto faltante en consultas complejas de Firebase Cloud Firestore paso a paso."
-category: "Web y Código"
-tags: ["Firebase", "Cloud Firestore", "JavaScript", "NoSQL", "Bases de Datos"]
-readTime: "5 min"
-date: "2026-08-19"
+title: 'Cómo resolver: The query requires an index en Cloud Firestore'
+description: >-
+  Aprende a solucionar el error de índice compuesto faltante en consultas
+  complejas de Firebase Cloud Firestore paso a paso.
+category: Web y Código
+tags:
+  - Firebase
+  - Cloud Firestore
+  - JavaScript
+  - NoSQL
+  - Bases de Datos
+readTime: 5 min
+date: '2026-08-19'
 ---
+
+El error FAILED_PRECONDITION: The query requires an index en Cloud Firestore se genera cuando ejecutas una consulta compleja que combina cláusulas where() sobre múltiples campos distintos o mezcla un filtro de rango/desigualdad (<, <=, >, >=) con una ordenación orderBy() en un campo diferente. Por diseño NoSQL, Firestore exige un índice compuesto previo para garantizar un rendimiento constante en tiempo de consulta O(N).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Consulta compuesta en Firestore que combina múltiples campos con filtros de desigualdad o diferente orden** | Crear el índice compuesto mediante el enlace directo generado en el log de error de la consola |
 | **Índice compuesto faltante en el archivo de despliegue firestore.indexes.json** | Definir la colección, campos y ordenación en firestore.indexes.json y desplegar con Firebase CLI |
-
-El error FAILED_PRECONDITION: The query requires an index en Cloud Firestore se genera cuando ejecutas una consulta compleja que combina cláusulas where() sobre múltiples campos distintos o mezcla un filtro de rango/desigualdad (<, <=, >, >=) con una ordenación orderBy() en un campo diferente. Por diseño NoSQL, Firestore exige un índice compuesto previo para garantizar un rendimiento constante en tiempo de consulta O(N).
 
 ## 🚀 Cómo solucionar el error paso a paso
 

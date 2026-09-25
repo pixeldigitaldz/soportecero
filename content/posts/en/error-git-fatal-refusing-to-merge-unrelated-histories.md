@@ -1,24 +1,24 @@
 ---
-title: "[FIXED] Error 'fatal: refusing to merge unrelated histories' in Git"
-description: "Git refusing to merge local repo with GitHub due to 'unrelated histories'? Step-by-step fix using --allow-unrelated-histories flag."
-category: "Web & Code"
-tags: ["Git", "GitHub", "DevOps"]
-readTime: "3 min"
-date: "2026-08-03"
+title: '[FIXED] Error ''fatal: refusing to merge unrelated histories'' in Git'
+description: >-
+  Git refusing to merge local repo with GitHub due to 'unrelated histories'?
+  Step-by-step fix using --allow-unrelated-histories flag.
+category: Web & Code
+tags:
+  - Git
+  - GitHub
+  - DevOps
+readTime: 3 min
+date: '2026-08-03'
 ---
+
+The error **`fatal: refusing to merge unrelated histories`** occurs when attempting to execute `git pull` or `git merge` between two Git repositories that do not share a common commit history. This frequently happens when you run `git init` locally while simultaneously creating a new repository on GitHub initialized with a `README.md` or `.gitignore` file.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Attempting to merge two branches/repositories with unrelated commit histories** | Allow forced merge using `--allow-unrelated-histories` flag |
 | **Remote repository initialized independently with README/LICENSE files** | Execute `git pull origin main --allow-unrelated-histories` |
-
-
-The error **`fatal: refusing to merge unrelated histories`** occurs when attempting to execute `git pull` or `git merge` between two Git repositories that do not share a common commit history. This frequently happens when you run `git init` locally while simultaneously creating a new repository on GitHub initialized with a `README.md` or `.gitignore` file.
-
-> **Quick Solution (1 Minute):**
-> Execute the pull command with the allow flag:
-> `git pull origin main --allow-unrelated-histories`
 
 ## 🚀 Step-by-Step Troubleshooting
 

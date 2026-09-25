@@ -1,22 +1,29 @@
 ---
-title: "Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite)"
-description: "Evita que tus juegos pesados e instancias de Docker se cierren solos configurando o expandiendo el espacio de memoria SWAP en distribuciones modernas de Linux."
-category: "Gaming Tech"
-tags: ["Linux", "Optimización", "Gaming"]
-readTime: "4 min"
-date: "2026-06-26"
+title: >-
+  Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS /
+  Bazzite)
+description: >-
+  Evita que tus juegos pesados e instancias de Docker se cierren solos
+  configurando o expandiendo el espacio de memoria SWAP en distribuciones
+  modernas de Linux.
+category: Gaming Tech
+tags:
+  - Linux
+  - Optimización
+  - Gaming
+readTime: 4 min
+date: '2026-06-26'
 ---
+
+Al ejecutar títulos demandantes en hardware moderno bajo distribuciones Linux de alto rendimiento como **CachyOS** o **Bazzite**, el sistema puede cerrar repentinamente tus juegos o contenedores pesados sin previo aviso. Al revisar los logs, el culpable suele ser el proceso `Out Of Memory (OOM) Killer`.
+
+Esto pasa porque el sistema se queda sin memoria RAM física y, al no encontrar suficiente memoria virtual (**espacio SWAP**) configurada en el almacenamiento local, congela o mata la aplicación para proteger el sistema operativo.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Memoria RAM y espacio Swap totalmente agotados (OOM Killer)** | Crear un archivo swap adicional con `fallocate -l 4G /swapfile && mkswap /swapfile` |
 | **Parámetro vm.swappiness desconfigurado** | Ajustar swappiness a un valor equilibrado (10-30): `sysctl vm.swappiness=20` |
-
-
-Al ejecutar títulos demandantes en hardware moderno bajo distribuciones Linux de alto rendimiento como **CachyOS** o **Bazzite**, el sistema puede cerrar repentinamente tus juegos o contenedores pesados sin previo aviso. Al revisar los logs, el culpable suele ser el proceso `Out Of Memory (OOM) Killer`.
-
-Esto pasa porque el sistema se queda sin memoria RAM física y, al no encontrar suficiente memoria virtual (**espacio SWAP**) configurada en el almacenamiento local, congela o mata la aplicación para proteger el sistema operativo.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

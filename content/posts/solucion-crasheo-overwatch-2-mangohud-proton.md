@@ -1,25 +1,26 @@
 ---
-title: "[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck"
-description: "¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al usar Proton? Solución paso a paso para DXVK y compilación de shaders."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Steam Deck", "Proton", "Overwatch 2"]
-readTime: "4 min"
-date: "2026-08-16"
+title: '[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck'
+description: >-
+  ¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al
+  usar Proton? Solución paso a paso para DXVK y compilación de shaders.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Steam Deck
+  - Proton
+  - Overwatch 2
+readTime: 4 min
+date: '2026-08-16'
 ---
+
+El **cierre inesperado (*crash*) o congelamiento de Overwatch 2** al ejecutarse en Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck a través de Proton suele estar causado por la compilación síncrona de shaders de DXVK, capas de rendimiento incompatibles como MangoHud o la falta de parches en la versión estándar de Proton.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Incompatibilidad de la capa MangoHud con el compilador DXVK/VKD3D** | Desactivar el parámetro `MANGOHUD=1` o actualizar MangoHud a la versión más reciente |
 | **Conflicto de captura de pantalla u overlay de compatibilidad de Proton** | Utilizar `MANGOHUD_CONFIG=no_display %command%` en los parámetros de arranque |
-
-
-El **cierre inesperado (*crash*) o congelamiento de Overwatch 2** al ejecutarse en Linux (CachyOS, Arch, Ubuntu, Fedora) o Steam Deck a través de Proton suele estar causado por la compilación síncrona de shaders de DXVK, capas de rendimiento incompatibles como MangoHud o la falta de parches en la versión estándar de Proton.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En las Opciones de Lanzamiento de Steam para Overwatch 2, añade:
->    `MANGOHUD=0 %command%`
-> 2. Cambia la versión de compatibilidad a **GE-Proton** (Proton GloriousEggroll).
 
 ## 🚀 Cómo solucionar el crasheo de Overwatch 2 paso a paso
 

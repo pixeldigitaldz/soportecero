@@ -1,20 +1,24 @@
 ---
-title: "How to Fix SSH Connection Timeout Errors Due to Firewall Rules"
-description: "Learn how to diagnose connection blocks on port 22 and correctly configure IPTables or UFW rules to allow secure remote access."
-category: "Systems & Servers"
-tags: ["SSH", "Sysadmin", "Firewall"]
-readTime: "4 min"
-date: "2026-07-25"
+title: How to Fix SSH Connection Timeout Errors Due to Firewall Rules
+description: >-
+  Learn how to diagnose connection blocks on port 22 and correctly configure
+  IPTables or UFW rules to allow secure remote access.
+category: Systems & Servers
+tags:
+  - SSH
+  - Sysadmin
+  - Firewall
+readTime: 4 min
+date: '2026-07-25'
 ---
+
+The time limit reached error on **port 22** (`ssh: connect to host ... port 22: Connection timed out`) occurs when the destination server's firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **iptables or UFW firewall rules blocking SSH port (22)** | Allow SSH port 22 in firewall: `sudo ufw allow 22/tcp` |
 | **SSH server daemon not listening on expected IP address** | Check SSH daemon status: `sudo systemctl status sshd` |
-
-
-The time limit reached error on **port 22** (`ssh: connect to host ... port 22: Connection timed out`) occurs when the destination server's firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.
 
 ## 🚀 Step-by-Step Solution
 

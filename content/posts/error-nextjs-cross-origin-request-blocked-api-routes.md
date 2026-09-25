@@ -1,24 +1,27 @@
 ---
-title: "[SOLUCIONADO] Cross-Origin Request Blocked en Route Handlers y API Routes de Next.js"
-description: "Cómo solucionar el error de CORS en Next.js App Router (route.js) y Pages Router al consumir APIs desde dominios externos o móviles."
-category: "Web y Código"
-tags: ["Nextjs","React","CORS","Webdev"]
-readTime: "4 min"
-date: "2026-10-11"
+title: >-
+  [SOLUCIONADO] Cross-Origin Request Blocked en Route Handlers y API Routes de
+  Next.js
+description: >-
+  Cómo solucionar el error de CORS en Next.js App Router (route.js) y Pages
+  Router al consumir APIs desde dominios externos o móviles.
+category: Web y Código
+tags:
+  - Nextjs
+  - React
+  - CORS
+  - Webdev
+readTime: 4 min
+date: '2026-10-11'
 ---
+
+Al consumir una API creada en Next.js (utilizando el directorio App Router `app/api/.../route.ts` o Pages Router `pages/api/...`) desde una aplicación frontend externa (como una app de React Native, Flutter o un subdominio diferente), el navegador bloquea la llamada con: `Access to fetch at ... from origin ... has been blocked by CORS policy: Response to preflight request doesn't pass access control check`.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Falta de cabeceras Access-Control-Allow-Origin en las respuestas del App Router de Next.js** | Configurar cabeceras de respuesta en next.config.js o añadir un middleware de CORS |
 | **Navegadores bloqueando la petición previa (Preflight OPTIONS request) no manejada en route.js** | Exportar una función OPTIONS en app/api/.../route.js con las cabeceras permitidas |
-
-Al consumir una API creada en Next.js (utilizando el directorio App Router `app/api/.../route.ts` o Pages Router `pages/api/...`) desde una aplicación frontend externa (como una app de React Native, Flutter o un subdominio diferente), el navegador bloquea la llamada con: `Access to fetch at ... from origin ... has been blocked by CORS policy: Response to preflight request doesn't pass access control check`.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En el App Router de Next.js, exporta la respuesta para peticiones OPTIONS:
->    `export async function OPTIONS() { return new Response(null, { status: 204, headers: corsHeaders }); }`
-> 2. O habilita cabeceras globales en next.config.js con headers().
 
 ## 🚀 Cómo solucionar el error paso a paso
 

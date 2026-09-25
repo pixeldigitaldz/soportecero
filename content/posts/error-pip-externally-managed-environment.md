@@ -1,25 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error 'externally-managed-environment' al usar pip en Linux"
-description: "¿No puedes instalar paquetes Python con pip por el error externally-managed-environment en Ubuntu 24.04, Debian 12 o Arch? Aprende a solucionarlo."
-category: "Web y Código"
-tags: ["Python", "Linux", "Pip"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Error ''externally-managed-environment'' al usar pip en Linux'
+description: >-
+  ¿No puedes instalar paquetes Python con pip por el error
+  externally-managed-environment en Ubuntu 24.04, Debian 12 o Arch? Aprende a
+  solucionarlo.
+category: Web y Código
+tags:
+  - Python
+  - Linux
+  - Pip
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El error **`error: externally-managed-environment`** ocurre al ejecutar `pip install <paquete>` en distribuciones de Linux recientes como **Ubuntu 24.04 LTS, Debian 12 (Bookworm) y Arch Linux / CachyOS**. Es una restricción de seguridad del estándar **PEP 668** para evitar que `pip` sobrescriba las librerías de Python administradas directamente por el gestor de paquetes del sistema operativo (`apt` o `pacman`).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Protección PEP 668 en Python moderno impidiendo pip install global en el sistema** | Crear y activar un entorno virtual: `python3 -m venv venv && source venv/bin/activate` |
 | **Necesidad de instalar un paquete Python a nivel de sistema operativo** | Instalar el paquete mediante el gestor de paquetes de la distribución (ej. `apt install python3-pkg`) |
-
-
-El error **`error: externally-managed-environment`** ocurre al ejecutar `pip install <paquete>` en distribuciones de Linux recientes como **Ubuntu 24.04 LTS, Debian 12 (Bookworm) y Arch Linux / CachyOS**. Es una restricción de seguridad del estándar **PEP 668** para evitar que `pip` sobrescriba las librerías de Python administradas directamente por el gestor de paquetes del sistema operativo (`apt` o `pacman`).
-
-> **Solución Rápida (1 Minuto):**
-> 1. Crea un entorno virtual: `python3 -m venv venv`
-> 2. Actívalo: `source venv/bin/activate`
-> 3. Instala tu paquete: `pip install nombre-paquete`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

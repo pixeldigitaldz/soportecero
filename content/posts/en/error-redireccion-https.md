@@ -1,19 +1,27 @@
 ---
-title: "How to Fix Infinite HTTP to HTTPS Redirect Loops (ERR_TOO_MANY_REDIRECTS)"
-description: "Learn how to resolve ERR_TOO_MANY_REDIRECTS loops across Cloudflare, Nginx, Apache, and WordPress when enforcing HTTPS."
-category: "Web & Code"
-tags: ["HTTPS", "SSL", "Cloudflare", "Nginx", "WordPress", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: How to Fix Infinite HTTP to HTTPS Redirect Loops (ERR_TOO_MANY_REDIRECTS)
+description: >-
+  Learn how to resolve ERR_TOO_MANY_REDIRECTS loops across Cloudflare, Nginx,
+  Apache, and WordPress when enforcing HTTPS.
+category: Web & Code
+tags:
+  - HTTPS
+  - SSL
+  - Cloudflare
+  - Nginx
+  - WordPress
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The `ERR_TOO_MANY_REDIRECTS` exception occurs when a browser enters an unresolved loop of HTTP and HTTPS redirection cycles. This condition is most frequently triggered by synchronization mismatches between an edge reverse proxy (such as Cloudflare) and an origin web server (Nginx/Apache/WordPress).
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Cloudflare SSL mode set to 'Flexible' while origin server forces HTTPS redirects** | Switch Cloudflare SSL/TLS encryption mode to 'Full' or 'Full (Strict)' |
 | **Missing X-Forwarded-Proto headers causing WordPress / Nginx to mistakenly identify HTTPS requests as HTTP** | Configure `fastcgi_param HTTPS on;` and check `$_SERVER['HTTP_X_FORWARDED_PROTO']` |
-
-The `ERR_TOO_MANY_REDIRECTS` exception occurs when a browser enters an unresolved loop of HTTP and HTTPS redirection cycles. This condition is most frequently triggered by synchronization mismatches between an edge reverse proxy (such as Cloudflare) and an origin web server (Nginx/Apache/WordPress).
 
 ## 🚀 Step-by-Step Solution
 

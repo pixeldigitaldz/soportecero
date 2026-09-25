@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed"
-description: "Soluciona el fallo rsync error code 12 connection unexpectedly closed al transferir archivos grandes o copias de seguridad por SSH."
-category: "Sistemas y Servidores"
-tags: ["rsync","SSH","Linux","Backup"]
-readTime: "4 min"
-date: "2026-09-17"
+title: >-
+  [SOLUCIONADO] rsync error: error in rsync protocol data stream (code 12)
+  connection unexpectedly closed
+description: >-
+  Soluciona el fallo rsync error code 12 connection unexpectedly closed al
+  transferir archivos grandes o copias de seguridad por SSH.
+category: Sistemas y Servidores
+tags:
+  - rsync
+  - SSH
+  - Linux
+  - Backup
+readTime: 4 min
+date: '2026-09-17'
 ---
+
+Durante la sincronización de archivos o respaldos remotos a través de SSH, la transferencia se interrumpe abruptamente arrojando: `rsync: connection unexpectedly closed (0 bytes received so far) [sender]` seguido de `rsync error: error in rsync protocol data stream (code 12) at io.c`. Este código de salida 12 significa que la comunicación entre los procesos de rsync emisor y receptor se rompió antes de completar el apretón de manos o la transferencia.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El demonio rsync no está instalado en el servidor remoto de destino** | Instalar rsync en el host remoto ejecutando sudo apt install rsync |
 | **Cierre de sesión SSH por inactividad o firewall cortando conexiones de archivos pesados** | Configurar ServerAliveInterval en SSH y usar las opciones -P --partial en rsync |
-
-Durante la sincronización de archivos o respaldos remotos a través de SSH, la transferencia se interrumpe abruptamente arrojando: `rsync: connection unexpectedly closed (0 bytes received so far) [sender]` seguido de `rsync error: error in rsync protocol data stream (code 12) at io.c`. Este código de salida 12 significa que la comunicación entre los procesos de rsync emisor y receptor se rompió antes de completar el apretón de manos o la transferencia.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Comprueba que rsync esté instalado en el servidor remoto:
->    `ssh usuario@servidor "which rsync"`
-> 2. Transfiere con reanudación y mantenedor de conexión SSH activo:
->    `rsync -avzP -e "ssh -o ServerAliveInterval=30 -o TCPKeepAlive=yes" origen/ usuario@servidor:/destino/`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

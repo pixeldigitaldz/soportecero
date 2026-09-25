@@ -1,26 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error 'Host key verification failed' en SSH"
-description: "¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto."
-category: "Sistemas y Servidores"
-tags: ["SSH", "Linux", "Sysadmin", "Seguridad"]
-readTime: "3 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Error ''Host key verification failed'' en SSH'
+description: >-
+  ¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST
+  IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.
+category: Sistemas y Servidores
+tags:
+  - SSH
+  - Linux
+  - Sysadmin
+  - Seguridad
+readTime: 3 min
+date: '2026-08-03'
 ---
+
+El error **`Host key verification failed`** (acompañado de la advertencia en rojo `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local `~/.ssh/known_hosts`.
+
+Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **La clave pública de la máquina remota cambió en el archivo known_hosts** | Eliminar la entrada antigua del host: `ssh-keygen -R IP_O_HOST` |
 | **Ataque Man-in-the-Middle o reinstalación del sistema operativo del servidor** | Confirmar el nuevo huella digital de la clave e ingresar nuevamente mediante SSH |
-
-
-El error **`Host key verification failed`** (acompañado de la advertencia en rojo `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`) ocurre cuando tu cliente SSH detecta que la huella digital criptográfica del servidor al que te intentas conectar no coincide con la llave guardada en tu archivo local `~/.ssh/known_hosts`.
-
-Ocurre comúnmente cuando reinstalas el sistema operativo de tu VPS, cambias de servidor manteniendo la misma dirección IP o reconfiguras las llaves del servicio OpenSSH.
-
-> **Solución Rápida (1 Minuto):**
-> Elimina la clave antigua del servidor ejecutando:
-> `ssh-keygen -R tu-direccion-ip-o-dominio`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

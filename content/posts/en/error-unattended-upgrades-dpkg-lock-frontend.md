@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian"
-description: "Learn how to resolve Could not get lock /var/lib/dpkg/lock-frontend caused by unattended-upgrades or frozen background apt sessions."
-category: "Systems & Servers"
-tags: ["Ubuntu","Debian","apt","Linux"]
-readTime: "4 min"
-date: "2026-09-23"
+title: '[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian'
+description: >-
+  Learn how to resolve Could not get lock /var/lib/dpkg/lock-frontend caused by
+  unattended-upgrades or frozen background apt sessions.
+category: Systems & Servers
+tags:
+  - Ubuntu
+  - Debian
+  - apt
+  - Linux
+readTime: 4 min
+date: '2026-09-23'
 ---
+
+When invoking `apt update` or `apt install` on Ubuntu or Debian machines, the command frequently aborts with: `E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)` followed by `E: Unable to acquire the dpkg frontend lock, is another process using it?`. dpkg enforces a strict single-writer mutex lock to prevent concurrent operations from corrupting installed package status.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Background system auto-updater (unattended-upgrades) is actively patching packages** | Allow the automated routine to finish or safely terminate hanging PID with kill |
 | **Orphaned lock files remaining after a hard reboot or aborted apt run** | Clear stale lock handles and repair package database with dpkg --configure -a |
-
-When invoking `apt update` or `apt install` on Ubuntu or Debian machines, the command frequently aborts with: `E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)` followed by `E: Unable to acquire the dpkg frontend lock, is another process using it?`. dpkg enforces a strict single-writer mutex lock to prevent concurrent operations from corrupting installed package status.
-
-> **Quick Solution (1 Minute):**
-> 1. Check which PID holds the frontend lock:
->    `sudo lsof /var/lib/dpkg/lock-frontend`
-> 2. If stale, terminate the hanging PID and repair:
->    `sudo kill -9 <PID> && sudo dpkg --configure -a`
 
 ## 🚀 Step-by-Step Solution
 

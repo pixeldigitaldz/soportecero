@@ -1,19 +1,26 @@
 ---
-title: "How to fix: The query requires an index in Cloud Firestore"
-description: "Learn how to resolve missing composite index errors in Cloud Firestore queries with Firebase Console and firestore.indexes.json."
-category: "Web & Code"
-tags: ["Firebase", "Cloud Firestore", "JavaScript", "NoSQL", "Databases"]
-readTime: "5 min"
-date: "2026-08-19"
+title: 'How to fix: The query requires an index in Cloud Firestore'
+description: >-
+  Learn how to resolve missing composite index errors in Cloud Firestore queries
+  with Firebase Console and firestore.indexes.json.
+category: Web & Code
+tags:
+  - Firebase
+  - Cloud Firestore
+  - JavaScript
+  - NoSQL
+  - Databases
+readTime: 5 min
+date: '2026-08-19'
 ---
+
+The error FAILED_PRECONDITION: The query requires an index in Cloud Firestore occurs when executing complex queries that filter on multiple distinct fields or combine inequality filters (<, <=, >, >=) with an orderBy() clause on a different field. Firestore enforces composite indexing to guarantee predictable O(N) query performance regardless of dataset scale.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Composite Firestore query combining multiple equality/range filters or orderBy fields** | Create composite index via direct link in error log or Firebase Console |
 | **Missing composite index definition in project firestore.indexes.json** | Define collection, field paths, and sorting order in firestore.indexes.json and deploy via Firebase CLI |
-
-The error FAILED_PRECONDITION: The query requires an index in Cloud Firestore occurs when executing complex queries that filter on multiple distinct fields or combine inequality filters (<, <=, >, >=) with an orderBy() clause on a different field. Firestore enforces composite indexing to guarantee predictable O(N) query performance regardless of dataset scale.
 
 ## 🚀 Step-by-Step Solution
 

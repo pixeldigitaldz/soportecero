@@ -1,25 +1,25 @@
 ---
-title: "[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian"
-description: "Elimina el molesto mensaje sudo: unable to resolve host al ejecutar comandos en Linux. Guía rápida para corregir /etc/hostname y /etc/hosts."
-category: "Sistemas y Servidores"
-tags: ["Linux","Ubuntu","Sysadmin","Bash"]
-readTime: "3 min"
-date: "2026-09-16"
+title: '[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian'
+description: >-
+  Elimina el molesto mensaje sudo: unable to resolve host al ejecutar comandos
+  en Linux. Guía rápida para corregir /etc/hostname y /etc/hosts.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Ubuntu
+  - Sysadmin
+  - Bash
+readTime: 3 min
+date: '2026-09-16'
 ---
+
+Cada vez que ejecutas un comando con `sudo`, la terminal pausa brevemente y devuelve la advertencia `sudo: unable to resolve host <nombre-servidor>: Name or service not known`. Aunque el comando termine ejecutándose, esta advertencia retrasa la ejecución y puede provocar fallos en scripts automáticos, despliegues CI/CD y servicios que dependen de la resolución local de nombres.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El nombre de equipo configurado en /etc/hostname no está registrado en /etc/hosts** | Añadir la correspondencia 127.0.1.1 con el hostname exacto en /etc/hosts |
 | **Cambio de nombre de servidor VPS o instancia cloud (AWS, Hetzner, DigitalOcean) sin actualizar el mapeo local** | Sincronizar el comando hostnamectl con el archivo /etc/hosts |
-
-Cada vez que ejecutas un comando con `sudo`, la terminal pausa brevemente y devuelve la advertencia `sudo: unable to resolve host <nombre-servidor>: Name or service not known`. Aunque el comando termine ejecutándose, esta advertencia retrasa la ejecución y puede provocar fallos en scripts automáticos, despliegues CI/CD y servicios que dependen de la resolución local de nombres.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Consulta tu nombre de host actual:
->    `hostname`
-> 2. Añade la IP de loopback local en /etc/hosts:
->    `echo "127.0.1.1 $(hostname)" | sudo tee -a /etc/hosts`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

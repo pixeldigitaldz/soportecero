@@ -1,20 +1,24 @@
 ---
-title: "How to Resize an LVM Volume in Linux When the Disk Runs Out of Space"
-description: "Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server."
-category: "Systems & Servers"
-tags: ["Linux", "Sysadmin", "LVM"]
-readTime: "4 min"
-date: "2026-07-26"
+title: How to Resize an LVM Volume in Linux When the Disk Runs Out of Space
+description: >-
+  Learn how to safely extend an LVM logical volume and its EXT4 or XFS
+  filesystem without losing data and without shutting down the server.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - LVM
+readTime: 4 min
+date: '2026-07-26'
 ---
+
+The disk full error (`No space left on device`) on a Linux server using LVM (Logical Volume Manager) can paralyze databases and services. The advantage of LVM is that it allows hot storage expansion, adding physical space to the logical volume and extending the file system without needing a reboot.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Logical Volume (LV) full while Volume Group (VG) has free space** | Extend logical volume: `lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv` |
 | **Filesystem not expanded after extending the logical volume** | Resize ext4/xfs filesystem using `resize2fs` or `xfs_growfs` |
-
-
-The disk full error (`No space left on device`) on a Linux server using LVM (Logical Volume Manager) can paralyze databases and services. The advantage of LVM is that it allows hot storage expansion, adding physical space to the logical volume and extending the file system without needing a reboot.
 
 ## 🚀 Step-by-Step Solution
 

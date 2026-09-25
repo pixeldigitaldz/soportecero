@@ -1,26 +1,27 @@
 ---
-title: "[FIXED] Error 'Host key verification failed' in SSH"
-description: "Getting 'Host key verification failed' or 'REMOTE HOST IDENTIFICATION HAS CHANGED' error when connecting via SSH? 1-minute step-by-step fix."
-category: "Systems & Servers"
-tags: ["SSH", "Linux", "Sysadmin", "Security"]
-readTime: "3 min"
-date: "2026-08-03"
+title: '[FIXED] Error ''Host key verification failed'' in SSH'
+description: >-
+  Getting 'Host key verification failed' or 'REMOTE HOST IDENTIFICATION HAS
+  CHANGED' error when connecting via SSH? 1-minute step-by-step fix.
+category: Systems & Servers
+tags:
+  - SSH
+  - Linux
+  - Sysadmin
+  - Security
+readTime: 3 min
+date: '2026-08-03'
 ---
+
+The error **`Host key verification failed`** (accompanied by the warning `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`) occurs when your SSH client detects that the remote server's cryptographic host key fingerprint does not match the entry saved in your local `~/.ssh/known_hosts` file.
+
+This commonly happens when you reinstall your server OS, rebuild a VPS instance with the same IP address, or regenerate OpenSSH keys.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Remote host public key changed in known_hosts file** | Remove stale host entry: `ssh-keygen -R HOST_OR_IP` |
 | **Man-in-the-Middle alert or server OS reinstallation** | Verify key fingerprint and re-authenticate via SSH |
-
-
-The error **`Host key verification failed`** (accompanied by the warning `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!`) occurs when your SSH client detects that the remote server's cryptographic host key fingerprint does not match the entry saved in your local `~/.ssh/known_hosts` file.
-
-This commonly happens when you reinstall your server OS, rebuild a VPS instance with the same IP address, or regenerate OpenSSH keys.
-
-> **Quick Solution (1 Minute):**
-> Remove the outdated key entry from your known_hosts file:
-> `ssh-keygen -R your-server-ip-or-domain`
 
 ## 🚀 Step-by-Step Fixes
 

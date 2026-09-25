@@ -1,25 +1,24 @@
 ---
-title: "[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)"
-description: "¿Te sale 'connection refused ssh' al conectar al puerto 22 de tu servidor? Soluciona el error de SSH en menos de 5 minutos con esta guía práctica."
-category: "Sistemas y Servidores"
-tags: ["SSH", "Linux", "Firewall"]
-readTime: "3 min"
-date: "2026-06-26"
+title: '[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)'
+description: >-
+  ¿Te sale 'connection refused ssh' al conectar al puerto 22 de tu servidor?
+  Soluciona el error de SSH en menos de 5 minutos con esta guía práctica.
+category: Sistemas y Servidores
+tags:
+  - SSH
+  - Linux
+  - Firewall
+readTime: 3 min
+date: '2026-06-26'
 ---
+
+El error **SSH Connection Refused** (o `connection refused ssh`) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio **OpenSSH está detenido**, el **puerto SSH fue cambiado** o el **firewall (UFW/iptables)** bloquea el puerto 22.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Servicio SSH (sshd) detenido en el servidor de destino** | Iniciar el servicio SSH: `sudo systemctl start sshd` |
 | **Filtro de seguridad o puerto por defecto bloqueado** | Verificar conexión en el puerto asignado con `ssh -p PUERTO usuario@host` |
-
-
-El error **SSH Connection Refused** (o `connection refused ssh`) ocurre cuando tu cliente intenta conectarse a un servidor remoto, pero el puerto 22 rechaza la solicitud. Esto sucede principalmente porque el servicio **OpenSSH está detenido**, el **puerto SSH fue cambiado** o el **firewall (UFW/iptables)** bloquea el puerto 22.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Inicia SSH: `sudo systemctl enable --now sshd`
-> 2. Abre el puerto en el firewall: `sudo ufw allow 22/tcp && sudo ufw reload`
-> 3. Verifica el puerto actual: `grep -i "port" /etc/ssh/sshd_config`
 
 ## 🚀 Cómo solucionar el error SSH Connection Refused paso a paso
 
@@ -60,4 +59,3 @@ Prácticas de seguridad recomendadas para SSH:
 * No uses el puerto 22 por defecto en servidores de producción expuestos a internet.
 * Deshabilita el acceso directo al usuario root modificando `/etc/ssh/sshd_config` (`PermitRootLogin no`).
 * Configura la autenticación mediante Llaves SSH (`SSH Keys`) y deshabilita el acceso por contraseña.
-

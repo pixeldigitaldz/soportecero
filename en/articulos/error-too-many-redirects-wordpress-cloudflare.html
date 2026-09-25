@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>How to Fix ERR_TOO_MANY_REDIRECTS Loop in WordPress with Cloudflare SSL | SoporteCero</title>
   <meta name="description" content="Fix the infinite HTTPS redirection loop in WordPress hosted behind Cloudflare by configuring SSL/TLS mode to Full (Strict) and setting reverse proxy headers.">
+  <meta name="keywords" content="WordPress, Cloudflare, SSL">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-too-many-redirects-wordpress-cloudflare.html">
   
@@ -24,6 +25,9 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-07-27">
   <meta property="article:section" content="Web & Code">
+  <meta property="article:tag" content="WordPress">
+  <meta property="article:tag" content="Cloudflare">
+  <meta property="article:tag" content="SSL">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +55,7 @@
   "@type": "TechArticle",
   "headline": "How to Fix ERR_TOO_MANY_REDIRECTS Loop in WordPress with Cloudflare SSL",
   "description": "Fix the infinite HTTPS redirection loop in WordPress hosted behind Cloudflare by configuring SSL/TLS mode to Full (Strict) and setting reverse proxy headers.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Web & Code",
   "articleSection": "Web & Code",
@@ -242,15 +247,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The ERR_TOO_MANY_REDIRECTS error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.</p>
-      </section>
-      
-
+          <p>The <code>ERR_TOO_MANY_REDIRECTS</code> error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -259,8 +256,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>Browser displays <code>ERR_TOO_MANY_REDIRECTS</code> when attempting to open site</strong>: Cloudflare is set to &quot;Flexible&quot; SSL mode, sending unencrypted HTTP to origin while WordPress forces HTTP to HTTPS redirect</div>
@@ -269,7 +265,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Change Cloudflare SSL/TLS mode to &quot;Full&quot; or &quot;Full (Strict)&quot; and update HTTPS proxy detection in <code>wp-config.php</code></div>
           </div></div></div>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -283,7 +278,8 @@
       </ol>
     </nav>
     
-    <h2 id="step-by-step-solution">
+    
+<h2 id="step-by-step-solution">
           <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
             <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
           </svg>

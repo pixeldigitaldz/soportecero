@@ -1,26 +1,24 @@
 ---
-title: "[FIXED] Error 'fatal: cannot lock ref' in Git"
-description: "Git returning 'cannot lock ref' or 'unable to update local ref' during pull or fetch? Step-by-step resolution to clear stale locks."
-category: "Web & Code"
-tags: ["Git", "GitHub", "DevOps"]
-readTime: "3 min"
-date: "2026-08-20"
+title: '[FIXED] Error ''fatal: cannot lock ref'' in Git'
+description: >-
+  Git returning 'cannot lock ref' or 'unable to update local ref' during pull or
+  fetch? Step-by-step resolution to clear stale locks.
+category: Web & Code
+tags:
+  - Git
+  - GitHub
+  - DevOps
+readTime: 3 min
+date: '2026-08-20'
 ---
+
+The error **`error: cannot lock ref 'refs/remotes/origin/main': is at ... but expected ...`** or `fatal: cannot lock ref` occurs during `git pull`, `git fetch`, or `git checkout` when local Git reference pointers become corrupted from abrupt process terminations or case-sensitivity branch conflicts.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Stale Git ref lock file present (.git/refs/heads/X.lock)** | Remove leftover lock file: `rm -f .git/refs/heads/branch-name.lock` |
 | **Multiple concurrent Git processes running simultaneously** | Kill other active Git processes or IDE locks before retrying |
-
-
-The error **`error: cannot lock ref 'refs/remotes/origin/main': is at ... but expected ...`** or `fatal: cannot lock ref` occurs during `git pull`, `git fetch`, or `git checkout` when local Git reference pointers become corrupted from abrupt process terminations or case-sensitivity branch conflicts.
-
-> **Quick Solution (1 Minute):**
-> 1. Prune outdated remote references:
->    `git remote prune origin`
-> 2. Manually delete the stale lock file if needed:
->    `rm -f .git/refs/remotes/origin/main.lock`
 
 ## 🚀 Step-by-Step Fixes
 

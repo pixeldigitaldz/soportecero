@@ -1,24 +1,25 @@
 ---
-title: "[SOLVED] TypeScript Error TS2339: Property does not exist on type"
-description: "Step-by-step guide to resolving TypeScript error TS2339 Property does not exist on type in objects, interfaces, window, and React event handlers."
-category: "Web & Code"
-tags: ["TypeScript","JavaScript","React","Frontend"]
-readTime: "4 min"
-date: "2026-10-17"
+title: '[SOLVED] TypeScript Error TS2339: Property does not exist on type'
+description: >-
+  Step-by-step guide to resolving TypeScript error TS2339 Property does not
+  exist on type in objects, interfaces, window, and React event handlers.
+category: Web & Code
+tags:
+  - TypeScript
+  - JavaScript
+  - React
+  - Frontend
+readTime: 4 min
+date: '2026-10-17'
 ---
+
+Among the most frequent build-stopping issues in modern frontend and backend development is `error TS2339: Property '...' does not exist on type '...'`. The TypeScript static type analyzer halts transpilation because code attempts to read or mutate a property not formally cataloged in the target type contract.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Accessing dynamic properties on strictly typed objects lacking index signatures** | Declare optional properties or define record index signatures [key: string]: unknown |
 | **Appending custom runtime attributes to global window without interface declaration merging** | Extend interface Window inside a root global.d.ts ambient declaration file |
-
-Among the most frequent build-stopping issues in modern frontend and backend development is `error TS2339: Property '...' does not exist on type '...'`. The TypeScript static type analyzer halts transpilation because code attempts to read or mutate a property not formally cataloged in the target type contract.
-
-> **Quick Solution (1 Minute):**
-> 1. For dynamic dictionary objects, apply an index signature:
->    `interface DynamicMap { [key: string]: unknown; }`
-> 2. For custom window properties, extend global ambient types in global.d.ts.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,25 +1,26 @@
 ---
-title: "[SOLUCIONADO] Error Certbot 'Failed authorization procedure (http-01)'"
-description: "¿Let's Encrypt / Certbot no puede generar tu certificado SSL por fallo en la prueba HTTP-01? Aprende a solucionar los bloqueos de puerto y Nginx."
-category: "Sistemas y Servidores"
-tags: ["Certbot", "SSL", "Nginx", "Apache", "Sysadmin"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Error Certbot ''Failed authorization procedure (http-01)'''
+description: >-
+  ¿Let's Encrypt / Certbot no puede generar tu certificado SSL por fallo en la
+  prueba HTTP-01? Aprende a solucionar los bloqueos de puerto y Nginx.
+category: Sistemas y Servidores
+tags:
+  - Certbot
+  - SSL
+  - Nginx
+  - Apache
+  - Sysadmin
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El error **`Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout`** ocurre al intentar emitir o renovar un certificado SSL gratuito de Let's Encrypt cuando los servidores de validación de Let's Encrypt no pueden acceder al archivo de prueba temporal generado en tu servidor web.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Puerto 80 bloqueado por firewall o servidor web mal configurado** | Abrir el puerto 80 en el firewall: `ufw allow 80/tcp` |
 | **Ruta del desafío .well-known/acme-challenge inaccesible** | Verificar que el directorio raíz `root` coincida exactamente en Nginx/Apache |
-
-
-El error **`Certbot: Failed authorization procedure. domain.com (http-01): fetching http://domain.com/.well-known/acme-challenge/...: Connection refused / Timeout`** ocurre al intentar emitir o renovar un certificado SSL gratuito de Let's Encrypt cuando los servidores de validación de Let's Encrypt no pueden acceder al archivo de prueba temporal generado en tu servidor web.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Abre el puerto 80 en tu firewall: `sudo ufw allow 80/tcp`
-> 2. Si usas Nginx, detén el servicio temporalmente para renovar en modo standalone:
->    `sudo systemctl stop nginx && sudo certbot certonly --standalone -d tudominio.com`
 
 ## 🚀 Cómo solucionar el error de autorización HTTP-01 paso a paso
 

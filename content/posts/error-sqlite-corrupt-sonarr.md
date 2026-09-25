@@ -1,20 +1,25 @@
 ---
-title: "Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr"
-description: "Aprende a recuperar tus series y configuraciones reparando el error 'database disk image is malformed' de SQLite mediante herramientas de consola en Linux."
-category: "Sistemas y Servidores"
-tags: ["Sonarr", "Radarr", "Database", "SQLite"]
-readTime: "4 min"
-date: "2026-06-27"
+title: Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr
+description: >-
+  Aprende a recuperar tus series y configuraciones reparando el error 'database
+  disk image is malformed' de SQLite mediante herramientas de consola en Linux.
+category: Sistemas y Servidores
+tags:
+  - Sonarr
+  - Radarr
+  - Database
+  - SQLite
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje `database disk image is malformed`) ocurre cuando el archivo interno SQLite (`sonarr.db` o `radarr.db`) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Base de datos SQLite de Sonarr/Radarr corrupta por apagado repentino del contenedor** | Restaurar un respaldo automático de la carpeta `Backups/scheduled/` |
 | **Integridad de la base de datos sqlite3 dañada** | Reparar exportando e importando datos: `sqlite3 sonarr.db ".recover" | sqlite3 sonarr_fixed.db` |
-
-
-El error de base de datos corrupta en Sonarr o Radarr (identificado en los logs con el mensaje `database disk image is malformed`) ocurre cuando el archivo interno SQLite (`sonarr.db` o `radarr.db`) se corrompe por escrituras interrumpidas, cortes repentinos de energía en tu servidor o problemas de sincronización de bloqueos de archivos en sistemas de almacenamiento en red.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

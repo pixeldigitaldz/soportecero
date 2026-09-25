@@ -1,20 +1,24 @@
 ---
-title: "Reparar: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare"
-description: "Aprende a solucionar los fallos de timeout y desafíos no resueltos al configurar FlareSolverr con gestores de descargas y automatizadores."
-category: "Sistemas y Servidores"
-tags: ["Docker", "Cloudflare", "FlareSolverr"]
-readTime: "4 min"
-date: "2026-06-27"
+title: 'Reparar: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare'
+description: >-
+  Aprende a solucionar los fallos de timeout y desafíos no resueltos al
+  configurar FlareSolverr con gestores de descargas y automatizadores.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - Cloudflare
+  - FlareSolverr
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El error de timeout en FlareSolverr ocurre cuando la herramienta intenta resolver un desafío de paso de Cloudflare (como las pantallas de verificación de JavaScript o CAPTCHA) y los tiempos de espera expiran sin éxito, arrojando errores de tipo `Error: El desafío no se pudo resolver` o `Too many attempts`. Esto sucede por el uso de firmas de navegador desactualizadas o por bloqueos directos de IP originados por la mala reputación de tu proveedor de internet.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **FlareSolverr bloqueado por cambios recientes de protección Turnstile de Cloudflare** | Actualizar el contenedor FlareSolverr a la última versión disponible en Docker Hub |
 | **Timeout de respuesta al resolver el reto JS debido a falta de recursos** | Aumentar el valor de `RESOURCE_TIMEOUT` a 60000ms en las variables de entorno |
-
-
-El error de timeout en FlareSolverr ocurre cuando la herramienta intenta resolver un desafío de paso de Cloudflare (como las pantallas de verificación de JavaScript o CAPTCHA) y los tiempos de espera expiran sin éxito, arrojando errores de tipo `Error: El desafío no se pudo resolver` o `Too many attempts`. Esto sucede por el uso de firmas de navegador desactualizadas o por bloqueos directos de IP originados por la mala reputación de tu proveedor de internet.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

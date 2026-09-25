@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] npm ERR! ERESOLVE unable to resolve dependency tree en npm install"
-description: "Aprende a resolver el error ERESOLVE unable to resolve dependency tree al instalar paquetes y librerías en Node.js y React."
-category: "Web y Código"
-tags: ["npm","Nodejs","JavaScript","React"]
-readTime: "4 min"
-date: "2026-10-13"
+title: >-
+  [SOLUCIONADO] npm ERR! ERESOLVE unable to resolve dependency tree en npm
+  install
+description: >-
+  Aprende a resolver el error ERESOLVE unable to resolve dependency tree al
+  instalar paquetes y librerías en Node.js y React.
+category: Web y Código
+tags:
+  - npm
+  - Nodejs
+  - JavaScript
+  - React
+readTime: 4 min
+date: '2026-10-13'
 ---
+
+Al ejecutar `npm install` o añadir una nueva librería a tu proyecto de Node.js, la instalación se detiene bruscamente arrojando: `npm ERR! code ERESOLVE` y `npm ERR! ERESOLVE unable to resolve dependency tree` con un diagrama de conflicto de versiones. Este fallo ocurre porque a partir de npm v7, el instalador valida estrictamente que todas las dependencias de pares (*peerDependencies*) coincidan a la perfección.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Conflicto estricto de dependencias de pares (peerDependencies) introducido en npm v7+** | Utilizar el flag --legacy-peer-deps o actualizar las librerías obsoletas a versiones compatibles |
 | **Incompatibilidad de versiones entre React 18/19 y paquetes antiguos de terceros** | Configurar .npmrc con legacy-peer-deps=true o forzar resolución con overrides |
-
-Al ejecutar `npm install` o añadir una nueva librería a tu proyecto de Node.js, la instalación se detiene bruscamente arrojando: `npm ERR! code ERESOLVE` y `npm ERR! ERESOLVE unable to resolve dependency tree` con un diagrama de conflicto de versiones. Este fallo ocurre porque a partir de npm v7, el instalador valida estrictamente que todas las dependencias de pares (*peerDependencies*) coincidan a la perfección.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Para desbloquear la instalación de inmediato:
->    `npm install --legacy-peer-deps`
-> 2. O haz que el comportamiento sea permanente en tu proyecto:
->    `echo "legacy-peer-deps=true" >> .npmrc`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,22 +1,26 @@
 ---
-title: "How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite)"
-description: "Prevent your heavy games and Docker instances from closing unexpectedly by configuring or expanding SWAP memory space on modern Linux distributions."
-category: "Gaming Tech"
-tags: ["Linux", "Optimization", "Gaming"]
-readTime: "4 min"
-date: "2026-07-20"
+title: How to Fix Out of Memory (SWAP) Crashes in Linux (CachyOS / Bazzite)
+description: >-
+  Prevent your heavy games and Docker instances from closing unexpectedly by
+  configuring or expanding SWAP memory space on modern Linux distributions.
+category: Gaming Tech
+tags:
+  - Linux
+  - Optimization
+  - Gaming
+readTime: 4 min
+date: '2026-07-20'
 ---
+
+When running demanding titles on modern hardware under high-performance Linux distributions like **CachyOS** or **Bazzite**, the system may suddenly close your games or heavy containers without warning. When checking the logs, the culprit is usually the `Out Of Memory (OOM) Killer` process.
+
+This happens because the system runs out of physical RAM and, failing to find enough virtual memory (**SWAP space**) configured on local storage, freezes or kills the application to protect the operating system.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **RAM and Swap space completely exhausted (OOM Killer)** | Create extra swap file: `fallocate -l 4G /swapfile && mkswap /swapfile` |
 | **Misconfigured vm.swappiness parameter** | Set balanced swappiness (10-30): `sysctl vm.swappiness=20` |
-
-
-When running demanding titles on modern hardware under high-performance Linux distributions like **CachyOS** or **Bazzite**, the system may suddenly close your games or heavy containers without warning. When checking the logs, the culprit is usually the `Out Of Memory (OOM) Killer` process.
-
-This happens because the system runs out of physical RAM and, failing to find enough virtual memory (**SWAP space**) configured on local storage, freezes or kills the application to protect the operating system.
 
 ## 🚀 Step-by-Step Solution
 

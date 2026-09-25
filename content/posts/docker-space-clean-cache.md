@@ -1,19 +1,28 @@
 ---
-title: "Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker"
-description: "Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos."
-category: "Sistemas y Servidores"
-tags: ["Docker", "Linux", "DevOps", "SysAdmin", "Almacenamiento"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en
+  Docker
+description: >-
+  Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas
+  BuildKit, imágenes no utilizadas y volúmenes huérfanos.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - Linux
+  - DevOps
+  - SysAdmin
+  - Almacenamiento
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El crecimiento desmedido del directorio `/var/lib/docker` en servidores Linux es una de las causas más frecuentes de agotamiento de espacio en disco (error `no space left on device`). Esto ocurre porque Docker almacena de forma indefinida imágenes intermedias, capas de compilación en caché de BuildKit, contenedores detenidos y volúmenes anónimos huérfanos.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Directorio /var/lib/docker saturado por capas antiguas de compilación BuildKit e imágenes dangling** | Ejecutar `docker system prune -a --volumes` para recuperar espacio no utilizado |
 | **Registros de logs masivos generados por contenedores en /var/lib/docker/containers/** | Configurar rotación de logs (log-driver max-size) en `/etc/docker/daemon.json` |
-
-El crecimiento desmedido del directorio `/var/lib/docker` en servidores Linux es una de las causas más frecuentes de agotamiento de espacio en disco (error `no space left on device`). Esto ocurre porque Docker almacena de forma indefinida imágenes intermedias, capas de compilación en caché de BuildKit, contenedores detenidos y volúmenes anónimos huérfanos.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,20 +1,24 @@
 ---
-title: "Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay"
-description: "Aprende a corregir el fallo de autenticación 'Invalid Signature' o token expirado al integrar pasarelas de pago cripto en tu aplicación web."
-category: "Web y Código"
-tags: ["Binance", "API", "Crypto"]
-readTime: "4 min"
-date: "2026-06-27"
+title: 'Troubleshooting: Error de Token Inválido o expirado en la API de Binance Pay'
+description: >-
+  Aprende a corregir el fallo de autenticación 'Invalid Signature' o token
+  expirado al integrar pasarelas de pago cripto en tu aplicación web.
+category: Web y Código
+tags:
+  - Binance
+  - API
+  - Crypto
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El error `Invalid Signature` o `Token Expired` en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **API Key o Secret Key de Binance expirada, mal copiada o con IP no autorizada** | Generar una nueva clave API en Binance y registrar la dirección IP estática de tu servidor |
 | **Desincronización de hora del sistema local con el reloj del servidor de Binance** | Sincronizar el reloj del servidor con NTP: `sudo ntpdate pool.ntp.org` |
-
-
-El error `Invalid Signature` o `Token Expired` en la API de Binance Pay ocurre cuando intentas procesar un pago en USDT u otra criptomoneda y los servidores de Binance rechazan la petición. La causa principal es una desincronización de la marca de tiempo (Timestamp) entre tu servidor local y el reloj oficial de Binance, o una concatenación incorrecta de las claves API al generar la firma criptográfica HMAC-SHA512.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

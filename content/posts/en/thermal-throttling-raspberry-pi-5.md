@@ -1,20 +1,24 @@
 ---
-title: "How to Prevent Thermal Throttling on Raspberry Pi 5"
-description: "Learn how to diagnose performance drops due to high temperatures and configure cooling thresholds on your Raspberry Pi 5 mini PC."
-category: "Systems & Servers"
-tags: ["Raspberry Pi", "Hardware", "Linux"]
-readTime: "4 min"
-date: "2026-07-20"
+title: How to Prevent Thermal Throttling on Raspberry Pi 5
+description: >-
+  Learn how to diagnose performance drops due to high temperatures and configure
+  cooling thresholds on your Raspberry Pi 5 mini PC.
+category: Systems & Servers
+tags:
+  - Raspberry Pi
+  - Hardware
+  - Linux
+readTime: 4 min
+date: '2026-07-20'
 ---
+
+Thermal throttling on Raspberry Pi 5 occurs when the CPU temperature exceeds 80 °C under heavy workloads. To prevent heat damage, the PMIC (Power Management IC) automatically drops the processor frequency from 2.4 GHz to under 1.5 GHz, drastically degrading container or emulator performance.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **SoC temperature reaching 80°C threshold under heavy load** | Install official Raspberry Pi Active Cooler fan assembly |
 | **Inadequate heat dissipation inside enclosure** | Use aluminum case with passive cooling or PWM-controlled fan |
-
-
-Thermal throttling on Raspberry Pi 5 occurs when the CPU temperature exceeds 80 °C under heavy workloads. To prevent heat damage, the PMIC (Power Management IC) automatically drops the processor frequency from 2.4 GHz to under 1.5 GHz, drastically degrading container or emulator performance.
 
 ## 🚀 Step-by-Step Solution
 

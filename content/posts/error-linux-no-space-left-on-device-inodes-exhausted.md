@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)"
-description: "¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso."
-category: "Sistemas y Servidores"
-tags: ["Linux","Sysadmin","Almacenamiento","Bash"]
-readTime: "4 min"
-date: "2026-09-11"
+title: >-
+  [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados
+  en Linux)
+description: >-
+  ¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio
+  disponible? Aprende a detectar y liberar inodos agotados paso a paso.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Sysadmin
+  - Almacenamiento
+  - Bash
+readTime: 4 min
+date: '2026-09-11'
 ---
+
+El error `No space left on device` en Linux no solo ocurre cuando los gigabytes del disco duro se llenan. Cada archivo, enlace simbólico y directorio requiere una estructura de metadatos llamada **inodo**. Si tu sistema crea millones de archivos diminutos (como sesiones de PHP, logs o ficheros de caché), la tabla de inodos se agota al 100% aunque `df -h` muestre gigabytes de espacio disponible.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Millones de archivos temporales pequeños o sesiones PHP/Docker sin limpiar** | Buscar directorios con más inodos mediante find y eliminarlos |
 | **Archivos eliminados que siguen retenidos por procesos en ejecución** | Identificar descriptores con lsof +L1 y reiniciar los servicios responsables |
-
-El error `No space left on device` en Linux no solo ocurre cuando los gigabytes del disco duro se llenan. Cada archivo, enlace simbólico y directorio requiere una estructura de metadatos llamada **inodo**. Si tu sistema crea millones de archivos diminutos (como sesiones de PHP, logs o ficheros de caché), la tabla de inodos se agota al 100% aunque `df -h` muestre gigabytes de espacio disponible.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Comprueba si los inodos están al 100%:
->    `df -ih`
-> 2. Localiza la carpeta con más archivos acumulados:
->    `for d in /var/*; do echo -n "$d: "; find "$d" -xdev | wc -l; done | sort -k2 -n`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>Error iptables failed: No chain/target/match by that name en Docker | SoporteCero</title>
   <meta name="description" content="Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.">
+  <meta name="keywords" content="Docker, Linux, Redes">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html">
   
@@ -24,6 +25,9 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-23">
   <meta property="article:section" content="Sistemas y Servidores">
+  <meta property="article:tag" content="Docker">
+  <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="Redes">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +55,7 @@
   "@type": "TechArticle",
   "headline": "Error iptables failed: No chain/target/match by that name en Docker",
   "description": "Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "es",
   "category": "Sistemas y Servidores",
   "articleSection": "Sistemas y Servidores",
@@ -196,15 +201,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Respuesta Rápida">
-        <div class="ai-summary-header">
-          ✨ Respuesta Rápida
-        </div>
-        <p>El error iptables failed: iptables --wait -t nat -A DOCKER ... No chain/target/match by that name se produce cuando el cortafuegos del sistema (UFW, Firewalld o iptables) se reinicia o recarga mientras el daemon de Docker está activo, eliminando las cadenas nativas DOCKER y DOCKER-USER de la tabla NAT.</p>
-      </section>
-      
-
+          <p>El error <code>iptables failed: iptables --wait -t nat -A DOCKER ... No chain/target/match by that name</code> se produce cuando el cortafuegos del sistema (UFW, Firewalld o iptables) se reinicia o recarga mientras el daemon de Docker está activo, eliminando las cadenas nativas <code>DOCKER</code> y <code>DOCKER-USER</code> de la tabla NAT.</p>
 <p>Al intentar mapear puertos de red en un nuevo contenedor (<code>-p 8080:80</code>), Docker falla porque no encuentra la infraestructura de enrutamiento necesaria.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
@@ -214,8 +211,7 @@
         </svg>
         El Diagnóstico Rápido
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Causa</div>
             <div class="diag-value"><strong>Reinicio de UFW o Firewalld después de Docker</strong></div>
@@ -240,7 +236,6 @@
             <div class="diag-label">Solución</div>
             <div class="diag-value">Cargar los módulos con <code>sudo modprobe ip_tables &amp;&amp; sudo modprobe iptable_nat</code></div>
           </div></div></div>
-
     </section>
 
     <nav class="toc-container" aria-label="Tabla de contenidos">
@@ -251,7 +246,8 @@
       </ol>
     </nav>
     
-    <h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
+    
+<h2 id="la-solucion-paso-a-paso">La Solución Paso a Paso</h2>
 <p><strong>Reinicia el servicio de Docker para regenerar las cadenas</strong>
 La solución inmediata y más común es forzar a Docker a reconstruir sus reglas en la tabla de filtrado de paquetes:</p>
 
@@ -372,6 +368,40 @@ sudo modprobe iptable_filter
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLUCIONADO] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
       <article class="related-card">
         <div class="related-card-content">
@@ -384,40 +414,6 @@ sudo modprobe iptable_filter
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
             <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Lectura: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>

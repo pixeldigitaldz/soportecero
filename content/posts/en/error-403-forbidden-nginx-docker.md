@@ -1,20 +1,24 @@
 ---
-title: "How to Fix 403 Forbidden Error in Nginx Inside Docker"
-description: "Learn how to diagnose and correct file access and permission issues when mounting web directories in Nginx containers."
-category: "Systems & Servers"
-tags: ["Nginx", "Docker", "Linux"]
-readTime: "4 min"
-date: "2026-07-21"
+title: How to Fix 403 Forbidden Error in Nginx Inside Docker
+description: >-
+  Learn how to diagnose and correct file access and permission issues when
+  mounting web directories in Nginx containers.
+category: Systems & Servers
+tags:
+  - Nginx
+  - Docker
+  - Linux
+readTime: 4 min
+date: '2026-07-21'
 ---
+
+The **403 forbidden nginx** error in a Docker container usually occurs when the web server does not have read permissions to access the files of the mounted local volume, or when it does not find a valid indexed start file in the root directory of the service path.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Restricted local filesystem permissions on mounted volume** | Set local permissions: `chmod -R 755` on dirs and `644` on files |
 | **Missing index entrypoint file (index.html / index.php)** | Verify casing match on root index file |
-
-
-The **403 forbidden nginx** error in a Docker container usually occurs when the web server does not have read permissions to access the files of the mounted local volume, or when it does not find a valid indexed start file in the root directory of the service path.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,19 +1,29 @@
 ---
-title: "Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS"
-description: "Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd."
-category: "Sistemas y Servidores"
-tags: ["CachyOS", "Arch Linux", "Pacman", "Linux", "SysAdmin", "Almacenamiento"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en
+  CachyOS
+description: >-
+  Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux
+  usando paccache, pacman -Sc y automatización por systemd.
+category: Sistemas y Servidores
+tags:
+  - CachyOS
+  - Arch Linux
+  - Pacman
+  - Linux
+  - SysAdmin
+  - Almacenamiento
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+En CachyOS y distribuciones basadas en Arch Linux, el gestor de paquetes Pacman nunca elimina automáticamente los paquetes descargados (`.pkg.tar.zst`) de `/var/cache/pacman/pkg/`. Con el paso de las semanas, este directorio puede acumular fácilmente 20GB o 50GB de espacio en disco, provocando advertencias de poco espacio en la partición raíz.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Directorio /var/cache/pacman/pkg saturado por cientos de versiones antiguas de paquetes** | Limpiar versiones antiguas manteniendo solo las últimas 2 con `sudo paccache -r` |
 | **Caché huérfana de paquetes compilados por AUR helpers como Yay o Paru en ~/.cache** | Limpiar la caché AUR con `yay -Sc --aur` o purgar `~/.cache/yay` |
-
-En CachyOS y distribuciones basadas en Arch Linux, el gestor de paquetes Pacman nunca elimina automáticamente los paquetes descargados (`.pkg.tar.zst`) de `/var/cache/pacman/pkg/`. Con el paso de las semanas, este directorio puede acumular fácilmente 20GB o 50GB de espacio en disco, provocando advertencias de poco espacio en la partición raíz.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

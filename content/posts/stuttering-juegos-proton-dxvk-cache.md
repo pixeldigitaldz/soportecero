@@ -1,20 +1,27 @@
 ---
-title: "Cómo eliminar los tirones (stuttering) de gráficos en juegos de Linux usando caché de DXVK"
-description: "Aprende a mitigar el tartamudeo gráfico al traducir DirectX a Vulkan configurando la compilación asíncrona de shaders en tus juegos de PC."
-category: "Gaming Tech"
-tags: ["Linux", "Gaming", "DXVK", "Proton"]
-readTime: "4 min"
-date: "2026-06-27"
+title: >-
+  Cómo eliminar los tirones (stuttering) de gráficos en juegos de Linux usando
+  caché de DXVK
+description: >-
+  Aprende a mitigar el tartamudeo gráfico al traducir DirectX a Vulkan
+  configurando la compilación asíncrona de shaders en tus juegos de PC.
+category: Gaming Tech
+tags:
+  - Linux
+  - Gaming
+  - DXVK
+  - Proton
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El tartamudeo gráfico o *stuttering* al jugar títulos de Windows en Linux a través de Proton o Wine ocurre porque las llamadas de gráficos DirectX de los juegos se traducen a la API abierta Vulkan en tiempo real mediante la librería DXVK. Esto genera un pico de consumo en el procesador para compilar cada nuevo sombreador de texturas la primera vez que se presenta en pantalla.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Compilación de shaders DXVK sucediendo en tiempo real durante la partida** | Activar la compilación asíncrona mediante la variable `DXVK_ASYNC=1` |
 | **Caché de shaders corrupta en el directorio del prefijo de Steam** | Borrar el contenido de la carpeta `shadercache` y reconstruir el archivo de caché |
-
-
-El tartamudeo gráfico o *stuttering* al jugar títulos de Windows en Linux a través de Proton o Wine ocurre porque las llamadas de gráficos DirectX de los juegos se traducen a la API abierta Vulkan en tiempo real mediante la librería DXVK. Esto genera un pico de consumo en el procesador para compilar cada nuevo sombreador de texturas la primera vez que se presenta en pantalla.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

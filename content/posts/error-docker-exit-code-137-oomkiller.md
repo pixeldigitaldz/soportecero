@@ -1,19 +1,25 @@
 ---
-title: "Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)"
-description: "Aprende a diagnosticar y solucionar el error 137 en Docker provocado por el OOM Killer de Linux y límites de memoria en Docker Compose."
-category: "Sistemas y Servidores"
-tags: ["Docker", "Linux", "DevOps", "Docker Compose"]
-readTime: "5 min"
-date: "2026-09-02"
+title: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)
+description: >-
+  Aprende a diagnosticar y solucionar el error 137 en Docker provocado por el
+  OOM Killer de Linux y límites de memoria en Docker Compose.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - Linux
+  - DevOps
+  - Docker Compose
+readTime: 5 min
+date: '2026-09-02'
 ---
+
+El código de salida `Exit Code 137` en Docker indica que el contenedor fue terminado forzosamente por la señal del sistema `SIGKILL` (señal estándar 9, donde 128 + 9 = 137). En el 95% de los entornos de producción, esto ocurre cuando el proceso dentro del contenedor consume más memoria RAM de la configurada o agota la memoria del host, obligando al mecanismo **Out Of Memory (OOM) Killer** del kernel de Linux a finalizarlo para proteger la estabilidad del servidor.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Contenedor superó el límite de memoria asignado en Docker** | Aumentar `mem_limit` en `docker-compose.yml` o añadir swap al host |
 | **Proceso terminado por el kernel Linux (OOM Killer SIGKILL 9)** | Optimizar el recolector de basura de la app y verificar logs con `dmesg -T` |
-
-El código de salida `Exit Code 137` en Docker indica que el contenedor fue terminado forzosamente por la señal del sistema `SIGKILL` (señal estándar 9, donde 128 + 9 = 137). En el 95% de los entornos de producción, esto ocurre cuando el proceso dentro del contenedor consume más memoria RAM de la configurada o agota la memoria del host, obligando al mecanismo **Out Of Memory (OOM) Killer** del kernel de Linux a finalizarlo para proteger la estabilidad del servidor.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

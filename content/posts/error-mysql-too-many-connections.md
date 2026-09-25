@@ -1,20 +1,24 @@
 ---
-title: "Solución al fallo: \"Too many connections\" en bases de datos MySQL / MariaDB"
-description: "Aprende a diagnosticar y corregir el error de exceso de conexiones abiertas en MySQL optimizando las directivas de conexión de tu servidor."
-category: "Web y Código"
-tags: ["MySQL", "MariaDB", "Database"]
-readTime: "3 min"
-date: "2026-06-27"
+title: 'Solución al fallo: "Too many connections" en bases de datos MySQL / MariaDB'
+description: >-
+  Aprende a diagnosticar y corregir el error de exceso de conexiones abiertas en
+  MySQL optimizando las directivas de conexión de tu servidor.
+category: Web y Código
+tags:
+  - MySQL
+  - MariaDB
+  - Database
+readTime: 3 min
+date: '2026-06-27'
 ---
+
+El error `Error 1040: Too many connections` detiene de inmediato las consultas a tu base de datos y ocurre cuando el número de hilos de conexión abiertos por tu aplicación excede la directiva máxima definida en los ajustes internos del servidor MySQL o MariaDB.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Límite de conexiones simultáneas max_connections alcanzado en MySQL/MariaDB** | Aumentar temporalmente el límite: `SET GLOBAL max_connections = 500;` |
 | **Conexiones persistentes colgadas o no cerradas por la aplicación** | Ajustar `max_connections = 500` en `/etc/mysql/my.cnf` y reiniciar el servicio |
-
-
-El error `Error 1040: Too many connections` detiene de inmediato las consultas a tu base de datos y ocurre cuando el número de hilos de conexión abiertos por tu aplicación excede la directiva máxima definida en los ajustes internos del servidor MySQL o MariaDB.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

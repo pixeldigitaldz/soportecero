@@ -1,19 +1,27 @@
 ---
-title: "Guía: chmod Operation not permitted (Incluso como Root) en Linux"
-description: "Aprende a solucionar el error chmod / chown: Operation not permitted usando lsattr y chattr para desbloquear archivos inmutables en Linux."
-category: "Sistemas y Servidores"
-tags: ["Linux", "Permisos", "SysAdmin", "Seguridad", "Ubuntu", "Debian"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Guía: chmod Operation not permitted (Incluso como Root) en Linux'
+description: >-
+  Aprende a solucionar el error chmod / chown: Operation not permitted usando
+  lsattr y chattr para desbloquear archivos inmutables en Linux.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Permisos
+  - SysAdmin
+  - Seguridad
+  - Ubuntu
+  - Debian
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+En Linux, encontrarse con el error `chmod: changing permissions of 'archivo': Operation not permitted` o `chown: changing ownership of 'archivo': Operation not permitted` ejecutando el comando como superusuario `root` desconcierta a muchos administradores. Ocurre cuando el archivo tiene asignados atributos extendidos de inmutabilidad en el sistema de archivos (ext4/XFS) o el sistema de archivos fue bloqueado en modo de solo lectura tras un error de disco.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Archivo protegido con el atributo inmutable (+i) o append-only (+a) en el sistema de archivos ext4/xfs** | Comprobar con `lsattr <archivo>` y quitar el atributo con `sudo chattr -i <archivo>` |
 | **Sistema de archivos montado en modo de solo lectura (Read-Only) o bloqueo por SELinux / AppArmor** | Remontar con permisos de escritura (`sudo mount -o remount,rw /`) o verificar contextos de seguridad |
-
-En Linux, encontrarse con el error `chmod: changing permissions of 'archivo': Operation not permitted` o `chown: changing ownership of 'archivo': Operation not permitted` ejecutando el comando como superusuario `root` desconcierta a muchos administradores. Ocurre cuando el archivo tiene asignados atributos extendidos de inmutabilidad en el sistema de archivos (ext4/XFS) o el sistema de archivos fue bloqueado en modo de solo lectura tras un error de disco.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

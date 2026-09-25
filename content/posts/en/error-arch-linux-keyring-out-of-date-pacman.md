@@ -1,19 +1,26 @@
 ---
-title: "How to Fix archlinux-keyring Out-of-Date Error in Arch Linux & Pacman"
-description: "Complete guide to resolving outdated PGP keyring errors in Arch Linux, Manjaro, and CachyOS using pacman-key and official repositories."
-category: "Systems & Servers"
-tags: ["Arch Linux", "Pacman", "Linux", "CachyOS", "SysAdmin"]
-readTime: "5 min"
-date: "2026-08-04"
+title: How to Fix archlinux-keyring Out-of-Date Error in Arch Linux & Pacman
+description: >-
+  Complete guide to resolving outdated PGP keyring errors in Arch Linux,
+  Manjaro, and CachyOS using pacman-key and official repositories.
+category: Systems & Servers
+tags:
+  - Arch Linux
+  - Pacman
+  - Linux
+  - CachyOS
+  - SysAdmin
+readTime: 5 min
+date: '2026-08-04'
 ---
+
+The common failure `error: archlinux-keyring: signature is marginal trust` or `error: failed to commit transaction (invalid or corrupted package (PGP signature))` occurs when Arch Linux package maintainers rotate their cryptographic master signing keys while your local keyring contains expired trust records.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Outdated archlinux-keyring package on a system not updated for weeks** | Update only the keyring package with `sudo pacman -Sy archlinux-keyring` prior to broad upgrades |
 | **Corrupted cryptographic keyring directory in /etc/pacman.d/gnupg** | Rebuild GPG keyring via `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init && sudo pacman-key --populate archlinux` |
-
-The common failure `error: archlinux-keyring: signature is marginal trust` or `error: failed to commit transaction (invalid or corrupted package (PGP signature))` occurs when Arch Linux package maintainers rotate their cryptographic master signing keys while your local keyring contains expired trust records.
 
 ## 🚀 Step-by-Step Solution
 

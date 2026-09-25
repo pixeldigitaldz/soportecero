@@ -1,19 +1,27 @@
 ---
-title: "Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux"
-description: "Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire."
-category: "Gaming Tech"
-tags: ["Warframe", "Proton", "Linux", "Gaming", "Audio", "Steam Deck"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Guía: Error de audio distorsionado o sin sonido en Warframe bajo Proton Linux'
+description: >-
+  Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de
+  sonido en Warframe con Proton, FAudio y PipeWire.
+category: Gaming Tech
+tags:
+  - Warframe
+  - Proton
+  - Linux
+  - Gaming
+  - Audio
+  - Steam Deck
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Al ejecutar Warframe en Linux mediante Steam Proton o en Steam Deck, los jugadores a menudo experimentan audio distorsionado, crujidos constantes (crackling) o ausencia total de sonido en cinemáticas y combate. Esto ocurre por desajustes en el búfer de latencia entre el motor de sonido de Warframe (Wwise/XAudio2) y el servidor de sonido del sistema anfitrión.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Frecuencia de muestreo (sample rate) incompatible o tamaño de búfer de audio bajo en PipeWire/PulseAudio** | Configurar frecuencia fija a 48000 Hz y ajustar `default.clock.min-quantum` a 1024 en PipeWire |
 | **Incompatibilidad en bibliotecas de decodificación de audio XAudio2/FAudio en el prefijo de Proton** | Utilizar Proton-GE y añadir `WINEDLLOVERRIDES="xaudio2_7=n,b"` en las opciones de lanzamiento |
-
-Al ejecutar Warframe en Linux mediante Steam Proton o en Steam Deck, los jugadores a menudo experimentan audio distorsionado, crujidos constantes (crackling) o ausencia total de sonido en cinemáticas y combate. Esto ocurre por desajustes en el búfer de latencia entre el motor de sonido de Warframe (Wwise/XAudio2) y el servidor de sonido del sistema anfitrión.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

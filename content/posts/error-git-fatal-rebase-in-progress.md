@@ -1,26 +1,24 @@
 ---
-title: "[SOLUCIONADO] Cancelar un Rebase en Git o Error 'No rebase in progress'"
-description: "¿Te has quedado atrapado en medio de un rebase de Git o aparece el error 'No rebase in progress'? Solución paso a paso para abortar rebase."
-category: "Web y Código"
-tags: ["Git", "GitHub", "DevOps"]
-readTime: "3 min"
-date: "2026-08-28"
+title: '[SOLUCIONADO] Cancelar un Rebase en Git o Error ''No rebase in progress'''
+description: >-
+  ¿Te has quedado atrapado en medio de un rebase de Git o aparece el error 'No
+  rebase in progress'? Solución paso a paso para abortar rebase.
+category: Web y Código
+tags:
+  - Git
+  - GitHub
+  - DevOps
+readTime: 3 min
+date: '2026-08-28'
 ---
+
+El estado **`interactive rebase in progress`** (o el error opuesto `fatal: No rebase in progress`) ocurre al ejecutar `git rebase` cuando Git encuentra conflictos de fusión en un commit intermedio y suspende la secuencia a la espera de intervención manual. Si la terminal se cierra o la carpeta oculta `.git/rebase-merge` se corrompe, el repositorio queda bloqueado.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Operación de Rebase pendiente o interrumpida por conflictos** | Resolver conflictos y continuar con `git rebase --continue` o abortar con `git rebase --abort` |
 | **Carpeta temporal .git/rebase-merge bloqueando nuevos comandos** | Cancelar la operación rebase actual para restaurar el estado limpio del árbol |
-
-
-El estado **`interactive rebase in progress`** (o el error opuesto `fatal: No rebase in progress`) ocurre al ejecutar `git rebase` cuando Git encuentra conflictos de fusión en un commit intermedio y suspende la secuencia a la espera de intervención manual. Si la terminal se cierra o la carpeta oculta `.git/rebase-merge` se corrompe, el repositorio queda bloqueado.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Para cancelar y volver al estado previo al rebase:
->    `git rebase --abort`
-> 2. Si marca `fatal: No rebase in progress` pero sigues atrapado, elimina la carpeta de bloqueo:
->    `rm -rf .git/rebase-apply .git/rebase-merge`
 
 ## 🚀 Cómo resolver o abortar un Rebase de Git paso a paso
 

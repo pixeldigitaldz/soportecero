@@ -1,19 +1,27 @@
 ---
-title: "Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)"
-description: "Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia."
-category: "Gaming Tech"
-tags: ["Proton", "Linux", "Vulkan", "DXVK", "Gaming", "Mesa"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)'
+description: >-
+  Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine
+  y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.
+category: Gaming Tech
+tags:
+  - Proton
+  - Linux
+  - Vulkan
+  - DXVK
+  - Gaming
+  - Mesa
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El mensaje de error `DX11 feature level 10.0 is required to run the engine` en títulos desarrollados con Unreal Engine o Unity al ejecutarse en Linux mediante Steam Proton ocurre cuando la capa de traducción DXVK no puede inicializar una instancia válida de Vulkan con compatibilidad para los niveles de características de Direct3D 10/11.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Controlador Vulkan de 32 y 64 bits faltante o incompleto en la distribución Linux** | Instalar los paquetes `vulkan-icd-loader` y drivers `vulkan-radeon` o `nvidia-utils` |
 | **GPU integrada antigua sin soporte para Vulkan 1.3 o capas DXVK deshabilitadas** | Forzar traducción WINE D3D con `PROTON_USE_WINED3D=1` o actualizar controlador Mesa |
-
-El mensaje de error `DX11 feature level 10.0 is required to run the engine` en títulos desarrollados con Unreal Engine o Unity al ejecutarse en Linux mediante Steam Proton ocurre cuando la capa de traducción DXVK no puede inicializar una instancia válida de Vulkan con compatibilidad para los niveles de características de Direct3D 10/11.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

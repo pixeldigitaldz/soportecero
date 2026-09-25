@@ -1,25 +1,24 @@
 ---
-title: "[FIXED] Error 'externally-managed-environment' when using pip in Linux"
-description: "Cannot install Python packages with pip due to externally-managed-environment error on Ubuntu 24.04, Debian 12, or Arch Linux? Step-by-step fix."
-category: "Web & Code"
-tags: ["Python", "Linux", "Pip"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[FIXED] Error ''externally-managed-environment'' when using pip in Linux'
+description: >-
+  Cannot install Python packages with pip due to externally-managed-environment
+  error on Ubuntu 24.04, Debian 12, or Arch Linux? Step-by-step fix.
+category: Web & Code
+tags:
+  - Python
+  - Linux
+  - Pip
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+The **`error: externally-managed-environment`** occurs when running `pip install <package>` on modern Linux distributions such as **Ubuntu 24.04 LTS, Debian 12 (Bookworm), and Arch Linux / CachyOS**. This restriction (defined in **PEP 668**) prevents `pip` from overwriting system Python libraries managed by `apt` or `pacman`.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **PEP 668 protection in modern Python preventing system-wide pip install** | Create and activate virtual environment: `python3 -m venv venv && source venv/bin/activate` |
 | **Requirement to install Python package via system package manager** | Install package via system package manager (e.g. `apt install python3-pkg`) |
-
-
-The **`error: externally-managed-environment`** occurs when running `pip install <package>` on modern Linux distributions such as **Ubuntu 24.04 LTS, Debian 12 (Bookworm), and Arch Linux / CachyOS**. This restriction (defined in **PEP 668**) prevents `pip` from overwriting system Python libraries managed by `apt` or `pacman`.
-
-> **Quick Solution (1 Minute):**
-> 1. Create a virtual environment: `python3 -m venv venv`
-> 2. Activate it: `source venv/bin/activate`
-> 3. Run pip install safely: `pip install package-name`
 
 ## 🚀 Step-by-Step Solutions
 

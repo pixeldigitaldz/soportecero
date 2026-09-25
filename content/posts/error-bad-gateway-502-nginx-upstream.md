@@ -1,20 +1,24 @@
 ---
-title: "Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy"
-description: "Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend."
-category: "Sistemas y Servidores"
-tags: ["Nginx", "Docker", "Sysadmin"]
-readTime: "4 min"
-date: "2026-06-27"
+title: Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy
+description: >-
+  Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway
+  comprobando sockets y servicios del backend.
+category: Sistemas y Servidores
+tags:
+  - Nginx
+  - Docker
+  - Sysadmin
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El error `502 Bad Gateway` en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Servicio de aplicación (PHP-FPM, Node.js, Gunicorn) fuera de servicio** | Verificar e iniciar el servicio backend con `systemctl status php-fpm` o Docker |
 | **Puerto o socket UNIX mal configurado en la directiva proxy_pass** | Corregir la ruta del socket `/var/run/php/php-fpm.sock` o puerto en `nginx.conf` |
-
-
-El error `502 Bad Gateway` en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

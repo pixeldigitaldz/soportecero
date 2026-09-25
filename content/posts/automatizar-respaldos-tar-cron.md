@@ -1,20 +1,26 @@
 ---
-title: "Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron"
-description: "Aprende a empaquetar directorios de configuración de forma automática utilizando scripts en Bash comprimidos y programando su ejecución con Cron."
-category: "Sistemas y Servidores"
-tags: ["Linux", "Sysadmin", "Cron"]
-readTime: "3 min"
-date: "2026-06-27"
+title: >-
+  Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y
+  Cron
+description: >-
+  Aprende a empaquetar directorios de configuración de forma automática
+  utilizando scripts en Bash comprimidos y programando su ejecución con Cron.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - Sysadmin
+  - Cron
+readTime: 3 min
+date: '2026-06-27'
 ---
+
+El error más grave en la gestión de servidores locales o domésticos es no disponer de respaldos automatizados e íntegros frente a fallos de hardware o corrupción de archivos. Crear una tarea programada que empaquete tus archivos esenciales de configuración te garantizará tranquilidad.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Cronjob no ejecuta por rutas relativas o variables de entorno** | Especificar rutas absolutas en el script (`/bin/tar`, `/usr/bin/crontab`) |
 | **Permisos insuficientes en el directorio de destino** | Asegurar permisos de escritura con `chmod 755` o ejecutar cron como root |
-
-
-El error más grave en la gestión de servidores locales o domésticos es no disponer de respaldos automatizados e íntegros frente a fallos de hardware o corrupción de archivos. Crear una tarea programada que empaquete tus archivos esenciales de configuración te garantizará tranquilidad.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

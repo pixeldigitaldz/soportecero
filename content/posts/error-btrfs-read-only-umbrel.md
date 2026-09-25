@@ -1,20 +1,26 @@
 ---
-title: "Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor"
-description: "Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción."
-category: "Sistemas y Servidores"
-tags: ["BTRFS", "Linux", "Storage"]
-readTime: "4 min"
-date: "2026-06-27"
+title: >-
+  Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura
+  (Read-Only) en tu servidor
+description: >-
+  Guía paso a paso para recuperar el acceso de escritura en discos duros de
+  servidores domésticos que se bloquean para proteger tus datos de corrupción.
+category: Sistemas y Servidores
+tags:
+  - BTRFS
+  - Linux
+  - Storage
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a `Read-Only` (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Errores en el sistema de archivos Btrfs por corte de energía inesperado** | Verificar el log de kernel `dmesg` y ejecutar `btrfs check --repair /dev/sdX` |
 | **Unidad de almacenamiento dañada o en modo de protección contra fallas** | Remontar la unidad en modo lectura/escritura: `mount -o remount,rw /data` |
-
-
-Cuando un disco duro secundario configurado con el sistema de archivos moderno BTRFS (muy común en arreglos de almacenamiento y servidores caseros como Umbrel o ZimaOS) detecta un error de escritura, un corte de energía o sectores corruptos, el núcleo de Linux cambia su estado automáticamente a `Read-Only` (Solo lectura) para evitar que la información existente se destruya. Esto congela de inmediato todas tus aplicaciones de automatización y descargas.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

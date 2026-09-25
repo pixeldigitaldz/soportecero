@@ -1,19 +1,27 @@
 ---
-title: "How to Configure Virtual Memory in Linux and Optimize Swap"
-description: "Learn how to create a Swapfile, configure fstab persistence, and optimize swappiness and vfs_cache_pressure in Linux."
-category: "Systems & Servers"
-tags: ["Linux", "SysAdmin", "Swap", "Performance", "Ubuntu", "Debian"]
-readTime: "5 min"
-date: "2026-06-27"
+title: How to Configure Virtual Memory in Linux and Optimize Swap
+description: >-
+  Learn how to create a Swapfile, configure fstab persistence, and optimize
+  swappiness and vfs_cache_pressure in Linux.
+category: Systems & Servers
+tags:
+  - Linux
+  - SysAdmin
+  - Swap
+  - Performance
+  - Ubuntu
+  - Debian
+readTime: 5 min
+date: '2026-06-27'
 ---
+
+In Linux operating systems, Swap space allows the kernel to offload idle memory pages to disk storage, preserving fast physical RAM for active process execution and file system buffer caches. Running without swap risks sudden system freezes and immediate termination of critical processes by the OOM Killer.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Linux host running without Swap memory triggering unexpected OOM Killer crashes** | Create a 4GB-8GB swapfile via `fallocate` / `mkswap` and activate via `swapon` |
 | **Aggressive disk swapping with plenty of available free RAM (high swappiness)** | Lower `vm.swappiness` parameter to 10 or 20 in `/etc/sysctl.conf` |
-
-In Linux operating systems, Swap space allows the kernel to offload idle memory pages to disk storage, preserving fast physical RAM for active process execution and file system buffer caches. Running without swap risks sudden system freezes and immediate termination of critical processes by the OOM Killer.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] fatal: unable to access: SSL certificate problem: unable to get local issuer certificate en Git"
-description: "Aprende a solucionar el error de certificado SSL en Git al clonar o hacer push a repositorios de GitHub, GitLab o Bitbucket."
-category: "Web y Código"
-tags: ["Git","SSL","DevOps","Seguridad"]
-readTime: "4 min"
-date: "2026-10-07"
+title: >-
+  [SOLUCIONADO] fatal: unable to access: SSL certificate problem: unable to get
+  local issuer certificate en Git
+description: >-
+  Aprende a solucionar el error de certificado SSL en Git al clonar o hacer push
+  a repositorios de GitHub, GitLab o Bitbucket.
+category: Web y Código
+tags:
+  - Git
+  - SSL
+  - DevOps
+  - Seguridad
+readTime: 4 min
+date: '2026-10-07'
 ---
+
+Al ejecutar `git clone`, `git pull` o `git push` hacia servidores remotos (GitHub, GitLab, servidores corporativos privados), Git aborta inmediatamente la conexión con: `fatal: unable to access "https://github.com/...": SSL certificate problem: unable to get local issuer certificate`. Este fallo de seguridad significa que la biblioteca libcurl utilizada por Git no pudo validar la cadena de confianza del certificado SSL del servidor.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El almacén de certificados CA de Git no incluye el certificado raíz o está desactualizado** | Actualizar el paquete ca-certificates o vincular la ruta del certificado con git config |
 | **Intercepción de tráfico por proxies corporativos, VPNs empresariales o antivirus con escaneo SSL** | Importar el certificado intermedio de la empresa al bundle de Git mediante http.sslCAInfo |
-
-Al ejecutar `git clone`, `git pull` o `git push` hacia servidores remotos (GitHub, GitLab, servidores corporativos privados), Git aborta inmediatamente la conexión con: `fatal: unable to access "https://github.com/...": SSL certificate problem: unable to get local issuer certificate`. Este fallo de seguridad significa que la biblioteca libcurl utilizada por Git no pudo validar la cadena de confianza del certificado SSL del servidor.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En Linux, actualiza el almacén de autoridades certificadoras:
->    `sudo apt update && sudo apt install --reinstall ca-certificates`
-> 2. Configura la ruta oficial del certificado en Git:
->    `git config --global http.sslCAInfo /etc/ssl/certs/ca-certificates.crt`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,10 +1,21 @@
 ---
-title: "Solution Direct3D Could Not Create Device"
-description: "Does your favorite retro or classic game fail to launch on Windows 10 or 11? Resolve this classic error by installing legacy DirectX components."
-category: "Gaming Tech"
-tags: ["DirectX", "Gaming", "Windows"]
-readTime: "3 min"
-date: "2026-07-25"
+title: Solution Direct3D Could Not Create Device
+description: >-
+  Does your favorite retro or classic game fail to launch on Windows 10 or 11?
+  Resolve this classic error by installing legacy DirectX components.
+category: Gaming Tech
+tags:
+  - DirectX
+  - Gaming
+  - Windows
+readTime: 3 min
+date: '2026-07-25'
+---
+
+The `Direct3D: Could not create device` error is an extremely common issue when attempting to run games released between 2000 and 2012 on modern operating systems like Windows 10 or Windows 11.
+
+This problem occurs because modern versions of Windows no longer include legacy **DirectX 9 (d3dx9.dll)** libraries by default, or because the game attempts to launch at a resolution that your current monitor does not support in fullscreen mode.
+
 ---
 
 ## Quick Diagnostics
@@ -12,13 +23,6 @@ date: "2026-07-25"
 |---|---|
 | **Missing or corrupted D3DCompiler / DirectX 11/12 runtime libraries** | Reinstall DirectX End-User Runtimes installer |
 | **Outdated Proton/Wine compatibility layer in Linux** | Set `DXVK_ASYNC=1` or use Proton Experimental / Proton-GE |
-
-
-The `Direct3D: Could not create device` error is an extremely common issue when attempting to run games released between 2000 and 2012 on modern operating systems like Windows 10 or Windows 11.
-
-This problem occurs because modern versions of Windows no longer include legacy **DirectX 9 (d3dx9.dll)** libraries by default, or because the game attempts to launch at a resolution that your current monitor does not support in fullscreen mode.
-
----
 
 ## 🚀 Step-by-Step Solution
 

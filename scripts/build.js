@@ -97,26 +97,6 @@ function postProcessHtml(rawHtml, lang = 'es') {
   let parsedFaqs = [];
   const isEn = lang === 'en';
 
-  // 0. Extract GEO / AI Summary (TL;DR)
-  let aiSummaryHtml = '';
-  const firstParagraphMatch = html.match(/<p>([\s\S]*?)<\/p>/i);
-  if (firstParagraphMatch) {
-    const summaryText = firstParagraphMatch[1].replace(/<[^>]*>/g, '').trim(); 
-    if (summaryText.length > 30) {
-      const summaryTitle = isEn ? '✨ Quick Answer' : '✨ Respuesta Rápida';
-      aiSummaryHtml = `
-      <section class="ai-summary" aria-label="${summaryTitle}">
-        <div class="ai-summary-header">
-          ${summaryTitle}
-        </div>
-        <p>${summaryText}</p>
-      </section>
-      `;
-      // Remove original paragraph to prevent duplication on the page
-      html = html.replace(firstParagraphMatch[0], '');
-    }
-  }
-
   // 1. Code blocks wrapping in custom containers with copy buttons
   html = html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (match, langClass, code) => {
     const displayLang = langClass ? langClass.toUpperCase() : (isEn ? 'CODE' : 'CÓDIGO');
@@ -132,10 +112,9 @@ function postProcessHtml(rawHtml, lang = 'es') {
     `;
   });
 
-  // 2. Diagnostic Box layout wrapping
-  let diagBoxHtml = '';
+  // 2. Diagnostic Box layout wrapping (only wraps heading + table)
   const diagTitle = isEn ? 'Quick Diagnostics' : 'El Diagnóstico Rápido';
-  const diagRegex = /<h2[^>]*>[^<]*(?:Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
+  const diagRegex = /<h2[^>]*>[^<]*(?:Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
 
   const transformTableToCards = (htmlStr) => {
     return htmlStr.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableInner) => {
@@ -169,9 +148,9 @@ function postProcessHtml(rawHtml, lang = 'es') {
 
   const diagMatch = html.match(diagRegex);
   if (diagMatch) {
-    const diagContent = diagMatch[1];
-    let formattedDiag = transformTableToCards(diagContent);
-    diagBoxHtml = `
+    const diagTableContent = diagMatch[1];
+    let formattedDiag = transformTableToCards(diagTableContent);
+    const diagBoxHtml = `
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="diag-heading">
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -183,27 +162,6 @@ function postProcessHtml(rawHtml, lang = 'es') {
     </section>
     `;
     html = html.replace(diagRegex, diagBoxHtml);
-  } else {
-    const firstH2Match = html.match(/<h2/i);
-    if (firstH2Match) {
-      const firstH2Index = html.search(/<h2/i);
-      const diagContent = html.substring(0, firstH2Index).trim();
-      if (diagContent) {
-        let formattedDiag = transformTableToCards(diagContent);
-        diagBoxHtml = `
-        <section class="diagnostic-box" aria-labelledby="diag-heading">
-          <h3 id="diag-heading">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
-            ${diagTitle}
-          </h3>
-          ${formattedDiag}
-        </section>
-        `;
-        html = diagBoxHtml + html.substring(firstH2Index);
-      }
-    }
   }
 
   // 3. Extraction of Prevention Tips section to populate Callout
@@ -391,10 +349,6 @@ function postProcessHtml(rawHtml, lang = 'es') {
     }
   }
 
-  if (aiSummaryHtml) {
-    html = aiSummaryHtml + '\n' + html;
-  }
-
   return {
     contentHtml: html,
     preventionHtml: preventionListHtml,
@@ -565,6 +519,7 @@ function build() {
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
+      "image": "https://soportecero.com/favicon.svg",
       "inLanguage": "es",
       "category": post.category,
       "articleSection": post.category,
@@ -690,6 +645,9 @@ function build() {
     </div>
     `;
 
+    const keywordsStr = post.tags ? post.tags.join(', ') : '';
+    const articleTagsMeta = (post.tags || []).map(t => `<meta property="article:tag" content="${t}">`).join('\n  ');
+
     const postHtml = postTemplateEs
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
@@ -703,7 +661,9 @@ function build() {
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
       .replace(/\{\{schema\}\}/g, schemaScriptHtml)
       .replace(/\{\{hreflang\}\}/g, hreflang)
-      .replace(/\{\{lang_selector\}\}/g, langSelector);
+      .replace(/\{\{lang_selector\}\}/g, langSelector)
+      .replace(/\{\{keywords\}\}/g, keywordsStr)
+      .replace(/\{\{article_tags\}\}/g, articleTagsMeta);
 
     fs.writeFileSync(path.join(DIST_DIR, 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
     console.log(`[POST ES] Compilado: articulos/${post.filename}.html`);
@@ -758,6 +718,7 @@ function build() {
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
+      "image": "https://soportecero.com/favicon.svg",
       "inLanguage": "en",
       "category": post.category,
       "articleSection": post.category,
@@ -883,6 +844,9 @@ function build() {
     </div>
     `;
 
+    const keywordsStr = post.tags ? post.tags.join(', ') : '';
+    const articleTagsMeta = (post.tags || []).map(t => `<meta property="article:tag" content="${t}">`).join('\n  ');
+
     const postHtml = postTemplateEn
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
@@ -896,7 +860,9 @@ function build() {
       .replace(/\{\{related\}\}/g, relatedCardsHtml)
       .replace(/\{\{schema\}\}/g, schemaScriptHtml)
       .replace(/\{\{hreflang\}\}/g, hreflang)
-      .replace(/\{\{lang_selector\}\}/g, langSelector);
+      .replace(/\{\{lang_selector\}\}/g, langSelector)
+      .replace(/\{\{keywords\}\}/g, keywordsStr)
+      .replace(/\{\{article_tags\}\}/g, articleTagsMeta);
 
     fs.writeFileSync(path.join(DIST_DIR, 'en', 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
     console.log(`[POST EN] Compilado: en/articulos/${post.filename}.html`);
@@ -1081,6 +1047,60 @@ function build() {
     <lastmod>${todayStr}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/legal/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/legal/terminos.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/terminos.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/legal/cookies.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/cookies.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 `;
 

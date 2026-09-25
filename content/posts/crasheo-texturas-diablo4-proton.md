@@ -1,19 +1,27 @@
 ---
-title: "Solución al crasheo por carga de texturas en Diablo IV bajo Linux (Proton)"
-description: "Aprende a solucionar el error Out of Memory y los cierres al cargar texturas en Diablo IV jugando en Linux con Steam Proton y Battle.net."
-category: "Gaming Tech"
-tags: ["Diablo 4", "Proton", "Linux", "Gaming", "Vulkan", "VKD3D"]
-readTime: "5 min"
-date: "2026-06-25"
+title: Solución al crasheo por carga de texturas en Diablo IV bajo Linux (Proton)
+description: >-
+  Aprende a solucionar el error Out of Memory y los cierres al cargar texturas
+  en Diablo IV jugando en Linux con Steam Proton y Battle.net.
+category: Gaming Tech
+tags:
+  - Diablo 4
+  - Proton
+  - Linux
+  - Gaming
+  - Vulkan
+  - VKD3D
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El cierre inesperado de Diablo IV en Linux (a menudo con el error `Fenris Error` o `Out of Memory - The application ran out of video memory`) ocurre debido a la alta demanda de memoria de video (VRAM) y memoria RAM física que requiere el motor de Blizzard al cargar paquetes de texturas de alta resolución mediante la capa de traducción Direct3D 12 a Vulkan (VKD3D-Proton).
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Saturación y fragmentación de VRAM al cargar texturas en calidad Ultra con VKD3D** | Reducir la calidad de texturas a Alta/Media y configurar `VKD3D_CONFIG=no_upload_hvv` |
 | **Falta de memoria de intercambio (Swap) o agotamiento del límite de descriptores de archivos** | Asignar al menos 8GB de swap y aumentar los límites `fs.file-max` y `vm.max_map_count` |
-
-El cierre inesperado de Diablo IV en Linux (a menudo con el error `Fenris Error` o `Out of Memory - The application ran out of video memory`) ocurre debido a la alta demanda de memoria de video (VRAM) y memoria RAM física que requiere el motor de Blizzard al cargar paquetes de texturas de alta resolución mediante la capa de traducción Direct3D 12 a Vulkan (VKD3D-Proton).
 
 ## 🚀 Cómo solucionar el error paso a paso
 

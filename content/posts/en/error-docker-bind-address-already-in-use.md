@@ -1,19 +1,27 @@
 ---
-title: "Fix: Error starting userland proxy: bind: address already in use in Docker"
-description: "Learn how to find and terminate processes occupying conflicting network ports (80, 443, 3000, 8080) in Linux and Docker Compose."
-category: "Systems & Servers"
-tags: ["Docker", "Linux", "Ports", "SysAdmin", "Networking", "DevOps"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Fix: Error starting userland proxy: bind: address already in use in Docker'
+description: >-
+  Learn how to find and terminate processes occupying conflicting network ports
+  (80, 443, 3000, 8080) in Linux and Docker Compose.
+category: Systems & Servers
+tags:
+  - Docker
+  - Linux
+  - Ports
+  - SysAdmin
+  - Networking
+  - DevOps
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+When launching containers via `docker run` or `docker compose up`, the exception `driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use` indicates the requested host TCP port is already allocated by an active process.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Host system daemon (e.g. Apache, Nginx, or Node.js) already listening on target port** | Identify process PID using `sudo lsof -i :<port>` or `ss -tulpn` and terminate service |
 | **Orphaned Docker container or stale userland proxy retaining port allocation** | Stop container via `docker stop <id>` or restart Docker daemon `systemctl restart docker` |
-
-When launching containers via `docker run` or `docker compose up`, the exception `driver failed programming external connectivity on endpoint ...: Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use` indicates the requested host TCP port is already allocated by an active process.
 
 ## 🚀 Step-by-Step Solution
 

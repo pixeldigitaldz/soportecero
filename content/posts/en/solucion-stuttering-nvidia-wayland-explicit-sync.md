@@ -1,25 +1,25 @@
 ---
-title: "[FIXED] NVIDIA Wayland Gaming Stuttering & Flickering in Linux"
-description: "Experiencing screen flickering or stuttering with NVIDIA GPUs on Wayland compositors (KDE 6, Hyprland, GNOME)? Enable Explicit Sync & DRM modeset."
-category: "Gaming Tech"
-tags: ["NVIDIA", "Wayland", "Gaming", "Linux"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[FIXED] NVIDIA Wayland Gaming Stuttering & Flickering in Linux'
+description: >-
+  Experiencing screen flickering or stuttering with NVIDIA GPUs on Wayland
+  compositors (KDE 6, Hyprland, GNOME)? Enable Explicit Sync & DRM modeset.
+category: Gaming Tech
+tags:
+  - NVIDIA
+  - Wayland
+  - Gaming
+  - Linux
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+Visual **flickering, stuttering, and frame out-of-order issues** when gaming on Linux with **NVIDIA graphics cards under Wayland compositors** (KDE Plasma 6, Hyprland, GNOME) stems from buffer synchronization mismatches between the proprietary display driver and the Wayland compositor windowing system.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Lack of Explicit Sync support in Nvidia drivers prior to version 555** | Update proprietary Nvidia drivers to version 555.58 or higher |
 | **Frame desynchronization between XWayland and Wayland compositor** | Enable explicit sync flag in compositor configuration file |
-
-
-Visual **flickering, stuttering, and frame out-of-order issues** when gaming on Linux with **NVIDIA graphics cards under Wayland compositors** (KDE Plasma 6, Hyprland, GNOME) stems from buffer synchronization mismatches between the proprietary display driver and the Wayland compositor windowing system.
-
-> **Quick Solution (1 Minute):**
-> 1. Update to **NVIDIA Driver 555.58** or newer (`linux-explicit-synchronization-v1` support).
-> 2. Add `nvidia-drm.modeset=1` to kernel boot parameters.
-> 3. Add `GBM_BACKEND=nvidia-drm` to `/etc/environment`.
 
 ## 🚀 Step-by-Step Optimization
 

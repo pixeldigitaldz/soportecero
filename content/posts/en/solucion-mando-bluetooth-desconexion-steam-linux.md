@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] Bluetooth Controller Disconnecting (Xbox / PS5) in Steam & Linux"
-description: "Fix random Bluetooth disconnects, input lag, and pairing drops with Xbox Series and PS5 DualSense controllers on Steam and Linux gaming systems."
-category: "Gaming Tech"
-tags: ["Gaming","Bluetooth","Linux","Steam"]
-readTime: "4 min"
-date: "2026-10-03"
+title: '[SOLVED] Bluetooth Controller Disconnecting (Xbox / PS5) in Steam & Linux'
+description: >-
+  Fix random Bluetooth disconnects, input lag, and pairing drops with Xbox
+  Series and PS5 DualSense controllers on Steam and Linux gaming systems.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Bluetooth
+  - Linux
+  - Steam
+readTime: 4 min
+date: '2026-10-03'
 ---
+
+When gaming on Linux or Steam Deck with wireless controllers (Xbox Series X|S, PS5 DualSense, Switch Pro), gamers regularly confront erratic dropouts, blinking LEDs, or unresponsiveness after pausing. This instability is driven by Linux kernel aggressive power management suspending the Bluetooth radio and missing wireless feedback rumble drivers.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Aggressive USB Bluetooth autosuspend power management in Linux kernel** | Disable Bluetooth autosuspend via custom udev power rules |
 | **Stock kernel xpad driver incompatibilities with recent Xbox wireless firmware** | Deploy the xpadneo DKMS kernel module for modern Xbox gamepad support |
-
-When gaming on Linux or Steam Deck with wireless controllers (Xbox Series X|S, PS5 DualSense, Switch Pro), gamers regularly confront erratic dropouts, blinking LEDs, or unresponsiveness after pausing. This instability is driven by Linux kernel aggressive power management suspending the Bluetooth radio and missing wireless feedback rumble drivers.
-
-> **Quick Solution (1 Minute):**
-> 1. Enforce active Bluetooth readiness:
->    `sudo sed -i 's/#AutoEnable=false/AutoEnable=true/' /etc/bluetooth/main.conf`
-> 2. Install advanced xpadneo driver for Xbox controllers:
->    `sudo apt install dkms && git clone https://github.com/atar-axis/xpadneo && sudo ./xpadneo/install.sh`
 
 ## 🚀 Step-by-Step Solution
 

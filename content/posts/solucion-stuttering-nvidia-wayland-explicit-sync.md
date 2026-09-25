@@ -1,26 +1,25 @@
 ---
-title: "[SOLUCIONADO] Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)"
-description: "¿Tus juegos sufren parpadeos (flickering) o lag en KDE, Hyprland o GNOME con tarjetas NVIDIA en Wayland? Activa Explicit Sync y optimiza controladores."
-category: "Gaming Tech"
-tags: ["NVIDIA", "Wayland", "Gaming", "Linux"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)'
+description: >-
+  ¿Tus juegos sufren parpadeos (flickering) o lag en KDE, Hyprland o GNOME con
+  tarjetas NVIDIA en Wayland? Activa Explicit Sync y optimiza controladores.
+category: Gaming Tech
+tags:
+  - NVIDIA
+  - Wayland
+  - Gaming
+  - Linux
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El **parpadeo visual (*flickering*), tartamudeo (*stuttering*) o desincronización de cuadros** al jugar en sistemas Linux con tarjetas gráficas **NVIDIA bajo entornos Wayland** (KDE Plasma 6, Hyprland, GNOME) se debe a la desincronización entre el búfer de renderizado del controlador y el compositor de ventanas.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Falta de soporte de Explicit Sync en controladores Nvidia anteriores a la serie 555** | Actualizar los controladores propietarios de Nvidia a la versión 555.58 o superior |
 | **Desincronización de fotogramas entre XWayland y el servidor Wayland** | Habilitar la bandera de sincronización explícita en el archivo de configuración del compositor |
-
-
-El **parpadeo visual (*flickering*), tartamudeo (*stuttering*) o desincronización de cuadros** al jugar en sistemas Linux con tarjetas gráficas **NVIDIA bajo entornos Wayland** (KDE Plasma 6, Hyprland, GNOME) se debe a la desincronización entre el búfer de renderizado del controlador y el compositor de ventanas.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Actualiza al controlador **NVIDIA 555.58** o superior (soporte para el protocolo `linux-explicit-synchronization-v1`).
-> 2. Añade en `/etc/environment`:
->    `GBM_BACKEND=nvidia-drm`
->    `__GLX_VENDOR_LIBRARY_NAME=nvidia`
 
 ## 🚀 Cómo corregir el rendimiento de NVIDIA en Wayland paso a paso
 

@@ -1,26 +1,26 @@
 ---
-title: "[FIXED] Error 502 Bad Gateway in Nginx with PHP-FPM"
-description: "Nginx returning 502 Bad Gateway while processing PHP requests? Learn how to fix PHP-FPM socket path mismatches and permissions in 3 steps."
-category: "Systems & Servers"
-tags: ["Nginx", "PHP-FPM", "Sysadmin", "Linux"]
-readTime: "4 min"
-date: "2026-08-12"
+title: '[FIXED] Error 502 Bad Gateway in Nginx with PHP-FPM'
+description: >-
+  Nginx returning 502 Bad Gateway while processing PHP requests? Learn how to
+  fix PHP-FPM socket path mismatches and permissions in 3 steps.
+category: Systems & Servers
+tags:
+  - Nginx
+  - PHP-FPM
+  - Sysadmin
+  - Linux
+readTime: 4 min
+date: '2026-08-12'
 ---
+
+The **`502 Bad Gateway`** error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at `/var/log/nginx/error.log` usually states:
+`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` or `Connection refused`.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **php-fpm daemon service stopped or not started** | Start PHP daemon: `sudo systemctl start php-fpm` (or `php8.2-fpm`) |
 | **Insufficient permissions on UNIX socket /var/run/php/php-fpm.sock** | Change socket owner to `www-data:www-data` in `/etc/php/fpm/pool.d/www.conf` |
-
-
-The **`502 Bad Gateway`** error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at `/var/log/nginx/error.log` usually states:
-`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` or `Connection refused`.
-
-> **Quick Solution (1 Minute):**
-> 1. Restart your active PHP-FPM service:
->    `sudo systemctl restart php8.2-fpm`
-> 2. Ensure your Nginx `fastcgi_pass` directive matches your exact installed PHP socket version.
 
 ## 🚀 Step-by-Step Fixes
 

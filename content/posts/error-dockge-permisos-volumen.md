@@ -1,19 +1,27 @@
 ---
-title: "Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose"
-description: "Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge."
-category: "Sistemas y Servidores"
-tags: ["Docker", "Dockge", "Linux", "Permisos", "Docker Compose", "DevOps"]
-readTime: "5 min"
-date: "2026-06-26"
+title: 'Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose'
+description: >-
+  Aprende a solucionar errores EACCES y Permission Denied en carpetas
+  compartidas y volúmenes de Docker Compose y Dockge.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - Dockge
+  - Linux
+  - Permisos
+  - Docker Compose
+  - DevOps
+readTime: 5 min
+date: '2026-06-26'
 ---
+
+El fallo recurrente `EACCES: permission denied`, `touch: cannot touch '/data/...': Permission denied` o `failed to open stream: Permission denied` en aplicaciones desplegadas con Dockge o Docker Compose ocurre cuando el usuario interno del contenedor (como `node` UID 1000, `www-data` UID 33 o `nobody` UID 65534) no posee permisos de escritura sobre el directorio montado en el sistema anfitrión.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El UID/GID del usuario dentro del contenedor no coincide con el propietario de la carpeta en el host** | Cambiar el propietario de la carpeta con `sudo chown -R 1000:1000 /ruta/volumen` o usar variable `user: "1000:1000"` |
 | **Bloqueo de seguridad por contexto SELinux o AppArmor** | Añadir el flag de volumen `:z` o `:Z` al mapear volúmenes en `docker-compose.yml` |
-
-El fallo recurrente `EACCES: permission denied`, `touch: cannot touch '/data/...': Permission denied` o `failed to open stream: Permission denied` en aplicaciones desplegadas con Dockge o Docker Compose ocurre cuando el usuario interno del contenedor (como `node` UID 1000, `www-data` UID 33 o `nobody` UID 65534) no posee permisos de escritura sobre el directorio montado en el sistema anfitrión.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

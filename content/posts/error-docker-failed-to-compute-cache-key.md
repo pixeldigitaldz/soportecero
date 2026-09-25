@@ -1,25 +1,24 @@
 ---
-title: "[SOLUCIONADO] Error 'failed to compute cache key' en Docker Build"
-description: "¿Recibes el error 'failed to compute cache key' al construir una imagen con docker build? Solución paso a paso para corregir rutas y Dockerfile."
-category: "Sistemas y Servidores"
-tags: ["Docker", "DevOps", "Sysadmin"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Error ''failed to compute cache key'' en Docker Build'
+description: >-
+  ¿Recibes el error 'failed to compute cache key' al construir una imagen con
+  docker build? Solución paso a paso para corregir rutas y Dockerfile.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - DevOps
+  - Sysadmin
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El error **`failed to compute cache key: failed to walk: lstat ...: no such file or directory`** durante el comando `docker build` ocurre cuando la instrucción `COPY` o `ADD` dentro del `Dockerfile` hace referencia a un archivo o directorio local que no existe dentro del **contexto de construcción** de Docker.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Ruta de origen especificada en el comando COPY/ADD del Dockerfile no existe** | Verificar la ruta exacta en la estructura de archivos local y el archivo `.dockerignore` |
 | **Contexto de compilación de Docker apuntando a una carpeta incorrecta** | Ejecutar el comando `docker build` asegurando la sintaxis `.` al final del comando |
-
-
-El error **`failed to compute cache key: failed to walk: lstat ...: no such file or directory`** durante el comando `docker build` ocurre cuando la instrucción `COPY` o `ADD` dentro del `Dockerfile` hace referencia a un archivo o directorio local que no existe dentro del **contexto de construcción** de Docker.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Revisa que la ruta del archivo copiado exista dentro de la carpeta actual donde ejecutas `docker build .`
-> 2. Comprueba que el archivo no esté excluido en el archivo `.dockerignore`.
-> 3. Si usas subcarpetas, ejecuta la compilación especificando el contexto correcto: `docker build -f docker/Dockerfile .`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

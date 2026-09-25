@@ -1,19 +1,27 @@
 ---
-title: "[SOLVED] Linux DNS Failure: 'Could not resolve host' / systemd-resolved"
-description: "Learn how to repair broken DNS name resolution and systemd-resolved daemon failures in Ubuntu, Debian, and Arch Linux."
-category: "Systems & Servers"
-tags: ["systemd", "DNS", "Linux", "SysAdmin", "Ubuntu", "Networking"]
-readTime: "5 min"
-date: "2026-06-25"
+title: '[SOLVED] Linux DNS Failure: ''Could not resolve host'' / systemd-resolved'
+description: >-
+  Learn how to repair broken DNS name resolution and systemd-resolved daemon
+  failures in Ubuntu, Debian, and Arch Linux.
+category: Systems & Servers
+tags:
+  - systemd
+  - DNS
+  - Linux
+  - SysAdmin
+  - Ubuntu
+  - Networking
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The systemic failure `Temporary failure in name resolution`, `Could not resolve host: google.com` or `Failed to start Network Name Resolution` in Linux occurs when the local domain resolver daemon or `/etc/resolv.conf` loses valid upstream nameserver configurations, halting outbound network connections requiring hostname resolution.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Broken symlink at /etc/resolv.conf pointing to an inactive systemd-resolved stub file** | Recreate symlink pointing to `/run/systemd/resolve/stub-resolv.conf` or apply static nameservers |
 | **systemd-resolved unit in failed state due to configuration errors or port 53 collision** | Restart daemon with `sudo systemctl restart systemd-resolved` and declare upstream DNS |
-
-The systemic failure `Temporary failure in name resolution`, `Could not resolve host: google.com` or `Failed to start Network Name Resolution` in Linux occurs when the local domain resolver daemon or `/etc/resolv.conf` loses valid upstream nameserver configurations, halting outbound network connections requiring hostname resolution.
 
 ## 🚀 Step-by-Step Solution
 

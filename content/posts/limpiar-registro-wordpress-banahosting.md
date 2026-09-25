@@ -1,19 +1,26 @@
 ---
-title: "Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting"
-description: "Guía práctica para eliminar transitorios, revisiones huérfanas y reducir el consumo de disco MySQL en cPanel BanaHosting."
-category: "Sistemas y Servidores"
-tags: ["WordPress", "BanaHosting", "MySQL", "cPanel", "Optimización"]
-readTime: "5 min"
-date: "2026-06-27"
+title: Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting
+description: >-
+  Guía práctica para eliminar transitorios, revisiones huérfanas y reducir el
+  consumo de disco MySQL en cPanel BanaHosting.
+category: Sistemas y Servidores
+tags:
+  - WordPress
+  - BanaHosting
+  - MySQL
+  - cPanel
+  - Optimización
+readTime: 5 min
+date: '2026-06-27'
 ---
+
+El crecimiento descontrolado de la base de datos MySQL en alojamientos como BanaHosting o servidores cPanel provoca que tu sitio web supere los límites de inodes, alcance el tope de CPU/IOPS y experimente lentitud general o errores 500/503. Esto suele deberse a millones de transitorios no eliminados en `wp_options` y miles de revisiones antiguas en `wp_posts`.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Tabla wp_options sobrecargada por transitorios expirados y logs huérfanos** | Ejecutar consulta SQL de limpieza de transitorios expirados en phpMyAdmin |
 | **Exceso de revisiones de entradas y auto-guardados acumulados en wp_posts** | Limitar revisiones en `wp-config.php` y optimizar tablas MySQL con comando OPTIMIZE TABLE |
-
-El crecimiento descontrolado de la base de datos MySQL en alojamientos como BanaHosting o servidores cPanel provoca que tu sitio web supere los límites de inodes, alcance el tope de CPU/IOPS y experimente lentitud general o errores 500/503. Esto suele deberse a millones de transitorios no eliminados en `wp_options` y miles de revisiones antiguas en `wp_posts`.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

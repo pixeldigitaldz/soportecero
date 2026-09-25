@@ -1,19 +1,28 @@
 ---
-title: "Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide"
-description: "Learn how to eliminate stuttering and frame drops in Elden Ring on Linux using GE-Proton, VKD3D-Proton, Vulkan GPL, and RADV."
-category: "Gaming Tech"
-tags: ["Elden Ring", "Proton", "Linux", "Gaming", "VKD3D", "Vulkan", "Steam Deck"]
-readTime: "5 min"
-date: "2026-08-24"
+title: 'Fix Elden Ring Stuttering and FPS Drops with VKD3D on Linux: Complete Guide'
+description: >-
+  Learn how to eliminate stuttering and frame drops in Elden Ring on Linux using
+  GE-Proton, VKD3D-Proton, Vulkan GPL, and RADV.
+category: Gaming Tech
+tags:
+  - Elden Ring
+  - Proton
+  - Linux
+  - Gaming
+  - VKD3D
+  - Vulkan
+  - Steam Deck
+readTime: 5 min
+date: '2026-08-24'
 ---
+
+Elden Ring relies on native Direct3D 12. When executed on Linux via Steam Proton, Direct3D instructions are translated to Vulkan via VKD3D-Proton. If the underlying graphics driver performs real-time synchronous compilation without Graphics Pipeline Library (GPL) support, frame delivery pauses for 100-300ms upon discovering new particle effects or enemy assets.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Synchronous Direct3D 12 shader compilation stalls in VKD3D when traversing the Lands Between** | Enable Vulkan GPL (`RADV_PERFTEST=gpl`) and enable background shader pre-caching in Steam |
 | **VRAM fragmentation or restrictive Linux kernel virtual memory mapping limits** | Use latest GE-Proton build and expand `vm.max_map_count=1048576` |
-
-Elden Ring relies on native Direct3D 12. When executed on Linux via Steam Proton, Direct3D instructions are translated to Vulkan via VKD3D-Proton. If the underlying graphics driver performs real-time synchronous compilation without Graphics Pipeline Library (GPL) support, frame delivery pauses for 100-300ms upon discovering new particle effects or enemy assets.
 
 ## 🚀 Step-by-Step Solution
 

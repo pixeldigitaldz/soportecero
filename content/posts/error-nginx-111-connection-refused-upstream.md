@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Nginx connect() failed (111: Connection refused) while connecting to upstream"
-description: "Soluciona el error de Nginx 111: Connection refused en proxy_pass hacia Node.js, PHP-FPM, Docker o Python Gunicorn."
-category: "Sistemas y Servidores"
-tags: ["Nginx","DevOps","Nodejs","Sysadmin"]
-readTime: "4 min"
-date: "2026-09-17"
+title: >-
+  [SOLUCIONADO] Nginx connect() failed (111: Connection refused) while
+  connecting to upstream
+description: >-
+  Soluciona el error de Nginx 111: Connection refused en proxy_pass hacia
+  Node.js, PHP-FPM, Docker o Python Gunicorn.
+category: Sistemas y Servidores
+tags:
+  - Nginx
+  - DevOps
+  - Nodejs
+  - Sysadmin
+readTime: 4 min
+date: '2026-09-17'
 ---
+
+Al configurar Nginx como proxy inverso hacia aplicaciones web (Next.js, Express, Django, Laravel), es muy común ver el error HTTP 502 Bad Gateway en el navegador y la siguiente línea en el archivo de registro `/var/log/nginx/error.log`: `connect() failed (111: Connection refused) while connecting to upstream, client: ..., server: ..., request: ..., upstream: "http://127.0.1:3000/..."`. Esto significa que Nginx intentó transferir la petición al backend, pero no encontró ningún proceso escuchando en ese puerto o socket.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El servicio backend (Node.js, Gunicorn, Docker) no está ejecutándose o se cayó por un error fatal** | Comprobar el estado del proceso backend con systemctl status o docker ps |
 | **Discordancia de puerto o socket UNIX en la directiva proxy_pass de Nginx** | Corregir el puerto de escucha (ej. 3000, 8000) o los permisos del socket .sock |
-
-Al configurar Nginx como proxy inverso hacia aplicaciones web (Next.js, Express, Django, Laravel), es muy común ver el error HTTP 502 Bad Gateway en el navegador y la siguiente línea en el archivo de registro `/var/log/nginx/error.log`: `connect() failed (111: Connection refused) while connecting to upstream, client: ..., server: ..., request: ..., upstream: "http://127.0.1:3000/..."`. Esto significa que Nginx intentó transferir la petición al backend, pero no encontró ningún proceso escuchando en ese puerto o socket.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Revisa qué servicios están escuchando en puertos locales:
->    `sudo ss -tulpn | grep -E '3000|8000|8080|9000'`
-> 2. Comprueba si tu backend (Node/Python/Docker) está activo:
->    `sudo systemctl status mi-app`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

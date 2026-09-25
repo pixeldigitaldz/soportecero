@@ -1,19 +1,27 @@
 ---
-title: "Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux"
-description: "Learn how to resolve distorted audio, crackling, and missing sound in Warframe using Steam Proton, FAudio, and PipeWire."
-category: "Gaming Tech"
-tags: ["Warframe", "Proton", "Linux", "Gaming", "Audio", "Steam Deck"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Guide: How to Fix Audio Crackling and No Sound in Warframe on Proton Linux'
+description: >-
+  Learn how to resolve distorted audio, crackling, and missing sound in Warframe
+  using Steam Proton, FAudio, and PipeWire.
+category: Gaming Tech
+tags:
+  - Warframe
+  - Proton
+  - Linux
+  - Gaming
+  - Audio
+  - Steam Deck
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+When running Warframe on Linux via Steam Proton or Steam Deck, players frequently encounter distorted audio, severe crackling during intense combat, or missing cinematic sound effects. This stems from latency buffer underruns between the Warframe sound engine (Wwise/XAudio2) and the host audio daemon.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Sample rate mismatch or aggressive low audio buffer quantum in PipeWire/PulseAudio** | Enforce 48000 Hz sample rate and set `PULSE_LATENCY_MSEC=60` in launch options |
 | **XAudio2 / FAudio translation layer compatibility issues in Proton wineprefix** | Switch to GE-Proton and configure `WINEDLLOVERRIDES="xaudio2_7=n,b"` |
-
-When running Warframe on Linux via Steam Proton or Steam Deck, players frequently encounter distorted audio, severe crackling during intense combat, or missing cinematic sound effects. This stems from latency buffer underruns between the Warframe sound engine (Wwise/XAudio2) and the host audio daemon.
 
 ## 🚀 Step-by-Step Solution
 

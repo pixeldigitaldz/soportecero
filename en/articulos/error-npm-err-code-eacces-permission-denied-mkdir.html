@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>[FIXED] Error 'npm ERR! code EACCES permission denied' in Linux | SoporteCero</title>
   <meta name="description" content="Getting npm EACCES permission denied errors installing global packages? Learn how to fix npm directory permissions without using sudo.">
+  <meta name="keywords" content="Node.js, npm, Linux">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-npm-err-code-eacces-permission-denied-mkdir.html">
   
@@ -24,6 +25,9 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-03">
   <meta property="article:section" content="Web & Code">
+  <meta property="article:tag" content="Node.js">
+  <meta property="article:tag" content="npm">
+  <meta property="article:tag" content="Linux">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +55,7 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 'npm ERR! code EACCES permission denied' in Linux",
   "description": "Getting npm EACCES permission denied errors installing global packages? Learn how to fix npm directory permissions without using sudo.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Web & Code",
   "articleSection": "Web & Code",
@@ -196,14 +201,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The error npm ERR! code EACCES permission denied (or EACCES: permission denied, access &#39;/usr/local/lib/node_modules&#39;) occurs when trying to install global packages via npm install -g &lt;package&gt;. It happens because system Node directories are owned by root, preventing regular users from writing to them.</p>
-      </section>
-      
+          <p>The error <strong><code>npm ERR! code EACCES permission denied</code></strong> (or <code>EACCES: permission denied, access &#39;/usr/local/lib/node_modules&#39;</code>) occurs when trying to install global packages via <code>npm install -g &lt;package&gt;</code>. It happens because system Node directories are owned by <code>root</code>, preventing regular users from writing to them.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -212,8 +210,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>Running global npm install without write permissions to /usr/local/lib/node_modules</strong></div>
@@ -230,24 +227,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Run <code>sudo chown -R $USER:$USER .</code> in project root directory</div>
           </div></div></div>
-
-<blockquote>
-<p><strong>Quick Solution (Recommended):</strong>
-Change npm&#39;s default global directory to your home folder:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
-      </div>
-      <pre class="formatted-pre"><code>mkdir ~/.npm-global
-npm config set prefix &#39;~/.npm-global&#39;
-echo &#39;export PATH=~/.npm-global/bin:$PATH&#39; &gt;&gt; ~/.bashrc &amp;&amp; source ~/.bashrc
-</code></pre>
-    </div>
-    
-</blockquote>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -260,7 +239,8 @@ echo &#39;export PATH=~/.npm-global/bin:$PATH&#39; &gt;&gt; ~/.bashrc &amp;&amp;
       </ol>
     </nav>
     
-    <h2 id="step-by-step-fixes-without-sudo">🚀 Step-by-Step Fixes (Without sudo)</h2>
+    
+<h2 id="step-by-step-fixes-without-sudo">🚀 Step-by-Step Fixes (Without sudo)</h2>
 <h3 id="method-1-reconfigure-npm-default-global-directory">Method 1: Reconfigure NPM Default Global Directory</h3>
 <p>Running <code>sudo npm</code> creates security vulnerabilities and corrupts folder permissions for non-root users.</p>
 <ol>

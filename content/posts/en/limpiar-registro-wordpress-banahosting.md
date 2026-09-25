@@ -1,19 +1,26 @@
 ---
-title: "How to clean and optimize a bloated WordPress database in BanaHosting"
-description: "Step-by-step guide to removing expired transients, post revisions, and optimizing MySQL table storage in cPanel BanaHosting."
-category: "Systems & Servers"
-tags: ["WordPress", "BanaHosting", "MySQL", "cPanel", "Optimization"]
-readTime: "5 min"
-date: "2026-07-27"
+title: How to clean and optimize a bloated WordPress database in BanaHosting
+description: >-
+  Step-by-step guide to removing expired transients, post revisions, and
+  optimizing MySQL table storage in cPanel BanaHosting.
+category: Systems & Servers
+tags:
+  - WordPress
+  - BanaHosting
+  - MySQL
+  - cPanel
+  - Optimization
+readTime: 5 min
+date: '2026-07-27'
 ---
+
+Unchecked growth of WordPress databases in shared hosting environments like BanaHosting or standard cPanel VPS causes sites to exceed inode quotas, trigger CPU/IOPS resource throttling, and suffer intermittent 500/503 errors. The culprit is typically unpruned `_transient_` options and thousands of draft revisions.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **wp_options table bloated by expired transient records and unpruned autoload data** | Run SQL cleanup queries for transients in phpMyAdmin |
 | **Accumulated post revisions and orphan postmeta consuming IOPS in wp_posts** | Cap post revisions in `wp-config.php` and run OPTIMIZE TABLE in MySQL |
-
-Unchecked growth of WordPress databases in shared hosting environments like BanaHosting or standard cPanel VPS causes sites to exceed inode quotas, trigger CPU/IOPS resource throttling, and suffer intermittent 500/503 errors. The culprit is typically unpruned `_transient_` options and thousands of draft revisions.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,28 +1,24 @@
 ---
-title: "[SOLUCIONADO] Error 'npm ERR! code EACCES permission denied' en Linux"
-description: "¿Fallo de permisos EACCES al instalar paquetes globales con npm? Aprende a solucionar los permisos de Node.js sin usar sudo de forma segura."
-category: "Web y Código"
-tags: ["Node.js", "npm", "Linux"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Error ''npm ERR! code EACCES permission denied'' en Linux'
+description: >-
+  ¿Fallo de permisos EACCES al instalar paquetes globales con npm? Aprende a
+  solucionar los permisos de Node.js sin usar sudo de forma segura.
+category: Web y Código
+tags:
+  - Node.js
+  - npm
+  - Linux
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El error **`npm ERR! code EACCES permission denied`** (o `EACCES: permission denied, access '/usr/local/lib/node_modules'`) ocurre al intentar instalar paquetes globales con `npm install -g <paquete>`. Sucede porque el directorio del sistema pertenece al usuario `root`, impidiendo que tu usuario normal escriba en él.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Ejecución de npm install global sin permisos en /usr/local/lib/node_modules** | Cambiar el directorio global por defecto de npm a la carpeta home del usuario |
 | **Permisos de carpeta del proyecto pertenecientes a root** | Ejecutar `sudo chown -R $USER:$USER .` en la carpeta raíz del proyecto |
-
-
-El error **`npm ERR! code EACCES permission denied`** (o `EACCES: permission denied, access '/usr/local/lib/node_modules'`) ocurre al intentar instalar paquetes globales con `npm install -g <paquete>`. Sucede porque el directorio del sistema pertenece al usuario `root`, impidiendo que tu usuario normal escriba en él.
-
-> **Solución Rápida (Recomendada):**
-> Cambia la ubicación del directorio global de npm a tu carpeta de usuario local:
-> ```bash
-> mkdir ~/.npm-global
-> npm config set prefix '~/.npm-global'
-> echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc && source ~/.bashrc
-> ```
 
 ## 🚀 Cómo solucionar el error de permisos en NPM sin usar sudo
 

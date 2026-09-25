@@ -1,19 +1,29 @@
 ---
-title: "How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through socket"
-description: "Learn how to solve MySQL error 2002 Can't connect through socket '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS."
-category: "Web & Code"
-tags: ["MySQL", "MariaDB", "Linux", "SysAdmin", "Databases", "Ubuntu"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  How to Fix: Error 2002 (HY000): Can't connect to local MySQL server through
+  socket
+description: >-
+  Learn how to solve MySQL error 2002 Can't connect through socket
+  '/var/run/mysqld/mysqld.sock' in Ubuntu, Debian, and CentOS.
+category: Web & Code
+tags:
+  - MySQL
+  - MariaDB
+  - Linux
+  - SysAdmin
+  - Databases
+  - Ubuntu
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The exception `ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)` occurs when local CLI clients or web applications attempt communication via the UNIX domain socket IPC endpoint and find the socket file missing or the `mysqld` daemon in a failed state.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **MySQL / MariaDB daemon stopped or unable to create UNIX socket due to exhausted storage** | Inspect disk with `df -h` and start service with `sudo systemctl start mysql` |
 | **Socket path mismatch between my.cnf (/var/run/mysqld/mysqld.sock vs /tmp/mysql.sock)** | Create compatibility symlink or synchronize socket paths across `[client]` and `[mysqld]` |
-
-The exception `ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)` occurs when local CLI clients or web applications attempt communication via the UNIX domain socket IPC endpoint and find the socket file missing or the `mysqld` daemon in a failed state.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,19 +1,29 @@
 ---
-title: "Cómo resolver: Error 2002 (HY000): Can't connect to local MySQL server through socket"
-description: "Aprende a solucionar el error 2002 Can't connect to MySQL server through socket '/var/run/mysqld/mysqld.sock' en Ubuntu, Debian y CentOS."
-category: "Web y Código"
-tags: ["MySQL", "MariaDB", "Linux", "SysAdmin", "Bases de Datos", "Ubuntu"]
-readTime: "5 min"
-date: "2026-06-25"
+title: >-
+  Cómo resolver: Error 2002 (HY000): Can't connect to local MySQL server through
+  socket
+description: >-
+  Aprende a solucionar el error 2002 Can't connect to MySQL server through
+  socket '/var/run/mysqld/mysqld.sock' en Ubuntu, Debian y CentOS.
+category: Web y Código
+tags:
+  - MySQL
+  - MariaDB
+  - Linux
+  - SysAdmin
+  - Bases de Datos
+  - Ubuntu
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)` ocurre cuando el cliente de línea de comandos de MySQL o una aplicación web local intenta comunicarse con el motor de base de datos a través del archivo de socket IPC de UNIX y este no existe en la ruta esperada o el daemon `mysqld` se ha detenido abruptamente.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El servidor MySQL / MariaDB está detenido o no pudo crear el socket UNIX por falta de espacio en disco** | Comprobar almacenamiento con `df -h` e iniciar el servicio con `sudo systemctl start mysql` |
 | **Ruta del archivo de socket desincronizada entre my.cnf (/var/run/mysqld/mysqld.sock y /tmp/mysql.sock)** | Crear un enlace simbólico al socket o sincronizar la ruta en la sección `[client]` y `[mysqld]` |
-
-El error `ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)` ocurre cuando el cliente de línea de comandos de MySQL o una aplicación web local intenta comunicarse con el motor de base de datos a través del archivo de socket IPC de UNIX y este no existe en la ruta esperada o el daemon `mysqld` se ha detenido abruptamente.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

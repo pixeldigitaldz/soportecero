@@ -1,19 +1,27 @@
 ---
-title: "Resuelto: server certificate verification failed en Git"
-description: "Aprende a solucionar el error de verificación de certificado SSL en Git (fatal: unable to access) en Linux, Windows y macOS de forma segura."
-category: "Web y Código"
-tags: ["Git", "SSL", "Linux", "Seguridad", "GitHub", "DevOps"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Resuelto: server certificate verification failed en Git'
+description: >-
+  Aprende a solucionar el error de verificación de certificado SSL en Git
+  (fatal: unable to access) en Linux, Windows y macOS de forma segura.
+category: Web y Código
+tags:
+  - Git
+  - SSL
+  - Linux
+  - Seguridad
+  - GitHub
+  - DevOps
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+El error `fatal: unable to access 'https://github.com/...': server certificate verification failed. CAfile: none CRLfile: none` ocurre cuando el cliente Git no puede validar la cadena criptográfica del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación de confianza.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Almacén de certificados de Autoridades de Certificación (CA) del sistema operativo desactualizado** | Actualizar `ca-certificates` en Linux con `sudo apt update && sudo apt install --reinstall ca-certificates` |
 | **Proxy corporativo interceptando el tráfico SSL o certificado autofirmado no registrado en Git** | Configurar la ruta del certificado CA con `git config --global http.sslCAInfo /ruta/ca.crt` |
-
-El error `fatal: unable to access 'https://github.com/...': server certificate verification failed. CAfile: none CRLfile: none` ocurre cuando el cliente Git no puede validar la cadena criptográfica del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación de confianza.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,20 +1,24 @@
 ---
-title: "How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker"
-description: "Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications."
-category: "Web & Code"
-tags: ["Prowlarr", "Docker", "qBittorrent"]
-readTime: "4 min"
-date: "2026-07-27"
+title: How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker
+description: >-
+  Learn how to resolve the 'Connection Refused' error by configuring Docker's
+  internal networks correctly for your automation applications.
+category: Web & Code
+tags:
+  - Prowlarr
+  - Docker
+  - qBittorrent
+readTime: 4 min
+date: '2026-07-27'
 ---
+
+The `Connection Refused` or `Test failed: Connection refused` error when trying to link Prowlarr to qBittorrent in Docker occurs because both services run in isolated containers that do not share the same virtual logical Docker network, or because qBittorrent rejects external requests due to incorrect WebUI API access settings.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Docker network hostname unreachable between containers** | Connect both containers to same Docker bridge network |
 | **Incorrect qBittorrent API key or authentication credentials** | Disable CSRF protection in qBittorrent or verify web UI port (8080) |
-
-
-The `Connection Refused` or `Test failed: Connection refused` error when trying to link Prowlarr to qBittorrent in Docker occurs because both services run in isolated containers that do not share the same virtual logical Docker network, or because qBittorrent rejects external requests due to incorrect WebUI API access settings.
 
 ## 🚀 Step-by-Step Solution
 

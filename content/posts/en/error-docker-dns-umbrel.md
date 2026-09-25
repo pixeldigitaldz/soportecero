@@ -1,20 +1,24 @@
 ---
-title: "Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)"
-description: "Learn how to resolve the network block where your containers in Umbrel lose access to the outside due to conflicts with the internal DNS resolver."
-category: "Systems & Servers"
-tags: ["Umbrel", "Docker", "DNS"]
-readTime: "4 min"
-date: "2026-07-27"
+title: 'Error: Internet Connection Loss due to DNS Failure in Docker (Umbrel OS)'
+description: >-
+  Learn how to resolve the network block where your containers in Umbrel lose
+  access to the outside due to conflicts with the internal DNS resolver.
+category: Systems & Servers
+tags:
+  - Umbrel
+  - Docker
+  - DNS
+readTime: 4 min
+date: '2026-07-27'
 ---
+
+A very common critical failure in home servers based on the **Umbrel OS** ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing `Temporary failure in name resolution` errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Internal Docker DNS resolver failing on Umbrel OS** | Set public DNS in `/etc/docker/daemon.json` (e.g. `"dns": ["1.1.1.1"]`) |
 | **Port 53 conflict with systemd-resolved service** | Set `DNSStubListener=no` in `/etc/systemd/resolved.conf` |
-
-
-A very common critical failure in home servers based on the **Umbrel OS** ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing `Temporary failure in name resolution` errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.
 
 ## 🚀 Step-by-Step Solution
 

@@ -1,25 +1,25 @@
 ---
-title: "[SOLVED] DXGI_ERROR_DEVICE_HUNG in Proton & Steam Games on Linux"
-description: "Step-by-step resolution for the fatal DXGI_ERROR_DEVICE_HUNG crash in DirectX 11 & 12 titles running through Proton and VKD3D on Linux."
-category: "Gaming Tech"
-tags: ["Proton","Steam","Linux","Vulkan"]
-readTime: "4 min"
-date: "2026-09-27"
+title: '[SOLVED] DXGI_ERROR_DEVICE_HUNG in Proton & Steam Games on Linux'
+description: >-
+  Step-by-step resolution for the fatal DXGI_ERROR_DEVICE_HUNG crash in DirectX
+  11 & 12 titles running through Proton and VKD3D on Linux.
+category: Gaming Tech
+tags:
+  - Proton
+  - Steam
+  - Linux
+  - Vulkan
+readTime: 4 min
+date: '2026-09-27'
 ---
+
+While gaming on Linux via Steam Proton (playing Cyberpunk 2077, Elden Ring, or Apex Legends), the screen suddenly freezes followed by an Unreal Engine / DirectX dialogue reporting: `Fatal error: The GPU device has been suspended or hung: DXGI_ERROR_DEVICE_HUNG (0x887A0006)`. This crash occurs when the Linux graphics stack fails to receive a timely response from the GPU execution ring.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **GPU driver kernel timeout (TDR) triggered during intense graphics workload bursts** | Configure VKD3D synchronization flags and set PROTON_ENABLE_NVAPI=1 |
 | **VRAM saturation or unstable GPU memory overclocks under Linux translation layers** | Lower texture quality by one preset and test against Proton Experimental / GE |
-
-While gaming on Linux via Steam Proton (playing Cyberpunk 2077, Elden Ring, or Apex Legends), the screen suddenly freezes followed by an Unreal Engine / DirectX dialogue reporting: `Fatal error: The GPU device has been suspended or hung: DXGI_ERROR_DEVICE_HUNG (0x887A0006)`. This crash occurs when the Linux graphics stack fails to receive a timely response from the GPU execution ring.
-
-> **Quick Solution (1 Minute):**
-> 1. Add launch options in Steam game properties:
->    `VKD3D_CONFIG=no_upload_hvv %command%`
-> 2. For NVIDIA GPUs, enable native NVAPI bridges:
->    `PROTON_ENABLE_NVAPI=1 %command%`
 
 ## 🚀 Step-by-Step Solution
 

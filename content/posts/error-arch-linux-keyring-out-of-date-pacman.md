@@ -1,19 +1,28 @@
 ---
-title: "Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes"
-description: "Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales."
-category: "Sistemas y Servidores"
-tags: ["Arch Linux", "Pacman", "Linux", "CachyOS", "SysAdmin"]
-readTime: "5 min"
-date: "2026-08-04"
+title: >-
+  Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar
+  paquetes
+description: >-
+  Guía completa para solucionar errores de claves desactualizadas en Arch Linux,
+  Manjaro y CachyOS con pacman-key y repositorios oficiales.
+category: Sistemas y Servidores
+tags:
+  - Arch Linux
+  - Pacman
+  - Linux
+  - CachyOS
+  - SysAdmin
+readTime: 5 min
+date: '2026-08-04'
 ---
+
+El fallo recurrente `error: archlinux-keyring: signature is marginal trust` o `error: failed to commit transaction (invalid or corrupted package (PGP signature))` ocurre cuando los desarrolladores y empaquetadores de Arch Linux rotan o renuevan sus certificados criptográficos mientras tu sistema conserva un llavero antiguo, impidiendo que Pacman confíe en los nuevos paquetes oficiales.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Paquete archlinux-keyring desactualizado en una instalación inactiva por semanas** | Actualizar exclusivamente el llavero con `sudo pacman -Sy archlinux-keyring` antes de la actualización general |
 | **Directorio de firmas criptográficas corrupto en /etc/pacman.d/gnupg** | Reconstruir el llavero GPG con `sudo rm -rf /etc/pacman.d/gnupg && sudo pacman-key --init && sudo pacman-key --populate archlinux` |
-
-El fallo recurrente `error: archlinux-keyring: signature is marginal trust` o `error: failed to commit transaction (invalid or corrupted package (PGP signature))` ocurre cuando los desarrolladores y empaquetadores de Arch Linux rotan o renuevan sus certificados criptográficos mientras tu sistema conserva un llavero antiguo, impidiendo que Pacman confíe en los nuevos paquetes oficiales.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

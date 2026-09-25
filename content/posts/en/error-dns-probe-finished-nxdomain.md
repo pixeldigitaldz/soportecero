@@ -1,19 +1,27 @@
 ---
-title: "How to Fix DNS_PROBE_FINISHED_NXDOMAIN Error in Your Local Network"
-description: "Learn how to resolve DNS_PROBE_FINISHED_NXDOMAIN in Windows, Linux, and macOS by flushing DNS cache and switching DNS resolvers."
-category: "Web & Code"
-tags: ["DNS", "Networking", "Windows", "Linux", "Chrome", "SysAdmin"]
-readTime: "5 min"
-date: "2026-06-25"
+title: How to Fix DNS_PROBE_FINISHED_NXDOMAIN Error in Your Local Network
+description: >-
+  Learn how to resolve DNS_PROBE_FINISHED_NXDOMAIN in Windows, Linux, and macOS
+  by flushing DNS cache and switching DNS resolvers.
+category: Web & Code
+tags:
+  - DNS
+  - Networking
+  - Windows
+  - Linux
+  - Chrome
+  - SysAdmin
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The error `DNS_PROBE_FINISHED_NXDOMAIN` (Non-Existent Domain) signifies that the Domain Name System resolver could not translate the requested hostname into a valid IP address. This typically arises from corrupted local DNS cache entries, outdated hostfile overrides, or upstream nameserver lookup failures.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Stale or corrupted DNS resolver cache in operating system or web browser** | Flush DNS cache via `ipconfig /flushdns` on Windows or `resolvectl flush-caches` on Linux |
 | **ISP default DNS resolvers offline or failing hostname translation lookups** | Switch primary nameservers to Cloudflare (`1.1.1.1`) or Google (`8.8.8.8`) |
-
-The error `DNS_PROBE_FINISHED_NXDOMAIN` (Non-Existent Domain) signifies that the Domain Name System resolver could not translate the requested hostname into a valid IP address. This typically arises from corrupted local DNS cache entries, outdated hostfile overrides, or upstream nameserver lookup failures.
 
 ## 🚀 Step-by-Step Solution
 

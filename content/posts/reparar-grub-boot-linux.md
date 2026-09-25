@@ -1,20 +1,24 @@
 ---
-title: "Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux"
-description: "Aprende a restablecer el cargador de arranque GRUB en sistemas UEFI y BIOS utilizando una distribución Live USB y la herramienta chroot."
-category: "Sistemas y Servidores"
-tags: ["Linux", "GRUB", "Bootloader"]
-readTime: "4 min"
-date: "2026-06-27"
+title: Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux
+description: >-
+  Aprende a restablecer el cargador de arranque GRUB en sistemas UEFI y BIOS
+  utilizando una distribución Live USB y la herramienta chroot.
+category: Sistemas y Servidores
+tags:
+  - Linux
+  - GRUB
+  - Bootloader
+readTime: 4 min
+date: '2026-06-27'
 ---
+
+El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate `grub>`) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Cargador de arranque GRUB eliminado o corrupto tras actualización de Windows** | Iniciar desde un Live USB y reinstalar GRUB con `grub-install /dev/sdX` |
 | **Archivo de configuración /boot/grub/grub.cfg corrupto o desactualizado** | Regenerar el menú de arranque con `grub-mkconfig -o /boot/grub/grub.cfg` |
-
-
-El fallo en el cargador de arranque GRUB (dejando el sistema congelado en la consola de rescate `grub>`) suele ocurrir tras una actualización de kernel fallida, fallos en la tabla de particiones EFI o tras configurar arranques duales con Windows. Para repararlo, debemos montar e ingresar al sistema de archivos dañado desde un entorno temporal.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

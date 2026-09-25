@@ -1,19 +1,28 @@
 ---
-title: "Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa"
-description: "Aprende a eliminar los tirones y congelamientos en Elden Ring en Linux usando GE-Proton, VKD3D-Proton, Vulkan GPL y RADV."
-category: "Gaming Tech"
-tags: ["Elden Ring", "Proton", "Linux", "Gaming", "VKD3D", "Vulkan", "Steam Deck"]
-readTime: "5 min"
-date: "2026-08-24"
+title: 'Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa'
+description: >-
+  Aprende a eliminar los tirones y congelamientos en Elden Ring en Linux usando
+  GE-Proton, VKD3D-Proton, Vulkan GPL y RADV.
+category: Gaming Tech
+tags:
+  - Elden Ring
+  - Proton
+  - Linux
+  - Gaming
+  - VKD3D
+  - Vulkan
+  - Steam Deck
+readTime: 5 min
+date: '2026-08-24'
 ---
+
+Elden Ring utiliza Direct3D 12 de forma nativa. Al ejecutarse en Linux mediante Steam Proton, el motor traduce las instrucciones gráficas a Vulkan mediante la capa VKD3D-Proton. Si la compilación de shaders se produce en tiempo real de forma síncrona o el controlador no utiliza Graphics Pipeline Library (GPL), el juego experimenta congelamientos perceptibles (stuttering) de 100-300ms cada vez que aparece un nuevo enemigo, efecto visual o zona en pantalla.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Compilación síncrona de sombreadores DirectX 12 en VKD3D al explorar nuevas regiones de las Tierras Intermedias** | Activar Vulkan GPL (`RADV_PERFTEST=gpl`) y habilitar preprocesamiento de shaders en Steam |
 | **Incompatibilidades en la gestión de memoria VRAM o límites de descriptores en el kernel** | Utilizar GE-Proton más reciente y ajustar `vm.max_map_count=1048576` |
-
-Elden Ring utiliza Direct3D 12 de forma nativa. Al ejecutarse en Linux mediante Steam Proton, el motor traduce las instrucciones gráficas a Vulkan mediante la capa VKD3D-Proton. Si la compilación de shaders se produce en tiempo real de forma síncrona o el controlador no utiliza Graphics Pipeline Library (GPL), el juego experimenta congelamientos perceptibles (stuttering) de 100-300ms cada vez que aparece un nuevo enemigo, efecto visual o zona en pantalla.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,19 +1,27 @@
 ---
-title: "How to Fix 504 Gateway Timeout Error in Nginx with PHP-FPM (Quickly)"
-description: "Step-by-step troubleshooting guide to resolve 504 Gateway Timeout in Nginx and PHP-FPM by tuning execution timeouts and process pools."
-category: "Systems & Servers"
-tags: ["Nginx", "PHP-FPM", "Linux", "SysAdmin", "Servers", "WordPress"]
-readTime: "5 min"
-date: "2026-07-26"
+title: How to Fix 504 Gateway Timeout Error in Nginx with PHP-FPM (Quickly)
+description: >-
+  Step-by-step troubleshooting guide to resolve 504 Gateway Timeout in Nginx and
+  PHP-FPM by tuning execution timeouts and process pools.
+category: Systems & Servers
+tags:
+  - Nginx
+  - PHP-FPM
+  - Linux
+  - SysAdmin
+  - Servers
+  - WordPress
+readTime: 5 min
+date: '2026-07-26'
 ---
+
+The `504 Gateway Timeout` error in an Nginx and PHP-FPM web server stack indicates that Nginx, operating as a reverse proxy gateway, did not receive a timely response from the upstream PHP-FPM worker process before the configured timeout interval expired.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **PHP script execution time exceeds Nginx fastcgi_read_timeout boundary** | Increase `fastcgi_read_timeout 300s;` in Nginx server block configuration |
 | **Low max_execution_time and request_terminate_timeout in php.ini and PHP-FPM pool** | Raise `max_execution_time = 300` in `php.ini` and `request_terminate_timeout = 300s` in `www.conf` |
-
-The `504 Gateway Timeout` error in an Nginx and PHP-FPM web server stack indicates that Nginx, operating as a reverse proxy gateway, did not receive a timely response from the upstream PHP-FPM worker process before the configured timeout interval expired.
 
 ## 🚀 Step-by-Step Solution
 

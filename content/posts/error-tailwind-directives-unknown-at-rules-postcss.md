@@ -1,24 +1,27 @@
 ---
-title: "[SOLUCIONADO] Advertencia Unknown at rule @tailwind y @apply en VS Code y PostCSS"
-description: "Elimina las advertencias Unknown at rule @tailwind, @apply y @layer en archivos CSS en Visual Studio Code, Tailwind CSS y PostCSS."
-category: "Web y Código"
-tags: ["TailwindCSS","CSS","Frontend","VSCode"]
-readTime: "3 min"
-date: "2026-10-15"
+title: >-
+  [SOLUCIONADO] Advertencia Unknown at rule @tailwind y @apply en VS Code y
+  PostCSS
+description: >-
+  Elimina las advertencias Unknown at rule @tailwind, @apply y @layer en
+  archivos CSS en Visual Studio Code, Tailwind CSS y PostCSS.
+category: Web y Código
+tags:
+  - TailwindCSS
+  - CSS
+  - Frontend
+  - VSCode
+readTime: 3 min
+date: '2026-10-15'
 ---
+
+Al abrir tu archivo `globals.css` o `style.css` en proyectos configurados con Tailwind CSS, Visual Studio Code subraya en amarillo o rojo las directivas `@tailwind base;`, `@apply` y `@layer` con la advertencia: `Unknown at rule @tailwind(unknownAtRules)` o `Unknown at rule @apply`. Aunque el proyecto compila correctamente, estas advertencias ensucian el editor y ocultan errores CSS reales.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El validador de CSS nativo de VS Code no reconoce la sintaxis de directivas especiales de Tailwind** | Instalar la extensión oficial Tailwind CSS IntelliSense y asociar los archivos como Tailwind CSS |
 | **Falta de configuración de PostCSS o configuración de linter css.lint.unknownAtRules en ajustes** | Configurar css.lint.unknownAtRules en "ignore" en settings.json de VS Code |
-
-Al abrir tu archivo `globals.css` o `style.css` en proyectos configurados con Tailwind CSS, Visual Studio Code subraya en amarillo o rojo las directivas `@tailwind base;`, `@apply` y `@layer` con la advertencia: `Unknown at rule @tailwind(unknownAtRules)` o `Unknown at rule @apply`. Aunque el proyecto compila correctamente, estas advertencias ensucian el editor y ocultan errores CSS reales.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En VS Code, abre settings.json y añade:
->    `"css.lint.unknownAtRules": "ignore"`
-> 2. Instala la extensión oficial 'Tailwind CSS IntelliSense'.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

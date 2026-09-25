@@ -1,19 +1,27 @@
 ---
-title: "How to Safely Clean Pacman Package Cache in CachyOS and Arch Linux"
-description: "Learn how to free disk space in CachyOS and Arch Linux by pruning Pacman and Yay cache using paccache, pacman -Sc, and systemd automation."
-category: "Systems & Servers"
-tags: ["CachyOS", "Arch Linux", "Pacman", "Linux", "SysAdmin", "Storage"]
-readTime: "5 min"
-date: "2026-06-25"
+title: How to Safely Clean Pacman Package Cache in CachyOS and Arch Linux
+description: >-
+  Learn how to free disk space in CachyOS and Arch Linux by pruning Pacman and
+  Yay cache using paccache, pacman -Sc, and systemd automation.
+category: Systems & Servers
+tags:
+  - CachyOS
+  - Arch Linux
+  - Pacman
+  - Linux
+  - SysAdmin
+  - Storage
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+In CachyOS and Arch Linux environments, the Pacman package manager never automatically purges downloaded `.pkg.tar.zst` archive binaries from `/var/cache/pacman/pkg/`. Over time, this directory routinely swells to 20GB-50GB, triggering low storage warnings on root partitions.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **/var/lib/pacman and /var/cache/pacman/pkg directories accumulating dozens of package revisions** | Prune obsolete package tarballs while retaining the latest 2 versions via `sudo paccache -r` |
 | **AUR build cache bloating user directories (~/.cache/yay or ~/.cache/paru)** | Clean AUR cache using `yay -Sc --aur` or purge `~/.cache/yay` |
-
-In CachyOS and Arch Linux environments, the Pacman package manager never automatically purges downloaded `.pkg.tar.zst` archive binaries from `/var/cache/pacman/pkg/`. Over time, this directory routinely swells to 20GB-50GB, triggering low storage warnings on root partitions.
 
 ## 🚀 Step-by-Step Solution
 

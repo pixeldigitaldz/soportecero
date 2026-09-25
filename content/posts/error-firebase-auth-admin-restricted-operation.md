@@ -1,19 +1,26 @@
 ---
-title: "Troubleshooting: Error (auth/admin-restricted-operation) en Firebase"
-description: "Aprende a solucionar el error auth/admin-restricted-operation en Firebase Authentication habilitando proveedores y configurando Identity Platform."
-category: "Web y Código"
-tags: ["Firebase", "Authentication", "JavaScript", "Seguridad", "Cloud"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Troubleshooting: Error (auth/admin-restricted-operation) en Firebase'
+description: >-
+  Aprende a solucionar el error auth/admin-restricted-operation en Firebase
+  Authentication habilitando proveedores y configurando Identity Platform.
+category: Web y Código
+tags:
+  - Firebase
+  - Authentication
+  - JavaScript
+  - Seguridad
+  - Cloud
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+La excepción `FirebaseError: Firebase: Error (auth/admin-restricted-operation)` en Firebase Authentication ocurre cuando tu aplicación cliente intenta ejecutar una acción de autenticación que no ha sido activada en la consola de Firebase o que está reservada exclusivamente para credenciales de administrador con privilegios de cuenta de servicio.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El método de autenticación invocado (ej. Anónimo o Correo/Contraseña) está deshabilitado en Firebase Console** | Habilitar el proveedor correspondiente en Firebase Console > Authentication > Sign-in method |
 | **Operación administrativa restringida ejecutada desde el SDK cliente sin privilegios de Admin SDK** | Mover la operación sensible (como borrado masivo o creación de usuarios con claims) a Cloud Functions o Node.js con Firebase Admin SDK |
-
-La excepción `FirebaseError: Firebase: Error (auth/admin-restricted-operation)` en Firebase Authentication ocurre cuando tu aplicación cliente intenta ejecutar una acción de autenticación que no ha sido activada en la consola de Firebase o que está reservada exclusivamente para credenciales de administrador con privilegios de cuenta de servicio.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>[FIXED] Error 521 Web Server Is Down in Cloudflare | SoporteCero</title>
   <meta name="description" content="Users seeing Cloudflare Error 521 Web Server Is Down? Step-by-step resolution for Nginx, Apache, and origin firewall IP allowlists.">
+  <meta name="keywords" content="Cloudflare, Nginx, Apache, Sysadmin">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-cloudflare-521-web-server-is-down.html">
   
@@ -24,6 +25,10 @@
   <meta property="og:image" content="https://soportecero.com/favicon.svg">
   <meta property="article:published_time" content="2026-08-24">
   <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Cloudflare">
+  <meta property="article:tag" content="Nginx">
+  <meta property="article:tag" content="Apache">
+  <meta property="article:tag" content="Sysadmin">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
@@ -51,6 +56,7 @@
   "@type": "TechArticle",
   "headline": "[FIXED] Error 521 Web Server Is Down in Cloudflare",
   "description": "Users seeing Cloudflare Error 521 Web Server Is Down? Step-by-step resolution for Nginx, Apache, and origin firewall IP allowlists.",
+  "image": "https://soportecero.com/favicon.svg",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
@@ -196,14 +202,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          
-      <section class="ai-summary" aria-label="✨ Quick Answer">
-        <div class="ai-summary-header">
-          ✨ Quick Answer
-        </div>
-        <p>The Error 521: Web server is down returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
-      </section>
-      
+          <p>The <strong><code>Error 521: Web server is down</code></strong> returned by Cloudflare&#39;s edge network occurs when Cloudflare proxies attempt to connect to your origin server IP (on ports 80 or 443), but the origin web server (Nginx / Apache) actively refused the connection or a firewall dropped the packets.</p>
 
     <section class="diagnostic-box" aria-labelledby="diag-heading">
       <h3 id="quick-diagnostics">
@@ -212,8 +211,7 @@
         </svg>
         Quick Diagnostics
       </h3>
-      
-<div class="diagnostic-cards"><div class="diag-card">
+      <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">Cause</div>
             <div class="diag-value"><strong>Origin web server down or stopped</strong></div>
@@ -230,17 +228,6 @@
             <div class="diag-label">Solution</div>
             <div class="diag-value">Whitelist official Cloudflare IP ranges in server firewall</div>
           </div></div></div>
-
-<blockquote>
-<p><strong>Quick Solution (1 Minute):</strong></p>
-<ol>
-<li>Restart your origin web server daemon:
-<code>sudo systemctl restart nginx</code> or <code>sudo systemctl restart apache2</code></li>
-<li>Allow Cloudflare IP ranges in your firewall (UFW/iptables):
-<code>sudo ufw allow 80/tcp &amp;&amp; sudo ufw allow 443/tcp</code></li>
-</ol>
-</blockquote>
-
     </section>
 
     <nav class="toc-container" aria-label="Table of contents">
@@ -254,7 +241,8 @@
       </ol>
     </nav>
     
-    <h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
+    
+<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
 <h3 id="step-1-verify-origin-web-server-daemon-status">Step 1: Verify Origin Web Server Daemon Status</h3>
 <p>SSH into your origin VPS and check web server status:</p>
 
@@ -361,6 +349,40 @@ sudo ufw reload
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
       <article class="related-card">
         <div class="related-card-content">
@@ -373,40 +395,6 @@ sudo ufw reload
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
             <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: [SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
           </div>
         </div>
       </article>

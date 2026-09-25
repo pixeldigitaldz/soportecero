@@ -1,19 +1,27 @@
 ---
-title: "Fix: Quota exceeded for quota metric Read requests in Firestore"
-description: "Learn how to fix Firestore Read quota exceeded errors using client-side cache persistence, pagination, and server aggregation counts."
-category: "Web & Code"
-tags: ["Firebase", "Cloud Firestore", "JavaScript", "Optimization", "NoSQL", "Cloud"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Fix: Quota exceeded for quota metric Read requests in Firestore'
+description: >-
+  Learn how to fix Firestore Read quota exceeded errors using client-side cache
+  persistence, pagination, and server aggregation counts.
+category: Web & Code
+tags:
+  - Firebase
+  - Cloud Firestore
+  - JavaScript
+  - Optimization
+  - NoSQL
+  - Cloud
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The error `RESOURCE_EXHAUSTED: Quota exceeded for quota metric 'Read requests' and limit 'Read requests per day' of service 'firestore.googleapis.com'` indicates your application exhausted the complimentary 50,000 daily document reads granted by the Firebase Spark plan. All subsequent read operations fail until quota refresh.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Excessive document reads caused by unindexed scans, unpaginated collections, or leaked listeners** | Implement cursor pagination via `limit()` / `startAfter()` and enable local cache persistence |
 | **Spark free tier 50,000 daily read limit exceeded by client development loops** | Identify offending query in Firebase Console and configure billing budget thresholds |
-
-The error `RESOURCE_EXHAUSTED: Quota exceeded for quota metric 'Read requests' and limit 'Read requests per day' of service 'firestore.googleapis.com'` indicates your application exhausted the complimentary 50,000 daily document reads granted by the Firebase Spark plan. All subsequent read operations fail until quota refresh.
 
 ## 🚀 Step-by-Step Solution
 

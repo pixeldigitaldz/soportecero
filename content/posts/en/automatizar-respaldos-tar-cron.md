@@ -1,20 +1,24 @@
 ---
-title: "How to Create a Compressed Automated Backup Script in Linux with Tar and Cron"
-description: "Learn how to automatically pack configuration directories using compressed Bash scripts and schedule their execution with Cron."
-category: "Systems & Servers"
-tags: ["Linux", "Sysadmin", "Cron"]
-readTime: "3 min"
-date: "2026-07-16"
+title: How to Create a Compressed Automated Backup Script in Linux with Tar and Cron
+description: >-
+  Learn how to automatically pack configuration directories using compressed
+  Bash scripts and schedule their execution with Cron.
+category: Systems & Servers
+tags:
+  - Linux
+  - Sysadmin
+  - Cron
+readTime: 3 min
+date: '2026-07-16'
 ---
+
+The most serious mistake in managing local or home servers is not having automated and intact backups against hardware failures or file corruption. Creating a scheduled task that packages your essential configuration files will guarantee peace of mind.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Cronjob failing due to relative paths or environment variables** | Specify absolute paths in script (`/bin/tar`, `/usr/bin/crontab`) |
 | **Insufficient write permissions in destination directory** | Ensure write permissions with `chmod 755` or run cron as root |
-
-
-The most serious mistake in managing local or home servers is not having automated and intact backups against hardware failures or file corruption. Creating a scheduled task that packages your essential configuration files will guarantee peace of mind.
 
 ## 🚀 Step-by-Step Solution
 

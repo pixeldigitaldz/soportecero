@@ -1,19 +1,26 @@
 ---
-title: "Troubleshooting: Firebase auth/admin-restricted-operation Error"
-description: "Learn how to resolve auth/admin-restricted-operation in Firebase Authentication by enabling providers and configuring Identity Platform."
-category: "Web & Code"
-tags: ["Firebase", "Authentication", "JavaScript", "Security", "Cloud"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Troubleshooting: Firebase auth/admin-restricted-operation Error'
+description: >-
+  Learn how to resolve auth/admin-restricted-operation in Firebase
+  Authentication by enabling providers and configuring Identity Platform.
+category: Web & Code
+tags:
+  - Firebase
+  - Authentication
+  - JavaScript
+  - Security
+  - Cloud
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+The exception `FirebaseError: Firebase: Error (auth/admin-restricted-operation)` in Firebase Authentication occurs when a client-side web or mobile application attempts an authentication workflow that is currently disabled in project settings or strictly reserved for authenticated service account credentials.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **The invoked authentication provider (e.g., Anonymous or Email/Password) is disabled in Firebase Console** | Enable target sign-in provider under Firebase Console > Authentication > Sign-in method |
 | **Privileged administrative method called from client-side Web SDK instead of Firebase Admin SDK** | Migrate administrative logic (claims, user bans) to backend Cloud Functions using Firebase Admin |
-
-The exception `FirebaseError: Firebase: Error (auth/admin-restricted-operation)` in Firebase Authentication occurs when a client-side web or mobile application attempts an authentication workflow that is currently disabled in project settings or strictly reserved for authenticated service account credentials.
 
 ## 🚀 Step-by-Step Solution
 

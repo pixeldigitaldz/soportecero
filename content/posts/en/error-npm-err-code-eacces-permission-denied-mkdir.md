@@ -1,28 +1,24 @@
 ---
-title: "[FIXED] Error 'npm ERR! code EACCES permission denied' in Linux"
-description: "Getting npm EACCES permission denied errors installing global packages? Learn how to fix npm directory permissions without using sudo."
-category: "Web & Code"
-tags: ["Node.js", "npm", "Linux"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[FIXED] Error ''npm ERR! code EACCES permission denied'' in Linux'
+description: >-
+  Getting npm EACCES permission denied errors installing global packages? Learn
+  how to fix npm directory permissions without using sudo.
+category: Web & Code
+tags:
+  - Node.js
+  - npm
+  - Linux
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+The error **`npm ERR! code EACCES permission denied`** (or `EACCES: permission denied, access '/usr/local/lib/node_modules'`) occurs when trying to install global packages via `npm install -g <package>`. It happens because system Node directories are owned by `root`, preventing regular users from writing to them.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Running global npm install without write permissions to /usr/local/lib/node_modules** | Change default global npm directory to user home directory |
 | **Project directory ownership belonging to root user** | Run `sudo chown -R $USER:$USER .` in project root directory |
-
-
-The error **`npm ERR! code EACCES permission denied`** (or `EACCES: permission denied, access '/usr/local/lib/node_modules'`) occurs when trying to install global packages via `npm install -g <package>`. It happens because system Node directories are owned by `root`, preventing regular users from writing to them.
-
-> **Quick Solution (Recommended):**
-> Change npm's default global directory to your home folder:
-> ```bash
-> mkdir ~/.npm-global
-> npm config set prefix '~/.npm-global'
-> echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc && source ~/.bashrc
-> ```
 
 ## 🚀 Step-by-Step Fixes (Without sudo)
 

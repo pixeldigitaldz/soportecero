@@ -1,19 +1,27 @@
 ---
-title: "Guide: chmod Operation not permitted (Even as Root) in Linux"
-description: "Learn how to solve chmod / chown: Operation not permitted using lsattr and chattr to unlock immutable files in Linux step by step."
-category: "Systems & Servers"
-tags: ["Linux", "Permissions", "SysAdmin", "Security", "Ubuntu", "Debian"]
-readTime: "5 min"
-date: "2026-06-25"
+title: 'Guide: chmod Operation not permitted (Even as Root) in Linux'
+description: >-
+  Learn how to solve chmod / chown: Operation not permitted using lsattr and
+  chattr to unlock immutable files in Linux step by step.
+category: Systems & Servers
+tags:
+  - Linux
+  - Permissions
+  - SysAdmin
+  - Security
+  - Ubuntu
+  - Debian
+readTime: 5 min
+date: '2026-06-25'
 ---
+
+Encountering `chmod: changing permissions of 'file': Operation not permitted` or `chown: changing ownership of 'file': Operation not permitted` while executing commands as superuser `root` indicates the file is locked by Linux kernel extended filesystem attributes or the storage partition has degraded to Read-Only mode.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **File protected by kernel immutable (+i) or append-only (+a) filesystem attribute** | Check with `lsattr <file>` and clear attributes using `sudo chattr -i <file>` |
 | **Underlying filesystem mounted in Read-Only (ro) mode following disk I/O errors** | Remount read-write via `sudo mount -o remount,rw /` or verify SELinux context |
-
-Encountering `chmod: changing permissions of 'file': Operation not permitted` or `chown: changing ownership of 'file': Operation not permitted` while executing commands as superuser `root` indicates the file is locked by Linux kernel extended filesystem attributes or the storage partition has degraded to Read-Only mode.
 
 ## 🚀 Step-by-Step Solution
 

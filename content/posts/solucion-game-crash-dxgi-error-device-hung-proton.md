@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en Linux"
-description: "Guía para reparar el crasheo fatal DXGI_ERROR_DEVICE_HUNG al jugar títulos DirectX 11 y 12 a través de Proton y VKD3D en Linux."
-category: "Gaming Tech"
-tags: ["Proton","Steam","Linux","Vulkan"]
-readTime: "4 min"
-date: "2026-09-27"
+title: >-
+  [SOLUCIONADO] Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en
+  Linux
+description: >-
+  Guía para reparar el crasheo fatal DXGI_ERROR_DEVICE_HUNG al jugar títulos
+  DirectX 11 y 12 a través de Proton y VKD3D en Linux.
+category: Gaming Tech
+tags:
+  - Proton
+  - Steam
+  - Linux
+  - Vulkan
+readTime: 4 min
+date: '2026-09-27'
 ---
+
+Al ejecutar juegos modernos de Steam en Linux con Proton (como Cyberpunk 2077, God of War, Apex Legends o Elden Ring), el juego se congela repentinamente arrojando una ventana de error de Unreal Engine o DirectX: `Fatal error: The GPU device has been suspended or hung: DXGI_ERROR_DEVICE_HUNG (0x887A0006)`. Esto indica que el controlador gráfico perdió comunicación con el hardware de la GPU.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **TDR (Timeout Detection and Recovery) del kernel de la GPU al superar el tiempo de respuesta esperado** | Ajustar las variables de sincronización de VKD3D y habilitar PROTON_ENABLE_NVAPI=1 |
 | **Incompatibilidad de memoria VRAM o overclocking inestable en la tarjeta de video** | Reducir la calidad de texturas un nivel y usar Proton Experimental o Proton GE |
-
-Al ejecutar juegos modernos de Steam en Linux con Proton (como Cyberpunk 2077, God of War, Apex Legends o Elden Ring), el juego se congela repentinamente arrojando una ventana de error de Unreal Engine o DirectX: `Fatal error: The GPU device has been suspended or hung: DXGI_ERROR_DEVICE_HUNG (0x887A0006)`. Esto indica que el controlador gráfico perdió comunicación con el hardware de la GPU.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Añade este parámetro de lanzamiento en Steam:
->    `VKD3D_CONFIG=dxr11,no_upload_hvv %command%`
-> 2. Si tienes GPU NVIDIA, activa compatibilidad NVAPI:
->    `PROTON_ENABLE_NVAPI=1 %command%`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

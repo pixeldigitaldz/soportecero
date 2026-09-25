@@ -1,19 +1,27 @@
 ---
-title: "Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton"
-description: "Elimina el stuttering y acelera la carga de shaders en juegos DirectX 11 y 12 usando Proton, DXVK y RADV/Nvidia en Linux."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Proton", "Vulkan", "DXVK", "Steam Deck"]
-readTime: "5 min"
-date: "2026-07-27"
+title: Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton
+description: >-
+  Elimina el stuttering y acelera la carga de shaders en juegos DirectX 11 y 12
+  usando Proton, DXVK y RADV/Nvidia en Linux.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Proton
+  - Vulkan
+  - DXVK
+  - Steam Deck
+readTime: 5 min
+date: '2026-07-27'
 ---
+
+Al jugar en Linux mediante Steam Proton, el tartamudeo o caída abrupta de fotogramas (stuttering) durante los primeros minutos de juego se debe a que el controlador gráfico está traduciendo llamadas de DirectX a código binario Vulkan (SPIR-V) en tiempo real (just-in-time). Si la GPU espera a que la CPU compile el sombreador antes de dibujar el fotograma, se genera una congelación perceptible.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Tartamudeo (stuttering) al entrar en nuevas zonas por compilación síncrona de shaders** | Activar compilación en segundo plano en Steam y habilitar GPL (Graphics Pipeline Library) |
 | **Caché de shaders de Vulkan corrupta o saturada en disco** | Limpiar el directorio `shadercache` y activar `RADV_PERFTEST=gpl` o `DXVK_ASYNC=1` |
-
-Al jugar en Linux mediante Steam Proton, el tartamudeo o caída abrupta de fotogramas (stuttering) durante los primeros minutos de juego se debe a que el controlador gráfico está traduciendo llamadas de DirectX a código binario Vulkan (SPIR-V) en tiempo real (just-in-time). Si la GPU espera a que la CPU compile el sombreador antes de dibujar el fotograma, se genera una congelación perceptible.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

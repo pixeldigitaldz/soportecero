@@ -1,24 +1,27 @@
 ---
-title: "[SOLUCIONADO] Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en Linux"
-description: "Soluciona los congelamientos y caídas a escritorio en juegos DirectX 12 que utilizan VKD3D-Proton con tarjetas gráficas NVIDIA GeForce en Linux."
-category: "Gaming Tech"
-tags: ["NVIDIA","Gaming","Linux","Vulkan"]
-readTime: "4 min"
-date: "2026-10-05"
+title: >-
+  [SOLUCIONADO] Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en
+  Linux
+description: >-
+  Soluciona los congelamientos y caídas a escritorio en juegos DirectX 12 que
+  utilizan VKD3D-Proton con tarjetas gráficas NVIDIA GeForce en Linux.
+category: Gaming Tech
+tags:
+  - NVIDIA
+  - Gaming
+  - Linux
+  - Vulkan
+readTime: 4 min
+date: '2026-10-05'
 ---
+
+Al ejecutar títulos modernos DirectX 12 (Cyberpunk 2077, Star Wars Jedi: Survivor, Forza Horizon 5) sobre Linux con tarjetas NVIDIA GeForce, es frecuente que el juego se congele por completo tras unos minutos de partida mientras el audio continúa reproduciéndose de fondo. Este bloqueo lo causa un desajuste en el gestor de memoria Vulkan de VKD3D al comunicarse con el controlador privativo de NVIDIA.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Falta de compatibilidad de sincronización explícita (Explicit Sync) en versiones antiguas del driver NVIDIA** | Actualizar al controlador NVIDIA 555 o superior y habilitar __GL_VRR_ALLOWED=1 |
 | **Saturación del buffer de descriptores en juegos D3D12 exigentes** | Configurar la variable de entorno VKD3D_CONFIG=upload_hvv,single_queue |
-
-Al ejecutar títulos modernos DirectX 12 (Cyberpunk 2077, Star Wars Jedi: Survivor, Forza Horizon 5) sobre Linux con tarjetas NVIDIA GeForce, es frecuente que el juego se congele por completo tras unos minutos de partida mientras el audio continúa reproduciéndose de fondo. Este bloqueo lo causa un desajuste en el gestor de memoria Vulkan de VKD3D al comunicarse con el controlador privativo de NVIDIA.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Actualiza a los controladores NVIDIA 555 o 560+ con soporte Explicit Sync.
-> 2. Agrega este parámetro en Steam:
->    `VKD3D_CONFIG=single_queue %command%`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

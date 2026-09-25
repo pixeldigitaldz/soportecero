@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create failed"
-description: "Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker."
-category: "Sistemas y Servidores"
-tags: ["Docker","DevOps","Contenedores","Linux"]
-readTime: "4 min"
-date: "2026-09-11"
+title: >-
+  [SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create
+  failed
+description: >-
+  Cómo solucionar el fallo failed to create shim task OCI runtime create failed
+  executable file not found al iniciar contenedores Docker.
+category: Sistemas y Servidores
+tags:
+  - Docker
+  - DevOps
+  - Contenedores
+  - Linux
+readTime: 4 min
+date: '2026-09-11'
 ---
+
+Al ejecutar `docker run` o `docker compose up`, el demonio de containerd puede abortar con el error `failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "...": executable file not found in $PATH`. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el `ENTRYPOINT` o `CMD`.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **El binario del ENTRYPOINT o CMD no existe dentro de la imagen o no tiene permisos de ejecución** | Verificar la ruta absoluta del binario y aplicar chmod +x en el Dockerfile |
 | **Finales de línea de Windows (CRLF) en el script de arranque entrypoint.sh** | Convertir el script a formato Unix LF con dos2unix entrypoint.sh |
-
-Al ejecutar `docker run` o `docker compose up`, el demonio de containerd puede abortar con el error `failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "...": executable file not found in $PATH`. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el `ENTRYPOINT` o `CMD`.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Revisa los saltos de línea de tu script de inicio:
->    `dos2unix entrypoint.sh`
-> 2. Asegura permisos de ejecución antes de construir la imagen:
->    `chmod +x entrypoint.sh && docker build -t mi-app .`
 
 ## 🚀 Cómo solucionar el error paso a paso
 

@@ -1,24 +1,25 @@
 ---
-title: "[SOLUCIONADO] Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck"
-description: "¿Tus juegos muestran pantalla negra o se congelan en Gamescope o Steam Deck con Proton? Guía de solución paso a paso para Wayland y Vulkan."
-category: "Gaming Tech"
-tags: ["Gaming", "Linux", "Steam Deck", "Proton"]
-readTime: "4 min"
-date: "2026-08-03"
+title: '[SOLUCIONADO] Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck'
+description: >-
+  ¿Tus juegos muestran pantalla negra o se congelan en Gamescope o Steam Deck
+  con Proton? Guía de solución paso a paso para Wayland y Vulkan.
+category: Gaming Tech
+tags:
+  - Gaming
+  - Linux
+  - Steam Deck
+  - Proton
+readTime: 4 min
+date: '2026-08-03'
 ---
+
+El problema de **pantalla negra al lanzar juegos en Gamescope, SteamOS o escritorios Linux con Wayland** ocurre frecuentemente por incompatibilidades en la resolución nativa de Gamescope, conflictos con capas de superposición (*overlays* como MangoHud) o versiones de Proton que no negocian correctamente la cadena de renderizado Vulkan.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Resolución de pantalla no soportada por el compositor Gamescope** | Establecer la resolución explícita: `gamescope -w 1280 -h 720 -- %command%` |
 | **Fallo en la tasa de refresco (Hz) elegida en el menú de ajuste rápido** | Restablecer la tasa de refresco a 60Hz o refrescar la sesión del servidor gráfico |
-
-
-El problema de **pantalla negra al lanzar juegos en Gamescope, SteamOS o escritorios Linux con Wayland** ocurre frecuentemente por incompatibilidades en la resolución nativa de Gamescope, conflictos con capas de superposición (*overlays* como MangoHud) o versiones de Proton que no negocian correctamente la cadena de renderizado Vulkan.
-
-> **Solución Rápida (1 Minuto):**
-> En las opciones de lanzamiento del juego en Steam, añade:
-> `gamescope -w 1920 -h 1080 -W 1920 -H 1080 -f -- %command%`
 
 ## 🚀 Cómo solucionar la pantalla negra en Gamescope paso a paso
 

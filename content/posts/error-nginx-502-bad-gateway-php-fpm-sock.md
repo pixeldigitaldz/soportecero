@@ -1,26 +1,26 @@
 ---
-title: "[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM"
-description: "¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a corregir el socket de comunicación de PHP-FPM en 3 pasos."
-category: "Sistemas y Servidores"
-tags: ["Nginx", "PHP-FPM", "Sysadmin", "Linux"]
-readTime: "4 min"
-date: "2026-08-12"
+title: '[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM'
+description: >-
+  ¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a
+  corregir el socket de comunicación de PHP-FPM en 3 pasos.
+category: Sistemas y Servidores
+tags:
+  - Nginx
+  - PHP-FPM
+  - Sysadmin
+  - Linux
+readTime: 4 min
+date: '2026-08-12'
 ---
+
+El error **`502 Bad Gateway`** en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en `/var/log/nginx/error.log` es:
+`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` o `Connection refused`.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Servicio php-fpm detenido o no iniciado** | Iniciar el demonio de PHP: `sudo systemctl start php-fpm` (o `php8.2-fpm`) |
 | **Permisos insuficientes en el archivo socket UNIX /var/run/php/php-fpm.sock** | Cambiar propietario del socket a `www-data:www-data` en `/etc/php/fpm/pool.d/www.conf` |
-
-
-El error **`502 Bad Gateway`** en un servidor web Nginx con PHP-FPM ocurre cuando Nginx actúa como proxy inverso pero no logra comunicarse con el proceso de escucha de PHP. El mensaje de error típico en `/var/log/nginx/error.log` es:
-`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` o `Connection refused`.
-
-> **Solución Rápida (1 Minuto):**
-> 1. Inicia el servicio PHP-FPM de tu versión instalada:
->    `sudo systemctl restart php8.2-fpm`
-> 2. Revisa que la ruta del socket en el `fastcgi_pass` de Nginx coincida exactamente con la versión activa de PHP.
 
 ## 🚀 Cómo solucionar el error 502 Bad Gateway paso a paso
 

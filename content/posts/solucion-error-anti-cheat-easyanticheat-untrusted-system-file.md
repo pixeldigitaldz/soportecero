@@ -1,25 +1,27 @@
 ---
-title: "[SOLUCIONADO] Error Easy Anti-Cheat: Untrusted system file en Windows y Linux Proton"
-description: "Cómo reparar el bloqueo Untrusted system file de Easy Anti-Cheat al jugar a Apex Legends, Fortnite o Elden Ring."
-category: "Gaming Tech"
-tags: ["Gaming","AntiCheat","Steam","Windows"]
-readTime: "4 min"
-date: "2026-10-01"
+title: >-
+  [SOLUCIONADO] Error Easy Anti-Cheat: Untrusted system file en Windows y Linux
+  Proton
+description: >-
+  Cómo reparar el bloqueo Untrusted system file de Easy Anti-Cheat al jugar a
+  Apex Legends, Fortnite o Elden Ring.
+category: Gaming Tech
+tags:
+  - Gaming
+  - AntiCheat
+  - Steam
+  - Windows
+readTime: 4 min
+date: '2026-10-01'
 ---
+
+Al intentar iniciar juegos multijugador protegidos por Easy Anti-Cheat (EAC), el proceso de carga se detiene y muestra una ventana emergente: `Easy Anti-Cheat - Untrusted system file (C:\...\archivo.dll)`. El sistema antitrampas rechaza la firma digital de esa biblioteca específica e impide la entrada al juego por motivos de seguridad.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Librerías DLL modificadas por programas de terceros (ReShade, MSI Afterburner, grabadores de pantalla)** | Desactivar overlays de captura o eliminar archivos dll inyectados en la carpeta del juego |
 | **Archivos del sistema corruptos en Windows o prefijo de Proton desincronizado en Linux** | Ejecutar sfc /scannow en Windows o verificar la integridad del runtime EasyAntiCheat en Steam |
-
-Al intentar iniciar juegos multijugador protegidos por Easy Anti-Cheat (EAC), el proceso de carga se detiene y muestra una ventana emergente: `Easy Anti-Cheat - Untrusted system file (C:\...\archivo.dll)`. El sistema antitrampas rechaza la firma digital de esa biblioteca específica e impide la entrada al juego por motivos de seguridad.
-
-> **Solución Rápida (1 Minuto):**
-> 1. En Windows, repara archivos de sistema protegidos:
->    `sfc /scannow`
-> 2. En Steam (Linux o Windows), verifica los archivos del juego:
->    *Propiedades -> Archivos instalados -> Verificar integridad de los archivos del juego*
 
 ## 🚀 Cómo solucionar el error paso a paso
 

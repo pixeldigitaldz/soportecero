@@ -1,20 +1,24 @@
 ---
-title: "How to Fix 'Corrupt loose object' Error in Local Git Repositories"
-description: "Resolve loose object corruption in your .git directory by recovering damaged files from the commit history of your remote repository."
-category: "Web & Code"
-tags: ["Git", "Web", "Programming"]
-readTime: "4 min"
-date: "2026-07-13"
+title: How to Fix 'Corrupt loose object' Error in Local Git Repositories
+description: >-
+  Resolve loose object corruption in your .git directory by recovering damaged
+  files from the commit history of your remote repository.
+category: Web & Code
+tags:
+  - Git
+  - Web
+  - Programming
+readTime: 4 min
+date: '2026-07-13'
 ---
+
+The critical Git error `error: object file .git/objects/... is empty` or `corrupt loose object` occurs after a sudden power outage, disk failure, or forced shutdown of the machine while Git was writing metadata to the local object database of your repository.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Corrupted loose Git object caused by sudden power loss or disk failure** | Identify and delete corrupted object in `.git/objects/` and `git fetch` |
 | **Branch ref pointing to a non-existent commit object** | Run `git fsck --full` to locate exact damaged object |
-
-
-The critical Git error `error: object file .git/objects/... is empty` or `corrupt loose object` occurs after a sudden power outage, disk failure, or forced shutdown of the machine while Git was writing metadata to the local object database of your repository.
 
 ## 🚀 Step-by-Step Solution
 

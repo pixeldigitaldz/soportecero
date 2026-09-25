@@ -1,26 +1,24 @@
 ---
-title: "[FIXED] How to Abort a Git Rebase or Fix 'No rebase in progress'"
-description: "Stuck in an interactive git rebase loop or receiving 'fatal: No rebase in progress'? Step-by-step guide to abort rebase and clean stale refs."
-category: "Web & Code"
-tags: ["Git", "GitHub", "DevOps"]
-readTime: "3 min"
-date: "2026-08-28"
+title: '[FIXED] How to Abort a Git Rebase or Fix ''No rebase in progress'''
+description: >-
+  Stuck in an interactive git rebase loop or receiving 'fatal: No rebase in
+  progress'? Step-by-step guide to abort rebase and clean stale refs.
+category: Web & Code
+tags:
+  - Git
+  - GitHub
+  - DevOps
+readTime: 3 min
+date: '2026-08-28'
 ---
+
+The status **`interactive rebase in progress`** (or the contradictory error `fatal: No rebase in progress`) occurs when running `git rebase` if Git encounters conflicts mid-sequence and halts execution pending manual resolution. If terminal sessions disconnect or `.git/rebase-merge` locks become stale, your repository remains locked in rebase state.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
 | **Pending or interrupted Rebase operation due to merge conflicts** | Resolve conflicts and run `git rebase --continue` or abort with `git rebase --abort` |
 | **Stale .git/rebase-merge directory blocking new commands** | Abort pending rebase operation to restore clean working tree |
-
-
-The status **`interactive rebase in progress`** (or the contradictory error `fatal: No rebase in progress`) occurs when running `git rebase` if Git encounters conflicts mid-sequence and halts execution pending manual resolution. If terminal sessions disconnect or `.git/rebase-merge` locks become stale, your repository remains locked in rebase state.
-
-> **Quick Solution (1 Minute):**
-> 1. Abort rebase and restore pre-rebase branch state:
->    `git rebase --abort`
-> 2. If git claims `No rebase in progress` but shell prompt is stuck, delete stale lock directories:
->    `rm -rf .git/rebase-apply .git/rebase-merge`
 
 ## 🚀 Step-by-Step Resolution
 

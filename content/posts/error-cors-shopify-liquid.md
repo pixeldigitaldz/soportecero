@@ -1,19 +1,29 @@
 ---
-title: "Cómo resolver: Error de CORS al consumir APIs externas desde plantillas de Shopify"
-description: "Aprende a solucionar fallos de Cross-Origin Resource Sharing (CORS) en Liquid, JavaScript storefront y Proxies de Aplicación de Shopify."
-category: "Web y Código"
-tags: ["Shopify", "Liquid", "CORS", "JavaScript", "APIs", "Frontend"]
-readTime: "5 min"
-date: "2026-06-27"
+title: >-
+  Cómo resolver: Error de CORS al consumir APIs externas desde plantillas de
+  Shopify
+description: >-
+  Aprende a solucionar fallos de Cross-Origin Resource Sharing (CORS) en Liquid,
+  JavaScript storefront y Proxies de Aplicación de Shopify.
+category: Web y Código
+tags:
+  - Shopify
+  - Liquid
+  - CORS
+  - JavaScript
+  - APIs
+  - Frontend
+readTime: 5 min
+date: '2026-06-27'
 ---
+
+Cuando realizas una petición `fetch()` o `axios` desde el archivo JavaScript de un tema de Shopify (`theme.liquid` o secciones storefront) hacia tu API externa, el navegador bloquea la respuesta con el error: `Access to fetch at 'https://mi-api.com' from origin 'https://mi-tienda.myshopify.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource`.
 
 ## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
 | **Petición fetch() desde tema Liquid hacia servidor externo sin cabecera Access-Control-Allow-Origin** | Añadir cabeceras CORS en el backend externo o utilizar Shopify App Proxies |
 | **Peticiones HTTP bloqueadas en tienda HTTPS por contenido mixto (Mixed Content)** | Asegurar que los endpoints utilicen HTTPS estricto y admitan peticiones preflight OPTIONS |
-
-Cuando realizas una petición `fetch()` o `axios` desde el archivo JavaScript de un tema de Shopify (`theme.liquid` o secciones storefront) hacia tu API externa, el navegador bloquea la respuesta con el error: `Access to fetch at 'https://mi-api.com' from origin 'https://mi-tienda.myshopify.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource`.
 
 ## 🚀 Cómo solucionar el error paso a paso
 

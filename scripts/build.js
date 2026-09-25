@@ -531,7 +531,10 @@ function build() {
         "@type": "Person",
         "name": "Rodolfo Castro",
         "jobTitle": "Diseñador Web & Creador de Apps",
-        "url": "https://soportecero.com/nosotros.html#rodolfo-castro"
+        "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+        "sameAs": [
+          "https://www.pixeldigitaldz.online/links"
+        ]
       },
       "publisher": {
         "@type": "Organization",
@@ -730,7 +733,10 @@ function build() {
         "@type": "Person",
         "name": "Rodolfo Castro",
         "jobTitle": "Web Designer & App Creator",
-        "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro"
+        "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+        "sameAs": [
+          "https://www.pixeldigitaldz.online/links"
+        ]
       },
       "publisher": {
         "@type": "Organization",

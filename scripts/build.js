@@ -55,6 +55,87 @@ function slugify(text) {
     .replace(/-+/g, '-');
 }
 
+// Circular Round-Robin related posts algorithm
+function getRelatedPosts(currentPost, allPosts) {
+  const categoryPosts = allPosts.filter(p => p.category === currentPost.category);
+  const currentIndex = categoryPosts.findIndex(p => p.filename === currentPost.filename);
+  const selected = [];
+
+  if (categoryPosts.length > 1 && currentIndex !== -1) {
+    const countToTake = Math.min(3, categoryPosts.length - 1);
+    for (let i = 1; i <= countToTake; i++) {
+      const nextIdx = (currentIndex + i) % categoryPosts.length;
+      selected.push(categoryPosts[nextIdx]);
+    }
+  }
+
+  // Si una categoría tiene menos de 4 artículos, completar con los siguientes del array general
+  if (selected.length < 3 && allPosts.length > 1) {
+    const globalIndex = allPosts.findIndex(p => p.filename === currentPost.filename);
+    for (let i = 1; i < allPosts.length && selected.length < 3; i++) {
+      const candidateIdx = (globalIndex + i) % allPosts.length;
+      const candidate = allPosts[candidateIdx];
+      if (candidate.filename !== currentPost.filename && !selected.some(s => s.filename === candidate.filename)) {
+        selected.push(candidate);
+      }
+    }
+  }
+
+  return selected;
+}
+
+// Generate Directory Index section for complete SEO discoverability
+function generateDirectoryIndex(posts, lang = 'es') {
+  const isEn = lang === 'en';
+  const summaryTitle = isEn
+    ? '📚 View Full Directory of Technical Guides (Archive)'
+    : '📚 Ver índice completo de guías técnicas (Archivo)';
+
+  const groups = {};
+  for (let post of posts) {
+    const cat = post.category || (isEn ? 'Other' : 'Otros');
+    if (!groups[cat]) {
+      groups[cat] = [];
+    }
+    groups[cat].push(post);
+  }
+
+  let categoriesHtml = '';
+  for (const [catName, catPosts] of Object.entries(groups)) {
+    const itemsHtml = catPosts.map(p => {
+      const url = isEn ? `articulos/${p.filename}.html` : p.url;
+      return `<li class="directory-item"><a href="${url}">${p.title}</a></li>`;
+    }).join('\n            ');
+
+    categoriesHtml += `
+        <div class="directory-category-col">
+          <h4 class="directory-cat-title">
+            <span>${catName}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">(${catPosts.length})</span>
+          </h4>
+          <ul class="directory-links-list">
+            ${itemsHtml}
+          </ul>
+        </div>`;
+  }
+
+  return `
+  <!-- Directory Index for Search Engines & Full Site Crawling -->
+  <section class="directory-index" aria-label="${isEn ? 'Technical Guides Directory' : 'Índice de Guías Técnicas'}">
+    <div class="directory-container">
+      <details class="directory-details">
+        <summary class="directory-summary">
+          <span>${summaryTitle}</span>
+          <span class="directory-badge">${posts.length} ${isEn ? 'guides' : 'artículos'}</span>
+        </summary>
+        <div class="directory-grid">
+          ${categoriesHtml}
+        </div>
+      </details>
+    </div>
+  </section>`;
+}
+
 // Helper to inject hreflang and lang_selector into static files
 function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn, lang = 'es') {
   let content = fs.readFileSync(srcPath, 'utf-8');
@@ -377,6 +458,9 @@ function build() {
   copyDirSync(path.join(SRC_DIR, 'css'), path.join(DIST_DIR, 'css'));
   copyDirSync(path.join(SRC_DIR, 'js'), path.join(DIST_DIR, 'js'));
 
+  // Ensure empty .nojekyll is always maintained in root for GitHub Pages
+  fs.writeFileSync(path.join(DIST_DIR, '.nojekyll'), '', 'utf-8');
+
   fs.copyFileSync(path.join(SRC_DIR, 'robots.txt'), path.join(DIST_DIR, 'robots.txt'));
   if (fs.existsSync(path.join(SRC_DIR, 'ads.txt'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'ads.txt'), path.join(DIST_DIR, 'ads.txt'));
@@ -482,14 +566,9 @@ function build() {
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />
   ` : '';
 
-    let relatedPosts = postsEs.filter(p => p.filename !== post.filename);
-    relatedPosts.sort((a, b) => {
-      if (a.category === post.category && b.category !== post.category) return -1;
-      if (a.category !== post.category && b.category === post.category) return 1;
-      return new Date(b.date) - new Date(a.date);
-    });
+    const relatedPosts = getRelatedPosts(post, postsEs);
 
-    const relatedCardsHtml = relatedPosts.slice(0, 3).map(rp => {
+    const relatedCardsHtml = relatedPosts.map(rp => {
       const firstTag = rp.tags && rp.tags.length > 0 ? `<span class="card-tag">${rp.tags[0]}</span>` : '';
       return `
       <!-- Related Card: ${rp.title} -->
@@ -510,7 +589,6 @@ function build() {
       `;
     }).join('\n');
 
-    const categorySlug = CATEGORY_MAP_ES[post.category] || 'sistemas';
     const pageUrl = `https://soportecero.com/articulos/${post.filename}.html`;
 
     // Rich JSON-LD TechArticle Schema
@@ -551,7 +629,7 @@ function build() {
       }
     };
 
-    // BreadcrumbList Schema
+    // BreadcrumbList Schema (2 levels: Home and Current Article)
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -565,12 +643,6 @@ function build() {
         {
           "@type": "ListItem",
           "position": 2,
-          "name": post.category,
-          "item": `https://soportecero.com/?cat=${categorySlug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": post.title,
           "item": pageUrl
         }
@@ -684,14 +756,9 @@ function build() {
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />
   ` : '';
 
-    let relatedPosts = postsEn.filter(p => p.filename !== post.filename);
-    relatedPosts.sort((a, b) => {
-      if (a.category === post.category && b.category !== post.category) return -1;
-      if (a.category !== post.category && b.category === post.category) return 1;
-      return new Date(b.date) - new Date(a.date);
-    });
+    const relatedPosts = getRelatedPosts(post, postsEn);
 
-    const relatedCardsHtml = relatedPosts.slice(0, 3).map(rp => {
+    const relatedCardsHtml = relatedPosts.map(rp => {
       const firstTag = rp.tags && rp.tags.length > 0 ? `<span class="card-tag">${rp.tags[0]}</span>` : '';
       return `
       <!-- Related Card: ${rp.title} -->
@@ -712,7 +779,6 @@ function build() {
       `;
     }).join('\n');
 
-    const categorySlug = CATEGORY_MAP_EN[post.category] || 'sistemas';
     const pageUrl = `https://soportecero.com/en/articulos/${post.filename}.html`;
 
     // Rich JSON-LD TechArticle Schema
@@ -753,7 +819,7 @@ function build() {
       }
     };
 
-    // BreadcrumbList Schema
+    // BreadcrumbList Schema (2 levels: Home and Current Article)
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -767,12 +833,6 @@ function build() {
         {
           "@type": "ListItem",
           "position": 2,
-          "name": post.category,
-          "item": `https://soportecero.com/en/?cat=${categorySlug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
           "name": post.title,
           "item": pageUrl
         }
@@ -920,10 +980,13 @@ function build() {
     <a href="en/" class="lang-inactive">EN</a>
   </div>
   `;
-  const indexHtmlEs = indexTemplateEs
+  const directoryIndexEs = generateDirectoryIndex(postsEs, 'es');
+  let indexHtmlEs = indexTemplateEs
     .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEs)
     .replace('{{hreflang}}', indexHreflangEs)
     .replace('{{lang_selector}}', indexLangSelectorEs);
+
+  indexHtmlEs = indexHtmlEs.replace('<footer>', `${directoryIndexEs}\n    <footer>`);
 
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexHtmlEs, 'utf-8');
   console.log('[INDEX ES] Compilado: index.html');
@@ -969,16 +1032,22 @@ function build() {
     <span class="lang-active">EN</span>
   </div>
   `;
-  const indexHtmlEn = indexTemplateEn
+  const directoryIndexEn = generateDirectoryIndex(postsEn, 'en');
+  let indexHtmlEn = indexTemplateEn
     .replace('<!-- ARTICLE_GRID_PLACEHOLDER -->', cardsHtmlEn)
     .replace('{{hreflang}}', indexHreflangEs)
     .replace('{{lang_selector}}', indexLangSelectorEn);
+
+  indexHtmlEn = indexHtmlEn.replace('<footer>', `${directoryIndexEn}\n    <footer>`);
 
   fs.writeFileSync(path.join(DIST_DIR, 'en', 'index.html'), indexHtmlEn, 'utf-8');
   console.log('[INDEX EN] Compilado: en/index.html');
 
   // 11. Generate Multilingual sitemap.xml
-  const todayStr = new Date().toISOString().split('T')[0];
+  const staticLastmod = '2026-07-15';
+  const homeLastmodEs = (postsEs.length > 0 && postsEs[0].date) ? postsEs[0].date : staticLastmod;
+  const homeLastmodEn = (postsEn.length > 0 && postsEn[0].date) ? postsEn[0].date : homeLastmodEs;
+
   let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
@@ -987,7 +1056,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${homeLastmodEs}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -996,7 +1065,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${homeLastmodEn}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1005,7 +1074,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -1014,7 +1083,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -1023,7 +1092,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1032,7 +1101,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1041,7 +1110,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1050,7 +1119,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1059,7 +1128,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1068,7 +1137,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1077,7 +1146,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1086,7 +1155,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1095,7 +1164,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1104,7 +1173,7 @@ function build() {
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
-    <lastmod>${todayStr}</lastmod>
+    <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
@@ -1112,7 +1181,7 @@ function build() {
 
   // Add Spanish posts to sitemap
   for (let post of postsEs) {
-    const postDate = post.dateModified || post.date || todayStr;
+    const postDate = post.dateModified || post.date || staticLastmod;
     const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
@@ -1128,7 +1197,7 @@ function build() {
 
   // Add English posts to sitemap
   for (let post of postsEn) {
-    const postDate = post.dateModified || post.date || todayStr;
+    const postDate = post.dateModified || post.date || staticLastmod;
     const hasEs = postsEs.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>

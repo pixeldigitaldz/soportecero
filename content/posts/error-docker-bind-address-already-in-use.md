@@ -1,5 +1,5 @@
 ---
-title: 'Error: Error starting userland proxy: bind: address already in use en Docker'
+title: '[SOLUCIONADO] Error bind: address already in use al iniciar contenedores en Docker'
 description: >-
   Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80,
   443, 3000, 8080) en Linux y Docker Compose.

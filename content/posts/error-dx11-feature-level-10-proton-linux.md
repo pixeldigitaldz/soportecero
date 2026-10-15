@@ -1,5 +1,5 @@
 ---
-title: 'Arreglar: DX11 feature level 10.0 is required to run the engine (Proton/Linux)'
+title: '[SOLUCIONADO] Error DX11 feature level 10.0 is required to run the engine en Linux (Proton)'
 description: >-
   Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine
   y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.

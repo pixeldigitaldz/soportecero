@@ -1,5 +1,5 @@
 ---
-title: Solución Direct3D Could Not Create Device
+title: '[SOLUCIONADO] Error Direct3D Could Not Create Device en Windows'
 description: >-
   ¿Tu juego retro o clásico favorito falla al iniciar en Windows 10 u 11?
   Resuelve este mítico error instalando los componentes heredados de DirectX.

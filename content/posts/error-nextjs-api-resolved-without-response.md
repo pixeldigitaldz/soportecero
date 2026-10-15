@@ -1,5 +1,5 @@
 ---
-title: 'Guía: API resolved without sending a response for /api/ en Next.js'
+title: '[SOLUCIONADO] Advertencia API resolved without sending a response en Next.js'
 description: 'Aprende a resolver el aviso API resolved without sending a response en Next.js Pages y App Router al manejar llamadas asíncronas o callbacks.'
 category: 'Web y Código'
 date: '2026-08-21'

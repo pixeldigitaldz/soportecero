@@ -1,5 +1,5 @@
 ---
-title: 'Error iptables failed: No chain/target/match by that name en Docker'
+title: '[SOLUCIONADO] Error iptables failed: No chain/target/match by that name en Docker'
 description: 'Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.'
 category: 'Sistemas y Servidores'
 date: '2026-08-23'

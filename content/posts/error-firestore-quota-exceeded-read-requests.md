@@ -1,5 +1,5 @@
 ---
-title: 'Error: Quota exceeded for quota metric Read requests en Firestore'
+title: '[SOLUCIONADO] Error Quota exceeded for quota metric Read requests en Firestore'
 description: >-
   Aprende a solucionar el error de cuota excedida de lecturas en Cloud Firestore
   implementando caché local, paginación y agregaciones.

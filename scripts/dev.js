@@ -12,7 +12,7 @@ const DIST_DIR = PROJECT_ROOT;
 const SRC_DIR = path.join(PROJECT_ROOT, 'src');
 const CONTENT_DIR = path.join(PROJECT_ROOT, 'content', 'posts');
 
-const PORT = 8080;
+let PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -102,6 +102,16 @@ function watchRecursive(dir, callback) {
 
 // Start development environment
 runBuild(() => {
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`[WARN] El puerto ${PORT} está en uso. Probando en http://localhost:${PORT + 1}...`);
+      PORT++;
+      server.listen(PORT, '127.0.0.1');
+    } else {
+      console.error('[ERROR] Error del servidor:', err);
+    }
+  });
+
   // Start server listening
   server.listen(PORT, '127.0.0.1', () => {
     console.log(`\n🚀 Servidor de desarrollo corriendo en: http://localhost:${PORT}`);

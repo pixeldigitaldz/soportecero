@@ -1,5 +1,5 @@
 ---
-title: 'Resuelto: Error de permisos (Permission Denied) en volúmenes de Docker Compose'
+title: '[SOLUCIONADO] Error de permisos (Permission Denied) en volúmenes de Docker Compose'
 description: >-
   Aprende a solucionar errores EACCES y Permission Denied en carpetas
   compartidas y volúmenes de Docker Compose y Dockge.

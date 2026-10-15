@@ -1,5 +1,5 @@
 ---
-title: 'Guía: chmod Operation not permitted (Incluso como Root) en Linux'
+title: '[SOLUCIONADO] Error chmod: Operation not permitted (Incluso como Root) en Linux'
 description: >-
   Aprende a solucionar el error chmod / chown: Operation not permitted usando
   lsattr y chattr para desbloquear archivos inmutables en Linux.

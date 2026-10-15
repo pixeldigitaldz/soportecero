@@ -1,7 +1,5 @@
 ---
-title: >-
-  Arreglar: Error de arranque en Linux por configuración incorrecta en
-  /etc/fstab
+title: '[SOLUCIONADO] Error de arranque en Linux por configuración incorrecta en /etc/fstab'
 description: >-
   Aprende a reparar tu sistema Linux si no inicia y se queda congelado en la
   consola de emergencia (Emergency Mode) debido a un error en el archivo fstab.

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build | SoporteCero</title>
+  <meta name="description" content="Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.">
+  <meta name="keywords" content="Docker, DevOps, Linux">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build">
+  <meta property="og:description" content="Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-10-17">
+  <meta property="article:section" content="Sistemas y Servidores">
+  <meta property="article:tag" content="Docker">
+  <meta property="article:tag" content="DevOps">
+  <meta property="article:tag" content="Linux">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build">
+  <meta name="twitter:description" content="Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build",
+  "description": "Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "es",
+  "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Docker, DevOps, Linux",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-10-17",
+  "dateModified": "2026-10-17",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+    "sameAs": [
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build",
+      "item": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build",
+  "description": "Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#ejecutar-la-compilacion-en-modo-plano-para-ver-el-error-real",
+      "name": "Ejecutar la compilación en modo plano para ver el error real",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Por defecto, la interfaz TUI de BuildKit trunca los errores internos de los subprocesos. Fuerza la salida en texto plano sin usar la caché para identificar exactamente qué línea del script o gestor de paquetes provocó el fallo: Examina las líneas inmediatamente anteriores al mensaje failed to solve. Allí verás el error original, como E: Unable to locate package, npm ERR! code ENOENT o un fallo de compilación de GCC/Python."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#desglosar-comandos-complejos-en-instrucciones-individuales",
+      "name": "Desglosar comandos complejos en instrucciones individuales",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si tu Dockerfile agrupa múltiples pasos en un solo comando: Separa temporalmente cada comando en una directiva RUN independiente para aislar con precisión cuál instrucción genera el código de error: Una vez corregido el problema, puedes volver a unificarlos para minimizar las capas de la imagen final."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#blindar-el-contexto-de-construccion-con-dockerignore",
+      "name": "Blindar el contexto de construcción con .dockerignore",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el proceso se interrumpe con exit code: 137 (OOMKilled) o context canceled, la causa habitual es que Docker está intentando transferir gigabytes innecesarios al demonio. Crea un archivo .dockerignore en la raíz de tu proyecto: Esto reduce drásticamente el tiempo de compilación y evita que binarios locales de arquitectura incompatible se mezclen con el entorno del contenedor."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#ajustar-la-compatibilidad-de-arquitectura-y-paquetes-base",
+      "name": "Ajustar la compatibilidad de arquitectura y paquetes base",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si utilizas procesadores ARM (Apple Silicon, Raspberry Pi) y despliegas en x86_64 (o viceversa), ciertas librerías binarias fallarán al compilar en /bin/sh. Especifica explícitamente la plataforma de destino o fija la distribución base:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué obtengo exit code 100 durante apt-get install en Docker?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El código 100 en Debian/Ubuntu suele deberse a repositorios no sincronizados (falta ejecutar apt-get update en la misma directiva) o a versiones antiguas de Docker Engine que no soportan llamadas al sistema modernas de imágenes como Debian 12 Bookworm."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué diferencia hay entre usar docker build y docker buildx build?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Buildx es el generador moderno que utiliza el motor BuildKit. Soporta compilación paralela, caché avanzada y compilación multi-arquitectura, pero requiere el flag --progress=plain para mostrar trazas de error completas en terminales estándar."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas" rel="nofollow">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming" rel="nofollow">Gaming Tech</a></li>
+          <li><a href="../?cat=web" rel="nofollow">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
+        <span style="color: var(--text-secondary);">[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Sistemas y Servidores</span>
+        <h1 id="post-title">[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Lectura: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Actualizado: 2026-10-17
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>El error <code>ERROR: failed to solve: process &quot;/bin/sh -c...&quot; did not complete successfully: exit code: 1</code> es uno de los fallos más frecuentes y frustrantes al compilar imágenes con Docker BuildKit (Buildx). Este mensaje no es el problema en sí mismo, sino un contenedor genérico que indica que una instrucción <code>RUN</code> dentro de tu <code>Dockerfile</code> falló y devolvió un código de salida distinto de cero.</p>
+<p>Dado que BuildKit agrupa y oculta los registros secundarios por defecto en su interfaz interactiva, la causa real (un fallo en <code>apt-get</code>, un paquete npm corrupto, falta de memoria o incompatibilidad de arquitectura) suele quedar oculta en la consola.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Comando <code>RUN</code> con múltiples sentencias encadenadas (<code>&amp;&amp;</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Compilar con <code>docker build --progress=plain --no-cache .</code> para ver la salida exacta del comando fallido</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Incompatibilidad entre Docker Engine y distribuciones recientes (ej. Debian Bookworm)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Actualizar Docker Engine o fijar la etiqueta de la imagen base (ej. cambiar a <code>bullseye</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Dependencia ausente, paquete descontinuado o repositorio sin actualizar</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Asegurar <code>apt-get update</code> antes de instalar y validar nombres de paquetes en la arquitectura de destino</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Contexto de compilación gigante que satura la memoria o genera timeout</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Crear o corregir <code>.dockerignore</code> para excluir <code>node_modules</code>, <code>.git</code> y volcados locales</div>
+          </div></div></div>
+    </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#por-que-obtengo-exit-code-100-durante-apt-get-install-en-docker">¿Por qué obtengo exit code 100 durante apt-get install en Docker?</a></li>
+        <li class="toc-subitem"><a href="#que-diferencia-hay-entre-usar-docker-build-y-docker-buildx-build">¿Qué diferencia hay entre usar docker build y docker buildx build?</a></li>
+      </ol>
+    </nav>
+    
+    
+<h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="ejecutar-la-compilacion-en-modo-plano-para-ver-el-error-real">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="ejecutar-la-compilacion-en-modo-plano-para-ver-el-error-real-heading">Paso 1: Ejecutar la compilación en modo plano para ver el error real</h4>
+            <p>Por defecto, la interfaz TUI de BuildKit trunca los errores internos de los subprocesos. Fuerza la salida en texto plano sin usar la caché para identificar exactamente qué línea del script o gestor de paquetes provocó el fallo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>docker build --progress=plain --no-cache -t mi-imagen:latest .
+</code></pre>
+    </div>
+    
+<p>Examina las líneas inmediatamente anteriores al mensaje <code>failed to solve</code>. Allí verás el error original, como <code>E: Unable to locate package</code>, <code>npm ERR! code ENOENT</code> o un fallo de compilación de GCC/Python.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="desglosar-comandos-complejos-en-instrucciones-individuales">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="desglosar-comandos-complejos-en-instrucciones-individuales-heading">Paso 2: Desglosar comandos complejos en instrucciones individuales</h4>
+            <p>Si tu <code>Dockerfile</code> agrupa múltiples pasos en un solo comando:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Difícil de depurar si falla a mitad de ejecución
+RUN apt-get update &amp;&amp; apt-get install -y python3-pip curl &amp;&amp; pip install -r requirements.txt
+</code></pre>
+    </div>
+    
+<p>Separa temporalmente cada comando en una directiva <code>RUN</code> independiente para aislar con precisión cuál instrucción genera el código de error:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>RUN apt-get update
+RUN apt-get install -y python3-pip curl
+RUN pip install --no-cache-dir -r requirements.txt
+</code></pre>
+    </div>
+    
+<p>Una vez corregido el problema, puedes volver a unificarlos para minimizar las capas de la imagen final.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="blindar-el-contexto-de-construccion-con-dockerignore">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="blindar-el-contexto-de-construccion-con-dockerignore-heading">Paso 3: Blindar el contexto de construcción con .dockerignore</h4>
+            <p>Si el proceso se interrumpe con <code>exit code: 137</code> (OOMKilled) o <code>context canceled</code>, la causa habitual es que Docker está intentando transferir gigabytes innecesarios al demonio. Crea un archivo <code>.dockerignore</code> en la raíz de tu proyecto:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>.git
+.github
+node_modules
+dist
+build
+*.log
+.env
+.venv
+</code></pre>
+    </div>
+    
+<p>Esto reduce drásticamente el tiempo de compilación y evita que binarios locales de arquitectura incompatible se mezclen con el entorno del contenedor.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="ajustar-la-compatibilidad-de-arquitectura-y-paquetes-base">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="ajustar-la-compatibilidad-de-arquitectura-y-paquetes-base-heading">Paso 4: Ajustar la compatibilidad de arquitectura y paquetes base</h4>
+            <p>Si utilizas procesadores ARM (Apple Silicon, Raspberry Pi) y despliegas en x86_64 (o viceversa), ciertas librerías binarias fallarán al compilar en <code>/bin/sh</code>. Especifica explícitamente la plataforma de destino o fija la distribución base:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Especificar plataforma explícita si hay dependencias binarias x86
+FROM --platform=linux/amd64 python:3.11-slim-bookworm
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="por-que-obtengo-exit-code-100-durante-apt-get-install-en-docker">¿Por qué obtengo exit code 100 durante apt-get install en Docker?</h3>
+<p>El código 100 en Debian/Ubuntu suele deberse a repositorios no sincronizados (falta ejecutar <code>apt-get update</code> en la misma directiva) o a versiones antiguas de Docker Engine que no soportan llamadas al sistema modernas de imágenes como Debian 12 Bookworm.</p>
+<h3 id="que-diferencia-hay-entre-usar-docker-build-y-docker-buildx-build">¿Qué diferencia hay entre usar docker build y docker buildx build?</h3>
+<p>Buildx es el generador moderno que utiliza el motor BuildKit. Soporta compilación paralela, caché avanzada y compilación multi-arquitectura, pero requiere el flag <code>--progress=plain</code> para mostrar trazas de error completas en terminales estándar.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Fijación de versiones (Pinning):</strong> Nunca uses etiquetas flotantes como <code>latest</code> en imágenes base de producción; define etiquetas inmutables (ej. <code>node:20.18-alpine3.20</code>).</li>
+<li><strong>Limpieza de caché en la misma capa:</strong> Siempre combina la actualización e instalación limpiando la caché en la misma línea (<code>apt-get update &amp;&amp; apt-get install -y pkg &amp;&amp; rm -rf /var/lib/apt/lists/*</code>) para evitar residuos y garantizar reproducibilidad.</li>
+<li><strong>Validación de linter:</strong> Pasa herramientas como <code>hadolint</code> a tus Dockerfiles en tu pipeline de CI/CD para detectar errores sintácticos antes de construir.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Enlaces & Proyectos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Proxmox</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

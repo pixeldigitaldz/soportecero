@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE | SoporteCero</title>
+  <meta name="description" content="Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.">
+  <meta name="keywords" content="Proxmox, Virtualización, SysAdmin">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE">
+  <meta property="og:description" content="Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-10-17">
+  <meta property="article:section" content="Sistemas y Servidores">
+  <meta property="article:tag" content="Proxmox">
+  <meta property="article:tag" content="Virtualización">
+  <meta property="article:tag" content="SysAdmin">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE">
+  <meta name="twitter:description" content="Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE",
+  "description": "Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "es",
+  "category": "Sistemas y Servidores",
+  "articleSection": "Sistemas y Servidores",
+  "keywords": "Proxmox, Virtualización, SysAdmin",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-10-17",
+  "dateModified": "2026-10-17",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+    "sameAs": [
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE",
+      "item": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE",
+  "description": "Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#verificar-y-cancelar-tareas-huerfanas-en-el-nodo",
+      "name": "Verificar y cancelar tareas huérfanas en el nodo",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Antes de forzar el desbloqueo, asegúrate de que ningún proceso en segundo plano continúe escribiendo datos en el disco de la VM. Conéctate por SSH o abre la consola Shell del nodo de Proxmox y lista los procesos activos relacionados con el ID de tu máquina virtual: Si ves un proceso de vzdump colgado o sin actividad de entrada/salida (I/O), finalízalo limpiamente o fuerza su detención:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#desbloquear-maquinas-virtuales-qemu-con-qm-unlock",
+      "name": "Desbloquear máquinas virtuales QEMU con qm unlock",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el recurso bloqueado es una máquina virtual KVM/QEMU, ejecuta el comando nativo qm unlock indicando el identificador numérico: Una vez ejecutado, actualiza la interfaz web de Proxmox. El icono de candado amarillo desaparecerá de inmediato y los botones de control (Start, Stop, Reboot) volverán a estar operativos."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#desbloquear-contenedores-lxc-con-pct-unlock",
+      "name": "Desbloquear contenedores LXC con pct unlock",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si el problema ocurre dentro de un contenedor Linux (LXC), la herramienta de gestión correspondiente es pct: Comprueba el estado del contenedor con:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#eliminar-manualmente-el-bloqueo-persistente-en-la-configuracion",
+      "name": "Eliminar manualmente el bloqueo persistente en la configuración",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En ocasiones excepcionales donde el comando unlock reporta que el cerrojo no existe pero la interfaz gráfica sigue mostrando el estado bloqueado, edita directamente el archivo de configuración de la máquina virtual: Busca la línea que comienza por lock: (por ejemplo, lock: backup o lock: snapshot), bórrala por completo, guarda los cambios con Ctrl + O y sal con Ctrl + X. La base de datos de clúster pmxcfs sincronizará el cambio en tiempo real."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Es seguro ejecutar qm unlock con la máquina virtual encendida?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, qm unlock solo retira la bandera de bloqueo administrativo a nivel de metadatos de Proxmox. Sin embargo, debes cerciorarte previamente de que no haya un snapshot o backup escribiendo activamente para evitar inconsistencias en la copia de seguridad resultante."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué Proxmox no incluye un botón de desbloqueo en la interfaz gráfica?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Por seguridad. El bloqueo previene que los administradores inicien o reinicien máquinas mientras el motor de instantáneas modifica los bloques de disco. La exigencia de usar la línea de comandos garantiza que el operador humano haya verificado el estado real de los procesos del sistema."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas" rel="nofollow">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming" rel="nofollow">Gaming Tech</a></li>
+          <li><a href="../?cat=web" rel="nofollow">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Inicio</a> &raquo; 
+        <span style="color: var(--text-secondary);">Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Sistemas y Servidores</span>
+        <h1 id="post-title">Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Lectura: 3 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Actualizado: 2026-10-17
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>El error <code>TASK ERROR: can&#39;t lock file &#39;/var/lock/qemu-server/lock-XXX.conf&#39; - got timeout</code> o el mensaje persistente <code>VM is locked (backup)</code> / <code>VM is locked (snapshot)</code> en la interfaz web de Proxmox Virtual Environment (PVE) ocurre cuando una tarea de mantenimiento se interrumpe de forma abrupta antes de retirar el cerrojo de seguridad.</p>
+<p>Proxmox bloquea preventivamente las máquinas virtuales (QEMU) y contenedores (LXC) durante tareas críticas como copias de seguridad con Proxmox Backup Server (PBS), instantáneas (snapshots) o migraciones en vivo para evitar escrituras simultáneas y corrupción de disco. Si el almacenamiento de destino sufre un corte de red o la tarea se cancela a la fuerza, el estado de bloqueo permanece activo indefinidamente impidiendo arrancar, apagar o modificar la máquina desde el panel web.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="el-diagnostico-rapido">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        El Diagnóstico Rápido
+      </h3>
+      <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Copia de seguridad interrumpida por apagón o pérdida de red (<code>locked: backup</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Liberar el cerrojo desde la terminal del nodo con <code>qm unlock &lt;vmid&gt;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Contenedor LXC bloqueado tras fallo de snapshot (<code>locked: snapshot</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Desbloquear el contenedor mediante CLI ejecutando <code>pct unlock &lt;vmid&gt;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Proceso zombie de backup o qemu bloqueando el archivo de configuración</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Identificar y matar el proceso colgado antes de retirar la directiva <code>lock</code> manual</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Causa Principal</div>
+            <div class="diag-value"><strong>Almacenamiento de red lento (NFS/SMB) generando cuellos de botella en snapshots</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Solución Recomendada</div>
+            <div class="diag-value">Revisar la estabilidad del almacenamiento y configurar límites de ancho de banda</div>
+          </div></div></div>
+    </section>
+
+    <nav class="toc-container" aria-label="Tabla de contenidos">
+      <div class="toc-title">📌 Contenido de esta guía</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#el-diagnostico-rapido">El Diagnóstico Rápido</a></li>
+        <li class="toc-item"><a href="#la-solucion-paso-a-paso">La Solución Paso a Paso</a></li>
+        <li class="toc-item"><a href="#preguntas-frecuentes">Preguntas Frecuentes</a></li>
+        <li class="toc-subitem"><a href="#es-seguro-ejecutar-qm-unlock-con-la-maquina-virtual-encendida">¿Es seguro ejecutar qm unlock con la máquina virtual encendida?</a></li>
+        <li class="toc-subitem"><a href="#por-que-proxmox-no-incluye-un-boton-de-desbloqueo-en-la-interfaz-grafica">¿Por qué Proxmox no incluye un botón de desbloqueo en la interfaz gráfica?</a></li>
+      </ol>
+    </nav>
+    
+    
+<h2 id="la-solucion-paso-a-paso">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="verificar-y-cancelar-tareas-huerfanas-en-el-nodo">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="verificar-y-cancelar-tareas-huerfanas-en-el-nodo-heading">Paso 1: Verificar y cancelar tareas huérfanas en el nodo</h4>
+            <p>Antes de forzar el desbloqueo, asegúrate de que ningún proceso en segundo plano continúe escribiendo datos en el disco de la VM. Conéctate por SSH o abre la consola Shell del nodo de Proxmox y lista los procesos activos relacionados con el ID de tu máquina virtual:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Reemplaza 105 por el VMID de tu máquina virtual
+ps aux | grep qm | grep 105
+ps aux | grep vzdump
+</code></pre>
+    </div>
+    
+<p>Si ves un proceso de <code>vzdump</code> colgado o sin actividad de entrada/salida (I/O), finalízalo limpiamente o fuerza su detención:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>kill -9 &lt;PID_DEL_PROCESO&gt;
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="desbloquear-maquinas-virtuales-qemu-con-qm-unlock">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="desbloquear-maquinas-virtuales-qemu-con-qm-unlock-heading">Paso 2: Desbloquear máquinas virtuales QEMU con qm unlock</h4>
+            <p>Si el recurso bloqueado es una máquina virtual KVM/QEMU, ejecuta el comando nativo <code>qm unlock</code> indicando el identificador numérico:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>qm unlock 105
+</code></pre>
+    </div>
+    
+<p>Una vez ejecutado, actualiza la interfaz web de Proxmox. El icono de candado amarillo desaparecerá de inmediato y los botones de control (Start, Stop, Reboot) volverán a estar operativos.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="desbloquear-contenedores-lxc-con-pct-unlock">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="desbloquear-contenedores-lxc-con-pct-unlock-heading">Paso 3: Desbloquear contenedores LXC con pct unlock</h4>
+            <p>Si el problema ocurre dentro de un contenedor Linux (LXC), la herramienta de gestión correspondiente es <code>pct</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>pct unlock 200
+</code></pre>
+    </div>
+    
+<p>Comprueba el estado del contenedor con:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code>pct status 200
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="eliminar-manualmente-el-bloqueo-persistente-en-la-configuracion">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="eliminar-manualmente-el-bloqueo-persistente-en-la-configuracion-heading">Paso 4: Eliminar manualmente el bloqueo persistente en la configuración</h4>
+            <p>En ocasiones excepcionales donde el comando <code>unlock</code> reporta que el cerrojo no existe pero la interfaz gráfica sigue mostrando el estado bloqueado, edita directamente el archivo de configuración de la máquina virtual:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+      </div>
+      <pre class="formatted-pre"><code># Para máquinas virtuales QEMU:
+nano /etc/pve/qemu-server/105.conf
+
+# Para contenedores LXC:
+nano /etc/pve/lxc/200.conf
+</code></pre>
+    </div>
+    
+<p>Busca la línea que comienza por <code>lock:</code> (por ejemplo, <code>lock: backup</code> o <code>lock: snapshot</code>), bórrala por completo, guarda los cambios con <code>Ctrl + O</code> y sal con <code>Ctrl + X</code>. La base de datos de clúster <code>pmxcfs</code> sincronizará el cambio en tiempo real.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="es-seguro-ejecutar-qm-unlock-con-la-maquina-virtual-encendida">¿Es seguro ejecutar qm unlock con la máquina virtual encendida?</h3>
+<p>Sí, <code>qm unlock</code> solo retira la bandera de bloqueo administrativo a nivel de metadatos de Proxmox. Sin embargo, debes cerciorarte previamente de que no haya un snapshot o backup escribiendo activamente para evitar inconsistencias en la copia de seguridad resultante.</p>
+<h3 id="por-que-proxmox-no-incluye-un-boton-de-desbloqueo-en-la-interfaz-grafica">¿Por qué Proxmox no incluye un botón de desbloqueo en la interfaz gráfica?</h3>
+<p>Por seguridad. El bloqueo previene que los administradores inicien o reinicien máquinas mientras el motor de instantáneas modifica los bloques de disco. La exigencia de usar la línea de comandos garantiza que el operador humano haya verificado el estado real de los procesos del sistema.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Límites de ancho de banda (BW Limit):</strong> Configura un límite de transferencia en <code>Datacenter -&gt; Backup</code> para evitar saturar el enlace de red entre el nodo de Proxmox y tu almacenamiento NFS o TrueNAS.</li>
+<li><strong>Evitar cancelaciones forzadas:</strong> No utilices la opción &quot;Stop&quot; brusca en la ventana de tareas mientras un snapshot de disco ZFS o LVM esté en progreso; espera a que la operación de I/O finalice de forma natural.</li>
+<li><strong>Monitoreo de almacenamiento de backups:</strong> Verifica que tus destinos de almacenamiento montados tengan activada la opción de desconexión segura ante cortes y cuenten con espacio suficiente antes de programar backups nocturnos masivos.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Enlaces & Proyectos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Lectura: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Nginx connect() failed (111: Connection refused) while connecting to upstream -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nginx-111-connection-refused-upstream.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Nginx connect() failed (111: Connection refused) while connecting to upstream</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nginx</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

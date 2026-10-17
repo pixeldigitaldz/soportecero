@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>[FIXED] Docker Error 'failed to solve: process did not complete successfully' | SoporteCero</title>
+  <meta name="description" content="Step-by-step troubleshooting guide to diagnose and fix the Docker build error 'failed to solve: process did not complete successfully: exit code' in Buildx.">
+  <meta name="keywords" content="Docker, DevOps, Linux">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" />
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="[FIXED] Docker Error 'failed to solve: process did not complete successfully'">
+  <meta property="og:description" content="Step-by-step troubleshooting guide to diagnose and fix the Docker build error 'failed to solve: process did not complete successfully: exit code' in Buildx.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-10-17">
+  <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Docker">
+  <meta property="article:tag" content="DevOps">
+  <meta property="article:tag" content="Linux">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="[FIXED] Docker Error 'failed to solve: process did not complete successfully'">
+  <meta name="twitter:description" content="Step-by-step troubleshooting guide to diagnose and fix the Docker build error 'failed to solve: process did not complete successfully: exit code' in Buildx.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "[FIXED] Docker Error 'failed to solve: process did not complete successfully'",
+  "description": "Step-by-step troubleshooting guide to diagnose and fix the Docker build error 'failed to solve: process did not complete successfully: exit code' in Buildx.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "en",
+  "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Docker, DevOps, Linux",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-10-17",
+  "dateModified": "2026-10-17",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Web Designer & App Creator",
+    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "sameAs": [
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "[FIXED] Docker Error 'failed to solve: process did not complete successfully'",
+      "item": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "[FIXED] Docker Error 'failed to solve: process did not complete successfully'",
+  "description": "Step-by-step troubleshooting guide to diagnose and fix the Docker build error 'failed to solve: process did not complete successfully: exit code' in Buildx.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#run-the-build-in-plain-progress-mode-to-expose-raw-logs",
+      "name": "Run the build in plain progress mode to expose raw logs",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "By default, BuildKit&#39;s TUI collapses multi-line outputs. Force plain-text output without cache to pinpoint the exact failure stream: Inspect the lines immediately preceding the final failed to solve line. You will find the actual tool error, such as E: Unable to locate package, npm ERR! code ENOENT, or a missing compiler dependency."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#break-down-chained-run-statements-into-single-directives",
+      "name": "Break down chained RUN statements into single directives",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "When a Dockerfile bundles multiple operations into one line: Temporarily split each task into its own RUN instruction to isolate the exact failing binary: Once you resolve the underlying problem, you can safely re-chain them to minimize final image layers."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#prevent-context-bloat-using-a-strict-dockerignore",
+      "name": "Prevent context bloat using a strict .dockerignore",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your build crashes with exit code: 137 (OOMKilled) or context canceled, Docker is likely attempting to ingest massive local directories into the build daemon. Place a .dockerignore file in your repository root: This substantially speeds up build initiation and prevents incompatible host-compiled binaries from contaminating the container filesystem."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html#enforce-target-architecture-and-base-image-pinning",
+      "name": "Enforce target architecture and base image pinning",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If developing on an Apple Silicon or ARM64 host while deploying to an x86_64 cloud instance, native binaries compiled inside /bin/sh may fail silently. Explicitly define the target platform or pin the distribution:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does RUN apt-get install return exit code 100?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Debian/Ubuntu environments, exit code 100 typically means the package list is stale (you must run apt-get update in the same RUN command) or an outdated Docker daemon is running on a host whose kernel syscalls conflict with modern glibc versions in Debian 12 Bookworm."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the advantage of docker buildx over traditional docker build?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Buildx is the next-generation Docker CLI plugin backed by BuildKit. It provides concurrent stage execution, multi-platform emulation, and advanced cache backends, requiring --progress=plain for uninterrupted terminal debugging."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <a href="../" class="logo" id="header-logo">
+        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        </svg>
+        Soporte<span class="logo-cero">Cero</span>
+      </a>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="../?cat=sistemas" rel="nofollow">Systems & Servers</a></li>
+          <li><a href="../?cat=gaming" rel="nofollow">Gaming Tech</a></li>
+          <li><a href="../?cat=web" rel="nofollow">Web & Code</a></li>
+          <li><a href="../nosotros.html">About</a></li>
+          <li><a href="../contacto.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <div class="post-breadcrumbs" style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
+        <a href="../" style="color: var(--text-muted);">Home</a> &raquo; 
+        <span style="color: var(--text-secondary);">[FIXED] Docker Error 'failed to solve: process did not complete successfully'</span>
+      </div>
+
+      <header class="post-header">
+        <span class="card-category">Systems & Servers</span>
+        <h1 id="post-title">[FIXED] Docker Error 'failed to solve: process did not complete successfully'</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Replicated and tested in laboratory environment">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: #10b981;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+            Lab Verified
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+            </svg>
+            Read time: 4 min
+          </span>
+          <span>
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/>
+            </svg>
+            Updated: 2026-10-17
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>The error <code>ERROR: failed to solve: process &quot;/bin/sh -c...&quot; did not complete successfully: exit code: 1</code> is one of the most common and puzzling build failures encountered in Docker BuildKit (Buildx). This error message is merely a generic wrapper stating that a command executed by an instruction inside your <code>Dockerfile</code> returned a non-zero exit status.</p>
+<p>Because BuildKit defaults to an interactive terminal UI that folds background stdout/stderr streams, the true root cause—such as a broken <code>apt-get</code> repository, an unhandled <code>npm</code> dependency conflict, out-of-memory limits, or architecture mismatches—remains hidden unless specifically queried.</p>
+
+    <section class="diagnostic-box" aria-labelledby="diag-heading">
+      <h3 id="quick-diagnostics">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Quick Diagnostics
+      </h3>
+      <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Root Cause</div>
+            <div class="diag-value"><strong>Chained <code>RUN</code> commands with <code>&amp;&amp;</code> masking the failing step</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Recommended Fix</div>
+            <div class="diag-value">Run build with <code>docker build --progress=plain --no-cache .</code> to expose full verbose logs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Root Cause</div>
+            <div class="diag-value"><strong>Engine incompatibility with modern base images (e.g., Debian Bookworm)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Recommended Fix</div>
+            <div class="diag-value">Update Docker Engine or pin the base image tag to a legacy release (e.g., <code>bullseye</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Root Cause</div>
+            <div class="diag-value"><strong>Missing package, deprecated name, or unsynchronized repository index</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Recommended Fix</div>
+            <div class="diag-value">Ensure <code>apt-get update</code> runs before install commands and verify package names for target architecture</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">Root Cause</div>
+            <div class="diag-value"><strong>Oversized build context triggering timeouts or OOM killer (exit code 137)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">Recommended Fix</div>
+            <div class="diag-value">Add a <code>.dockerignore</code> file excluding <code>node_modules</code>, <code>.git</code>, and local binary build artifacts</div>
+          </div></div></div>
+    </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-title">📌 Guide Contents</div>
+      <ol class="toc-list">
+            <li class="toc-subitem"><a href="#quick-diagnostics">Quick Diagnostics</a></li>
+        <li class="toc-item"><a href="#step-by-step-solution">Step-by-Step Solution</a></li>
+        <li class="toc-item"><a href="#frequently-asked-questions">Frequently Asked Questions</a></li>
+        <li class="toc-subitem"><a href="#why-does-run-apt-get-install-return-exit-code-100">Why does RUN apt-get install return exit code 100?</a></li>
+        <li class="toc-subitem"><a href="#what-is-the-advantage-of-docker-buildx-over-traditional-docker-build">What is the advantage of docker buildx over traditional docker build?</a></li>
+      </ol>
+    </nav>
+    
+    
+<h2 id="step-by-step-solution">
+          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          </svg>
+          Step-by-Step Solution
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="run-the-build-in-plain-progress-mode-to-expose-raw-logs">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="run-the-build-in-plain-progress-mode-to-expose-raw-logs-heading">Step 1: Run the build in plain progress mode to expose raw logs</h4>
+            <p>By default, BuildKit&#39;s TUI collapses multi-line outputs. Force plain-text output without cache to pinpoint the exact failure stream:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">BASH</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>docker build --progress=plain --no-cache -t my-app:latest .
+</code></pre>
+    </div>
+    
+<p>Inspect the lines immediately preceding the final <code>failed to solve</code> line. You will find the actual tool error, such as <code>E: Unable to locate package</code>, <code>npm ERR! code ENOENT</code>, or a missing compiler dependency.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="break-down-chained-run-statements-into-single-directives">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="break-down-chained-run-statements-into-single-directives-heading">Step 2: Break down chained RUN statements into single directives</h4>
+            <p>When a <code>Dockerfile</code> bundles multiple operations into one line:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Hard to isolate when a middle step fails
+RUN apt-get update &amp;&amp; apt-get install -y python3-pip curl &amp;&amp; pip install -r requirements.txt
+</code></pre>
+    </div>
+    
+<p>Temporarily split each task into its own <code>RUN</code> instruction to isolate the exact failing binary:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>RUN apt-get update
+RUN apt-get install -y python3-pip curl
+RUN pip install --no-cache-dir -r requirements.txt
+</code></pre>
+    </div>
+    
+<p>Once you resolve the underlying problem, you can safely re-chain them to minimize final image layers.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="prevent-context-bloat-using-a-strict-dockerignore">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="prevent-context-bloat-using-a-strict-dockerignore-heading">Step 3: Prevent context bloat using a strict .dockerignore</h4>
+            <p>If your build crashes with <code>exit code: 137</code> (OOMKilled) or <code>context canceled</code>, Docker is likely attempting to ingest massive local directories into the build daemon. Place a <code>.dockerignore</code> file in your repository root:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">TEXT</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code>.git
+.github
+node_modules
+dist
+build
+*.log
+.env
+.venv
+</code></pre>
+    </div>
+    
+<p>This substantially speeds up build initiation and prevents incompatible host-compiled binaries from contaminating the container filesystem.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="enforce-target-architecture-and-base-image-pinning">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="enforce-target-architecture-and-base-image-pinning-heading">Step 4: Enforce target architecture and base image pinning</h4>
+            <p>If developing on an Apple Silicon or ARM64 host while deploying to an x86_64 cloud instance, native binaries compiled inside <code>/bin/sh</code> may fail silently. Explicitly define the target platform or pin the distribution:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <span class="code-lang">DOCKERFILE</span>
+        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+      </div>
+      <pre class="formatted-pre"><code># Explicitly pin target platform for x86 architectures
+FROM --platform=linux/amd64 python:3.11-slim-bookworm
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-run-apt-get-install-return-exit-code-100">Why does RUN apt-get install return exit code 100?</h3>
+<p>In Debian/Ubuntu environments, exit code 100 typically means the package list is stale (you must run <code>apt-get update</code> in the same <code>RUN</code> command) or an outdated Docker daemon is running on a host whose kernel syscalls conflict with modern glibc versions in Debian 12 Bookworm.</p>
+<h3 id="what-is-the-advantage-of-docker-buildx-over-traditional-docker-build">What is the advantage of docker buildx over traditional docker build?</h3>
+<p>Buildx is the next-generation Docker CLI plugin backed by BuildKit. It provides concurrent stage execution, multi-platform emulation, and advanced cache backends, requiring <code>--progress=plain</code> for uninterrupted terminal debugging.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>Version pinning:</strong> Avoid floating tags like <code>latest</code> in production Dockerfiles; pin exact version digests or stable tags (e.g., <code>node:20.18-alpine3.20</code>).</li>
+<li><strong>Clean package caches within the same layer:</strong> Always pair repository updates and package installations with cache pruning (<code>apt-get update &amp;&amp; apt-get install -y pkg &amp;&amp; rm -rf /var/lib/apt/lists/*</code>) to ensure deterministic builds.</li>
+<li><strong>Automated linting:</strong> Run <code>hadolint</code> as part of your pre-commit hooks or CI/CD pipelines to catch bad practices before testing builds.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="author">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Author • Web Designer & App Creator</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Editorial Methodology
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Report an issue
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Links & Portfolio
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: How to Fix 'VM is locked (backup/snapshot)' Error in Proxmox VE -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix 'VM is locked (backup/snapshot)' Error in Proxmox VE</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Proxmox</span>
+            <span>Read Time: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailscale-derp-relay-direct-connection.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix High Latency and Force Direct Connection in Tailscale (Bypass DERP Relays)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Tailscale</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-unattended-upgrades-dpkg-lock-frontend.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Ubuntu</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Home</a></li>
+        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+        <li><a href="../contacto.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

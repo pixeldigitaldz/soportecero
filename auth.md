@@ -6,15 +6,48 @@ Technical error troubleshooting guides, Linux command remedies, and AI agent API
 
 This documentation is intended for automated AI agents, developer assistants, chat copilots, diagnostic runners, and Model Context Protocol (MCP) clients that query, index, or retrieve technical troubleshooting steps and repair guides from SoporteCero.
 
-## Registration & Discovery Endpoints
+## Registration & Provisioning Flow
 
-Autonomous agents can register and query metadata through standard discovery protocols:
+Autonomous agents can register programmatically using the following endpoints:
 
 - **Registration URI**: `https://soportecero.com/agent/register`
 - **Claim URI**: `https://soportecero.com/agent/claim`
 - **Revocation URI**: `https://soportecero.com/agent/revoke`
 - **Authorization Endpoint**: `https://soportecero.com/oauth/authorize`
 - **Token Endpoint**: `https://soportecero.com/oauth/token`
+
+### Agent Registration Request
+
+Submit a POST request to register:
+
+```http
+POST /agent/register HTTP/1.1
+Host: soportecero.com
+Content-Type: application/json
+
+{
+  "name": "TroubleshootingCopilot",
+  "identity_type": "anonymous"
+}
+```
+
+### Agent Registration Response
+
+```json
+{
+  "token": "eyJhbGciOi...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+### Credential Use
+
+Include the access token in all subsequent API queries:
+
+```http
+Authorization: Bearer <token>
+```
 
 ## Supported Identity & Credential Types
 

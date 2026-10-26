@@ -9,6 +9,11 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/servicios.html">
   {{hreflang}}
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/style.css">
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -20,12 +25,14 @@
   <div class="header-wrapper">
     <header>
       <a href="./" class="logo" id="header-logo">
-        <svg class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
-          <path d="M7 8L11 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M12 6L10 13H14L12 18L17 11H13L15 6Z" fill="var(--accent-color)" stroke="var(--accent-color)" stroke-width="1" stroke-linejoin="round" />
+        <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="6" fill="#12151E" stroke="rgba(6, 182, 212, 0.4)" stroke-width="1"/>
+          <path d="M9 11L14 16L9 21" stroke="#06B6D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="21" x2="23" y2="21" stroke="#06B6D4" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="23" cy="11" r="1.5" fill="#06B6D4" class="logo-pulse-dot"/>
         </svg>
-        Soporte<span class="logo-cero">Cero</span>
+        <span class="logo-text">Soporte<span class="logo-cero">Cero</span></span>
+        <span class="logo-badge">//0</span>
       </a>
       <nav aria-label="Navegación principal">
         <ul>
@@ -50,10 +57,11 @@
 
   <!-- Main Content Layout -->
   <main class="main-content">
-    <div style="margin: 1.5rem 0 1rem; font-size: 0.9rem; color: var(--text-muted);">
-      <a href="./" style="color: var(--text-muted);">Inicio</a> &raquo; 
-      <span style="color: var(--text-secondary);">Servicios</span>
-    </div>
+    <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
+      <a href="./">INICIO</a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span style="color: var(--text-secondary);">SERVICIOS</span>
+    </nav>
 
     <article class="post-article" style="max-width: 800px; margin: 0 auto; padding: 2.5rem 2rem;">
       <h1 style="margin-bottom: 1rem; text-align: center;">Servicios de Soporte Técnico</h1>
@@ -61,11 +69,12 @@
         Ofrecemos asistencia técnica avanzada y soluciones personalizadas para optimizar tu infraestructura de servidores, depurar tu código y configurar perfiles de alto rendimiento.
       </p>
 
-      <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1rem;">
+      <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem;">
         <!-- Serv 1 -->
-        <div style="border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; background-color: rgba(30, 41, 59, 0.2);">
-          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-            ⚙️ Soporte y Sysadmin Linux
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background-color: var(--card-bg);">
+          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233l2.846-2.845a3.75 3.75 0 00-5.304-5.304l-2.845 2.845m5.303 5.304l-5.303-5.304"/></svg>
+            Soporte y Sysadmin Linux
           </h3>
           <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
             Administración avanzada de sistemas, redimensionamiento en caliente de volúmenes lógicos LVM, recuperación de sistemas que no arrancan (GRUB corrupto, fallos de montaje en <code>fstab</code>), y optimización del uso de memoria SWAP.
@@ -73,9 +82,10 @@
         </div>
 
         <!-- Serv 2 -->
-        <div style="border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; background-color: rgba(30, 41, 59, 0.2);">
-          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-            🐳 Orquestación Docker y Nginx
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background-color: var(--card-bg);">
+          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>
+            Orquestación Docker y Nginx
           </h3>
           <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
             Solución a errores de permisos en volúmenes Docker (Dockge / Portainer), depuración de resoluciones de DNS internas, configuración de proxy inverso seguro en Nginx (errores 502 Bad Gateway y 403 Forbidden) y resolución de conflictos de puertos ocupados en Umbrel OS.
@@ -83,9 +93,10 @@
         </div>
 
         <!-- Serv 3 -->
-        <div style="border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; background-color: rgba(30, 41, 59, 0.2);">
-          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-            🎮 Optimización Gaming en Linux
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background-color: var(--card-bg);">
+          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.58-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+            Optimización Gaming en Linux
           </h3>
           <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
             Ajustes para reducir el lag de entrada (input lag), optimizar perfiles de audio en PipeWire/WirePlumber, mitigación de tirones gráficos mediante perfiles de caché DXVK en Proton y compatibilidad avanzada para placas Raspberry Pi 5.
@@ -93,9 +104,10 @@
         </div>
 
         <!-- Serv 4 -->
-        <div style="border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; background-color: rgba(30, 41, 59, 0.2);">
-          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-            💻 Desarrollo Web y Código
+        <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; background-color: var(--card-bg);">
+          <h3 style="color: var(--accent-color); margin-top: 0; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+            Desarrollo Web y Código
           </h3>
           <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
             Mitigación de errores CORS en plantillas de comercio (Shopify, WordPress), renovación forzada de certificados SSL con Certbot/Let's Encrypt y depuración de dependencias de node_modules e integraciones de bases de datos relacionales.

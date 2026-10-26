@@ -118,6 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     searchInput.addEventListener('input', handleSearch);
     searchInput.addEventListener('keyup', handleSearch);
+
+    // Command Palette Keyboard Shortcut (Ctrl+K, Cmd+K, or /)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      } else if (e.key === '/' && document.activeElement !== searchInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+    });
   }
 
   // Bind Category Buttons

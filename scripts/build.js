@@ -89,8 +89,8 @@ function getRelatedPosts(currentPost, allPosts) {
 function generateDirectoryIndex(posts, lang = 'es') {
   const isEn = lang === 'en';
   const summaryTitle = isEn
-    ? '📚 View Full Directory of Technical Guides (Archive)'
-    : '📚 Ver índice completo de guías técnicas (Archivo)';
+    ? 'View Full Directory of Technical Guides // Archive'
+    : 'Ver índice completo de guías técnicas // Archivo';
 
   const groups = {};
   for (let post of posts) {
@@ -194,8 +194,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
     `;
   });
 
-  // 2. Diagnostic Box layout wrapping (only wraps heading + table)
-  const diagTitle = isEn ? 'Quick Diagnostics' : 'El Diagnóstico Rápido';
+  // 2. Diagnostic Box / Telemetry Matrix layout wrapping
   const diagRegex = /<h2[^>]*>[^<]*(?:Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
 
   const transformTableToCards = (htmlStr) => {
@@ -214,10 +213,27 @@ function postProcessHtml(rawHtml, lang = 'es') {
         const cells = [...row[1].matchAll(/<td>([\s\S]*?)<\/td>/gi)].map(m => m[1].trim());
         cardsHtml += '<div class="diag-card">';
         for (let i = 0; i < cells.length; i++) {
-          const label = headers[i] || '';
+          const rawLabel = (headers[i] || '').replace(/<[^>]+>/g, '').trim();
+          let badgeClass = 'diag-badge-default';
+          let badgeText = rawLabel.toUpperCase() || 'INFO';
+
+          const labelLower = rawLabel.toLowerCase();
+          if (labelLower.includes('causa') || labelLower.includes('cause')) {
+            badgeClass = 'diag-badge-cause';
+            badgeText = 'CAUSA';
+          } else if (labelLower.includes('soluci') || labelLower.includes('solut') || labelLower.includes('fix')) {
+            badgeClass = 'diag-badge-solution';
+            badgeText = isEn ? 'SOLUTION' : 'SOLUCIÓN';
+          } else if (labelLower.includes('sintoma') || labelLower.includes('síntoma') || labelLower.includes('symptom') || labelLower.includes('error')) {
+            badgeClass = 'diag-badge-symptom';
+            badgeText = isEn ? 'SYMPTOM' : 'SÍNTOMA';
+          }
+
           cardsHtml += `
           <div class="diag-row">
-            <div class="diag-label">${label}</div>
+            <div class="diag-label">
+              <span class="diag-badge ${badgeClass}">${badgeText}</span>
+            </div>
             <div class="diag-value">${cells[i]}</div>
           </div>`;
         }
@@ -232,15 +248,19 @@ function postProcessHtml(rawHtml, lang = 'es') {
   if (diagMatch) {
     const diagTableContent = diagMatch[1];
     let formattedDiag = transformTableToCards(diagTableContent);
+    const consoleTitle = isEn ? 'QUICK DIAGNOSTICS // RESOLUTION MATRIX' : 'DIAGNÓSTICO RÁPIDO // MATRIZ DE RESOLUCIÓN';
     const diagBoxHtml = `
-    <section class="diagnostic-box" aria-labelledby="diag-heading">
-      <h3 id="diag-heading">
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
-        ${diagTitle}
-      </h3>
-      ${formattedDiag}
+    <section class="diagnostic-console" aria-labelledby="diag-heading">
+      <div class="diagnostic-console-header">
+        <div class="diag-console-title-group">
+          <span class="diag-pulse-dot" aria-hidden="true"></span>
+          <h3 id="diag-heading" class="diag-console-title">${consoleTitle}</h3>
+        </div>
+        <span class="diag-console-badge">[TELEMETRY]</span>
+      </div>
+      <div class="diagnostic-console-body">
+        ${formattedDiag}
+      </div>
     </section>
     `;
     html = html.replace(diagRegex, diagBoxHtml);
@@ -410,7 +430,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   if (tocItems.length > 0) {
     tocHtml = `
     <nav class="toc-container" aria-label="${isEn ? 'Table of contents' : 'Tabla de contenidos'}">
-      <div class="toc-title">${isEn ? '📌 Guide Contents' : '📌 Contenido de esta guía'}</div>
+      <div class="toc-title">${isEn ? 'INDEX // CONTENTS' : 'ÍNDICE // CONTENIDO'}</div>
       <ol class="toc-list">
     `;
     tocItems.forEach(item => {

@@ -15,6 +15,14 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta name="google-site-verification" content="-3vu7qXc2Q4kBffqaLzQ8hR5_3lZO-Py7Aa3PdY1uTY" />
   
+  <!-- AI Agent Discovery Links (RFC 8288 / RFC 9727 / ARD / MCP) -->
+  <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json">
+  <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json">
+  <link rel="service-desc" href="/.well-known/mcp/server-card.json" type="application/json">
+  <link rel="describedby" href="/auth.md" type="text/markdown">
+  <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json">
+  <link rel="alternate" type="text/markdown" href="/llms.txt" title="Markdown Overview">
+  
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SoporteCero">
@@ -80,16 +88,16 @@
     <h1>Soluciones Directas a Errores Técnicos</h1>
     <p>Micro-tutoriales prácticos, explicaciones claras y líneas de código listas para copiar. Resuelve tus fallos en sistemas, servidores, desarrollo y gaming al instante.</p>
     
-    <!-- Search Bar -->
-    <div class="search-container">
+    <!-- Search Bar (with WebMCP Declarative Form Attributes) -->
+    <form class="search-container" role="search" toolname="search_troubleshooting_guides" tooldescription="Search troubleshooting articles, technical guides, and command fixes on SoporteCero by keyword, error code, or topic" action="./" method="get">
       <span class="search-icon" aria-hidden="true">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </span>
-      <input type="search" id="search-input" class="search-input" placeholder="Buscar por error, comando, juego o tecnología..." aria-label="Buscar tutoriales">
-    </div>
+      <input type="search" id="search-input" name="q" class="search-input" placeholder="Buscar por error, comando, juego o tecnología..." aria-label="Buscar tutoriales" toolparamdescription="The search query, error code, software, or command to troubleshoot">
+    </form>
 
     <!-- Category Filters -->
     <div class="category-filters" aria-label="Filtrar por categoría">

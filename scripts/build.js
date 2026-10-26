@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
@@ -467,6 +468,18 @@ function build() {
   }
   if (fs.existsSync(path.join(SRC_DIR, 'favicon.svg'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'favicon.svg'), path.join(DIST_DIR, 'favicon.svg'));
+  }
+  if (fs.existsSync(path.join(SRC_DIR, 'auth.md'))) {
+    fs.copyFileSync(path.join(SRC_DIR, 'auth.md'), path.join(DIST_DIR, 'auth.md'));
+  }
+  if (fs.existsSync(path.join(SRC_DIR, 'llms.txt'))) {
+    fs.copyFileSync(path.join(SRC_DIR, 'llms.txt'), path.join(DIST_DIR, 'llms.txt'));
+  }
+  if (fs.existsSync(path.join(SRC_DIR, '_headers'))) {
+    fs.copyFileSync(path.join(SRC_DIR, '_headers'), path.join(DIST_DIR, '_headers'));
+  }
+  if (fs.existsSync(path.join(SRC_DIR, '.well-known'))) {
+    copyDirSync(path.join(SRC_DIR, '.well-known'), path.join(DIST_DIR, '.well-known'));
   }
 
   // 3. Compile static pages with Hreflang support
@@ -1215,6 +1228,68 @@ function build() {
 
   fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXml, 'utf-8');
   console.log('[SITEMAP] Compilado: sitemap.xml');
+
+  // 12. Generate llms-full.txt for comprehensive LLM & agent context
+  let llmsFullContent = `# SoporteCero - Directorio Extendido de Soluciones Técnicas\n\n`;
+  llmsFullContent += `> Base de conocimiento completa con tutoriales, soluciones paso a paso y comandos listos para copiar.\n\n`;
+  llmsFullContent += `## Artículos y Guías en Español\n\n`;
+  for (let post of postsEs) {
+    llmsFullContent += `### [${post.title}](https://soportecero.com/articulos/${post.filename}.html)\n`;
+    llmsFullContent += `- Categoría: ${post.category}\n`;
+    if (post.description) llmsFullContent += `- Resumen: ${post.description}\n`;
+    llmsFullContent += `- URL: https://soportecero.com/articulos/${post.filename}.html\n\n`;
+  }
+  if (postsEn.length > 0) {
+    llmsFullContent += `## English Technical Articles\n\n`;
+    for (let post of postsEn) {
+      llmsFullContent += `### [${post.title}](https://soportecero.com/en/articulos/${post.filename}.html)\n`;
+      llmsFullContent += `- Category: ${post.category}\n`;
+      if (post.description) llmsFullContent += `- Summary: ${post.description}\n`;
+      llmsFullContent += `- URL: https://soportecero.com/en/articulos/${post.filename}.html\n\n`;
+    }
+  }
+  fs.writeFileSync(path.join(DIST_DIR, 'llms-full.txt'), llmsFullContent, 'utf-8');
+  fs.writeFileSync(path.join(SRC_DIR, 'llms-full.txt'), llmsFullContent, 'utf-8');
+  console.log('[LLMS-FULL] Generado: llms-full.txt');
+
+  // 13. Synchronize Agent Skills digests in index.json
+  const skillsDir = path.join(DIST_DIR, '.well-known', 'agent-skills');
+  if (fs.existsSync(skillsDir)) {
+    const indexPath = path.join(skillsDir, 'index.json');
+    if (fs.existsSync(indexPath)) {
+      try {
+        const indexData = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+        let updated = false;
+        if (Array.isArray(indexData.skills)) {
+          for (let skill of indexData.skills) {
+            const relPath = skill.url.replace('/.well-known/agent-skills/', '');
+            const skillFilePath = path.join(skillsDir, relPath);
+            if (fs.existsSync(skillFilePath)) {
+              const fileContent = fs.readFileSync(skillFilePath);
+              const hash = crypto.createHash('sha256').update(fileContent).digest('hex');
+              const newDigest = `sha256:${hash}`;
+              if (skill.digest !== newDigest) {
+                skill.digest = newDigest;
+                updated = true;
+              }
+            }
+          }
+        }
+        if (updated) {
+          const serialized = JSON.stringify(indexData, null, 2);
+          fs.writeFileSync(indexPath, serialized, 'utf-8');
+          fs.writeFileSync(path.join(SRC_DIR, '.well-known', 'agent-skills', 'index.json'), serialized, 'utf-8');
+          if (fs.existsSync(path.join(DIST_DIR, '.well-known', 'skills'))) {
+            fs.writeFileSync(path.join(DIST_DIR, '.well-known', 'skills', 'index.json'), serialized, 'utf-8');
+            fs.writeFileSync(path.join(SRC_DIR, '.well-known', 'skills', 'index.json'), serialized, 'utf-8');
+          }
+        }
+      } catch (err) {
+        console.warn('[AGENT-SKILLS] Advertencia al sincronizar digests:', err.message);
+      }
+    }
+  }
+
   console.log('--- Compilación Completada con Éxito ---');
 }
 

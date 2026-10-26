@@ -258,4 +258,119 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Prevent standard form submission on search form if wrapped in <form>
+  const searchForm = document.querySelector('form.search-container');
+  if (searchForm) {
+    searchForm.addEventListener('submit', (e) => e.preventDefault());
+  }
+
+  // Register WebMCP tools
+  initWebMcp();
 });
+
+// --- WebMCP (Web Model Context Protocol) Tools Registration ---
+function initWebMcp() {
+  const modelContext = (typeof document !== 'undefined' && document.modelContext) || 
+                       (typeof navigator !== 'undefined' && navigator.modelContext);
+  if (!modelContext || typeof modelContext.registerTool !== 'function') {
+    return;
+  }
+
+  if (window.__webmcp_registered) return;
+  window.__webmcp_registered = true;
+
+  const abortController = new AbortController();
+
+  // Tool 1: Search troubleshooting guides
+  modelContext.registerTool({
+    name: 'search_troubleshooting_guides',
+    description: 'Search technical solutions, error fixes, command recipes, and articles on SoporteCero by keyword, error code, or category.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search keywords or error messages (e.g. "docker oomkiller", "vkd3d", "nginx 502")'
+        },
+        category: {
+          type: 'string',
+          description: 'Optional category filter: "sistemas", "gaming", or "web"',
+          enum: ['sistemas', 'gaming', 'web']
+        }
+      },
+      required: ['query']
+    },
+    execute: async ({ query, category }) => {
+      const q = (query || '').toLowerCase();
+      const cat = (category || 'all').toLowerCase();
+      const cards = Array.from(document.querySelectorAll('.article-card'));
+      const results = [];
+
+      for (const card of cards) {
+        const cardCat = card.getAttribute('data-category') || '';
+        const title = (card.getAttribute('data-title') || '').toLowerCase();
+        const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+        const summary = (card.getAttribute('data-summary') || '').toLowerCase();
+        const linkEl = card.querySelector('a');
+        const href = linkEl ? linkEl.getAttribute('href') : '';
+
+        if ((cat === 'all' || cardCat === cat) && (title.includes(q) || tags.includes(q) || summary.includes(q))) {
+          results.push({
+            title: card.getAttribute('data-title'),
+            category: cardCat,
+            url: href.startsWith('http') ? href : new URL(href, window.location.href).href,
+            summary: card.getAttribute('data-summary')
+          });
+          if (results.length >= 10) break;
+        }
+      }
+
+      return {
+        query,
+        category: cat,
+        totalFound: results.length,
+        results
+      };
+    }
+  }, { signal: abortController.signal }).catch(() => {});
+
+  // Tool 2: List categories and site topics
+  modelContext.registerTool({
+    name: 'list_categories',
+    description: 'List technical troubleshooting categories and available topics on SoporteCero.',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    },
+    execute: async () => {
+      return {
+        site: 'SoporteCero',
+        url: 'https://soportecero.com',
+        categories: [
+          {
+            id: 'sistemas',
+            name: 'Sistemas y Servidores',
+            description: 'Linux sysadmin, Docker, Proxmox, Nginx, SSH, Systemd, storage & backups',
+            url: 'https://soportecero.com/?cat=sistemas'
+          },
+          {
+            id: 'gaming',
+            name: 'Gaming Tech',
+            description: 'Linux gaming, Proton, Wine, Vulkan, Steam Deck, Gamescope, FPS optimization',
+            url: 'https://soportecero.com/?cat=gaming'
+          },
+          {
+            id: 'web',
+            name: 'Web y Código',
+            description: 'TypeScript, Node.js, React, Next.js, Vite, Git, databases, API integration',
+            url: 'https://soportecero.com/?cat=web'
+          }
+        ]
+      };
+    }
+  }, { signal: abortController.signal }).catch(() => {});
+}
+
+// Initial evaluation on load
+initWebMcp();

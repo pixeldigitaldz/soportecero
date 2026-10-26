@@ -246,6 +246,23 @@ function highlightCode(code, lang = '') {
   return str;
 }
 
+// Helper to format clean heading titles for Table of Contents
+function formatToCText(text) {
+  let cleaned = (text || '').trim();
+  if (cleaned.includes('//')) {
+    cleaned = cleaned.split('//')[0].trim();
+  }
+  // Convert ALL-CAPS titles to clean Title Case
+  if (cleaned.length > 3 && cleaned === cleaned.toUpperCase()) {
+    cleaned = cleaned
+      .toLowerCase()
+      .split(' ')
+      .map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : '')
+      .join(' ');
+  }
+  return cleaned;
+}
+
 // Custom post-processor for HTML content to inject SoporteCero layouts
 function postProcessHtml(rawHtml, lang = 'es') {
   let html = rawHtml;
@@ -508,7 +525,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
 
     const id = slugify(cleanText) || `seccion-${headingCount++}`;
     tocItems.push({
-      tag,
+      tag: tag.toLowerCase(),
       id,
       text: cleanText
     });
@@ -518,16 +535,87 @@ function postProcessHtml(rawHtml, lang = 'es') {
 
   let tocHtml = '';
   if (tocItems.length > 0) {
-    tocHtml = `
-    <nav class="toc-container" aria-label="${isEn ? 'Table of contents' : 'Tabla de contenidos'}">
-      <div class="toc-title">${isEn ? 'INDEX // CONTENTS' : 'ÍNDICE // CONTENIDO'}</div>
-      <ol class="toc-list">
-    `;
+    const tocTree = [];
+    let currentH2 = null;
+
     tocItems.forEach(item => {
-      const indentClass = item.tag.toLowerCase() === 'h3' ? 'toc-subitem' : 'toc-item';
-      tocHtml += `        <li class="${indentClass}"><a href="#${item.id}">${item.text}</a></li>\n`;
+      const displayText = formatToCText(item.text);
+      if (item.tag === 'h2') {
+        currentH2 = {
+          ...item,
+          displayText,
+          children: []
+        };
+        tocTree.push(currentH2);
+      } else if (item.tag === 'h3') {
+        if (currentH2) {
+          currentH2.children.push({
+            ...item,
+            displayText
+          });
+        } else {
+          currentH2 = {
+            tag: 'h2',
+            id: item.id,
+            text: item.text,
+            displayText,
+            children: []
+          };
+          tocTree.push(currentH2);
+        }
+      }
     });
-    tocHtml += `      </ol>
+
+    let h2Index = 1;
+    let itemsHtml = '';
+
+    tocTree.forEach(h2Item => {
+      const numStr = String(h2Index++).padStart(2, '0');
+      let sublistHtml = '';
+      if (h2Item.children && h2Item.children.length > 0) {
+        const subItems = h2Item.children.map(ch => `
+          <li class="toc-subitem">
+            <a href="#${ch.id}" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">${ch.displayText}</span>
+            </a>
+          </li>
+        `).join('\n');
+        sublistHtml = `\n        <ul class="toc-sublist">\n${subItems}\n        </ul>`;
+      }
+
+      itemsHtml += `
+        <li class="toc-item">
+          <a href="#${h2Item.id}" class="toc-link">
+            <span class="toc-number">${numStr}</span>
+            <span class="toc-text">${h2Item.displayText}</span>
+          </a>${sublistHtml}
+        </li>
+      `;
+    });
+
+    const tocTitle = isEn ? 'TABLE OF CONTENTS' : 'ÍNDICE DE CONTENIDO';
+    tocHtml = `
+    <nav class="toc-container" aria-label="${isEn ? 'Table of contents' : 'Índice de contenido'}">
+      <div class="toc-header">
+        <div class="toc-header-left">
+          <svg class="toc-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="toc-header-title">${tocTitle}</span>
+        </div>
+        <span class="toc-header-badge">NAV // SEC</span>
+      </div>
+      <div class="toc-body">
+        <ul class="toc-list">
+${itemsHtml}
+        </ul>
+      </div>
     </nav>
     `;
   }

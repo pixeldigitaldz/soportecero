@@ -983,19 +983,24 @@ nav a:hover::after, nav a.active::after {
 }
 
 .diag-value code, .diagnostic-table code {
-  background-color: rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.22);
-  border-radius: 4px;
-  padding: 0.15rem 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.88em;
-  color: #38BDF8;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  word-break: break-word;
+  background-color: rgba(6, 182, 212, 0.08) !important;
+  border: 1px solid rgba(6, 182, 212, 0.22) !important;
+  border-radius: 5px !important;
+  padding: 0.15rem 0.45rem !important;
+  margin: 0 0.15rem !important;
+  font-family: 'JetBrains Mono', var(--font-mono), monospace !important;
+  font-size: 0.85em !important;
+  line-height: 1.4 !important;
+  color: #38BDF8 !important;
+  display: inline-block !important;
+  vertical-align: baseline !important;
+  box-decoration-break: clone !important;
+  -webkit-box-decoration-break: clone !important;
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
 }
 
-/* Steps list */
+/* Steps list & Technical Timeline */
 .solution-steps {
   margin-bottom: 2.5rem;
   width: 100%;
@@ -1007,17 +1012,18 @@ nav a:hover::after, nav a.active::after {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 2.25rem;
+  gap: 2rem;
   padding-left: 0;
-  margin-bottom: 2.5rem;
+  margin: 1.5rem 0 2.5rem 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 .step-item {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -1025,23 +1031,53 @@ nav a:hover::after, nav a.active::after {
   box-sizing: border-box;
 }
 
+/* Vertical Timeline Line */
+.step-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 1.75rem;
+  bottom: -2rem;
+  left: 0.875rem;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="light"] .step-item:not(:last-child)::before {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Badge Técnico Cuadrado con Bordes Suavizados */
 .step-number {
-  flex-shrink: 0;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 50%;
-  background-color: var(--accent-transparent);
-  border: 2px solid var(--accent-color);
-  color: var(--accent-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 1.1rem;
+  flex-shrink: 0 !important;
+  width: 1.75rem !important; /* w-7 = 28px */
+  height: 1.75rem !important; /* h-7 = 28px */
+  border-radius: 0.375rem !important; /* rounded-md = 6px */
+  background-color: #10141D !important;
+  border: 1px solid rgba(6, 182, 212, 0.4) !important;
+  color: #22D3EE !important; /* text-cyan-400 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'JetBrains Mono', var(--font-mono), monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important; /* text-xs = 12px */
+  line-height: 1 !important;
+  margin-top: 0.2rem !important; /* Perfectly aligned with step title cap-height */
+  position: relative !important;
+  z-index: 1 !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.12) !important;
+}
+
+[data-theme="light"] .step-number {
+  background-color: #F1F5F9 !important;
+  border: 1px solid rgba(6, 182, 212, 0.5) !important;
+  color: #0891B2 !important;
 }
 
 .step-body {
-  padding-top: 0.2rem;
+  padding-top: 0;
   flex: 1 1 0%;
   min-width: 0; /* CRITICAL FIX: Allows flex child to shrink below intrinsic code width */
   max-width: 100%;
@@ -1049,73 +1085,125 @@ nav a:hover::after, nav a.active::after {
 }
 
 .step-body h4 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1.125rem; /* text-base md:text-lg = 18px */
+  font-weight: 600; /* font-semibold */
+  color: #FFFFFF; /* text-white */
+  letter-spacing: -0.02em; /* tracking-tight */
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem; /* mb-2 */
+  line-height: 1.4;
   overflow-wrap: break-word;
+}
+
+[data-theme="light"] .step-body h4 {
+  color: #0F172A;
 }
 
 .step-body p {
-  margin-bottom: 1.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.75rem; /* leading-7 */
+  color: #94A3B8;
+  margin-bottom: 1rem;
   overflow-wrap: break-word;
 }
 
-/* High Contrast Code Containers */
+[data-theme="light"] .step-body p {
+  color: #334155;
+}
+
+/* Refactored Technical Code Container & Terminal Window */
 .code-container {
-  background-color: #0b0f19; /* Clean dark background */
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  background-color: #07080C;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.5rem; /* rounded-lg = 8px */
   overflow: hidden;
-  margin: 1.5rem 0;
+  margin: 1rem 0; /* my-4 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3); /* shadow-lg */
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
 }
 
 .code-header {
-  background-color: #111827;
-  padding: 0.6rem 1.25rem;
+  background-color: #0F1219;
+  padding: 0.625rem 1rem; /* px-4 py-2.5 */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
 }
 
+.code-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.code-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.code-dot {
+  width: 0.5rem; /* w-2 = 8px */
+  height: 0.5rem; /* h-2 = 8px */
+  border-radius: 9999px; /* rounded-full */
+  background-color: rgba(255, 255, 255, 0.12);
+  display: inline-block;
+}
+
 .code-lang {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
+  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-size: 11px; /* text-[11px] */
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em; /* tracking-widest */
+  color: #A1A1AA; /* text-zinc-400 */
 }
 
 .copy-btn {
-  background: none;
-  border: 1px solid var(--border-color);
-  background-color: var(--card-bg);
-  color: var(--text-secondary);
-  padding: 0.3rem 0.85rem;
-  font-size: 0.75rem;
-  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #D4D4D8; /* text-zinc-300 */
+  padding: 0.25rem 0.625rem; /* px-2.5 py-1 */
+  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-size: 0.75rem; /* text-xs = 12px */
+  border-radius: 0.25rem; /* rounded = 4px */
   cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem; /* gap-1.5 */
+  font-weight: 500;
+  line-height: 1;
 }
 
 .copy-btn:hover {
-  border-color: var(--accent-color);
-  color: var(--text-primary);
-  background-color: var(--border-color);
+  background-color: rgba(6, 182, 212, 0.15);
+  color: #67E8F9; /* text-cyan-300 */
+  border-color: rgba(6, 182, 212, 0.3);
 }
 
-.code-container pre {
+.copy-btn.copied {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.copy-icon {
+  flex-shrink: 0;
+  transition: stroke 0.2s ease;
+}
+
+.code-container pre,
+.code-container pre.formatted-pre {
   margin: 0;
-  padding: 1.25rem 1.5rem; /* Ample horizontal padding */
+  padding: 1rem 1.25rem; /* p-4 md:p-5 */
   overflow-x: auto;
   max-width: 100%;
   width: 100%;
@@ -1123,34 +1211,73 @@ nav a:hover::after, nav a.active::after {
   white-space: pre;
   word-break: normal;
   word-wrap: normal;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  background: transparent;
+  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-size: 13.5px;
+  line-height: 1.5rem; /* leading-6 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
-.code-container code {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  color: #e2e8f0; /* White/grey text for contrast */
-  display: inline-block;
-  min-width: 100%;
-  box-sizing: border-box;
+.code-container pre code,
+.code-container pre.formatted-pre code {
+  font-family: 'JetBrains Mono', var(--font-mono), monospace !important;
+  font-size: 13.5px !important;
+  line-height: 1.5rem !important;
+  color: #E2E8F0 !important;
+  display: block !important;
+  min-width: 100% !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  white-space: pre !important;
+  word-break: normal !important;
+  box-decoration-break: slice !important;
+  -webkit-box-decoration-break: slice !important;
 }
 
+/* Custom Scrollbar for code block */
 .code-container pre::-webkit-scrollbar {
-  height: 6px;
+  height: 5px;
 }
 
 .code-container pre::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: transparent;
 }
 
 .code-container pre::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
 }
 
 .code-container pre::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-color);
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Syntax Highlighting Tokens (GitHub Dark / Tokyo Night Inspired) */
+.tok-kw {
+  color: #C084FC !important; /* Soft purple keyword */
+  font-weight: 500;
+}
+
+.tok-str {
+  color: #34D399 !important; /* Soft emerald green string */
+}
+
+.tok-prop {
+  color: #60A5FA !important; /* Clean blue property/method/flag */
+}
+
+.tok-num {
+  color: #FBBF24 !important; /* Amber number */
+}
+
+.tok-cmt {
+  color: #64748B !important; /* Slate comment */
+  font-style: italic !important;
 }
 
 /* Sidebar & Prevention Card */
@@ -1487,17 +1614,44 @@ footer {
   }
 }
 
-/* Inline code elements */
-.post-article :not(pre) > code {
-  background-color: var(--inline-code-bg);
-  border: 1px solid var(--inline-code-border);
-  border-radius: 6px;
-  padding: 0.2rem 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-  color: var(--accent-color);
-  word-break: break-word;
-  white-space: pre-wrap;
+/* Inline code elements & Token Box Protection */
+:not(pre) > code,
+.post-article :not(pre) > code,
+.step-body :not(pre) > code,
+p :not(pre) > code,
+li :not(pre) > code,
+td :not(pre) > code {
+  font-family: 'JetBrains Mono', var(--font-mono), monospace !important;
+  font-size: 0.85em !important;
+  line-height: 1.4 !important;
+  padding: 0.15rem 0.45rem !important;
+  margin: 0 0.15rem !important;
+  border-radius: 5px !important;
+  background-color: rgba(6, 182, 212, 0.08) !important;
+  border: 1px solid rgba(6, 182, 212, 0.22) !important;
+  color: #38BDF8 !important;
+  display: inline-block !important;
+  vertical-align: baseline !important;
+  box-decoration-break: clone !important;
+  -webkit-box-decoration-break: clone !important;
+  max-width: 100% !important;
+  overflow-wrap: break-word !important;
+}
+
+[data-theme="light"] :not(pre) > code,
+[data-theme="light"] .post-article :not(pre) > code,
+[data-theme="light"] .step-body :not(pre) > code,
+[data-theme="light"] p :not(pre) > code,
+[data-theme="light"] li :not(pre) > code {
+  background-color: rgba(6, 182, 212, 0.08) !important;
+  border: 1px solid rgba(6, 182, 212, 0.28) !important;
+  color: #0284C7 !important;
+}
+
+/* Article & Step Paragraphs Line Height Protection */
+.post-article p,
+.step-body p {
+  line-height: 1.75rem !important; /* leading-7 */
 }
 
 /* Table of Contents */
@@ -1664,10 +1818,17 @@ footer {
   }
 
   .step-number {
-    width: 2.2rem !important;
-    height: 2.2rem !important;
-    font-size: 0.95rem !important;
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 0.375rem !important;
     flex-shrink: 0 !important;
+  }
+
+  .step-item:not(:last-child)::before {
+    left: 0.875rem !important;
+    top: 1.75rem !important;
+    bottom: -2rem !important;
   }
 
   .step-body {
@@ -1769,9 +1930,17 @@ footer {
   }
 
   .step-number {
-    width: 1.9rem !important;
-    height: 1.9rem !important;
-    font-size: 0.85rem !important;
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 0.375rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .step-item:not(:last-child)::before {
+    left: 0.875rem !important;
+    top: 1.75rem !important;
+    bottom: -2rem !important;
   }
 
   .code-container pre {

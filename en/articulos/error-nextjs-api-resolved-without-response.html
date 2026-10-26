@@ -303,17 +303,30 @@ If you are using the Pages Router (<code>pages/api/...</code>), every asynchrono
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>// pages/api/users.js
-export default async function handler(req, res) {
-  try {
-    // Omitting await will trigger the unhandled resolution warning
-    const users = await db.collection(&#39;users&#39;).find().toArray();
-    return res.status(200).json({ success: true, data: users });
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+      <pre class="formatted-pre"><code><span class="tok-cmt">// pages/api/users.js</span>
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> handler(req, res) {
+  <span class="tok-kw">try</span> {
+   <span class="tok-cmt"> // Omitting await will trigger the unhandled resolution warning</span>
+    <span class="tok-kw">const</span> users = <span class="tok-kw">await</span> db.<span class="tok-prop">collection</span>(<span class="tok-str">&#39;users&#39;</span>).<span class="tok-prop">find</span>().<span class="tok-prop">toArray</span>();
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ success: <span class="tok-kw">true</span>, data: users });
+  } <span class="tok-kw">catch</span> (error) {
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">500</span>).<span class="tok-prop">json</span>({ success: <span class="tok-kw">false</span>, error: error.message });
   }
 }
 </code></pre>
@@ -324,18 +337,31 @@ When dealing with older packages that do not provide native Promises (e.g. <code
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>export default async function handler(req, res) {
-  await new Promise((resolve) =&gt; {
-    jwt.verify(token, secretKey, (err, decoded) =&gt; {
-      if (err) {
-        res.status(401).json({ error: &#39;Invalid token&#39; });
-        return resolve();
+      <pre class="formatted-pre"><code><span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> handler(req, res) {
+  <span class="tok-kw">await</span> <span class="tok-kw">new</span> Promise((resolve) =&gt; {
+    jwt.<span class="tok-prop">verify</span>(token, secretKey, (err, decoded) =&gt; {
+      <span class="tok-kw">if</span> (err) {
+        res.<span class="tok-prop">status</span>(<span class="tok-num">401</span>).<span class="tok-prop">json</span>({ error: <span class="tok-str">&#39;Invalid token&#39;</span> });
+        <span class="tok-kw">return</span> resolve();
       }
-      res.status(200).json({ user: decoded });
-      return resolve();
+      res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ user: decoded });
+      <span class="tok-kw">return</span> resolve();
     });
   });
 }
@@ -347,15 +373,28 @@ For the modern App Router (<code>app/api/.../route.js</code>), return native web
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">JAVASCRIPT</span>
-        <button class="copy-btn" aria-label="Copy code to clipboard">Copy</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>// app/api/users/route.js
-import { NextResponse } from &#39;next/server&#39;;
+      <pre class="formatted-pre"><code><span class="tok-cmt">// app/api/users/route.js</span>
+<span class="tok-kw">import</span> { NextResponse } <span class="tok-kw">from</span> <span class="tok-str">&#39;next/server&#39;</span>;
 
-export async function GET(request) {
-  const data = await fetchUserData();
-  return NextResponse.json(data);
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-prop">GET</span>(request) {
+  <span class="tok-kw">const</span> data = <span class="tok-kw">await</span> fetchUserData();
+  <span class="tok-kw">return</span> NextResponse.<span class="tok-prop">json</span>(data);
 }
 </code></pre>
     </div>
@@ -416,8 +455,8 @@ export async function GET(request) {
     <!-- Related Solutions Section -->
     <section class="related-solutions-section" aria-labelledby="related-heading">
       <h2 id="related-heading">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>
         Related Solutions
       </h2>

@@ -332,8 +332,8 @@
     
     
 <h2 id="la-solucion-paso-a-paso">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           La Solución Paso a Paso
         </h2>
@@ -347,10 +347,23 @@
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>systemd-analyze blame | grep cloud-init
+      <pre class="formatted-pre"><code>systemd-analyze blame | <span class="tok-kw">grep</span> cloud-init
 </code></pre>
     </div>
     
@@ -367,17 +380,30 @@
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code># Crear el archivo indicador de desactivacion permanente
-sudo touch /etc/cloud/cloud-init.disabled
-
-# Detener y deshabilitar los servicios de systemd
-sudo systemctl disable cloud-init.service
-sudo systemctl disable cloud-init-local.service
-sudo systemctl disable cloud-config.service
-sudo systemctl disable cloud-final.service
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Crear el archivo indicador de desactivacion permanente</span>
+<span class="tok-kw">sudo</span> touch /etc/cloud/cloud-init.disabled
+<span class="tok-cmt">
+# Detener y deshabilitar los servicios de systemd</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-init.<span class="tok-kw">service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-init-local.<span class="tok-kw">service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-config.<span class="tok-kw">service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-final.<span class="tok-kw">service</span>
 </code></pre>
     </div>
           </div>
@@ -393,10 +419,23 @@ sudo systemctl disable cloud-final.service
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>sudo nano /etc/netplan/50-cloud-init.yaml
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/netplan/<span class="tok-num">50</span>-cloud-init.yaml
 </code></pre>
     </div>
     
@@ -404,11 +443,24 @@ sudo systemctl disable cloud-final.service
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">YAML</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
       </div>
       <pre class="formatted-pre"><code>network:
-  version: 2
+  <span class="tok-kw">version</span>: <span class="tok-num">2</span>
   ethernets:
     eth0:
       dhcp4: true
@@ -420,10 +472,23 @@ sudo systemctl disable cloud-final.service
 
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">BASH</span>
-        <button class="copy-btn" aria-label="Copiar código al portapapeles">Copiar</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>sudo netplan apply
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> netplan apply
 </code></pre>
     </div>
           </div>
@@ -485,8 +550,8 @@ sudo systemctl disable cloud-final.service
     <!-- Related Solutions Section -->
     <section class="related-solutions-section" aria-labelledby="related-heading">
       <h2 id="related-heading">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>
         Soluciones Relacionadas
       </h2>

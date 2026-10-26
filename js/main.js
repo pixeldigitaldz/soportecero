@@ -181,32 +181,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   copyButtons.forEach(button => {
     button.addEventListener('click', async () => {
-      // Find the sibling pre code element
-      const preElement = button.closest('.code-container').querySelector('pre');
+      const codeContainer = button.closest('.code-container');
+      const preElement = codeContainer ? codeContainer.querySelector('pre') : null;
       if (!preElement) return;
 
       const codeText = preElement.textContent;
+      const copyTextEl = button.querySelector('.copy-text');
+      const copyIcon = button.querySelector('.copy-icon');
+
+      const isEnglish = document.documentElement.lang === 'en' || window.location.pathname.includes('/en/');
+      const defaultCopy = isEnglish ? 'Copy' : 'Copiar';
+      const defaultCopied = isEnglish ? 'Copied' : 'Copiado';
+
+      const copyLabel = button.getAttribute('data-copy-label') || (copyTextEl ? copyTextEl.textContent : defaultCopy);
+      const copiedLabel = button.getAttribute('data-copied-label') || defaultCopied;
 
       try {
         await navigator.clipboard.writeText(codeText);
         
-        // Visual feedback
-        const originalText = button.textContent;
-        button.textContent = '¡Copiado!';
-        button.style.borderColor = '#10b981'; // Green accent on success
-        button.style.color = '#10b981';
+        button.classList.add('copied');
+        if (copyTextEl) {
+          copyTextEl.textContent = copiedLabel;
+        }
+        if (copyIcon) {
+          copyIcon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+          copyIcon.setAttribute('stroke', '#34D399');
+          copyIcon.setAttribute('stroke-width', '2');
+        }
 
         setTimeout(() => {
-          button.textContent = originalText;
-          button.style.borderColor = '';
-          button.style.color = '';
-        }, 1500);
+          button.classList.remove('copied');
+          if (copyTextEl) {
+            copyTextEl.textContent = copyLabel;
+          }
+          if (copyIcon) {
+            copyIcon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>';
+            copyIcon.setAttribute('stroke', 'currentColor');
+            copyIcon.setAttribute('stroke-width', '1.75');
+          }
+        }, 1800);
       } catch (err) {
         console.error('Error al copiar el código: ', err);
-        button.textContent = 'Error';
+        if (copyTextEl) copyTextEl.textContent = 'Error';
         setTimeout(() => {
-          button.textContent = 'Copiar';
-        }, 1500);
+          if (copyTextEl) copyTextEl.textContent = copyLabel;
+        }, 1800);
       }
     });
   });

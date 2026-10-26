@@ -172,6 +172,80 @@ function compileStaticPage(srcPath, destPath, urlPathEs, urlPathEn, lang = 'es')
   fs.writeFileSync(destPath, content, 'utf-8');
 }
 
+// Lightweight syntax highlighter for developer documentation
+function highlightCode(code, lang = '') {
+  const l = (lang || '').toLowerCase().trim();
+  const placeholders = [];
+  const addPlaceholder = (html) => {
+    const idx = placeholders.length;
+    placeholders.push(html);
+    return `___TOK_${idx}___`;
+  };
+
+  let str = code;
+
+  // 1. Comments
+  if (['bash', 'sh', 'shell', 'dockerfile', 'yaml', 'yml', 'ini', 'nginx', 'apache', 'conf'].includes(l)) {
+    str = str.replace(/(^|[^\\])#.*$/gm, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+  } else if (l === 'sql') {
+    str = str.replace(/--.*$/gm, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+    str = str.replace(/\/\*[\s\S]*?\*\//g, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+  } else {
+    str = str.replace(/\/\*[\s\S]*?\*\//g, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+    str = str.replace(/(^|[^:])\/\/.*$/gm, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+    if (l === 'python' || l === 'py') {
+      str = str.replace(/(^|[^\\])#.*$/gm, (match) => addPlaceholder(`<span class="tok-cmt">${match}</span>`));
+    }
+  }
+
+  // 2. Strings (handles standard quotes and HTML-escaped entities)
+  str = str.replace(/(`[\s\S]*?`|&#39;[\s\S]*?&#39;|\x27[\s\S]*?\x27|&quot;[\s\S]*?&quot;|"[\s\S]*?")/g, (match) => {
+    return addPlaceholder(`<span class="tok-str">${match}</span>`);
+  });
+
+  // 3. Keywords
+  if (['bash', 'sh', 'shell', 'cmd', 'powershell'].includes(l)) {
+    const bashKw = /\b(sudo|systemctl|journalctl|docker-compose|docker|npm|npx|yarn|pnpm|node|git|curl|wget|tar|chmod|chown|mkdir|rm|cp|mv|grep|cat|echo|nano|vim|sed|awk|pacman|apt-get|apt|yum|dnf|service|export|source|alias|set|cd|ls|df|free|top|htop|killall|kill|ss|netstat|ip|iptables|ufw|firewall-cmd|mount|umount|rsync|ssh|scp|ln|which|find|crontab|reboot|shutdown)\b/g;
+    str = str.replace(bashKw, (match) => addPlaceholder(`<span class="tok-kw">${match}</span>`));
+    str = str.replace(/(^|\s)(-[a-zA-Z0-9_-]+|--[a-zA-Z0-9_-]+)/g, (match, prefix, flag) => {
+      return prefix + addPlaceholder(`<span class="tok-prop">${flag}</span>`);
+    });
+  } else if (['nginx', 'apache', 'conf'].includes(l)) {
+    const nginxKw = /\b(server|location|listen|server_name|root|index|proxy_pass|proxy_set_header|try_files|return|rewrite|fastcgi_pass|fastcgi_param|include|access_log|error_log|ssl_certificate|ssl_certificate_key|client_max_body_size|add_header|upstream|worker_processes|events|http|sendfile|keepalive_timeout)\b/g;
+    str = str.replace(nginxKw, (match) => addPlaceholder(`<span class="tok-kw">${match}</span>`));
+  } else if (['dockerfile', 'yaml', 'yml'].includes(l)) {
+    const dockerKw = /\b(FROM|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ARG|ONBUILD|STOPSIGNAL|HEALTHCHECK|SHELL|version|services|image|ports|environment|volumes|restart|depends_on|networks)\b/g;
+    str = str.replace(dockerKw, (match) => addPlaceholder(`<span class="tok-kw">${match}</span>`));
+  } else if (l === 'sql') {
+    const sqlKw = /\b(SELECT|FROM|WHERE|INSERT|INTO|UPDATE|SET|DELETE|CREATE|TABLE|ALTER|DROP|JOIN|LEFT|RIGHT|INNER|OUTER|ON|GROUP|BY|ORDER|HAVING|LIMIT|OFFSET|AND|OR|NOT|IN|IS|NULL|PRIMARY|KEY|FOREIGN|REFERENCES)\b/gi;
+    str = str.replace(sqlKw, (match) => addPlaceholder(`<span class="tok-kw">${match}</span>`));
+  } else {
+    // JavaScript, TypeScript, PHP, Python, default
+    const jsKw = /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|default|try|catch|finally|throw|new|class|extends|super|this|import|export|from|as|await|async|yield|typeof|instanceof|void|delete|in|of|type|interface|enum|implements|public|private|protected|readonly|static|true|false|null|undefined|NaN|require)\b/g;
+    str = str.replace(jsKw, (match) => addPlaceholder(`<span class="tok-kw">${match}</span>`));
+  }
+
+  // 4. Properties & Methods
+  str = str.replace(/\.([a-zA-Z0-9_$]+)(?=\s*\()/g, (match, p1) => {
+    return '.' + addPlaceholder(`<span class="tok-prop">${p1}</span>`);
+  });
+  str = str.replace(/\b(OPTIONS|GET|POST|PUT|DELETE|PATCH|HEAD|status|headers|json|method|url|origin)\b/g, (match) => {
+    return addPlaceholder(`<span class="tok-prop">${match}</span>`);
+  });
+
+  // 5. Numbers (safe from character entities)
+  str = str.replace(/(?<!&#)\b(\d+(?:\.\d+)?)\b/g, (match) => {
+    return addPlaceholder(`<span class="tok-num">${match}</span>`);
+  });
+
+  // 6. Restore placeholders in reverse order
+  for (let i = placeholders.length - 1; i >= 0; i--) {
+    str = str.split(`___TOK_${i}___`).join(placeholders[i]);
+  }
+
+  return str;
+}
+
 // Custom post-processor for HTML content to inject SoporteCero layouts
 function postProcessHtml(rawHtml, lang = 'es') {
   let html = rawHtml;
@@ -179,17 +253,33 @@ function postProcessHtml(rawHtml, lang = 'es') {
   let parsedFaqs = [];
   const isEn = lang === 'en';
 
-  // 1. Code blocks wrapping in custom containers with copy buttons
+  // 1. Code blocks wrapping in custom containers with copy buttons and syntax highlighting
   html = html.replace(/<pre><code(?: class="language-([^"]*)")?>([\s\S]*?)<\/code><\/pre>/g, (match, langClass, code) => {
-    const displayLang = langClass ? langClass.toUpperCase() : (isEn ? 'CODE' : 'CÓDIGO');
+    const rawLang = langClass ? langClass.trim() : '';
+    const displayLang = rawLang ? rawLang.toUpperCase() : (isEn ? 'CODE' : 'CÓDIGO');
     const copyLabel = isEn ? 'Copy' : 'Copiar';
+    const copiedLabel = isEn ? 'Copied' : 'Copiado';
+    const highlightedCode = highlightCode(code, rawLang);
     return `
     <div class="code-container">
       <div class="code-header">
-        <span class="code-lang">${displayLang}</span>
-        <button class="copy-btn" aria-label="${isEn ? 'Copy code to clipboard' : 'Copiar código al portapapeles'}">${copyLabel}</button>
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">${displayLang}</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="${isEn ? 'Copy code to clipboard' : 'Copiar código al portapapeles'}" data-copy-label="${copyLabel}" data-copied-label="${copiedLabel}">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">${copyLabel}</span>
+        </button>
       </div>
-      <pre class="formatted-pre"><code>${code}</code></pre>
+      <pre class="formatted-pre"><code>${highlightedCode}</code></pre>
     </div>
     `;
   });
@@ -341,9 +431,9 @@ function postProcessHtml(rawHtml, lang = 'es') {
       const newSolutionContent = solutionContent.replace(/<ol[^>]*>[\s\S]*?<\/ol>/i, newOl);
       
       html = html.replace(solutionMatch[0], 
-        `<h2 style="display: flex; align-items: center; gap: 0.5rem;">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        `<h2 class="solution-heading" style="display: flex; align-items: center; gap: 0.65rem;">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           ${solTitle}
         </h2>\n${newSolutionContent}`);
@@ -376,9 +466,9 @@ function postProcessHtml(rawHtml, lang = 'es') {
 
       const newOl = `<ol class="steps-list">\n${formattedSteps.join('\n')}\n</ol>`;
       html = html.replace(solutionMatch[0],
-        `<h2 style="display: flex; align-items: center; gap: 0.5rem;">
-          <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
-            <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        `<h2 class="solution-heading" style="display: flex; align-items: center; gap: 0.65rem;">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           ${solTitle}
         </h2>\n${newOl}\n`);
@@ -694,7 +784,7 @@ function build() {
         "description": post.description,
         "step": steps.map((s, idx) => {
           let cleanText = s.body
-            .replace(/<div class="code-container"[\s\S]*?<\/div>\s*<\/div>/gi, '')
+            .replace(/<div class="code-container"[\s\S]*?<\/pre>\s*<\/div>/gi, '')
             .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
             .replace(/<pre[\s\S]*?<\/pre>/gi, '')
             .replace(/<button[\s\S]*?<\/button>/gi, '')
@@ -887,7 +977,7 @@ function build() {
         "description": post.description,
         "step": steps.map((s, idx) => {
           let cleanText = s.body
-            .replace(/<div class="code-container"[\s\S]*?<\/div>\s*<\/div>/gi, '')
+            .replace(/<div class="code-container"[\s\S]*?<\/pre>\s*<\/div>/gi, '')
             .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
             .replace(/<pre[\s\S]*?<\/pre>/gi, '')
             .replace(/<button[\s\S]*?<\/button>/gi, '')

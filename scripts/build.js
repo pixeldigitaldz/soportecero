@@ -474,6 +474,9 @@ function build() {
   }
   if (fs.existsSync(path.join(SRC_DIR, 'llms.txt'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'llms.txt'), path.join(DIST_DIR, 'llms.txt'));
+    fs.copyFileSync(path.join(SRC_DIR, 'llms.txt'), path.join(DIST_DIR, 'index.md'));
+    fs.mkdirSync(path.join(DIST_DIR, 'en'), { recursive: true });
+    fs.copyFileSync(path.join(SRC_DIR, 'llms.txt'), path.join(DIST_DIR, 'en', 'index.md'));
   }
   if (fs.existsSync(path.join(SRC_DIR, '_headers'))) {
     fs.copyFileSync(path.join(SRC_DIR, '_headers'), path.join(DIST_DIR, '_headers'));
@@ -754,6 +757,9 @@ function build() {
       .replace(/\{\{article_tags\}\}/g, articleTagsMeta);
 
     fs.writeFileSync(path.join(DIST_DIR, 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
+    if (fs.existsSync(path.join(CONTENT_DIR, `${post.filename}.md`))) {
+      fs.copyFileSync(path.join(CONTENT_DIR, `${post.filename}.md`), path.join(DIST_DIR, 'articulos', `${post.filename}.md`));
+    }
     console.log(`[POST ES] Compilado: articulos/${post.filename}.html`);
   }
 
@@ -944,6 +950,9 @@ function build() {
       .replace(/\{\{article_tags\}\}/g, articleTagsMeta);
 
     fs.writeFileSync(path.join(DIST_DIR, 'en', 'articulos', `${post.filename}.html`), postHtml, 'utf-8');
+    if (fs.existsSync(path.join(contentDirEn, `${post.filename}.md`))) {
+      fs.copyFileSync(path.join(contentDirEn, `${post.filename}.md`), path.join(DIST_DIR, 'en', 'articulos', `${post.filename}.md`));
+    }
     console.log(`[POST EN] Compilado: en/articulos/${post.filename}.html`);
   }
 

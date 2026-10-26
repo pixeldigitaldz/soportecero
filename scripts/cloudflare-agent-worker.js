@@ -2,9 +2,13 @@
  * Cloudflare Worker for SoporteCero - Agent Readiness & RFC Compliance
  * 
  * Capabilities:
- * 1. RFC 8288 Link Headers on homepage & HTML pages.
- * 2. Markdown Negotiation (Accept: text/markdown) returning clean markdown with x-markdown-tokens.
- * 3. CORS headers (Access-Control-Allow-Origin: *) for /.well-known/ and API endpoints.
+ * 1. Markdown Content Negotiation (Accept: text/markdown):
+ *    - For homepage (/), returns /llms.txt with Content-Type: text/markdown and x-markdown-tokens.
+ *    - For articles (/articulos/*.html), fetches the corresponding raw .md file or converts to markdown.
+ * 2. RFC 8288 Link Response Headers:
+ *    - Advertises API Catalog, MCP Server Card, ARD AI-Catalog, Auth.md, and LLM documentation.
+ * 3. CORS headers:
+ *    - Enables Access-Control-Allow-Origin: * on .well-known, API endpoints, and markdown files.
  */
 
 export default {
@@ -13,8 +17,8 @@ export default {
     const acceptHeader = request.headers.get('accept') || '';
     const wantsMarkdown = acceptHeader.includes('text/markdown');
 
-    // 1. Handle Markdown Content Negotiation for Root / Landing Page
-    if (wantsMarkdown && (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/en' || url.pathname === '/en/')) {
+    // 1. Markdown Negotiation for Homepage / Landing Pages
+    if (wantsMarkdown && (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/en' || url.pathname === '/en/' || url.pathname === '/en/index.html')) {
       const llmsUrl = new URL('/llms.txt', url.origin);
       const llmsResponse = await fetch(llmsUrl);
       if (llmsResponse.ok) {
@@ -26,19 +30,41 @@ export default {
             'Content-Type': 'text/markdown; charset=utf-8',
             'x-markdown-tokens': tokenEstimate.toString(),
             'Access-Control-Allow-Origin': '*',
-            'Vary': 'Accept'
+            'Vary': 'Accept',
+            'Cache-Control': 'public, max-age=600'
           }
         });
       }
     }
 
-    // 2. Fetch original response from GitHub Pages origin
+    // 2. Markdown Negotiation for Technical Articles (/articulos/*.html -> /articulos/*.md)
+    if (wantsMarkdown && url.pathname.includes('/articulos/') && url.pathname.endsWith('.html')) {
+      const mdPath = url.pathname.replace(/\.html$/, '.md');
+      const mdUrl = new URL(mdPath, url.origin);
+      const mdResponse = await fetch(mdUrl);
+      if (mdResponse.ok) {
+        const mdText = await mdResponse.text();
+        const tokenEstimate = Math.round(mdText.length / 4);
+        return new Response(mdText, {
+          status: 200,
+          headers: {
+            'Content-Type': 'text/markdown; charset=utf-8',
+            'x-markdown-tokens': tokenEstimate.toString(),
+            'Access-Control-Allow-Origin': '*',
+            'Vary': 'Accept',
+            'Cache-Control': 'public, max-age=600'
+          }
+        });
+      }
+    }
+
+    // 3. Fetch original response from GitHub Pages origin
     const response = await fetch(request);
 
-    // Clone response so headers can be modified
+    // Clone headers to inject RFC discovery metadata
     const newHeaders = new Headers(response.headers);
 
-    // 3. RFC 8288 Link Response Headers
+    // RFC 8288 Link Response Headers
     const linkHeaders = [
       '</.well-known/api-catalog>; rel="api-catalog"',
       '</.well-known/ai-catalog.json>; rel="ai-catalog"',
@@ -46,20 +72,18 @@ export default {
       '</auth.md>; rel="describedby"',
       '</llms.txt>; rel="service-doc"'
     ].join(', ');
-
     newHeaders.set('Link', linkHeaders);
 
-    // 4. CORS headers for .well-known endpoints
+    // CORS for discovery endpoints
     if (url.pathname.startsWith('/.well-known/') || url.pathname === '/auth.md' || url.pathname.startsWith('/llms')) {
       newHeaders.set('Access-Control-Allow-Origin', '*');
       newHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
     }
 
-    // 5. If the request was for Markdown on an article HTML page, convert or return with markdown header
+    // Fallback markdown conversion if requested for other HTML pages
     const contentType = newHeaders.get('content-type') || '';
     if (wantsMarkdown && contentType.includes('text/html')) {
       const htmlText = await response.text();
-      // Basic markdown extraction of article content
       const tokenEstimate = Math.round(htmlText.length / 4);
       newHeaders.set('Content-Type', 'text/markdown; charset=utf-8');
       newHeaders.set('x-markdown-tokens', tokenEstimate.toString());

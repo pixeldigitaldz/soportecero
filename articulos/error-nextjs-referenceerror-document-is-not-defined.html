@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Solución Error Next.js ReferenceError: document is not defined (App Router y SSR) | SoporteCero</title>
+  <meta name="description" content="Aprende a solucionar el error 'ReferenceError: document is not defined' y 'window is not defined' en Next.js App Router con dynamic imports y useEffect.">
+  <meta name="keywords" content="Next.js, React, SSR, JavaScript, TypeScript, Frontend">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-nextjs-referenceerror-document-is-not-defined.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html" />
+  
+  
+  <!-- AI Agent Discovery Links (RFC 8288 / RFC 9727 / ARD / MCP) -->
+  <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json">
+  <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json">
+  <link rel="service-desc" href="/.well-known/mcp/server-card.json" type="application/json">
+  <link rel="describedby" href="/auth.md" type="text/markdown">
+  <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json">
+  <link rel="alternate" type="text/markdown" href="/llms.txt" title="Markdown Overview">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)">
+  <meta property="og:description" content="Aprende a solucionar el error 'ReferenceError: document is not defined' y 'window is not defined' en Next.js App Router con dynamic imports y useEffect.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/favicon.svg">
+  <meta property="article:published_time" content="2026-10-26">
+  <meta property="article:section" content="Web y Código">
+  <meta property="article:tag" content="Next.js">
+  <meta property="article:tag" content="React">
+  <meta property="article:tag" content="SSR">
+  <meta property="article:tag" content="JavaScript">
+  <meta property="article:tag" content="TypeScript">
+  <meta property="article:tag" content="Frontend">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)">
+  <meta name="twitter:description" content="Aprende a solucionar el error 'ReferenceError: document is not defined' y 'window is not defined' en Next.js App Router con dynamic imports y useEffect.">
+  <meta name="twitter:image" content="https://soportecero.com/favicon.svg">
+  
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)",
+  "description": "Aprende a solucionar el error 'ReferenceError: document is not defined' y 'window is not defined' en Next.js App Router con dynamic imports y useEffect.",
+  "image": "https://soportecero.com/favicon.svg",
+  "inLanguage": "es",
+  "category": "Web y Código",
+  "articleSection": "Web y Código",
+  "keywords": "Next.js, React, SSR, JavaScript, TypeScript, Frontend",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+    "sameAs": [
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)",
+      "item": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)",
+  "description": "Aprende a solucionar el error 'ReferenceError: document is not defined' y 'window is not defined' en Next.js App Router con dynamic imports y useEffect.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html#declarar-el-componente-como-client-component-con-39use-client39",
+      "name": "Declarar el componente como Client Component con &#39;use client&#39;",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En el modelo App Router de Next.js (app/), todos los componentes son Server Components por defecto. Si tu componente necesita interactuar con eventos del navegador o APIs del cliente, declara la directiva en la línea 1:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html#trasladar-el-acceso-al-dom-dentro-de-useeffect",
+      "name": "Trasladar el acceso al DOM dentro de useEffect",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Incluso con &#39;use client&#39;, el servidor pre-renderiza el HTML inicial ejecutando el cuerpo del componente. El hook useEffect garantiza que su contenido se ejecute exclusivamente en el navegador tras montar el componente:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html#cargar-librerias-de-terceros-con-nextdynamic-y-ssr-false",
+      "name": "Cargar librerías de terceros con next/dynamic y ssr: false",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si una librería externa ejecuta llamadas a document.createElement o window en su inicialización (como librerías de mapas o editores de texto enriquecido), debes desactivar su renderizado en servidor mediante next/dynamic:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-nextjs-referenceerror-document-is-not-defined.html#validar-la-existencia-de-window-antes-de-leer-almacenamiento-o-cookies",
+      "name": "Validar la existencia de window antes de leer almacenamiento o cookies",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Si necesitas leer datos de localStorage o sessionStorage fuera de un efecto (por ejemplo, en funciones auxiliares), valida previamente el contexto de ejecución:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué &#39;use client&#39; no evita el error de window is not defined?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "La directiva &#39;use client&#39; define los límites entre Server y Client Components, pero Next.js sigue pre-renderizando el HTML inicial de los Client Components en el servidor para optimizar el First Contentful Paint. Si ejecutas window fuera de useEffect, fallará durante ese pre-renderizado."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo afecta el uso de ssr: false al posicionamiento SEO de Google?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El contenido dentro de un componente con ssr: false no estará en el HTML inicial recibido por los motores de búsqueda. Es recomendable usar ssr: false únicamente para widgets interactivos, gráficos, paneles privados o mapas, manteniendo los encabezados, textos y metadatos principales como Server Components."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué diferencia hay entre typeof window !== &#39;undefined&#39; y useEffect?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "typeof window !== &#39;undefined&#39; es una comprobación síncrona que indica si el código corre en Node.js o navegador, pero usarlo para renderizar condicionalmente en el cuerpo del componente puede causar un error de hidratación (Hydration Mismatch). useEffect es la solución canónica para sincronizar estado con el cliente sin romper la hidratación."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <!-- Logo Soporte Cero - Edición Ingeniería -->
+      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <!-- Isotipo Terminal + Cero Técnico -->
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Prompt '>' -->
+            <polyline points="5 8 9 12 5 16"></polyline>
+            <!-- Cero Técnico Cortado '0' -->
+            <rect x="12" y="7" width="7" height="10" rx="2"></rect>
+            <line x1="14" y1="14" x2="17" y2="10" stroke-width="1.5"></line>
+          </svg>
+          <!-- Punto de telemetría esquina superior derecha -->
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+
+        <!-- Logotipo Tipográfico -->
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">
+            Soporte
+          </span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">
+            Cero
+          </span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
+            SYS//KB
+          </span>
+        </div>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="../?cat=sistemas" rel="nofollow">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming" rel="nofollow">Gaming Tech</a></li>
+          <li><a href="../?cat=web" rel="nofollow">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/articulos/error-nextjs-referenceerror-document-is-not-defined.html" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
+        <a href="../">INICIO</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span>Web y Código</span>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span style="color: var(--text-secondary);">Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)</span>
+      </nav>
+
+      <header class="post-header">
+        <span class="card-category">Web y Código</span>
+        <h1 id="post-title">Solución Error Next.js ReferenceError: document is not defined (App Router y SSR)</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Lectura: 4 min
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            Actualizado: 2026-10-26
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>El error <code>ReferenceError: document is not defined</code> (o su variante <code>ReferenceError: window is not defined</code>) es una de las excepciones más comunes en aplicaciones construidas con Next.js (tanto en Pages Router como en App Router). Este fallo se produce cuando código JavaScript intenta interactuar con las API del Document Object Model (DOM) del navegador durante la fase de Server-Side Rendering (SSR) o durante la compilación en el servidor con Node.js, donde los objetos globales <code>window</code> y <code>document</code> no existen.</p>
+
+    <section class="diagnostic-console" aria-labelledby="diag-heading">
+      <div class="diagnostic-console-header">
+        <div class="diag-console-title-group">
+          <span class="diag-pulse-dot" aria-hidden="true"></span>
+          <h3 id="diagnostico-rapido-matriz-de-resolucion">DIAGNÓSTICO RÁPIDO // MATRIZ DE RESOLUCIÓN</h3>
+        </div>
+        <span class="diag-console-badge">[TELEMETRY]</span>
+      </div>
+      <div class="diagnostic-console-body">
+        <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Acceso directo a document o window en el cuerpo principal de un componente</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Mover la lógica que interactúa con el DOM al hook useEffect o validar typeof window !== &#39;undefined&#39;</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Librería externa de UI o gráficos (Leaflet, Chart.js, canvas) evaluada en el servidor</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Importar el componente de manera dinámica usando next/dynamic con la opción ssr: false</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Componente de cliente sin directiva en Next.js App Router</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Agregar la directiva &#39;use client&#39; en la primera línea del archivo correspondiente</div>
+          </div></div></div>
+      </div>
+    </section>
+
+    <nav class="toc-container" aria-label="Índice de contenido">
+      <div class="toc-header">
+        <div class="toc-header-left">
+          <svg class="toc-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="toc-header-title">ÍNDICE DE CONTENIDO</span>
+        </div>
+        <span class="toc-header-badge">NAV // SEC</span>
+      </div>
+      <div class="toc-body">
+        <ul class="toc-list">
+
+        <li class="toc-item">
+          <a href="#diagnostico-rapido-matriz-de-resolucion" class="toc-link">
+            <span class="toc-number">01</span>
+            <span class="toc-text">Diagnóstico Rápido</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#la-solucion-paso-a-paso" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">La Solución Paso a Paso</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#preguntas-frecuentes" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Preguntas Frecuentes</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#por-que-39use-client39-no-evita-el-error-de-window-is-not-defined" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">¿Por qué &#39;use client&#39; no evita el error de window is not defined?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#como-afecta-el-uso-de-ssr-false-al-posicionamiento-seo-de-google" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">¿Cómo afecta el uso de ssr: false al posicionamiento SEO de Google?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#que-diferencia-hay-entre-typeof-window-39undefined39-y-useeffect" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">¿Qué diferencia hay entre typeof window !== &#39;undefined&#39; y useEffect?</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        </ul>
+      </div>
+    </nav>
+    
+    
+<h2 id="la-solucion-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          La Solución Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="declarar-el-componente-como-client-component-con-39use-client39">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="declarar-el-componente-como-client-component-con-39use-client39-heading">Paso 1: Declarar el componente como Client Component con &#39;use client&#39;</h4>
+            <p>En el modelo App Router de Next.js (<code>app/</code>), todos los componentes son Server Components por defecto. Si tu componente necesita interactuar con eventos del navegador o APIs del cliente, declara la directiva en la línea 1:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TSX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-str">&#39;use client&#39;</span>;
+
+<span class="tok-kw">import</span> React, { useState } <span class="tok-kw">from</span> <span class="tok-str">&#39;react&#39;</span>;
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">function</span> ContadorInteractivo() {
+  <span class="tok-kw">const</span> [contador, setContador] = useState(<span class="tok-num">0</span>);
+
+  <span class="tok-kw">return</span> (
+    &lt;button onClick={() =&gt; setContador(contador + <span class="tok-num">1</span>)}&gt;
+      Clics: {contador}
+    &lt;/button&gt;
+  );
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="trasladar-el-acceso-al-dom-dentro-de-useeffect">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="trasladar-el-acceso-al-dom-dentro-de-useeffect-heading">Paso 2: Trasladar el acceso al DOM dentro de useEffect</h4>
+            <p>Incluso con <code>&#39;use client&#39;</code>, el servidor pre-renderiza el HTML inicial ejecutando el cuerpo del componente. El hook <code>useEffect</code> garantiza que su contenido se ejecute exclusivamente en el navegador tras montar el componente:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TSX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-str">&#39;use client&#39;</span>;
+
+<span class="tok-kw">import</span> { useEffect, useState } <span class="tok-kw">from</span> <span class="tok-str">&#39;react&#39;</span>;
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">function</span> AnchoPantalla() {
+  <span class="tok-kw">const</span> [ancho, setAncho] = useState&lt;number | <span class="tok-kw">null</span>&gt;(<span class="tok-kw">null</span>);
+
+  useEffect(() =&gt; {
+   <span class="tok-cmt"> // Seguro: solo se ejecuta en el navegador</span>
+    setAncho(window.innerWidth);
+
+    <span class="tok-kw">const</span> handleResize = () =&gt; setAncho(window.innerWidth);
+    window.<span class="tok-prop">addEventListener</span>(<span class="tok-str">&#39;resize&#39;</span>, handleResize);
+    <span class="tok-kw">return</span> () =&gt; window.<span class="tok-prop">removeEventListener</span>(<span class="tok-str">&#39;resize&#39;</span>, handleResize);
+  }, []);
+
+  <span class="tok-kw">if</span> (ancho === <span class="tok-kw">null</span>) <span class="tok-kw">return</span> &lt;div&gt;Calculando dimensión...&lt;/div&gt;;
+
+  <span class="tok-kw">return</span> &lt;p&gt;Ancho de ventana: {ancho}px&lt;/p&gt;;
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="cargar-librerias-de-terceros-con-nextdynamic-y-ssr-false">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="cargar-librerias-de-terceros-con-nextdynamic-y-ssr-false-heading">Paso 3: Cargar librerías de terceros con next/dynamic y ssr: false</h4>
+            <p>Si una librería externa ejecuta llamadas a <code>document.createElement</code> o <code>window</code> en su inicialización (como librerías de mapas o editores de texto enriquecido), debes desactivar su renderizado en servidor mediante <code>next/dynamic</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TSX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-str">&#39;use client&#39;</span>;
+
+<span class="tok-kw">import</span> dynamic <span class="tok-kw">from</span> <span class="tok-str">&#39;next/dynamic&#39;</span>;
+<span class="tok-cmt">
+// Desactiva el Server-Side Rendering para este componente específico</span>
+<span class="tok-kw">const</span> MapaInteractivo = dynamic(
+  () =&gt; <span class="tok-kw">import</span>(<span class="tok-str">&#39;./ComponenteMapaLeaflet&#39;</span>),
+  {
+    ssr: <span class="tok-kw">false</span>,
+    loading: () =&gt; &lt;p&gt;Cargando visualización del mapa...&lt;/p&gt;
+  }
+);
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">function</span> PaginaUbicacion() {
+  <span class="tok-kw">return</span> (
+    &lt;section&gt;
+      &lt;h1&gt;Nuestra Ubicación&lt;/h1&gt;
+      &lt;MapaInteractivo /&gt;
+    &lt;/section&gt;
+  );
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validar-la-existencia-de-window-antes-de-leer-almacenamiento-o-cookies">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="validar-la-existencia-de-window-antes-de-leer-almacenamiento-o-cookies-heading">Paso 4: Validar la existencia de window antes de leer almacenamiento o cookies</h4>
+            <p>Si necesitas leer datos de <code>localStorage</code> o <code>sessionStorage</code> fuera de un efecto (por ejemplo, en funciones auxiliares), valida previamente el contexto de ejecución:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TYPESCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">export</span> <span class="tok-kw">function</span> obtenerTokenSeguro(): string | <span class="tok-kw">null</span> {
+  <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> window === <span class="tok-str">&#39;undefined&#39;</span>) {
+   <span class="tok-cmt"> // Entorno de servidor: retorno seguro para evitar ReferenceError</span>
+    <span class="tok-kw">return</span> <span class="tok-kw">null</span>;
+  }
+  <span class="tok-kw">return</span> localStorage.<span class="tok-prop">getItem</span>(<span class="tok-str">&#39;auth_token&#39;</span>);
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="por-que-39use-client39-no-evita-el-error-de-window-is-not-defined">¿Por qué &#39;use client&#39; no evita el error de window is not defined?</h3>
+<p>La directiva <code>&#39;use client&#39;</code> define los límites entre Server y Client Components, pero Next.js sigue pre-renderizando el HTML inicial de los Client Components en el servidor para optimizar el First Contentful Paint. Si ejecutas <code>window</code> fuera de <code>useEffect</code>, fallará durante ese pre-renderizado.</p>
+<h3 id="como-afecta-el-uso-de-ssr-false-al-posicionamiento-seo-de-google">¿Cómo afecta el uso de ssr: false al posicionamiento SEO de Google?</h3>
+<p>El contenido dentro de un componente con <code>ssr: false</code> no estará en el HTML inicial recibido por los motores de búsqueda. Es recomendable usar <code>ssr: false</code> únicamente para widgets interactivos, gráficos, paneles privados o mapas, manteniendo los encabezados, textos y metadatos principales como Server Components.</p>
+<h3 id="que-diferencia-hay-entre-typeof-window-39undefined39-y-useeffect">¿Qué diferencia hay entre typeof window !== &#39;undefined&#39; y useEffect?</h3>
+<p><code>typeof window !== &#39;undefined&#39;</code> es una comprobación síncrona que indica si el código corre en Node.js o navegador, pero usarlo para renderizar condicionalmente en el cuerpo del componente puede causar un error de hidratación (<em>Hydration Mismatch</em>). <code>useEffect</code> es la solución canónica para sincronizar estado con el cliente sin romper la hidratación.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li>Nunca accedas a <code>document.getElementById</code>, <code>window.location</code> o <code>navigator.userAgent</code> en el ámbito global del archivo ni en el cuerpo directo de funciones de componentes.</li>
+<li>Utiliza Server Components para recuperar datos y generar el marcado semántico, delegando las interacciones DOM a componentes hoja (<em>leaf components</em>) clientes.</li>
+<li>Configura ESLint con la regla <code>react-hooks/exhaustive-deps</code> para gestionar adecuadamente las dependencias de los hooks que consultan el entorno del navegador.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Enlaces & Proyectos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: [SOLUCIONADO] PrismaClientInitializationError: Query engine binary could not be found -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-prisma-client-initialization-query-engine-binary.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] PrismaClientInitializationError: Query engine binary could not be found</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Prisma</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Error TypeScript TS2339: Property does not exist on type -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-typescript-ts2339-property-does-not-exist-on-type.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Error TypeScript TS2339: Property does not exist on type</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">TypeScript</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: [SOLUCIONADO] Advertencia Unknown at rule @tailwind y @apply en VS Code y PostCSS -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-tailwind-directives-unknown-at-rules-postcss.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[SOLUCIONADO] Advertencia Unknown at rule @tailwind y @apply en VS Code y PostCSS</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">TailwindCSS</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -667,6 +667,11 @@ function build() {
   if (fs.existsSync(path.join(SRC_DIR, 'favicon.svg'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'favicon.svg'), path.join(DIST_DIR, 'favicon.svg'));
   }
+  for (const imgName of ['og-image.png', 'apple-touch-icon.png', 'favicon.png']) {
+    if (fs.existsSync(path.join(SRC_DIR, imgName))) {
+      fs.copyFileSync(path.join(SRC_DIR, imgName), path.join(DIST_DIR, imgName));
+    }
+  }
   if (fs.existsSync(path.join(SRC_DIR, 'auth.md'))) {
     fs.copyFileSync(path.join(SRC_DIR, 'auth.md'), path.join(DIST_DIR, 'auth.md'));
   }
@@ -811,7 +816,7 @@ function build() {
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
-      "image": "https://soportecero.com/favicon.svg",
+      "image": "https://soportecero.com/og-image.png",
       "inLanguage": "es",
       "category": post.category,
       "articleSection": post.category,
@@ -1004,7 +1009,7 @@ function build() {
       "@type": "TechArticle",
       "headline": post.title,
       "description": post.description,
-      "image": "https://soportecero.com/favicon.svg",
+      "image": "https://soportecero.com/og-image.png",
       "inLanguage": "en",
       "category": post.category,
       "articleSection": post.category,

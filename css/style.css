@@ -2482,3 +2482,240 @@ td :not(pre) > code {
   color: var(--accent-color);
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   SYS//TOOLS Banner & SYS//TOOL BRIDGE Contextual Widgets
+   ========================================================================== */
+
+/* Top Floating / Notification Banner */
+.sys-tools-banner {
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.12) 0%, rgba(16, 18, 24, 0.95) 50%, rgba(6, 182, 212, 0.08) 100%);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  position: relative;
+  z-index: 40;
+}
+
+.sys-tools-banner-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sys-tools-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 260px;
+}
+
+.sys-tools-badge {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: var(--accent-hover);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.sys-tools-text {
+  color: #E2E8F0;
+  line-height: 1.4;
+}
+
+.sys-tools-text strong {
+  color: #38BDF8;
+}
+
+.sys-tools-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #0891B2;
+  color: #FFFFFF !important;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  text-decoration: none !important;
+  transition: all var(--transition-speed) ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(6, 182, 212, 0.25);
+}
+
+.sys-tools-btn:hover {
+  background: #06B6D4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+}
+
+/* SYS//TOOL BRIDGE Bento Box inside articles */
+.sys-tool-bridge {
+  margin: 2.75rem 0;
+  padding: 1.75rem;
+  background: #0C0E14;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.sys-tool-bridge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #06B6D4, #3B82F6, #10B981);
+}
+
+.sys-tool-bridge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sys-tool-bridge-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #38BDF8;
+  letter-spacing: 0.1em;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+}
+
+.sys-tool-bridge-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #34D399;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #10B981;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10B981;
+  display: inline-block;
+}
+
+.sys-tool-bridge-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  margin: 0.25rem 0 0.65rem;
+  letter-spacing: -0.01em;
+}
+
+.sys-tool-bridge-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #94A3B8;
+  margin-bottom: 1.35rem;
+}
+
+.sys-tool-bridge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.85rem;
+}
+
+.sys-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1rem;
+  background: #141720;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: all var(--transition-speed) ease;
+}
+
+.sys-tool-card:hover {
+  background: #1A1F2C;
+  border-color: rgba(6, 182, 212, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.sys-tool-card-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.sys-tool-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.sys-tool-card-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F1F5F9;
+  line-height: 1.35;
+}
+
+.sys-tool-card:hover .sys-tool-card-name {
+  color: #38BDF8;
+}
+
+.sys-tool-card-meta {
+  font-size: 0.72rem;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sys-tool-card-arrow {
+  color: #06B6D4;
+  font-size: 1rem;
+  transition: transform var(--transition-speed) ease;
+  flex-shrink: 0;
+}
+
+.sys-tool-card:hover .sys-tool-card-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .sys-tools-banner-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sys-tools-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .sys-tool-bridge {
+    padding: 1.25rem 1rem;
+  }
+  .sys-tool-bridge-grid {
+    grid-template-columns: 1fr;
+  }
+}

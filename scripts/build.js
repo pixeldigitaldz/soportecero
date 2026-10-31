@@ -629,6 +629,101 @@ ${itemsHtml}
     }
   }
 
+  // 7. Contextual Mid-Article Bento Card ("SYS//TOOL BRIDGE")
+  const toolBridgeCardMidEs = `
+  <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">⚡ Utilidades Interactivas &amp; Modelado Financiero</h3>
+    <p class="sys-tool-bridge-desc">
+      En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, utiliza nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
+        <div class="sys-tool-card-icon">💳</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
+          <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
+        <div class="sys-tool-card-icon">⏱️</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
+          <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
+        <div class="sys-tool-card-icon">📈</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  `;
+
+  const toolBridgeCardMidEn = `
+  <section class="sys-tool-bridge" aria-label="Interactive Tool SYS//TOOL BRIDGE">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // FINANCIAL SUITE</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">⚡ Interactive Utilities &amp; Financial Modeling</h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon">💳</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon">⏱️</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon">📈</div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  `;
+
+  const bridgeCard = isEn ? toolBridgeCardMidEn : toolBridgeCardMidEs;
+  const targetFaqHeadingRegex = isEn
+    ? /<h2[^>]*>[^<]*(?:Frequently Asked Questions|FAQ|Common Questions)[^<]*<\/h2>/i
+    : /<h2[^>]*>[^<]*(?:Preguntas Frecuentes|FAQ|Dudas Frecuentes)[^<]*<\/h2>/i;
+
+  if (targetFaqHeadingRegex.test(html)) {
+    html = html.replace(targetFaqHeadingRegex, match => `${bridgeCard}\n${match}`);
+  } else {
+    const lastH2Index = html.lastIndexOf('<h2');
+    if (lastH2Index !== -1) {
+      html = html.substring(0, lastH2Index) + bridgeCard + '\n' + html.substring(lastH2Index);
+    } else {
+      html += '\n' + bridgeCard;
+    }
+  }
+
   return {
     contentHtml: html,
     preventionHtml: preventionListHtml,

@@ -636,13 +636,15 @@ ${itemsHtml}
       <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
       <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
     </div>
-    <h3 class="sys-tool-bridge-title">⚡ Utilidades Interactivas &amp; Modelado Financiero</h3>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
+    </h3>
     <p class="sys-tool-bridge-desc">
       En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, utiliza nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
     </p>
     <div class="sys-tool-bridge-grid">
       <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
-        <div class="sys-tool-card-icon">💳</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
           <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
@@ -650,7 +652,7 @@ ${itemsHtml}
         <span class="sys-tool-card-arrow">&rarr;</span>
       </a>
       <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
-        <div class="sys-tool-card-icon">⏱️</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
           <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
@@ -658,7 +660,7 @@ ${itemsHtml}
         <span class="sys-tool-card-arrow">&rarr;</span>
       </a>
       <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
-        <div class="sys-tool-card-icon">📈</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
           <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
@@ -675,13 +677,15 @@ ${itemsHtml}
       <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // FINANCIAL SUITE</div>
       <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
     </div>
-    <h3 class="sys-tool-bridge-title">⚡ Interactive Utilities &amp; Financial Modeling</h3>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Interactive Utilities &amp; Financial Modeling
+    </h3>
     <p class="sys-tool-bridge-desc">
       At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
     </p>
     <div class="sys-tool-bridge-grid">
       <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon">💳</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
           <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
@@ -689,7 +693,7 @@ ${itemsHtml}
         <span class="sys-tool-card-arrow">&rarr;</span>
       </a>
       <a href="/tools/?silo=freelance" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon">⏱️</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
           <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
@@ -697,7 +701,7 @@ ${itemsHtml}
         <span class="sys-tool-card-arrow">&rarr;</span>
       </a>
       <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon">📈</div>
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="sys-tool-card-body">
           <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
           <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>

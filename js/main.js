@@ -133,19 +133,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Category Filtering & Header Dock Synchronization ---
+  function setCategory(cat, updateUrl = true, shouldScroll = false) {
+    currentCategory = cat || 'all';
+    currentPage = 1;
+
+    // 1. Synchronize filter buttons below search
+    if (filterButtons.length > 0) {
+      filterButtons.forEach(btn => {
+        const filterVal = btn.getAttribute('data-filter');
+        if (filterVal === currentCategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // 2. Synchronize header dock navigation links
+    const headerNavLinks = document.querySelectorAll('header nav a');
+    headerNavLinks.forEach(link => {
+      const href = link.getAttribute('href') || '';
+      if (currentCategory !== 'all' && href.includes(`cat=${currentCategory}`)) {
+        link.classList.add('active');
+      } else if (href.includes('?cat=')) {
+        link.classList.remove('active');
+      }
+    });
+
+    // 3. Update URL without reloading if supported
+    if (updateUrl && window.history && window.history.pushState) {
+      const newUrl = currentCategory === 'all' 
+        ? window.location.pathname 
+        : `${window.location.pathname}?cat=${currentCategory}`;
+      window.history.pushState({ cat: currentCategory }, '', newUrl);
+    }
+
+    // 4. Filter cards and update pagination
+    updatePagination();
+
+    // 5. Smooth scroll if requested
+    if (shouldScroll && articlesSection) {
+      articlesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   // Bind Category Buttons
   if (filterButtons.length > 0) {
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        currentCategory = btn.getAttribute('data-filter');
-        currentPage = 1;
-        updatePagination();
+        const cat = btn.getAttribute('data-filter');
+        setCategory(cat, true, false);
       });
     });
   }
+
+  // Intercept Header Nav Category Clicks on Homepage for instant response
+  const headerNavLinks = document.querySelectorAll('header nav a');
+  if (filterButtons.length > 0) {
+    headerNavLinks.forEach(link => {
+      const href = link.getAttribute('href') || '';
+      if (href.includes('?cat=')) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const match = href.match(/cat=([^&]+)/);
+          if (match && match[1]) {
+            setCategory(match[1], true, true);
+          }
+        });
+      }
+    });
+  }
+
+  // Handle Initial Category Query Param & Browser Popstate
+  const initialCatParam = new URLSearchParams(window.location.search).get('cat');
+  if (initialCatParam && ['sistemas', 'gaming', 'web'].includes(initialCatParam)) {
+    setCategory(initialCatParam, false, false);
+  }
+
+  window.addEventListener('popstate', () => {
+    const poppedCat = new URLSearchParams(window.location.search).get('cat') || 'all';
+    setCategory(poppedCat, false, false);
+  });
 
   // Bind Pagination Navigation Buttons
   if (btnPrev) {
@@ -232,49 +301,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 3. Set Active Navigation Page Link ---
   const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll('nav a');
+  const navLinks = document.querySelectorAll('header nav a');
   
-  // Highlight active static page link (e.g. posts, legal)
+  // Highlight active static page link (e.g. /tools/, legal, contact)
   navLinks.forEach(link => {
     const linkHref = link.getAttribute('href');
     if (!linkHref) return;
     
-    // Ignore home links for generic highlight
-    const isHomeLink = linkHref === './' || linkHref === '../' || linkHref === 'index.html' || linkHref === '../index.html' || linkHref.includes('?cat=');
-    
-    if (!isHomeLink && currentPath.includes(linkHref) && linkHref !== '/') {
+    // Tools suite highlight
+    if (linkHref === '/tools/' && currentPath.startsWith('/tools')) {
       link.classList.add('active');
     }
   });
-
-  // Handle category query parameter from URL (e.g. ?cat=sistemas) on the homepage
-  const urlParams = new URLSearchParams(window.location.search);
-  const catParam = urlParams.get('cat');
-  if (catParam) {
-    const targetBtn = document.querySelector(`.filter-btn[data-filter="${catParam}"]`);
-    if (targetBtn) {
-      targetBtn.click();
-    }
-    // Also highlight matching nav link
-    navLinks.forEach(link => {
-      const linkHref = link.getAttribute('href');
-      if (linkHref && linkHref.includes(`cat=${catParam}`)) {
-        link.classList.add('active');
-      } else {
-        link.classList.remove('active');
-      }
-    });
-  } else {
-    // If no category param, highlight standard "Inicio" if we are on the home page
-    navLinks.forEach(link => {
-      const linkHref = link.getAttribute('href');
-      const isHome = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '' || currentPath.endsWith('./') || currentPath.endsWith('../');
-      const isHomeLink = linkHref === './' || linkHref === '../' || linkHref === 'index.html' || linkHref === '../index.html';
-      if (isHome && isHomeLink) {
-        link.classList.add('active');
-      }
-    });
-  }
 
   // --- 4. Theme Toggle Click Event Handler ---
   const themeToggle = document.getElementById('theme-toggle');

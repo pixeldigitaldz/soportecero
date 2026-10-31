@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error SSH Connection Refused en Linux (Paso a Paso)'
+title: 'Error SSH Connection Refused en Linux (Paso a Paso)'
 description: >-
   ¿Te sale 'connection refused ssh' al conectar al puerto 22 de tu servidor?
   Soluciona el error de SSH en menos de 5 minutos con esta guía práctica.

@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Advertencia Unknown at rule @tailwind y @apply en VS Code y
+  Advertencia Unknown at rule @tailwind y @apply en VS Code y
   PostCSS
 description: >-
   Elimina las advertencias Unknown at rule @tailwind, @apply y @layer en

@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error: Failed to mount cgroup cgroup2 o systemd en Docker y
+  Error: Failed to mount cgroup cgroup2 o systemd en Docker y
   Linux
 description: >-
   Repara el fallo Failed to mount cgroup cgroup2 o cgroup hierarchy v2 en

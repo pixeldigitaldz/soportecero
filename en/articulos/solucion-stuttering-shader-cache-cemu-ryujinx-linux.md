@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Fix Shader Cache Stuttering & Lag in Cemu & Ryujinx on Linux'
+title: 'Fix Shader Cache Stuttering & Lag in Cemu & Ryujinx on Linux'
 description: >-
   Eliminate frame drops and micro-stutter during live shader compilation in
   Ryujinx, Cemu, and RPCS3 emulators on Linux using Mesa and Vulkan.

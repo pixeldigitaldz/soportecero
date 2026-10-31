@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''curl: (7) Failed to connect to localhost port'''
+title: 'Error ''curl: (7) Failed to connect to localhost port'''
 description: >-
   ¿Recibes el fallo de conexión curl (7) al probar APIs o servicios web locales?
   Solución paso a paso para resolver la escucha de puertos.

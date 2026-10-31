@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux'
+title: 'Error: Failed to mount cgroup cgroup2 or systemd in Docker & Linux'
 description: >-
   Fix Failed to mount cgroup cgroup2 or cgroup hierarchy v2 in Docker, LXC, and
   systemd environments across modern Linux systems.

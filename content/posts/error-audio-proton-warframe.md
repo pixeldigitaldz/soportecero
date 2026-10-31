@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Audio distorsionado o sin sonido en Warframe bajo Proton Linux'
+title: 'Audio distorsionado o sin sonido en Warframe bajo Proton Linux'
 description: >-
   Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de
   sonido en Warframe con Proton, FAudio y PipeWire.

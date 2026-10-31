@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''fatal: cannot lock ref'' en Git'
+title: 'Error ''fatal: cannot lock ref'' en Git'
 description: >-
   ¿Git muestra 'cannot lock ref' o 'unable to update local ref' al hacer pull o
   fetch? Solución paso a paso para eliminar locks corruptos.

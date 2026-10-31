@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] npm ERR! ERESOLVE unable to resolve dependency tree en npm
+  npm ERR! ERESOLVE unable to resolve dependency tree en npm
   install
 description: >-
   Aprende a resolver el error ERESOLVE unable to resolve dependency tree al

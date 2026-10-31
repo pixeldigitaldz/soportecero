@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Crasheo de Overwatch 2 en Linux / Steam Deck'
+title: 'Crasheo de Overwatch 2 en Linux / Steam Deck'
 description: >-
   ¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al
   usar Proton? Solución paso a paso para DXVK y compilación de shaders.

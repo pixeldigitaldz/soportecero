@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error Docker: failed to create shim task: OCI runtime create
+  Error Docker: failed to create shim task: OCI runtime create
   failed
 description: >-
   Cómo solucionar el fallo failed to create shim task OCI runtime create failed

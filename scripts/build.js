@@ -819,6 +819,9 @@ function build() {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     const filename = path.basename(file, '.md');
     const { data: frontMatter, content: markdownBody } = matter(fileContent);
+    if (frontMatter.title) {
+      frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|Solucionado|Solved)\]\s*/i, '').trim();
+    }
 
     const postDate = new Date(frontMatter.date + 'T00:00:00');
     if (postDate > today) {
@@ -847,6 +850,9 @@ function build() {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
       const filename = path.basename(file, '.md');
       const { data: frontMatter, content: markdownBody } = matter(fileContent);
+      if (frontMatter.title) {
+        frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|Solucionado|Solved)\]\s*/i, '').trim();
+      }
 
       const postDate = new Date(frontMatter.date + 'T00:00:00');
       if (postDate > today) {

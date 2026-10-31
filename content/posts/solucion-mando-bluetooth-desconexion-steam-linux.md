@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux'
+title: 'Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux'
 description: >-
   Elimina los cortes de conexión, retraso de entrada y desvinculaciones
   aleatorias de mandos Xbox y DualSense en Steam sobre distribuciones Linux.

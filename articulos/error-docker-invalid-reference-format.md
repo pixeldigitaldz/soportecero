@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''invalid reference format'' en Docker'
+title: 'Error ''invalid reference format'' en Docker'
 description: >-
   ¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o
   docker build? Aprende a corregir sintaxis de comillas y rutas.

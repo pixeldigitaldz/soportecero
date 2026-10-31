@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Error: sudo: unable to resolve host in Ubuntu & Debian'
+title: 'Error: sudo: unable to resolve host in Ubuntu & Debian'
 description: >-
   Fix the annoying sudo: unable to resolve host warning in Linux. Fast guide to
   reconciling /etc/hostname with /etc/hosts on cloud servers.

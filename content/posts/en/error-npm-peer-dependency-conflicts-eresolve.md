@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] npm ERR! ERESOLVE unable to resolve dependency tree in npm install'
+title: 'npm ERR! ERESOLVE unable to resolve dependency tree in npm install'
 description: >-
   Learn how to resolve npm ERR! ERESOLVE unable to resolve dependency tree when
   installing packages in Node.js and modern React projects.

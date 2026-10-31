@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Unknown at rule @tailwind & @apply Warning in VS Code & PostCSS'
+title: 'Unknown at rule @tailwind & @apply Warning in VS Code & PostCSS'
 description: >-
   Eliminate Unknown at rule @tailwind, @apply, and @layer CSS linter warnings in
   Visual Studio Code and Tailwind CSS projects.

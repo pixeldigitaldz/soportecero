@@ -1,5 +1,5 @@
 ---
-title: "[SOLUCIONADO] Error 'failed to solve: process did not complete successfully' en Docker Build"
+title: "Error 'failed to solve: process did not complete successfully' en Docker Build"
 description: "Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso."
 category: "Sistemas y Servidores"
 date: "2026-10-17"

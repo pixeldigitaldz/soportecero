@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en
+  Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en
   Linux
 description: >-
   Soluciona los congelamientos y caídas a escritorio en juegos DirectX 12 que

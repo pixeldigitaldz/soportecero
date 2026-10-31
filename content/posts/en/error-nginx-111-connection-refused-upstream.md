@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] Nginx connect() failed (111: Connection refused) while connecting to
+  Nginx connect() failed (111: Connection refused) while connecting to
   upstream
 description: >-
   Fix Nginx error 111: Connection refused on proxy_pass routes connecting to

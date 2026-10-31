@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Cancelar un Rebase en Git o Error ''No rebase in progress'''
+title: 'Cancelar un Rebase en Git o Error ''No rebase in progress'''
 description: >-
   ¿Te has quedado atrapado en medio de un rebase de Git o aparece el error 'No
   rebase in progress'? Solución paso a paso para abortar rebase.

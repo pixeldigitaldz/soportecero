@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error 502 Bad Gateway en Nginx con PHP-FPM'
+title: 'Error 502 Bad Gateway en Nginx con PHP-FPM'
 description: >-
   ¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a
   corregir el socket de comunicación de PHP-FPM en 3 pasos.

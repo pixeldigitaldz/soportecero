@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''fatal: refusing to merge unrelated histories'' en Git'
+title: 'Error ''fatal: refusing to merge unrelated histories'' en Git'
 description: >-
   ¿Git rechaza fusionar tu repositorio local con GitHub por 'unrelated
   histories'? Aprende a resolverlo en 1 minuto con este comando.

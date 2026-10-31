@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error Vite: Failed to load url / Dynamic import cannot load
+  Error Vite: Failed to load url / Dynamic import cannot load
   CommonJS module
 description: >-
   Aprende a solucionar los fallos Failed to load url y Dynamic import cannot

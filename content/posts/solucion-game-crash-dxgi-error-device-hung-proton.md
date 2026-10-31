@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en
+  Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en
   Linux
 description: >-
   Guía para reparar el crasheo fatal DXGI_ERROR_DEVICE_HUNG al jugar títulos

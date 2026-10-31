@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] DXGI_ERROR_DEVICE_HUNG in Proton & Steam Games on Linux'
+title: 'DXGI_ERROR_DEVICE_HUNG in Proton & Steam Games on Linux'
 description: >-
   Step-by-step resolution for the fatal DXGI_ERROR_DEVICE_HUNG crash in DirectX
   11 & 12 titles running through Proton and VKD3D on Linux.

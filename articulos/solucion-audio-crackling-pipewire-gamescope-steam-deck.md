@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Chasquidos y cortes de audio en PipeWire y Gamescope en Steam
+  Chasquidos y cortes de audio en PipeWire y Gamescope en Steam
   Deck y Linux
 description: >-
   Aprende a solucionar el audio crackling, chasquidos y retrasos de sonido al

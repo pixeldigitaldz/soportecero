@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] How to Fix ''connect ECONNREFUSED 127.0.0.1:27017'' in MongoDB'
+title: 'How to Fix ''connect ECONNREFUSED 127.0.0.1:27017'' in MongoDB'
 description: >-
   Learn how to fix connect ECONNREFUSED errors in MongoDB by starting mongod
   services, resolving socket locks, and setting bindIp.

@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck'
+title: 'Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck'
 description: >-
   ¿Tus juegos muestran pantalla negra o se congelan en Gamescope o Steam Deck
   con Proton? Guía de solución paso a paso para Wayland y Vulkan.

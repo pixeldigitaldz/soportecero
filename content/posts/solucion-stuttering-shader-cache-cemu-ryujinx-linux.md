@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Solución a tirones y stuttering por Shader Cache en Cemu y
+  Solución a tirones y stuttering por Shader Cache en Cemu y
   Ryujinx en Linux
 description: >-
   Elimina los microtirones y congelamientos al compilar shaders en emuladores

@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Bluetooth Controller Disconnecting (Xbox / PS5) in Steam & Linux'
+title: 'Bluetooth Controller Disconnecting (Xbox / PS5) in Steam & Linux'
 description: >-
   Fix random Bluetooth disconnects, input lag, and pairing drops with Xbox
   Series and PS5 DualSense controllers on Steam and Linux gaming systems.

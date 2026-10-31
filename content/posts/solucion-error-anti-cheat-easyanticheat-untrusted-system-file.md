@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error Easy Anti-Cheat: Untrusted system file en Windows y Linux
+  Error Easy Anti-Cheat: Untrusted system file en Windows y Linux
   Proton
 description: >-
   Cómo reparar el bloqueo Untrusted system file de Easy Anti-Cheat al jugar a

@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Error Docker: failed to create shim task: OCI runtime create failed'
+title: 'Error Docker: failed to create shim task: OCI runtime create failed'
 description: >-
   How to fix failed to create shim task OCI runtime create failed executable
   file not found when launching Docker containers.

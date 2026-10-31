@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian'
+title: 'Could not get lock /var/lib/dpkg/lock-frontend in Ubuntu & Debian'
 description: >-
   Learn how to resolve Could not get lock /var/lib/dpkg/lock-frontend caused by
   unattended-upgrades or frozen background apt sessions.

@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''Host key verification failed'' en SSH'
+title: 'Error ''Host key verification failed'' en SSH'
 description: >-
   ¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST
   IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.

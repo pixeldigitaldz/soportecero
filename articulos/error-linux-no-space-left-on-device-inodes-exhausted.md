@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Error No Space Left on Device con Espacio Libre (Inodos Agotados
+  Error No Space Left on Device con Espacio Libre (Inodos Agotados
   en Linux)
 description: >-
   ¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio

@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''externally-managed-environment'' al usar pip en Linux'
+title: 'Error ''externally-managed-environment'' al usar pip en Linux'
 description: >-
   ¿No puedes instalar paquetes Python con pip por el error
   externally-managed-environment en Ubuntu 24.04, Debian 12 o Arch? Aprende a

@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] Vite Error: Failed to load url / Dynamic import cannot load CommonJS
+  Vite Error: Failed to load url / Dynamic import cannot load CommonJS
   module
 description: >-
   Fix Vite errors Failed to load url and Dynamic import cannot load CommonJS

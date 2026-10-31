@@ -332,27 +332,32 @@ a:hover {
 
 /* Navigation */
 header nav {
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 1rem;
 }
 
 header nav ul {
   display: flex;
   list-style: none;
-  gap: 1.75rem;
+  gap: clamp(0.5rem, 1.2vw, 1.35rem);
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  padding: 0;
+  flex-wrap: nowrap;
 }
 
 header nav a {
-  font-size: 0.9rem;
+  font-size: clamp(0.78rem, 0.88vw, 0.9rem);
   font-weight: 500;
   color: var(--text-secondary);
   position: relative;
-  padding: 0.25rem 0;
+  padding: 0.25rem 0.2rem;
+  white-space: nowrap;
   transition: color var(--transition-speed) ease;
 }
 
@@ -376,6 +381,60 @@ header nav a::after {
 header nav a:hover::after, header nav a.active::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Calculadoras Nav Pill Badge */
+.nav-tools-highlight {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem !important;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 9999px;
+  color: #22d3ee !important;
+  font-weight: 600;
+  font-size: clamp(0.75rem, 0.85vw, 0.84rem) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.nav-tools-highlight:hover {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: rgba(6, 182, 212, 0.55);
+  color: #67e8f9 !important;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+}
+
+.nav-tools-highlight::after {
+  display: none !important;
+}
+
+[data-theme="light"] .nav-tools-highlight {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: #0891b2 !important;
+}
+
+/* Tablet & Compact Desktop Header Refinement */
+@media (max-width: 1080px) {
+  .logo-badge {
+    display: none !important;
+  }
+  .lang-selector {
+    margin-right: 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  header nav {
+    margin: 0 0.5rem;
+  }
+  header nav ul {
+    gap: clamp(0.35rem, 0.8vw, 0.75rem);
+  }
+  header nav a {
+    font-size: 0.82rem;
+  }
 }
 
 /* Hero Section */
@@ -1556,21 +1615,19 @@ footer {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header-wrapper {
-    height: 100px !important;
+    height: auto !important;
+    min-height: 96px !important;
   }
   .header-wrapper header {
     display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
-    height: 60px !important;
-    padding: 0 1rem !important;
+    justify-content: space-between !important;
+    height: auto !important;
+    min-height: 96px !important;
+    padding: 0.5rem 1rem 0.35rem !important;
     position: relative !important;
-    gap: 0.75rem !important;
-  }
-  
-  nav ul {
-    gap: 1.25rem;
+    gap: 0 !important;
   }
   
   .hero {
@@ -2135,7 +2192,8 @@ td :not(pre) > code {
 
   /* Mobile Header Overhaul */
   .logo {
-    font-size: 1.2rem !important;
+    order: 1 !important;
+    font-size: 1.15rem !important;
     gap: 0.35rem !important;
   }
   
@@ -2144,24 +2202,32 @@ td :not(pre) > code {
     height: 20px !important;
   }
 
+  .lang-selector {
+    order: 2 !important;
+    margin-left: auto !important;
+    margin-right: 0.5rem !important;
+  }
+
   .theme-toggle-btn {
-    width: 32px !important;
-    height: 32px !important;
+    order: 2 !important;
+    width: 34px !important;
+    height: 34px !important;
   }
 
   nav {
+    order: 3 !important;
     position: static !important;
     width: 100% !important;
-    height: auto !important;
+    height: 40px !important;
     background-color: transparent !important;
     border: none !important;
     overflow-x: auto !important;
     white-space: nowrap !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important; /* Centrado */
-    padding: 0.5rem 0.5rem !important;
-    margin: 0 auto !important; /* Centrado */
+    justify-content: flex-start !important;
+    padding: 0.2rem 0 !important;
+    margin: 0.25rem 0 0 0 !important;
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
   }
@@ -2174,12 +2240,12 @@ td :not(pre) > code {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    gap: 1rem !important;
+    gap: 0.65rem !important;
     width: auto !important;
-    padding: 0 !important;
-    margin: 0 auto !important; /* Centrado */
+    padding: 0 0.25rem !important;
+    margin: 0 !important;
     list-style: none !important;
-    justify-content: center !important; /* Centrado */
+    justify-content: flex-start !important;
     align-items: center !important;
   }
 
@@ -2190,9 +2256,9 @@ td :not(pre) > code {
   }
 
   nav a {
-    font-size: 0.85rem !important;
-    min-height: 38px !important;
-    padding: 0 0.5rem !important;
+    font-size: 0.82rem !important;
+    min-height: 32px !important;
+    padding: 0.2rem 0.5rem !important;
     display: inline-flex !important;
     align-items: center !important;
     white-space: nowrap !important;

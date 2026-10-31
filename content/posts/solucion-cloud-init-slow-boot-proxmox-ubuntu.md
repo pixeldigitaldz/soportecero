@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] cloud-init Retarda el Arranque en Proxmox / Ubuntu Server'
+title: 'cloud-init Retarda el Arranque en Proxmox / Ubuntu Server'
 description: >-
   ¿Tu máquina virtual Proxmox o Ubuntu Server tarda minutos en arrancar por
   'cloud-init waiting for network config'? Solución paso a paso.

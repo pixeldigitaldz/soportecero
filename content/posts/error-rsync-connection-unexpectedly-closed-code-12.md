@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] rsync error: error in rsync protocol data stream (code 12)
+  rsync error: error in rsync protocol data stream (code 12)
   connection unexpectedly closed
 description: >-
   Soluciona el fallo rsync error code 12 connection unexpectedly closed al

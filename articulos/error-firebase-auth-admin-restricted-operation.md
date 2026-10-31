@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error (auth/admin-restricted-operation) en Firebase'
+title: 'Error (auth/admin-restricted-operation) en Firebase'
 description: >-
   Aprende a solucionar el error auth/admin-restricted-operation en Firebase
   Authentication habilitando proveedores y configurando Identity Platform.

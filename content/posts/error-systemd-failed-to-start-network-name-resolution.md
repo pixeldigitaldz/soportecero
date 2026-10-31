@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Fallo de DNS en Linux: 'Could not resolve host' /
+  Fallo de DNS en Linux: 'Could not resolve host' /
   systemd-resolved
 description: >-
   Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en

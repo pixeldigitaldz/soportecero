@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y
+  Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y
   Debian
 description: >-
   Aprende a solucionar el bloqueo Could not get lock /var/lib/dpkg/lock-frontend

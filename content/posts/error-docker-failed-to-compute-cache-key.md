@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''failed to compute cache key'' en Docker Build'
+title: 'Error ''failed to compute cache key'' en Docker Build'
 description: >-
   ¿Recibes el error 'failed to compute cache key' al construir una imagen con
   docker build? Solución paso a paso para corregir rutas y Dockerfile.

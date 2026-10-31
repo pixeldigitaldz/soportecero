@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Cross-Origin Request Blocked in Next.js Route Handlers & API Routes'
+title: 'Cross-Origin Request Blocked in Next.js Route Handlers & API Routes'
 description: >-
   How to fix CORS errors in Next.js App Router (route.js) and Pages Router when
   consumed by external web clients or mobile apps.

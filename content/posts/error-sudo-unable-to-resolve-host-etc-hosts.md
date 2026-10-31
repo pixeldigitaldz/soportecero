@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error: sudo: unable to resolve host en Ubuntu y Debian'
+title: 'Error: sudo: unable to resolve host en Ubuntu y Debian'
 description: >-
   Elimina el molesto mensaje sudo: unable to resolve host al ejecutar comandos
   en Linux. Guía rápida para corregir /etc/hostname y /etc/hosts.

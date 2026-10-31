@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)'
+title: 'Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)'
 description: >-
   ¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del
   usuario root en menos de 3 minutos modificando GRUB.

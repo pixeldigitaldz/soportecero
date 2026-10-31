@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] Audio Crackling, Popping & Stuttering with PipeWire & Gamescope on
+  Audio Crackling, Popping & Stuttering with PipeWire & Gamescope on
   Linux
 description: >-
   Fix audio crackling, popping, and static stuttering when gaming with PipeWire,

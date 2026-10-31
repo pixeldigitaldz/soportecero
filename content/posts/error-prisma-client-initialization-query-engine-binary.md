@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] PrismaClientInitializationError: Query engine binary could not
+  PrismaClientInitializationError: Query engine binary could not
   be found
 description: >-
   Soluciona el fallo de Prisma Query engine binary could not be found or

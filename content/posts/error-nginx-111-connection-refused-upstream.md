@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] Nginx connect() failed (111: Connection refused) while
+  Nginx connect() failed (111: Connection refused) while
   connecting to upstream
 description: >-
   Soluciona el error de Nginx 111: Connection refused en proxy_pass hacia

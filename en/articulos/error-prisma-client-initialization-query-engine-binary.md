@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] PrismaClientInitializationError: Query engine binary could not be
+  PrismaClientInitializationError: Query engine binary could not be
   found
 description: >-
   Fix Prisma error Query engine binary could not be found or executed in Docker,

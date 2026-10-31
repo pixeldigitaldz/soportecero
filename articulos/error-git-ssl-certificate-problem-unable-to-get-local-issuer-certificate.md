@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLUCIONADO] fatal: unable to access: SSL certificate problem: unable to get
+  fatal: unable to access: SSL certificate problem: unable to get
   local issuer certificate en Git
 description: >-
   Aprende a solucionar el error de certificado SSL en Git al clonar o hacer push

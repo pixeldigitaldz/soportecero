@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''npm ERR! code EACCES permission denied'' en Linux'
+title: 'Error ''npm ERR! code EACCES permission denied'' en Linux'
 description: >-
   ¿Fallo de permisos EACCES al instalar paquetes globales con npm? Aprende a
   solucionar los permisos de Node.js sin usar sudo de forma segura.

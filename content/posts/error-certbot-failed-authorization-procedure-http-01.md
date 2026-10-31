@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error Certbot ''Failed authorization procedure (http-01)'''
+title: 'Error Certbot ''Failed authorization procedure (http-01)'''
 description: >-
   ¿Let's Encrypt / Certbot no puede generar tu certificado SSL por fallo en la
   prueba HTTP-01? Aprende a solucionar los bloqueos de puerto y Nginx.

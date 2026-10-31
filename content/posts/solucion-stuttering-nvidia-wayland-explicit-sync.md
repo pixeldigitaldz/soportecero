@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)'
+title: 'Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)'
 description: >-
   ¿Tus juegos sufren parpadeos (flickering) o lag en KDE, Hyprland o GNOME con
   tarjetas NVIDIA en Wayland? Activa Explicit Sync y optimiza controladores.

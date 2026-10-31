@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error ''connect ECONNREFUSED 127.0.0.1:27017'' en MongoDB'
+title: 'Error ''connect ECONNREFUSED 127.0.0.1:27017'' en MongoDB'
 description: >-
   Aprende a solucionar el error connect ECONNREFUSED en MongoDB iniciando el
   servicio mongod, reparando permisos y configurando bindIp.

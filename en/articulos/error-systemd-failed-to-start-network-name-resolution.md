@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Linux DNS Failure: ''Could not resolve host'' / systemd-resolved'
+title: 'Linux DNS Failure: ''Could not resolve host'' / systemd-resolved'
 description: >-
   Learn how to repair broken DNS name resolution and systemd-resolved daemon
   failures in Ubuntu, Debian, and Arch Linux.

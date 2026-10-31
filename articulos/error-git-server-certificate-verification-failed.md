@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error server certificate verification failed en Git'
+title: 'Error server certificate verification failed en Git'
 description: >-
   Aprende a solucionar el error de verificación de certificado SSL en Git
   (fatal: unable to access) en Linux, Windows y macOS de forma segura.

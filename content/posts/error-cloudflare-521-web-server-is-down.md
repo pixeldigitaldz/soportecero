@@ -1,5 +1,5 @@
 ---
-title: '[SOLUCIONADO] Error 521 Web Server Is Down en Cloudflare'
+title: 'Error 521 Web Server Is Down en Cloudflare'
 description: >-
   ¿Tus usuarios ven el Error 521 de Cloudflare al entrar a tu sitio web?
   Solución paso a paso para Nginx, Apache y reglas de Firewall de origen.

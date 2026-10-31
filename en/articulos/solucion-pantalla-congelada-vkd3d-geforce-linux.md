@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] Screen Freezing in DirectX 12 Games with NVIDIA & VKD3D on Linux'
+title: 'Screen Freezing in DirectX 12 Games with NVIDIA & VKD3D on Linux'
 description: >-
   Resolve hard screen freezes and desktop crashes in DirectX 12 games running
   through VKD3D-Proton on NVIDIA GeForce graphics cards on Linux.

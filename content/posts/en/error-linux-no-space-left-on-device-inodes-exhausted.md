@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] Error No Space Left on Device with Free Disk Space (Inodes Exhausted
+  Error No Space Left on Device with Free Disk Space (Inodes Exhausted
   in Linux)
 description: >-
   Does your Linux server show No Space Left on Device while df -h shows free

@@ -1,5 +1,5 @@
 ---
-title: '[SOLVED] TypeScript Error TS2339: Property does not exist on type'
+title: 'TypeScript Error TS2339: Property does not exist on type'
 description: >-
   Step-by-step guide to resolving TypeScript error TS2339 Property does not
   exist on type in objects, interfaces, window, and React event handlers.

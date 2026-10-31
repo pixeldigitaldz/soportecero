@@ -1,6 +1,6 @@
 ---
 title: >-
-  [SOLVED] fatal: unable to access: SSL certificate problem: unable to get local
+  fatal: unable to access: SSL certificate problem: unable to get local
   issuer certificate in Git
 description: >-
   Fix Git SSL certificate problem: unable to get local issuer certificate when

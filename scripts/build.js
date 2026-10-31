@@ -1295,6 +1295,14 @@ function build() {
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://soportecero.com/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://soportecero.com/contacto.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />

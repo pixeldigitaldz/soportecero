@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan | SoporteCero</title>
+  <meta name="description" content="Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK.">
+  <meta name="keywords" content="Gaming, Linux, Proton, Vulkan, Rendimiento, Sysadmin">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan">
+  <meta property="og:description" content="Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:secure_url" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SoporteCero - Cero Errores">
+  <meta property="article:published_time" content="2026-11-08">
+  <meta property="article:section" content="Gaming Tech">
+  <meta property="article:tag" content="Gaming">
+  <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="Proton">
+  <meta property="article:tag" content="Vulkan">
+  <meta property="article:tag" content="Rendimiento">
+  <meta property="article:tag" content="Sysadmin">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan">
+  <meta name="twitter:description" content="Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK.">
+  <meta name="twitter:image" content="https://soportecero.com/og-image.png">
+  
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan",
+  "description": "Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK.",
+  "image": "https://soportecero.com/og-image.png",
+  "inLanguage": "es",
+  "category": "Gaming Tech",
+  "articleSection": "Gaming Tech",
+  "keywords": "Gaming, Linux, Proton, Vulkan, Rendimiento, Sysadmin",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-11-08",
+  "dateModified": "2026-11-08",
+  "author": {
+    "@type": "Person",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Diseñador Web & Creador de Apps",
+    "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+    "sameAs": [
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://soportecero.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan",
+      "item": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan",
+  "description": "Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "url": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html#configurar-los-parametros-sysctl-del-kernel-para-alto-rendimiento",
+      "name": "Configurar los parámetros sysctl del kernel para alto rendimiento",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Crea un archivo de configuración persistente en /etc/sysctl.d/99-gaming-performance.conf: Pega exactamente los siguientes parámetros de ajuste del kernel: kernel.split_lock_mitigate = 0: Desactiva la penalización del kernel, permitiendo que las instrucciones del procesador se ejecuten a máxima velocidad sin pausas artificiales. vm.swappiness = 180: Al utilizar ZRAM, un valor alto de swappiness instruye al kernel a preferir comprimir páginas de memoria anónimas en la RAM antes de purgar la caché de archivos de lectura (page cache), manteniendo los archivos del juego siempre calientes en memoria. vm.page-cluster = 0: Desactiva la lectura por adelantado de páginas contiguas en el swap, optimizando la lectura de una sola página (4 KB) a la vez, ideal para la velocidad instantánea de ZRAM. Aplica los cambios inmediatamente sin necesidad de reiniciar:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html#implementar-y-optimizar-zram-con-compresion-zstd",
+      "name": "Implementar y optimizar ZRAM con compresión zstd",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "ZRAM crea un dispositivo de bloques en memoria RAM que comprime los datos al vuelo con una relación típica de 2:1 a 3:1. En distribuciones basadas en Arch Linux, Fedora, Ubuntu o Debian, instala el generador oficial de ZRAM: Crea el archivo de configuración declarativo /etc/systemd/zram-generator.conf: Inicia y activa el servicio del generador de ZRAM: Verifica la activación ejecutando zramctl: La consola debe mostrar el dispositivo /dev/zram0 con algoritmo zstd y una prioridad de 32767."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html#tabla-definitiva-de-variables-de-entorno-para-proton-dxvk-y-vkd3d",
+      "name": "Tabla definitiva de Variables de Entorno para Proton, DXVK y VKD3D",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "No todas las variables de optimización deben activarse ciegamente; algunas provocan inestabilidad o artefactos gráficos. A continuación se detalla la matriz técnica de flags recomendados: Variable de Entorno Cuándo Usarla (Recomendado) Cuándo NO Usarla (Evitar) Función Técnica Exacta DXVK_ASYNC=1 En versiones de Proton con soporte de parche async (ej. Proton-GE antiguo) En títulos con sistemas anti-cheat competitivos (Ricochét, EAC, BattlEye) Compila shaders en hilos secundarios asíncronos para eliminar tirones WINE_FULLSCREEN_FSR=1 Cuando necesitas reescalar resoluciones inferiores a 4K/1440p en pantallas grandes En juegos que ya incorporan FSR 2.0 / DLSS nativo en sus menús Aplica el algoritmo FidelityFX Super Resolution 1.0 a nivel del backend de Wine RADV_PERFTEST=gpl Ya activo por defecto en Mesa moderno para GPU AMD Radeon En tarjetas NVIDIA o controladores antiguos sin soporte de Graphics Pipeline Library Habilita compilación rápida de pipelines gráficos bajo Vulkan PROTON_ENABLE_NVAPI=1 En GPUs NVIDIA para habilitar DLSS y Reflex en juegos compatibles En tarjetas gráficas AMD Radeon o Intel Arc Expone la librería NVAPI de NVIDIA dentro del prefijo de Wine VKD3D_CONFIG=no_upload_hlist En títulos D3D12 que sufren caídas de memoria o texturas parpadeantes Si el juego funciona con fluidez por defecto Evita la sobrecarga de sincronización en listas de comandos de subida de texturas Para aplicar estas variables en Steam, haz clic derecho sobre el juego -&gt; Propiedades -&gt; Parámetros de lanzamiento: El demonio gamemode de Feral Interactive ajusta automáticamente el gobernador de la CPU a performance, eleva la prioridad de programación del proceso a nivel de renice y activa el modo de juego en el compositor."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <!-- Logo Soporte Cero - Edición Ingeniería -->
+      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <!-- Isotipo Cero Técnico -->
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Cero Técnico Cortado '0' Centrado -->
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <!-- Punto de telemetría esquina superior derecha -->
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+
+        <!-- Logotipo Tipográfico -->
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">
+            Soporte
+          </span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">
+            Cero
+          </span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
+            INGENIERÍA
+          </span>
+        </div>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../?cat=web">Web y Código</a></li>
+          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="../contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <span class="lang-active">ES</span>
+      <span class="lang-separator">|</span>
+      <a href="../en/" class="lang-inactive">EN</a>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
+  <aside class="sys-tools-banner" aria-label="Suite de Herramientas">
+    <div class="sys-tools-banner-inner">
+      <div class="sys-tools-banner-content">
+        <span class="sys-tools-badge font-mono">HERRAMIENTAS</span>
+        <span class="sys-tools-text">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NUEVO EN SOPORTECERO:</strong> Suite de Calculadoras para Freelancers, Cotizador PDF en 1 Clic y Simuladores Financieros
+        </span>
+      </div>
+      <a href="/tools/" class="sys-tools-btn">
+        <span>Abrir /tools/</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
+        <a href="../">INICIO</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span>Gaming Tech</span>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span style="color: var(--text-secondary);">Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan</span>
+      </nav>
+
+      <header class="post-header">
+        <span class="card-category">Gaming Tech</span>
+        <h1 id="post-title">Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+            Verificado en Laboratorio
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Lectura: 9 min
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            Actualizado: 2026-11-08
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>El gaming en sistemas operativos <strong>Linux</strong> ha alcanzado una madurez sin precedentes gracias al desarrollo constante de <strong>Proton</strong>, <strong>DXVK</strong>, <strong>VKD3D-Proton</strong> y el ecosistema de controladores de código abierto como Mesa RADV. Sin embargo, muchos jugadores y entusiastas experimentan un fenómeno sumamente frustrante: aunque la tasa media de fotogramas por segundo (FPS) sea alta (ej. 120 o 144 FPS), el juego sufre micro-congelamientos esporádicos (<em>stuttering</em>) y caídas dramáticas en el percentil <strong>1% Low FPS</strong>.</p>
+<p>Estas irregularidades en el tiempo de entrega de cuadros (<em>frametime variance</em>) rara vez se deben a la potencia bruta de la tarjeta gráfica; su causa reside en cuellos de botella del <strong>kernel de Linux</strong>, bloqueos a nivel de bus de memoria (<em>split locks</em>), contención en la paginación a disco y parámetros de sincronización desalineados entre la capa de traducción de DirectX y el compositor gráfico.</p>
+<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<p>Para erradicar la latencia en Linux, es imprescindible comprender qué ocurre internamente entre el procesador (CPU), el subsistema de memoria virtual y la GPU:</p>
+<ol>
+<li><strong>El impacto de `kernel.split_lock_mitigate` en el bus de CPU:</strong> Un <em>split lock</em> ocurre cuando una instrucción atómica de la CPU intenta acceder a un dato que cruza dos líneas de caché de 64 bytes contiguas. Para evitar inconsistencias de datos, el procesador se ve forzado a bloquear el bus del sistema entero durante múltiples ciclos de reloj. En kernels recientes (a partir de Linux 5.19+), los desarrolladores del kernel introdujeron un mecanismo de mitigación de seguridad que ralentiza intencionadamente (<em>throttling</em>) a los procesos que provocan split locks para evitar ataques de denegación de servicio. Ciertos motores de juegos de Windows (especialmente títulos basados en Unreal Engine 4/5 o emuladores) generan miles de split locks por segundo al ejecutarse sobre Wine/Proton. La mitigación del kernel penaliza estos hilos introduciendo pausas forzadas de hasta 10 milisegundos, lo que se traduce directamente en caídas devastadoras de FPS.</li>
+<li><strong>Paginación en disco tradicional frente a compresión en memoria con ZRAM:</strong> Por defecto, los sistemas operativos Linux delegan el desbordamiento de memoria RAM en particiones o archivos Swap ubicados en unidades de almacenamiento secundario (SSD NVMe o HDD). Aunque los NVMe actuales son rápidos, su latencia de acceso (decenas de microsegundos) es órdenes de magnitud superior a la latencia de la memoria RAM (nanosegundos). Cuando un juego moderno satura la memoria o el kernel decide paginar páginas anónimas inactivas, el hilo principal de renderizado se congela a la espera de E/S de disco. Al reemplazar la Swap física por <strong>ZRAM</strong> (un dispositivo de bloques comprimido en la propia memoria RAM utilizando algoritmos ultrarrápidos como `zstd` o `lz4`), el sistema multiplica virtualmente la memoria disponible y reduce la latencia de intercambio a cero absoluto.</li>
+<li><strong>Límites de mapas de memoria (`vm.max_map_count`):</strong> Juegos con mundos abiertos masivos y arquitecturas de 64 bits complejas (como Star Citizen, Hogwarts Legacy, Counter-Strike 2 o títulos ejecutados mediante Direct3D 12) requieren asignar cientos de miles de regiones de memoria virtual independientes mediante llamadas al sistema `mmap()`. El valor por defecto en muchas distribuciones Linux (65.530) agota la tabla del kernel rápidamente, provocando crasheos inmediatos al cargar mapas o micro-parones al intentar reasignar memoria sobre la marcha.</li>
+</ol>
+
+    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
+    <section class="diagnostic-console" aria-labelledby="diag-heading">
+      <div class="diagnostic-console-header">
+        <div class="diag-console-title-group">
+          <span class="diag-pulse-dot" aria-hidden="true"></span>
+          <h3 id="diagnostico-tecnico-y-causa-raiz">Diagnóstico Técnico y Causa Raíz</h3>
+        </div>
+        <span class="diag-console-badge">Laboratorio Técnico</span>
+      </div>
+      <div class="diagnostic-console-body">
+        <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">PARÁMETRO / MÉTRICA</span>
+            </div>
+            <div class="diag-value"><code>kernel.split_lock_mitigate</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ESTÁNDAR POR DEFECTO</span>
+            </div>
+            <div class="diag-value"><code>1</code> (Habilitado / Throttling)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ÓPTIMO PARA GAMING</span>
+            </div>
+            <div class="diag-value"><code>0</code> (Deshabilitado)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMPACTO EN RENDIMIENTO</span>
+            </div>
+            <div class="diag-value">Elimina las pausas forzadas de CPU en juegos que ejecutan accesos desalineados</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">PARÁMETRO / MÉTRICA</span>
+            </div>
+            <div class="diag-value"><code>vm.max_map_count</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ESTÁNDAR POR DEFECTO</span>
+            </div>
+            <div class="diag-value"><code>65530</code> o <code>262144</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ÓPTIMO PARA GAMING</span>
+            </div>
+            <div class="diag-value"><code>2147483642</code> (Máximo seguro)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMPACTO EN RENDIMIENTO</span>
+            </div>
+            <div class="diag-value">Previene crasheos y pausas de asignación en juegos D3D12 y mundos abiertos</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">PARÁMETRO / MÉTRICA</span>
+            </div>
+            <div class="diag-value"><code>vm.swappiness</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ESTÁNDAR POR DEFECTO</span>
+            </div>
+            <div class="diag-value"><code>60</code> (Paginación agresiva)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ÓPTIMO PARA GAMING</span>
+            </div>
+            <div class="diag-value"><code>10</code> o <code>180</code> (con ZRAM)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMPACTO EN RENDIMIENTO</span>
+            </div>
+            <div class="diag-value">Evita la expulsión prematura de páginas activas del juego hacia el swap</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">PARÁMETRO / MÉTRICA</span>
+            </div>
+            <div class="diag-value">Dispositivo de Intercambio</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ESTÁNDAR POR DEFECTO</span>
+            </div>
+            <div class="diag-value">Partición Swap en disco</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ÓPTIMO PARA GAMING</span>
+            </div>
+            <div class="diag-value">ZRAM con compresión <code>zstd</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMPACTO EN RENDIMIENTO</span>
+            </div>
+            <div class="diag-value">Reduce la latencia de I/O de disco a microsegundos en la memoria RAM</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">PARÁMETRO / MÉTRICA</span>
+            </div>
+            <div class="diag-value">Planificador de CPU (sched)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ESTÁNDAR POR DEFECTO</span>
+            </div>
+            <div class="diag-value">CFS / EEVDF</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VALOR ÓPTIMO PARA GAMING</span>
+            </div>
+            <div class="diag-value">P-State Performance / <code>sched-ext</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMPACTO EN RENDIMIENTO</span>
+            </div>
+            <div class="diag-value">Máxima frecuencia de reloj sostenida sin descensos por ahorro energético</div>
+          </div></div></div>
+      </div>
+    </section>
+
+    <nav class="toc-container" aria-label="Índice de contenido">
+      <div class="toc-header">
+        <div class="toc-header-left">
+          <svg class="toc-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="toc-header-title">ÍNDICE DE CONTENIDO</span>
+        </div>
+        <span class="toc-header-badge">Índice Técnico</span>
+      </div>
+      <div class="toc-body">
+        <ul class="toc-list">
+
+        <li class="toc-item">
+          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
+            <span class="toc-number">01</span>
+            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#diagnostico-tecnico-y-causa-raiz" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Diagnóstico Técnico y Causa Raíz</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Implementación Técnica Paso a Paso</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-1-sobrescritura-de-frecuencias-y-temperatura-en-cpus-modernas-p-state-e-cores" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 1: Sobrescritura de frecuencias y temperatura en CPUs modernas (P-State / E-Cores)</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-2-incompatibilidad-entre-compositores-wayland-y-sincronizacion-vertical" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 2: Incompatibilidad entre compositores Wayland y sincronización vertical</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#verificacion-de-logs-en-tiempo-real-y-diagnostico" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Verificación de Logs en Tiempo Real y Diagnóstico</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        </ul>
+      </div>
+    </nav>
+    
+    
+<p>Ejecuta los siguientes comandos en la terminal para inspeccionar los parámetros vigentes de tu kernel:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar si la mitigación de split locks está castigando a tus procesos</span>
+<span class="tok-kw">sudo</span> sysctl kernel.split_lock_mitigate
+<span class="tok-cmt">
+# 2. Auditar advertencias de split locks emitidas por el kernel</span>
+<span class="tok-kw">sudo</span> dmesg | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> <span class="tok-str">&quot;split_lock&quot;</span> | tail <span class="tok-prop">-n</span> <span class="tok-num">20</span>
+<span class="tok-cmt">
+# 3. Verificar el estado actual de los dispositivos de swap y ZRAM</span>
+swapon <span class="tok-prop">--show</span> &amp;&amp; zramctl
+</code></pre>
+    </div>
+    
+<p>Si <code>zramctl</code> no devuelve ninguna salida o si <code>dmesg</code> muestra líneas como <code>traps: game.exe[...] split lock trap caught; slowed down</code>, tu sistema está sufriendo penalizaciones de latencia activas.</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="configurar-los-parametros-sysctl-del-kernel-para-alto-rendimiento">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="configurar-los-parametros-sysctl-del-kernel-para-alto-rendimiento-heading">Paso 1: Configurar los parámetros sysctl del kernel para alto rendimiento</h4>
+            <p>Crea un archivo de configuración persistente en <code>/etc/sysctl.d/99-gaming-performance.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/sysctl.d/<span class="tok-num">99</span>-gaming-performance.conf
+</code></pre>
+    </div>
+    
+<p>Pega exactamente los siguientes parámetros de ajuste del kernel:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Deshabilitar el throttling forzado por split locks en CPUs Intel/AMD</span>
+kernel.split_lock_mitigate = <span class="tok-num">0</span>
+<span class="tok-cmt">
+# Ampliar el límite de mapas de memoria virtual para juegos D3D12 y Proton</span>
+vm.max_map_count = <span class="tok-num">2147483642</span>
+<span class="tok-cmt">
+# Optimizar el comportamiento de la memoria virtual con ZRAM</span>
+vm.swappiness = <span class="tok-num">180</span>
+vm.watermark_boost_factor = <span class="tok-num">0</span>
+vm.watermark_scale_factor = <span class="tok-num">125</span>
+vm.page-cluster = <span class="tok-num">0</span>
+<span class="tok-cmt">
+# Reducir la latencia de sincronización de escrituras sucias en disco</span>
+vm.dirty_ratio = <span class="tok-num">10</span>
+vm.dirty_background_ratio = <span class="tok-num">5</span>
+<span class="tok-cmt">
+# Incrementar el número máximo de descriptores de archivos</span>
+fs.file-max = <span class="tok-num">2097152</span>
+</code></pre>
+    </div>
+    
+<ul>
+<li><code>kernel.split_lock_mitigate = 0</code>: Desactiva la penalización del kernel, permitiendo que las instrucciones del procesador se ejecuten a máxima velocidad sin pausas artificiales.</li>
+<li><code>vm.swappiness = 180</code>: Al utilizar ZRAM, un valor alto de swappiness instruye al kernel a preferir comprimir páginas de memoria anónimas en la RAM antes de purgar la caché de archivos de lectura (<em>page cache</em>), manteniendo los archivos del juego siempre calientes en memoria.</li>
+<li><code>vm.page-cluster = 0</code>: Desactiva la lectura por adelantado de páginas contiguas en el swap, optimizando la lectura de una sola página (4 KB) a la vez, ideal para la velocidad instantánea de ZRAM.</li>
+</ul>
+<p>Aplica los cambios inmediatamente sin necesidad de reiniciar:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> sysctl <span class="tok-prop">--system</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="implementar-y-optimizar-zram-con-compresion-zstd">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="implementar-y-optimizar-zram-con-compresion-zstd-heading">Paso 2: Implementar y optimizar ZRAM con compresión zstd</h4>
+            <p>ZRAM crea un dispositivo de bloques en memoria RAM que comprime los datos al vuelo con una relación típica de 2:1 a 3:1.</p>
+<p>En distribuciones basadas en Arch Linux, Fedora, Ubuntu o Debian, instala el generador oficial de ZRAM:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># En Arch Linux / Manjaro / CachyOS</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> <span class="tok-prop">--needed</span> zram-generator
+<span class="tok-cmt">
+# En Ubuntu / Debian</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> zram-tools
+</code></pre>
+    </div>
+    
+<p>Crea el archivo de configuración declarativo <code>/etc/systemd/zram-generator.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>[zram0]<span class="tok-cmt">
+# Asignar un tamaño de ZRAM igual al 100% de la RAM física instalada</span>
+zram-size = ram
+<span class="tok-cmt">
+# Algoritmo de compresión moderno: balance óptimo entre ratio y velocidad de descompresión</span>
+compression-algorithm = zstd
+<span class="tok-cmt">
+# Prioridad máxima para que el kernel utilice ZRAM antes que cualquier swap en disco</span>
+swap-priority = <span class="tok-num">32767</span>
+</code></pre>
+    </div>
+    
+<p>Inicia y activa el servicio del generador de ZRAM:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> daemon-reload
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart /dev/zram0
+</code></pre>
+    </div>
+    
+<p>Verifica la activación ejecutando <code>zramctl</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>zramctl
+</code></pre>
+    </div>
+    
+<p>La consola debe mostrar el dispositivo <code>/dev/zram0</code> con algoritmo <code>zstd</code> y una prioridad de <code>32767</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="tabla-definitiva-de-variables-de-entorno-para-proton-dxvk-y-vkd3d">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="tabla-definitiva-de-variables-de-entorno-para-proton-dxvk-y-vkd3d-heading">Paso 3: Tabla definitiva de Variables de Entorno para Proton, DXVK y VKD3D</h4>
+            <p>No todas las variables de optimización deben activarse ciegamente; algunas provocan inestabilidad o artefactos gráficos. A continuación se detalla la matriz técnica de flags recomendados:</p>
+<table>
+<thead>
+<tr>
+<th>Variable de Entorno</th>
+<th>Cuándo Usarla (Recomendado)</th>
+<th>Cuándo NO Usarla (Evitar)</th>
+<th>Función Técnica Exacta</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DXVK_ASYNC=1</code></td>
+<td>En versiones de Proton con soporte de parche async (ej. Proton-GE antiguo)</td>
+<td>En títulos con sistemas anti-cheat competitivos (Ricochét, EAC, BattlEye)</td>
+<td>Compila shaders en hilos secundarios asíncronos para eliminar tirones</td>
+</tr>
+<tr>
+<td><code>WINE_FULLSCREEN_FSR=1</code></td>
+<td>Cuando necesitas reescalar resoluciones inferiores a 4K/1440p en pantallas grandes</td>
+<td>En juegos que ya incorporan FSR 2.0 / DLSS nativo en sus menús</td>
+<td>Aplica el algoritmo FidelityFX Super Resolution 1.0 a nivel del backend de Wine</td>
+</tr>
+<tr>
+<td><code>RADV_PERFTEST=gpl</code></td>
+<td>Ya activo por defecto en Mesa moderno para GPU AMD Radeon</td>
+<td>En tarjetas NVIDIA o controladores antiguos sin soporte de Graphics Pipeline Library</td>
+<td>Habilita compilación rápida de pipelines gráficos bajo Vulkan</td>
+</tr>
+<tr>
+<td><code>PROTON_ENABLE_NVAPI=1</code></td>
+<td>En GPUs NVIDIA para habilitar DLSS y Reflex en juegos compatibles</td>
+<td>En tarjetas gráficas AMD Radeon o Intel Arc</td>
+<td>Expone la librería NVAPI de NVIDIA dentro del prefijo de Wine</td>
+</tr>
+<tr>
+<td><code>VKD3D_CONFIG=no_upload_hlist</code></td>
+<td>En títulos D3D12 que sufren caídas de memoria o texturas parpadeantes</td>
+<td>Si el juego funciona con fluidez por defecto</td>
+<td>Evita la sobrecarga de sincronización en listas de comandos de subida de texturas</td>
+</tr>
+</tbody></table>
+<p>Para aplicar estas variables en Steam, haz clic derecho sobre el juego -&gt; <strong>Propiedades</strong> -&gt; <strong>Parámetros de lanzamiento</strong>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>gamemoderun %command%
+</code></pre>
+    </div>
+    
+<p>El demonio <code>gamemode</code> de Feral Interactive ajusta automáticamente el gobernador de la CPU a <code>performance</code>, eleva la prioridad de programación del proceso a nivel de renice y activa el modo de juego en el compositor.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h3 id="caso-borde-1-sobrescritura-de-frecuencias-y-temperatura-en-cpus-modernas-p-state-e-cores">Caso Borde 1: Sobrescritura de frecuencias y temperatura en CPUs modernas (P-State / E-Cores)</h3>
+<p>En procesadores Intel híbridos (con núcleos de rendimiento P-Cores y núcleos de eficiencia E-Cores) o AMD Ryzen con tecnología 3D V-Cache, el planificador del kernel puede asignar erróneamente los hilos principales del juego a núcleos lentos o secundarios.</p>
+<p>Para garantizar que el juego aproveche los núcleos de mayor rendimiento:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Comprobar el gobernador de energía activo en todos los núcleos de CPU</span>
+<span class="tok-kw">cat</span> /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | sort | uniq
+<span class="tok-cmt">
+# Forzar el gobernador de rendimiento máximo mediante gamemode</span>
+<span class="tok-kw">systemctl</span> <span class="tok-prop">--user</span> <span class="tok-prop">status</span> gamemoded
+</code></pre>
+    </div>
+    
+<p>Si tu distribución soporta el nuevo framework de planificadores de CPU extensibles <strong>sched-ext</strong> (disponible en kernels Linux 6.12+ y distribuciones como CachyOS), puedes ejecutar planificadores optimizados para latencia de videojuegos como <code>scx_bpfland</code> o <code>scx_lavd</code> para garantizar que los hilos de renderizado nunca compitan con procesos secundarios en segundo plano.</p>
+<h3 id="caso-borde-2-incompatibilidad-entre-compositores-wayland-y-sincronizacion-vertical">Caso Borde 2: Incompatibilidad entre compositores Wayland y sincronización vertical</h3>
+<p>En compositores Wayland (GNOME Mutter, KDE KWin o Hyprland), la sincronización vertical suele estar forzada a nivel de servidor gráfico para garantizar que no exista <em>tearing</em>. Sin embargo, esto puede añadir entre 1 y 2 cuadros de latencia de entrada (<em>input lag</em>).</p>
+<p>En KDE Plasma 6 o compositores compatibles con el protocolo de sincronización explícita (<code>linux-drm-syncobj-v1</code>), habilita la opción de permitir desgarro de pantalla en pantalla completa (<em>Allow tearing in fullscreen</em>) en la configuración de pantalla. Esto otorga al controlador gráfico la libertad de enviar fotogramas directamente al monitor tan pronto como se renderizan, reduciendo la latencia de entrada a niveles idénticos a los de Windows.</p>
+<h3 id="verificacion-de-logs-en-tiempo-real-y-diagnostico">Verificación de Logs en Tiempo Real y Diagnóstico</h3>
+<p>Para confirmar que tu entorno no sufra estrangulamiento térmico ni fallos de controlador durante una sesión de juego:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Monitorear eventos del kernel mientras el juego se ejecuta</span>
+<span class="tok-kw">sudo</span> dmesg <span class="tok-prop">-wH</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;(amdgpu|nvidia|vulkan|page allocation failure)&quot;</span>
+<span class="tok-cmt">
+# 2. Auditar el frametime y consumo de recursos en pantalla mediante MangoHud</span>
+MANGOHUD=<span class="tok-num">1</span> %command%
+</code></pre>
+    </div>
+    
+<p>Al inspeccionar el gráfico de frametime en MangoHud, una línea completamente plana y sin picos verticales confirma que las mitigaciones del kernel y la compresión en ZRAM han estabilizado la canalización de cuadros de tu equipo.</p>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Consejo de Prevención
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Prácticas de seguridad recomendadas:
+            </p>
+            <ul class="prevention-list">
+              <li><strong>No desactives <code>split_lock_mitigate</code> en servidores de producción:</strong> Este ajuste es ideal para estaciones de trabajo y PCs de gaming personales; en servidores web públicos o entornos multiusuario con máquinas virtuales, la mitigación previene ataques maliciosos de denegación de servicio.</li>
+<li><strong>Mantén actualizados los paquetes de controladores gráficos Mesa:</strong> Las optimizaciones de compilación de shaders (GPL) y sincronización explícita evolucionan rápidamente en cada versión menor de Mesa.</li>
+<li><strong>Evita saturar el prefijo de lanzamiento con decenas de variables obsoletas:</strong> Muchas variables populares en foros antiguos (como <code>__GL_THREADED_OPTIMIZATIONS</code>) hoy están integradas de forma nativa por los propios controladores y forzarlas manualmente puede causar inestabilidad.</li>
+            </ul>
+          </div>
+
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
+            <div class="sys-tool-bridge-header">
+              <div class="sys-tool-bridge-tag font-mono">HERRAMIENTAS PARA DESARROLLADORES &amp; SYSADMINS</div>
+              <span class="sys-tool-bridge-status"><span class="status-dot"></span> CALCULADORAS WEB</span>
+            </div>
+            <h3 class="sys-tool-bridge-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
+            </h3>
+            <p class="sys-tool-bridge-desc">
+              En SoporteCero no solo documentamos soluciones técnicas ante fallos de infraestructura y código; también construimos utilidades interactivas de ingeniería financiera para desarrolladores, freelancers y creadores de proyectos digitales. Si estás implementando pasarelas de pago o presupuestando desarrollos, accede a nuestras herramientas verificadas con exportación formal en PDF:
+            </p>
+            <div class="sys-tool-bridge-grid">
+              <a href="/tools/comisiones-pasarelas-pago.html" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
+                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                <div class="sys-tool-card-body">
+                  <span class="sys-tool-card-name">Calculadora de Comisiones de Pago</span>
+                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Modo inverso neto</span>
+                </div>
+                <span class="sys-tool-card-arrow">&rarr;</span>
+              </a>
+              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Calcular tarifa por hora y cotizar proyectos en PDF">
+                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <div class="sys-tool-card-body">
+                  <span class="sys-tool-card-name">Calculadora de Tarifa Hora Freelance</span>
+                  <span class="sys-tool-card-meta font-mono">Gastos fijos · Margen · Cotizador PDF</span>
+                </div>
+                <span class="sys-tool-card-arrow">&rarr;</span>
+              </a>
+              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulador ROAS y punto de equilibrio publicitario">
+                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                <div class="sys-tool-card-body">
+                  <span class="sys-tool-card-name">Simulador ROAS E-commerce</span>
+                  <span class="sys-tool-card-meta font-mono">Break-even publicitario · CPA máximo</span>
+                </div>
+                <span class="sys-tool-card-arrow">&rarr;</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="autor">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
+                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Metodología de validación
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contacto.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Reportar corrección
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Enlaces & Proyectos
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        Soluciones Relacionadas
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-pantalla-congelada-vkd3d-geforce-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">NVIDIA</span>
+            <span>Lectura: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-mando-bluetooth-desconexion-steam-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Gaming</span>
+            <span>Lectura: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error Easy Anti-Cheat: Untrusted system file en Windows y Linux Proton -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/solucion-error-anti-cheat-easyanticheat-untrusted-system-file.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error Easy Anti-Cheat: Untrusted system file en Windows y Linux Proton</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Gaming</span>
+            <span>Lectura: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../">Inicio</a></li>
+        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="../contacto.html">Contacto</a></li>
+        <li><a href="../servicios.html">Servicios</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../js/main.js"></script>
+</body>
+</html>

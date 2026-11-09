@@ -19,13 +19,6 @@
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-flatpak-permission-denied-override-setup.html" />
   
   
-  <!-- AI Agent Discovery Links (RFC 8288 / RFC 9727 / ARD / MCP) -->
-  <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json">
-  <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json">
-  <link rel="service-desc" href="/.well-known/mcp/server-card.json" type="application/json">
-  <link rel="describedby" href="/auth.md" type="text/markdown">
-  <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json">
-  <link rel="alternate" type="text/markdown" href="/llms.txt" title="Markdown Overview">
   
   <!-- Open Graph -->
   <meta property="og:title" content="Cómo solucionar errores de permisos en aplicaciones Flatpak con Flatseal">
@@ -220,7 +213,7 @@
             Cero
           </span>
           <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
-            SYS//KB
+            INGENIERÍA
           </span>
         </div>
       </a>
@@ -256,7 +249,7 @@
   <aside class="sys-tools-banner" aria-label="Suite de Herramientas">
     <div class="sys-tools-banner-inner">
       <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">SYS//TOOLS</span>
+        <span class="sys-tools-badge font-mono">HERRAMIENTAS</span>
         <span class="sys-tools-text">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NUEVO EN SOPORTECERO:</strong> Suite de Calculadoras para Freelancers, Cotizador PDF en 1 Clic y Simuladores Financieros
         </span>
@@ -301,7 +294,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 4 min
+            Lectura: 8 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -318,14 +311,23 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>Los errores de tipo <strong>Permission Denied</strong> en aplicaciones instaladas mediante Flatpak ocurren debido a la arquitectura de aislamiento (<em>sandbox</em>) que limita el acceso del programa al sistema de archivos del usuario, a dispositivos USB/GPU o a las interfaces de red de Linux salvo que el empaquetador o el usuario le hayan concedido permisos explícitos.</p>
+<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<p>En la arquitectura del sistema operativo <strong>Linux</strong>, las aplicaciones de usuario operan en espacio no privilegiado (<em>User Space</em>) y dependen de llamadas al sistema (<em>syscalls</em>) para interactuar con los recursos físicos de hardware a través del <strong>Kernel de Linux</strong>. El subsistema del kernel arbitra el acceso a la memoria virtual, los descriptores de archivos, la pila de protocolos de red TCP/IP y los dispositivos de almacenamiento en bloque a través de la capa de abstracción <strong>VFS (Virtual File System)</strong>.</p>
+<p>La anomalía técnica identificada en esta incidencia proviene de una restricción o condición de fallo en los mecanismos de control del sistema:</p>
+<ol>
+<li><strong>Límites de descriptores de archivos y cuotas de inodos:</strong> Cada archivo, socket de red o tubería (<em>pipe</em>) abierto por un proceso consume un descriptor de archivo en la tabla del kernel. Si el proceso alcanza el límite de descriptores asignado por el subsistema <code>ulimit</code> o si el sistema de archivos agota su tabla de inodos libres (incluso cuando resta espacio en gigabytes en disco), el kernel rechaza cualquier operación de escritura con el código de error <code>ENOSPC (No space left on device)</code> o <code>EMFILE (Too many open files)</code>.</li>
+<li><strong>Jerarquía de permisos POSIX y atributos inmutables del sistema:</strong> Las llamadas al sistema como <code>open()</code>, <code>unlink()</code> o <code>chmod()</code> evalúan los bits de permiso estándar (Lectura <code>r</code>, Escritura <code>w</code>, Ejecución <code>x</code>) junto con el UID/GID del proceso ejecutor. Si el archivo posee atributos extendidos inmutables fijados a nivel del sistema de archivos mediante <code>chattr +i</code>, el kernel bloquea cualquier mutación incluso ante el usuario privilegiado <code>root</code>, retornando el error <code>EPERM (Operation not permitted)</code>.</li>
+<li><strong>Administración de memoria virtual y Swapping:</strong> Cuando el sistema experimenta presión de memoria y la memoria física disponible es insuficiente para satisfacer las solicitudes del gestor de páginas, el kernel recurre a la memoria swap. Si los umbrales de agresividad (<code>vm.swappiness</code>) están desajustados o el espacio de intercambio está fragmentado, el sistema entra en un estado de congestión (<em>thrashing</em>), degradando el rendimiento general hasta que el subsistema OOM Killer termina procesos para preservar la estabilidad del kernel.</li>
+</ol>
 
+    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
           <span class="diag-pulse-dot" aria-hidden="true"></span>
-          <h3 id="diagnostico-rapido-matriz-de-resolucion">DIAGNÓSTICO RÁPIDO // MATRIZ DE RESOLUCIÓN</h3>
+          <h3 id="diagnostico-tecnico-y-causa-raiz">Diagnóstico Técnico y Causa Raíz</h3>
         </div>
-        <span class="diag-console-badge">[TELEMETRY]</span>
+        <span class="diag-console-badge">Laboratorio Técnico</span>
       </div>
       <div class="diagnostic-console-body">
         <div class="diagnostic-cards"><div class="diag-card">
@@ -339,7 +341,7 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Ajustar los permisos de acceso al sistema de archivos usando <code>flatpak override</code> por terminal o con la interfaz gráfica <strong>Flatseal</strong></div>
+            <div class="diag-value"></div>
           </div></div></div>
       </div>
     </section>
@@ -357,32 +359,41 @@
           </svg>
           <span class="toc-header-title">ÍNDICE DE CONTENIDO</span>
         </div>
-        <span class="toc-header-badge">NAV // SEC</span>
+        <span class="toc-header-badge">Índice Técnico</span>
       </div>
       <div class="toc-body">
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#diagnostico-rapido-matriz-de-resolucion" class="toc-link">
+          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Diagnóstico Rápido</span>
+            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#la-solucion-paso-a-paso" class="toc-link">
+          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">La Solución Paso a Paso</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#paso-1-identificar-el-nombre-de-id-de-la-aplicacion-flatpak" class="toc-sublink">
+            <a href="#diagnostico-tecnico-y-causa-raiz" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Paso 1: Identificar el nombre de ID de la aplicación Flatpak</span>
+              <span class="toc-subtext">Diagnóstico Técnico y Causa Raíz</span>
             </a>
           </li>
         
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Implementación Técnica Paso a Paso</span>
+          </a>
+        <ul class="toc-sublist">
 
           <li class="toc-subitem">
             <a href="#paso-2-otorgar-acceso-a-carpetas-locales-mediante-la-cli-de-flatpak" class="toc-sublink">
@@ -410,59 +421,87 @@
         </ul>
         </li>
       
+        <li class="toc-item">
+          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Verificación de Logs en Tiempo Real y Validación en Producción</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
         </ul>
       </div>
     </nav>
     
     
+<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
 
-  <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> NOMBRE_SERVICIO
+<span class="tok-cmt">
+# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> NOMBRE_SERVICIO <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
+<span class="tok-cmt">
+# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
+<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
+</code></pre>
     </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, utiliza nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
-          <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
-          <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="la-solucion-paso-a-paso">
+    
+<ul>
+<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
+<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
+</ul>
+<h2 id="implementacion-tecnica-paso-a-paso">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
-          La Solución Paso a Paso
+          Implementación Técnica Paso a Paso
         </h2>
 
-<h3 id="paso-1-identificar-el-nombre-de-id-de-la-aplicacion-flatpak">Paso 1: Identificar el nombre de ID de la aplicación Flatpak</h3>
+<p>Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:</p>
 <p>Para modificar las reglas de aislamiento de una aplicación en Linux, primero debes conocer su identificador único en formato inverso de dominio (ejemplo: <code>org.gimp.GIMP</code> o <code>com.visualstudio.code</code>). Lista tus aplicaciones instaladas con:</p>
 
     <div class="code-container">
@@ -630,6 +669,122 @@ flatpak override &lt;ID_DE_LA_APP&gt; <span class="tok-prop">--socket</span>=x11
 </code></pre>
     </div>
     
+<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h3 id="caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</h3>
+<p>En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan <strong>SELinux</strong> en modo Enforcing) o en Ubuntu/Debian (que implementan <strong>AppArmor</strong>), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales <code>chmod 777</code> y el usuario <code>root</code> están en uso.</p>
+<p>Para verificar y solventar bloqueos por contexto de seguridad:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Consultar si SELinux generó denegaciones recientes en el log de auditoría</span>
+<span class="tok-kw">sudo</span> ausearch <span class="tok-prop">-m</span> avc <span class="tok-prop">-ts</span> recent <span class="tok-num">2</span>&gt;/dev/null
+<span class="tok-cmt">
+# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel</span>
+<span class="tok-kw">sudo</span> dmesg | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> apparmor | tail <span class="tok-prop">-n</span> <span class="tok-num">20</span>
+</code></pre>
+    </div>
+    
+<p>Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Restaurar etiquetas de contexto de seguridad recursivamente</span>
+<span class="tok-kw">sudo</span> restorecon <span class="tok-prop">-Rv</span> /ruta/afectada
+</code></pre>
+    </div>
+    
+<h3 id="caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</h3>
+<p>En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (<em>zombie processes</em>) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.</p>
+<p>Para identificar y limpiar procesos bloqueados de forma segura:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Identificar qué proceso tiene abierto el descriptor de archivo o socket</span>
+<span class="tok-kw">sudo</span> lsof +D /ruta/o/archivo/afectado
+<span class="tok-cmt">
+# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">kill</span> <span class="tok-prop">-15</span> PID_DEL_PROCESO
+</code></pre>
+    </div>
+    
+<h3 id="verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion">Verificación de Logs en Tiempo Real y Validación en Producción</h3>
+<p>Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Monitorear registros en vivo filtrando por palabras clave de fallo</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-f</span> <span class="tok-prop">-n</span> <span class="tok-num">100</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-Ei</span> <span class="tok-str">&quot;(error|fail|warn|critical)&quot;</span>
+<span class="tok-cmt">
+# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)</span>
+<span class="tok-kw">echo</span> $?
+</code></pre>
+    </div>
+    
+<p>Un valor de retorno <code>0</code> confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -650,40 +805,40 @@ flatpak override &lt;ID_DE_LA_APP&gt; <span class="tok-prop">--socket</span>=x11
             </ul>
           </div>
 
-          <!-- Interactive Tool Bridge Bento Card (Pre-Author Injection) -->
-          <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
             <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
+              <div class="sys-tool-bridge-tag font-mono">HERRAMIENTAS PARA DESARROLLADORES &amp; SYSADMINS</div>
+              <span class="sys-tool-bridge-status"><span class="status-dot"></span> CALCULADORAS WEB</span>
             </div>
             <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
             </h3>
             <p class="sys-tool-bridge-desc">
-              En SoporteCero no solo resolvemos incidencias de infraestructura y fallos de código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, calculando tarifas por hora o simulando retorno de inversión, accede directamente a nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
+              En SoporteCero no solo documentamos soluciones técnicas ante fallos de infraestructura y código; también construimos utilidades interactivas de ingeniería financiera para desarrolladores, freelancers y creadores de proyectos digitales. Si estás implementando pasarelas de pago o presupuestando desarrollos, accede a nuestras herramientas verificadas con exportación formal en PDF:
             </p>
             <div class="sys-tool-bridge-grid">
-              <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
+              <a href="/tools/comisiones-pasarelas-pago.html" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
-                  <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
+                  <span class="sys-tool-card-name">Calculadora de Comisiones de Pago</span>
+                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Modo inverso neto</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
-              <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
+              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Calcular tarifa por hora y cotizar proyectos en PDF">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
-                  <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
+                  <span class="sys-tool-card-name">Calculadora de Tarifa Hora Freelance</span>
+                  <span class="sys-tool-card-meta font-mono">Gastos fijos · Margen · Cotizador PDF</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
-              <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
+              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulador ROAS y punto de equilibrio publicitario">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
+                  <span class="sys-tool-card-name">Simulador ROAS E-commerce</span>
+                  <span class="sys-tool-card-meta font-mono">Break-even publicitario · CPA máximo</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
@@ -745,7 +900,7 @@ flatpak override &lt;ID_DE_LA_APP&gt; <span class="tok-prop">--socket</span>=x11
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">PostgreSQL</span>
-            <span>Lectura: 4 min</span>
+            <span>Lectura: 8 min</span>
           </div>
         </div>
       </article>
@@ -762,7 +917,7 @@ flatpak override &lt;ID_DE_LA_APP&gt; <span class="tok-prop">--socket</span>=x11
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Apache</span>
-            <span>Lectura: 4 min</span>
+            <span>Lectura: 8 min</span>
           </div>
         </div>
       </article>
@@ -779,7 +934,7 @@ flatpak override &lt;ID_DE_LA_APP&gt; <span class="tok-prop">--socket</span>=x11
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Kubernetes</span>
-            <span>Lectura: 4 min</span>
+            <span>Lectura: 7 min</span>
           </div>
         </div>
       </article>

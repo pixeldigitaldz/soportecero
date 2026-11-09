@@ -303,7 +303,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   });
 
   // 2. Diagnostic Box / Telemetry Matrix layout wrapping
-  const diagRegex = /<h2[^>]*>[^<]*(?:Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
+  const diagRegex = /<h2[^>]*>[^<]*(?:Entorno de Laboratorio y Diagnóstico Previo|Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
 
   const transformTableToCards = (htmlStr) => {
     return htmlStr.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableInner) => {
@@ -356,15 +356,17 @@ function postProcessHtml(rawHtml, lang = 'es') {
   if (diagMatch) {
     const diagTableContent = diagMatch[1];
     let formattedDiag = transformTableToCards(diagTableContent);
-    const consoleTitle = isEn ? 'QUICK DIAGNOSTICS // RESOLUTION MATRIX' : 'DIAGNÓSTICO RÁPIDO // MATRIZ DE RESOLUCIÓN';
+    const labHeading = isEn ? 'Lab Environment &amp; Preliminary Diagnostics' : 'Entorno de Laboratorio y Diagnóstico Previo';
+    const consoleTitle = isEn ? 'Technical Diagnostics & Root Cause Matrix' : 'Diagnóstico Técnico y Causa Raíz';
     const diagBoxHtml = `
+    <h2>${labHeading}</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
           <span class="diag-pulse-dot" aria-hidden="true"></span>
           <h3 id="diag-heading" class="diag-console-title">${consoleTitle}</h3>
         </div>
-        <span class="diag-console-badge">[TELEMETRY]</span>
+        <span class="diag-console-badge">${isEn ? 'Lab Environment' : 'Laboratorio Técnico'}</span>
       </div>
       <div class="diagnostic-console-body">
         ${formattedDiag}
@@ -394,10 +396,10 @@ function postProcessHtml(rawHtml, lang = 'es') {
   }
 
   // 4. Solution Steps list formatting & extraction
-  const solTitle = isEn ? 'Step-by-Step Solution' : 'La Solución Paso a Paso';
+  const solTitle = isEn ? 'Step-by-Step Technical Implementation' : 'Implementación Técnica Paso a Paso';
   const solRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix|La Solución Paso a Paso|Solución Paso a Paso|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
-    : /<h2[^>]*>[^<]*(?:La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
+    ? /<h2[^>]*>[^<]*(?:Step-by-Step Technical Implementation|Step-by-Step Implementation|Step-by-Step Solution|Step-by-step Solution|Solution|How to solve|How to fix|Implementación Técnica Paso a Paso|La Solución Paso a Paso|Solución Paso a Paso|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+    : /<h2[^>]*>[^<]*(?:Implementación Técnica Paso a Paso|Implementación Paso a Paso|La Solución Paso a Paso|Solución Paso a Paso|Solución|Cómo solucionar|Como solucionar)[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i;
 
   const solutionMatch = html.match(solRegex);
   if (solutionMatch) {
@@ -610,7 +612,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
           </svg>
           <span class="toc-header-title">${tocTitle}</span>
         </div>
-        <span class="toc-header-badge">NAV // SEC</span>
+        <span class="toc-header-badge">${isEn ? 'Technical Index' : 'Índice Técnico'}</span>
       </div>
       <div class="toc-body">
         <ul class="toc-list">
@@ -630,104 +632,9 @@ ${itemsHtml}
     }
   }
 
-  // 7. Contextual Mid-Article Bento Card ("SYS//TOOL BRIDGE")
-  const toolBridgeCardMidEs = `
-  <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, utiliza nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
-          <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
-          <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  `;
-
-  const toolBridgeCardMidEn = `
-  <section class="sys-tool-bridge" aria-label="Interactive Tool SYS//TOOL BRIDGE">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // FINANCIAL SUITE</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Interactive Utilities &amp; Financial Modeling
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  `;
-
-  const bridgeCard = isEn ? toolBridgeCardMidEn : toolBridgeCardMidEs;
-  const targetFaqHeadingRegex = isEn
-    ? /<h2[^>]*>[^<]*(?:Frequently Asked Questions|FAQ|Common Questions)[^<]*<\/h2>/i
-    : /<h2[^>]*>[^<]*(?:Preguntas Frecuentes|FAQ|Dudas Frecuentes)[^<]*<\/h2>/i;
-
-  if (targetFaqHeadingRegex.test(html)) {
-    html = html.replace(targetFaqHeadingRegex, match => `${bridgeCard}\n${match}`);
-  } else {
-    const lastH2Index = html.lastIndexOf('<h2');
-    if (lastH2Index !== -1) {
-      html = html.substring(0, lastH2Index) + bridgeCard + '\n' + html.substring(lastH2Index);
-    } else {
-      html += '\n' + bridgeCard;
-    }
-  }
+  // 7. Note: The authoritative 'Herramientas para Desarrolladores & SysAdmins' section
+  // is placed directly in src/post-template.html and src/en/post-template.html
+  // right before the author bio, avoiding duplicate mid-article injections.
 
   return {
     contentHtml: html,
@@ -1385,18 +1292,8 @@ function build() {
   <url>
     <loc>https://soportecero.com/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
     <lastmod>${homeLastmodEs}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
-    <lastmod>${homeLastmodEn}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1460,16 +1357,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/contacto.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/contacto.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contacto.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1478,16 +1365,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/nosotros.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/nosotros.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1496,16 +1373,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/servicios.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/servicios.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1514,16 +1381,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/legal/privacidad.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/legal/privacidad.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1532,16 +1389,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/legal/terminos.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/legal/terminos.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1550,16 +1397,6 @@ function build() {
   <url>
     <loc>https://soportecero.com/legal/cookies.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
-    <lastmod>${staticLastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://soportecero.com/en/legal/cookies.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>

@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy | SoporteCero</title>
-  <meta name="description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
-  <meta name="keywords" content="Nginx, Docker, Sysadmin">
+  <meta name="description" content="Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos de upstream y registros en tiempo real.">
+  <meta name="keywords" content="Nginx, Docker, Sysadmin, Linux, PHP-FPM">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
@@ -19,17 +19,10 @@
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html" />
   
   
-  <!-- AI Agent Discovery Links (RFC 8288 / RFC 9727 / ARD / MCP) -->
-  <link rel="api-catalog" href="/.well-known/api-catalog" type="application/linkset+json">
-  <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json">
-  <link rel="service-desc" href="/.well-known/mcp/server-card.json" type="application/json">
-  <link rel="describedby" href="/auth.md" type="text/markdown">
-  <link rel="agent-skills" href="/.well-known/agent-skills/index.json" type="application/json">
-  <link rel="alternate" type="text/markdown" href="/llms.txt" title="Markdown Overview">
   
   <!-- Open Graph -->
   <meta property="og:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy">
-  <meta property="og:description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
+  <meta property="og:description" content="Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos de upstream y registros en tiempo real.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -44,11 +37,13 @@
   <meta property="article:tag" content="Nginx">
   <meta property="article:tag" content="Docker">
   <meta property="article:tag" content="Sysadmin">
+  <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="PHP-FPM">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy">
-  <meta name="twitter:description" content="Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.">
+  <meta name="twitter:description" content="Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos de upstream y registros en tiempo real.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -75,12 +70,12 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy",
-  "description": "Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.",
+  "description": "Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos de upstream y registros en tiempo real.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "es",
   "category": "Sistemas y Servidores",
   "articleSection": "Sistemas y Servidores",
-  "keywords": "Nginx, Docker, Sysadmin",
+  "keywords": "Nginx, Docker, Sysadmin, Linux, PHP-FPM",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-06-27",
   "dateModified": "2026-06-27",
@@ -133,41 +128,53 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy",
-  "description": "Aprende a diagnosticar por qué Nginx devuelve un error 502 Bad Gateway comprobando sockets y servicios del backend.",
+  "description": "Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos de upstream y registros en tiempo real.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#comprobar-el-estado-del-servicio-del-backend",
-      "name": "Comprobar el estado del servicio del backend",
+      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#comprobar-y-restablecer-el-ciclo-de-vida-del-servicio-backend",
+      "name": "Comprobar y restablecer el ciclo de vida del servicio backend",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Nginx no puede despachar la consulta si el servicio que procesa la lógica interna de tu aplicación web se ha detenido. Comprueba su estado en consola: (Si el servicio trasero está inactivo, inicialo de inmediato: sudo systemctl start php8.2-fpm)."
+          "text": "Verifica el estado del demonio responsable de procesar el código de la aplicación. Utiliza el comando correspondiente a tu entorno tecnológico: El parámetro -l (--full) en systemctl evita truncar las líneas de salida del log en la terminal, mientras que --no-pager vuelca la salida directamente al flujo de texto estándar (stdout), permitiendo leer los últimos mensajes de fallo del servicio sin bloquear la pantalla interactiva. Si el servicio aparece con estado inactive (dead) o failed, arráncalo e inspecciona que no falle al iniciar:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#verificar-la-ruta-del-socket-o-puerto-en-la-configuracion",
-      "name": "Verificar la ruta del Socket o Puerto en la configuración",
+      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#corregir-la-definicion-de-upstream-y-permisos-en-la-configuracion-de-nginx",
+      "name": "Corregir la definición de Upstream y permisos en la configuración de Nginx",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Si el backend está activo pero sigues recibiendo el error 502, es probable que Nginx esté intentando comunicarse a través de un puerto o socket unix incorrecto. Abre el archivo de configuración del bloque de tu sitio /etc/nginx/sites-available/default:"
+          "text": "Accede al bloque de configuración del sitio web (generalmente ubicado en /etc/nginx/sites-available/ o /etc/nginx/conf.d/): Asegúrate de que la directiva de enrutamiento apunte exactamente al medio de transporte activo: proxy_http_version 1.1: Habilita HTTP/1.1 para permitir conexiones persistentes (keep-alive) entre Nginx y el backend, reduciendo la latencia y la saturación de sockets en el kernel. proxy_set_header Host $host: Garantiza que el backend conozca el nombre de dominio real solicitado por el cliente y no la dirección local 127.0.0.1. proxy_buffer_size 128k: Asigna un bloque de memoria suficiente para almacenar las cabeceras de respuesta que envía el backend, erradicando el fallo por desbordamiento de headers."
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 3,
-      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#revisar-el-registro-detallado-de-logs-de-nginx",
-      "name": "Revisar el registro detallado de logs de Nginx",
+      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#alinear-permisos-de-usuario-entre-nginx-y-el-pool-del-backend",
+      "name": "Alinear permisos de usuario entre Nginx y el pool del backend",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "El log de errores de Nginx te dará la causa de conexión rechazada exacta. Inspecciónalo en tiempo real: (Busca descriptores como Connection refused o Permission denied en la comunicación con el socket)."
+          "text": "Si utilizas sockets UNIX y el registro de Nginx reporta 13: Permission denied, edita el archivo de configuración del pool del backend (por ejemplo /etc/php/8.2/fpm/pool.d/www.conf): Tras modificar la directiva, reinicia el demonio del pool:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html#validar-la-sintaxis-y-recargar-nginx-con-cero-tiempo-de-inactividad",
+      "name": "Validar la sintaxis y recargar Nginx con cero tiempo de inactividad",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Antes de aplicar los cambios en un servidor en producción, valida siempre la integridad semántica de la configuración con el flag -t: El parámetro -t comprueba la sintaxis de todos los archivos incluidos y verifica la accesibilidad de los directorios referenciados sin interrumpir el tráfico activo. Si la consola confirma syntax is ok y test is successful, envía una señal SIGHUP al proceso maestro mediante un reload grácil: El comando reload no detiene los procesos worker existentes que atienden solicitudes en curso; en su lugar, levanta nuevos workers con la nueva configuración y retira de forma ordenada a los anteriores una vez completadas las transacciones pendientes."
         }
       ]
     }
@@ -208,7 +215,7 @@
             Cero
           </span>
           <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
-            SYS//KB
+            INGENIERÍA
           </span>
         </div>
       </a>
@@ -244,7 +251,7 @@
   <aside class="sys-tools-banner" aria-label="Suite de Herramientas">
     <div class="sys-tools-banner-inner">
       <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">SYS//TOOLS</span>
+        <span class="sys-tools-badge font-mono">HERRAMIENTAS</span>
         <span class="sys-tools-text">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NUEVO EN SOPORTECERO:</strong> Suite de Calculadoras para Freelancers, Cotizador PDF en 1 Clic y Simuladores Financieros
         </span>
@@ -289,7 +296,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 4 min
+            Lectura: 7 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -305,41 +312,123 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>El error <code>502 Bad Gateway</code> en un servidor web Nginx configurado como proxy inverso significa que Nginx ha recibido una respuesta inválida (o ninguna respuesta) del servidor de origen o backend (como PHP-FPM, un proceso de Node.js, Gunicorn o un contenedor de Docker) al intentar transferir la petición del cliente.</p>
+          <p>El error <strong>502 Bad Gateway</strong> es una respuesta estándar del protocolo HTTP (definida formalmente en RFC 7231 y RFC 9110) emitida por un servidor web intermedio que opera como puerta de enlace o proxy inverso. En una arquitectura moderna basada en <strong>Nginx</strong>, este código indica de forma inequívoca que Nginx actuó como intermediario para transferir la petición entrante del cliente hacia un servicio de aplicación en el backend (como PHP-FPM, un proceso Node.js, un servidor ASGI/WSGI como Uvicorn o Gunicorn, o un contenedor Docker), pero recibió una respuesta inválida, un paquete TCP RST (Reset), o ninguna respuesta antes de que se cerrara la conexión en la capa de transporte.</p>
+<p>A diferencia de un error 504 Gateway Timeout (donde el backend acepta la conexión pero tarda más de lo permitido en generar los bytes de respuesta), el error 502 suele ser síntoma de una interrupción prematura en la negociación del canal de comunicación: el proceso de destino está caído, el socket UNIX no existe o tiene permisos de lectura/escritura denegados, la cola de conexiones (<code>backlog</code>) se ha saturado por picos de tráfico, o el buffer de cabeceras de Nginx es insuficiente para almacenar la respuesta enviada por el upstream.</p>
+<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<p>Para comprender la causa raíz de un código 502, es necesario examinar el flujo de datos entre la capa de red del sistema operativo y los procesos en espacio de usuario (<em>user space</em>):</p>
+<ol>
+<li><strong>Ciclo de vida del socket y paquetes TCP:</strong> Cuando Nginx recibe una solicitud HTTP en el puerto 80 o 443, consulta su bloque de configuración (<code>server</code> y <code>location</code>). Si la directiva <code>proxy_pass</code> o <code>fastcgi_pass</code> apunta a una dirección IP y puerto local (por ejemplo <code>http://127.0.0.1:3000</code>), el kernel ejecuta la llamada al sistema <code>connect()</code>. Si en ese puerto no hay ningún proceso escuchando con un socket en estado <code>LISTEN</code>, el kernel emite de inmediato un paquete TCP con el flag <code>RST</code> activado. Nginx intercepta este rechazo de conexión (<code>ECONNREFUSED</code>) e interrumpe la transacción generando el error 502 hacia el navegador.</li>
+<li><strong>Sockets de Dominio UNIX (AF_UNIX) y Permisos POSIX:</strong> En entornos PHP-FPM o Gunicorn donde la comunicación se optimiza prescindiendo del stack de red TCP/IP para usar sockets en disco (ej. <code>/run/php/php8.2-fpm.sock</code>), la comunicación depende de los permisos del sistema de archivos POSIX. Si el archivo de socket es propiedad del usuario <code>www-data</code> pero el proceso de Nginx corre bajo un usuario distinto (o carece de permisos de escritura <code>w</code> en el archivo o de ejecución <code>x</code> en los directorios superiores), la llamada al sistema devuelve <code>EACCES (Permission denied)</code>, culminando en un 502 inmediato.</li>
+<li><strong>Colapso del worker por Out-Of-Memory (OOM Killer):</strong> Si el proceso backend (como un worker de Node.js o un proceso hijo de PHP-FPM) agota la memoria RAM disponible o supera los límites de cgroups en Docker, el subsistema OOM Killer del kernel de Linux envía una señal <code>SIGKILL (kill -9)</code> fulminante al proceso. En ese instante exacto, la conexión TCP o el socket UNIX se cierra abruptamente mientras Nginx esperaba los encabezados HTTP, lo que genera en los logs de Nginx la alerta <code>upstream prematurely closed connection while reading response header from upstream</code>.</li>
+<li><strong>Desbordamiento de cabeceras HTTP de respuesta:</strong> Cuando el backend genera cookies de sesión de gran tamaño, tokens JWT extensos o cabeceras personalizadas que superan el tamaño por defecto de <code>proxy_buffer_size</code> (normalmente 4k u 8k según la arquitectura del sistema operativo), Nginx no puede almacenar la cabecera en memoria y aborta la transferencia marcándola como respuesta corrupta.</li>
+</ol>
 
+    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
           <span class="diag-pulse-dot" aria-hidden="true"></span>
-          <h3 id="diagnostico-rapido-matriz-de-resolucion">DIAGNÓSTICO RÁPIDO // MATRIZ DE RESOLUCIÓN</h3>
+          <h3 id="diagnostico-tecnico-y-causa-raiz">Diagnóstico Técnico y Causa Raíz</h3>
         </div>
-        <span class="diag-console-badge">[TELEMETRY]</span>
+        <span class="diag-console-badge">Laboratorio Técnico</span>
       </div>
       <div class="diagnostic-console-body">
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
             </div>
-            <div class="diag-value"><strong>Servicio de aplicación (PHP-FPM, Node.js, Gunicorn) fuera de servicio</strong></div>
+            <div class="diag-value"><code>connect() failed (111: Connection refused)</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+              <span class="diag-badge diag-badge-default">CAPA AFECTADA</span>
             </div>
-            <div class="diag-value">Verificar e iniciar el servicio backend con <code>systemctl status php-fpm</code> o Docker</div>
+            <div class="diag-value">Red / Proceso</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">El servicio backend (Node.js/Gunicorn/Docker) está detenido o escucha en otra interfaz</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ACCIÓN CORRECTIVA INMEDIATA</span>
+            </div>
+            <div class="diag-value">Iniciar el servicio o ajustar la directiva <code>proxy_pass</code> al puerto correcto</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
             </div>
-            <div class="diag-value"><strong>Puerto o socket UNIX mal configurado en la directiva proxy_pass</strong></div>
+            <div class="diag-value"><code>connect() to ... failed (13: Permission denied)</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+              <span class="diag-badge diag-badge-default">CAPA AFECTADA</span>
             </div>
-            <div class="diag-value">Corregir la ruta del socket <code>/var/run/php/php-fpm.sock</code> o puerto en <code>nginx.conf</code></div>
+            <div class="diag-value">Sistema de Archivos POSIX</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">El proceso Nginx no tiene permisos para escribir en el socket UNIX <code>/run/php/...sock</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ACCIÓN CORRECTIVA INMEDIATA</span>
+            </div>
+            <div class="diag-value">Ajustar <code>listen.owner</code>, <code>listen.group</code> y <code>listen.mode = 0660</code> en el pool del backend</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>upstream prematurely closed connection</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">CAPA AFECTADA</span>
+            </div>
+            <div class="diag-value">Memoria / Proceso</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">El proceso backend colapsó por excepción no controlada o fue terminado por el OOM Killer</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ACCIÓN CORRECTIVA INMEDIATA</span>
+            </div>
+            <div class="diag-value">Auditar memoria con <code>dmesg -T</code> y revisar excepciones del framework backend</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>upstream sent too big header while reading response header</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">CAPA AFECTADA</span>
+            </div>
+            <div class="diag-value">Buffers de Nginx</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Las cabeceras HTTP del backend exceden el tamaño de buffer asignado en Nginx</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ACCIÓN CORRECTIVA INMEDIATA</span>
+            </div>
+            <div class="diag-value">Incrementar <code>proxy_buffer_size</code> y <code>proxy_buffers</code> en el bloque <code>location</code></div>
           </div></div></div>
       </div>
     </section>
@@ -357,23 +446,73 @@
           </svg>
           <span class="toc-header-title">ÍNDICE DE CONTENIDO</span>
         </div>
-        <span class="toc-header-badge">NAV // SEC</span>
+        <span class="toc-header-badge">Índice Técnico</span>
       </div>
       <div class="toc-body">
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#diagnostico-rapido-matriz-de-resolucion" class="toc-link">
+          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Diagnóstico Rápido</span>
+            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#la-solucion-paso-a-paso" class="toc-link">
+          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">La Solución Paso a Paso</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
           </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#diagnostico-tecnico-y-causa-raiz" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Diagnóstico Técnico y Causa Raíz</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Implementación Técnica Paso a Paso</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-1-bloqueo-silencioso-por-politicas-de-selinux-rhel-almalinux-rocky-linux-centos" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 1: Bloqueo silencioso por políticas de SELinux (RHEL, AlmaLinux, Rocky Linux, CentOS)</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#caso-borde-2-asignacion-de-nombres-de-servicio-en-redes-docker-dns-interno-no-resuelto" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Caso Borde 2: Asignación de nombres de servicio en redes Docker (DNS interno no resuelto)</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#verificacion-de-logs-en-tiempo-real-y-cierre-de-incidencia" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Verificación de Logs en Tiempo Real y Cierre de Incidencia</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -381,59 +520,7 @@
     </nav>
     
     
-
-  <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, utiliza nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
-          <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
-          <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="la-solucion-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          La Solución Paso a Paso
-        </h2>
-<ol class="steps-list">
-
-        <li class="step-item" id="comprobar-el-estado-del-servicio-del-backend">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="comprobar-el-estado-del-servicio-del-backend-heading">Paso 1: Comprobar el estado del servicio del backend</h4>
-            <p>Nginx no puede despachar la consulta si el servicio que procesa la lógica interna de tu aplicación web se ha detenido. Comprueba su estado en consola:</p>
+<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -453,27 +540,121 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Ejemplo si tu aplicación usa PHP-FPM</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> php8.<span class="tok-num">2</span>-fpm
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar si el socket TCP del backend está realmente escuchando</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tulpn</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-cmt">&#39;:(3000|8000|8080|9000)&#39;</span>
 <span class="tok-cmt">
-# Ejemplo si usas NodeJS en segundo plano con PM2</span>
-pm2 <span class="tok-prop">status</span>
+# 2. Verificar permisos y existencia física del socket UNIX</span>
+<span class="tok-kw">ls</span> <span class="tok-prop">-la</span> /run/php/*.sock
 <span class="tok-cmt">
-# Ejemplo si corres el backend en contenedores</span>
-<span class="tok-kw">docker</span> ps
+# 3. Comprobar si el proceso de Nginx puede comunicarse directamente con el backend mediante HTTP</span>
+<span class="tok-kw">curl</span> <span class="tok-prop">-Iv</span> http://<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">3000</span>/
 </code></pre>
     </div>
     
-<p><em>(Si el servicio trasero está inactivo, inicialo de inmediato: <code>sudo systemctl start php8.2-fpm</code>).</em></p>
+<ul>
+<li>El comando <code>ss</code> con los parámetros <code>-t</code> (sockets TCP), <code>-u</code> (UDP), <code>-l</code> (estado listening), <code>-p</code> (mostrar PID y nombre del programa) y <code>-n</code> (resolver numéricamente sin consultar DNS) te permite verificar si el puerto está efectivamente en escucha y cuál es el PID del proceso propietario.</li>
+<li>El comando <code>curl</code> con el flag <code>-I</code> (solicitar únicamente los encabezados HTTP mediante el método HEAD) y <code>-v</code> (modo verbose exhaustivo) permite aislar a Nginx y confirmar si el servidor backend responde directamente en la interfaz loopback.</li>
+</ul>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="comprobar-y-restablecer-el-ciclo-de-vida-del-servicio-backend">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="comprobar-y-restablecer-el-ciclo-de-vida-del-servicio-backend-heading">Paso 1: Comprobar y restablecer el ciclo de vida del servicio backend</h4>
+            <p>Verifica el estado del demonio responsable de procesar el código de la aplicación. Utiliza el comando correspondiente a tu entorno tecnológico:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Para aplicaciones basadas en PHP-FPM</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> php8.<span class="tok-num">2</span>-fpm <span class="tok-prop">-l</span> <span class="tok-prop">--no-pager</span>
+<span class="tok-cmt">
+# Para aplicaciones Node.js gestionadas mediante PM2</span>
+pm2 <span class="tok-prop">status</span>
+<span class="tok-cmt">
+# Para servicios desplegados en contenedores Docker</span>
+<span class="tok-kw">docker</span> ps <span class="tok-prop">--filter</span> <span class="tok-str">&quot;status=running&quot;</span>
+</code></pre>
+    </div>
+    
+<p>El parámetro <code>-l</code> (<code>--full</code>) en <code>systemctl</code> evita truncar las líneas de salida del log en la terminal, mientras que <code>--no-pager</code> vuelca la salida directamente al flujo de texto estándar (<code>stdout</code>), permitiendo leer los últimos mensajes de fallo del servicio sin bloquear la pantalla interactiva.</p>
+<p>Si el servicio aparece con estado <code>inactive (dead)</code> o <code>failed</code>, arráncalo e inspecciona que no falle al iniciar:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart php8.<span class="tok-num">2</span>-fpm
+</code></pre>
+    </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="verificar-la-ruta-del-socket-o-puerto-en-la-configuracion">
+        <li class="step-item" id="corregir-la-definicion-de-upstream-y-permisos-en-la-configuracion-de-nginx">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="verificar-la-ruta-del-socket-o-puerto-en-la-configuracion-heading">Paso 2: Verificar la ruta del Socket o Puerto en la configuración</h4>
-            <p>Si el backend está activo pero sigues recibiendo el error 502, es probable que Nginx esté intentando comunicarse a través de un puerto o socket unix incorrecto. Abre el archivo de configuración del bloque de tu sitio <code>/etc/nginx/sites-available/default</code>:</p>
+            <h4 id="corregir-la-definicion-de-upstream-y-permisos-en-la-configuracion-de-nginx-heading">Paso 2: Corregir la definición de Upstream y permisos en la configuración de Nginx</h4>
+            <p>Accede al bloque de configuración del sitio web (generalmente ubicado en <code>/etc/nginx/sites-available/</code> o <code>/etc/nginx/conf.d/</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/nginx/sites-available/misitio.conf
+</code></pre>
+    </div>
+    
+<p>Asegúrate de que la directiva de enrutamiento apunte exactamente al medio de transporte activo:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -493,22 +674,83 @@ pm2 <span class="tok-prop">status</span>
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Ejemplo de enrutamiento por Socket Unix. Verifica que la ruta física del archivo .sock sea idéntica</span>
-<span class="tok-kw">fastcgi_pass</span> unix:/run/php/php8.<span class="tok-num">2</span>-fpm.sock;
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Opción A: Comunicación mediante Socket UNIX (Recomendado para PHP-FPM en el mismo host)</span>
+<span class="tok-kw">location</span> ~ \.php$ {
+    <span class="tok-kw">include</span> snippets/fastcgi-php.conf;
+    <span class="tok-kw">fastcgi_pass</span> unix:/run/php/php8.<span class="tok-num">2</span>-fpm.sock;
+    <span class="tok-kw">fastcgi_param</span> SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    <span class="tok-kw">include</span> fastcgi_params;
+    
+   <span class="tok-cmt"> # Prevenir timeouts en scripts de larga duración</span>
+    fastcgi_connect_timeout 60s;
+    fastcgi_send_timeout 180s;
+    fastcgi_read_timeout 180s;
+    fastcgi_buffer_size 128k;
+    fastcgi_buffers <span class="tok-num">4</span> 256k;
+}
 <span class="tok-cmt">
-# Ejemplo de enrutamiento por puerto local. Asegura que el servicio escuche en el puerto correcto</span>
-<span class="tok-kw">proxy_pass</span> <span class="tok-kw">http</span>://<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">3000</span>;
+# Opción B: Comunicación mediante Proxy Inverso TCP (Node.js, Python, Go, Docker)</span>
+<span class="tok-kw">location</span> / {
+    <span class="tok-kw">proxy_pass</span> <span class="tok-kw">http</span>://<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">3000</span>;
+    proxy_http_version <span class="tok-num">1.1</span>;
+    
+   <span class="tok-cmt"> # Preservar encabezados del cliente para el backend</span>
+    <span class="tok-kw">proxy_set_header</span> Upgrade $http_upgrade;
+    <span class="tok-kw">proxy_set_header</span> Connection <span class="tok-cmt">&#39;upgrade&#39;;</span>
+    <span class="tok-kw">proxy_set_header</span> Host $host;
+    <span class="tok-kw">proxy_set_header</span> X-Real-IP $remote_addr;
+    <span class="tok-kw">proxy_set_header</span> X-Forwarded-For $proxy_add_x_forwarded_for;
+    <span class="tok-kw">proxy_set_header</span> X-Forwarded-Proto $scheme;
+
+   <span class="tok-cmt"> # Dimensionamiento de buffers para evitar errores 502 por cabeceras grandes</span>
+    proxy_buffer_size 128k;
+    proxy_buffers <span class="tok-num">4</span> 256k;
+    proxy_busy_buffers_size 256k;
+}
 </code></pre>
     </div>
+    
+<ul>
+<li><code>proxy_http_version 1.1</code>: Habilita HTTP/1.1 para permitir conexiones persistentes (<em>keep-alive</em>) entre Nginx y el backend, reduciendo la latencia y la saturación de sockets en el kernel.</li>
+<li><code>proxy_set_header Host $host</code>: Garantiza que el backend conozca el nombre de dominio real solicitado por el cliente y no la dirección local <code>127.0.0.1</code>.</li>
+<li><code>proxy_buffer_size 128k</code>: Asigna un bloque de memoria suficiente para almacenar las cabeceras de respuesta que envía el backend, erradicando el fallo por desbordamiento de headers.</li>
+</ul>
           </div>
         </li>
         
 
-        <li class="step-item" id="revisar-el-registro-detallado-de-logs-de-nginx">
+        <li class="step-item" id="alinear-permisos-de-usuario-entre-nginx-y-el-pool-del-backend">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="revisar-el-registro-detallado-de-logs-de-nginx-heading">Paso 3: Revisar el registro detallado de logs de Nginx</h4>
-            <p>El log de errores de Nginx te dará la causa de conexión rechazada exacta. Inspecciónalo en tiempo real:</p>
+            <h4 id="alinear-permisos-de-usuario-entre-nginx-y-el-pool-del-backend-heading">Paso 3: Alinear permisos de usuario entre Nginx y el pool del backend</h4>
+            <p>Si utilizas sockets UNIX y el registro de Nginx reporta <code>13: Permission denied</code>, edita el archivo de configuración del pool del backend (por ejemplo <code>/etc/php/8.2/fpm/pool.d/www.conf</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>; Configurar el propietario del socket para coincidir con el usuario de Nginx
+listen.owner = www-data
+listen.group = www-data
+listen.mode = <span class="tok-num">0660</span>
+</code></pre>
+    </div>
+    
+<p>Tras modificar la directiva, reinicia el demonio del pool:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -528,15 +770,198 @@ pm2 <span class="tok-prop">status</span>
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> tail <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">-f</span> /var/log/nginx/error.log
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart php8.<span class="tok-num">2</span>-fpm
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validar-la-sintaxis-y-recargar-nginx-con-cero-tiempo-de-inactividad">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="validar-la-sintaxis-y-recargar-nginx-con-cero-tiempo-de-inactividad-heading">Paso 4: Validar la sintaxis y recargar Nginx con cero tiempo de inactividad</h4>
+            <p>Antes de aplicar los cambios en un servidor en producción, valida siempre la integridad semántica de la configuración con el flag <code>-t</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> nginx <span class="tok-prop">-t</span>
 </code></pre>
     </div>
     
-<p><em>(Busca descriptores como <code>Connection refused</code> o <code>Permission denied</code> en la comunicación con el socket).</em></p>
+<p>El parámetro <code>-t</code> comprueba la sintaxis de todos los archivos incluidos y verifica la accesibilidad de los directorios referenciados sin interrumpir el tráfico activo. Si la consola confirma <code>syntax is ok</code> y <code>test is successful</code>, envía una señal <code>SIGHUP</code> al proceso maestro mediante un reload grácil:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> reload nginx
+</code></pre>
+    </div>
+    
+<p>El comando <code>reload</code> no detiene los procesos worker existentes que atienden solicitudes en curso; en su lugar, levanta nuevos workers con la nueva configuración y retira de forma ordenada a los anteriores una vez completadas las transacciones pendientes.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h3 id="caso-borde-1-bloqueo-silencioso-por-politicas-de-selinux-rhel-almalinux-rocky-linux-centos">Caso Borde 1: Bloqueo silencioso por políticas de SELinux (RHEL, AlmaLinux, Rocky Linux, CentOS)</h3>
+<p>En distribuciones con SELinux en modo <code>Enforcing</code>, Nginx tiene restringida por defecto la capacidad de iniciar conexiones de red salientes hacia puertos TCP no estándar o hacia la interfaz loopback. Esto provoca un error 502 aunque el servicio backend esté corriendo perfectamente en el puerto 3000.</p>
+<p>Para verificar si SELinux está bloqueando la comunicación:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspeccionar denegaciones de SELinux en el log de auditoría</span>
+<span class="tok-kw">sudo</span> ausearch <span class="tok-prop">-m</span> avc <span class="tok-prop">-ts</span> recent | <span class="tok-kw">grep</span> nginx
+<span class="tok-cmt">
+# Consultar el estado del booleano de conexión de red para servidores web</span>
+getsebool httpd_can_network_connect
+</code></pre>
+    </div>
+    
+<p>Si el booleano está desactivado (<code>off</code>), actívalo de forma permanente con el flag <code>-P</code> (persistent):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> setsebool <span class="tok-prop">-P</span> httpd_can_network_connect <span class="tok-num">1</span>
+</code></pre>
+    </div>
+    
+<h3 id="caso-borde-2-asignacion-de-nombres-de-servicio-en-redes-docker-dns-interno-no-resuelto">Caso Borde 2: Asignación de nombres de servicio en redes Docker (DNS interno no resuelto)</h3>
+<p>Cuando Nginx corre en un contenedor Docker y el backend corre en otro, configurar <code>proxy_pass http://localhost:3000;</code> provocará un error 502 inmediato, ya que <code>localhost</code> dentro de un contenedor hace referencia a la interfaz de red del propio contenedor de Nginx. </p>
+<p>La solución requiere crear una red puente definida por el usuario (<em>user-defined bridge network</em>) y referenciar el backend por el nombre de su servicio en Docker:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># docker-compose.yml</span>
+<span class="tok-kw">version</span>: <span class="tok-cmt">&#39;3.8&#39;</span>
+<span class="tok-kw">services</span>:
+  web:
+    <span class="tok-kw">image</span>: nginx:alpine
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;80:80&quot;</span>
+    <span class="tok-kw">networks</span>:
+      - app-network
+  api:
+    <span class="tok-kw">image</span>: node:<span class="tok-num">20</span>-alpine
+    <span class="tok-kw">networks</span>:
+      - app-network
+
+<span class="tok-kw">networks</span>:
+  app-network:
+    driver: bridge
+</code></pre>
+    </div>
+    
+<p>En la configuración de Nginx, la directiva debe ser <code>proxy_pass http://api:3000;</code>. Si la IP del contenedor backend puede cambiar dinámicamente, añade la directiva <code>resolver 127.0.0.11 valid=10s;</code> (la IP del DNS interno de Docker) para evitar que Nginx conserve una IP obsoleta en caché.</p>
+<h3 id="verificacion-de-logs-en-tiempo-real-y-cierre-de-incidencia">Verificación de Logs en Tiempo Real y Cierre de Incidencia</h3>
+<p>Una vez aplicadas las correcciones, audita los registros en tiempo real ejecutando:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Monitorear logs de error de Nginx filtrando códigos de retorno del upstream</span>
+<span class="tok-kw">sudo</span> tail <span class="tok-prop">-n</span> <span class="tok-num">100</span> <span class="tok-prop">-f</span> /var/log/nginx/error.log | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;(upstream|connect\(\)|recv\(\))&quot;</span>
+<span class="tok-cmt">
+# Realizar una prueba de estrés ligera para confirmar estabilidad del backend</span>
+for i in {<span class="tok-num">1</span>..<span class="tok-num">20</span>}; do <span class="tok-kw">curl</span> <span class="tok-prop">-s</span> <span class="tok-prop">-o</span> /dev/null <span class="tok-prop">-w</span> <span class="tok-str">&quot;%{http_code}\n&quot;</span> https://midominio.com/; done
+</code></pre>
+    </div>
+    
+<p>El bucle de prueba envía 20 peticiones consecutivas e imprime únicamente el código HTTP devuelto (<code>%{http_code}</code>). Si todas las peticiones retornan <code>200</code> y el archivo <code>error.log</code> permanece en silencio sin trazas de <code>connect() failed</code>, la arquitectura de proxy inverso queda validada y blindada para tráfico en producción.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -551,44 +976,44 @@ pm2 <span class="tok-prop">status</span>
               Prácticas de seguridad recomendadas:
             </p>
             <ul class="prevention-list">
-              <li>Configura sistemas de monitorización o guardianes (<em>watchdogs</em>) automáticos para tus backends. Si una fuga de memoria provoca que tu aplicación de NodeJS o PHP-FPM colapse repentinamente y deje a Nginx incomunicado, herramientas como Systemd (con la directiva <code>Restart=on-failure</code>) o gestores de procesos como PM2 levantarán el servicio de forma automática en milisegundos, mitigando la aparición del error 502 a tus visitantes.</li>
+              
             </ul>
           </div>
 
-          <!-- Interactive Tool Bridge Bento Card (Pre-Author Injection) -->
-          <section class="sys-tool-bridge" aria-label="Herramienta Interactiva SYS//TOOL BRIDGE">
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
             <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE // SUITE FINANCIERA</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
+              <div class="sys-tool-bridge-tag font-mono">HERRAMIENTAS PARA DESARROLLADORES &amp; SYSADMINS</div>
+              <span class="sys-tool-bridge-status"><span class="status-dot"></span> CALCULADORAS WEB</span>
             </div>
             <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Utilidades Interactivas &amp; Modelado Financiero
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
             </h3>
             <p class="sys-tool-bridge-desc">
-              En SoporteCero no solo resolvemos incidencias de infraestructura y fallos de código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y creadores digitales. Si estás implementando pasarelas de cobro, calculando tarifas por hora o simulando retorno de inversión, accede directamente a nuestras calculadoras verificadas en laboratorio con exportación PDF en un solo clic:
+              En SoporteCero no solo documentamos soluciones técnicas ante fallos de infraestructura y código; también construimos utilidades interactivas de ingeniería financiera para desarrolladores, freelancers y creadores de proyectos digitales. Si estás implementando pasarelas de pago o presupuestando desarrollos, accede a nuestras herramientas verificadas con exportación formal en PDF:
             </p>
             <div class="sys-tool-bridge-grid">
-              <a href="/tools/?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
+              <a href="/tools/comisiones-pasarelas-pago.html" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
-                  <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
+                  <span class="sys-tool-card-name">Calculadora de Comisiones de Pago</span>
+                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Modo inverso neto</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
-              <a href="/tools/?silo=freelance" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
+              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Calcular tarifa por hora y cotizar proyectos en PDF">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
-                  <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
+                  <span class="sys-tool-card-name">Calculadora de Tarifa Hora Freelance</span>
+                  <span class="sys-tool-card-meta font-mono">Gastos fijos · Margen · Cotizador PDF</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
-              <a href="/tools/?silo=ecommerce" class="sys-tool-card" title="Simular punto de equilibrio publicitario y márgenes">
+              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulador ROAS y punto de equilibrio publicitario">
                 <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
                 <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Simulador ROAS E-commerce &amp; Finanzas</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
+                  <span class="sys-tool-card-name">Simulador ROAS E-commerce</span>
+                  <span class="sys-tool-card-meta font-mono">Break-even publicitario · CPA máximo</span>
                 </div>
                 <span class="sys-tool-card-arrow">&rarr;</span>
               </a>
@@ -650,7 +1075,7 @@ pm2 <span class="tok-prop">status</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">BTRFS</span>
-            <span>Lectura: 4 min</span>
+            <span>Lectura: 7 min</span>
           </div>
         </div>
       </article>
@@ -667,7 +1092,7 @@ pm2 <span class="tok-prop">status</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Lectura: 3 min</span>
+            <span>Lectura: 7 min</span>
           </div>
         </div>
       </article>
@@ -684,7 +1109,7 @@ pm2 <span class="tok-prop">status</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Umbrel</span>
-            <span>Lectura: 4 min</span>
+            <span>Lectura: 6 min</span>
           </div>
         </div>
       </article>

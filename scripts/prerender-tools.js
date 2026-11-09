@@ -1,12 +1,51 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const TOOLS_DIR = path.join(PROJECT_ROOT, 'tools');
 const TEMPLATE_PATH = path.join(TOOLS_DIR, 'index.html');
+
+// Helper to copy directory recursively
+function copyDirSync(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (let entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDirSync(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+// 1. Compile Finanzas Pro Hub and copy build assets if project exists
+const FINANZAS_HUB_DIR = path.resolve(PROJECT_ROOT, '..', 'Finanzas Pro Hub');
+if (fs.existsSync(FINANZAS_HUB_DIR)) {
+  try {
+    console.log('[PRERENDER] Compilando Finanzas Pro Hub (Vite + TypeScript)...');
+    execSync('npm run build', { cwd: FINANZAS_HUB_DIR, stdio: 'inherit' });
+    const distDir = path.join(FINANZAS_HUB_DIR, 'dist');
+    if (fs.existsSync(distDir)) {
+      const distIndexPath = path.join(distDir, 'index.html');
+      if (fs.existsSync(distIndexPath)) {
+        fs.copyFileSync(distIndexPath, TEMPLATE_PATH);
+      }
+      const distAssetsDir = path.join(distDir, 'assets');
+      if (fs.existsSync(distAssetsDir)) {
+        copyDirSync(distAssetsDir, path.join(TOOLS_DIR, 'assets'));
+      }
+      console.log('[PRERENDER] Sincronizados index.html y assets de Finanzas Pro Hub en tools/');
+    }
+  } catch (err) {
+    console.warn('[PRERENDER] Advertencia al compilar Finanzas Pro Hub:', err.message);
+  }
+}
 
 if (!fs.existsSync(TEMPLATE_PATH)) {
   console.error(`[PRERENDER] Error: Base template not found at ${TEMPLATE_PATH}`);
@@ -76,6 +115,14 @@ const TOOLS_CONFIG = [
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "En relaciones comerciales B2B y prestación de servicios transfronterizos entre profesionales independientes y empresas, es legal y estándar acordar honorarios netos o detallar un recargo por procesamiento administrativo financiero, siempre y cuando quede reflejado con total transparencia en la propuesta comercial o contrato de servicios previo a la emisión de la factura."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo optimizar comisiones al cobrar contratos recurrentes o retainers mensuales a largo plazo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Para retainers mensuales o contratos de soporte continuo, la mejor estrategia técnica es utilizar débitos directos ACH (en EE. UU.) o transferencias SEPA B2B (en Europa) gestionadas a través de Stripe Billing o Wise Business en lugar de tarjetas de crédito. El procesamiento ACH cuesta habitualmente un 0.8% con un tope máximo de $5.00 USD, lo que ahorra cientos de dólares mensuales en facturas de $2,000 a $10,000 USD frente al 4%-5.4% de PayPal o tarjetas tradicionales."
               }
             }
           ]
@@ -154,67 +201,61 @@ const TOOLS_CONFIG = [
                 <td>$5,285.73 USD</td>
                 <td>$5,000.00 USD (Exacto)</td>
               </tr>
+              <tr>
+                <td>$10,000.00 USD</td>
+                <td>$10,540.00 USD</td>
+                <td>$9,970.46 USD (Pérdida)</td>
+                <td>$10,571.14 USD</td>
+                <td>$10,000.00 USD (Exacto)</td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <h2 class="seo-h2">3. Tabla Técnica Comparativa de Pasarelas Internacionales (2026)</h2>
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Impacto por Pasarela)</h2>
         <p class="seo-p">
-          A continuación se detallan las condiciones comerciales estándar auditadas para profesionales que operan en mercados de habla hispana recibiendo capital de Norteamérica y la Unión Europea:
+          A continuación se presenta el cálculo cuantitativo exacto del capital neto recibido y la retención real sufrida en 4 órdenes de trabajo representativas del ejercicio profesional independiente:
         </p>
 
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
-                <th>Plataforma</th>
-                <th>Tarifa Transaccional</th>
-                <th>Costo Fijo</th>
-                <th>Spread Cambiario (FX)</th>
-                <th>Retiro a Banco Local</th>
-                <th>Veredicto de Eficiencia</th>
+                <th>Caso Práctico / Importe</th>
+                <th>Pasarela Utilizada</th>
+                <th>Comisión Aplicada (Fijo + %)</th>
+                <th>Neto Final Recibido</th>
+                <th>Fuga Porcentual Real</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Stripe Payments</strong></td>
-                <td>2.9% a 3.9% + 1% cross-border</td>
-                <td>$0.30 USD</td>
-                <td>1.0% - 2.0%</td>
-                <td>Automático (2-4 días hábiles)</td>
-                <td>Líder absoluto para SaaS, e-commerce y facturación recurrente con tarjetas corporativas.</td>
+                <td><strong>Caso 1: Micro-pago / Suscripción ($30 USD)</strong></td>
+                <td>PayPal Comercial (5.4% + $0.30)</td>
+                <td>$1.92 USD</td>
+                <td>$28.08 USD</td>
+                <td>6.40% de pérdida efectiva</td>
               </tr>
               <tr>
-                <td><strong>PayPal Comercial</strong></td>
-                <td>4.4% a 5.4% internacional</td>
-                <td>$0.30 USD</td>
-                <td>3.5% - 4.5%</td>
-                <td>Variable según país ($0 a 3.5%)</td>
-                <td>Muy accesible pero con las tasas y spreads más costosos de la industria.</td>
+                <td><strong>Caso 2: Anticipo Freelance ($500 USD)</strong></td>
+                <td>Stripe Payments (2.9% + $0.30)</td>
+                <td>$14.80 USD</td>
+                <td>$485.20 USD</td>
+                <td>2.96% de pérdida efectiva</td>
               </tr>
               <tr>
-                <td><strong>Wise Business (ACH/SEPA)</strong></td>
-                <td>0.4% a 0.8% según divisa</td>
-                <td>~$0.45 USD</td>
-                <td>0% (Tipo medio real de mercado)</td>
-                <td>Directo en moneda local sin margen</td>
-                <td>Máxima rentabilidad para transferencias bancarias internacionales de mediano y alto volumen.</td>
+                <td><strong>Caso 3: Proyecto de Desarrollo ($2,500 USD)</strong></td>
+                <td>Wise ACH Transfer (0.45% + $0.45)</td>
+                <td>$11.70 USD</td>
+                <td>$2,488.30 USD</td>
+                <td>0.47% de pérdida efectiva</td>
               </tr>
               <tr>
-                <td><strong>Payoneer</strong></td>
-                <td>0% (entre cuentas) / 3% tarjeta</td>
-                <td>$0.00</td>
-                <td>~2.0% sobre tasa interbancaria</td>
-                <td>Retiro a cuenta local (hasta 2%)</td>
-                <td>Especialmente útil para cobros en plataformas de marketplace (Upwork, Fiverr, Airbnb).</td>
-              </tr>
-              <tr>
-                <td><strong>Binance Pay (Cripto/USDT)</strong></td>
-                <td>0.1% a 0.3% / 0% P2P</td>
-                <td>Cero comisión fija</td>
-                <td>0% (Cotización directa en P2P)</td>
-                <td>Instantáneo vía mercado P2P local</td>
-                <td>Cero fricción bancaria y liquidación inmediata para clientes familiarizados con Web3.</td>
+                <td><strong>Caso 4: Retainer Corporativo ($10,000 USD)</strong></td>
+                <td>Binance Pay / Cripto (0.10% o P2P)</td>
+                <td>$10.00 USD</td>
+                <td>$9,990.00 USD</td>
+                <td>0.10% de pérdida efectiva</td>
               </tr>
             </tbody>
           </table>
@@ -269,6 +310,10 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Es legal estipular en el contrato que el cliente cubre las comisiones de pago?</h3>
             <p class="seo-p">En relaciones comerciales B2B y prestación de servicios transfronterizos entre profesionales independientes y empresas, es legal y estándar acordar honorarios netos o detallar un recargo por procesamiento administrativo financiero, siempre y cuando quede reflejado con total transparencia en la propuesta comercial o contrato de servicios previo a la emisión de la factura.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo optimizar comisiones al cobrar contratos recurrentes o retainers mensuales a largo plazo?</h3>
+            <p class="seo-p">Para retainers mensuales o contratos de soporte continuo, la mejor estrategia técnica es utilizar débitos directos ACH (en EE. UU.) o transferencias SEPA B2B (en Europa) gestionadas a través de Stripe Billing o Wise Business en lugar de tarjetas de crédito. El procesamiento ACH cuesta habitualmente un 0.8% con un tope máximo de $5.00 USD, lo que ahorra cientos de dólares mensuales en facturas de $2,000 a $10,000 USD frente al 4%-5.4% de PayPal o tarjetas tradicionales.</p>
           </div>
         </div>
       </section>
@@ -326,6 +371,22 @@ const TOOLS_CONFIG = [
                 "@type": "Answer",
                 "text": "En lugar de calcular el año con base en 52 semanas laborales, se deben restar las semanas de vacaciones deseadas (por ejemplo, 4 semanas) más 2 semanas adicionales reservadas para imprevistos o enfermedad (total 46 semanas útiles). El costo de esas 6 semanas no trabajadas debe ser financiado por la tarifa de las semanas facturadas."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo pasar de cobrar por hora a presupuestar por proyectos de valor cerrado?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cobrar por hora penaliza la experiencia: a mayor velocidad y pericia técnica, menos ingresos percibes por el mismo entregable de alto impacto. Para migrar a presupuestos cerrados, calcula primero el coste base utilizando tu tarifa horaria estimada multiplicada por las horas proyectadas más un 30% de contingencia, y luego ajusta el precio final en función del Retorno sobre la Inversión (ROI) o beneficio económico directo que el entregable generará al cliente."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo comunicar y justificar un incremento de tarifas horarias a clientes actuales?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Los aumentos deben comunicarse con un preaviso mínimo de 30 a 60 días, vinculando el ajuste a la ampliación de capacidades técnicas, mayor rapidez de entrega o inflación acumulada. Se recomienda ofrecer a los clientes fidelizados la opción de contratar un paquete anticipado de horas o un contrato mensual (retainer) respetando la tarifa anterior durante un período de gracia de 3 meses."
+              }
             }
           ]
         }
@@ -369,16 +430,16 @@ const TOOLS_CONFIG = [
           <p class="seo-formula-desc">El factor 1.25 crea un fondo de reserva para reinversión en nuevo hardware, cursos de capacitación técnica, períodos de sequía de clientes y absorción de scope creep.</p>
         </div>
 
-        <h2 class="seo-h2">3. Tabla de Referencia por Especialidad y Horas Facturables</h2>
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Perfiles Profesionales)</h2>
         <p class="seo-p">
-          A continuación se presenta una auditoría comparativa de perfiles técnicos promedio que aspiran a diferentes niveles de ingresos netos anuales:
+          A continuación se presenta una auditoría comparativa de 4 casos prácticos reales para diferentes especialidades técnicas que aspiran a distintas metas de ingresos netos mensuales:
         </p>
 
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
-                <th>Especialidad Profesional</th>
+                <th>Caso Práctico / Especialidad</th>
                 <th>Meta Neta Mensual</th>
                 <th>Horas Facturables / Sem</th>
                 <th>Gastos Fijos / Mes</th>
@@ -388,7 +449,7 @@ const TOOLS_CONFIG = [
             </thead>
             <tbody>
               <tr>
-                <td><strong>Diseñador UI/UX Junior</strong></td>
+                <td><strong>Caso 1: Diseñador UI/UX Junior</strong></td>
                 <td>$2,200 USD</td>
                 <td>24 horas</td>
                 <td>$250 USD</td>
@@ -396,7 +457,7 @@ const TOOLS_CONFIG = [
                 <td>$34.75 USD / h</td>
               </tr>
               <tr>
-                <td><strong>Desarrollador Frontend React</strong></td>
+                <td><strong>Caso 2: Desarrollador Frontend React</strong></td>
                 <td>$3,800 USD</td>
                 <td>25 horas</td>
                 <td>$380 USD</td>
@@ -404,7 +465,7 @@ const TOOLS_CONFIG = [
                 <td>$57.75 USD / h</td>
               </tr>
               <tr>
-                <td><strong>Ingeniero Full-Stack / DevOps</strong></td>
+                <td><strong>Caso 3: Ingeniero Full-Stack / DevOps</strong></td>
                 <td>$5,500 USD</td>
                 <td>28 horas</td>
                 <td>$600 USD</td>
@@ -412,7 +473,7 @@ const TOOLS_CONFIG = [
                 <td>$80.60 USD / h</td>
               </tr>
               <tr>
-                <td><strong>Consultor Cloud / Arquitecto AWS</strong></td>
+                <td><strong>Caso 4: Consultor Cloud / Arquitecto AWS</strong></td>
                 <td>$8,000 USD</td>
                 <td>20 horas</td>
                 <td>$850 USD</td>
@@ -456,6 +517,14 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Cómo se calcula el colchón de seguridad para vacaciones y bajas médicas?</h3>
             <p class="seo-p">En lugar de calcular el año con base en 52 semanas laborales, se deben restar las semanas de vacaciones deseadas (por ejemplo, 4 semanas) más 2 semanas adicionales reservadas para imprevistos o enfermedad (total 46 semanas útiles). El costo de esas 6 semanas no trabajadas debe ser financiado por la tarifa de las semanas facturadas.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo pasar de cobrar por hora a presupuestar por proyectos de valor cerrado?</h3>
+            <p class="seo-p">Cobrar por hora penaliza la experiencia: a mayor velocidad y pericia técnica, menos ingresos percibes por el mismo entregable de alto impacto. Para migrar a presupuestos cerrados, calcula primero el coste base utilizando tu tarifa horaria estimada multiplicada por las horas proyectadas más un 30% de contingencia, y luego ajusta el precio final en función del Retorno sobre la Inversión (ROI) o beneficio económico directo que el entregable generará al cliente.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo comunicar y justificar un incremento de tarifas horarias a clientes actuales?</h3>
+            <p class="seo-p">Los aumentos deben comunicarse con un preaviso mínimo de 30 a 60 días, vinculando el ajuste a la ampliación de capacidades técnicas, mayor rapidez de entrega o inflación acumulada. Se recomienda ofrecer a los clientes fidelizados la opción de contratar un paquete anticipado de horas o un contrato mensual (retainer) respetando la tarifa anterior durante un período de gracia de 3 meses.</p>
           </div>
         </div>
       </section>
@@ -505,6 +574,30 @@ const TOOLS_CONFIG = [
                 "@type": "Answer",
                 "text": "El CPA Máximo es el costo por compra exacto donde tu margen neto es $0.00 (punto de equilibrio). El Target CPA (CPA Objetivo) debe situarse al menos entre un 25% y un 35% por debajo del CPA Máximo para que cada pedido genere un beneficio neto comercial real para sostener la empresa."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo influye la atribución post-view o post-click en las métricas de ROAS?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Las ventanas de atribución predeterminadas de Meta (7 días click / 1 día view) suelen atribuirse ventas que habrían ocurrido de forma orgánica o a través de recomendaciones boca a boca. Se recomienda auditar las ventas contrastando las órdenes reales de Shopify o WooCommerce con el reporte de anuncios para evitar sobreestimar el ROAS real."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo calcular el Breakeven ROAS en tiendas con catálogo de múltiples márgenes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cuando una tienda comercializa productos con diferentes estructuras de coste, se debe calcular el Margen Bruto Ponderado por volumen de ventas de cada categoría. Alternativamente, se recomienda segmentar las campañas de Google Shopping y Meta Advantage+ por grupos de margen similar (p. ej. catálogo de alto margen >60% vs. catálogo de volumen <35%) para aplicar pujas de Target ROAS específicas a cada grupo."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué porcentaje del margen bruto se debe reinvertir en publicidad para escalar con rentabilidad?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "En etapas de escalado controlado, se aconseja mantener el MER (Marketing Efficiency Ratio = Ingresos Totales / Gasto Total en Pauta) por encima de 4.0x y destinar entre el 45% y el 60% del Margen Bruto antes de Anuncios a adquisición publicitaria, reservando el 40% a 55% restante para cubrir gastos fijos de la empresa, nóminas y beneficio neto libre de caja."
+              }
             }
           ]
         }
@@ -549,12 +642,12 @@ const TOOLS_CONFIG = [
           <p class="seo-formula-desc">La cantidad máxima exacta que puedes pagar a las plataformas publicitarias por una orden completada.</p>
         </div>
 
-        <h2 class="seo-h2">3. Tabla Comparativa por Modelo de Negocio E-commerce</h2>
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Modelos de E-commerce)</h2>
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
-                <th>Modelo Comercial</th>
+                <th>Caso Práctico / Modelo Comercial</th>
                 <th>Ticket Promedio (PV)</th>
                 <th>COGS + Logística</th>
                 <th>Margen Bruto (MBA)</th>
@@ -564,7 +657,7 @@ const TOOLS_CONFIG = [
             </thead>
             <tbody>
               <tr>
-                <td><strong>Dropshipping Bajo Ticket</strong></td>
+                <td><strong>Caso 1: Dropshipping Bajo Ticket</strong></td>
                 <td>$32.00 USD</td>
                 <td>$18.50 USD (58%)</td>
                 <td>$11.90 USD</td>
@@ -572,7 +665,7 @@ const TOOLS_CONFIG = [
                 <td>$11.90 USD</td>
               </tr>
               <tr>
-                <td><strong>Marca D2C Moda / Ropa</strong></td>
+                <td><strong>Caso 2: Marca D2C Moda / Ropa</strong></td>
                 <td>$68.00 USD</td>
                 <td>$26.00 USD (38%)</td>
                 <td>$38.80 USD</td>
@@ -580,7 +673,7 @@ const TOOLS_CONFIG = [
                 <td>$38.80 USD</td>
               </tr>
               <tr>
-                <td><strong>Cosmética & Cuidado Facial</strong></td>
+                <td><strong>Caso 3: Cosmética &amp; Cuidado Facial</strong></td>
                 <td>$85.00 USD</td>
                 <td>$21.00 USD (25%)</td>
                 <td>$60.20 USD</td>
@@ -588,7 +681,7 @@ const TOOLS_CONFIG = [
                 <td>$60.20 USD</td>
               </tr>
               <tr>
-                <td><strong>SaaS / Producto Digital</strong></td>
+                <td><strong>Caso 4: SaaS / Producto Digital</strong></td>
                 <td>$99.00 USD</td>
                 <td>$4.00 USD (4%)</td>
                 <td>$91.80 USD</td>
@@ -627,6 +720,14 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Cómo influye la atribución post-view o post-click en las métricas de ROAS?</h3>
             <p class="seo-p">Las ventanas de atribución predeterminadas de Meta (7 días click / 1 día view) suelen atribuirse ventas que habrían ocurrido de forma orgánica o a través de recomendaciones boca a boca. Se recomienda auditar las ventas contrastando las órdenes reales de Shopify o WooCommerce con el reporte de anuncios para evitar sobreestimar el ROAS real.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo calcular el Breakeven ROAS en tiendas con catálogo de múltiples márgenes?</h3>
+            <p class="seo-p">Cuando una tienda comercializa productos con diferentes estructuras de coste, se debe calcular el Margen Bruto Ponderado por volumen de ventas de cada categoría. Alternativamente, se recomienda segmentar las campañas de Google Shopping y Meta Advantage+ por grupos de margen similar (p. ej. catálogo de alto margen >60% vs. catálogo de volumen <35%) para aplicar pujas de Target ROAS específicas a cada grupo.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Qué porcentaje del margen bruto se debe reinvertir en publicidad para escalar con rentabilidad?</h3>
+            <p class="seo-p">En etapas de escalado controlado, se aconseja mantener el MER (Marketing Efficiency Ratio = Ingresos Totales / Gasto Total en Pauta) por encima de 4.0x y destinar entre el 45% y el 60% del Margen Bruto antes de Anuncios a adquisición publicitaria, reservando el 40% a 55% restante para cubrir gastos fijos de la empresa, nóminas y beneficio neto libre de caja.</p>
           </div>
         </div>
       </section>
@@ -676,6 +777,30 @@ const TOOLS_CONFIG = [
                 "@type": "Answer",
                 "text": "Porque el descuento se aplica sobre el total del precio facturado, mientras que los costos del producto, almacenamiento y logística permanecen fijos. Por ejemplo, en un producto que cuesta $70 y se vende en $100, la ganancia es $30. Un descuento del 20% baja el precio a $80, reduciendo la ganancia a solo $10 (una caída del 66.6% en el beneficio neto unitario)."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo se debe calcular el precio con IVA o impuestos de venta incluidos?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El impuesto indirecto sobre las ventas no forma parte del margen comercial del negocio. Se debe calcular primero el precio de venta sugerido neto mediante la fórmula: PV_neto = COGS / (1 - Margen_Deseado), y sobre ese resultado aplicar la tasa impositiva correspondiente: PV_final = PV_neto × (1 + %IVA)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo calcular el volumen de ventas adicional necesario para compensar un descuento?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Se aplica la fórmula de elasticidad de margen: %Incremento_Ventas = Descuento / (Margen_Original - Descuento). En un producto con 40% de margen original, aplicar un descuento del 20% requiere vender un 100% más de unidades (+100%, exactamente el doble) para obtener la misma masa de beneficio en dólares."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué alternativas comerciales existen a los descuentos directos para preservar el margen de caja?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Las tres mejores alternativas son: Regalo con Compra (GWP), donde ofreces un accesorio con alto valor percibido pero coste unitario mínimo; Descuento Escalonado por Volumen ('compra 3 y obtén 15%'), lo que eleva el ticket medio y diluye el costo de envío; y Crédito o Puntos para la siguiente compra, garantizando una segunda transacción retenida."
+              }
             }
           ]
         }
@@ -715,59 +840,59 @@ const TOOLS_CONFIG = [
           <p class="seo-formula-desc">Donde D es el porcentaje de descuento comercial aplicado y Margen_Original es el margen previo de la tienda.</p>
         </div>
 
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Impacto de Descuentos)</h2>
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
+                <th>Caso Práctico / Categoría</th>
                 <th>Margen Original</th>
                 <th>Descuento Ofrecido</th>
                 <th>Beneficio Unitario Residual</th>
-                <th>Aumento de Ventas Necesario para Empatar</th>
+                <th>Aumento de Ventas Requerido para Empatar</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>30% de Margen</td>
+                <td><strong>Caso 1: Cosmética &amp; Belleza D2C</strong></td>
+                <td>75% de Margen ($60 PVP)</td>
+                <td>15% Descuento</td>
+                <td>60% restante</td>
+                <td><strong>+25.0% en volumen de órdenes</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Caso 2: Moda &amp; Ropa Textil</strong></td>
+                <td>60% de Margen ($75 PVP)</td>
+                <td>20% Descuento</td>
+                <td>40% restante</td>
+                <td><strong>+50.0% en volumen de órdenes</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Caso 3: Electrónica &amp; Gadgets</strong></td>
+                <td>30% de Margen ($100 PVP)</td>
                 <td>10% Descuento</td>
                 <td>20% restante</td>
                 <td><strong>+50.0% en volumen de órdenes</strong></td>
               </tr>
               <tr>
-                <td>30% de Margen</td>
-                <td>15% Descuento</td>
-                <td>15% restante</td>
-                <td><strong>+100.0% en volumen de órdenes (Vender el doble)</strong></td>
-              </tr>
-              <tr>
-                <td>40% de Margen</td>
+                <td><strong>Caso 4: Muebles &amp; Decoración Hogar</strong></td>
+                <td>40% de Margen ($300 PVP)</td>
                 <td>20% Descuento</td>
                 <td>20% restante</td>
-                <td><strong>+100.0% en volumen de órdenes</strong></td>
-              </tr>
-              <tr>
-                <td>50% de Margen</td>
-                <td>25% Descuento</td>
-                <td>25% restante</td>
-                <td><strong>+100.0% en volumen de órdenes</strong></td>
-              </tr>
-              <tr>
-                <td>25% de Margen</td>
-                <td>15% Descuento</td>
-                <td>10% restante</td>
-                <td><strong>+150.0% en volumen de órdenes</strong></td>
+                <td><strong>+100.0% en volumen de órdenes (Vender el doble)</strong></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2 class="seo-h2">3. Estrategias Superiores a los Descuentos Lineales</h2>
+        <h2 class="seo-h2">4. Estrategias Superiores a los Descuentos Lineales</h2>
         <ol class="seo-ordered-list">
           <li><strong>Regalos con Compra (GWP - Gift With Purchase):</strong> En lugar de descontar $10 USD a un pedido de $60 USD, regala un accesorio complementario cuyo valor percibido sea $15 USD pero tu costo de adquisición sea únicamente $2.50 USD. El cliente percibe mayor valor y preservas $7.50 USD de caja.</li>
           <li><strong>Descuento por Volumen Escalonado (Tiered Pricing):</strong> "Compra 1 con 0% desc, compra 2 con 10% desc, compra 3 con 20% desc". De este modo garantizas un AOV elevado que amortiza el embalaje y flete de un único paquete.</li>
           <li><strong>Crédito en Tienda o Puntos de Fidelidad:</strong> Emitir $10 USD en saldo para la próxima compra asegura una segunda transacción retenida en lugar de perder margen en la primera compra.</li>
         </ol>
 
-        <h2 class="seo-h2">4. Análisis de Casos de Negocio Reales: Black Friday y Liquidaciones</h2>
+        <h2 class="seo-h2">5. Análisis de Casos de Negocio Reales: Black Friday y Liquidaciones</h2>
         <div class="seo-cards-grid">
           <div class="seo-case-card">
             <h3 class="seo-h3">Caso 1: Promoción Agresiva del 20% en Black Friday</h3>
@@ -783,7 +908,7 @@ const TOOLS_CONFIG = [
           </div>
         </div>
 
-        <h2 class="seo-h2">5. Preguntas Frecuentes Técnicas sobre Margen y Markup</h2>
+        <h2 class="seo-h2">6. Preguntas Frecuentes Técnicas sobre Margen y Markup</h2>
         <div class="seo-faq-block">
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Cuál es la diferencia exacta entre Margen y Markup?</h3>
@@ -796,6 +921,14 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Cómo se debe calcular el precio con IVA o impuestos de venta incluidos?</h3>
             <p class="seo-p">El impuesto indirecto sobre las ventas no forma parte del margen bruto comercial. Se debe calcular primero el precio de venta sugerido neto mediante la fórmula: PV_neto = COGS / (1 - Margen_Deseado), y sobre ese resultado aplicar la tasa impositiva correspondiente: PV_final = PV_neto × (1 + %IVA).</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo calcular el volumen de ventas adicional necesario para compensar un descuento?</h3>
+            <p class="seo-p">Se aplica la fórmula de elasticidad de margen: %Incremento_Ventas = Descuento / (Margen_Original - Descuento). En un producto con 40% de margen original, aplicar un descuento del 20% requiere vender un 100% más de unidades (+100%, exactamente el doble) para obtener la misma masa de beneficio en dólares.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Qué alternativas comerciales existen a los descuentos directos para preservar el margen de caja?</h3>
+            <p class="seo-p">Las tres mejores alternativas son: Regalo con Compra (GWP), donde ofreces un accesorio con alto valor percibido pero coste unitario mínimo; Descuento Escalonado por Volumen ('compra 3 y obtén 15%'), lo que eleva el ticket medio y diluye el costo de envío; y Crédito o Puntos para la siguiente compra, garantizando una segunda transacción retenida.</p>
           </div>
         </div>
       </section>
@@ -845,6 +978,30 @@ const TOOLS_CONFIG = [
                 "@type": "Answer",
                 "text": "Debido a la naturaleza del sistema francés, los primeros años presentan un saldo deudor muy elevado, lo que hace que la mayor parte de cada cuota se destine a pagar intereses. Un abono de $5,000 en el año 2 reduce el saldo base durante 28 años seguidos, evitando miles de dólares en intereses compuestos; ese mismo abono en el año 25 solo evitaría intereses durante los últimos 5 años."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuál es la diferencia entre el TIN (Tipo de Interés Nominal) y la TAE (Tasa Anual Equivalente)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El TIN refleja únicamente el porcentaje de interés que cobra el banco por el capital prestado. La TAE representa el coste financiero total anual de la operación, integrando el TIN, las comisiones de apertura, tasación de la vivienda y seguros obligatorios vinculados (hogar y vida). Para comparar ofertas bancarias siempre se debe exigir y auditar la TAE."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué comisiones y límites legales existen para la amortización anticipada de hipotecas?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "En legislaciones modernas (como la Ley Hipotecaria en España), las comisiones por amortización anticipada están limitadas por ley: en tipo variable es como máximo 0.15% los primeros 5 años y 0% después; en tipo fijo es máximo 2% los primeros 10 años y 1.5% posteriormente, siempre sujeta a que el banco demuestre pérdida financiera."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuándo es más rentable invertir el capital disponible en lugar de amortizar la hipoteca?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Si el tipo de interés de tu hipoteca es muy bajo (por ejemplo, menor al 2.5% o 3% fijo), la rentabilidad media histórica neta de fondos indexados globales (7% a 8% anual) supera con creces el ahorro en intereses de la hipoteca. Sin embargo, si la hipoteca supera el 4.5% o 5%, amortizar deuda ofrece un retorno garantizado libre de riesgo y exento de tributación."
+              }
             }
           ]
         }
@@ -881,12 +1038,12 @@ const TOOLS_CONFIG = [
           <p class="seo-formula-desc">Cualquier inyección extraordinaria (Abono_Extra) entra directo al capital (Saldo_k = Saldo_(k-1) - A_k - Abono_Extra), destruyendo el cómputo de intereses de los meses subsiguientes.</p>
         </div>
 
-        <h2 class="seo-h2">3. Tabla de Simulación: Impacto de Abonos Extra a Capital</h2>
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Impacto de Abonos a Capital)</h2>
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
-                <th>Crédito Base</th>
+                <th>Caso Práctico / Crédito Base</th>
                 <th>Estrategia de Abono Extra</th>
                 <th>Intereses Totales Sin Abono</th>
                 <th>Intereses Con Abono</th>
@@ -896,7 +1053,7 @@ const TOOLS_CONFIG = [
             </thead>
             <tbody>
               <tr>
-                <td>$200,000 @ 6.5% (30A)</td>
+                <td><strong>Caso 1: Hipoteca Media ($200k @ 6.5% 30A)</strong></td>
                 <td>+$100 USD / mes constante</td>
                 <td>$255,088 USD</td>
                 <td>$208,350 USD</td>
@@ -904,7 +1061,7 @@ const TOOLS_CONFIG = [
                 <td><strong>-4 años y 9 meses</strong></td>
               </tr>
               <tr>
-                <td>$200,000 @ 6.5% (30A)</td>
+                <td><strong>Caso 2: Hipoteca Agresiva ($200k @ 6.5% 30A)</strong></td>
                 <td>+$200 USD / mes constante</td>
                 <td>$255,088 USD</td>
                 <td>$178,420 USD</td>
@@ -912,7 +1069,7 @@ const TOOLS_CONFIG = [
                 <td><strong>-8 años y 2 meses</strong></td>
               </tr>
               <tr>
-                <td>$300,000 @ 7.0% (30A)</td>
+                <td><strong>Caso 3: Hipoteca Alta ($300k @ 7.0% 30A)</strong></td>
                 <td>+$150 USD / mes constante</td>
                 <td>$418,527 USD</td>
                 <td>$354,110 USD</td>
@@ -920,8 +1077,8 @@ const TOOLS_CONFIG = [
                 <td><strong>-4 años y 3 meses</strong></td>
               </tr>
               <tr>
-                <td>$150,000 @ 5.0% (25A)</td>
-                <td>Pago único $10k en Año 2</td>
+                <td><strong>Caso 4: Abono Único ($150k @ 5.0% 25A)</strong></td>
+                <td>Pago único $10,000 en Año 2</td>
                 <td>$113,061 USD</td>
                 <td>$90,810 USD</td>
                 <td><strong>$22,251 USD ahorrados</strong></td>
@@ -965,6 +1122,14 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Cuál es la diferencia entre el TIN (Tipo de Interés Nominal) y la TAE (Tasa Anual Equivalente)?</h3>
             <p class="seo-p">El TIN refleja únicamente el porcentaje de interés que cobra el banco por el capital prestado. La TAE representa el coste financiero total anual de la operación, integrando el TIN, las comisiones de apertura, tasación de la vivienda y seguros obligatorios vinculados (hogar y vida). Para comparar ofertas bancarias siempre se debe exigir y auditar la TAE.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Qué comisiones y límites legales existen para la amortización anticipada de hipotecas?</h3>
+            <p class="seo-p">En legislaciones modernas (como la Ley Hipotecaria en España), las comisiones por amortización anticipada están limitadas por ley: en tipo variable es como máximo 0.15% los primeros 5 años y 0% después; en tipo fijo es máximo 2% los primeros 10 años y 1.5% posteriormente, siempre sujeta a que el banco demuestre pérdida financiera.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cuándo es más rentable invertir el capital disponible en lugar de amortizar la hipoteca?</h3>
+            <p class="seo-p">Si el tipo de interés de tu hipoteca es muy bajo (por ejemplo, menor al 2.5% o 3% fijo), la rentabilidad media histórica neta de fondos indexados globales (7% a 8% anual) supera con creces el ahorro en intereses de la hipoteca. Sin embargo, si la hipoteca supera el 4.5% o 5%, amortizar deuda ofrece un retorno garantizado libre de riesgo y exento de tributación.</p>
           </div>
         </div>
       </section>
@@ -1014,6 +1179,30 @@ const TOOLS_CONFIG = [
                 "@type": "Answer",
                 "text": "La Regla del 4% se deriva del prestigioso Estudio Trinity. Concluyó que un inversor que posea una cartera indexada equilibrada (por ejemplo, 75% acciones globales / 25% bonos de calidad) puede retirar cada año el 4% del capital total acumulado (ajustado por inflación) sin riesgo significativo de agotar su fondo patrimonial durante un horizonte superior a 30 años."
               }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Con qué frecuencia deben capitalizarse los intereses para maximizar el retorno?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La capitalización periódica más frecuente (mensual, diaria o continua) maximiza matemáticamente el retorno sobre la anual, ya que los rendimientos devengados en el mes 1 comienzan a producir nuevos intereses de forma inmediata a partir del mes 2."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo impactan las comisiones de gestión (TER de ETFs o fondos) en el interés compuesto a 25 años?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Una diferencia aparentemente pequeña del 1.5% anual en comisiones de gestión (por ejemplo, un fondo bancario tradicional con 1.7% de TER frente a un ETF indexado global con 0.15% de TER) devora más del 30% del patrimonio neto final acumulado al cabo de 25 o 30 años debido al efecto compuesto negativo de las comisiones."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuál es la fórmula para calcular el capital necesario para alcanzar la independencia financiera (FIRE)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Bajo la regla del 4%, el Capital Objetivo FIRE equivale a multiplicar tus gastos anuales proyectados por 25: Capital_FIRE = Gasto_Anual_Deseado × 25. Por ejemplo, si necesitas $36,000 USD al año ($3,000 USD/mes) para cubrir tu estilo de vida, tu meta patrimonial es $36,000 × 25 = $900,000 USD."
+              }
             }
           ]
         }
@@ -1048,16 +1237,16 @@ const TOOLS_CONFIG = [
           <p class="seo-formula-desc">FV_real expresa tu patrimonio futuro exactamente en moneda de valor constante de hoy, neutralizando la ilusión inflacionaria.</p>
         </div>
 
-        <h2 class="seo-h2">3. Tabla de Evolución Temporal Comparativa ($USD)</h2>
+        <h2 class="seo-h2">3. Tabla de 4 Casos Prácticos Reales Calculados (Evolución Temporal $USD)</h2>
         <p class="seo-p">
-          Evolución de un inversor que comienza con $5,000 USD iniciales y aporta $350 USD mensuales con un rendimiento histórico del 9.0% nominal (índice bursátil S&P 500 / MSCI World) y una inflación promedio del 3.0%:
+          Evolución cuantitativa de un inversor que comienza con $5,000 USD iniciales y aporta $350 USD mensuales con un rendimiento histórico del 9.0% nominal (índice bursátil S&P 500 / MSCI World) y una inflación promedio del 3.0%:
         </p>
 
         <div class="seo-table-wrapper">
           <table class="seo-table">
             <thead>
               <tr>
-                <th>Horizonte Temporal</th>
+                <th>Caso Práctico / Plazo</th>
                 <th>Capital Aportado De Bolsillo</th>
                 <th>Interés Ganado</th>
                 <th>Patrimonio Nominal (FV)</th>
@@ -1067,7 +1256,7 @@ const TOOLS_CONFIG = [
             </thead>
             <tbody>
               <tr>
-                <td><strong>10 Años</strong></td>
+                <td><strong>Caso 1: Horizonte 10 Años</strong></td>
                 <td>$47,000 USD</td>
                 <td>$30,550 USD</td>
                 <td>$77,550 USD</td>
@@ -1075,7 +1264,7 @@ const TOOLS_CONFIG = [
                 <td>$258 USD / mes</td>
               </tr>
               <tr>
-                <td><strong>20 Años</strong></td>
+                <td><strong>Caso 2: Horizonte 20 Años</strong></td>
                 <td>$89,000 USD</td>
                 <td>$170,800 USD</td>
                 <td>$259,800 USD</td>
@@ -1083,7 +1272,7 @@ const TOOLS_CONFIG = [
                 <td>$866 USD / mes</td>
               </tr>
               <tr>
-                <td><strong>30 Años</strong></td>
+                <td><strong>Caso 3: Horizonte 30 Años</strong></td>
                 <td>$131,000 USD</td>
                 <td>$588,200 USD</td>
                 <td>$719,200 USD</td>
@@ -1091,7 +1280,7 @@ const TOOLS_CONFIG = [
                 <td>$2,397 USD / mes</td>
               </tr>
               <tr>
-                <td><strong>35 Años</strong></td>
+                <td><strong>Caso 4: Horizonte 35 Años</strong></td>
                 <td>$152,000 USD</td>
                 <td>$1,038,000 USD</td>
                 <td>$1,190,000 USD</td>
@@ -1133,6 +1322,14 @@ const TOOLS_CONFIG = [
           <div class="seo-faq-item">
             <h3 class="seo-h3">¿Con qué frecuencia deben capitalizarse los intereses para maximizar el retorno?</h3>
             <p class="seo-p">La capitalización periódica más frecuente (mensual, diaria o continua) maximiza matemáticamente el retorno sobre la anual, ya que los rendimientos devengados en el mes 1 comienzan a producir nuevos intereses de forma inmediata a partir del mes 2.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo impactan las comisiones de gestión (TER de ETFs o fondos) en el interés compuesto a 25 años?</h3>
+            <p class="seo-p">Una diferencia aparentemente pequeña del 1.5% anual en comisiones de gestión (por ejemplo, un fondo bancario tradicional con 1.7% de TER frente a un ETF indexado global con 0.15% de TER) devora más del 30% del patrimonio neto final acumulado al cabo de 25 o 30 años debido al efecto compuesto negativo de las comisiones.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cuál es la fórmula para calcular el capital necesario para alcanzar la independencia financiera (FIRE)?</h3>
+            <p class="seo-p">Bajo la regla del 4%, el Capital Objetivo FIRE equivale a multiplicar tus gastos anuales proyectados por 25: Capital_FIRE = Gasto_Anual_Deseado × 25. Por ejemplo, si necesitas $36,000 USD al año ($3,000 USD/mes) para cubrir tu estilo de vida, tu meta patrimonial es $36,000 × 25 = $900,000 USD.</p>
           </div>
         </div>
       </section>
@@ -1355,7 +1552,7 @@ for (const tool of TOOLS_CONFIG) {
   const articleBlock = `
     <script>window.__INITIAL_TOOL_ID__ = "${tool.toolId}";</script>
     <div id="root"></div>
-    <article class="seo-static-content" role="article" aria-label="${tool.title}">
+    <article class="max-w-5xl mx-auto px-4 py-12 text-slate-300 seo-static-content" role="article" aria-label="${tool.title}">
       <header class="seo-header">
         <span class="seo-header-tag">${tool.badge}</span>
         <h1 class="seo-h1">${tool.h1}</h1>

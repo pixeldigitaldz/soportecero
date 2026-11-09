@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de ROAS Mínimo y Punto de Equilibrio en E-commerce | SoporteCero</title>
+    <meta name="description" content="Calcula el Breakeven ROAS y el CPA máximo permitido para Meta Ads, Google Ads y TikTok Ads considerando COGS, costos de envío, empaque y pasarelas." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
+    <link rel="alternate" hreflang="es" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
+    <link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
+
+    <!-- Google AdSense Oficial -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+
+    <!-- Tipografía Editorial (Inter & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/tools/assets/index-DkzA_83P.js"></script>
+    <link rel="stylesheet" crossorigin href="/tools/assets/index-BbNhc--3.css">
+  
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+      {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Calculadora de Breakeven ROAS y Margen Neto E-commerce",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://soportecero.com/tools/calculadora-roas-ecommerce.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Cálculo exacto del ROAS de punto de equilibrio (Breakeven ROAS)",
+        "Determinación del Costo por Adquisición Máximo Permitido (Max CPA)",
+        "Margen bruto antes de publicidad deduciendo COGS, fletes y empaque",
+        "Semáforo de viabilidad operativa para campañas publicitarias"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Por qué un ROAS de 3.0x en Meta Ads puede generar pérdidas netas en mi tienda?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El ROAS reportado por Meta Ads (Ingresos Brutos / Gasto en Pauta) no contempla el costo de los productos vendidos (COGS), costos de preparación y flete, devoluciones de clientes ni las comisiones de Shopify y pasarelas de pago. Si la suma de estos costos supera el 67% del precio de venta, tu Breakeven ROAS es superior a 3.0x, lo que significa que cada venta generada te cuesta dinero."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuál es la diferencia entre CPA Máximo y Target CPA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El CPA Máximo es el costo por compra exacto donde tu margen neto es $0.00 (punto de equilibrio). El Target CPA (CPA Objetivo) debe situarse al menos entre un 25% y un 35% por debajo del CPA Máximo para que cada pedido genere un beneficio neto comercial real para sostener la empresa."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    
+<style id="seo-static-styles">
+  .seo-static-content {
+    max-width: 80rem;
+    margin: 3rem auto 5rem auto;
+    padding: 2.5rem 1.5rem;
+    background: rgba(16, 19, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px);
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  .seo-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 9999px;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+  .seo-meta-audit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.75rem;
+  }
+  .seo-h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .seo-h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .seo-h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .seo-p {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  .seo-lead-box {
+    background: rgba(6, 182, 212, 0.05);
+    border-left: 3px solid #06b6d4;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    margin-bottom: 2rem;
+  }
+  .seo-lead {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin-bottom: 0;
+    font-weight: 450;
+    line-height: 1.75;
+  }
+  .seo-list, .seo-ordered-list {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+  }
+  .seo-list li, .seo-ordered-list li {
+    margin-bottom: 0.65rem;
+    line-height: 1.65;
+  }
+  .seo-formula-card {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .seo-formula-title {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #22d3ee;
+    margin-bottom: 0.75rem;
+  }
+  .seo-code-block {
+    background: #0b0d14;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: #38bdf8;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+  }
+  .seo-formula-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+  .seo-table-wrapper {
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.85rem;
+    background: #0d1017;
+  }
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  .seo-table th {
+    background: #141824;
+    color: #38bdf8;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .seo-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+  }
+  .seo-table tr:hover td {
+    background: rgba(6, 182, 212, 0.04);
+  }
+  .seo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .seo-case-card {
+    background: #11141f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .seo-static-content {
+      padding: 1.5rem 1rem;
+      margin: 1.5rem auto 3rem auto;
+      border-radius: 1rem;
+    }
+    .seo-h1 {
+      font-size: 1.45rem;
+    }
+    .seo-h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+  </head>
+  <body class="bg-[#0B0C10] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+    
+    <script>window.__INITIAL_TOOL_ID__ = "calculadora-roas-breakeven-ecommerce";</script>
+    <div id="root"></div>
+    <article class="seo-static-content" role="article" aria-label="Calculadora de ROAS Mínimo y Punto de Equilibrio en E-commerce | SoporteCero">
+      <header class="seo-header">
+        <span class="seo-header-tag">Suite E-commerce & Ads</span>
+        <h1 class="seo-h1">Guía Técnica de ROAS de Punto de Equilibrio y Rentabilidad Publicitaria en E-commerce</h1>
+        <div class="seo-meta-audit">
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-08 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Licencia CC-BY-4.0</span>
+        </div>
+      </header>
+      
+      <section class="seo-section">
+        <div class="seo-lead-box">
+          <p class="seo-lead">
+            Escalar pauta publicitaria en Meta Ads, Google Ads o TikTok Ads sin conocer con certeza matemática tu ROAS de punto de equilibrio (Breakeven ROAS) es el camino más rápido hacia la bancarrota en e-commerce. Esta guía técnica analiza cómo auditar la estructura de costes unitarios y fijar límites de puja que blinden la rentabilidad de tu tienda online.
+          </p>
+        </div>
+
+        <h2 class="seo-h2">1. La Trampa del ROAS Sintético en las Plataformas de Anuncios</h2>
+        <p class="seo-p">
+          Las consolas de administración publicitaria (Meta Ads Manager, Google Ads, TikTok Ads) muestran con orgullo métricas de ROAS (Return On Ad Spend) calculadas de forma superficial:
+        </p>
+        <div class="seo-code-block"><code>ROAS_Plataforma = Valor_Total_Conversiones / Importe_Gastado_En_Anuncios</code></div>
+        <p class="seo-p">
+          Esta métrica ignora por completo la realidad financiera del negocio. Si vendes un producto a $50 USD y gastas $15 USD en anuncios para conseguir una venta, el panel de Facebook reportará un ROAS de 3.33x ($50 / $15), lo que a primera vista parece un éxito rotundo. Sin embargo, si fabricar o adquirir el producto te cuesta $22 USD (COGS), el empaque y flete cuestan $8 USD, y las comisiones de pasarela retienen $2 USD, tu coste unitario total antes de publicidad es de $32 USD.
+        </p>
+        <p class="seo-p">
+          Tu margen bruto real antes de anuncios es únicamente de $18 USD ($50 - $32). Al gastar $15 USD en la adquisición del cliente (CPA), tu beneficio neto real se reduce a apenas $3 USD por unidad. Si el CPA sube a $19 USD, el panel de Meta seguirá mostrando un ROAS positivo de 2.63x, pero estarás perdiendo $1 USD de tu bolsillo en cada pedido.
+        </p>
+
+        <h2 class="seo-h2">2. Deducción Matemática del Breakeven ROAS y CPA Máximo</h2>
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Paso 1: Margen Bruto antes de Publicidad (MBA)</div>
+          <div class="seo-code-block"><code>MBA = PV - COGS - Flete_Envio - Empaque - (PV × %Fee_Pasarela)</code></div>
+          <p class="seo-formula-desc">Representa el dinero líquido real que deja cada orden para absorber el coste publicitario de adquisición.</p>
+        </div>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Paso 2: Breakeven ROAS (Punto de Equilibrio Publicitario)</div>
+          <div class="seo-code-block"><code>Breakeven_ROAS = PV / MBA</code></div>
+          <p class="seo-formula-desc">El umbral mínimo absoluto de retorno que deben reportar tus campañas para no generar pérdidas de caja.</p>
+        </div>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Paso 3: Costo por Adquisición Máximo Permitido (Max CPA)</div>
+          <div class="seo-code-block"><code>Max_CPA = MBA</code></div>
+          <p class="seo-formula-desc">La cantidad máxima exacta que puedes pagar a las plataformas publicitarias por una orden completada.</p>
+        </div>
+
+        <h2 class="seo-h2">3. Tabla Comparativa por Modelo de Negocio E-commerce</h2>
+        <div class="seo-table-wrapper">
+          <table class="seo-table">
+            <thead>
+              <tr>
+                <th>Modelo Comercial</th>
+                <th>Ticket Promedio (PV)</th>
+                <th>COGS + Logística</th>
+                <th>Margen Bruto (MBA)</th>
+                <th>Breakeven ROAS</th>
+                <th>Max CPA Permitido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dropshipping Bajo Ticket</strong></td>
+                <td>$32.00 USD</td>
+                <td>$18.50 USD (58%)</td>
+                <td>$11.90 USD</td>
+                <td>2.69x</td>
+                <td>$11.90 USD</td>
+              </tr>
+              <tr>
+                <td><strong>Marca D2C Moda / Ropa</strong></td>
+                <td>$68.00 USD</td>
+                <td>$26.00 USD (38%)</td>
+                <td>$38.80 USD</td>
+                <td>1.75x</td>
+                <td>$38.80 USD</td>
+              </tr>
+              <tr>
+                <td><strong>Cosmética & Cuidado Facial</strong></td>
+                <td>$85.00 USD</td>
+                <td>$21.00 USD (25%)</td>
+                <td>$60.20 USD</td>
+                <td>1.41x</td>
+                <td>$60.20 USD</td>
+              </tr>
+              <tr>
+                <td><strong>SaaS / Producto Digital</strong></td>
+                <td>$99.00 USD</td>
+                <td>$4.00 USD (4%)</td>
+                <td>$91.80 USD</td>
+                <td>1.08x</td>
+                <td>$91.80 USD</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="seo-h2">4. Tres Palancas Clave para Disminuir tu Breakeven ROAS</h2>
+        <ol class="seo-ordered-list">
+          <li><strong>Elevar el Valor Medio del Pedido (AOV):</strong> Mediante venta cruzada (cross-sells), ventas adicionales (upsells) y bundles de 2 o 3 unidades, diluyes el coste de envío y empaque fijo en una orden de mayor cuantía, incrementando exponencialmente tu margen bruto unitario.</li>
+          <li><strong>Renegociar Tarifas de Envío y Packaging:</strong> Reducir $1.50 USD en el coste logístico de cada paquete puede reducir tu Breakeven ROAS en hasta 0.3 puntos porcentuales, otorgando una ventaja competitiva decisiva en las subastas de pujas frente a tus competidores.</li>
+          <li><strong>Fomentar la Recompra Orgánica (Email & WhatsApp Marketing):</strong> El primer pedido adquirido vía publicidad paga el coste de adquisición; las recompras a 30, 60 y 90 días entran a coste publicitario $0.00, disparando el Margen Neto Global del negocio.</li>
+        </ol>
+
+        <h2 class="seo-h2">5. El Factor Oculto: Devoluciones, Reembolsos y Logística Inversa</h2>
+        <p class="seo-p">
+          En industrias de comercio electrónico como moda, calzado o joyería de consumo, las tasas de devolución oscilan entre el 8% y el 22%. Cuando un cliente devuelve un producto, la tienda no solo pierde la venta y el dinero invertido en anuncios para captarlo, sino que asume el coste del flete de ida, el flete de retorno, los costes de reacondicionamiento y la depreciación de inventario.
+        </p>
+        <p class="seo-p">
+          Para neutralizar este fenómeno, los directores financieros experimentados incorporan una provisión por devoluciones del 4% al 7% directamente dentro del coste de bienes vendidos (COGS). De esta forma, el Breakeven ROAS calculado por nuestra herramienta absorbe con solvencia matemática el impacto de las devoluciones sin desangrar el flujo de caja del negocio.
+        </p>
+
+        <h2 class="seo-h2">6. Preguntas Frecuentes Técnicas sobre ROAS y Pauta Publicitaria</h2>
+        <div class="seo-faq-block">
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Por qué un ROAS de 3.0x en Meta Ads puede generar pérdidas netas en mi tienda?</h3>
+            <p class="seo-p">El ROAS reportado por Meta Ads (Ingresos Brutos / Gasto en Pauta) no contempla el costo de los productos vendidos (COGS), costos de preparación y flete, devoluciones de clientes ni las comisiones de Shopify y pasarelas de pago. Si la suma de estos costos supera el 67% del precio de venta, tu Breakeven ROAS es superior a 3.0x, lo que significa que cada venta generada te cuesta dinero.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cuál es la diferencia entre CPA Máximo y Target CPA?</h3>
+            <p class="seo-p">El CPA Máximo es el costo por compra exacto donde tu margen neto es $0.00 (punto de equilibrio). El Target CPA (CPA Objetivo) debe situarse al menos entre un 25% y un 35% por debajo del CPA Máximo para que cada pedido genere un beneficio neto comercial real para sostener la empresa.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo influye la atribución post-view o post-click en las métricas de ROAS?</h3>
+            <p class="seo-p">Las ventanas de atribución predeterminadas de Meta (7 días click / 1 día view) suelen atribuirse ventas que habrían ocurrido de forma orgánica o a través de recomendaciones boca a boca. Se recomienda auditar las ventas contrastando las órdenes reales de Shopify o WooCommerce con el reporte de anuncios para evitar sobreestimar el ROAS real.</p>
+          </div>
+        </div>
+      </section>
+    
+    </article>
+  
+  </body>
+</html>

@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
+import { execSync } from 'child_process';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
@@ -1405,7 +1406,56 @@ function build() {
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>1.0</priority>
+  </url>
+  <!-- 6 Prerendered Interactive Tools (Priority 1.0) -->
+  <url>
+    <loc>https://soportecero.com/tools/comisiones-pasarelas-pago.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/tarifa-hora-freelance.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/tarifa-hora-freelance.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/tarifa-hora-freelance.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/calculadora-roas-ecommerce.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/margen-descuentos-ecommerce.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/interes-compuesto-ahorro.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
     <loc>https://soportecero.com/contacto.html</loc>
@@ -1517,15 +1567,11 @@ function build() {
   </url>
 `;
 
-  // Add Spanish posts to sitemap
+  // Add Spanish posts to sitemap (Primary Indexable Content)
   for (let post of postsEs) {
     const postDate = post.dateModified || post.date || staticLastmod;
-    const hasEn = postsEn.some(p => p.filename === post.filename);
     sitemapXml += `  <url>
     <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
-    ${hasEn ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
     <lastmod>${postDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1533,21 +1579,8 @@ function build() {
 `;
   }
 
-  // Add English posts to sitemap
-  for (let post of postsEn) {
-    const postDate = post.dateModified || post.date || staticLastmod;
-    const hasEs = postsEs.some(p => p.filename === post.filename);
-    sitemapXml += `  <url>
-    <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>
-    ${hasEs ? `<xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : ''}
-    <lastmod>${postDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-`;
-  }
+  // English posts removed from sitemap.xml to eliminate duplicate/translated content dilution
+  // and prevent AdSense penalties for thin/duplicate content.
 
   sitemapXml += `</urlset>`;
 
@@ -1613,6 +1646,17 @@ function build() {
         console.warn('[AGENT-SKILLS] Advertencia al sincronizar digests:', err.message);
       }
     }
+  }
+
+  // 13. Prerender the 6 interactive tools
+  try {
+    const prerenderScriptPath = path.join(__dirname, 'prerender-tools.js');
+    if (fs.existsSync(prerenderScriptPath)) {
+      console.log('[TOOLS] Ejecutando prerender de calculadoras...');
+      execSync(`node "${prerenderScriptPath}"`, { stdio: 'inherit' });
+    }
+  } catch (err) {
+    console.warn('[TOOLS] Advertencia al prerenderizar herramientas:', err.message);
   }
 
   console.log('--- Compilación Completada con Éxito ---');

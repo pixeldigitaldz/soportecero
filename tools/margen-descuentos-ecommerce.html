@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Margen vs. Markup y Descuentos en E-commerce | SoporteCero</title>
+    <meta name="description" content="Aprende la diferencia matemática real entre Margen y Markup, simula el precio de venta sugerido con impuestos y calcula el volumen extra para compensar promociones." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
+    <link rel="alternate" hreflang="es" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
+    <link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
+
+    <!-- Google AdSense Oficial -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+
+    <!-- Tipografía Editorial (Inter & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/tools/assets/index-DkzA_83P.js"></script>
+    <link rel="stylesheet" crossorigin href="/tools/assets/index-BbNhc--3.css">
+  
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+      {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Simulador de Margen vs. Markup y Descuentos",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://soportecero.com/tools/margen-descuentos-ecommerce.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Conversor algebraico bidireccional entre Margen de Ganancia y Markup",
+        "Cálculo de precio de venta recomendado con impuestos indirectos",
+        "Simulador de elasticidad de volumen ante campañas de descuento",
+        "Análisis del impacto destructivo de promociones sobre el margen unitario"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuál es la diferencia exacta entre Margen y Markup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El Margen de Beneficio se calcula siempre sobre el Precio de Venta final: (Beneficio / Precio de Venta) × 100. El Markup se calcula sobre el Costo de Adquisición o Fabricación: (Beneficio / Costo) × 100. Un producto con costo de $50 y venta en $100 tiene un Markup del 100%, pero un Margen de solo el 50%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué un descuento comercial del 20% destruye mucho más del 20% de las ganancias?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque el descuento se aplica sobre el total del precio facturado, mientras que los costos del producto, almacenamiento y logística permanecen fijos. Por ejemplo, en un producto que cuesta $70 y se vende en $100, la ganancia es $30. Un descuento del 20% baja el precio a $80, reduciendo la ganancia a solo $10 (una caída del 66.6% en el beneficio neto unitario)."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    
+<style id="seo-static-styles">
+  .seo-static-content {
+    max-width: 80rem;
+    margin: 3rem auto 5rem auto;
+    padding: 2.5rem 1.5rem;
+    background: rgba(16, 19, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px);
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  .seo-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 9999px;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+  .seo-meta-audit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.75rem;
+  }
+  .seo-h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .seo-h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .seo-h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .seo-p {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  .seo-lead-box {
+    background: rgba(6, 182, 212, 0.05);
+    border-left: 3px solid #06b6d4;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    margin-bottom: 2rem;
+  }
+  .seo-lead {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin-bottom: 0;
+    font-weight: 450;
+    line-height: 1.75;
+  }
+  .seo-list, .seo-ordered-list {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+  }
+  .seo-list li, .seo-ordered-list li {
+    margin-bottom: 0.65rem;
+    line-height: 1.65;
+  }
+  .seo-formula-card {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .seo-formula-title {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #22d3ee;
+    margin-bottom: 0.75rem;
+  }
+  .seo-code-block {
+    background: #0b0d14;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: #38bdf8;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+  }
+  .seo-formula-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+  .seo-table-wrapper {
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.85rem;
+    background: #0d1017;
+  }
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  .seo-table th {
+    background: #141824;
+    color: #38bdf8;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .seo-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+  }
+  .seo-table tr:hover td {
+    background: rgba(6, 182, 212, 0.04);
+  }
+  .seo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .seo-case-card {
+    background: #11141f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .seo-static-content {
+      padding: 1.5rem 1rem;
+      margin: 1.5rem auto 3rem auto;
+      border-radius: 1rem;
+    }
+    .seo-h1 {
+      font-size: 1.45rem;
+    }
+    .seo-h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+  </head>
+  <body class="bg-[#0B0C10] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+    
+    <script>window.__INITIAL_TOOL_ID__ = "calculadora-margen-markup-descuentos";</script>
+    <div id="root"></div>
+    <article class="seo-static-content" role="article" aria-label="Simulador de Margen vs. Markup y Descuentos en E-commerce | SoporteCero">
+      <header class="seo-header">
+        <span class="seo-header-tag">Suite Pricing & Descuentos</span>
+        <h1 class="seo-h1">Guía Técnica de Pricing: Diferencia Crítica entre Margen vs. Markup y Trampa de Descuentos</h1>
+        <div class="seo-meta-audit">
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-08 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Licencia CC-BY-4.0</span>
+        </div>
+      </header>
+      
+      <section class="seo-section">
+        <div class="seo-lead-box">
+          <p class="seo-lead">
+            Confundir Margen con Markup es uno de los errores contables más destructivos en el comercio electrónico y el retail físico. Aplicar descuentos agresivos sin calcular la elasticidad del volumen adicional requerida erosiona el capital de trabajo de la empresa. Esta guía técnica analiza las fórmulas exactas de conversión y el impacto matemático de las promociones.
+          </p>
+        </div>
+
+        <h2 class="seo-h2">1. Desmitificando Margen vs. Markup con Matemáticas Puras</h2>
+        <p class="seo-p">
+          Muchos emprendedores y gestores de catálogo creen erróneamente que "Margen" y "Markup" son términos sinónimos. Esta confusión genera catástrofes de pricing:
+        </p>
+        <ul class="seo-list">
+          <li><strong>Margen de Beneficio (Profit Margin):</strong> Indica qué proporción del dinero pagado por el cliente final es ganancia neta. Matemáticamente nunca puede superar el 100% (salvo costes negativos teóricos).</li>
+          <li><strong>Markup (Recargo sobre el Coste):</strong> Mide cuánto se incrementa el coste original del bien para fijar el precio. Puede ser del 100%, 200%, 500% o infinito.</li>
+        </ul>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Fórmulas de Conversión Exacta</div>
+          <div class="seo-code-block"><code>Markup = Margen / (1 - Margen)   |   Margen = Markup / (1 + Markup)</code></div>
+          <p class="seo-formula-desc">Para un Margen deseado del 40%, el Markup requerido es 0.40 / 0.60 = 66.67%. Para un Margen del 50%, el Markup necesario es 0.50 / 0.50 = 100%.</p>
+        </div>
+
+        <h2 class="seo-h2">2. La Trampa de los Descuentos: ¿Cuántas Unidades Más Debes Vender?</h2>
+        <p class="seo-p">
+          Lanzar una campaña con un 20% de descuento en Black Friday o Cyber Monday parece inocuo, pero suele reducir el beneficio neto en más de un 60%. La fórmula que determina el volumen adicional de ventas necesario simplemente para empatar la ganancia bruta previa al descuento es:
+        </p>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Fórmula de Elasticidad de Volumen por Descuento</div>
+          <div class="seo-code-block"><code>%Incremento_Ventas_Necesario = D / (Margen_Original - D)</code></div>
+          <p class="seo-formula-desc">Donde D es el porcentaje de descuento comercial aplicado y Margen_Original es el margen previo de la tienda.</p>
+        </div>
+
+        <div class="seo-table-wrapper">
+          <table class="seo-table">
+            <thead>
+              <tr>
+                <th>Margen Original</th>
+                <th>Descuento Ofrecido</th>
+                <th>Beneficio Unitario Residual</th>
+                <th>Aumento de Ventas Necesario para Empatar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>30% de Margen</td>
+                <td>10% Descuento</td>
+                <td>20% restante</td>
+                <td><strong>+50.0% en volumen de órdenes</strong></td>
+              </tr>
+              <tr>
+                <td>30% de Margen</td>
+                <td>15% Descuento</td>
+                <td>15% restante</td>
+                <td><strong>+100.0% en volumen de órdenes (Vender el doble)</strong></td>
+              </tr>
+              <tr>
+                <td>40% de Margen</td>
+                <td>20% Descuento</td>
+                <td>20% restante</td>
+                <td><strong>+100.0% en volumen de órdenes</strong></td>
+              </tr>
+              <tr>
+                <td>50% de Margen</td>
+                <td>25% Descuento</td>
+                <td>25% restante</td>
+                <td><strong>+100.0% en volumen de órdenes</strong></td>
+              </tr>
+              <tr>
+                <td>25% de Margen</td>
+                <td>15% Descuento</td>
+                <td>10% restante</td>
+                <td><strong>+150.0% en volumen de órdenes</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="seo-h2">3. Estrategias Superiores a los Descuentos Lineales</h2>
+        <ol class="seo-ordered-list">
+          <li><strong>Regalos con Compra (GWP - Gift With Purchase):</strong> En lugar de descontar $10 USD a un pedido de $60 USD, regala un accesorio complementario cuyo valor percibido sea $15 USD pero tu costo de adquisición sea únicamente $2.50 USD. El cliente percibe mayor valor y preservas $7.50 USD de caja.</li>
+          <li><strong>Descuento por Volumen Escalonado (Tiered Pricing):</strong> "Compra 1 con 0% desc, compra 2 con 10% desc, compra 3 con 20% desc". De este modo garantizas un AOV elevado que amortiza el embalaje y flete de un único paquete.</li>
+          <li><strong>Crédito en Tienda o Puntos de Fidelidad:</strong> Emitir $10 USD en saldo para la próxima compra asegura una segunda transacción retenida en lugar de perder margen en la primera compra.</li>
+        </ol>
+
+        <h2 class="seo-h2">4. Análisis de Casos de Negocio Reales: Black Friday y Liquidaciones</h2>
+        <div class="seo-cards-grid">
+          <div class="seo-case-card">
+            <h3 class="seo-h3">Caso 1: Promoción Agresiva del 20% en Black Friday</h3>
+            <p class="seo-p">
+              Una tienda vende auriculares a $100 USD con un costo unitario de $70 USD (margen base del 30%, ganancia de $30 USD). Durante el Black Friday aplica un descuento del 20%, fijando el precio en $80 USD. El beneficio unitario colapsa de $30 a $10 USD (una reducción del 66.7%). Para igualar la masa de margen que generaban 100 ventas previas ($3,000 USD), la tienda necesita procesar 300 pedidos con el consiguiente estrés de inventario y atención al cliente.
+            </p>
+          </div>
+          <div class="seo-case-card">
+            <h3 class="seo-h3">Caso 2: Cupones Condicionados a un Ticket Mínimo</h3>
+            <p class="seo-p">
+              En lugar de ofrecer un 15% indiscriminado en todo el catálogo, una marca D2C ofrece "$15 USD de descuento en compras superiores a $100 USD". Esta condición empuja al comprador a agregar un segundo artículo al carrito, elevando el ticket medio de $65 a $105 USD y logrando que el descuento efectivo se reduzca a un manejable 14.2% con mayor beneficio absoluto en dólares.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="seo-h2">5. Preguntas Frecuentes Técnicas sobre Margen y Markup</h2>
+        <div class="seo-faq-block">
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cuál es la diferencia exacta entre Margen y Markup?</h3>
+            <p class="seo-p">El Margen de Beneficio se calcula siempre sobre el Precio de Venta final: (Beneficio / Precio de Venta) × 100. El Markup se calcula sobre el Costo de Adquisición o Fabricación: (Beneficio / Costo) × 100. Un producto con costo de $50 y venta en $100 tiene un Markup del 100%, pero un Margen de solo el 50%.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Por qué un descuento comercial del 20% destruye mucho más del 20% de las ganancias?</h3>
+            <p class="seo-p">Porque el descuento se aplica sobre el total del precio facturado, mientras que los costos del producto, almacenamiento y logística permanecen fijos. Por ejemplo, en un producto que cuesta $70 y se vende en $100, la ganancia es $30. Un descuento del 20% baja el precio a $80, reduciendo la ganancia a solo $10 (una caída del 66.6% en el beneficio neto unitario).</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo se debe calcular el precio con IVA o impuestos de venta incluidos?</h3>
+            <p class="seo-p">El impuesto indirecto sobre las ventas no forma parte del margen bruto comercial. Se debe calcular primero el precio de venta sugerido neto mediante la fórmula: PV_neto = COGS / (1 - Margen_Deseado), y sobre ese resultado aplicar la tasa impositiva correspondiente: PV_final = PV_neto × (1 + %IVA).</p>
+          </div>
+        </div>
+      </section>
+    
+    </article>
+  
+  </body>
+</html>

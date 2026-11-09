@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de Comisiones PayPal, Stripe, Wise y Binance (2026) | SoporteCero</title>
+    <meta name="description" content="Calcula exactamente cuánto recibes o cuánto debes cobrar a tus clientes para cubrir comisiones de pasarelas internacionales. Incluye cálculo directo, inverso y comparativa." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
+    <link rel="alternate" hreflang="es" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
+    <link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
+
+    <!-- Google AdSense Oficial -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+
+    <!-- Tipografía Editorial (Inter & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/tools/assets/index-DkzA_83P.js"></script>
+    <link rel="stylesheet" crossorigin href="/tools/assets/index-BbNhc--3.css">
+  
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+      {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Calculadora de Comisiones PayPal, Stripe, Wise y Binance Pay",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://soportecero.com/tools/comisiones-pasarelas-pago.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Cálculo directo e inverso de retenciones",
+        "Comparador simultáneo de 5 pasarelas internacionales",
+        "Desglose de comisiones fijas, porcentuales y spread cambiario",
+        "Exportación de cotizaciones para clientes en WhatsApp y PDF"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Por qué la calculadora inversa siempre da un monto superior al sumar el porcentaje directamente?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque las pasarelas descuentan su comisión sobre el total bruto final cobrado, no sobre la cantidad original neta. Si sumas 5.4% directamente a $1,000 obtienes $1,054; pero cuando PayPal aplica el 5.4% sobre $1,054 ($56.92) más el fijo de $0.30, recibirás únicamente $996.78, perdiendo dinero. La fórmula matemática exacta inversa es: Bruto = (Neto Deseado + Costo Fijo) / (1 - %Comisión)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué pasarela tiene menor comisión para recibir pagos de clientes en EE. UU. o Europa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Para transferencias bancarias locales ACH (Estados Unidos) o SEPA (Europa), Wise y Payoneer ofrecen las tarifas más bajas del mercado (0.4% a 1%). Para pagos con tarjeta de crédito corporativa, Stripe es la opción estándar de la industria (2.9% + $0.30 para transacciones locales y 3.9% para internacionales), mientras que PayPal suele ser la alternativa más costosa (4.4% a 5.4% + $0.30)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo afecta el diferencial de cambio (spread FX) al dinero que llega a tu cuenta bancaria local?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Muchas pasarelas publicitan comisiones de transacción moderadas pero aplican un sobreprecio oculto en el tipo de cambio de divisas del 2.5% al 4.5% sobre la tasa interbancaria oficial de Google o Reuters. Wise destaca por utilizar la tasa interbancaria media real sin sobreprecio cambiario, lo que representa ahorros de más del 3% en cada liquidación a moneda local."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es legal estipular en el contrato que el cliente cubre las comisiones de pago?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En relaciones comerciales B2B y prestación de servicios transfronterizos entre profesionales independientes y empresas, es legal y estándar acordar honorarios netos o detallar un recargo por procesamiento administrativo financiero, siempre y cuando quede reflejado con total transparencia en la propuesta comercial o contrato de servicios previo a la emisión de la factura."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    
+<style id="seo-static-styles">
+  .seo-static-content {
+    max-width: 80rem;
+    margin: 3rem auto 5rem auto;
+    padding: 2.5rem 1.5rem;
+    background: rgba(16, 19, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px);
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  .seo-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 9999px;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+  .seo-meta-audit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.75rem;
+  }
+  .seo-h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .seo-h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .seo-h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .seo-p {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  .seo-lead-box {
+    background: rgba(6, 182, 212, 0.05);
+    border-left: 3px solid #06b6d4;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    margin-bottom: 2rem;
+  }
+  .seo-lead {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin-bottom: 0;
+    font-weight: 450;
+    line-height: 1.75;
+  }
+  .seo-list, .seo-ordered-list {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+  }
+  .seo-list li, .seo-ordered-list li {
+    margin-bottom: 0.65rem;
+    line-height: 1.65;
+  }
+  .seo-formula-card {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .seo-formula-title {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #22d3ee;
+    margin-bottom: 0.75rem;
+  }
+  .seo-code-block {
+    background: #0b0d14;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: #38bdf8;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+  }
+  .seo-formula-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+  .seo-table-wrapper {
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.85rem;
+    background: #0d1017;
+  }
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  .seo-table th {
+    background: #141824;
+    color: #38bdf8;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .seo-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+  }
+  .seo-table tr:hover td {
+    background: rgba(6, 182, 212, 0.04);
+  }
+  .seo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .seo-case-card {
+    background: #11141f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .seo-static-content {
+      padding: 1.5rem 1rem;
+      margin: 1.5rem auto 3rem auto;
+      border-radius: 1rem;
+    }
+    .seo-h1 {
+      font-size: 1.45rem;
+    }
+    .seo-h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+  </head>
+  <body class="bg-[#0B0C10] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+    
+    <script>window.__INITIAL_TOOL_ID__ = "calculadora-comisiones-pasarelas-pago";</script>
+    <div id="root"></div>
+    <article class="seo-static-content" role="article" aria-label="Calculadora de Comisiones PayPal, Stripe, Wise y Binance (2026) | SoporteCero">
+      <header class="seo-header">
+        <span class="seo-header-tag">Suite Freelance & Pagos Globales</span>
+        <h1 class="seo-h1">Guía y Comparador Técnico de Comisiones: PayPal vs. Stripe vs. Wise vs. Payoneer vs. Binance Pay</h1>
+        <div class="seo-meta-audit">
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-08 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Licencia CC-BY-4.0</span>
+        </div>
+      </header>
+      
+      <section class="seo-section">
+        <div class="seo-lead-box">
+          <p class="seo-lead">
+            Cobrar servicios profesionales, consultoría técnica o productos digitales a clientes internacionales implica navegar un complejo entramado de tarifas porcentuales, comisiones fijas por transacción, recargos transfronterizos y márgenes ocultos en el tipo de cambio de divisas (spread FX). Esta guía técnica detalla la metodología cuantitativa para calcular con precisión milimétrica el valor neto a percibir y el valor bruto a facturar utilizando fórmulas inversas algebraicamente exactas.
+          </p>
+        </div>
+
+        <h2 class="seo-h2">1. Anatomía y Estructura de Costos en Pasarelas Globales</h2>
+        <p class="seo-p">
+          Cuando un cliente emite un pago desde el extranjero a través de una tarjeta de crédito, débito o transferencia interbancaria, intervienen múltiples entidades financieras: el banco emisor de la tarjeta, las redes globales de tarjetas (Visa, Mastercard, American Express), el procesador de pagos o pasarela adquirente (Stripe, PayPal, Payoneer) y la entidad receptora. Cada eslabón deduce una fracción del capital transaccionado.
+        </p>
+        <p class="seo-p">
+          Para comprender con exactitud la retención total, debemos desglosar los cuatro componentes críticos de costos que componen cualquier transacción comercial transfronteriza:
+        </p>
+        <ul class="seo-list">
+          <li><strong>Tarifa Porcentual Base (%FEE):</strong> Es el porcentaje comercial que retiene la pasarela (por ejemplo, 2.9% a 5.4%). Esta tarifa cubre el riesgo crediticio, los costos de intercambio de la red de pagos y el margen de ganancia del procesador.</li>
+          <li><strong>Comisión Fija por Operación (CF):</strong> Un importe fijo en moneda base (habitualmente $0.30 USD, €0.25 EUR o $0.35 USD) devengado independientemente del volumen de la orden. En transacciones de bajo ticket ($10 a $30 USD), esta cuota fija ejerce un impacto porcentual desproporcionado sobre el margen neto.</li>
+          <li><strong>Recargo Transfronterizo (Cross-Border Fee):</strong> Cuando el país de origen de la tarjeta o cuenta difiere del país de constitución de la cuenta receptora, pasarelas como Stripe y PayPal agregan entre un 1.0% y un 1.5% adicional por procesamiento internacional.</li>
+          <li><strong>Spread Cambiario Oculto (FX Markup):</strong> Al convertir el dinero recibido (por ejemplo, de dólares estadounidenses o euros a pesos mexicanos, pesos colombianos, pesos argentinos o soles), muchas plataformas no utilizan el tipo de cambio interbancario oficial, sino que aplican un recargo cambiario de entre el 2.5% y el 4.5%.</li>
+        </ul>
+
+        <h2 class="seo-h2">2. Fórmulas Matemáticas: Cálculo Directo vs. Cálculo Inverso</h2>
+        <p class="seo-p">
+          El error financiero más extendido entre freelancers y agencias de desarrollo consiste en intentar compensar una comisión sumando el porcentaje directamente al importe neto pretendido. Supongamos que deseas ingresar $1,000 USD limpios y tu pasarela cobra un 5.4% más $0.30 USD. Si multiplicas $1,000 por 1.054 obtienes $1,054. Al emitir una factura por $1,054, la pasarela deducirá el 5.4% sobre $1,054 ($56.92) más $0.30, restando un total de $57.22. En consecuencia, tu balance solo recibirá $996.78 ($3.22 menos de lo acordado). En facturas de $10,000 USD, este desfase asciende a decenas de dólares.
+        </p>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Fórmula de Cálculo Directo (Monto Neto Recibido)</div>
+          <div class="seo-code-block"><code>Neto = B - (B × %FEE + CF) = B × (1 - %FEE) - CF</code></div>
+          <p class="seo-formula-desc">Permite determinar el capital neto disponible en tu cuenta a partir de una orden de pago bruta (B) acordada con el comprador.</p>
+        </div>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Fórmula de Cálculo Inverso (Monto Bruto a Facturar)</div>
+          <div class="seo-code-block"><code>Bruto = (Neto_Deseado + CF) / (1 - %FEE)</code></div>
+          <p class="seo-formula-desc">Despeja algebraicamente la ecuación para calcular la cifra exacta que debes presupuestar o facturar para que, tras deducir todas las retenciones, tu saldo final sea exactamente el Neto Deseado.</p>
+        </div>
+
+        <div class="seo-table-wrapper">
+          <table class="seo-table">
+            <thead>
+              <tr>
+                <th>Monto Neto Pretendido</th>
+                <th>Cálculo Erróneo (+5.4%)</th>
+                <th>Neto Real Tras Cobro</th>
+                <th>Cálculo Inverso Exacto</th>
+                <th>Neto Final Recibido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>$250.00 USD</td>
+                <td>$263.50 USD</td>
+                <td>$248.97 USD (Pérdida)</td>
+                <td>$264.60 USD</td>
+                <td>$250.00 USD (Exacto)</td>
+              </tr>
+              <tr>
+                <td>$1,000.00 USD</td>
+                <td>$1,054.00 USD</td>
+                <td>$996.78 USD (Pérdida)</td>
+                <td>$1,057.40 USD</td>
+                <td>$1,000.00 USD (Exacto)</td>
+              </tr>
+              <tr>
+                <td>$5,000.00 USD</td>
+                <td>$5,270.00 USD</td>
+                <td>$4,985.12 USD (Pérdida)</td>
+                <td>$5,285.73 USD</td>
+                <td>$5,000.00 USD (Exacto)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="seo-h2">3. Tabla Técnica Comparativa de Pasarelas Internacionales (2026)</h2>
+        <p class="seo-p">
+          A continuación se detallan las condiciones comerciales estándar auditadas para profesionales que operan en mercados de habla hispana recibiendo capital de Norteamérica y la Unión Europea:
+        </p>
+
+        <div class="seo-table-wrapper">
+          <table class="seo-table">
+            <thead>
+              <tr>
+                <th>Plataforma</th>
+                <th>Tarifa Transaccional</th>
+                <th>Costo Fijo</th>
+                <th>Spread Cambiario (FX)</th>
+                <th>Retiro a Banco Local</th>
+                <th>Veredicto de Eficiencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Stripe Payments</strong></td>
+                <td>2.9% a 3.9% + 1% cross-border</td>
+                <td>$0.30 USD</td>
+                <td>1.0% - 2.0%</td>
+                <td>Automático (2-4 días hábiles)</td>
+                <td>Líder absoluto para SaaS, e-commerce y facturación recurrente con tarjetas corporativas.</td>
+              </tr>
+              <tr>
+                <td><strong>PayPal Comercial</strong></td>
+                <td>4.4% a 5.4% internacional</td>
+                <td>$0.30 USD</td>
+                <td>3.5% - 4.5%</td>
+                <td>Variable según país ($0 a 3.5%)</td>
+                <td>Muy accesible pero con las tasas y spreads más costosos de la industria.</td>
+              </tr>
+              <tr>
+                <td><strong>Wise Business (ACH/SEPA)</strong></td>
+                <td>0.4% a 0.8% según divisa</td>
+                <td>~$0.45 USD</td>
+                <td>0% (Tipo medio real de mercado)</td>
+                <td>Directo en moneda local sin margen</td>
+                <td>Máxima rentabilidad para transferencias bancarias internacionales de mediano y alto volumen.</td>
+              </tr>
+              <tr>
+                <td><strong>Payoneer</strong></td>
+                <td>0% (entre cuentas) / 3% tarjeta</td>
+                <td>$0.00</td>
+                <td>~2.0% sobre tasa interbancaria</td>
+                <td>Retiro a cuenta local (hasta 2%)</td>
+                <td>Especialmente útil para cobros en plataformas de marketplace (Upwork, Fiverr, Airbnb).</td>
+              </tr>
+              <tr>
+                <td><strong>Binance Pay (Cripto/USDT)</strong></td>
+                <td>0.1% a 0.3% / 0% P2P</td>
+                <td>Cero comisión fija</td>
+                <td>0% (Cotización directa en P2P)</td>
+                <td>Instantáneo vía mercado P2P local</td>
+                <td>Cero fricción bancaria y liquidación inmediata para clientes familiarizados con Web3.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="seo-h2">4. Análisis de Escenarios Reales de Facturación</h2>
+        <div class="seo-cards-grid">
+          <div class="seo-case-card">
+            <h3 class="seo-h3">Escenario A: Anticipo de Proyecto Freelance ($300 USD)</h3>
+            <p class="seo-p">
+              Para pagos de ticket pequeño, las cuotas fijas sumadas a las tarifas de retiro castigan severamente al prestador del servicio. Con PayPal, el profesional recibe aproximadamente $283.50 tras el cobro internacional, perdiendo $16.50 (5.5%). Utilizando Wise mediante ACH local de EE. UU., la deducción no supera los $1.50 USD, preservando un 99.5% del valor facturado.
+            </p>
+          </div>
+          <div class="seo-case-card">
+            <h3 class="seo-h3">Escenario B: Retainer Mensual de Software ($2,500 USD)</h3>
+            <p class="seo-p">
+              En facturaciones recurrentes de servicios IT, una diferencia del 3% en tarifas representa $75 USD mensuales o $900 USD anuales desperdiciados en comisiones. Implementar Stripe con tarjeta o Wise con débito directo reduce la fuga de capital a menos de $25 USD por ciclo mensual.
+            </p>
+          </div>
+          <div class="seo-case-card">
+            <h3 class="seo-h3">Escenario C: Factura de Agencia o Consultoría ($8,000 USD)</h3>
+            <p class="seo-p">
+              En importes superiores a $5,000 USD, las transferencias electrónicas SWIFT tradicionales o Wise Wire resultan infinitamente más rentables que las pasarelas de tarjetas. Mientras PayPal deduciría más de $350 USD por la operación, una transferencia Wise Wire cobra un coste plano menor a $5 USD.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="seo-h2">5. Protocolo Recomendado para Presupuestar y Facturar</h2>
+        <p class="seo-p">
+          Para evitar conflictos con los clientes y blindar la salud financiera de tu negocio independiente, aplica estas tres directrices operativas en tus propuestas comerciales:
+        </p>
+        <ol class="seo-ordered-list">
+          <li><strong>Especifica siempre importes netos en la cotización:</strong> Añade una cláusula formal: <em>"Las tarifas expresadas representan honorarios netos libres de retenciones bancarias o gastos de procesamiento financiero."</em></li>
+          <li><strong>Ofrece alternativas de pago con incentivo de descuento:</strong> Ofrece a tu cliente pagar con tarjeta (precio con fórmula inversa aplicada) o pagar vía transferencia bancaria ACH/Wise/Cripto con un 4% de descuento de cortesía. El 80% de los clientes corporativos optará por la transferencia directa.</li>
+          <li><strong>Automatiza la exportación de comprobantes:</strong> Utiliza el botón de exportación a WhatsApp o PDF de nuestra calculadora para adjuntar el desglose matemático transparente de la comisión a tu cliente.</li>
+        </ol>
+
+        <h2 class="seo-h2">6. Preguntas Frecuentes Técnicas</h2>
+        <div class="seo-faq-block">
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Por qué la calculadora inversa siempre da un monto superior al sumar el porcentaje directamente?</h3>
+            <p class="seo-p">Porque las pasarelas descuentan su comisión sobre el total bruto final cobrado, no sobre la cantidad original neta. Si sumas 5.4% directamente a $1,000 obtienes $1,054; pero cuando PayPal aplica el 5.4% sobre $1,054 ($56.92) más el fijo de $0.30, recibirás únicamente $996.78, perdiendo dinero. La fórmula matemática exacta inversa es: Bruto = (Neto Deseado + Costo Fijo) / (1 - %Comisión).</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Qué pasarela tiene menor comisión para recibir pagos de clientes en EE. UU. o Europa?</h3>
+            <p class="seo-p">Para transferencias bancarias locales ACH (Estados Unidos) o SEPA (Europa), Wise y Payoneer ofrecen las tarifas más bajas del mercado (0.4% a 1%). Para pagos con tarjeta de crédito corporativa, Stripe es la opción estándar de la industria (2.9% + $0.30 para transacciones locales y 3.9% para internacionales), mientras que PayPal suele ser la alternativa más costosa (4.4% a 5.4% + $0.30).</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Cómo afecta el diferencial de cambio (spread FX) al dinero que llega a tu cuenta bancaria local?</h3>
+            <p class="seo-p">Muchas pasarelas publicitan comisiones de transacción moderadas pero aplican un sobreprecio oculto en el tipo de cambio de divisas del 2.5% al 4.5% sobre la tasa interbancaria oficial de Google o Reuters. Wise destaca por utilizar la tasa interbancaria media real sin sobreprecio cambiario, lo que representa ahorros de más del 3% en cada liquidación a moneda local.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Es legal estipular en el contrato que el cliente cubre las comisiones de pago?</h3>
+            <p class="seo-p">En relaciones comerciales B2B y prestación de servicios transfronterizos entre profesionales independientes y empresas, es legal y estándar acordar honorarios netos o detallar un recargo por procesamiento administrativo financiero, siempre y cuando quede reflejado con total transparencia en la propuesta comercial o contrato de servicios previo a la emisión de la factura.</p>
+          </div>
+        </div>
+      </section>
+    
+    </article>
+  
+  </body>
+</html>

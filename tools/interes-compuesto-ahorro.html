@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Interés Compuesto y Poder Adquisitivo con Inflación | SoporteCero</title>
+    <meta name="description" content="Proyecta el crecimiento de tu patrimonio a largo plazo con aportaciones periódicas, calcula el poder de compra real descontando la inflación y simula tu renta FIRE." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
+    <link rel="alternate" hreflang="es" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
+    <link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
+
+    <!-- Google AdSense Oficial -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+
+    <!-- Tipografía Editorial (Inter & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/tools/assets/index-DkzA_83P.js"></script>
+    <link rel="stylesheet" crossorigin href="/tools/assets/index-BbNhc--3.css">
+  
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+      {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Simulador de Interés Compuesto e Inflación",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://soportecero.com/tools/interes-compuesto-ahorro.html",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Proyección exponencial con aportaciones mensuales o anuales",
+        "Ajuste por inflación histórica y cálculo de poder adquisitivo constante",
+        "Simulador de renta pasiva vitalicia bajo la Regla del 4% (FIRE)",
+        "Comparador gráfico de capital de bolsillo invertido vs interés generado"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Por qué la inflación destruye las carteras de inversión a largo plazo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque la inflación disminuye el poder de compra real de cada unidad monetaria acumulada. Una inflación del 3.5% anual reduce a la mitad el valor adquisitivo del dinero en aproximadamente 20 años. Por ello, una cartera que rinde un 8% nominal rinde en realidad un 4.3% real una vez deflactado el incremento en el coste de vida."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué es la Regla del 4% para la independencia financiera (FIRE)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La Regla del 4% se deriva del prestigioso Estudio Trinity. Concluyó que un inversor que posea una cartera indexada equilibrada (por ejemplo, 75% acciones globales / 25% bonos de calidad) puede retirar cada año el 4% del capital total acumulado (ajustado por inflación) sin riesgo significativo de agotar su fondo patrimonial durante un horizonte superior a 30 años."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    
+<style id="seo-static-styles">
+  .seo-static-content {
+    max-width: 80rem;
+    margin: 3rem auto 5rem auto;
+    padding: 2.5rem 1.5rem;
+    background: rgba(16, 19, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(16px);
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  .seo-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: 9999px;
+    color: #22d3ee;
+    margin-bottom: 1rem;
+  }
+  .seo-meta-audit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.75rem;
+  }
+  .seo-h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .seo-h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .seo-h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .seo-p {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  .seo-lead-box {
+    background: rgba(6, 182, 212, 0.05);
+    border-left: 3px solid #06b6d4;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+    margin-bottom: 2rem;
+  }
+  .seo-lead {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin-bottom: 0;
+    font-weight: 450;
+    line-height: 1.75;
+  }
+  .seo-list, .seo-ordered-list {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+  }
+  .seo-list li, .seo-ordered-list li {
+    margin-bottom: 0.65rem;
+    line-height: 1.65;
+  }
+  .seo-formula-card {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .seo-formula-title {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #22d3ee;
+    margin-bottom: 0.75rem;
+  }
+  .seo-code-block {
+    background: #0b0d14;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: #38bdf8;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+  }
+  .seo-formula-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0;
+  }
+  .seo-table-wrapper {
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.85rem;
+    background: #0d1017;
+  }
+  .seo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  .seo-table th {
+    background: #141824;
+    color: #38bdf8;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .seo-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+  }
+  .seo-table tr:hover td {
+    background: rgba(6, 182, 212, 0.04);
+  }
+  .seo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .seo-case-card {
+    background: #11141f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .seo-static-content {
+      padding: 1.5rem 1rem;
+      margin: 1.5rem auto 3rem auto;
+      border-radius: 1rem;
+    }
+    .seo-h1 {
+      font-size: 1.45rem;
+    }
+    .seo-h2 {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+  </head>
+  <body class="bg-[#0B0C10] text-slate-100 antialiased selection:bg-cyan-500 selection:text-white">
+    
+    <script>window.__INITIAL_TOOL_ID__ = "calculadora-interes-compuesto-inflacion";</script>
+    <div id="root"></div>
+    <article class="seo-static-content" role="article" aria-label="Simulador de Interés Compuesto y Poder Adquisitivo con Inflación | SoporteCero">
+      <header class="seo-header">
+        <span class="seo-header-tag">Suite Inversión & FIRE</span>
+        <h1 class="seo-h1">Guía Técnica de Interés Compuesto, Rendimiento Exponencial y Descuento por Inflación</h1>
+        <div class="seo-meta-audit">
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-08 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Licencia CC-BY-4.0</span>
+        </div>
+      </header>
+      
+      <section class="seo-section">
+        <div class="seo-lead-box">
+          <p class="seo-lead">
+            Albert Einstein describió el interés compuesto como la octava maravilla del mundo: quien lo entiende lo gana; quien no lo entiende, lo paga. Sin embargo, planificar la jubilación o libertad financiera calculando únicamente cifras nominales conduce a ilusiones monetarias peligrosas si no se descuenta la tasa de inflación acumulada. Esta guía técnica detalla la matemática cuantitativa del crecimiento exponencial real.
+          </p>
+        </div>
+
+        <h2 class="seo-h2">1. El Mecanismo Exponencial del Interés Compuesto</h2>
+        <p class="seo-p">
+          En el interés simple, los rendimientos devengados se retiran y no generan beneficios adicionales. En el <strong>interés compuesto</strong>, cada dólar o euro generado en dividendos o intereses se reinvierte de forma inmediata en el fondo principal. En consecuencia, en el siguiente período, los intereses devengan intereses sobre sí mismos.
+        </p>
+        <p class="seo-p">
+          Durante los primeros 5 a 8 años, la curva de patrimonio parece avanzar de manera lenta y casi lineal. Pero a partir del año 15 o 20, la pendiente de la curva se vuelve vertical: el flujo generado por los intereses acumulados supera ampliamente la suma total del dinero ahorrado de tu propio bolsillo.
+        </p>
+
+        <h2 class="seo-h2">2. Fórmulas Matemáticas de Crecimiento con Aportaciones y Retorno Real</h2>
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Valor Futuro con Aportes Periódicos Mensuales</div>
+          <div class="seo-code-block"><code>FV = P(1 + r/m)^(m·t) + PMT × [((1 + r/m)^(m·t) - 1) / (r/m)]</code></div>
+          <p class="seo-formula-desc">Donde P = Capital inicial, PMT = Aporte mensual, r = Tasa nominal anual, m = Capitalizaciones por año (12), y t = Plazo en años.</p>
+        </div>
+
+        <div class="seo-formula-card">
+          <div class="seo-formula-title">Ajuste por Inflación (Ecuación de Fisher y Poder Adquisitivo Real)</div>
+          <div class="seo-code-block"><code>r_real = (1 + r) / (1 + inf) - 1   |   FV_real = FV / (1 + inf)^t</code></div>
+          <p class="seo-formula-desc">FV_real expresa tu patrimonio futuro exactamente en moneda de valor constante de hoy, neutralizando la ilusión inflacionaria.</p>
+        </div>
+
+        <h2 class="seo-h2">3. Tabla de Evolución Temporal Comparativa ($USD)</h2>
+        <p class="seo-p">
+          Evolución de un inversor que comienza con $5,000 USD iniciales y aporta $350 USD mensuales con un rendimiento histórico del 9.0% nominal (índice bursátil S&P 500 / MSCI World) y una inflación promedio del 3.0%:
+        </p>
+
+        <div class="seo-table-wrapper">
+          <table class="seo-table">
+            <thead>
+              <tr>
+                <th>Horizonte Temporal</th>
+                <th>Capital Aportado De Bolsillo</th>
+                <th>Interés Ganado</th>
+                <th>Patrimonio Nominal (FV)</th>
+                <th>Poder Real (FV_real)</th>
+                <th>Renta Pasiva Mensual (4%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>10 Años</strong></td>
+                <td>$47,000 USD</td>
+                <td>$30,550 USD</td>
+                <td>$77,550 USD</td>
+                <td>$57,705 USD</td>
+                <td>$258 USD / mes</td>
+              </tr>
+              <tr>
+                <td><strong>20 Años</strong></td>
+                <td>$89,000 USD</td>
+                <td>$170,800 USD</td>
+                <td>$259,800 USD</td>
+                <td>$143,840 USD</td>
+                <td>$866 USD / mes</td>
+              </tr>
+              <tr>
+                <td><strong>30 Años</strong></td>
+                <td>$131,000 USD</td>
+                <td>$588,200 USD</td>
+                <td>$719,200 USD</td>
+                <td>$296,290 USD</td>
+                <td>$2,397 USD / mes</td>
+              </tr>
+              <tr>
+                <td><strong>35 Años</strong></td>
+                <td>$152,000 USD</td>
+                <td>$1,038,000 USD</td>
+                <td>$1,190,000 USD</td>
+                <td>$423,000 USD</td>
+                <td>$3,966 USD / mes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="seo-h2">4. La Regla del 4% y el Movimiento FIRE (Libertad Financiera)</h2>
+        <p class="seo-p">
+          Para vivir de rentas pasivas sin que tu patrimonio se extinga, el Estudio Trinity de la Universidad de Texas determinó que puedes retirar anualmente hasta el 4% de tu capital acumulado (ajustando la cifra por inflación en los años siguientes). En una cartera de $720,000 USD acumulados, el 4% anual equivale a $28,800 USD anuales ($2,400 USD limpios al mes) de por vida, manteniendo el capital protegido ante volatilidades del mercado.
+        </p>
+
+        <h2 class="seo-h2">5. La Destrucción Silenciosa del Ahorro Bancario sin Inversión</h2>
+        <p class="seo-p">
+          Mantener ahorros estancados en una cuenta corriente tradicional que rinde el 0% o 0.5% anual ante una inflación promedio del 3.5% garantiza una pérdida adquisitiva matemática garantizada:
+        </p>
+        <ul class="seo-list">
+          <li><strong>En 10 años:</strong> $100,000 USD en el banco compran el equivalente a solo $70,890 USD de hoy.</li>
+          <li><strong>En 20 años:</strong> El poder adquisitivo cae a $50,250 USD (la mitad del valor real original).</li>
+          <li><strong>En 30 años:</strong> El dinero ahorrado solo alcanza para comprar bienes por valor de $35,630 USD.</li>
+        </ul>
+        <p class="seo-p">
+          La inversión regular en activos productivos (fondos indexados globales, ETFs diversificados y empresas con dividendos crecientes) no es una actividad especulativa, sino el único mecanismo financiero comprobado para proteger el patrimonio frente a la depreciación del dinero fiat.
+        </p>
+
+        <h2 class="seo-h2">6. Preguntas Frecuentes Técnicas sobre Interés Compuesto e Inflación</h2>
+        <div class="seo-faq-block">
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Por qué la inflación destruye las carteras de inversión a largo plazo?</h3>
+            <p class="seo-p">Porque la inflación disminuye el poder de compra real de cada unidad monetaria acumulada. Una inflación del 3.5% anual reduce a la mitad el valor adquisitivo del dinero en aproximadamente 20 años. Por ello, una cartera que rinde un 8% nominal rinde en realidad un 4.3% real una vez deflactado el incremento en el coste de vida.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Qué es la Regla del 4% para la independencia financiera (FIRE)?</h3>
+            <p class="seo-p">La Regla del 4% se deriva del prestigioso Estudio Trinity. Concluyó que un inversor que posea una cartera indexada equilibrada (por ejemplo, 75% acciones globales / 25% bonos de calidad) puede retirar cada año el 4% del capital total acumulado (ajustado por inflación) sin riesgo significativo de agotar su fondo patrimonial durante un horizonte superior a 30 años.</p>
+          </div>
+          <div class="seo-faq-item">
+            <h3 class="seo-h3">¿Con qué frecuencia deben capitalizarse los intereses para maximizar el retorno?</h3>
+            <p class="seo-p">La capitalización periódica más frecuente (mensual, diaria o continua) maximiza matemáticamente el retorno sobre la anual, ya que los rendimientos devengados en el mes 1 comienzan a producir nuevos intereses de forma inmediata a partir del mes 2.</p>
+          </div>
+        </div>
+      </section>
+    
+    </article>
+  
+  </body>
+</html>

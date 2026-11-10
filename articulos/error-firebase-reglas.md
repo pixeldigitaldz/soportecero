@@ -18,7 +18,7 @@ El error `Firebase Error: [code=permission-denied]` ocurre cuando tu aplicación
 
 Este fallo es sumamente común al pasar un proyecto de la etapa de desarrollo local a producción, o cuando expira el periodo de gracia del "Modo de prueba" (que suele durar 30 días).
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 El sistema de control de versiones **Git** opera como una base de datos de objetos direccionables por contenido criptográfico (hashes SHA-1 / SHA-256) respaldada por un grafo acíclico dirigido (DAG). La integridad del repositorio descansa en el directorio interno `.git/`, donde se almacenan cuatro tipos de objetos atómicos: **blobs** (contenido puro de archivos), **trees** (representación de directorios y permisos POSIX), **commits** (metadatos del autor, mensaje y puntero al árbol raíz) y **annotated tags**.
 
@@ -27,7 +27,7 @@ La causa raíz de esta incidencia se produce por una alteración en los punteros
 2. **Desincronización del grafo DAG y divergencia de ramas:** Durante procesos de `rebase` o `cherry-pick`, Git reescribe la historia aplicando commits de forma secuencial sobre un nuevo commit base. Si se detectan cambios incompatibles en los mismos bloques de código sin un ancestro común directo (o si se fuerza la unión de árboles de commits independientes creados desde cero), el algoritmo de merge trifásico (*three-way merge*) detiene la ejecución para proteger la integridad del historial, dejando al repositorio en un estado transicional (`REBASE-i`, `MERGING` o `DETACHED HEAD`).
 3. **Capa de transporte SSL/TLS y validación de certificados:** Al interactuar con remotos a través de HTTPS, el cliente Git delega la autenticación en la librería local `libcurl` y el almacén de certificados CA del sistema operativo. Si la cadena de certificación intermedia no se resuelve o existen desajustes en el reloj del sistema, el handshake criptográfico se cancela de inmediato.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -82,7 +82,7 @@ service cloud.firestore {
 **Publicar cambios**
 Haz clic en el botón Publish (Publicar) en la consola de Firebase. Los cambios en las reglas toman entre 1 y 2 minutos en propagarse globalmente. Reinicia tu aplicación cliente y los errores de permisos desaparecerán.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

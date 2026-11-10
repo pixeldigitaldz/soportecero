@@ -13,7 +13,7 @@ date: '2026-08-28'
 ---
 El estado **`interactive rebase in progress`** (o el error opuesto `fatal: No rebase in progress`) ocurre al ejecutar `git rebase` cuando Git encuentra conflictos de fusión en un commit intermedio y suspende la secuencia a la espera de intervención manual. Si la terminal se cierra o la carpeta oculta `.git/rebase-merge` se corrompe, el repositorio queda bloqueado.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 El sistema de control de versiones **Git** opera como una base de datos de objetos direccionables por contenido criptográfico (hashes SHA-1 / SHA-256) respaldada por un grafo acíclico dirigido (DAG). La integridad del repositorio descansa en el directorio interno `.git/`, donde se almacenan cuatro tipos de objetos atómicos: **blobs** (contenido puro de archivos), **trees** (representación de directorios y permisos POSIX), **commits** (metadatos del autor, mensaje y puntero al árbol raíz) y **annotated tags**.
 
@@ -22,7 +22,7 @@ La causa raíz de esta incidencia se produce por una alteración en los punteros
 2. **Desincronización del grafo DAG y divergencia de ramas:** Durante procesos de `rebase` o `cherry-pick`, Git reescribe la historia aplicando commits de forma secuencial sobre un nuevo commit base. Si se detectan cambios incompatibles en los mismos bloques de código sin un ancestro común directo (o si se fuerza la unión de árboles de commits independientes creados desde cero), el algoritmo de merge trifásico (*three-way merge*) detiene la ejecución para proteger la integridad del historial, dejando al repositorio en un estado transicional (`REBASE-i`, `MERGING` o `DETACHED HEAD`).
 3. **Capa de transporte SSL/TLS y validación de certificados:** Al interactuar con remotos a través de HTTPS, el cliente Git delega la autenticación en la librería local `libcurl` y el almacén de certificados CA del sistema operativo. Si la cadena de certificación intermedia no se resuelve o existen desajustes en el reloj del sistema, el handshake criptográfico se cancela de inmediato.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -83,7 +83,7 @@ Si prefieres **completar** el rebase en lugar de abortarlo:
    git rebase --continue
    ```
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

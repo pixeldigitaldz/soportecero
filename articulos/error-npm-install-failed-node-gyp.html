@@ -287,7 +287,7 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>El error de instalación de paquetes NPM como <code>node-gyp rebuild failed</code> o <code>make: *** [addon.target.mk] Error 1</code> ocurre cuando una dependencia de Node.js requiere compilar extensiones nativas escritas en C o C++ (como bcrypt, sharp o sqlite3) y tu sistema operativo no tiene instalado un compilador de C++ compatible o Python en su ruta global.</p>
-<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
 <p>En el ecosistema de <strong>Node.js</strong> y compiladores modernos de <strong>JavaScript / TypeScript</strong> (como <code>tsc</code>, <code>esbuild</code> o <code>swc</code>), la ejecución del código transcurre sobre el motor <strong>V8</strong> de Google acoplado a la librería de abstracción de E/S <strong>libuv</strong>, la cual gestiona el bucle de eventos (<em>Event Loop</em>) y el pool de hilos para operaciones asíncronas de red y sistema de archivos.</p>
 <p>La causa raíz de esta incidencia proviene de desalineaciones en la resolución de módulos, el árbol de tipado AST o la frontera de renderizado:</p>
 <ol>
@@ -296,7 +296,7 @@
 <li><strong>Mapeo del Sistema de Tipos AST en TypeScript:</strong> El compilador de TypeScript (<code>tsc</code>) genera un árbol de sintaxis abstracta (<em>Abstract Syntax Tree</em>) y valida la correspondencia de tipos en tiempo de transpilación. Si una interfaz carece de una definición de propiedad explícita o se utiliza una librería de JavaScript que no expone declaraciones de tipos (<code>@types/*</code>), el verificador de tipos emite el error TS2339 para salvaguardar la seguridad de tipos (<em>type safety</em>), bloqueando la compilación del proyecto.</li>
 </ol>
 
-    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
+    <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
@@ -341,16 +341,16 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
+          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
+            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
+          <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
 
@@ -372,9 +372,9 @@
         </li>
       
         <li class="toc-item">
-          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+          <a href="#resolucion-de-casos-borde-troubleshooting" class="toc-link">
             <span class="toc-number">04</span>
-            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+            <span class="toc-text">Resolución de Casos Borde (Troubleshooting)</span>
           </a>
         <ul class="toc-sublist">
 
@@ -519,7 +519,7 @@
         </li>
         
 </ol>
-<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
 <h3 id="caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</h3>
 <p>En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan <strong>SELinux</strong> en modo Enforcing) o en Ubuntu/Debian (que implementan <strong>AppArmor</strong>), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales <code>chmod 777</code> y el usuario <code>root</code> están en uso.</p>
 <p>Para verificar y solventar bloqueos por contexto de seguridad:</p>
@@ -653,14 +653,14 @@
             </ul>
           </div>
 
-          <!-- SYS//TOOL BRIDGE — Herramientas para Desarrolladores & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins">
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
             <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; SUITE FINANCIERA</div>
+              <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
               <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
             </div>
             <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
             </h3>
             <p class="sys-tool-bridge-desc">
               En SoporteCero no solo resolvemos incidencias de infraestructura y fallos de código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:

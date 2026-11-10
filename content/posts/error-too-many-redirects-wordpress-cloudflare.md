@@ -15,7 +15,7 @@ date: '2026-07-27'
 ---
 El mensaje de error `ERR_TOO_MANY_REDIRECTS` (o bucle infinito de redirecciones) ocurre en sitios WordPress alojados detrás de Cloudflare cuando el proxy de CDN y el servidor web de origen entran en una espiral de redirecciones HTTP/HTTPS contradictorias.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 En la arquitectura del sistema operativo **Linux**, las aplicaciones de usuario operan en espacio no privilegiado (*User Space*) y dependen de llamadas al sistema (*syscalls*) para interactuar con los recursos físicos de hardware a través del **Kernel de Linux**. El subsistema del kernel arbitra el acceso a la memoria virtual, los descriptores de archivos, la pila de protocolos de red TCP/IP y los dispositivos de almacenamiento en bloque a través de la capa de abstracción **VFS (Virtual File System)**.
 
@@ -24,7 +24,7 @@ La anomalía técnica identificada en esta incidencia proviene de una restricci�
 2. **Jerarquía de permisos POSIX y atributos inmutables del sistema:** Las llamadas al sistema como `open()`, `unlink()` o `chmod()` evalúan los bits de permiso estándar (Lectura `r`, Escritura `w`, Ejecución `x`) junto con el UID/GID del proceso ejecutor. Si el archivo posee atributos extendidos inmutables fijados a nivel del sistema de archivos mediante `chattr +i`, el kernel bloquea cualquier mutación incluso ante el usuario privilegiado `root`, retornando el error `EPERM (Operation not permitted)`.
 3. **Administración de memoria virtual y Swapping:** Cuando el sistema experimenta presión de memoria y la memoria física disponible es insuficiente para satisfacer las solicitudes del gestor de páginas, el kernel recurre a la memoria swap. Si los umbrales de agresividad (`vm.swappiness`) están desajustados o el espacio de intercambio está fragmentado, el sistema entra en un estado de congestión (*thrashing*), degradando el rendimiento general hasta que el subsistema OOM Killer termina procesos para preservar la estabilidad del kernel.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -78,7 +78,7 @@ define('WP_SITEURL', 'https://tudominio.com');
 2. Limpia la caché de tu navegador web o realiza la prueba en una ventana de incógnito.
 3. Si utilizas plugins de caché en WordPress (como WP Rocket o LiteSpeed Cache), purga la caché del plugin.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

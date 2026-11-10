@@ -1,5 +1,5 @@
 ---
-title: "Optimización de Core Web Vitals (INP, LCP y CLS) en Aplicaciones React y Vite: Code Splitting Manual, Compresión Brotli y Pre-renderizado Estático"
+title: "Optimización de Core Web Vitals (INP, LCP y CLS) en Aplicaciones React y Vite: Code Splitting Manual, Compresión y Pre-renderizado Estático"
 description: "Guía técnica para maximizar la puntuación Core Web Vitals en React con Vite. Domina el Code Splitting manual con Rollup, reduce el bundle JavaScript a menos de 100 KB, elimina el CLS y acelera el INP."
 category: "Web y Código"
 tags:
@@ -19,7 +19,7 @@ En el desarrollo frontend contemporáneo con **React** y **Vite**, la experienci
 
 Este gigantesco archivo JavaScript monolítico (`index.js` > 500 KB o incluso varios megabytes) impacta negativamente las tres métricas oficiales de rendimiento de Google: **LCP (Largest Contentful Paint)**, **CLS (Cumulative Layout Shift)** y el nuevo estándar de interactividad **INP (Interaction to Next Paint)**. Para alcanzar una calificación perfecta de 100 en Google PageSpeed Insights y evitar penalizaciones de posicionamiento orgánico, es indispensable aplicar técnicas avanzadas de **división de código (*code splitting*)**, compresión algorítmica y mitigación de desplazamientos visuales.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 Para comprender por qué un bundle masivo de JavaScript destruye la experiencia del usuario y las métricas de Google, debemos analizar el ciclo de vida del motor de renderizado del navegador web (Chromium V8 / WebKit / Gecko):
 
@@ -30,7 +30,7 @@ Para comprender por qué un bundle masivo de JavaScript destruye la experiencia 
    * Fuentes web personalizadas que generan el efecto **FOUT (Flash of Unstyled Text)** o **FOIT (Flash of Invisible Text)** al tardar en descargarse sin una directiva `font-display: swap` o con métricas tipográficas desfasadas.
    * Imágenes o componentes SVG renderizados condicionalmente sin atributos explícitos `width` y `height`.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de alterar la configuración de empaquetado, debemos auditar el peso del bundle generado y desglosar qué librerías consumen la mayor proporción de bytes:
 
@@ -200,7 +200,7 @@ Para blindar la estabilidad visual de tu aplicación, aplica estas tres reglas e
    ```
 3. **Atributos dimensionales en imágenes y multimedia:** Siempre incluye `width` y `height` en las etiquetas `<img>` o componentes SVG para que el motor de renderizado calcule el espacio antes de que la imagen termine de descargarse.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Referencias cruzadas y dependencias circulares entre Chunks
 

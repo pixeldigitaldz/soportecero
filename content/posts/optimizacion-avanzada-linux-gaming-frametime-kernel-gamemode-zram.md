@@ -1,5 +1,5 @@
 ---
-title: "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan"
+title: "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Parámetros del Kernel (sysctl), ZRAM con Zstd y Variables Proton/Vulkan"
 description: "Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock_mitigate, ajusta vm.max_map_count y domina las variables de entorno de Proton y DXVK."
 category: "Gaming Tech"
 tags:
@@ -17,7 +17,7 @@ El gaming en sistemas operativos **Linux** ha alcanzado una madurez sin preceden
 
 Estas irregularidades en el tiempo de entrega de cuadros (*frametime variance*) rara vez se deben a la potencia bruta de la tarjeta gráfica; su causa reside en cuellos de botella del **kernel de Linux**, bloqueos a nivel de bus de memoria (*split locks*), contención en la paginación a disco y parámetros de sincronización desalineados entre la capa de traducción de DirectX y el compositor gráfico.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 Para erradicar la latencia en Linux, es imprescindible comprender qué ocurre internamente entre el procesador (CPU), el subsistema de memoria virtual y la GPU:
 
@@ -25,7 +25,7 @@ Para erradicar la latencia en Linux, es imprescindible comprender qué ocurre in
 2. **Paginación en disco tradicional frente a compresión en memoria con ZRAM:** Por defecto, los sistemas operativos Linux delegan el desbordamiento de memoria RAM en particiones o archivos Swap ubicados en unidades de almacenamiento secundario (SSD NVMe o HDD). Aunque los NVMe actuales son rápidos, su latencia de acceso (decenas de microsegundos) es órdenes de magnitud superior a la latencia de la memoria RAM (nanosegundos). Cuando un juego moderno satura la memoria o el kernel decide paginar páginas anónimas inactivas, el hilo principal de renderizado se congela a la espera de E/S de disco. Al reemplazar la Swap física por **ZRAM** (un dispositivo de bloques comprimido en la propia memoria RAM utilizando algoritmos ultrarrápidos como \`zstd\` o \`lz4\`), el sistema multiplica virtualmente la memoria disponible y reduce la latencia de intercambio a cero absoluto.
 3. **Límites de mapas de memoria (\`vm.max_map_count\`):** Juegos con mundos abiertos masivos y arquitecturas de 64 bits complejas (como Star Citizen, Hogwarts Legacy, Counter-Strike 2 o títulos ejecutados mediante Direct3D 12) requieren asignar cientos de miles de regiones de memoria virtual independientes mediante llamadas al sistema \`mmap()\`. El valor por defecto en muchas distribuciones Linux (65.530) agota la tabla del kernel rápidamente, provocando crasheos inmediatos al cargar mapas o micro-parones al intentar reasignar memoria sobre la marcha.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier modificación al kernel o al gestor de memoria, realiza un diagnóstico en tiempo real para evaluar el estado actual de tu sistema:
 
@@ -160,7 +160,7 @@ gamemoderun %command%
 
 El demonio `gamemode` de Feral Interactive ajusta automáticamente el gobernador de la CPU a `performance`, eleva la prioridad de programación del proceso a nivel de renice y activa el modo de juego en el compositor.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Sobrescritura de frecuencias y temperatura en CPUs modernas (P-State / E-Cores)
 

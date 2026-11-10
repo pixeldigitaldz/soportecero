@@ -14,7 +14,7 @@ date: '2026-06-27'
 ---
 El error de falta de memoria de video (VRAM) o la congelación de pantalla al abrir el inventario o cambiar de zona en Diablo IV ocurre por una fuga en la asignación de recursos gráficos del motor del juego. El título consume toda la memoria física de la tarjeta gráfica y, al intentar desbordar los datos sobrantes en la RAM del sistema, colapsa si los tiempos de respuesta no están optimizados.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 En la arquitectura de ejecución de videojuegos de Windows sobre sistemas operativos **Linux**, la capa de compatibilidad se fundamenta en **Wine** y **Proton**, complementados por traductores de llamadas gráficas en tiempo real como **DXVK** (que traduce Direct3D 9, 10 y 11 hacia la API moderna de **Vulkan**) y **VKD3D-Proton** (que traduce llamadas de Direct3D 12 hacia Vulkan).
 
@@ -23,7 +23,7 @@ El fallo de rendimiento, congelamiento (*freeze*) o cierre abrupto (*crash*) res
 2. **Sincronización explícita y compositores Wayland:** Con la transición de X11 hacia el protocolo de servidor gráfico **Wayland**, la gestión de los buffers de intercambio (*swapchains*) dependía históricamente de la sincronización implícita del kernel. Cuando los controladores gráficos envían fotogramas desfasados antes de que la GPU complete la renderización del buffer anterior, se genera desgarro visual (*screen tearing*), fotogramas fuera de orden o bloqueos completos en compositores como KWin o Mutter.
 3. **Agotamiento de VRAM y límites de memoria del subsistema DRM:** Cuando un título exige más memoria de video de la físicamente integrada en la tarjeta gráfica, el subsistema de administración de memoria de video del kernel (`amdgpu` o `nvidia-modeset`) se ve forzado a realizar swapping de texturas hacia la memoria RAM del sistema a través del bus PCIe. Esta transferencia a velocidades muy inferiores satura el ancho de banda del bus, culminando en caídas masivas de FPS o en un error fatal `VK_ERROR_DEVICE_LOST` emitido por el driver.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -59,7 +59,7 @@ Si tu tarjeta gráfica tiene 8GB de VRAM o menos, poner las texturas en "Ultra" 
 ### Paso 2: Activar la generación de fotogramas con OptiScaler / FSR 3
 Si usas reescalado, asegúrate de activar el modo *Equilibrado* para reducir la resolución base de renderizado, disminuyendo drásticamente la cantidad de megabytes que la GPU debe retener en su memoria interna por cada fotograma.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

@@ -1,5 +1,5 @@
 ---
-title: "Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Macvlan, Subredes Internas y Reverse Proxy Seguro"
+title: "Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro"
 description: "Aprende a diseñar una arquitectura de red multicapa segura en Docker Compose. Aísla bases de datos sin acceso a Internet con redes internas, configura reverse proxies Nginx y previene fugas de puertos por bypass de iptables."
 category: "Sistemas y Servidores"
 tags:
@@ -17,7 +17,7 @@ En infraestructuras modernas de servidores locales (*homelabs*) y entornos de pr
 
 Este enfoque expone directamente sockets de bases de datos, paneles de administración interna y colas de mensajes a toda la red de área local o, peor aún, a la Internet pública, ignorando las reglas de cortafuegos convencionales del host. Para blindar un entorno profesional, es imprescindible diseñar una **topología de red multicapa segregada** donde cada contenedor tenga acceso estrictamente al principio de mínimo privilegio de red.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 Para comprender por qué los contenedores quedan vulnerables por omisión en Docker, debemos analizar cómo interactúa el demonio `dockerd` con el subsistema de red del kernel de Linux:
 
@@ -25,7 +25,7 @@ Para comprender por qué los contenedores quedan vulnerables por omisión en Doc
 2. **Topología de red plana vs. Redes de Cero Confianza (*Zero Trust*):** En una red bridge predeterminada (`default bridge`), todos los contenedores adjuntos comparten la misma interfaz virtual (ej. `docker0`) y pueden comunicarse entre sí sin restricciones a través de sus direcciones IP internas. Si un atacante compromete un contenedor frontend (como un CMS vulnerable o una API web expuesta), obtiene de inmediato conectividad directa por sockets TCP hacia la base de datos o el almacenamiento en caché de Redis, permitiendo el movimiento lateral sin resistencia.
 3. **Mapeo Macvlan frente a Subredes Internas Aisladas:** Mientras que los controladores **Macvlan** asignan una dirección MAC física independiente a cada contenedor para que aparezca como un dispositivo físico en la LAN corporativa (ideal para servicios como Pi-hole, AdGuard Home o servidores DHCP que requieren interactuar a nivel de Capa 2), las aplicaciones web multicapa requieren lo opuesto: subredes virtuales aisladas mediante el parámetro `internal: true`. Una red definida con `internal: true` no asigna una puerta de enlace (*default gateway*) hacia la interfaz física del host, impidiendo que los contenedores allí confinados puedan iniciar o recibir tráfico fuera del daemon de Docker, neutralizando de raíz ataques de exfiltración de datos.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de implementar una arquitectura multicapa, debemos auditar las tablas de enrutamiento y comprobar qué contenedores y puertos están expuestos en interfaces externas:
 
@@ -267,7 +267,7 @@ Verifica que todos los contenedores alcancen el estado `healthy`:
 docker compose ps
 ```
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Fallo de resolución DNS interno en redes con `internal: true`
 

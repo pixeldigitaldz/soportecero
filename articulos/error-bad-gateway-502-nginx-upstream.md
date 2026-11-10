@@ -16,7 +16,7 @@ El error **502 Bad Gateway** es una respuesta estándar del protocolo HTTP (defi
 
 A diferencia de un error 504 Gateway Timeout (donde el backend acepta la conexión pero tarda más de lo permitido en generar los bytes de respuesta), el error 502 suele ser síntoma de una interrupción prematura en la negociación del canal de comunicación: el proceso de destino está caído, el socket UNIX no existe o tiene permisos de lectura/escritura denegados, la cola de conexiones (`backlog`) se ha saturado por picos de tráfico, o el buffer de cabeceras de Nginx es insuficiente para almacenar la respuesta enviada por el upstream.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 Para comprender la causa raíz de un código 502, es necesario examinar el flujo de datos entre la capa de red del sistema operativo y los procesos en espacio de usuario (*user space*):
 
@@ -25,7 +25,7 @@ Para comprender la causa raíz de un código 502, es necesario examinar el flujo
 3. **Colapso del worker por Out-Of-Memory (OOM Killer):** Si el proceso backend (como un worker de Node.js o un proceso hijo de PHP-FPM) agota la memoria RAM disponible o supera los límites de cgroups en Docker, el subsistema OOM Killer del kernel de Linux envía una señal `SIGKILL (kill -9)` fulminante al proceso. En ese instante exacto, la conexión TCP o el socket UNIX se cierra abruptamente mientras Nginx esperaba los encabezados HTTP, lo que genera en los logs de Nginx la alerta `upstream prematurely closed connection while reading response header from upstream`.
 4. **Desbordamiento de cabeceras HTTP de respuesta:** Cuando el backend genera cookies de sesión de gran tamaño, tokens JWT extensos o cabeceras personalizadas que superan el tamaño por defecto de `proxy_buffer_size` (normalmente 4k u 8k según la arquitectura del sistema operativo), Nginx no puede almacenar la cabecera en memoria y aborta la transferencia marcándola como respuesta corrupta.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de modificar directivas de configuración o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -162,7 +162,7 @@ sudo systemctl reload nginx
 
 El comando `reload` no detiene los procesos worker existentes que atienden solicitudes en curso; en su lugar, levanta nuevos workers con la nueva configuración y retira de forma ordenada a los anteriores una vez completadas las transacciones pendientes.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Bloqueo silencioso por políticas de SELinux (RHEL, AlmaLinux, Rocky Linux, CentOS)
 

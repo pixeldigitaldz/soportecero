@@ -320,11 +320,11 @@ sudo systemctl reload NOMBRE_SERVICIO || sudo systemctl restart NOMBRE_SERVICIO
   // Build the complete markdown text
   const newMarkdownBody = `${originalIntro}
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 ${architectureSection}
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -340,7 +340,7 @@ Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivame
 
 ${formattedSteps}
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ${troubleshootingSection}${preventionBlock}
 `;

@@ -16,7 +16,7 @@ date: '2026-06-27'
 ---
 El error `World of Warcraft was unable to start up 3D acceleration` suele aparecer tras parches grandes de expansiones modernas como *The War Within* o el contenido de *Midnight*. Ocurre porque el juego intenta arrancar forzando el modo DirectX 12 en hardware antiguo, o porque los archivos de configuración local guardan resoluciones de pantalla completa obsoletas que tu monitor actual no tolera.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 En la arquitectura de ejecución de videojuegos de Windows sobre sistemas operativos **Linux**, la capa de compatibilidad se fundamenta en **Wine** y **Proton**, complementados por traductores de llamadas gráficas en tiempo real como **DXVK** (que traduce Direct3D 9, 10 y 11 hacia la API moderna de **Vulkan**) y **VKD3D-Proton** (que traduce llamadas de Direct3D 12 hacia Vulkan).
 
@@ -25,7 +25,7 @@ El fallo de rendimiento, congelamiento (*freeze*) o cierre abrupto (*crash*) res
 2. **Sincronización explícita y compositores Wayland:** Con la transición de X11 hacia el protocolo de servidor gráfico **Wayland**, la gestión de los buffers de intercambio (*swapchains*) dependía históricamente de la sincronización implícita del kernel. Cuando los controladores gráficos envían fotogramas desfasados antes de que la GPU complete la renderización del buffer anterior, se genera desgarro visual (*screen tearing*), fotogramas fuera de orden o bloqueos completos en compositores como KWin o Mutter.
 3. **Agotamiento de VRAM y límites de memoria del subsistema DRM:** Cuando un título exige más memoria de video de la físicamente integrada en la tarjeta gráfica, el subsistema de administración de memoria de video del kernel (`amdgpu` o `nvidia-modeset`) se ve forzado a realizar swapping de texturas hacia la memoria RAM del sistema a través del bus PCIe. Esta transferencia a velocidades muy inferiores satura el ancho de banda del bus, culminando en caídas masivas de FPS o en un error fatal `VK_ERROR_DEVICE_LOST` emitido por el driver.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -69,7 +69,7 @@ Si el juego sigue crasheando antes de abrir, borra la caché de configuración d
 2. Abre el archivo `Config.wtf` con el bloc de notas.
 3. Busca la línea que dice `SET gxApi "D3D12"` y cámbiala por `SET gxApi "D3D11"`. Si el error persiste, borra el archivo `Config.wtf` por completo para que el juego genere uno limpio con los valores por defecto de tu hardware.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

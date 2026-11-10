@@ -326,7 +326,7 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>El mensaje de error <code>DX11 feature level 10.0 is required to run the engine</code> en títulos desarrollados con Unreal Engine o Unity al ejecutarse en Linux mediante Steam Proton ocurre cuando la capa de traducción DXVK no puede inicializar una instancia válida de Vulkan con compatibilidad para los niveles de características de Direct3D 10/11.</p>
-<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
 <p>En la arquitectura de ejecución de videojuegos de Windows sobre sistemas operativos <strong>Linux</strong>, la capa de compatibilidad se fundamenta en <strong>Wine</strong> y <strong>Proton</strong>, complementados por traductores de llamadas gráficas en tiempo real como <strong>DXVK</strong> (que traduce Direct3D 9, 10 y 11 hacia la API moderna de <strong>Vulkan</strong>) y <strong>VKD3D-Proton</strong> (que traduce llamadas de Direct3D 12 hacia Vulkan).</p>
 <p>El fallo de rendimiento, congelamiento (<em>freeze</em>) o cierre abrupto (<em>crash</em>) responde a cuellos de botella en la canalización de renderizado (<em>graphics pipeline</em>):</p>
 <ol>
@@ -335,7 +335,7 @@
 <li><strong>Agotamiento de VRAM y límites de memoria del subsistema DRM:</strong> Cuando un título exige más memoria de video de la físicamente integrada en la tarjeta gráfica, el subsistema de administración de memoria de video del kernel (<code>amdgpu</code> o <code>nvidia-modeset</code>) se ve forzado a realizar swapping de texturas hacia la memoria RAM del sistema a través del bus PCIe. Esta transferencia a velocidades muy inferiores satura el ancho de banda del bus, culminando en caídas masivas de FPS o en un error fatal <code>VK_ERROR_DEVICE_LOST</code> emitido por el driver.</li>
 </ol>
 
-    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
+    <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
@@ -380,16 +380,16 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
+          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
+            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
+          <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
 
@@ -411,9 +411,9 @@
         </li>
       
         <li class="toc-item">
-          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+          <a href="#resolucion-de-casos-borde-troubleshooting" class="toc-link">
             <span class="toc-number">04</span>
-            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+            <span class="toc-text">Resolución de Casos Borde (Troubleshooting)</span>
           </a>
         <ul class="toc-sublist">
 
@@ -622,7 +622,7 @@ PROTON_USE_WINED3D=<span class="tok-num">1</span> %command%
         </li>
         
 </ol>
-<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
 <h3 id="caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</h3>
 <p>En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan <strong>SELinux</strong> en modo Enforcing) o en Ubuntu/Debian (que implementan <strong>AppArmor</strong>), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales <code>chmod 777</code> y el usuario <code>root</code> están en uso.</p>
 <p>Para verificar y solventar bloqueos por contexto de seguridad:</p>
@@ -739,13 +739,13 @@ PROTON_USE_WINED3D=<span class="tok-num">1</span> %command%
     
 <p>Un valor de retorno <code>0</code> confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.</p>
 
-  <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins">
+  <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
     <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; SUITE FINANCIERA</div>
+      <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
       <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
     </div>
     <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
     </h3>
     <p class="sys-tool-bridge-desc">
       En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:
@@ -802,14 +802,14 @@ PROTON_USE_WINED3D=<span class="tok-num">1</span> %command%
             </ul>
           </div>
 
-          <!-- SYS//TOOL BRIDGE — Herramientas para Desarrolladores & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins">
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
             <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; SUITE FINANCIERA</div>
+              <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
               <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
             </div>
             <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
             </h3>
             <p class="sys-tool-bridge-desc">
               En SoporteCero no solo resolvemos incidencias de infraestructura y fallos de código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:
@@ -903,13 +903,13 @@ PROTON_USE_WINED3D=<span class="tok-num">1</span> %command%
       </article>
       
 
-      <!-- Related Card: Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan -->
+      <!-- Related Card: Optimización Profunda de Latencia y Frametime en Linux: Configuración de Parámetros del Kernel (sysctl), ZRAM con Zstd y Variables Proton/Vulkan -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Optimización Profunda de Latencia y Frametime en Linux: Configuración de Planificadores de CPU (sched-ext), ZRAM, Split Lock Mitigate y Variables Proton/Vulkan</a>
+              <a href="../articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Optimización Profunda de Latencia y Frametime en Linux: Configuración de Parámetros del Kernel (sysctl), ZRAM con Zstd y Variables Proton/Vulkan</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">

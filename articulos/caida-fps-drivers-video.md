@@ -19,7 +19,7 @@ date: '2026-06-25'
 ---
 Experimentar una caída drástica de fotogramas por segundo (FPS) o micro-tirones constantes en títulos competitivos después de actualizar los controladores de NVIDIA (GeForce Game Ready) o AMD (Adrenalin Edition) es un problema frecuente. Ocurre cuando los nuevos archivos binarios entran en conflicto con configuraciones previas del registro, perfiles de energía modificados o cachés de sombreadores incompatibles generadas con versiones anteriores.
 
-## Contexto de Arquitectura y Causa Raíz del Fallo
+## Análisis de Arquitectura y Causa Raíz
 
 En la arquitectura de ejecución de videojuegos de Windows sobre sistemas operativos **Linux**, la capa de compatibilidad se fundamenta en **Wine** y **Proton**, complementados por traductores de llamadas gráficas en tiempo real como **DXVK** (que traduce Direct3D 9, 10 y 11 hacia la API moderna de **Vulkan**) y **VKD3D-Proton** (que traduce llamadas de Direct3D 12 hacia Vulkan).
 
@@ -28,7 +28,7 @@ El fallo de rendimiento, congelamiento (*freeze*) o cierre abrupto (*crash*) res
 2. **Sincronización explícita y compositores Wayland:** Con la transición de X11 hacia el protocolo de servidor gráfico **Wayland**, la gestión de los buffers de intercambio (*swapchains*) dependía históricamente de la sincronización implícita del kernel. Cuando los controladores gráficos envían fotogramas desfasados antes de que la GPU complete la renderización del buffer anterior, se genera desgarro visual (*screen tearing*), fotogramas fuera de orden o bloqueos completos en compositores como KWin o Mutter.
 3. **Agotamiento de VRAM y límites de memoria del subsistema DRM:** Cuando un título exige más memoria de video de la físicamente integrada en la tarjeta gráfica, el subsistema de administración de memoria de video del kernel (`amdgpu` o `nvidia-modeset`) se ve forzado a realizar swapping de texturas hacia la memoria RAM del sistema a través del bus PCIe. Esta transferencia a velocidades muy inferiores satura el ancho de banda del bus, culminando en caídas masivas de FPS o en un error fatal `VK_ERROR_DEVICE_LOST` emitido por el driver.
 
-## Entorno de Laboratorio y Diagnóstico Previo
+## Entorno de Laboratorio y Diagnóstico
 
 Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
 
@@ -81,7 +81,7 @@ A menudo las actualizaciones restablecen la administración de energía a un mod
 Actualizaciones de drivers suelen causar incompatibilidades temporales con overlays que inyectan hooks en DirectX:
 - Desactiva el overlay de **Discord**, **GeForce Experience** o **Steam Overlay** temporalmente para aislar si el hook gráfico es el causante del stuttering.
 
-## Casos Borde (Troubleshooting) y Prácticas en Producción
+## Resolución de Casos Borde (Troubleshooting)
 
 ### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
 

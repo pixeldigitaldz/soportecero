@@ -303,7 +303,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
   });
 
   // 2. Diagnostic Box / Telemetry Matrix layout wrapping
-  const diagRegex = /<h2[^>]*>[^<]*(?:Entorno de Laboratorio y Diagnóstico Previo|Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
+  const diagRegex = /<h2[^>]*>[^<]*(?:Entorno de Laboratorio y Diagnóstico|Entorno de Laboratorio y Diagnóstico Previo|Diagnóstico|Diagnostics|Diagnostic)[^<]*<\/h2>\s*(?:[\s\S]*?)(<table>[\s\S]*?<\/table>)/i;
 
   const transformTableToCards = (htmlStr) => {
     return htmlStr.replace(/<table>([\s\S]*?)<\/table>/gi, (match, tableInner) => {
@@ -356,8 +356,8 @@ function postProcessHtml(rawHtml, lang = 'es') {
   if (diagMatch) {
     const diagTableContent = diagMatch[1];
     let formattedDiag = transformTableToCards(diagTableContent);
-    const labHeading = isEn ? 'Lab Environment &amp; Preliminary Diagnostics' : 'Entorno de Laboratorio y Diagnóstico Previo';
-    const consoleTitle = isEn ? 'Technical Diagnostics & Root Cause Matrix' : 'Diagnóstico Técnico y Causa Raíz';
+    const labHeading = isEn ? 'Lab Environment &amp; Diagnostics' : 'Entorno de Laboratorio y Diagnóstico';
+    const consoleTitle = isEn ? 'Technical Diagnostics &amp; Root Cause Analysis' : 'Diagnóstico Técnico y Causa Raíz';
     const diagBoxHtml = `
     <h2>${labHeading}</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -373,7 +373,7 @@ function postProcessHtml(rawHtml, lang = 'es') {
       </div>
     </section>
     `;
-    html = html.replace(diagRegex, diagBoxHtml);
+    html = html.replace(diagMatch[0], diagBoxHtml);
   }
 
   // 3. Extraction of Prevention Tips section to populate Callout
@@ -632,15 +632,15 @@ ${itemsHtml}
     }
   }
 
-  // 7. Contextual Mid-Article Bento Card ("SYS//TOOL BRIDGE") before FAQ
+  // 7. Contextual Mid-Article Bento Card ("Herramientas para Desarrolladores & SysAdmins") before FAQ
   const toolBridgeCardMidEs = `
-  <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins">
+  <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
     <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; SUITE FINANCIERA</div>
+      <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
       <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
     </div>
     <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
     </h3>
     <p class="sys-tool-bridge-desc">
       En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:
@@ -675,13 +675,13 @@ ${itemsHtml}
   `;
 
   const toolBridgeCardMidEn = `
-  <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Tools for Developers &amp; SysAdmins">
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
     <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; FINANCIAL SUITE</div>
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
       <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
     </div>
     <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Tools for Developers &amp; SysAdmins
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
     </h3>
     <p class="sys-tool-bridge-desc">
       At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:

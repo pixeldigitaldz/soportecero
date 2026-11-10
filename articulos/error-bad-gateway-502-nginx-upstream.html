@@ -314,7 +314,7 @@
         <div class="post-article">
           <p>El error <strong>502 Bad Gateway</strong> es una respuesta estándar del protocolo HTTP (definida formalmente en RFC 7231 y RFC 9110) emitida por un servidor web intermedio que opera como puerta de enlace o proxy inverso. En una arquitectura moderna basada en <strong>Nginx</strong>, este código indica de forma inequívoca que Nginx actuó como intermediario para transferir la petición entrante del cliente hacia un servicio de aplicación en el backend (como PHP-FPM, un proceso Node.js, un servidor ASGI/WSGI como Uvicorn o Gunicorn, o un contenedor Docker), pero recibió una respuesta inválida, un paquete TCP RST (Reset), o ninguna respuesta antes de que se cerrara la conexión en la capa de transporte.</p>
 <p>A diferencia de un error 504 Gateway Timeout (donde el backend acepta la conexión pero tarda más de lo permitido en generar los bytes de respuesta), el error 502 suele ser síntoma de una interrupción prematura en la negociación del canal de comunicación: el proceso de destino está caído, el socket UNIX no existe o tiene permisos de lectura/escritura denegados, la cola de conexiones (<code>backlog</code>) se ha saturado por picos de tráfico, o el buffer de cabeceras de Nginx es insuficiente para almacenar la respuesta enviada por el upstream.</p>
-<h2 id="contexto-de-arquitectura-y-causa-raiz-del-fallo">Contexto de Arquitectura y Causa Raíz del Fallo</h2>
+<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
 <p>Para comprender la causa raíz de un código 502, es necesario examinar el flujo de datos entre la capa de red del sistema operativo y los procesos en espacio de usuario (<em>user space</em>):</p>
 <ol>
 <li><strong>Ciclo de vida del socket y paquetes TCP:</strong> Cuando Nginx recibe una solicitud HTTP en el puerto 80 o 443, consulta su bloque de configuración (<code>server</code> y <code>location</code>). Si la directiva <code>proxy_pass</code> o <code>fastcgi_pass</code> apunta a una dirección IP y puerto local (por ejemplo <code>http://127.0.0.1:3000</code>), el kernel ejecuta la llamada al sistema <code>connect()</code>. Si en ese puerto no hay ningún proceso escuchando con un socket en estado <code>LISTEN</code>, el kernel emite de inmediato un paquete TCP con el flag <code>RST</code> activado. Nginx intercepta este rechazo de conexión (<code>ECONNREFUSED</code>) e interrumpe la transacción generando el error 502 hacia el navegador.</li>
@@ -323,7 +323,7 @@
 <li><strong>Desbordamiento de cabeceras HTTP de respuesta:</strong> Cuando el backend genera cookies de sesión de gran tamaño, tokens JWT extensos o cabeceras personalizadas que superan el tamaño por defecto de <code>proxy_buffer_size</code> (normalmente 4k u 8k según la arquitectura del sistema operativo), Nginx no puede almacenar la cabecera en memoria y aborta la transferencia marcándola como respuesta corrupta.</li>
 </ol>
 
-    <h2 id="entorno-de-laboratorio-y-diagnostico-previo">Entorno de Laboratorio y Diagnóstico Previo</h2>
+    <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
       <div class="diagnostic-console-header">
         <div class="diag-console-title-group">
@@ -452,16 +452,16 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#contexto-de-arquitectura-y-causa-raiz-del-fallo" class="toc-link">
+          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Contexto de Arquitectura y Causa Raíz del Fallo</span>
+            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#entorno-de-laboratorio-y-diagnostico-previo" class="toc-link">
+          <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Entorno de Laboratorio y Diagnóstico Previo</span>
+            <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
 
@@ -483,9 +483,9 @@
         </li>
       
         <li class="toc-item">
-          <a href="#casos-borde-troubleshooting-y-practicas-en-produccion" class="toc-link">
+          <a href="#resolucion-de-casos-borde-troubleshooting" class="toc-link">
             <span class="toc-number">04</span>
-            <span class="toc-text">Casos Borde (Troubleshooting) y Prácticas en Producción</span>
+            <span class="toc-text">Resolución de Casos Borde (Troubleshooting)</span>
           </a>
         <ul class="toc-sublist">
 
@@ -834,7 +834,7 @@ listen.mode = <span class="tok-num">0660</span>
         </li>
         
 </ol>
-<h2 id="casos-borde-troubleshooting-y-practicas-en-produccion">Casos Borde (Troubleshooting) y Prácticas en Producción</h2>
+<h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
 <h3 id="caso-borde-1-bloqueo-silencioso-por-politicas-de-selinux-rhel-almalinux-rocky-linux-centos">Caso Borde 1: Bloqueo silencioso por políticas de SELinux (RHEL, AlmaLinux, Rocky Linux, CentOS)</h3>
 <p>En distribuciones con SELinux en modo <code>Enforcing</code>, Nginx tiene restringida por defecto la capacidad de iniciar conexiones de red salientes hacia puertos TCP no estándar o hacia la interfaz loopback. Esto provoca un error 502 aunque el servicio backend esté corriendo perfectamente en el puerto 3000.</p>
 <p>Para verificar si SELinux está bloqueando la comunicación:</p>
@@ -980,14 +980,14 @@ for i in {<span class="tok-num">1</span>..<span class="tok-num">20</span>}; do <
             </ul>
           </div>
 
-          <!-- SYS//TOOL BRIDGE — Herramientas para Desarrolladores & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins">
+          <!-- Herramientas para Desarrolladores & SysAdmins -->
+          <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
             <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">SYS//TOOL BRIDGE &bull; SUITE FINANCIERA</div>
+              <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
               <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
             </div>
             <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SYS//TOOL BRIDGE — Herramientas para Desarrolladores &amp; SysAdmins
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
             </h3>
             <p class="sys-tool-bridge-desc">
               En SoporteCero no solo resolvemos incidencias de infraestructura y fallos de código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>How to Fix Micro-Stuttering in World of Warcraft Using Proton-GE on Linux | SoporteCero</title>
-  <meta name="description" content="Learn how to optimize performance and eliminate image micro-stuttering in WoW by configuring Proton-GE and enabling asynchronous shader compilation.">
-  <meta name="keywords" content="Gaming, Linux, World of Warcraft, Proton">
-  <meta name="robots" content="noindex, follow">
+  <meta name="description" content="Learn how to optimize performance and eliminate image micro-stuttering in World of Warcraft by configuring Proton-GE, DXVK async compilation, and Vulkan shader caching under Linux.">
+  <meta name="keywords" content="Gaming, Linux, World of Warcraft, Proton, Wine">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/caida-fps-proton-ge-wow.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -22,7 +22,7 @@
   
   <!-- Open Graph -->
   <meta property="og:title" content="How to Fix Micro-Stuttering in World of Warcraft Using Proton-GE on Linux">
-  <meta property="og:description" content="Learn how to optimize performance and eliminate image micro-stuttering in WoW by configuring Proton-GE and enabling asynchronous shader compilation.">
+  <meta property="og:description" content="Learn how to optimize performance and eliminate image micro-stuttering in World of Warcraft by configuring Proton-GE, DXVK async compilation, and Vulkan shader caching under Linux.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/caida-fps-proton-ge-wow.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -38,11 +38,12 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="World of Warcraft">
   <meta property="article:tag" content="Proton">
+  <meta property="article:tag" content="Wine">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to Fix Micro-Stuttering in World of Warcraft Using Proton-GE on Linux">
-  <meta name="twitter:description" content="Learn how to optimize performance and eliminate image micro-stuttering in WoW by configuring Proton-GE and enabling asynchronous shader compilation.">
+  <meta name="twitter:description" content="Learn how to optimize performance and eliminate image micro-stuttering in World of Warcraft by configuring Proton-GE, DXVK async compilation, and Vulkan shader caching under Linux.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -69,12 +70,12 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "How to Fix Micro-Stuttering in World of Warcraft Using Proton-GE on Linux",
-  "description": "Learn how to optimize performance and eliminate image micro-stuttering in WoW by configuring Proton-GE and enabling asynchronous shader compilation.",
+  "description": "Learn how to optimize performance and eliminate image micro-stuttering in World of Warcraft by configuring Proton-GE, DXVK async compilation, and Vulkan shader caching under Linux.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Gaming Tech",
   "articleSection": "Gaming Tech",
-  "keywords": "Gaming, Linux, World of Warcraft, Proton",
+  "keywords": "Gaming, Linux, World of Warcraft, Proton, Wine",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-18",
   "dateModified": "2026-07-18",
@@ -127,7 +128,7 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix Micro-Stuttering in World of Warcraft Using Proton-GE on Linux",
-  "description": "Learn how to optimize performance and eliminate image micro-stuttering in WoW by configuring Proton-GE and enabling asynchronous shader compilation.",
+  "description": "Learn how to optimize performance and eliminate image micro-stuttering in World of Warcraft by configuring Proton-GE, DXVK async compilation, and Vulkan shader caching under Linux.",
   "step": [
     {
       "@type": "HowToStep",
@@ -137,21 +138,33 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Open your Proton manager (such as ProtonUp-Qt) and install the latest available version of Proton-GE."
+          "text": "Install ProtonUp-Qt via Flatpak or your distribution package manager:"
         }
       ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between DXVK_ASYNC=1 and modern Vulkan GPL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "DXVK_ASYNC=1 skips rendering objects for a few frames while their shader compiles in a background thread, preventing frame drops at the risk of slight visual pop-in. Vulkan GPL creates lightweight pipeline state objects instantaneously, eliminating stutter without any visual glitches or pop-in."
+      }
     },
     {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/caida-fps-proton-ge-wow.html#step-2",
-      "name": "Step 2",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Open Steam, go to the properties of World of Warcraft, enter Compatibility and force the use of the installed Proton-GE version."
-        }
-      ]
+      "@type": "Question",
+      "name": "Why does Battle.net occasionally fail to launch under Proton?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Battle.net relies on internal Qt components and self-updating mechanisms that occasionally hang. Setting WINE_SIMULATE_WRITECOPY=1 in your launch parameters prevents permission collisions between the launcher and agent binaries."
+      }
     }
   ]
 }
@@ -167,7 +180,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -196,12 +209,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -231,7 +244,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -244,7 +257,7 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Gaming Tech</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
@@ -259,7 +272,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -271,7 +284,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -287,7 +300,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Micro-stuttering in World of Warcraft when traversing areas of recent expansions like <em>The War Within</em> or <em>Midnight</em> under Linux occurs mainly due to the late compilation of texture shaders. When the official Steam or Lutris client translates DirectX 12 instructions to Vulkan in real time, CPU performance is momentarily saturated, causing severe FPS drops for milliseconds.</p>
+          <p>Micro-stuttering in <em>World of Warcraft</em> (WoW) when traversing dense capital cities (such as Valdrakken or Dornogal) and participating in intensive 25-man mythic raids under Linux occurs primarily due to runtime shader compilation lag. When Steam&#39;s Proton or Lutris translates Direct3D 11 / Direct3D 12 draw calls into native Vulkan pipeline instructions in real time, GPU thread queues occasionally stall, producing noticeable frametime spikes and dropped frames for several milliseconds.</p>
+<p>By leveraging community-developed <strong>Proton-GE</strong> (GloriousEggroll) builds along with advanced DXVK graphics library flags and Mesa shader pre-caching, you can achieve stutter-free 120+ FPS gaming on modern Linux distributions.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -304,25 +318,37 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Corrupted or saturated DXVK Shader Cache</strong></div>
+            <div class="diag-value"><strong>Corrupted or saturated DXVK/VKD3D pipeline cache</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Delete the <code>shadercache</code> folder in game prefix on Steam/Lutris</div>
+            <div class="diag-value">Clear the game&#39;s prefix shader cache directory in Steam/Lutris</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Proton-GE version incompatible with latest WoW patch</strong></div>
+            <div class="diag-value"><strong>Outdated Valve upstream Proton branch missing MMORPG patches</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Update to latest Proton-GE release via ProtonUp-Qt</div>
+            <div class="diag-value">Switch to the latest Proton-GE release via ProtonUp-Qt</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Synchronous shader compilation blocking render loop</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Enable DXVK asynchronous compilation or Graphics Pipeline Library (GPL)</div>
           </div></div></div>
       </div>
     </section>
@@ -370,17 +396,58 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-instalar-y-seleccionar-la-version-mas-reciente-de-proton-ge" class="toc-sublink">
+            <a href="#step-1-install-and-select-the-latest-proton-ge-release" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Instalar y seleccionar la versión más reciente de Proton-GE</span>
+              <span class="toc-subtext">Step 1: Install and Select the Latest Proton-GE Release</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-activar-la-variable-de-compilacion-asincrona-dxvkasync" class="toc-sublink">
+            <a href="#step-2-configure-graphics-pipeline-library-gpl-and-async-options" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Activar la variable de compilación asíncrona (DXVK_ASYNC)</span>
+              <span class="toc-subtext">Step 2: Configure Graphics Pipeline Library (GPL) and Async Options</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-optimize-in-game-graphics-api-settings" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Optimize In-Game Graphics API Settings</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-clear-old-corrupted-dxvk-cache-files" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Clear Old Corrupted DXVK Cache Files</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#what-is-the-difference-between-dxvkasync1-and-modern-vulkan-gpl" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What is the difference between DXVK_ASYNC=1 and modern Vulkan GPL?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-battlenet-occasionally-fail-to-launch-under-proton" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does Battle.net occasionally fail to launch under Proton?</span>
             </a>
           </li>
         
@@ -399,32 +466,18 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-instalar-y-seleccionar-la-version-mas-reciente-de-proton-ge">Step 1: Instalar y seleccionar la versión más reciente de Proton-GE</h3>
-<p>Proton-GE (GloriousEggroll) includes specific patches and performance improvements that the official Valve branch takes time to implement.</p>
+<h3 id="step-1-install-and-select-the-latest-proton-ge-release">Step 1: Install and Select the Latest Proton-GE Release</h3>
+<p>Proton-GE bundles critical game-specific staging patches, media foundation codecs, and optimized VKD3D-Proton translation layers that have not yet landed in Valve&#39;s default upstream Proton client:</p>
 <ol class="steps-list">
 
         <li class="step-item" id="step-1">
           <div class="step-number">1</div>
           <div class="step-body">
             <h4 id="step-1-heading">Step 1</h4>
-            Open your Proton manager (such as ProtonUp-Qt) and install the latest available version of <strong>Proton-GE</strong>.
+            Install <strong>ProtonUp-Qt</strong> via Flatpak or your distribution package manager:
           </div>
         </li>
         
-
-        <li class="step-item" id="step-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            Open Steam, go to the properties of World of Warcraft, enter <strong>Compatibility</strong> and force the use of the installed Proton-GE version.
-          </div>
-        </li>
-        
-</ol>
-<h3 id="step-2-activar-la-variable-de-compilacion-asincrona-dxvkasync">Step 2: Activar la variable de compilación asíncrona (DXVK_ASYNC)</h3>
-<p>To prevent the game from waiting for a shader to compile before rendering it (which generates the visual stutter), we will force asynchronous rendering.</p>
-<ol>
-<li>In the launch properties of the game in Steam (or Lutris), add the following environment variable:</li>
 </ol>
 
     <div class="code-container">
@@ -445,11 +498,120 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>DXVK_ASYNC=<span class="tok-num">1</span> %command%
+      <pre class="formatted-pre"><code>flatpak install flathub net.davidotek.pupgui2
 </code></pre>
     </div>
     
-<p><em>(Nota: Esto permite que DXVK cargue texturas y shaders de fondo de forma fluida, reduciendo los tirones a cero al entrar a capitales o combates concurridos).</em></p>
+<ol start="2">
+<li>Launch ProtonUp-Qt, select <strong>Steam</strong> (or <strong>Lutris</strong>), click <strong>Add version</strong>, choose <strong>GE-Proton</strong>, and install the latest stable build.</li>
+<li>In Steam, right-click <em>World of Warcraft</em> (or the Battle.net launcher), open <strong>Properties</strong> &gt; <strong>Compatibility</strong>, check <strong>Force the use of a specific Steam Play compatibility tool</strong>, and select your installed Proton-GE build.</li>
+</ol>
+<h3 id="step-2-configure-graphics-pipeline-library-gpl-and-async-options">Step 2: Configure Graphics Pipeline Library (GPL) and Async Options</h3>
+<p>Modern Vulkan drivers (Mesa 23.1+ for AMD/Intel and driver 535+ for NVIDIA) support the Vulkan extension <code>VK_EXT_graphics_pipeline_library</code> (GPL). GPL compiles shaders ahead of time without needing legacy hacky async patches.</p>
+<p>In your Steam Launch Options for World of Warcraft or Battle.net, add:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>DXVK_ASYNC=<span class="tok-num">1</span> RADV_PERFTEST=gpl %command%
+</code></pre>
+    </div>
+    
+<p><em>(Technical note: If you are running an AMD Radeon GPU with the RADV Mesa driver, <code>RADV_PERFTEST=gpl</code> enables rapid background compiling, reducing frametime anomalies to near zero when entering newly loaded zones).</em></p>
+<h3 id="step-3-optimize-in-game-graphics-api-settings">Step 3: Optimize In-Game Graphics API Settings</h3>
+<p>Inside the World of Warcraft client:</p>
+<ol>
+<li>Navigate to <strong>Options</strong> &gt; <strong>System</strong> &gt; <strong>Advanced</strong>.</li>
+<li>Set the <strong>Graphics API</strong> dropdown to <strong>DirectX 11</strong> if running on older hardware, or <strong>DirectX 12</strong> if running a modern Vulkan-capable GPU.</li>
+<li>Set <strong>Optional GPU Features</strong> to Enabled.</li>
+<li>Disable <strong>Vertical Sync (V-Sync)</strong> within the game and enforce framerate caps through <strong>MangoHud</strong> or your display server to eliminate double-buffering input latency.</li>
+</ol>
+<h3 id="step-4-clear-old-corrupted-dxvk-cache-files">Step 4: Clear Old Corrupted DXVK Cache Files</h3>
+<p>If micro-stutters persist after a major patch, stale shader cache indices may be conflicting with updated game assets. Clear your prefix shader cache:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Locate your Steam World of Warcraft compatdata prefix</span>
+<span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> ~/.local/share/Steam/steamapps/shadercache/NON_STEAM_ID/
+</code></pre>
+    </div>
+    
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="what-is-the-difference-between-dxvkasync1-and-modern-vulkan-gpl">What is the difference between DXVK_ASYNC=1 and modern Vulkan GPL?</h3>
+<p><code>DXVK_ASYNC=1</code> skips rendering objects for a few frames while their shader compiles in a background thread, preventing frame drops at the risk of slight visual pop-in. Vulkan GPL creates lightweight pipeline state objects instantaneously, eliminating stutter without any visual glitches or pop-in.</p>
+<h3 id="why-does-battlenet-occasionally-fail-to-launch-under-proton">Why does Battle.net occasionally fail to launch under Proton?</h3>
+<p>Battle.net relies on internal Qt components and self-updating mechanisms that occasionally hang. Setting <code>WINE_SIMULATE_WRITECOPY=1</code> in your launch parameters prevents permission collisions between the launcher and agent binaries.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -464,7 +626,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Never mix different versions of Proton (for example, switching from Proton Experimental to Proton-GE suddenly) on the same Steam simulation prefix without first cleaning the temporary graphics cache. If you leave old residual files in the cache folder, the graphics driver will try to use them under the new Proton, which corrupts the cache and causes immediate locks and crashes. Always clean the <code>shadercache/</code> folder of the game identifier before changing the environment version.</li>
+              <li><strong>Keep Mesa Drivers Updated:</strong> Distributions like Arch Linux, Fedora, and CachyOS provide the latest Mesa graphics packages. If you are on Ubuntu LTS, consider adding the Kisak PPA to benefit from recent Vulkan driver optimizations.</li>
+<li><strong>Do Not Use DXVK_ASYNC on Anti-Cheat Titles:</strong> While World of Warcraft allows DXVK wrappers, asynchronous drawing can trigger flags in strict competitive shooters.</li>
             </ul>
           </div>
 
@@ -514,7 +677,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -525,7 +688,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -563,7 +726,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">OptiScaler</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -610,13 +773,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

@@ -1,8 +1,7 @@
 ---
-title: How to Configure Virtual Memory in Linux and Optimize Swap
+title: How to Increase and Optimize Virtual Memory (Swap) on Linux
 description: >-
-  Learn how to create a Swapfile, configure fstab persistence, and optimize
-  swappiness and vfs_cache_pressure in Linux.
+  Learn how to increase and optimize virtual memory (Swap) on Linux without rebooting. Step-by-step guide to create a swapfile, tune swappiness, and prevent OOM Killer crashes.
 category: Systems & Servers
 tags:
   - Linux
@@ -15,7 +14,7 @@ readTime: 5 min
 date: '2026-06-27'
 ---
 
-In Linux operating systems, Swap space allows the kernel to offload idle memory pages to disk storage, preserving fast physical RAM for active process execution and file system buffer caches. Running without swap risks sudden system freezes and immediate termination of critical processes by the OOM Killer.
+Configuring and increasing virtual memory in Linux through an optimized Swap file ensures system stability and prevents sudden crashes caused by the kernel Out-Of-Memory (OOM) Killer. In this engineering guide, you will learn how to expand swap space in real time without rebooting, set up persistence in fstab, and fine-tune swappiness for maximum server performance.
 
 ## Quick Diagnostics
 | Cause | Solution |

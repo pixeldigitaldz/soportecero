@@ -2,47 +2,82 @@
 title: How to Activate OptiScaler in PC Games Without Native DLSS Support
 description: >-
   Learn how to force modern image upscaling and improve your FPS on older
-  graphics cards using OptiScaler via manual library configurations.
+  graphics cards using OptiScaler via manual library configurations and Wine overrides.
 category: Gaming Tech
 tags:
   - OptiScaler
   - Gaming
   - Proton
-readTime: 4 min
+  - Linux
+  - DLSS
+readTime: 5 min
 date: '2026-07-16'
 ---
 
-If you are a PC gamer with modest hardware or use optimized Linux-based operating systems (such as CachyOS or Bazzite), increasing frames per second (FPS) in demanding titles like Diablo IV is a priority. However, technologies like DLSS are locked for older generation graphics cards.
+If you are a PC gamer with legacy hardware or use optimized Linux-based gaming platforms (such as CachyOS, Bazzite, or SteamOS), maximizing frames per second (FPS) in demanding titles like *Cyberpunk 2077* or *Diablo IV* is essential. However, proprietary upscaling technologies like NVIDIA DLSS are hardware-locked to RTX series graphics cards, leaving GTX and older Radeon cards unsupported.
 
-This is where **OptiScaler** comes in, an open-source mod and wrapper that intercepts DLSS rendering calls and translates them into open technologies like FSR 3 or XeSS. This allows smart upscaling to be enabled in games that did not originally support it on your hardware.
+This is where **OptiScaler** comes in. OptiScaler is an open-source middleware wrapper that intercepts native DLSS (NVNGX) API calls at the DirectX/Vulkan boundary and translates them into vendor-agnostic technologies such as AMD FidelityFX Super Resolution (FSR 2.2 / FSR 3.1) or Intel XeSS. This enables high-performance spatial and temporal upscaling on GPUs that do not natively feature proprietary Tensor cores.
 
 ## Quick Diagnostics
 | Cause | Solution |
 |---|---|
-| **Missing OptiScaler DLL or Wine/Proton not configured** | Install OptiScaler `dxgi.dll` in the executable (`.exe`) folder |
-| **Inactive NVAPI environment variable in Linux** | Add `DXVK_ENABLE_NVAPI=1 %command%` in Steam launch options |
+| **Missing OptiScaler DLL wrapper or incorrect injection path** | Copy `dxgi.dll` and `nvngx.dll` into the directory containing the primary game `.exe` |
+| **Proton/Wine ignoring custom DLLs in Linux prefix** | Configure `WINEDLLOVERRIDES="dxgi=n,b" %command%` in Steam Launch Options |
+| **DirectX 12 hook collision with third-party overlays (MangoHud/RivaTuner)** | Disable conflicting hooks or load OptiScaler ahead of monitoring overlays |
 
-## 🚀 Cómo activar OptiScaler paso a paso
+## 🚀 Step-by-Step Implementation Guide
 
-### Step 1: Descargar los archivos del mod
-Go to the official OptiScaler repository on GitHub and download the latest stable version (usually a packed `.zip` file). The critical file we need is `dxgi.dll` or `nvngx.dll`.
+### Step 1: Download and Verify the OptiScaler Release
+Download the latest verified release from the official OptiScaler GitHub repository. The release archive contains the core wrapper libraries:
+- `dxgi.dll`: Intercepts the DirectX Graphics Infrastructure presentation loop.
+- `nvngx.dll`: Emulates NVIDIA's DLSS backend integration layer.
+- `optiscaler.ini`: The central configuration file for setting upscaler backends (FSR 3.1, XeSS, or native spatial upscalers).
 
-### Step 2: Colocar las librerías en la ruta del juego
-Open the root folder where the main executable (`.exe`) of your video game is installed. Copy and paste the downloaded files (`dxgi.dll` and the configuration file `optiscaler.ini`) right there.
-
-### Step 3: Configurar el entorno de ejecución (Ejemplo en Steam / Linux / Proton)
-If you play on Windows, the game will load the `.dll` file automatically upon opening. But if you are using Steam on Linux with Proton, you must force the system to load that custom library natively.
-
-1. Open Steam, right-click on the game and select **Properties**.
-2. Under the **General** tab, go to the **Launch Options** section.
-3. Paste exactly the following command line:
+### Step 2: Deploy Wrapper Files to the Game Directory
+Locate your game's root installation folder where the actual 64-bit game binary resides (ensure you place the files in the directory with the real binary, not a launcher executable):
 ```bash
-WINEDLLOVERRIDES="dxgi=n,b" %command%
+# Example directory structure for Steam games on Linux:
+~/.local/share/Steam/steamapps/common/Cyberpunk 2077/bin/x64/
+```
+Extract `dxgi.dll`, `nvngx.dll`, and `optiscaler.ini` directly into this folder adjacent to the game executable.
+
+### Step 3: Configure Wine/Proton DLL Overrides
+On Windows, DirectX applications automatically check the local application directory for DLLs before scanning system directories (`System32`). Under Wine or Valve's Proton on Linux, however, the Wine runtime prioritizes internal built-in libraries over custom files unless explicitly instructed otherwise.
+
+To force Wine to load your local OptiScaler wrapper:
+1. Open Steam, right-click your game, and select **Properties**.
+2. Navigate to the **General** tab and locate the **Launch Options** field.
+3. Add the following override command:
+```bash
+WINEDLLOVERRIDES="dxgi=n,b;nvngx=n,b" %command%
+```
+*(Explanation: `n,b` instructs the Wine loader to attempt `native` first, falling back to `builtin` only if the local file fails to load).*
+
+### Step 4: Fine-Tune Upscaling Backend in optiscaler.ini
+Open `optiscaler.ini` with any standard text editor to configure runtime behavior:
+```ini
+[General]
+; Set backend: Auto, FSR2.2, FSR3.1, or XeSS
+Dx12Upscaler = FSR3.1
+Dx11Upscaler = FSR3.1
+OutputScaling = false
+
+[FSR3]
+; Enable native camera jitter detection
+Velocity = auto
 ```
 
-### Step 4: Ajustar los modos dentro del juego
-Launch the video game in the conventional way. Go to the graphics settings menu. You will notice that the NVIDIA DLSS option is now enabled for selection, even if you have a card from another brand. Enable it in Quality or Balanced mode to enjoy a massive performance boost without losing visual sharpness.
+### Step 5: Activate DLSS in the In-Game Graphics Settings
+Launch the game normally. Open the in-game display or graphics settings. The DLSS option will now appear enabled and selectable, regardless of whether your physical GPU is manufactured by AMD, Intel, or NVIDIA. Select **Quality** or **Balanced** mode to achieve significant framerate improvements while retaining sharp native-like visuals.
 
-## 🛡️ Prevention Tips
-Recommended safety practices:
-- Since OptiScaler injects and modifies dynamic libraries at runtime, use it only in single-player or cooperative modes. Avoid using it in competitive multiplayer titles with strict kernel-level anti-cheat systems (such as Valve Anti-Cheat or Easy Anti-Cheat), as they could misinterpret the mod as a malicious program and ban your account.
+## 🛡️ Prevention and Anti-Cheat Advisory
+- **Single-Player and Co-Op Only:** Because OptiScaler hooks runtime DirectX and Vulkan memory structures, never run it in games protected by kernel-level anti-cheat engines (such as Easy Anti-Cheat, BattlEye, or Ricochet). Anti-cheat software may detect memory hooking as third-party injection and trigger an account ban.
+- **Backup Original Files:** Always verify game file integrity via Steam or your launcher if you decide to remove OptiScaler.
+
+## Frequently Asked Questions (FAQ)
+
+### Can OptiScaler induce input lag or frame pacing stutter?
+When configured with temporal upscalers like FSR 3 or XeSS, input latency is identical to native rendering at the internal render resolution. However, ensure V-Sync and framerate limiters are coordinated in your GPU driver control panel to maintain smooth frametime delivery.
+
+### Does OptiScaler support frame generation on GTX 10-series or RX 5000 GPUs?
+Yes, when combined with FSR 3.1 frame generation modules, OptiScaler can synthesize intermediate frames even on older hardware architectures that lack hardware optical flow accelerators.

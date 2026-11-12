@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache | SoporteCero</title>
-  <meta name="description" content="Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates.">
-  <meta name="keywords" content="Linux, Gaming, DXVK">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK | SoporteCero</title>
+  <meta name="description" content="Learn how to eliminate frametime stuttering when gaming on Linux. Configure DXVK shader caching, Graphics Pipeline Library (GPL), and expand Mesa/NVIDIA disk cache limits.">
+  <meta name="keywords" content="Linux, Gaming, DXVK, Proton, Vulkan">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache">
-  <meta property="og:description" content="Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates.">
+  <meta property="og:title" content="How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK">
+  <meta property="og:description" content="Learn how to eliminate frametime stuttering when gaming on Linux. Configure DXVK shader caching, Graphics Pipeline Library (GPL), and expand Mesa/NVIDIA disk cache limits.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="Gaming">
   <meta property="article:tag" content="DXVK">
+  <meta property="article:tag" content="Proton">
+  <meta property="article:tag" content="Vulkan">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache">
-  <meta name="twitter:description" content="Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates.">
+  <meta name="twitter:title" content="How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK">
+  <meta name="twitter:description" content="Learn how to eliminate frametime stuttering when gaming on Linux. Configure DXVK shader caching, Graphics Pipeline Library (GPL), and expand Mesa/NVIDIA disk cache limits.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache",
-  "description": "Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates.",
+  "headline": "How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK",
+  "description": "Learn how to eliminate frametime stuttering when gaming on Linux. Configure DXVK shader caching, Graphics Pipeline Library (GPL), and expand Mesa/NVIDIA disk cache limits.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Gaming Tech",
   "articleSection": "Gaming Tech",
-  "keywords": "Linux, Gaming, DXVK",
+  "keywords": "Linux, Gaming, DXVK, Proton, Vulkan",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache",
+      "name": "How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK",
       "item": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html"
     }
   ]
@@ -125,32 +127,80 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache",
-  "description": "Learn how to configure graphical translation environment variables to compile shaders in the background and stabilize your frame rates.",
+  "name": "How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK",
+  "description": "Learn how to eliminate frametime stuttering when gaming on Linux. Configure DXVK shader caching, Graphics Pipeline Library (GPL), and expand Mesa/NVIDIA disk cache limits.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#step-1",
-      "name": "Step 1",
+      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#activate-vulkan-graphics-pipeline-library-gpl",
+      "name": "Activate Vulkan Graphics Pipeline Library (GPL)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Open the game properties in Steam."
+          "text": "The Vulkan VK_EXT_graphics_pipeline_library (GPL) extension fundamentally resolves runtime shader stutter. Unlike legacy asynchronous hacks, GPL decouples vertex, fragment, and pipeline state objects, enabling near-instantaneous pipeline linking without visual artifacts or popping textures: AMD Radeon GPUs (Mesa RADV Driver): GPL is enabled by default in Mesa 23.1+. To enforce aggressive background compilation, add this parameter to your Steam Launch Options: NVIDIA GeForce GPUs: Ensure you are running NVIDIA proprietary driver version 535 or newer. GPL is active by default. You can verify support via the terminal:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#step-2",
-      "name": "Step 2",
+      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#expand-shader-disk-cache-quotas-prevent-stale-eviction",
+      "name": "Expand Shader Disk Cache Quotas (Prevent Stale Eviction)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "In the Launch Options bar, add the following magic line of variables:"
+          "text": "By default, GPU drivers limit disk cache storage to modest sizes (often 1 GB to 2 GB). When playing large modern titles like Elden Ring, Cyberpunk 2077, or Apex Legends, the cache quickly fills, causing the driver to evict older shaders. When you return to a previously visited zone, the GPU is forced to recompile those shaders, re-introducing stuttering. Expand the driver cache size to 10 GB or more: For NVIDIA users: Add these persistent environment variables to your shell profile (~/.bashrc or /etc/environment): For AMD Mesa / Intel users: Add these persistent environment variables: Reload your active environment with source ~/.bashrc."
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#steam-launch-options-configuration-for-dxvk",
+      "name": "Steam Launch Options Configuration for DXVK",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In your Steam library, right-click any game exhibiting stuttering, select Properties, and append the following optimized launch parameters: (Technical note: If your GPU hardware or driver is older and lacks native GPL support, you can use Proton-GE and set DXVK_ASYNC=1 to force non-blocking asynchronous shader dispatching)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-proton-dxvk-cache-stutter.html#clear-corrupted-prefix-caches-after-major-game-patches",
+      "name": "Clear Corrupted Prefix Caches After Major Game Patches",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If a game begins stuttering following a major expansion or engine update, the existing state cache may contain conflicting bytecode references. Clear the state cache file:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between DXVK state cache and the driver shader cache?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The DXVK state cache (.dxvk-cache) is an architecture-agnostic log of Direct3D pipeline state objects observed during gameplay. The driver shader cache (mesa_shader_cache or NVIDIA compute cache) stores compiled binary machine code tailored to your exact physical GPU silicon. Both work together to prevent stuttering."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do shaders recompile after updating my Mesa or NVIDIA drivers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GPU driver updates frequently modify the internal compiler backend or instruction scheduler. Because compiled machine code is driver-version specific, the driver invalidates prior caches to avoid memory corruption, triggering a brief re-compilation phase on first launch."
+      }
     }
   ]
 }
@@ -166,7 +216,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -195,12 +245,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -230,7 +280,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -243,22 +293,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Gaming Tech</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache</span>
+        <span style="color: var(--text-secondary);">How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Gaming Tech</span>
-        <h1 id="post-title">How to Eliminate Stuttering When Playing DirectX Titles on Linux by Optimizing DXVK Cache</h1>
+        <h1 id="post-title">How to Eliminate Shader Compilation Stuttering in Linux Gaming with DXVK</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -270,7 +320,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -286,7 +336,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The image stuttering (<em>stuttering</em>) when launching a Windows game on Linux using Proton occurs because DirectX graphics calls must be translated to the open <strong>Vulkan</strong> API in real time using a library called DXVK. Every time you enter a new area or an enemy casts an ability, the game freezes for a few milliseconds while compiling the shader for the first time.</p>
+          <p>Micro-stuttering and sudden frametime spikes when launching Windows games on Linux via Valve&#39;s <strong>Proton</strong>, <strong>Wine</strong>, or <strong>Lutris</strong> are almost universally caused by runtime <strong>shader compilation stutter</strong>. Because games written for Windows communicate using Microsoft&#39;s proprietary Direct3D 9, 10, 11, or 12 graphics APIs, the Linux translation layer—<strong>DXVK</strong> (for Direct3D 9/10/11) and <strong>VKD3D-Proton</strong> (for Direct3D 12)—must translate high-level Direct3D shading bytecode into native <strong>Vulkan</strong> SPIR-V instructions in real time.</p>
+<p>Whenever your character encounters a new particle effect, changes weather zones, or casts an ability for the first time in a gaming session, the GPU driver pauses the render thread for several milliseconds to compile the shader into machine code. Understanding how to configure the Vulkan <strong>Graphics Pipeline Library (GPL)</strong> and expand GPU driver disk cache quotas eliminates this stutter entirely.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -303,25 +354,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Corrupted or out-of-sync DXVK shader cache</strong></div>
+            <div class="diag-value"><strong>GPU driver compiling shaders synchronously during gameplay loops</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Delete <code>.dxvk-cache</code> file in game prefix folder</div>
+            <div class="diag-value">Enable Vulkan Graphics Pipeline Library (GPL) in Mesa or NVIDIA drivers</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>High CPU usage spike during real-time shader compilation</strong></div>
+            <div class="diag-value"><strong>GPU driver evicting compiled shaders due to small default disk cache limits</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Enable async shader precompilation: <code>DXVK_ASYNC=1 %command%</code></div>
+            <div class="diag-value">Expand cache size limits via <code>__GL_SHADER_DISK_CACHE_SIZE</code> or <code>MESA_SHADER_CACHE_MAX_SIZE</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Corrupted or invalidated <code>.dxvk-cache</code> state after game updates</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Delete stale <code>.dxvk-cache</code> state files inside the game&#39;s Wine prefix</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Missing Steam background shader pre-caching</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Enable Steam Shader Pre-Caching in Steam Settings &gt; Downloads</div>
           </div></div></div>
       </div>
     </section>
@@ -366,20 +441,27 @@
             <span class="toc-number">02</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-habilitar-la-compilacion-de-shaders-en-paralelo-gpl" class="toc-sublink">
+            <a href="#what-is-the-difference-between-dxvk-state-cache-and-the-driver-shader-cache" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Habilitar la compilación de shaders en paralelo (GPL)</span>
+              <span class="toc-subtext">What is the difference between DXVK state cache and the driver shader cache?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-asignar-un-espacio-ilimitado-para-la-cache-en-el-disco-ssd" class="toc-sublink">
+            <a href="#why-do-shaders-recompile-after-updating-my-mesa-or-nvidia-drivers" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Asignar un espacio ilimitado para la caché en el disco SSD</span>
+              <span class="toc-subtext">Why do shaders recompile after updating my Mesa or NVIDIA drivers?</span>
             </a>
           </li>
         
@@ -397,78 +479,248 @@
           </svg>
           Step-by-Step Technical Implementation
         </h2>
-
-<h3 id="step-1-habilitar-la-compilacion-de-shaders-en-paralelo-gpl">Step 1: Habilitar la compilación de shaders en paralelo (GPL)</h3>
-<p>If you have modern graphics drivers (recent NVIDIA or AMD Mesa), you can activate the <em>Graphics Pipeline Library (GPL)</em> feature, which compiles shaders invisibly before they appear on screen.</p>
 <ol class="steps-list">
 
-        <li class="step-item" id="step-1">
+        <li class="step-item" id="activate-vulkan-graphics-pipeline-library-gpl">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Open the game properties in Steam.
+            <h4 id="activate-vulkan-graphics-pipeline-library-gpl-heading">Step 1: Activate Vulkan Graphics Pipeline Library (GPL)</h4>
+            <p>The Vulkan <code>VK_EXT_graphics_pipeline_library</code> (GPL) extension fundamentally resolves runtime shader stutter. Unlike legacy asynchronous hacks, GPL decouples vertex, fragment, and pipeline state objects, enabling near-instantaneous pipeline linking without visual artifacts or popping textures:</p>
+<ul>
+<li><strong>AMD Radeon GPUs (Mesa RADV Driver):</strong> GPL is enabled by default in Mesa 23.1+. To enforce aggressive background compilation, add this parameter to your Steam Launch Options:</li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>RADV_PERFTEST=gpl %command%
+</code></pre>
+    </div>
+    
+<ul>
+<li><strong>NVIDIA GeForce GPUs:</strong> Ensure you are running NVIDIA proprietary driver <strong>version 535 or newer</strong>. GPL is active by default. You can verify support via the terminal:</li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>vulkaninfo | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> graphics_pipeline_library
+</code></pre>
+    </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="step-2">
+        <li class="step-item" id="expand-shader-disk-cache-quotas-prevent-stale-eviction">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            In the <strong>Launch Options</strong> bar, add the following magic line of variables:
+            <h4 id="expand-shader-disk-cache-quotas-prevent-stale-eviction-heading">Step 2: Expand Shader Disk Cache Quotas (Prevent Stale Eviction)</h4>
+            <p>By default, GPU drivers limit disk cache storage to modest sizes (often 1 GB to 2 GB). When playing large modern titles like <em>Elden Ring</em>, <em>Cyberpunk 2077</em>, or <em>Apex Legends</em>, the cache quickly fills, causing the driver to evict older shaders. When you return to a previously visited zone, the GPU is forced to recompile those shaders, re-introducing stuttering.</p>
+<p>Expand the driver cache size to 10 GB or more:</p>
+<ul>
+<li><strong>For NVIDIA users:</strong>
+Add these persistent environment variables to your shell profile (<code>~/.bashrc</code> or <code>/etc/environment</code>):</li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Expand NVIDIA shader cache quota to 10 Gigabytes (value in bytes)</span>
+<span class="tok-kw">export</span> __GL_SHADER_DISK_CACHE_SIZE=<span class="tok-num">10737418240</span>
+<span class="tok-kw">export</span> __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=<span class="tok-num">1</span>
+</code></pre>
+    </div>
+    
+<ul>
+<li><strong>For AMD Mesa / Intel users:</strong>
+Add these persistent environment variables:</li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Expand Mesa shader cache quota to 10 Gigabytes</span>
+<span class="tok-kw">export</span> MESA_SHADER_CACHE_MAX_SIZE=10G
+</code></pre>
+    </div>
+    
+<p>Reload your active environment with <code>source ~/.bashrc</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="steam-launch-options-configuration-for-dxvk">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="steam-launch-options-configuration-for-dxvk-heading">Step 3: Steam Launch Options Configuration for DXVK</h4>
+            <p>In your Steam library, right-click any game exhibiting stuttering, select <strong>Properties</strong>, and append the following optimized launch parameters:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>DXVK_STATE_CACHE=<span class="tok-num">1</span> DXVK_ASYNC=<span class="tok-num">0</span> %command%
+</code></pre>
+    </div>
+    
+<p><em>(Technical note: If your GPU hardware or driver is older and lacks native GPL support, you can use Proton-GE and set <code>DXVK_ASYNC=1</code> to force non-blocking asynchronous shader dispatching).</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="clear-corrupted-prefix-caches-after-major-game-patches">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="clear-corrupted-prefix-caches-after-major-game-patches-heading">Step 4: Clear Corrupted Prefix Caches After Major Game Patches</h4>
+            <p>If a game begins stuttering following a major expansion or engine update, the existing state cache may contain conflicting bytecode references. Clear the state cache file:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Navigate to your game&#39;s Steam prefix directory and locate the state cache:</span>
+<span class="tok-kw">find</span> ~/.local/share/Steam/steamapps/compatdata/ <span class="tok-prop">-name</span> <span class="tok-str">&quot;*.dxvk-cache&quot;</span><span class="tok-cmt">
+# Remove the specific cache file to regenerate a clean pipeline state</span>
+<span class="tok-kw">rm</span> ~/.local/share/Steam/steamapps/compatdata/&lt;APP_ID&gt;/pfx/*.dxvk-cache
+</code></pre>
+    </div>
           </div>
         </li>
         
 </ol>
 
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>dxvk.enableGraphicsPipelineLibrary = True __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=<span class="tok-num">1</span> %command%
-</code></pre>
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
     </div>
-    
-<h3 id="step-2-asignar-un-espacio-ilimitado-para-la-cache-en-el-disco-ssd">Step 2: Asignar un espacio ilimitado para la caché en el disco SSD</h3>
-<p>By default, video drivers limit the cache folder size to 1GB or 2GB. When it fills up, the system deletes old shaders and generates stuttering again. Modify your operating system limits by adding these lines in your terminal so that the GPU retains all texture learning:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;export EXTRA_LDFLAGS=\&quot;</span>-Wl,-O1 <span class="tok-prop">-Wl</span>,--as-needed\<span class="tok-str">&quot;&quot;</span> &gt;&gt; ~/.bashrc
-<span class="tok-kw">source</span> ~/.bashrc
-</code></pre>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
     </div>
-    
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="what-is-the-difference-between-dxvk-state-cache-and-the-driver-shader-cache">What is the difference between DXVK state cache and the driver shader cache?</h3>
+<p>The <strong>DXVK state cache</strong> (<code>.dxvk-cache</code>) is an architecture-agnostic log of Direct3D pipeline state objects observed during gameplay. The <strong>driver shader cache</strong> (<code>mesa_shader_cache</code> or NVIDIA compute cache) stores compiled binary machine code tailored to your exact physical GPU silicon. Both work together to prevent stuttering.</p>
+<h3 id="why-do-shaders-recompile-after-updating-my-mesa-or-nvidia-drivers">Why do shaders recompile after updating my Mesa or NVIDIA drivers?</h3>
+<p>GPU driver updates frequently modify the internal compiler backend or instruction scheduler. Because compiled machine code is driver-version specific, the driver invalidates prior caches to avoid memory corruption, triggering a brief re-compilation phase on first launch.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -483,7 +735,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>When using performance distributions like CachyOS, avoid clearing system temporary files in bulk with automatic tools before playing. Deleting the <code>.nv</code> or <code>.cache</code> folder from your user directory will destroy weeks of previous shader compilation for your favorite games, forcing your video card to start the annoying stuttering process from scratch in the next game session.</li>
+              <li><strong>Do Not Run Aggressive Disk Cleaners on Shader Directories:</strong> Tools like BleachBit often delete <code>~/.cache/mesa_shader_cache</code> or <code>~/.nv/ComputeCache</code>. Wiping these directories destroys accumulated shader learning, forcing your GPU to recompile every game asset from scratch.</li>
+<li><strong>Enable Steam Background Processing:</strong> In Steam &gt; Settings &gt; Downloads &gt; <strong>Shader Pre-Caching</strong>, check both <strong>Enable Shader Pre-Caching</strong> and <strong>Allow background processing of Vulkan shaders</strong> to let Steam compile pipelines before you launch the title.</li>
             </ul>
           </div>
 
@@ -533,7 +786,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -544,7 +797,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -571,35 +824,35 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV -->
+      <!-- Related Card: How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-vram-allocation-diablo4.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV</a>
+              <a href="../articulos/error-vram-allocation-diablo4.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: How to reduce input lag for competitive gaming in Linux -->
+      <!-- Related Card: How to Reduce Input Lag for Competitive Gaming on Linux (Wayland & X11) -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/optimizar-input-lag-juegos-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to reduce input lag for competitive gaming in Linux</a>
+              <a href="../articulos/optimizar-input-lag-juegos-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Reduce Input Lag for Competitive Gaming on Linux (Wayland & X11)</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -629,13 +882,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

@@ -784,9 +784,10 @@ function build() {
   }
 
   // 3. Compile static pages with Hreflang support
-  compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contacto.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'sobre-mi.html'), path.join(DIST_DIR, 'sobre-mi.html'), 'sobre-mi.html', 'about.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contact.html', 'es');
   compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html', 'es');
-  compileStaticPage(path.join(SRC_DIR, 'nosotros.html'), path.join(DIST_DIR, 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'nosotros.html'), path.join(DIST_DIR, 'nosotros.html'), 'nosotros.html', 'about.html', 'es');
   
   fs.mkdirSync(path.join(DIST_DIR, 'legal'), { recursive: true });
   compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'es');
@@ -795,9 +796,11 @@ function build() {
 
   // English static pages
   fs.mkdirSync(path.join(DIST_DIR, 'en', 'legal'), { recursive: true });
-  compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contacto.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'about.html'), path.join(DIST_DIR, 'en', 'about.html'), 'sobre-mi.html', 'about.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'contact.html'), path.join(DIST_DIR, 'en', 'contact.html'), 'contacto.html', 'contact.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contact.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html', 'en');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'nosotros.html'), path.join(DIST_DIR, 'en', 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'nosotros.html'), path.join(DIST_DIR, 'en', 'nosotros.html'), 'nosotros.html', 'about.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html', 'en');
@@ -1031,7 +1034,7 @@ function build() {
 
     const langSelectorLink = hasEnTranslation 
       ? `../en/articulos/${post.filename}.html`
-      : `../en/`;
+      : `../en/index.html`;
     const langSelector = `
     <div class="lang-selector">
       <span class="lang-active">ES</span>
@@ -1224,7 +1227,7 @@ function build() {
 
     const langSelectorLink = hasEsCounterpart
       ? `../../articulos/${post.filename}.html`
-      : `../../`;
+      : `../../index.html`;
     const langSelector = `
     <div class="lang-selector">
       <a href="${langSelectorLink}" class="lang-inactive">ES</a>
@@ -1296,14 +1299,14 @@ function build() {
   const indexTemplateEs = fs.readFileSync(path.join(SRC_DIR, 'index-template.html'), 'utf-8');
   const indexHreflangEs = `
   <link rel="alternate" hreflang="es" href="https://soportecero.com/" />
-  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
   `;
   const indexLangSelectorEs = `
   <div class="lang-selector">
     <span class="lang-active">ES</span>
     <span class="lang-separator">|</span>
-    <a href="en/" class="lang-inactive">EN</a>
+    <a href="en/index.html" class="lang-inactive">EN</a>
   </div>
   `;
   const directoryIndexEs = generateDirectoryIndex(postsEs, 'es');
@@ -1353,7 +1356,7 @@ function build() {
   const indexTemplateEn = fs.readFileSync(path.join(SRC_DIR, 'en', 'index-template.html'), 'utf-8');
   const indexLangSelectorEn = `
   <div class="lang-selector">
-    <a href="../" class="lang-inactive">ES</a>
+    <a href="../index.html" class="lang-inactive">ES</a>
     <span class="lang-separator">|</span>
     <span class="lang-active">EN</span>
   </div>
@@ -1380,15 +1383,25 @@ function build() {
   <url>
     <loc>https://soportecero.com/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
     <lastmod>${homeLastmodEs}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://soportecero.com/tools/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/" />
+    <loc>https://soportecero.com/en/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
+    <lastmod>${homeLastmodEn}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/tools/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/index.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/index.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -1443,15 +1456,53 @@ function build() {
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://soportecero.com/sobre-mi.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/sobre-mi.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/sobre-mi.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://soportecero.com/contacto.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contact.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/about.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/about.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/sobre-mi.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/sobre-mi.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/contact.html" />
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/contacto.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/contacto.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://soportecero.com/nosotros.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/nosotros.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/nosotros.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/nosotros.html" />
     <lastmod>${staticLastmod}</lastmod>
@@ -1461,6 +1512,16 @@ function build() {
   <url>
     <loc>https://soportecero.com/servicios.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/servicios.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/servicios.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/servicios.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/servicios.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1468,6 +1529,16 @@ function build() {
   </url>
   <url>
     <loc>https://soportecero.com/legal/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/privacidad.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/privacidad.html" />
     <lastmod>${staticLastmod}</lastmod>
@@ -1477,6 +1548,16 @@ function build() {
   <url>
     <loc>https://soportecero.com/legal/terminos.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/terminos.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/terminos.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/terminos.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/terminos.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1485,6 +1566,16 @@ function build() {
   <url>
     <loc>https://soportecero.com/legal/cookies.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
+    <lastmod>${staticLastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://soportecero.com/en/legal/cookies.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/legal/cookies.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/legal/cookies.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/legal/cookies.html" />
     <lastmod>${staticLastmod}</lastmod>
     <changefreq>monthly</changefreq>
@@ -1492,11 +1583,19 @@ function build() {
   </url>
 `;
 
-  // Add Spanish posts to sitemap (Primary Indexable Content)
+  // Add Spanish posts to sitemap (with bidirectional hreflang)
   for (let post of postsEs) {
     const postDate = post.dateModified || post.date || staticLastmod;
+    const hasEn = postsEn.some(p => p.filename === post.filename);
+    const hreflangLines = hasEn ? `
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : `
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />`;
+
     sitemapXml += `  <url>
-    <loc>https://soportecero.com/articulos/${post.filename}.html</loc>
+    <loc>https://soportecero.com/articulos/${post.filename}.html</loc>${hreflangLines}
     <lastmod>${postDate}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1504,8 +1603,25 @@ function build() {
 `;
   }
 
-  // English posts removed from sitemap.xml to eliminate duplicate/translated content dilution
-  // and prevent AdSense penalties for thin/duplicate content.
+  // Add English posts to sitemap (with bidirectional hreflang)
+  for (let post of postsEn) {
+    const postDate = post.dateModified || post.date || staticLastmod;
+    const hasEs = postsEs.some(p => p.filename === post.filename);
+    const hreflangLines = hasEs ? `
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/${post.filename}.html" />` : `
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/${post.filename}.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/en/articulos/${post.filename}.html" />`;
+
+    sitemapXml += `  <url>
+    <loc>https://soportecero.com/en/articulos/${post.filename}.html</loc>${hreflangLines}
+    <lastmod>${postDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+`;
+  }
 
   sitemapXml += `</urlset>`;
 

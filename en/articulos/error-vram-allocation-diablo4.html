@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV | SoporteCero</title>
-  <meta name="description" content="Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file.">
-  <meta name="keywords" content="Gaming, Diablo IV, VRAM">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops | SoporteCero</title>
+  <meta name="description" content="Learn how to fix Diablo IV 'Out of GPU Memory' crashes, inventory stuttering, and severe FPS drops. Optimize texture streaming pools, manage shared VRAM fallback paging, and configure VKD3D on Linux.">
+  <meta name="keywords" content="Gaming, Diablo IV, VRAM, GPU, Windows, Linux">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-vram-allocation-diablo4.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV">
-  <meta property="og:description" content="Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file.">
+  <meta property="og:title" content="How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops">
+  <meta property="og:description" content="Learn how to fix Diablo IV 'Out of GPU Memory' crashes, inventory stuttering, and severe FPS drops. Optimize texture streaming pools, manage shared VRAM fallback paging, and configure VKD3D on Linux.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-vram-allocation-diablo4.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,14 @@
   <meta property="article:tag" content="Gaming">
   <meta property="article:tag" content="Diablo IV">
   <meta property="article:tag" content="VRAM">
+  <meta property="article:tag" content="GPU">
+  <meta property="article:tag" content="Windows">
+  <meta property="article:tag" content="Linux">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV">
-  <meta name="twitter:description" content="Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file.">
+  <meta name="twitter:title" content="How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops">
+  <meta name="twitter:description" content="Learn how to fix Diablo IV 'Out of GPU Memory' crashes, inventory stuttering, and severe FPS drops. Optimize texture streaming pools, manage shared VRAM fallback paging, and configure VKD3D on Linux.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +70,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV",
-  "description": "Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file.",
+  "headline": "How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops",
+  "description": "Learn how to fix Diablo IV 'Out of GPU Memory' crashes, inventory stuttering, and severe FPS drops. Optimize texture streaming pools, manage shared VRAM fallback paging, and configure VKD3D on Linux.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Gaming Tech",
   "articleSection": "Gaming Tech",
-  "keywords": "Gaming, Diablo IV, VRAM",
+  "keywords": "Gaming, Diablo IV, VRAM, GPU, Windows, Linux",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
@@ -115,7 +118,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV",
+      "name": "How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops",
       "item": "https://soportecero.com/en/articulos/error-vram-allocation-diablo4.html"
     }
   ]
@@ -125,8 +128,8 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV",
-  "description": "Learn how to mitigate the 'Out of Video Memory' error and drastic performance drops by optimizing texture management and your GPU's paging file.",
+  "name": "How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops",
+  "description": "Learn how to fix Diablo IV 'Out of GPU Memory' crashes, inventory stuttering, and severe FPS drops. Optimize texture streaming pools, manage shared VRAM fallback paging, and configure VKD3D on Linux.",
   "step": [
     {
       "@type": "HowToStep",
@@ -136,7 +139,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Enter the graphics settings within Diablo IV."
+          "text": "Launch Diablo IV and open Options &gt; Graphics."
         }
       ]
     },
@@ -148,7 +151,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Lower texture quality to Medium or High. The visual difference in motion is imperceptible, but it reduces memory consumption by a stable 2.5 GB."
+          "text": "Set Texture Quality to Medium (for 6 GB - 8 GB GPUs) or High (for 10 GB - 12 GB GPUs). Never select Ultra unless your graphics card carries 16 GB+ of physical VRAM."
         }
       ]
     },
@@ -160,9 +163,57 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Turn off Screen Space Reflections (SSR), which doubles the shading load unnecessarily."
+          "text": "Lower Shadow Quality to High or Medium."
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-vram-allocation-diablo4.html#step-4",
+      "name": "Step 4",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Disable Screen Space Reflections (SSR) and set Clutter Density to Medium."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/en/articulos/error-vram-allocation-diablo4.html#step-5",
+      "name": "Step 5",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Set an in-game Max Foreground FPS cap corresponding to your display refresh rate (e.g., 120 FPS or 144 FPS). Capping the framerate prevents the rendering pipeline from requesting unbounded frame buffers."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does Diablo IV stutter specifically when opening the inventory or map?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The inventory and vendor interfaces render high-resolution 3D models and uncompressed 2D asset cards on top of the live 3D world. If your VRAM is already saturated, loading these interface assets immediately forces a massive memory swap, triggering an instantaneous 200 ms to 500 ms stutter."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can disabling Ray Tracing prevent VRAM crashes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Enabling Ray Tracing (Ray Traced Foliage, Shadows, and Reflections) increases VRAM consumption by 3 GB to 4.5 GB due to Bounding Volume Hierarchy (BVH) structures. Keeping Ray Tracing disabled is essential on GPUs with 8 GB to 12 GB of VRAM."
+      }
     }
   ]
 }
@@ -178,7 +229,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -207,12 +258,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -242,7 +293,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -255,22 +306,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Gaming Tech</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV</span>
+        <span style="color: var(--text-secondary);">How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Gaming Tech</span>
-        <h1 id="post-title">Solution: FPS Drops and Crashes Due VRAM Allocation in Diablo IV</h1>
+        <h1 id="post-title">How to Fix Diablo IV Out of Video Memory (VRAM) Crashes and FPS Drops</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -282,7 +333,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -298,7 +349,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The out of video memory (VRAM) error or screen freezing when opening the inventory or changing zones in Diablo IV occurs due to a resource allocation leak in the game engine graphics. The title consumes all the physical memory of the graphics card and, when trying to overflow the remaining data into the system RAM, it collapses if response times are not optimized.</p>
+          <p>Encountering a fatal <code>Out of GPU Memory</code> dialog or experiencing severe single-digit framerate drops when opening town portals, opening inventory screens, or traversing major hub zones (such as Kyovashad or Cerrigar) in <strong>Diablo IV</strong> is a notorious issue affecting both Windows and Linux PC gamers.</p>
+<p>This performance collapse occurs because the Diablo IV proprietary graphics engine utilizes an aggressive, un-throttled <strong>virtual texture streaming architecture</strong>. On GPUs equipped with 8 GB to 12 GB of dedicated Video RAM (VRAM), high-resolution mipmaps and uncompressed UI assets quickly saturate physical video memory. When VRAM fills completely, Windows (via WDDM) and the Linux kernel begin paging active textures into system RAM over the PCI Express bus. This causes immediate PCIe bus saturation, causing frametimes to skyrocket from 8 ms to over 300 ms.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -315,25 +367,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>VRAM overflow on GPUs with 8GB or less using Ultra textures</strong></div>
+            <div class="diag-value"><strong>Ultra texture quality saturating 8 GB / 12 GB physical VRAM capacity</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Lower texture settings to High or Medium in-game</div>
+            <div class="diag-value">Reduce Texture Quality to <strong>Medium</strong> or <strong>High</strong> in display options</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Inefficient DirectX 12 memory pool management by VKD3D-Proton</strong></div>
+            <div class="diag-value"><strong>DirectX 12 host-visible memory paging bottlenecks on Linux/Proton</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Add <code>VKD3D_CONFIG=upload_hvv %command%</code> in Steam launch parameters</div>
+            <div class="diag-value">Configure <code>VKD3D_CONFIG=upload_hvv %command%</code> in Steam Launch Options</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Vulkan/Direct3D 12 memory leaks during extended town portal transitions</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Enable FSR / DLSS Balanced mode and cap foreground framerates</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Windows paging file too small to accommodate VRAM overflow spills</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Set Windows virtual memory paging file to a fixed size of 16 GB to 32 GB</div>
           </div></div></div>
       </div>
     </section>
@@ -381,17 +457,58 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-forzar-el-tamano-de-las-texturas-a-un-nivel-seguro" class="toc-sublink">
+            <a href="#step-1-adjust-texture-quality-and-disable-memory-heavy-shaders" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Forzar el tamaño de las texturas a un nivel seguro</span>
+              <span class="toc-subtext">Step 1: Adjust Texture Quality and Disable Memory-Heavy Shaders</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-activar-la-generacion-de-fotogramas-con-optiscaler-fsr-3" class="toc-sublink">
+            <a href="#step-2-configure-upscaling-dlss-fsr-xess-in-balanced-mode" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Activar la generación de fotogramas con OptiScaler / FSR 3</span>
+              <span class="toc-subtext">Step 2: Configure Upscaling (DLSS / FSR / XeSS) in Balanced Mode</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-optimize-vkd3d-proton-memory-allocation-on-linux-steam-deck" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Optimize VKD3D-Proton Memory Allocation on Linux / Steam Deck</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-expand-the-windows-system-paging-file-virtual-memory" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Expand the Windows System Paging File (Virtual Memory)</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-diablo-iv-stutter-specifically-when-opening-the-inventory-or-map" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does Diablo IV stutter specifically when opening the inventory or map?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-disabling-ray-tracing-prevent-vram-crashes" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can disabling Ray Tracing prevent VRAM crashes?</span>
             </a>
           </li>
         
@@ -410,15 +527,15 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-forzar-el-tamano-de-las-texturas-a-un-nivel-seguro">Step 1: Forzar el tamaño de las texturas a un nivel seguro</h3>
-<p>If your graphics card has 8GB of VRAM or less, setting textures to &quot;Ultra&quot; will saturate the data bus in less than 20 minutes of play.</p>
+<h3 id="step-1-adjust-texture-quality-and-disable-memory-heavy-shaders">Step 1: Adjust Texture Quality and Disable Memory-Heavy Shaders</h3>
+<p>The single most impactful adjustment is stepping down texture resolution. While Diablo IV labels &quot;High&quot; and &quot;Ultra&quot; similarly in marketing materials, the Ultra texture pack requires over 14 GB of dedicated VRAM:</p>
 <ol class="steps-list">
 
         <li class="step-item" id="step-1">
           <div class="step-number">1</div>
           <div class="step-body">
             <h4 id="step-1-heading">Step 1</h4>
-            Enter the graphics settings within Diablo IV.
+            Launch Diablo IV and open <strong>Options</strong> &gt; <strong>Graphics</strong>.
           </div>
         </li>
         
@@ -427,7 +544,7 @@
           <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="step-2-heading">Step 2</h4>
-            Lower texture quality to <strong>Medium</strong> or <strong>High</strong>. The visual difference in motion is imperceptible, but it reduces memory consumption by a stable 2.5 GB.
+            Set <strong>Texture Quality</strong> to <strong>Medium</strong> (for 6 GB - 8 GB GPUs) or <strong>High</strong> (for 10 GB - 12 GB GPUs). Never select Ultra unless your graphics card carries 16 GB+ of physical VRAM.
           </div>
         </li>
         
@@ -436,13 +553,123 @@
           <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="step-3-heading">Step 3</h4>
-            Turn off <em>Screen Space Reflections (SSR)</em>, which doubles the shading load unnecessarily.
+            Lower <strong>Shadow Quality</strong> to High or Medium.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-4">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="step-4-heading">Step 4</h4>
+            Disable <strong>Screen Space Reflections (SSR)</strong> and set <strong>Clutter Density</strong> to Medium.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-5">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="step-5-heading">Step 5</h4>
+            Set an in-game <strong>Max Foreground FPS</strong> cap corresponding to your display refresh rate (e.g., 120 FPS or 144 FPS). Capping the framerate prevents the rendering pipeline from requesting unbounded frame buffers.
           </div>
         </li>
         
 </ol>
-<h3 id="step-2-activar-la-generacion-de-fotogramas-con-optiscaler-fsr-3">Step 2: Activar la generación de fotogramas con OptiScaler / FSR 3</h3>
-<p>If you use upscaling, make sure to activate <em>Balanced</em> mode to reduce the base rendering resolution, drastically decreasing the number of megabytes that the GPU must retain in its internal memory for each frame.</p>
+<h3 id="step-2-configure-upscaling-dlss-fsr-xess-in-balanced-mode">Step 2: Configure Upscaling (DLSS / FSR / XeSS) in Balanced Mode</h3>
+<p>Temporal upscaling reduces the internal rendering resolution, dramatically decreasing the size of framebuffers and geometry render targets held in physical VRAM:</p>
+<ol>
+<li>In the Graphics menu, enable your preferred upscaler:<ul>
+<li><strong>NVIDIA:</strong> DLSS (Deep Learning Super Sampling)</li>
+<li><strong>AMD:</strong> FSR 2 / FSR 3 (FidelityFX Super Resolution)</li>
+<li><strong>Intel:</strong> XeSS</li>
+</ul>
+</li>
+<li>Select <strong>Balanced</strong> or <strong>Quality</strong> mode.</li>
+<li>Set <strong>Sharpening</strong> between 5 and 7 to maintain crisp asset edges while freeing up to 2.5 GB of active VRAM.</li>
+</ol>
+<h3 id="step-3-optimize-vkd3d-proton-memory-allocation-on-linux-steam-deck">Step 3: Optimize VKD3D-Proton Memory Allocation on Linux / Steam Deck</h3>
+<p>If playing Diablo IV on Linux (via Steam, Lutris, or the Heroic Games Launcher), the VKD3D-Proton translation layer must manage host-visible video memory (HVV) efficiently across Vulkan queues.</p>
+<p>Add the following environment variables to your Steam or Lutris launch parameters:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>VKD3D_CONFIG=upload_hvv DXVK_ASYNC=<span class="tok-num">1</span> %command%
+</code></pre>
+    </div>
+    
+<p><em>(Technical note: <code>upload_hvv</code> instructs VKD3D to utilize Resizable BAR / Smart Access Memory for staging buffers, significantly accelerating texture uploads between system RAM and GPU VRAM).</em></p>
+<h3 id="step-4-expand-the-windows-system-paging-file-virtual-memory">Step 4: Expand the Windows System Paging File (Virtual Memory)</h3>
+<p>When the game engine experiences brief memory spikes, Windows must have sufficient storage space on an NVMe SSD to swap overflow pages without hard-crashing:</p>
+<ol>
+<li>Press <code>Windows Key + R</code>, type <code>sysdm.cpl</code>, and press <strong>Enter</strong>.</li>
+<li>Navigate to the <strong>Advanced</strong> tab and click <strong>Settings</strong> under <em>Performance</em>.</li>
+<li>Go to the <strong>Advanced</strong> tab and click <strong>Change</strong> under <em>Virtual memory</em>.</li>
+<li>Uncheck <em>Automatically manage paging file size for all drives</em>.</li>
+<li>Select your fastest NVMe SSD (typically <code>C:</code>), choose <strong>Custom size</strong>, and set both <strong>Initial size</strong> and <strong>Maximum size</strong> to <code>16384</code> (16 GB) or <code>24576</code> (24 GB).</li>
+<li>Click <strong>Set</strong>, then <strong>OK</strong>, and restart Windows.</li>
+</ol>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="why-does-diablo-iv-stutter-specifically-when-opening-the-inventory-or-map">Why does Diablo IV stutter specifically when opening the inventory or map?</h3>
+<p>The inventory and vendor interfaces render high-resolution 3D models and uncompressed 2D asset cards on top of the live 3D world. If your VRAM is already saturated, loading these interface assets immediately forces a massive memory swap, triggering an instantaneous 200 ms to 500 ms stutter.</p>
+<h3 id="can-disabling-ray-tracing-prevent-vram-crashes">Can disabling Ray Tracing prevent VRAM crashes?</h3>
+<p>Yes. Enabling Ray Tracing (Ray Traced Foliage, Shadows, and Reflections) increases VRAM consumption by 3 GB to 4.5 GB due to Bounding Volume Hierarchy (BVH) structures. Keeping Ray Tracing disabled is essential on GPUs with 8 GB to 12 GB of VRAM.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -457,7 +684,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Avoid modifying system registry tables to try to &#39;fool&#39; the game by falsely increasing the VRAM size via software (such as the DedicatedSegmentSize key trick in Windows)</strong>. This does not add real hardware and usually breaks video driver stability, forcing direct blue screens (BSOD) by demanding a power transfer effort that your integrated or dedicated graphics card cannot physically support.</li>
+              <li><strong>Avoid Misleading &#39;DedicatedSegmentSize&#39; Registry Hacks:</strong> Never follow internet guides advocating creating a fake <code>DedicatedSegmentSize</code> DWORD in <code>HKEY_LOCAL_MACHINE\SOFTWARE\Intel\GMM</code>. Modifying this registry key merely alters the dummy number reported to old diagnostic tools; it does not add physical VRAM and can destabilize GPU driver memory allocation routines.</li>
+<li><strong>Enable Resizable BAR (ReBAR) in BIOS:</strong> Ensure Resizable BAR (AMD Smart Access Memory) is enabled in your motherboard&#39;s UEFI firmware. ReBAR allows the CPU to access the entire GPU VRAM pool simultaneously rather than in small 256 MB chunks.</li>
             </ul>
           </div>
 
@@ -507,7 +735,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -518,7 +746,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -545,18 +773,18 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: How to reduce input lag for competitive gaming in Linux -->
+      <!-- Related Card: How to Reduce Input Lag for Competitive Gaming on Linux (Wayland & X11) -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/optimizar-input-lag-juegos-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to reduce input lag for competitive gaming in Linux</a>
+              <a href="../articulos/optimizar-input-lag-juegos-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Reduce Input Lag for Competitive Gaming on Linux (Wayland & X11)</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -579,18 +807,18 @@
       </article>
       
 
-      <!-- Related Card: How to fix graphics stuttering in Linux games using DXVK cache -->
+      <!-- Related Card: How to Fix Graphics Stuttering in Linux Games Using DXVK Pipeline Caching -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Gaming Tech</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/stuttering-juegos-proton-dxvk-cache.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to fix graphics stuttering in Linux games using DXVK cache</a>
+              <a href="../articulos/stuttering-juegos-proton-dxvk-cache.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Graphics Stuttering in Linux Games Using DXVK Pipeline Caching</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -603,13 +831,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker | SoporteCero</title>
-  <meta name="description" content="Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications.">
+  <meta name="description" content="Technical guide to resolving the 'Connection Refused' error between Prowlarr and qBittorrent in Docker Compose, bridge networks, and Gluetun VPN stacks.">
   <meta name="keywords" content="Prowlarr, Docker, qBittorrent">
-  <meta name="robots" content="noindex, follow">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -22,7 +22,7 @@
   
   <!-- Open Graph -->
   <meta property="og:title" content="How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker">
-  <meta property="og:description" content="Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications.">
+  <meta property="og:description" content="Technical guide to resolving the 'Connection Refused' error between Prowlarr and qBittorrent in Docker Compose, bridge networks, and Gluetun VPN stacks.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -41,7 +41,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker">
-  <meta name="twitter:description" content="Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications.">
+  <meta name="twitter:description" content="Technical guide to resolving the 'Connection Refused' error between Prowlarr and qBittorrent in Docker Compose, bridge networks, and Gluetun VPN stacks.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -68,7 +68,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker",
-  "description": "Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications.",
+  "description": "Technical guide to resolving the 'Connection Refused' error between Prowlarr and qBittorrent in Docker Compose, bridge networks, and Gluetun VPN stacks.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Web & Code",
@@ -126,7 +126,7 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Fix Connection Refused Error Between Prowlarr and qBittorrent in Docker",
-  "description": "Learn how to resolve the 'Connection Refused' error by configuring Docker's internal networks correctly for your automation applications.",
+  "description": "Technical guide to resolving the 'Connection Refused' error between Prowlarr and qBittorrent in Docker Compose, bridge networks, and Gluetun VPN stacks.",
   "step": [
     {
       "@type": "HowToStep",
@@ -136,7 +136,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Log in to the qBittorrent WebUI."
+          "text": "Open the qBittorrent WebUI in your browser (http://HOST_IP:8080)."
         }
       ]
     },
@@ -148,7 +148,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Go to Options &gt; WebUI."
+          "text": "Navigate to Options (gear icon or Alt+O) &gt; Web UI tab."
         }
       ]
     },
@@ -160,21 +160,81 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Uncheck the box Enable Cross-Site Request Forgery (CSRF) protection."
+          "text": "In the Security section, uncheck:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 4,
-      "url": "https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html#step-4",
-      "name": "Step 4",
+      "url": "https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html#enable-cross-site-request-forgery-csrf-protection",
+      "name": "Enable Cross-Site Request Forgery (CSRF) protection",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "In the field Bypass authentication for clients on local subnets, enter your Docker network subnets:"
+          "text": "Enable Cross-Site Request Forgery (CSRF) protection"
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html#enable-host-header-validation",
+      "name": "Enable Host header validation",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Enable Host header validation"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 6,
+      "url": "https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html#step-6",
+      "name": "Step 6",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "In the field Bypass authentication for clients on local subnets, enter Docker&#39;s internal subnet pools:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 7,
+      "url": "https://soportecero.com/en/articulos/error-conexion-prowlarr-qbittorrent-docker.html#step-7",
+      "name": "Step 7",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Save your settings. If the WebUI is inaccessible, stop the container and edit qBittorrent.conf directly:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why do I get Connection Refused when the WebUI opens fine in my desktop browser?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your desktop browser reaches qBittorrent via your LAN IP and the host&#39;s forwarded port (http://192.168.1.50:8080). Prowlarr runs within an isolated container network. Attempting to use localhost or LAN IPs without proper NAT hairpinning causes the connection to fail."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it safe to disable CSRF protection on the qBittorrent WebUI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, provided the WebUI is not forwarded directly to the public Internet via router port forwarding. Within an isolated Docker bridge network or behind a reverse proxy with authentication, disabling CSRF is the standard operational pattern required by REST API integrations."
+      }
     }
   ]
 }
@@ -190,7 +250,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -219,12 +279,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -254,7 +314,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -267,7 +327,7 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Web & Code</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
@@ -282,7 +342,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -294,7 +354,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 8 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -310,46 +370,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>Connection Refused</code> or <code>Test failed: Connection refused</code> error when trying to link Prowlarr to qBittorrent in Docker occurs because both services run in isolated containers that do not share the same virtual logical Docker network, or because qBittorrent rejects external requests due to incorrect WebUI API access settings.</p>
-
-    <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
-    <section class="diagnostic-console" aria-labelledby="diag-heading">
-      <div class="diagnostic-console-header">
-        <div class="diag-console-title-group">
-          <span class="diag-pulse-dot" aria-hidden="true"></span>
-          <h3 id="technical-diagnostics-amp-root-cause-analysis">Technical Diagnostics &amp; Root Cause Analysis</h3>
-        </div>
-        <span class="diag-console-badge">Lab Environment</span>
-      </div>
-      <div class="diagnostic-console-body">
-        <div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
-            </div>
-            <div class="diag-value"><strong>Docker network hostname unreachable between containers</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
-            </div>
-            <div class="diag-value">Connect both containers to same Docker bridge network</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
-            </div>
-            <div class="diag-value"><strong>Incorrect qBittorrent API key or authentication credentials</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
-            </div>
-            <div class="diag-value">Disable CSRF protection in qBittorrent or verify web UI port (8080)</div>
-          </div></div></div>
-      </div>
-    </section>
-
+          
     <nav class="toc-container" aria-label="Table of contents">
       <div class="toc-header">
         <div class="toc-header-left">
@@ -369,16 +390,23 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#lab-environment-amp-diagnostics" class="toc-link">
+          <a href="#architectural-analysis-and-root-cause" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Lab Environment &amp; Diagnostics</span>
+            <span class="toc-text">Architectural Analysis and Root Cause</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#laboratory-diagnosis-and-inspection" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">Laboratory Diagnosis and Inspection</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#technical-diagnostics-amp-root-cause-analysis" class="toc-sublink">
+            <a href="#network-inspection-commands" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Technical Diagnostics &amp; Root Cause Analysis</span>
+              <span class="toc-subtext">Network Inspection Commands</span>
             </a>
           </li>
         
@@ -387,31 +415,73 @@
       
         <li class="toc-item">
           <a href="#step-by-step-technical-implementation" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-configure-a-shared-network-in-your-docker-compose-file" class="toc-sublink">
+            <a href="#step-1-configure-a-shared-bridge-network-in-docker-compose" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Configure a shared network in your Docker Compose file</span>
+              <span class="toc-subtext">Step 1: Configure a Shared Bridge Network in Docker Compose</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-disable-csrf-protection-and-bypass-local-authentication-in-qbittorrent" class="toc-sublink">
+            <a href="#step-2-disable-csrf-and-host-header-validation-in-qbittorrent" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Disable CSRF protection and bypass local authentication in qBittorrent</span>
+              <span class="toc-subtext">Step 2: Disable CSRF and Host Header Validation in qBittorrent</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-use-the-container-service-name-as-the-host-address" class="toc-sublink">
+            <a href="#step-3-configure-download-client-settings-in-prowlarr" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Use the container service name as the host address</span>
+              <span class="toc-subtext">Step 3: Configure Download Client Settings in Prowlarr</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#edge-case-troubleshooting" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Edge Case Troubleshooting</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#edge-case-1-qbittorrent-routed-through-gluetun-vpn" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Edge Case 1: qBittorrent Routed Through Gluetun VPN</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">05</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-do-i-get-connection-refused-when-the-webui-opens-fine-in-my-desktop-browser" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why do I get Connection Refused when the WebUI opens fine in my desktop browser?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#is-it-safe-to-disable-csrf-protection-on-the-qbittorrent-webui" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Is it safe to disable CSRF protection on the qBittorrent WebUI?</span>
             </a>
           </li>
         
@@ -421,8 +491,137 @@
         </ul>
       </div>
     </nav>
+    <p>When configuring qBittorrent as a Download Client in Prowlarr (or companion <code>*arr</code> applications like Sonarr and Radarr), clicking the <strong>Test</strong> button frequently fails with one of the following error messages:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>Test failed: Unable to connect to qBittorrent, Connection refused (<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">8080</span>)
+</code></pre>
+    </div>
     
+<p>or:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>Test failed: Resource temporarily unavailable (qbittorrent:<span class="tok-num">8080</span>) / Connection refused
+</code></pre>
+    </div>
     
+<p>This failure rarely indicates that qBittorrent has crashed. Instead, it stems from architectural boundaries in Docker&#39;s virtual networking model, WebUI security mechanisms (Cross-Site Request Forgery and Host header validation) in modern qBittorrent releases, or VPN routing layers (such as Gluetun) where container network stacks are shared.</p>
+<hr>
+<h2 id="architectural-analysis-and-root-cause">Architectural Analysis and Root Cause</h2>
+<p>To establish a reliable TCP connection between both containers, it is critical to trace how Docker handles internal packet routing, network namespaces, and service discovery:</p>
+<ol>
+<li><strong>The <code>localhost</code> / <code>127.0.0.1</code> Pitfall in Containerized Environments:</strong> Every Docker container is provisioned with an isolated Network Namespace. When you enter <code>localhost:8080</code> in Prowlarr&#39;s configuration, Prowlarr attempts to bind a socket to its own internal loopback interface (<code>lo</code>). Because qBittorrent is running in an entirely separate namespace, nothing is listening on port 8080 within Prowlarr&#39;s container, causing the Linux kernel to immediately return a TCP RST packet (<code>ECONNREFUSED</code>).</li>
+<li><strong>Default Bridge vs User-Defined Bridge Networks:</strong> Containers started via <code>docker run</code> without custom network parameters attach to Docker&#39;s default <code>bridge</code>. Within this legacy default network, Docker&#39;s embedded DNS server (<code>127.0.0.11</code>) <strong>is disabled</strong>. Automatic service discovery by container name is exclusively supported on custom user-defined bridge networks created via <code>docker compose</code> or <code>docker network create</code>.</li>
+<li><strong>qBittorrent WebUI Security Policies:</strong> Contemporary qBittorrent builds enforce CSRF protection and Host header validation. When an automated service like Prowlarr sends an HTTP request with <code>Host: qbittorrent:8080</code> without an established session token, qBittorrent&#39;s embedded web server rejects the call or drops the connection unless local subnet exceptions are explicitly configured.</li>
+<li><strong>Shared Network Stacks via VPN (Gluetun):</strong> In privacy-focused homelab architectures, qBittorrent often shares the network namespace of a VPN container (<code>network_mode: &quot;service:gluetun&quot;</code>). In this configuration, qBittorrent lacks an independent virtual Ethernet interface (<code>eth0</code>) and has no addressable DNS hostname of its own. Other containers must communicate through the VPN service name (<code>gluetun</code>), and WebUI ports must be bound to the VPN container.</li>
+</ol>
+<hr>
+<h2 id="laboratory-diagnosis-and-inspection">Laboratory Diagnosis and Inspection</h2>
+<p>Use this diagnostic matrix to pinpoint your specific failure mode:</p>
+<table>
+<thead>
+<tr>
+<th>Error Symptom in Prowlarr</th>
+<th>Identified Root Cause</th>
+<th>Technical Resolution</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Connection refused (127.0.0.1:8080)</code></td>
+<td>Loopback address specified instead of Docker internal DNS name.</td>
+<td>Set Host to <code>qbittorrent</code> (or <code>gluetun</code>) in Prowlarr settings.</td>
+</tr>
+<tr>
+<td><code>Name or service not known: qbittorrent</code></td>
+<td>Containers belong to isolated Docker networks or default bridge network.</td>
+<td>Join both containers to a common user-defined bridge network in <code>docker-compose.yml</code>.</td>
+</tr>
+<tr>
+<td><code>Connection refused</code> (qBittorrent routed via Gluetun)</td>
+<td>Prowlarr targets <code>qbittorrent:8080</code> while the network stack belongs to <code>gluetun</code>.</td>
+<td>Point Host to <code>gluetun</code> and expose port <code>8080:8080</code> under the Gluetun service.</td>
+</tr>
+<tr>
+<td><code>Unauthorized / Test failed: Unauthorized</code></td>
+<td>Incorrect credentials or subnet authentication enforcement in qBittorrent.</td>
+<td>Whitelist Docker internal subnets in qBittorrent or reset WebUI credentials.</td>
+</tr>
+<tr>
+<td><code>403 Forbidden</code> / Connection drops</td>
+<td>CSRF protection or Host header validation active in qBittorrent WebUI.</td>
+<td>Disable Host header validation and CSRF for local subnets in <code>qBittorrent.conf</code>.</td>
+</tr>
+</tbody></table>
+<h3 id="network-inspection-commands">Network Inspection Commands</h3>
+<p>Run these commands on the Docker host to verify network membership and test TCP socket reachability:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Inspect Docker network assignments for both containers</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">-f</span> <span class="tok-cmt">&#39;{{json .NetworkSettings.Networks}}&#39; prowlarr | jq .</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">-f</span> <span class="tok-cmt">&#39;{{json .NetworkSettings.Networks}}&#39; qbittorrent | jq .</span>
+<span class="tok-cmt">
+# 2. Test DNS resolution and TCP port reachability from inside Prowlarr</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> prowlarr nc <span class="tok-prop">-zv</span> qbittorrent 8080<span class="tok-cmt">
+# Or using curl:</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> prowlarr <span class="tok-kw">curl</span> <span class="tok-prop">-I</span> <span class="tok-prop">-m</span> <span class="tok-num">5</span> http://qbittorrent:<span class="tok-num">8080</span>/api/v2/app/webapiVersion
+<span class="tok-cmt">
+# 3. Verify listening ports inside the qBittorrent container</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> qbittorrent <span class="tok-kw">ss</span> <span class="tok-prop">-tulpn</span>
+</code></pre>
+    </div>
+    
+<hr>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -430,8 +629,8 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-configure-a-shared-network-in-your-docker-compose-file">Step 1: Configure a shared network in your Docker Compose file</h3>
-<p>If your containers cannot resolve each other using their service names, define a dedicated bridge network in your <code>docker-compose.yml</code> file:</p>
+<h3 id="step-1-configure-a-shared-bridge-network-in-docker-compose">Step 1: Configure a Shared Bridge Network in Docker Compose</h3>
+<p>When running Prowlarr and qBittorrent within the same Compose project, establish a dedicated bridge network:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -451,14 +650,245 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Define a common bridge network in your compose</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">version</span>: <span class="tok-cmt">&#39;3.8&#39;</span>
+
+<span class="tok-kw">services</span>:
+  qbittorrent:
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    <span class="tok-kw">environment</span>:
+      - PUID=<span class="tok-num">1000</span>
+      - PGID=<span class="tok-num">1000</span>
+      - TZ=UTC
+      - WEBUI_PORT=<span class="tok-num">8080</span>
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;8080:8080&quot;</span>
+      - <span class="tok-str">&quot;6881:6881&quot;</span>
+      - <span class="tok-str">&quot;6881:6881/udp&quot;</span>
+    <span class="tok-kw">volumes</span>:
+      - ./qbittorrent/config:/config
+      - /data/torrents:/downloads
+    <span class="tok-kw">networks</span>:
+      - arr-net
+    <span class="tok-kw">restart</span>: unless-stopped
+
+  prowlarr:
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    <span class="tok-kw">environment</span>:
+      - PUID=<span class="tok-num">1000</span>
+      - PGID=<span class="tok-num">1000</span>
+      - TZ=UTC
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;9696:9696&quot;</span>
+    <span class="tok-kw">volumes</span>:
+      - ./prowlarr/config:/config
+    <span class="tok-kw">networks</span>:
+      - arr-net
+    <span class="tok-kw">restart</span>: unless-stopped
+
 <span class="tok-kw">networks</span>:
-  arr-network:
+  arr-net:
+    name: arr-net
     driver: bridge
 </code></pre>
     </div>
     
-<p>Ensure both the <code>prowlarr</code> and <code>qbittorrent</code> services are assigned to this network:</p>
+<p>If the applications reside in separate <code>docker-compose.yml</code> stacks, create an external network on the host:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Create shared bridge network once</span>
+<span class="tok-kw">docker</span> network create arr-net
+</code></pre>
+    </div>
+    
+<p>Then reference it in both Compose files:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">networks</span>:
+  arr-net:
+    external: true
+</code></pre>
+    </div>
+    
+<h3 id="step-2-disable-csrf-and-host-header-validation-in-qbittorrent">Step 2: Disable CSRF and Host Header Validation in qBittorrent</h3>
+<ol class="steps-list">
+
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="step-1-heading">Step 1</h4>
+            Open the qBittorrent WebUI in your browser (<code>http://HOST_IP:8080</code>).
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="step-2-heading">Step 2</h4>
+            Navigate to <strong>Options</strong> (gear icon or <code>Alt+O</code>) &gt; <strong>Web UI</strong> tab.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="step-3-heading">Step 3</h4>
+            In the <strong>Security</strong> section, uncheck:<ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="enable-cross-site-request-forgery-csrf-protection">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="enable-cross-site-request-forgery-csrf-protection-heading">Enable Cross-Site Request Forgery (CSRF) protection</h4>
+            .
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="enable-host-header-validation">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="enable-host-header-validation-heading">Enable Host header validation</h4>
+            .</li>
+</ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-6">
+          <div class="step-number">6</div>
+          <div class="step-body">
+            <h4 id="step-6-heading">Step 6</h4>
+            In the field <strong>Bypass authentication for clients on local subnets</strong>, enter Docker&#39;s internal subnet pools:
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>, <span class="tok-num">10.0</span>.<span class="tok-num">0.0</span>/<span class="tok-num">8</span>
+</code></pre>
+    </div>
+    
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-7">
+          <div class="step-number">7</div>
+          <div class="step-body">
+            <h4 id="step-7-heading">Step 7</h4>
+            Save your settings. If the WebUI is inaccessible, stop the container and edit <code>qBittorrent.conf</code> directly:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>[Preferences]
+WebUI\CSRFProtection=<span class="tok-kw">false</span>
+WebUI\HostHeaderValidation=<span class="tok-kw">false</span>
+WebUI\LocalHostAuth=<span class="tok-kw">false</span>
+WebUI\AuthSubnetWhitelist=<span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>
+</code></pre>
+    </div>
+    
+<h3 id="step-3-configure-download-client-settings-in-prowlarr">Step 3: Configure Download Client Settings in Prowlarr</h3>
+<ol>
+<li>Access the Prowlarr web interface (<code>http://HOST_IP:9696</code>).</li>
+<li>Go to <strong>Settings</strong> &gt; <strong>Download Clients</strong> &gt; click <strong>+</strong> and select <strong>qBittorrent</strong>.</li>
+<li>Fill in the connection parameters:<ul>
+<li><strong>Name:</strong> <code>qBittorrent</code></li>
+<li><strong>Enable:</strong> Checked</li>
+<li><strong>Host:</strong> <code>qbittorrent</code> (exact Docker service or container name)</li>
+<li><strong>Port:</strong> <code>8080</code> (internal WebUI port)</li>
+<li><strong>Use SSL:</strong> Unchecked</li>
+<li><strong>Username:</strong> Configured qBittorrent username (default: <code>admin</code>)</li>
+<li><strong>Password:</strong> Configured password</li>
+</ul>
+</li>
+<li>Click <strong>Test</strong>. You should receive a green confirmation banner. Click <strong>Save</strong>.</li>
+</ol>
+<hr>
+<h2 id="edge-case-troubleshooting">Edge Case Troubleshooting</h2>
+<h3 id="edge-case-1-qbittorrent-routed-through-gluetun-vpn">Edge Case 1: qBittorrent Routed Through Gluetun VPN</h3>
+<p>When qBittorrent routes traffic through Gluetun using <code>network_mode: &quot;service:gluetun&quot;</code>:</p>
+<ol>
+<li>qBittorrent <strong>cannot publish its own ports</strong>; all port bindings must be declared under <code>gluetun</code>.</li>
+<li>Communication must target the <code>gluetun</code> service name rather than <code>qbittorrent</code>.</li>
+</ol>
+<p><strong>Production Compose Configuration:</strong></p>
 
     <div class="code-container">
       <div class="code-header">
@@ -479,106 +909,82 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
-  prowlarr:
-    ...
+  gluetun:
+    <span class="tok-kw">image</span>: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;8080:8080&quot;</span><span class="tok-cmt"> # qBittorrent WebUI bound to Gluetun</span>
+      - <span class="tok-str">&quot;6881:6881&quot;</span>
+      - <span class="tok-str">&quot;6881:6881/udp&quot;</span>
+    <span class="tok-kw">environment</span>:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
     <span class="tok-kw">networks</span>:
-      - arr-network
+      - arr-net
+
   qbittorrent:
-    ...
-    <span class="tok-kw">networks</span>:
-      - arr-network
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: <span class="tok-str">&quot;service:gluetun&quot;</span>
+    <span class="tok-kw">depends_on</span>:
+      - gluetun
+    <span class="tok-kw">volumes</span>:
+      - ./qbittorrent/config:/config
+      - /data/torrents:/downloads
 </code></pre>
     </div>
     
-<h3 id="step-2-disable-csrf-protection-and-bypass-local-authentication-in-qbittorrent">Step 2: Disable CSRF protection and bypass local authentication in qBittorrent</h3>
-<p>qBittorrent&#39;s security engine will block API calls originating from other containers within the private network unless you configure WebUI access rules:</p>
-<ol class="steps-list">
+<p><strong>Prowlarr Configuration Adjustment:</strong> Set <strong>Host</strong> to <code>gluetun</code> and <strong>Port</strong> to <code>8080</code>.</p>
+<hr>
 
-        <li class="step-item" id="step-1">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Log in to the qBittorrent WebUI.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            Go to <strong>Options</strong> &gt; <strong>WebUI</strong>.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-3">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="step-3-heading">Step 3</h4>
-            Uncheck the box <strong>Enable Cross-Site Request Forgery (CSRF) protection</strong>.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-4">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h4 id="step-4-heading">Step 4</h4>
-            In the field <strong>Bypass authentication for clients on local subnets</strong>, enter your Docker network subnets:
-          </div>
-        </li>
-        
-</ol>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">PLAINTEXT</span>
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>
-</code></pre>
-    </div>
-    
-<h3 id="step-3-use-the-container-service-name-as-the-host-address">Step 3: Use the container service name as the host address</h3>
-<p>When configuring the Torrent client inside the Prowlarr panel, never use <code>localhost</code> or <code>127.0.0.1</code>. Instead, enter the exact Docker container service name:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">PLAINTEXT</span>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>Host: qbittorrent
-Port: <span class="tok-num">8080</span>
-</code></pre>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
     </div>
-    
+  </section>
+  
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-do-i-get-connection-refused-when-the-webui-opens-fine-in-my-desktop-browser">Why do I get Connection Refused when the WebUI opens fine in my desktop browser?</h3>
+<p>Your desktop browser reaches qBittorrent via your LAN IP and the host&#39;s forwarded port (<code>http://192.168.1.50:8080</code>). Prowlarr runs within an isolated container network. Attempting to use <code>localhost</code> or LAN IPs without proper NAT hairpinning causes the connection to fail.</p>
+<h3 id="is-it-safe-to-disable-csrf-protection-on-the-qbittorrent-webui">Is it safe to disable CSRF protection on the qBittorrent WebUI?</h3>
+<p>Yes, provided the WebUI is not forwarded directly to the public Internet via router port forwarding. Within an isolated Docker bridge network or behind a reverse proxy with authentication, disabling CSRF is the standard operational pattern required by REST API integrations.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -593,7 +999,7 @@ Port: <span class="tok-num">8080</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not expose your qBittorrent WebUI or Prowlarr API ports directly to the public Internet without a strong, custom access password. If you want remote access to your services, deploy a secure VPN tunnel (such as WireGuard or Tailscale) instead of executing port forwarding rules on your home router, securing your downloads from unauthorized access.</li>
+              
             </ul>
           </div>
 
@@ -643,7 +1049,7 @@ Port: <span class="tok-num">8080</span>
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -654,7 +1060,7 @@ Port: <span class="tok-num">8080</span>
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -739,13 +1145,13 @@ Port: <span class="tok-num">8080</span>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

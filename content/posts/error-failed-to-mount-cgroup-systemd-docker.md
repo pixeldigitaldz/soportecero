@@ -1,145 +1,145 @@
 ---
 title: 'Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux'
 description: >-
-  Repara el fallo Failed to mount cgroup cgroup2 o cgroup hierarchy v2 en
-  Docker, LXC y entornos systemd en distribuciones Linux modernas.
+  Guía técnica para solucionar fallos de montaje de cgroups v1 y cgroup2 en Docker,
+  runc y contenedores LXC/Proxmox en distribuciones Linux modernas.
 category: Sistemas y Servidores
 tags:
   - Docker
   - systemd
   - Linux
   - DevOps
+  - Proxmox
 readTime: 7 min
 date: '2026-09-14'
 ---
-Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux), es habitual encontrarse con el error `Failed to mount cgroup: No such file or directory` o `OCI runtime error: unable to apply cgroup configuration`. Esto sucede por el cambio de la jerarquía heredada (cgroup v1) al árbol unificado moderno (cgroup v2).
 
-## Análisis de Arquitectura y Causa Raíz
+Al iniciar contenedores con Docker, Podman o entornos virtualizados LXC/Proxmox en distribuciones modernas (Ubuntu 24.04, Debian 12, Arch Linux, Fedora), es habitual encontrarse con el fallo fatal `Failed to mount cgroup: No such file or directory`, `unable to apply cgroup configuration` o `mount: /sys/fs/cgroup/systemd: special device cgroup does not exist`.
 
-En entornos contenerizados, el motor de **Docker** se apoya en primitivas fundamentales del kernel de Linux: **Namespaces** (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y **Control Groups (cgroups v1/v2)** para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).
+Este error se origina en la transición arquitectónica del kernel de Linux: el abandono de la jerarquía multirraíz heredada (**cgroups v1**) en favor del árbol unificado (**cgroups v2**). En sistemas modernos con `systemd` v250+, el kernel monta cgroup2 por defecto en `/sys/fs/cgroup`. Cuando versiones legacy de Docker, runtimes OCI desactualizados (`runc` o `containerd`) o contenedores anidados en Proxmox/LXC intentan montar controladores independientes en pseudo-directorios de cgroup v1, el kernel deniega la operación con errores de montaje.
 
-Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio `dockerd`, el runtime OCI (`containerd` / `runc`) y el subsistema de red del host:
-1. **Comunicación con el socket IPC (`/var/run/docker.sock`):** El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo `docker` o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error `EACCES` o `ECONNREFUSED`.
-2. **Ciclo de vida del contenedor y estados OCI:** Durante la creación del contenedor (`container create / start`), `runc` solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento **Overlay2** (`lowerdir`, `upperdir` y `merged`). Si existe corrupción en las capas de imagen, agotamiento de inodos en `/var/lib/docker`, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).
-3. **Pila de red virtual y cadenas de iptables:** Para exponer puertos (`-p`), Docker manipula directamente las tablas `nat` y `filter` del subsistema Netfilter mediante cadenas personalizadas (`DOCKER`, `DOCKER-USER`). Reinicios no sincronizados del firewall (`ufw` o `firewalld`) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.
+## Matriz de Diagnóstico y Causa Raíz
 
-## Entorno de Laboratorio y Diagnóstico
+Antes de alterar la configuración del gestor de arranque o de Docker, identifica la causa exacta según la firma del error:
 
-Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
-
-| Causa | Solución |
-|---|---|
-| **Incompatibilidad entre Docker daemon y la jerarquía unificada cgroup v2 en kernels recientes** |
-
-Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
-
-```bash
-# 1. Comprobar el estado general del demonio Docker
-sudo systemctl status docker --no-pager -l
-
-# 2. Inspeccionar los últimos logs del contenedor afectado
-docker logs --tail 50 --timestamps NOMBRE_CONTENEDOR
-
-# 3. Verificar el uso de recursos y memoria en tiempo real
-docker stats --no-stream
-```
-
-- El comando `docker logs` con el parámetro `--tail 50` extrae únicamente las últimas 50 líneas emitidas en `stdout` y `stderr`, mientras que `--timestamps` permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.
-- El flag `--no-stream` en `docker stats` realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.
+| Firma del Error | Causa Raíz | Solución Técnica |
+|---|---|---|
+| `Failed to mount cgroup: No such file or directory` | El contenedor o runtime intenta montar controladores cgroup v1 en un host con cgroup v2 puro | Configurar el driver de cgroup de systemd o habilitar jerarquía híbrida en GRUB |
+| `unable to start container process: error applying cgroup configuration` | Incompatibilidad de versión entre `runc` y las cuotas de memoria/CPU de cgroup2 | Actualizar Docker CE / containerd a la versión upstream más reciente |
+| `systemd[1]: Failed to mount cgroup /sys/fs/cgroup/systemd` (LXC) | Contenedor Proxmox LXC sin delegación de namespaces o nesting habilitado | Habilitar `features: nesting=1` en `/etc/pve/lxc/ID.conf` |
+| `cgroup v2 is not supported by driver cgroupfs` | Docker daemon configurado con el driver legacy `cgroupfs` en lugar de `systemd` | Declarar `native.cgroupdriver=systemd` en `/etc/docker/daemon.json` |
 
 ## Implementación Técnica Paso a Paso
 
-Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:
-
-Ejecuta este comando para comprobar si tu sistema está utilizando la jerarquía v1 tradicional o v2 unificada:
+### Paso 1: Identificar la Versión de cgroup en Ejecución en el Host
+Inspecciona qué sistema de archivos de control groups está activo en el kernel de tu servidor:
 ```bash
 stat -fc %T /sys/fs/cgroup/
 ```
-- Si la respuesta es `cgroup2fs`, el kernel opera en **cgroup v2**.
-- Si la respuesta es `tmpfs`, opera en el modo tradicional **cgroup v1**.
+- **Salida `cgroup2fs`:** Confirma que el host utiliza la jerarquía unificada **cgroup v2**.
+- **Salida `tmpfs`:** Indica que el host está ejecutando la jerarquía heredada **cgroup v1**.
 
-### Paso 2: Ajustar la jerarquía de cgroups en el gestor de arranque GRUB
-Si utilizas software o versiones de Docker antiguas incompatibles con cgroup v2, puedes forzar la compatibilidad heredada:
+Para listar los controladores activos expuestos por el kernel:
 ```bash
-sudo nano /etc/default/grub
+cat /sys/fs/cgroup/cgroup.controllers
 ```
-Localiza la variable `GRUB_CMDLINE_LINUX_DEFAULT` y añade el parámetro:
-```plaintext
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash systemd.unified_cgroup_hierarchy=0"
-```
-Actualiza la configuración de GRUB y reinicia:
-```bash
-sudo update-grub
-sudo reboot
-```
+*(Deberías observar controladores como: `cpuset cpu io memory pids`).*
 
-### Paso 3: Configurar Docker daemon para soporte nativo de cgroup v2
-La solución recomendada a largo plazo es actualizar Docker y configurar el controlador nativo `systemd` en `/etc/docker/daemon.json`:
+---
+
+### Paso 2: Configurar Docker para Utilizar Nativamente el Driver de systemd
+La causa más frecuente de incompatibilidad en servidores de producción es utilizar el driver heredado `cgroupfs`. En distribuciones con systemd, ambos sistemas intentan gestionar los límites de memoria y cuotas de forma concurrente, provocando deadlocks y fallos de montaje.
+
+Configura a Docker para delegar la gestión de cgroups a systemd editando `/etc/docker/daemon.json`:
 ```json
 {
-  "exec-opts": ["native.cgroupdriver=systemd"]
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "50m",
+    "max-file": "3"
+  }
 }
 ```
-Aplica el cambio reiniciando el servicio:
+Aplica los cambios recargando el servicio:
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
-
-## Resolución de Casos Borde (Troubleshooting)
-
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
-
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
-
-Para verificar y solventar bloqueos por contexto de seguridad:
+Verifica que el driver se haya activado correctamente:
 ```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
-
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
+docker info | grep -i "cgroup driver"
 ```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
+*(Debe confirmar: `Cgroup Driver: systemd`).*
+
+---
+
+### Paso 3: Habilitar Compatibilidad Híbrida mediante Parámetros de GRUB (Fallback)
+Si tu servidor debe ejecutar contenedores muy antiguos (como imágenes legacy basadas en CentOS 6/7 o herramientas de orquestación que no soportan cgroup v2), puedes instruir al kernel de Linux para que reactive la jerarquía híbrida o v1 heredada:
+
+1. Abre el archivo de configuración del gestor de arranque:
 ```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
+sudo nano /etc/default/grub
 ```
-
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
-
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
-
-Para identificar y limpiar procesos bloqueados de forma segura:
+2. Localiza la línea `GRUB_CMDLINE_LINUX_DEFAULT` y añade el parámetro `systemd.unified_cgroup_hierarchy=0`:
+```plaintext
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash systemd.unified_cgroup_hierarchy=0"
+```
+*(Opcional: Si necesitas compatibilidad total con swap accounting en cgroup v1, añade también `cgroup_enable=memory swapaccount=1`).*
+3. Actualiza la configuración de GRUB y reinicia el servidor:
 ```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
+# En sistemas Debian / Ubuntu:
+sudo update-grub
 
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
+# En sistemas RHEL / Fedora / Arch:
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+sudo reboot
 ```
+Tras el reinicio, `stat -fc %T /sys/fs/cgroup/` devolverá `tmpfs`, permitiendo a los contenedores heredados montar cgroups v1 sin errores.
 
-### Verificación de Logs en Tiempo Real y Validación en Producción
+---
 
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
+### Paso 4: Solucionar el Error en Contenedores LXC de Proxmox
+Si ejecutas Docker dentro de un contenedor LXC en Proxmox VE, el contenedor se ejecuta sin privilegios de namespace por defecto, impidiendo que el motor interno monte los subárboles de cgroup.
+
+En el nodo host de Proxmox, edita el archivo de configuración del contenedor LXC afectado:
 ```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
-
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
+sudo nano /etc/pve/lxc/100.conf
 ```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
+*(Reemplaza `100` por el ID exacto de tu contenedor LXC).*
 
-## 🛡️ Consejos de Prevención
+Añade las siguientes directivas de nesting y compatibilidad con Docker:
+```ini
+features: nesting=1,keyctl=1
+lxc.apparmor.profile: unconfined
+lxc.cgroup2.devices.allow: a
+lxc.cap.drop:
+```
+Guarda el archivo y reinicia el contenedor desde la interfaz web de Proxmox o mediante `pct restart 100`.
 
-* Mantén Docker Engine y containerd actualizados a versiones oficiales para evitar problemas de compatibilidad con cgroup v2.
-* Evita desactivar cgroup v2 permanentemente, ya que el soporte para v1 será depreciado en futuras versiones del kernel Linux.
+---
 
-## Preguntas Frecuentes
+### Paso 5: Actualizar runc y containerd
+En entornos actualizados desde versiones anteriores de Ubuntu (como migrar de 20.04 a 22.04/24.04), es común que el binario de `runc` haya quedado anclado a una versión antigua incompatible con los descriptores de archivo de cgroup2.
 
-### ¿Cuál es la diferencia entre cgroup v1 y cgroup v2 en Linux?
-cgroup v1 permitía jerarquías independientes para CPU, memoria y E/S, lo que provocaba bloqueos. cgroup v2 unifica todos los controladores en un único árbol jerárquico gestionado eficientemente.
+Verifica y actualiza los componentes del runtime:
+```bash
+# Comprobar la versión instalada de runc
+runc --version
 
-### ¿Cómo soluciono este fallo dentro de contenedores LXC en Proxmox?
-En Proxmox VE añade `lxc.cgroup2.memory.max` o habilita la opción de virtualización de características avanzadas nesting=1 en el archivo /etc/pve/lxc/<ID>.conf.
+# Actualizar el runtime oficial de containerd y Docker
+sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io
+```
+
+## Prácticas en Producción y Ventajas de cgroup v2
+- **Aislamiento Seguro y Rootless Containers:** cgroup v2 fue diseñado con un modelo de propiedad de procesos estricto, permitiendo ejecutar Docker y Podman en modo Rootless (sin privilegios de superusuario) de manera segura.
+- **Métricas Confiables de OOM Killer:** Bajo cgroup v1, un contenedor podía agotar la memoria y provocar el congelamiento de procesos ajenos debido a que el controlador de memoria estaba desacoplado del de I/O. En cgroup v2, la contabilidad de memoria anónima y de caché de páginas es unificada, garantizando que el OOM Killer elimine únicamente los procesos del contenedor infractor.
+
+## Preguntas Frecuentes (FAQ)
+
+### ¿Debo mantener cgroup v1 de forma permanente en mi servidor?
+No. Upstream Linux, Kubernetes y las principales distribuciones han declarado cgroup v1 como obsoleto. El parámetro `systemd.unified_cgroup_hierarchy=0` debe utilizarse únicamente como una solución temporal mientras se actualizan las imágenes o runtimes de contenedores a versiones compatibles con cgroup v2.
+
+### ¿Por qué falla systemd al ejecutarse dentro de un contenedor Docker?
+Para ejecutar systemd como proceso PID 1 dentro de un contenedor (por ejemplo, para pruebas de Ansible), debes montar el cgroup del host en modo lectura/escritura (`-v /sys/fs/cgroup:/sys/fs/cgroup:rw`) y pasar el parámetro `--cgroupns host`.

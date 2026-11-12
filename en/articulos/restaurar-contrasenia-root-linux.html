@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to reset a forgotten root user password in Linux systems | SoporteCero</title>
-  <meta name="description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
-  <meta name="keywords" content="Linux, Sysadmin, Security">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL) | SoporteCero</title>
+  <meta name="description" content="Step-by-step guide to recover administrative root access on Linux servers using GRUB kernel parameters, init=/bin/bash, emergency targets, and SELinux relabeling.">
+  <meta name="keywords" content="Linux, Sysadmin, Security, Ubuntu, RHEL">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="How to reset a forgotten root user password in Linux systems">
-  <meta property="og:description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
+  <meta property="og:title" content="How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)">
+  <meta property="og:description" content="Step-by-step guide to recover administrative root access on Linux servers using GRUB kernel parameters, init=/bin/bash, emergency targets, and SELinux relabeling.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="Sysadmin">
   <meta property="article:tag" content="Security">
+  <meta property="article:tag" content="Ubuntu">
+  <meta property="article:tag" content="RHEL">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to reset a forgotten root user password in Linux systems">
-  <meta name="twitter:description" content="Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.">
+  <meta name="twitter:title" content="How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)">
+  <meta name="twitter:description" content="Step-by-step guide to recover administrative root access on Linux servers using GRUB kernel parameters, init=/bin/bash, emergency targets, and SELinux relabeling.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to reset a forgotten root user password in Linux systems",
-  "description": "Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.",
+  "headline": "How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)",
+  "description": "Step-by-step guide to recover administrative root access on Linux servers using GRUB kernel parameters, init=/bin/bash, emergency targets, and SELinux relabeling.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
-  "keywords": "Linux, Sysadmin, Security",
+  "keywords": "Linux, Sysadmin, Security, Ubuntu, RHEL",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "How to reset a forgotten root user password in Linux systems",
+      "name": "How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)",
       "item": "https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html"
     }
   ]
@@ -125,8 +127,8 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to reset a forgotten root user password in Linux systems",
-  "description": "Step-by-step guide to recover root administrative access to your physical or virtual server by modifying the GRUB bootloader.",
+  "name": "How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)",
+  "description": "Step-by-step guide to recover administrative root access on Linux servers using GRUB kernel parameters, init=/bin/bash, emergency targets, and SELinux relabeling.",
   "step": [
     {
       "@type": "HowToStep",
@@ -136,7 +138,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Restart the server."
+          "text": "Reboot your physical server or virtual machine."
         }
       ]
     },
@@ -148,9 +150,45 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "When the GRUB operating system selection menu screen appears, immediately press the e key on your keyboard to edit the boot variables of the selected kernel."
+          "text": "When the GRUB boot menu appears, immediately press the e key to edit the configuration of the default highlighted kernel entry."
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/restaurar-contrasenia-root-linux.html#step-3",
+      "name": "Step 3",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Use the arrow keys to scroll down and locate the kernel command line starting with linux or linux64:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does &#39;passwd&#39; return &#39;Authentication token manipulation error&#39;?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This error occurs when the filesystem is still mounted read-only (ro), or when the disk is 100% full with zero available storage blocks. Remount the filesystem as writable (mount -o remount,rw /) before invoking passwd."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I reset the password if the GRUB menu is hidden or boots too fast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If the GRUB menu is configured with TIMEOUT=0, repeatedly press or hold the Shift key (for legacy BIOS) or tap the Escape key (for UEFI) immediately upon machine power-on to force the GRUB menu to display."
+      }
     }
   ]
 }
@@ -166,7 +204,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -195,12 +233,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -230,7 +268,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -243,22 +281,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Systems & Servers</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">How to reset a forgotten root user password in Linux systems</span>
+        <span style="color: var(--text-secondary);">How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">How to reset a forgotten root user password in Linux systems</h1>
+        <h1 id="post-title">How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -270,7 +308,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -286,7 +324,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Losing the root administrator password on a physical Linux server or virtual machine blocks all access to system configurations. Fortunately, if you have physical access or access to the virtualization emulator console (KVM/IPMI), you can bypass authentication by editing kernel parameters in GRUB.</p>
+          <p>Losing or misplacing the administrative <code>root</code> password or finding your local <code>sudo</code> user account locked out on a physical Linux server or virtual machine can bring maintenance operations to a complete standstill.</p>
+<p>Fortunately, as long as you have console access (via a physical monitor and keyboard, an out-of-band management interface like IPMI/iDRAC/iLO, or a cloud provider&#39;s web VNC/serial console), Linux allows administrators to intercept the boot sequence. By instructing the <strong>GRUB bootloader</strong> to launch a root shell directly—bypassing the standard initialization daemon and authentication layer—you can remount the root filesystem in read-write mode and assign a new password within minutes.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -303,25 +342,37 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Forgotten or locked root superuser password</strong></div>
+            <div class="diag-value"><strong>Forgotten or locked root password on Debian/Ubuntu systems</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Boot in single-user mode by appending <code>init=/bin/bash</code> in GRUB</div>
+            <div class="diag-value">Append <code>init=/bin/bash</code> to kernel line in GRUB and remount root with <code>rw</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Read-only mounted filesystem during recovery</strong></div>
+            <div class="diag-value"><strong>Forgotten root password on RHEL / CentOS / Rocky Linux / Fedora</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Remount read/write: <code>mount -o remount,rw /</code> and reset password via <code>passwd</code></div>
+            <div class="diag-value">Append <code>rd.break</code> in GRUB, remount <code>/sysroot</code>, and touch <code>/.autorelabel</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Root password reset ignored or login fails on reboot due to SELinux</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Execute <code>touch /.autorelabel</code> to ensure security context recalculation</div>
           </div></div></div>
       </div>
     </section>
@@ -369,25 +420,42 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-acceder-e-interceptar-el-cargador-de-arranque-grub" class="toc-sublink">
+            <a href="#method-1-the-initbinbash-technique-debian-ubuntu-arch-linux" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Acceder e interceptar el cargador de arranque GRUB</span>
+              <span class="toc-subtext">Method 1: The init=/bin/bash Technique (Debian, Ubuntu, Arch Linux)</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-modificar-los-parametros-del-kernel" class="toc-sublink">
+            <a href="#method-2-the-rdbreak-emergency-mode-rhel-rocky-almalinux-fedora" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Modificar los parámetros del kernel</span>
+              <span class="toc-subtext">Method 2: The rd.break Emergency Mode (RHEL, Rocky, AlmaLinux, Fedora)</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-39passwd39-return-39authentication-token-manipulation-error39" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does &#39;passwd&#39; return &#39;Authentication token manipulation error&#39;?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave" class="toc-sublink">
+            <a href="#can-i-reset-the-password-if-the-grub-menu-is-hidden-or-boots-too-fast" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Montar el disco en modo escritura y cambiar la clave</span>
+              <span class="toc-subtext">Can I reset the password if the GRUB menu is hidden or boots too fast?</span>
             </a>
           </li>
         
@@ -406,14 +474,15 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-acceder-e-interceptar-el-cargador-de-arranque-grub">Step 1: Acceder e interceptar el cargador de arranque GRUB</h3>
+<h3 id="method-1-the-initbinbash-technique-debian-ubuntu-arch-linux">Method 1: The <code>init=/bin/bash</code> Technique (Debian, Ubuntu, Arch Linux)</h3>
+<p>This universal technique instructs the Linux kernel to bypass the standard <code>systemd</code> init process and execute a raw Bourne Again Shell with immediate root authority:</p>
 <ol class="steps-list">
 
         <li class="step-item" id="step-1">
           <div class="step-number">1</div>
           <div class="step-body">
             <h4 id="step-1-heading">Step 1</h4>
-            Restart the server.
+            Reboot your physical server or virtual machine.
           </div>
         </li>
         
@@ -422,15 +491,45 @@
           <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="step-2-heading">Step 2</h4>
-            When the <strong>GRUB</strong> operating system selection menu screen appears, immediately press the <code>e</code> key on your keyboard to edit the boot variables of the selected kernel.
+            When the <strong>GRUB boot menu</strong> appears, immediately press the <code>e</code> key to edit the configuration of the default highlighted kernel entry.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="step-3-heading">Step 3</h4>
+            Use the arrow keys to scroll down and locate the kernel command line starting with <code>linux</code> or <code>linux64</code>:
           </div>
         </li>
         
 </ol>
-<h3 id="step-2-modificar-los-parametros-del-kernel">Step 2: Modificar los parámetros del kernel</h3>
-<ol>
-<li>Scroll down using the arrow keys to locate the line starting with the word <code>linux</code> or <code>linux16</code>.</li>
-<li>Go to the end of that line, delete the silent boot words (such as <code>rhgb quiet</code>) and add the following command to force the kernel to open a secure command prompt instead of the login interface:</li>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">PLAINTEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>linux /boot/vmlinuz-<span class="tok-num">6.8</span>.<span class="tok-num">0</span>-generic root=UUID=... ro quiet splash
+</code></pre>
+    </div>
+    
+<ol start="4">
+<li>Move your cursor to the end of that line. Remove words like <code>quiet</code> and <code>splash</code>, and append:</li>
 </ol>
 
     <div class="code-container">
@@ -455,11 +554,10 @@
 </code></pre>
     </div>
     
-<ol start="3">
-<li>Press the <code>Ctrl + X</code> or <code>F10</code> key combination to boot the server with this new temporary configuration.</li>
+<ol start="5">
+<li>Press <code>Ctrl + X</code> (or <code>F10</code>) to boot the kernel with this temporary parameter.</li>
+<li>The system will boot instantly into a root prompt:</li>
 </ol>
-<h3 id="step-3-montar-el-disco-en-modo-escritura-y-cambiar-la-clave">Step 3: Montar el disco en modo escritura y cambiar la clave</h3>
-<p>The system will boot directly as superuser without asking for a password, but with the disk configured in read-only mode. Enable write access to save changes:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -479,20 +577,349 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Remontar la partición raíz con privilegios de escritura</span>
-<span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /
-<span class="tok-cmt">
-# Modificar la clave del usuario administrador root</span>
-passwd root
-<span class="tok-cmt">
-# Forzar el reetiquetado de seguridad si usas SELinux (esencial en RHEL/Fedora/Rocky)</span>
-touch /.autorelabel
-<span class="tok-cmt">
-# Reiniciar el equipo</span>
-exec /sbin/init
+      <pre class="formatted-pre"><code>root@(none):<span class="tok-cmt">/#</span>
 </code></pre>
     </div>
     
+<ol start="7">
+<li>By default, the root filesystem is mounted as read-only (<code>ro</code>). Remount it with read-write permissions:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /
+</code></pre>
+    </div>
+    
+<ol start="8">
+<li>Reset the root user password (or unlock your sudo user):</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>passwd root<span class="tok-cmt">
+# Or reset a standard user:</span>
+passwd username
+</code></pre>
+    </div>
+    
+<ol start="9">
+<li>Sync the disk buffers to ensure password changes are flushed to hardware:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>sync
+</code></pre>
+    </div>
+    
+<ol start="10">
+<li>If your system runs SELinux (or to ensure proper state restoration), trigger a reboot:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>exec /sbin/init<span class="tok-cmt">
+# Or force an immediate hardware reboot:</span>
+<span class="tok-kw">reboot</span> <span class="tok-prop">-f</span>
+</code></pre>
+    </div>
+    
+<h3 id="method-2-the-rdbreak-emergency-mode-rhel-rocky-almalinux-fedora">Method 2: The <code>rd.break</code> Emergency Mode (RHEL, Rocky, AlmaLinux, Fedora)</h3>
+<p>Red Hat Enterprise Linux and its enterprise derivatives enforce strict systemd and SELinux policies that can reject direct <code>init=/bin/bash</code> resets. Use the native <code>rd.break</code> dracut emergency target:</p>
+<ol>
+<li>At the GRUB menu, press <code>e</code> to edit the kernel line.</li>
+<li>Locate the line starting with <code>linux</code> or <code>linux16</code> and append <code>rd.break</code> to the end of the line:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">PLAINTEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>linux16 /vmlinuz-... root=... quiet rd.<span class="tok-kw">break</span>
+</code></pre>
+    </div>
+    
+<ol start="3">
+<li>Press <code>Ctrl + X</code> to boot into the emergency initramfs shell:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>switch_root:<span class="tok-cmt">/#</span>
+</code></pre>
+    </div>
+    
+<ol start="4">
+<li>In emergency mode, the real root filesystem is mounted read-only at <code>/sysroot</code>. Remount it as writable:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /sysroot
+</code></pre>
+    </div>
+    
+<ol start="5">
+<li>Enter the root chroot environment:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>chroot /sysroot
+</code></pre>
+    </div>
+    
+<ol start="6">
+<li>Change the password:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>passwd root
+</code></pre>
+    </div>
+    
+<ol start="7">
+<li><strong>Crucial SELinux Step:</strong> Inform SELinux to relabel the shadow password file on the next boot:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>touch /.autorelabel
+</code></pre>
+    </div>
+    
+<p><em>(Without <code>/.autorelabel</code>, SELinux will block the modified <code>/etc/shadow</code> file from loading, preventing login on reboot).</em>
+8. Exit the chroot and reboot:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>exit
+exit
+</code></pre>
+    </div>
+    
+<p>The system will reboot, perform an automated SELinux relabeling pass (which may take 1 to 2 minutes), and bring you to the standard login prompt with your new password.</p>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="why-does-39passwd39-return-39authentication-token-manipulation-error39">Why does &#39;passwd&#39; return &#39;Authentication token manipulation error&#39;?</h3>
+<p>This error occurs when the filesystem is still mounted read-only (<code>ro</code>), or when the disk is 100% full with zero available storage blocks. Remount the filesystem as writable (<code>mount -o remount,rw /</code>) before invoking <code>passwd</code>.</p>
+<h3 id="can-i-reset-the-password-if-the-grub-menu-is-hidden-or-boots-too-fast">Can I reset the password if the GRUB menu is hidden or boots too fast?</h3>
+<p>If the GRUB menu is configured with <code>TIMEOUT=0</code>, repeatedly press or hold the <code>Shift</code> key (for legacy BIOS) or tap the <code>Escape</code> key (for UEFI) immediately upon machine power-on to force the GRUB menu to display.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -507,7 +934,8 @@ exec /sbin/init
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>The ability to reset passwords in this way is a kernel feature, but it represents a major security risk if an attacker has physical access to your local servers. Protect your production system&#39;s bootloader by setting an access password for the GRUB console (<code>grub-mkpasswd-pbkdf2</code>), which will prevent unauthorized users from editing kernel parameters without prior authentication.</li>
+              <li><strong>Password-Protect the GRUB Bootloader:</strong> The ability to bypass authentication via kernel flags demonstrates why physical security is paramount. In enterprise environments, protect GRUB by generating an encrypted PBKDF2 password using <code>grub-mkpasswd-pbkdf2</code> and declaring superusers in <code>/etc/grub.d/40_custom</code>. This requires users to enter a password before accessing GRUB&#39;s <code>e</code> edit screen.</li>
+<li><strong>Enable Full-Disk Encryption (LUKS):</strong> If a server is physically stolen or an unencrypted hard drive is mounted on another machine, anyone can read plaintext files. Deploying LUKS full-disk encryption prevents unauthorized filesystem manipulation even if an attacker boots external recovery media.</li>
             </ul>
           </div>
 
@@ -557,7 +985,7 @@ exec /sbin/init
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -568,7 +996,7 @@ exec /sbin/init
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -612,18 +1040,18 @@ exec /sbin/init
       </article>
       
 
-      <!-- Related Card: How to Resize an LVM Volume in Linux When the Disk Runs Out of Space -->
+      <!-- Related Card: How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-disk-space-full-lvm-resize.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Resize an LVM Volume in Linux When the Disk Runs Out of Space</a>
+              <a href="../articulos/error-disk-space-full-lvm-resize.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -653,13 +1081,13 @@ exec /sbin/init
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

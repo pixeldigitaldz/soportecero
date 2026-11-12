@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>Error Docker: failed to create shim task: OCI runtime create failed | SoporteCero</title>
-  <meta name="description" content="How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers.">
+  <meta name="description" content="Comprehensive guide to resolving the 'failed to create shim task: OCI runtime create failed: executable file not found' error in Docker, containerd, and Alpine Linux.">
   <meta name="keywords" content="Docker, DevOps, Containers, Linux">
-  <meta name="robots" content="noindex, follow">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -22,7 +22,7 @@
   
   <!-- Open Graph -->
   <meta property="og:title" content="Error Docker: failed to create shim task: OCI runtime create failed">
-  <meta property="og:description" content="How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers.">
+  <meta property="og:description" content="Comprehensive guide to resolving the 'failed to create shim task: OCI runtime create failed: executable file not found' error in Docker, containerd, and Alpine Linux.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -42,7 +42,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Error Docker: failed to create shim task: OCI runtime create failed">
-  <meta name="twitter:description" content="How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers.">
+  <meta name="twitter:description" content="Comprehensive guide to resolving the 'failed to create shim task: OCI runtime create failed: executable file not found' error in Docker, containerd, and Alpine Linux.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -69,7 +69,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Error Docker: failed to create shim task: OCI runtime create failed",
-  "description": "How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers.",
+  "description": "Comprehensive guide to resolving the 'failed to create shim task: OCI runtime create failed: executable file not found' error in Docker, containerd, and Alpine Linux.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Systems & Servers",
@@ -127,41 +127,53 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Error Docker: failed to create shim task: OCI runtime create failed",
-  "description": "How to fix failed to create shim task OCI runtime create failed executable file not found when launching Docker containers.",
+  "description": "Comprehensive guide to resolving the 'failed to create shim task: OCI runtime create failed: executable file not found' error in Docker, containerd, and Alpine Linux.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#convert-windows-crlf-line-endings-to-unix-lf",
-      "name": "Convert Windows CRLF Line Endings to Unix LF",
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#sanitize-crlf-carriage-returns-windows-to-unix",
+      "name": "Sanitize CRLF Carriage Returns (Windows to Unix)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If your entrypoint.sh script was touched on Windows or committed with Git core.autocrlf enabled, carriage returns (\\r) corrupt the shebang line. Linux tries to resolve /bin/sh\\r, failing instantly:"
+          "text": "If the script was authored on Windows or checked out with Git&#39;s core.autocrlf enabled, convert line endings to POSIX-compliant Line Feeds (LF): Enforce strict line ending preservation across multi-platform teams by creating a .gitattributes file in your repository root:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#grant-explicit-execution-permissions-in-dockerfile",
-      "name": "Grant Explicit Execution Permissions in Dockerfile",
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#ensure-shebang-and-shell-compatibility",
+      "name": "Ensure Shebang and Shell Compatibility",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Ensure execution permissions are permanently baked into the image layers during docker build:"
+          "text": "In lightweight container images such as Alpine Linux (alpine:3.20), /bin/bash does not exist by default; /bin/sh links to BusyBox ash. Ensure scripts use POSIX-compliant syntax and standard shebangs: If your entrypoint relies on Bash-specific constructs (arrays, [[ ... ]], process substitution), install bash explicitly in the Dockerfile:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#validate-shebang-and-alpine-linux-compatibility",
-      "name": "Validate Shebang and Alpine Linux Compatibility",
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#resolve-dynamic-linker-mismatches-glibc-vs-musl",
+      "name": "Resolve Dynamic Linker Mismatches (glibc vs musl)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Check that your script&#39;s shebang calls an interpreter installed in the base image. Alpine Linux does not bundle /bin/bash by default, requiring /bin/sh: When using JSON exec syntax in ENTRYPOINT [&quot;entrypoint.sh&quot;], always provide the absolute path ([&quot;/usr/local/bin/entrypoint.sh&quot;]) or ensure the target directory is in $PATH."
+          "text": "When building in Go, Rust, or C++ on Ubuntu or Debian and copying the output into an Alpine runtime container, the dynamic loader will fail. For Golang Applications: Produce an entirely static, dependency-free binary by disabling CGO: For CGO-Dependent or Third-Party Binaries: If the binary requires glibc libraries, install Alpine&#39;s binary compatibility layer: Alternatively, switch your runtime stage to debian:bookworm-slim to match the compilation toolchain:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#validate-exec-syntax-and-file-permissions",
+      "name": "Validate Exec Syntax and File Permissions",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "The OCI specification recommends the JSON array syntax for ENTRYPOINT and CMD: When using bind mounts in local development (-v $(pwd):/app), verify that the host script retains executable permissions:"
         }
       ]
     }
@@ -175,18 +187,18 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does this error specifically hit Alpine-based Docker images?",
+      "name": "Why does docker logs output nothing when this error occurs?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Alpine uses musl libc instead of glibc. Compiled binaries and scripts with dynamic dependencies targeting GNU glibc will fail with executable file not found unless libc6-compat or gcompat is installed."
+        "text": "Because the container process never spawns. The failure takes place during runc&#39;s execve call before standard output (stdout) and standard error (stderr) file descriptors can be bound to the container application."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I debug a crashing container that exits before inspection?",
+      "name": "What is the difference between Shell syntax and Exec syntax in Dockerfile ENTRYPOINT?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Override the container entrypoint by launching a raw shell: docker run --rm -it --entrypoint /bin/sh my-image."
+        "text": "Exec syntax ([&quot;binary&quot;, &quot;arg1&quot;]) executes the program directly as PID 1, ensuring proper delivery of UNIX signals (SIGTERM, SIGINT). Shell syntax (ENTRYPOINT binary arg1) wraps execution in /bin/sh -c, which mandates the existence of /bin/sh in the base image."
       }
     }
   ]
@@ -203,7 +215,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -232,12 +244,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -267,7 +279,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -280,7 +292,7 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Systems & Servers</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
@@ -295,7 +307,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -307,7 +319,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 8 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -323,46 +335,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When running <code>docker run</code> or <code>docker compose up</code>, containerd may abort container execution with <code>failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: &quot;...&quot;: executable file not found in $PATH</code>. This fatal error prevents container startup because the Linux host kernel cannot invoke the binary or script defined in <code>ENTRYPOINT</code> or <code>CMD</code>.</p>
-
-    <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
-    <section class="diagnostic-console" aria-labelledby="diag-heading">
-      <div class="diagnostic-console-header">
-        <div class="diag-console-title-group">
-          <span class="diag-pulse-dot" aria-hidden="true"></span>
-          <h3 id="technical-diagnostics-amp-root-cause-analysis">Technical Diagnostics &amp; Root Cause Analysis</h3>
-        </div>
-        <span class="diag-console-badge">Lab Environment</span>
-      </div>
-      <div class="diagnostic-console-body">
-        <div class="diagnostic-cards"><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
-            </div>
-            <div class="diag-value"><strong>ENTRYPOINT or CMD binary missing inside container image or lacks execution rights</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
-            </div>
-            <div class="diag-value">Verify absolute binary path and apply chmod +x in Dockerfile</div>
-          </div></div><div class="diag-card">
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
-            </div>
-            <div class="diag-value"><strong>Windows CRLF line endings present in entrypoint.sh shell script</strong></div>
-          </div>
-          <div class="diag-row">
-            <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
-            </div>
-            <div class="diag-value">Convert entrypoint script to Unix LF format with dos2unix entrypoint.sh</div>
-          </div></div></div>
-      </div>
-    </section>
-
+          
     <nav class="toc-container" aria-label="Table of contents">
       <div class="toc-header">
         <div class="toc-header-left">
@@ -382,16 +355,23 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#lab-environment-amp-diagnostics" class="toc-link">
+          <a href="#architectural-analysis-and-root-cause" class="toc-link">
             <span class="toc-number">01</span>
-            <span class="toc-text">Lab Environment &amp; Diagnostics</span>
+            <span class="toc-text">Architectural Analysis and Root Cause</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#laboratory-diagnosis-and-inspection" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">Laboratory Diagnosis and Inspection</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#technical-diagnostics-amp-root-cause-analysis" class="toc-sublink">
+            <a href="#diagnostic-commands" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Technical Diagnostics &amp; Root Cause Analysis</span>
+              <span class="toc-subtext">Diagnostic Commands</span>
             </a>
           </li>
         
@@ -400,30 +380,55 @@
       
         <li class="toc-item">
           <a href="#step-by-step-technical-implementation" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions</span>
+          <a href="#edge-case-troubleshooting" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Edge Case Troubleshooting</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-this-error-specifically-hit-alpine-based-docker-images" class="toc-sublink">
+            <a href="#edge-case-1-bind-mount-overrides-in-docker-compose" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does this error specifically hit Alpine-based Docker images?</span>
+              <span class="toc-subtext">Edge Case 1: Bind Mount Overrides in Docker Compose</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#how-do-i-debug-a-crashing-container-that-exits-before-inspection" class="toc-sublink">
+            <a href="#edge-case-2-cpu-architecture-mismatch-amd64-vs-arm64" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How do I debug a crashing container that exits before inspection?</span>
+              <span class="toc-subtext">Edge Case 2: CPU Architecture Mismatch (AMD64 vs ARM64)</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">05</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-docker-logs-output-nothing-when-this-error-occurs" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does docker logs output nothing when this error occurs?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-is-the-difference-between-shell-syntax-and-exec-syntax-in-dockerfile-entrypoint" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What is the difference between Shell syntax and Exec syntax in Dockerfile ENTRYPOINT?</span>
             </a>
           </li>
         
@@ -433,21 +438,83 @@
         </ul>
       </div>
     </nav>
-    
-    
-<h2 id="step-by-step-technical-implementation">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          Step-by-Step Technical Implementation
-        </h2>
-<ol class="steps-list">
+    <p>When executing <code>docker run</code> or <code>docker compose up</code>, the containerd daemon can abruptly abort container execution with the following message:</p>
 
-        <li class="step-item" id="convert-windows-crlf-line-endings-to-unix-lf">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="convert-windows-crlf-line-endings-to-unix-lf-heading">Step 1: Convert Windows CRLF Line Endings to Unix LF</h4>
-            <p>If your <code>entrypoint.sh</code> script was touched on Windows or committed with Git core.autocrlf enabled, carriage returns (<code>\r</code>) corrupt the shebang line. Linux tries to resolve <code>/bin/sh\r</code>, failing instantly:</p>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: <span class="tok-str">&quot;/entrypoint.sh&quot;</span>: executable file not found <span class="tok-kw">in</span> $PATH: unknown
+</code></pre>
+    </div>
+    
+<p>Even when developers verify that the file physically exists inside the image or repository, the container enters an immediate <code>Exit 127</code> state. This failure stems from a breakdown between the Open Container Initiative (OCI) runtime (<code>runc</code>), the Linux kernel (<code>execve</code> system call), and the binary architecture of the target file.</p>
+<hr>
+<h2 id="architectural-analysis-and-root-cause">Architectural Analysis and Root Cause</h2>
+<p>To understand why Docker reports a file not found error despite the file being visible inside the container layer, it is essential to trace the Linux container execution pipeline:</p>
+<ol>
+<li><strong>The Role of <code>containerd-shim</code> and <code>runc</code>:</strong> Docker does not invoke containers directly; it delegates execution to <code>containerd</code>, which spawns a dedicated, lightweight <code>containerd-shim</code> process for each container. The shim invokes <code>runc</code>, the reference OCI runtime implementation.</li>
+<li><strong>The <code>execve</code> System Call:</strong> Inside <code>runc</code>, after setting up Linux namespaces (PID, Mount, Network, IPC) and performing <code>pivot_root</code> on the Overlay2 filesystem, the runtime executes <code>execve(const char *filename, char *const argv[], char *const envp[])</code>.</li>
+<li><strong>Triggering <code>ENOENT</code> (Error 2):</strong> The Linux kernel returns <code>ENOENT</code> (&quot;No such file or directory&quot;) under three distinct scenarios:<ul>
+<li><strong>Missing Shebang Interpreter:</strong> If a shell script declares <code>#!/bin/sh\r</code> (due to Windows CRLF carriage returns) or <code>#!/bin/bash</code> in an Alpine Linux image that lacks Bash, the kernel does not complain about the script itself. Instead, it fails to locate the specified interpreter binary, returning <code>ENOENT</code>.</li>
+<li><strong>Missing ELF Dynamic Linker:</strong> If a compiled binary (in Go with CGO, Rust, C++, or Node.js native addons) was dynamically linked against <code>glibc</code> (<code>/lib64/ld-linux-x86-64.so.2</code>) and runs inside an Alpine Linux container (which relies on <code>musl libc</code>), the kernel attempts to load the ELF interpreter specified in the binary header. Because <code>/lib64/ld-linux-x86-64.so.2</code> does not exist in Alpine, <code>execve</code> returns <code>ENOENT</code>, producing the confusing <code>executable file not found in $PATH</code> error message.</li>
+<li><strong>Relative Path Omission in <code>$PATH</code>:</strong> Using <code>ENTRYPOINT [&quot;entrypoint.sh&quot;]</code> rather than an absolute path (<code>/entrypoint.sh</code> or <code>/usr/local/bin/entrypoint.sh</code>) fails when the current <code>WORKDIR</code> is not explicitly exported in the container&#39;s <code>$PATH</code>.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="laboratory-diagnosis-and-inspection">Laboratory Diagnosis and Inspection</h2>
+<p>Before modifying Dockerfiles or pipeline configurations, use this diagnostic matrix to isolate the root cause:</p>
+<table>
+<thead>
+<tr>
+<th>Error Signature</th>
+<th>Underlying Root Cause</th>
+<th>Technical Mitigation Strategy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>exec: &quot;/entrypoint.sh&quot;: executable file not found in $PATH</code> (Shell script)</td>
+<td>Windows CRLF line endings (<code>\r\n</code>) or missing execute permissions (<code>chmod +x</code>).</td>
+<td>Convert line terminators with <code>dos2unix</code> and apply <code>chmod 755</code> before building.</td>
+</tr>
+<tr>
+<td><code>exec: &quot;bash&quot;: executable file not found in $PATH</code></td>
+<td>Minimal base image (Alpine Linux, BusyBox, Scratch) lacks the Bash interpreter.</td>
+<td>Change shebang to <code>#!/bin/sh</code> or install <code>bash</code> package via apk.</td>
+</tr>
+<tr>
+<td><code>exec: &quot;./app&quot;: executable file not found in $PATH</code> (Compiled binary)</td>
+<td>ABI incompatibility: binary dynamically linked against <code>glibc</code> executed in <code>musl libc</code> environment.</td>
+<td>Compile static binary (<code>CGO_ENABLED=0</code>) or install <code>gcompat</code> / <code>libc6-compat</code> in Alpine.</td>
+</tr>
+<tr>
+<td><code>exec: &quot;entrypoint.sh&quot;: executable file not found in $PATH</code></td>
+<td>Exec syntax with relative path outside container <code>$PATH</code>.</td>
+<td>Specify canonical absolute path: <code>ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]</code>.</td>
+</tr>
+<tr>
+<td><code>runc create failed: ... Permission denied</code></td>
+<td>Missing executable bit (+x) in the Overlay2 container image layer.</td>
+<td>Add explicit <code>RUN chmod +x /path/to/script</code> instruction in Dockerfile.</td>
+</tr>
+</tbody></table>
+<h3 id="diagnostic-commands">Diagnostic Commands</h3>
+<p>Inspect the offending files on your host and within the container image:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -467,20 +534,34 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Install dos2unix and sanitize the startup script</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">-y</span> dos2unix
-dos2unix entrypoint.sh
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Check file line terminators (must return &#39;ASCII text&#39;, NOT &#39;with CRLF line terminators&#39;)</span>
+file entrypoint.sh
+<span class="tok-cmt">
+# 2. Inspect the shebang line for hidden carriage return characters</span>
+head <span class="tok-prop">-n</span> <span class="tok-num">1</span> entrypoint.sh | <span class="tok-kw">cat</span> <span class="tok-prop">-v</span>
+<span class="tok-cmt">
+# 3. For compiled binaries, inspect the required ELF dynamic linker</span>
+readelf <span class="tok-prop">-l</span> app | <span class="tok-kw">grep</span> <span class="tok-str">&quot;program interpreter&quot;</span>
+<span class="tok-cmt">
+# 4. Interactively probe the container filesystem by overriding the entrypoint</span>
+<span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> <span class="tok-prop">-it</span> <span class="tok-prop">--entrypoint</span> /bin/sh my-image:tag
 </code></pre>
     </div>
-          </div>
-        </li>
-        
+    
+<hr>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
 
-        <li class="step-item" id="grant-explicit-execution-permissions-in-dockerfile">
-          <div class="step-number">2</div>
+        <li class="step-item" id="sanitize-crlf-carriage-returns-windows-to-unix">
+          <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="grant-explicit-execution-permissions-in-dockerfile-heading">Step 2: Grant Explicit Execution Permissions in Dockerfile</h4>
-            <p>Ensure execution permissions are permanently baked into the image layers during docker build:</p>
+            <h4 id="sanitize-crlf-carriage-returns-windows-to-unix-heading">Step 1: Sanitize CRLF Carriage Returns (Windows to Unix)</h4>
+            <p>If the script was authored on Windows or checked out with Git&#39;s <code>core.autocrlf</code> enabled, convert line endings to POSIX-compliant Line Feeds (LF):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -490,7 +571,7 @@ dos2unix entrypoint.sh
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">DOCKERFILE</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -500,21 +581,51 @@ dos2unix entrypoint.sh
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Inside your Dockerfile</span>
-<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
-<span class="tok-kw">RUN</span> chmod +x /usr/local/bin/entrypoint.sh
-<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Option A: Using dos2unix on Debian/Ubuntu</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">-y</span> dos2unix
+dos2unix entrypoint.sh
+<span class="tok-cmt">
+# Option B: Using sed directly in bash</span>
+<span class="tok-kw">sed</span> <span class="tok-prop">-i</span> <span class="tok-cmt">&#39;s/\r$//&#39; entrypoint.sh</span>
+</code></pre>
+    </div>
+    
+<p>Enforce strict line ending preservation across multi-platform teams by creating a <code>.gitattributes</code> file in your repository root:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">GITATTRIBUTES</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code># Enforce LF endings on shell scripts and Docker configuration
+*.sh text eol=lf
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="validate-shebang-and-alpine-linux-compatibility">
-          <div class="step-number">3</div>
+        <li class="step-item" id="ensure-shebang-and-shell-compatibility">
+          <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="validate-shebang-and-alpine-linux-compatibility-heading">Step 3: Validate Shebang and Alpine Linux Compatibility</h4>
-            <p>Check that your script&#39;s shebang calls an interpreter installed in the base image. Alpine Linux does not bundle <code>/bin/bash</code> by default, requiring <code>/bin/sh</code>:</p>
+            <h4 id="ensure-shebang-and-shell-compatibility-heading">Step 2: Ensure Shebang and Shell Compatibility</h4>
+            <p>In lightweight container images such as Alpine Linux (<code>alpine:3.20</code>), <code>/bin/bash</code> does not exist by default; <code>/bin/sh</code> links to BusyBox <code>ash</code>.</p>
+<p>Ensure scripts use POSIX-compliant syntax and standard shebangs:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -535,16 +646,305 @@ dos2unix entrypoint.sh
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-cmt">#!/bin/sh</span>
-<span class="tok-kw">set</span> <span class="tok-prop">-e</span>
+<span class="tok-kw">set</span> <span class="tok-prop">-eu</span>
+
+<span class="tok-kw">echo</span> <span class="tok-str">&quot;Initializing containerized application...&quot;</span>
 exec <span class="tok-str">&quot;$@&quot;</span>
 </code></pre>
     </div>
     
-<p>When using JSON exec syntax in <code>ENTRYPOINT [&quot;entrypoint.sh&quot;]</code>, always provide the absolute path (<code>[&quot;/usr/local/bin/entrypoint.sh&quot;]</code>) or ensure the target directory is in <code>$PATH</code>.</p>
+<p>If your entrypoint relies on Bash-specific constructs (arrays, <code>[[ ... ]]</code>, process substitution), install <code>bash</code> explicitly in the Dockerfile:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> alpine:<span class="tok-num">3.20</span>
+<span class="tok-cmt">
+# Install bash if scripts require non-POSIX extensions</span>
+<span class="tok-kw">RUN</span> apk add --no-cache bash ca-certificates
+
+<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
+<span class="tok-kw">RUN</span> chmod +x /usr/local/bin/entrypoint.sh
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+<span class="tok-kw">CMD</span> [<span class="tok-str">&quot;start&quot;</span>]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="resolve-dynamic-linker-mismatches-glibc-vs-musl">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="resolve-dynamic-linker-mismatches-glibc-vs-musl-heading">Step 3: Resolve Dynamic Linker Mismatches (glibc vs musl)</h4>
+            <p>When building in Go, Rust, or C++ on Ubuntu or Debian and copying the output into an Alpine runtime container, the dynamic loader will fail.</p>
+<h4>For Golang Applications:</h4>
+<p>Produce an entirely static, dependency-free binary by disabling CGO:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Compile fully static self-contained binary</span>
+CGO_ENABLED=<span class="tok-num">0</span> GOOS=linux GOARCH=amd64 go build <span class="tok-prop">-ldflags</span>=<span class="tok-str">&quot;-w -s&quot;</span> <span class="tok-prop">-o</span> app main.go
+</code></pre>
+    </div>
+    
+<h4>For CGO-Dependent or Third-Party Binaries:</h4>
+<p>If the binary requires <code>glibc</code> libraries, install Alpine&#39;s binary compatibility layer:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> alpine:<span class="tok-num">3.20</span>
+<span class="tok-cmt">
+# Install glibc binary compatibility layer for Alpine</span>
+<span class="tok-kw">RUN</span> apk add --no-cache gcompat libc6-compat
+
+<span class="tok-kw">WORKDIR</span> /app
+<span class="tok-kw">COPY</span> app /app/app
+<span class="tok-kw">RUN</span> chmod +x /app/app
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/app/app&quot;</span>]
+</code></pre>
+    </div>
+    
+<p>Alternatively, switch your runtime stage to <code>debian:bookworm-slim</code> to match the compilation toolchain:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> debian:bookworm-slim
+
+<span class="tok-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+    ca-certificates \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+<span class="tok-kw">WORKDIR</span> /app
+<span class="tok-kw">COPY</span> app /app/app
+<span class="tok-kw">RUN</span> chmod +x /app/app
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/app/app&quot;</span>]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validate-exec-syntax-and-file-permissions">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="validate-exec-syntax-and-file-permissions-heading">Step 4: Validate Exec Syntax and File Permissions</h4>
+            <p>The OCI specification recommends the JSON array syntax for <code>ENTRYPOINT</code> and <code>CMD</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># RECOMMENDED: Canonical absolute path and JSON array syntax</span>
+<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
+<span class="tok-kw">RUN</span> chmod <span class="tok-num">755</span> /usr/local/bin/entrypoint.sh
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+<span class="tok-cmt">
+# AVOID: Relative paths that depend on WORKDIR resolution</span><span class="tok-cmt">
+# ENTRYPOINT [&quot;entrypoint.sh&quot;]</span>
+</code></pre>
+    </div>
+    
+<p>When using bind mounts in local development (<code>-v $(pwd):/app</code>), verify that the host script retains executable permissions:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">chmod</span> +x ./entrypoint.sh
+</code></pre>
+    </div>
+    
+<hr>
           </div>
         </li>
         
 </ol>
+<h2 id="edge-case-troubleshooting">Edge Case Troubleshooting</h2>
+<h3 id="edge-case-1-bind-mount-overrides-in-docker-compose">Edge Case 1: Bind Mount Overrides in Docker Compose</h3>
+<p>A common pitfall occurs when the Dockerfile installs and permissions <code>/app/entrypoint.sh</code>, but <code>docker-compose.yml</code> mounts the current host directory directly over <code>/app</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  web:
+    build: .
+    <span class="tok-kw">volumes</span>:
+     <span class="tok-cmt"> # If host entrypoint.sh has CRLF or lacks +x, it masks the image build layer</span>
+      - .:/app
+</code></pre>
+    </div>
+    
+<p><strong>Solution:</strong> Mount directories selectively or mask the script with an anonymous volume:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  web:
+    build: .
+    <span class="tok-kw">volumes</span>:
+      - .:/app
+      - /app/entrypoint.sh
+</code></pre>
+    </div>
+    
+<h3 id="edge-case-2-cpu-architecture-mismatch-amd64-vs-arm64">Edge Case 2: CPU Architecture Mismatch (AMD64 vs ARM64)</h3>
+<p>Deploying images built on Apple Silicon (M-series) or ARM64 cloud instances to AMD64 hosts without multi-arch emulation produces <code>exec format error</code> or <code>executable file not found</code>.</p>
+<p>Inspect the image architecture and build for the target platform using Docker Buildx:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Check image architecture metadata</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">--format</span> <span class="tok-cmt">&#39;{{.Architecture}}&#39; my-image:tag</span>
+<span class="tok-cmt">
+# Build targeted multi-architecture image</span>
+<span class="tok-kw">docker</span> buildx build <span class="tok-prop">--platform</span> linux/amd64 <span class="tok-prop">-t</span> my-image:tag . <span class="tok-prop">--load</span>
+</code></pre>
+    </div>
+    
+<hr>
 
   <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
     <div class="sys-tool-bridge-header">
@@ -586,10 +986,10 @@ exec <span class="tok-str">&quot;$@&quot;</span>
   </section>
   
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-does-this-error-specifically-hit-alpine-based-docker-images">Why does this error specifically hit Alpine-based Docker images?</h3>
-<p>Alpine uses musl libc instead of glibc. Compiled binaries and scripts with dynamic dependencies targeting GNU glibc will fail with executable file not found unless libc6-compat or gcompat is installed.</p>
-<h3 id="how-do-i-debug-a-crashing-container-that-exits-before-inspection">How do I debug a crashing container that exits before inspection?</h3>
-<p>Override the container entrypoint by launching a raw shell: <code>docker run --rm -it --entrypoint /bin/sh my-image</code>.</p>
+<h3 id="why-does-docker-logs-output-nothing-when-this-error-occurs">Why does <code>docker logs</code> output nothing when this error occurs?</h3>
+<p>Because the container process never spawns. The failure takes place during <code>runc</code>&#39;s <code>execve</code> call before standard output (<code>stdout</code>) and standard error (<code>stderr</code>) file descriptors can be bound to the container application.</p>
+<h3 id="what-is-the-difference-between-shell-syntax-and-exec-syntax-in-dockerfile-entrypoint">What is the difference between Shell syntax and Exec syntax in Dockerfile ENTRYPOINT?</h3>
+<p>Exec syntax (<code>[&quot;binary&quot;, &quot;arg1&quot;]</code>) executes the program directly as PID 1, ensuring proper delivery of UNIX signals (<code>SIGTERM</code>, <code>SIGINT</code>). Shell syntax (<code>ENTRYPOINT binary arg1</code>) wraps execution in <code>/bin/sh -c</code>, which mandates the existence of <code>/bin/sh</code> in the base image.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -604,8 +1004,7 @@ exec <span class="tok-str">&quot;$@&quot;</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Maintain a root <code>.gitattributes</code> with <code>* text eol=lf</code> to block CRLF pollution across developer environments.</li>
-<li>Verify dependency on glibc vs musl libc when switching container base images from Debian to Alpine.</li>
+              
             </ul>
           </div>
 
@@ -655,7 +1054,7 @@ exec <span class="tok-str">&quot;$@&quot;</span>
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -666,7 +1065,7 @@ exec <span class="tok-str">&quot;$@&quot;</span>
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -751,13 +1150,13 @@ exec <span class="tok-str">&quot;$@&quot;</span>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

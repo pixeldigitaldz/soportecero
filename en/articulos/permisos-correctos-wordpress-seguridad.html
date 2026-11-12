@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>The ultimate file and folder permission guide to secure WordPress | SoporteCero</title>
-  <meta name="description" content="Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema.">
-  <meta name="keywords" content="WordPress, Security, Linux">
-  <meta name="robots" content="noindex, follow">
+  <title>The Definitive Linux File and Folder Permissions Guide to Secure WordPress | SoporteCero</title>
+  <meta name="description" content="Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.">
+  <meta name="keywords" content="WordPress, Security, Linux, Sysadmin, Nginx">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="The ultimate file and folder permission guide to secure WordPress">
-  <meta property="og:description" content="Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema.">
+  <meta property="og:title" content="The Definitive Linux File and Folder Permissions Guide to Secure WordPress">
+  <meta property="og:description" content="Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="WordPress">
   <meta property="article:tag" content="Security">
   <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="Sysadmin">
+  <meta property="article:tag" content="Nginx">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The ultimate file and folder permission guide to secure WordPress">
-  <meta name="twitter:description" content="Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema.">
+  <meta name="twitter:title" content="The Definitive Linux File and Folder Permissions Guide to Secure WordPress">
+  <meta name="twitter:description" content="Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "The ultimate file and folder permission guide to secure WordPress",
-  "description": "Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema.",
+  "headline": "The Definitive Linux File and Folder Permissions Guide to Secure WordPress",
+  "description": "Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Web & Code",
   "articleSection": "Web & Code",
-  "keywords": "WordPress, Security, Linux",
+  "keywords": "WordPress, Security, Linux, Sysadmin, Nginx",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "The ultimate file and folder permission guide to secure WordPress",
+      "name": "The Definitive Linux File and Folder Permissions Guide to Secure WordPress",
       "item": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html"
     }
   ]
@@ -125,44 +127,92 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "The ultimate file and folder permission guide to secure WordPress",
-  "description": "Protect your WordPress website from code injections and unauthorized access by applying the optimal security permission schema.",
+  "name": "The Definitive Linux File and Folder Permissions Guide to Secure WordPress",
+  "description": "Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#establecer-los-permisos-globales-de-forma-segura-por-consola",
-      "name": "Establecer los permisos globales de forma segura por consola",
+      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#assign-proper-web-server-user-and-group-ownership",
+      "name": "Assign Proper Web Server User and Group Ownership",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "WordPress directories must belong to your web server user (such as www-data, apache, or nginx) and have a permission mask that prevents other users from writing to them:"
+          "text": "Before adjusting permission masks, ensure that your files belong to the user account running the web server daemon: Ubuntu / Debian (Nginx or Apache): Default user is www-data:www-data. RHEL / CentOS / Rocky Linux / AlmaLinux: Default user is apache:apache or nginx:nginx. Docker Container Stacks: Usually runs under UID 33 (www-data) or 101 (nginx). Reclaim ownership of the entire WordPress root directory:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#proteger-al-maximo-el-archivo-critico-wp-configphp",
-      "name": "Proteger al máximo el archivo crítico wp-config.php",
+      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#apply-the-standard-755-644-permission-schema",
+      "name": "Apply the Standard 755 / 644 Permission Schema",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "The wp-config.php file contains your database credentials and session security keys. Nobody except the web server and you should be able to read it:"
+          "text": "Never apply permissions uniformly across an entire directory tree using a single recursive command. Directories require the execute (+x) bit to allow directory traversal, whereas standard files must never possess execute rights: (Explanation: 755 gives the owner read/write/traverse rights and all others read/traverse rights. 644 gives the owner read/write access and all others read-only access)."
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 3,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#proteger-el-archivo-de-reescritura-htaccess",
-      "name": "Proteger el archivo de reescritura .htaccess",
+      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#hardening-the-critical-wp-configphp-file",
+      "name": "Hardening the Critical wp-config.php File",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If you use the Apache web server, secure the route control file against plugin manipulations or malicious code injections:"
+          "text": "The wp-config.php file stores your raw MySQL database username, password, host, table prefix, and cryptographic authentication salts. No process other than the web server worker should be permitted to read this file: If your web server worker runs under www-data and you edit files over SSH as a distinct system user (e.g., ubuntu in the www-data group), use:"
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#secure-the-htaccess-and-nginx-server-blocks",
+      "name": "Secure the .htaccess and Nginx Server Blocks",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If your server runs Apache or LiteSpeed, protect the .htaccess routing file against plugin tampering: If your server runs Nginx, ensure your server configuration blocks direct browser requests to hidden files and sensitive locations:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#configure-direct-filesystem-access-in-wp-configphp",
+      "name": "Configure Direct Filesystem Access in wp-config.php",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If WordPress prompts for FTP credentials when installing plugins or updates, it indicates that the PHP worker process believes it does not own the webroot. Add this configuration to wp-config.php above the /* That&#39;s all, stop editing! */ line:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What should permissions be on the wp-content/uploads directory?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The wp-content/uploads folder should carry 755 permissions for subdirectories and 644 for uploaded image/media files, with ownership assigned to www-data:www-data. There is never a valid operational reason for uploads to require 777."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does &#39;find -exec chmod {} +&#39; perform better than &#39;chmod -R&#39;?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Using find -type d -exec chmod 755 {} + bundles hundreds of directory paths into a single system call execution, completing in milliseconds even on massive WordPress installations with tens of thousands of media uploads."
+      }
     }
   ]
 }
@@ -178,7 +228,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -207,12 +257,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -242,7 +292,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -255,22 +305,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Web & Code</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">The ultimate file and folder permission guide to secure WordPress</span>
+        <span style="color: var(--text-secondary);">The Definitive Linux File and Folder Permissions Guide to Secure WordPress</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Web & Code</span>
-        <h1 id="post-title">The ultimate file and folder permission guide to secure WordPress</h1>
+        <h1 id="post-title">The Definitive Linux File and Folder Permissions Guide to Secure WordPress</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -282,7 +332,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -298,7 +348,9 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>WordPress security flaws that allow attackers to upload malicious scripts or modify configuration files usually occur due to overly permissive permissions on your hosting directories. Keeping the default configuration of some automatic installers is the most exploited attack vector.</p>
+          <p>Operating a <strong>WordPress</strong> site on an unmanaged Linux Virtual Private Server (VPS), dedicated host, or Docker environment requires strict enforcement of the principle of least privilege across the filesystem. A significant percentage of WordPress malware infections, webshell injections, and defacements occur because developers and site administrators set overly permissive file permissions (<code>chmod -R 777</code>) to bypass media upload errors or automatic plugin update failures.</p>
+<p>Allowing world-writable permissions invites disaster: any compromised plugin or unauthenticated vulnerability in a theme file can write malicious PHP scripts into the webroot, rewrite <code>.htaccess</code> rules, or exfiltrate plaintext database credentials from <code>wp-config.php</code>.</p>
+<p>Applying the official WordPress hardening schema guarantees seamless functionality for core auto-updates and media uploads while completely locking out unauthorized write access.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -315,25 +367,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Overly permissive file permissions (e.g. 777) on WordPress files</strong></div>
+            <div class="diag-value"><strong>World-writable directories or files (chmod 777) exposing server to webshells</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Set secure permissions: <code>find . -type d -exec chmod 755 {} \;</code> and <code>644</code> for files</div>
+            <div class="diag-value">Reset directory permissions to <code>755</code> and file permissions to <code>644</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>wp-config.php file accessible or writable by other server users</strong></div>
+            <div class="diag-value"><strong>Media uploads or automatic plugin updates failing with permission denied</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Set strict permissions on wp-config.php: <code>chmod 600 wp-config.php</code></div>
+            <div class="diag-value">Align ownership with web server daemon user: <code>sudo chown -R www-data:www-data</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>wp-config.php</code> database credentials readable by other local server users</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Restrict <code>wp-config.php</code> permissions strictly to owner read-only: <code>chmod 600</code> or <code>440</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>WordPress prompting for FTP credentials when installing plugins</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Add <code>define(&#39;FS_METHOD&#39;, &#39;direct&#39;);</code> to <code>wp-config.php</code> after fixing ownership</div>
           </div></div></div>
       </div>
     </section>
@@ -380,6 +456,31 @@
           </a>
         </li>
       
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#what-should-permissions-be-on-the-wp-contentuploads-directory" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What should permissions be on the wp-content/uploads directory?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-39find-exec-chmod-39-perform-better-than-39chmod-r39" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does &#39;find -exec chmod {} +&#39; perform better than &#39;chmod -R&#39;?</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
         </ul>
       </div>
     </nav>
@@ -393,11 +494,17 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="establecer-los-permisos-globales-de-forma-segura-por-consola">
+        <li class="step-item" id="assign-proper-web-server-user-and-group-ownership">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="establecer-los-permisos-globales-de-forma-segura-por-consola-heading">Step 1: Establecer los permisos globales de forma segura por consola</h4>
-            <p>WordPress directories must belong to your web server user (such as <code>www-data</code>, <code>apache</code>, or <code>nginx</code>) and have a permission mask that prevents other users from writing to them:</p>
+            <h4 id="assign-proper-web-server-user-and-group-ownership-heading">Step 1: Assign Proper Web Server User and Group Ownership</h4>
+            <p>Before adjusting permission masks, ensure that your files belong to the user account running the web server daemon:</p>
+<ul>
+<li><strong>Ubuntu / Debian (Nginx or Apache):</strong> Default user is <code>www-data:www-data</code>.</li>
+<li><strong>RHEL / CentOS / Rocky Linux / AlmaLinux:</strong> Default user is <code>apache:apache</code> or <code>nginx:nginx</code>.</li>
+<li><strong>Docker Container Stacks:</strong> Usually runs under UID <code>33</code> (<code>www-data</code>) or <code>101</code> (<code>nginx</code>).</li>
+</ul>
+<p>Reclaim ownership of the entire WordPress root directory:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -417,25 +524,19 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Cambiar la propiedad de los archivos al usuario del servidor web</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Set ownership to the web server daemon user</span>
 <span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> <span class="tok-prop">-R</span> www-data:www-data /var/www/html/wordpress
-<span class="tok-cmt">
-# Forzar a todas las carpetas a tener permisos 755</span>
-<span class="tok-kw">find</span> /var/www/html/wordpress <span class="tok-prop">-type</span> d <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">755</span> {} \;
-<span class="tok-cmt">
-# Forzar a todos los archivos a tener permisos 644</span>
-<span class="tok-kw">find</span> /var/www/html/wordpress <span class="tok-prop">-type</span> f <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> {} \;
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="proteger-al-maximo-el-archivo-critico-wp-configphp">
+        <li class="step-item" id="apply-the-standard-755-644-permission-schema">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="proteger-al-maximo-el-archivo-critico-wp-configphp-heading">Step 2: Proteger al máximo el archivo crítico wp-config.php</h4>
-            <p>The <code>wp-config.php</code> file contains your database credentials and session security keys. Nobody except the web server and you should be able to read it:</p>
+            <h4 id="apply-the-standard-755-644-permission-schema-heading">Step 2: Apply the Standard 755 / 644 Permission Schema</h4>
+            <p>Never apply permissions uniformly across an entire directory tree using a single recursive command. Directories require the execute (<code>+x</code>) bit to allow directory traversal, whereas standard files must never possess execute rights:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -455,19 +556,80 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Cambiar permisos de lectura exclusiva al dueño del archivo</span>
-<span class="tok-kw">chmod</span> <span class="tok-num">600</span> /var/www/html/wordpress/wp-config.php
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Enforce 755 (rwxr-xr-x) on all directories</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">find</span> /var/www/html/wordpress/ <span class="tok-prop">-type</span> d <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">755</span> {} +
+<span class="tok-cmt">
+# 2. Enforce 644 (rw-r--r--) on all regular files</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">find</span> /var/www/html/wordpress/ <span class="tok-prop">-type</span> f <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> {} +
+</code></pre>
+    </div>
+    
+<p><em>(Explanation: <code>755</code> gives the owner read/write/traverse rights and all others read/traverse rights. <code>644</code> gives the owner read/write access and all others read-only access).</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="hardening-the-critical-wp-configphp-file">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="hardening-the-critical-wp-configphp-file-heading">Step 3: Hardening the Critical wp-config.php File</h4>
+            <p>The <code>wp-config.php</code> file stores your raw MySQL database username, password, host, table prefix, and cryptographic authentication salts. No process other than the web server worker should be permitted to read this file:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Set wp-config.php to owner read-only or owner read/write</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">600</span> /var/www/html/wordpress/wp-config.php
+</code></pre>
+    </div>
+    
+<p>If your web server worker runs under <code>www-data</code> and you edit files over SSH as a distinct system user (e.g., <code>ubuntu</code> in the <code>www-data</code> group), use:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">640</span> /var/www/html/wordpress/wp-config.php
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="proteger-el-archivo-de-reescritura-htaccess">
-          <div class="step-number">3</div>
+        <li class="step-item" id="secure-the-htaccess-and-nginx-server-blocks">
+          <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="proteger-el-archivo-de-reescritura-htaccess-heading">Step 3: Proteger el archivo de reescritura .htaccess</h4>
-            <p>If you use the Apache web server, secure the route control file against plugin manipulations or malicious code injections:</p>
+            <h4 id="secure-the-htaccess-and-nginx-server-blocks-heading">Step 4: Secure the .htaccess and Nginx Server Blocks</h4>
+            <p>If your server runs Apache or LiteSpeed, protect the <code>.htaccess</code> routing file against plugin tampering:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -487,13 +649,123 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">chmod</span> <span class="tok-num">644</span> /var/www/html/wordpress/.htaccess
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> /var/www/html/wordpress/.htaccess
+</code></pre>
+    </div>
+    
+<p>If your server runs Nginx, ensure your server configuration blocks direct browser requests to hidden files and sensitive locations:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">NGINX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Block browser access to hidden files (.git, .env, .htaccess)</span>
+<span class="tok-kw">location</span> ~ /\. {
+    deny all;
+    <span class="tok-kw">access_log</span> off;
+    log_not_found off;
+}
+<span class="tok-cmt">
+# Block direct execution of PHP scripts in uploads directory</span>
+<span class="tok-kw">location</span> ~* /(?:uploads|files)/.*\.php$ {
+    deny all;
+}
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="configure-direct-filesystem-access-in-wp-configphp">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="configure-direct-filesystem-access-in-wp-configphp-heading">Step 5: Configure Direct Filesystem Access in wp-config.php</h4>
+            <p>If WordPress prompts for FTP credentials when installing plugins or updates, it indicates that the PHP worker process believes it does not own the webroot. Add this configuration to <code>wp-config.php</code> above the <code>/* That&#39;s all, stop editing! */</code> line:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">PHP</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>define(<span class="tok-str">&#39;FS_METHOD&#39;</span>, <span class="tok-str">&#39;direct&#39;</span>);
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="what-should-permissions-be-on-the-wp-contentuploads-directory">What should permissions be on the wp-content/uploads directory?</h3>
+<p>The <code>wp-content/uploads</code> folder should carry <code>755</code> permissions for subdirectories and <code>644</code> for uploaded image/media files, with ownership assigned to <code>www-data:www-data</code>. There is never a valid operational reason for <code>uploads</code> to require <code>777</code>.</p>
+<h3 id="why-does-39find-exec-chmod-39-perform-better-than-39chmod-r39">Why does &#39;find -exec chmod {} +&#39; perform better than &#39;chmod -R&#39;?</h3>
+<p>Using <code>find -type d -exec chmod 755 {} +</code> bundles hundreds of directory paths into a single system call execution, completing in milliseconds even on massive WordPress installations with tens of thousands of media uploads.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -508,7 +780,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Never apply 777 permissions (read, write, and execute for everyone) to any folder or file on your website under any circumstances</strong>, not even temporarily to troubleshoot image upload issues in the <code>wp-content/uploads</code> folder. If a plugin has issues saving files, this is due to a file system user ownership conflict (<code>chown</code>) and not a lack of global write permissions; opening the doors completely will allow any script injected into the server to take full control of your host.</li>
+              <li><strong>Never Use <code>chmod 777</code> as a &#39;Quick Fix&#39;:</strong> If an image upload in <code>wp-content/uploads</code> fails, the issue is user/group ownership (<code>chown</code>), not a need for <code>777</code>. Applying <code>777</code> allows an attacker who uploads an obfuscated PHP script to execute arbitrary shell commands with full server privileges.</li>
+<li><strong>Disable File Editing in the Admin Dashboard:</strong> Add <code>define(&#39;DISALLOW_FILE_EDIT&#39;, true);</code> to <code>wp-config.php</code> to prevent compromised administrator accounts from editing plugin and theme PHP code directly through the WordPress dashboard.</li>
             </ul>
           </div>
 
@@ -558,7 +831,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -569,7 +842,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -596,13 +869,13 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Solution: CORS Error When Consuming External APIs from Shopify Templates -->
+      <!-- Related Card: How to Fix Shopify CORS Policy Error: Allow CORS on Storefront & APIs -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cors-shopify-liquid.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solution: CORS Error When Consuming External APIs from Shopify Templates</a>
+              <a href="../articulos/error-cors-shopify-liquid.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Shopify CORS Policy Error: Allow CORS on Storefront & APIs</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
@@ -630,13 +903,13 @@
       </article>
       
 
-      <!-- Related Card: How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide -->
+      <!-- Related Card: How to Fix CORS Policy Errors (Allow CORS & Access-Control-Allow-Origin) on APIs -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cors.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix CORS Error Access-Control-Allow-Origin: Ultimate Guide</a>
+              <a href="../articulos/error-cors.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix CORS Policy Errors (Allow CORS & Access-Control-Allow-Origin) on APIs</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
@@ -654,13 +927,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

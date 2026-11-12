@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers | SoporteCero</title>
-  <meta name="description" content="Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers.">
-  <meta name="keywords" content="Prowlarr, Radarr, Docker">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers | SoporteCero</title>
+  <meta name="description" content="Learn how to fix HTTP timeout errors (Request timed out) in Prowlarr and Radarr. Deploy FlareSolverr proxies, configure Docker container DNS, and adjust HTTP timeout thresholds.">
+  <meta name="keywords" content="Prowlarr, Radarr, Docker, Linux, Networking">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-timeout-prowlarr.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers">
-  <meta property="og:description" content="Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers.">
+  <meta property="og:title" content="How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers">
+  <meta property="og:description" content="Learn how to fix HTTP timeout errors (Request timed out) in Prowlarr and Radarr. Deploy FlareSolverr proxies, configure Docker container DNS, and adjust HTTP timeout thresholds.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-timeout-prowlarr.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="Prowlarr">
   <meta property="article:tag" content="Radarr">
   <meta property="article:tag" content="Docker">
+  <meta property="article:tag" content="Linux">
+  <meta property="article:tag" content="Networking">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers">
-  <meta name="twitter:description" content="Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers.">
+  <meta name="twitter:title" content="How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers">
+  <meta name="twitter:description" content="Learn how to fix HTTP timeout errors (Request timed out) in Prowlarr and Radarr. Deploy FlareSolverr proxies, configure Docker container DNS, and adjust HTTP timeout thresholds.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers",
-  "description": "Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers.",
+  "headline": "How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers",
+  "description": "Learn how to fix HTTP timeout errors (Request timed out) in Prowlarr and Radarr. Deploy FlareSolverr proxies, configure Docker container DNS, and adjust HTTP timeout thresholds.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
-  "keywords": "Prowlarr, Radarr, Docker",
+  "keywords": "Prowlarr, Radarr, Docker, Linux, Networking",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-27",
   "dateModified": "2026-07-27",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers",
+      "name": "How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers",
       "item": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html"
     }
   ]
@@ -125,8 +127,8 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers",
-  "description": "Definitive solution to connection errors and timeouts between automated media managers and private torrent or Usenet indexers.",
+  "name": "How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers",
+  "description": "Learn how to fix HTTP timeout errors (Request timed out) in Prowlarr and Radarr. Deploy FlareSolverr proxies, configure Docker container DNS, and adjust HTTP timeout thresholds.",
   "step": [
     {
       "@type": "HowToStep",
@@ -136,9 +138,129 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Bring up a FlareSolverr container in your Docker Compose file or local server:"
+          "text": "Open the Prowlarr web interface (http://localhost:9696)."
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#step-2",
+      "name": "Step 2",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Navigate to Settings &gt; Indexers."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#step-3",
+      "name": "Step 3",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Under the Indexer Proxies section, click the + (Add) button and select FlareSolverr."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#step-4",
+      "name": "Step 4",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Configure the parameters:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#name",
+      "name": "Name:",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "FlareSolverr Proxy"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 6,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#host",
+      "name": "Host:",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "http://flaresolverr:8191 (if running in the same Docker network) or http://&lt;host-ip&gt;:8191"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 7,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#tags",
+      "name": "Tags:",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Enter a custom tag, such as flaresolverr."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 8,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#step-8",
+      "name": "Step 8",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Click Test to verify connection, then click Save."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 9,
+      "url": "https://soportecero.com/en/articulos/error-timeout-prowlarr.html#step-9",
+      "name": "Step 9",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Open your failing indexer&#39;s settings and add the flaresolverr tag to its configuration so all traffic routes through the headless solver."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does FlareSolverr log &#39;Challenge not detected&#39; when an indexer times out?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If FlareSolverr reports that no challenge was detected yet Prowlarr times out, the tracker is either undergoing server maintenance, experiencing downtime, or blocking the VPN IP address range assigned by your provider."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I test indexer connectivity from inside the Prowlarr container?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Open a terminal inside the container: docker exec -it prowlarr curl -Iv https://tracker-domain.com. This immediately isolates whether the timeout is caused by DNS resolution, TLS handshakes, or application logic."
+      }
     }
   ]
 }
@@ -154,7 +276,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -183,12 +305,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -218,7 +340,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -231,22 +353,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Systems & Servers</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers</span>
+        <span style="color: var(--text-secondary);">How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">How to Resolve Timeout Failures When Connecting Prowlarr or Radarr with Private Indexers</h1>
+        <h1 id="post-title">How to Fix Timeout and Connection Failures in Prowlarr with Private Indexers</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +380,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -274,8 +396,13 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>Timeout</code> or connection timed out error in tools like Prowlarr, Radarr, or Sonarr occurs when the managers attempt to sync or perform a search on a private indexer and the request does not receive a response within the time limit (usually 30 seconds).</p>
-<p>This is primarily due to blocks by Cloudflare&#39;s security challenge on the tracker indexer, or name resolution (DNS) issues within the internal network of your Docker containers.</p>
+          <p>Encountering an <code>HTTP request timed out</code> or <code>Resource temporarily unavailable: Test failed for Indexer</code> error when connecting <strong>Prowlarr</strong>, <strong>Radarr</strong>, or <strong>Sonarr</strong> to private torrent trackers or Usenet indexers is a common issue in automated home media lab configurations.</p>
+<p>When Prowlarr attempts to test an indexer or dispatch automated search queries, the connection is aborted if an HTTP response is not returned within the application&#39;s default deadline (typically 30 seconds). This latency or total rejection stems from three primary infrastructure issues:</p>
+<ol>
+<li><strong>Cloudflare Anti-Bot Challenges:</strong> The target tracker has enabled Cloudflare Turnstile, JavaScript challenges, or DDoS protection, silently dropping raw automated API queries from Prowlarr&#39;s user-agent.</li>
+<li><strong>Docker Internal DNS Latency:</strong> Docker&#39;s embedded DNS server (<code>127.0.0.11</code>) experiences upstream query timeouts resolving international tracker top-level domains.</li>
+<li><strong>VPN Routing / Split Tunneling Collisions:</strong> When Prowlarr is routed through a VPN container (such as Gluetun), misconfigured MTU packet sizes or DNS leaks stall TCP handshakes.</li>
+</ol>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -292,25 +419,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Indexer connection blocked by Cloudflare / Turnstile challenge</strong></div>
+            <div class="diag-value"><strong>Indexer protected by Cloudflare Turnstile or Cloudflare DDoS challenge</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Connect Prowlarr with a running FlareSolverr container instance</div>
+            <div class="diag-value">Deploy a <strong>FlareSolverr</strong> proxy container and link via Prowlarr Indexer Proxy</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>High latency or server DNS failing to resolve indexer domains</strong></div>
+            <div class="diag-value"><strong>Prowlarr default 30-second timeout too short for saturated trackers</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Increase request timeout limit in Prowlarr indexer settings</div>
+            <div class="diag-value">Increase <code>HTTP Timeout</code> to 60 or 90 seconds in Prowlarr Settings &gt; General</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Docker embedded DNS failing to resolve tracker hostnames</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Specify explicit upstream DNS servers (<code>1.1.1.1</code>, <code>8.8.8.8</code>) in <code>docker-compose.yml</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>VPN network interface dropping fragmented packets</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Tune WireGuard/OpenVPN MTU in Gluetun (<code>FIREWALL_OUTBOUND_SUBNETS</code>)</div>
           </div></div></div>
       </div>
     </section>
@@ -358,17 +509,58 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-implementar-flaresolverr-para-evadir-bloqueos-de-cloudflare" class="toc-sublink">
+            <a href="#step-1-deploy-flaresolverr-to-bypass-cloudflare-protection" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Implementar FlareSolverr (Para evadir bloqueos de Cloudflare)</span>
+              <span class="toc-subtext">Step 1: Deploy FlareSolverr to Bypass Cloudflare Protection</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-ajustar-el-tiempo-de-espera-timeout-en-la-interfaz" class="toc-sublink">
+            <a href="#step-2-configure-the-proxy-in-the-prowlarr-dashboard" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Ajustar el tiempo de espera (Timeout) en la interfaz</span>
+              <span class="toc-subtext">Step 2: Configure the Proxy in the Prowlarr Dashboard</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-configure-explicit-dns-in-docker-compose" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Configure Explicit DNS in Docker Compose</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-increase-prowlarr-system-http-timeout-settings" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Increase Prowlarr System HTTP Timeout Settings</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-flaresolverr-log-39challenge-not-detected39-when-an-indexer-times-out" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does FlareSolverr log &#39;Challenge not detected&#39; when an indexer times out?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#how-do-i-test-indexer-connectivity-from-inside-the-prowlarr-container" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">How do I test indexer connectivity from inside the Prowlarr container?</span>
             </a>
           </li>
         
@@ -387,19 +579,9 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-implementar-flaresolverr-para-evadir-bloqueos-de-cloudflare">Step 1: Implementar FlareSolverr (Para evadir bloqueos de Cloudflare)</h3>
-<p>If the private indexer uses Cloudflare protection, your automation apps will be rejected immediately.</p>
-<ol class="steps-list">
-
-        <li class="step-item" id="step-1">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Bring up a <strong>FlareSolverr</strong> container in your Docker Compose file or local server:
-          </div>
-        </li>
-        
-</ol>
+<h3 id="step-1-deploy-flaresolverr-to-bypass-cloudflare-protection">Step 1: Deploy FlareSolverr to Bypass Cloudflare Protection</h3>
+<p>If your indexer works in a standard web browser but fails inside Prowlarr with HTTP 403 or Timeout, Cloudflare&#39;s bot management is challenging the connection. Deploy <strong>FlareSolverr</strong>, a headless browser proxy that solves JavaScript challenges and passes session cookies back to Prowlarr:</p>
+<p>Add FlareSolverr to your <code>docker-compose.yml</code> file:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -419,28 +601,225 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>  flaresolverr:
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  flaresolverr:
     <span class="tok-kw">image</span>: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
     <span class="tok-kw">environment</span>:
       - LOG_LEVEL=info
+      - CAPTCHA_SOLVER=none
+      - TZ=UTC
     <span class="tok-kw">ports</span>:
-      - <span class="tok-num">8191</span>:<span class="tok-num">8191</span>
+      - <span class="tok-str">&quot;8191:8191&quot;</span>
     <span class="tok-kw">restart</span>: unless-stopped
+    <span class="tok-kw">networks</span>:
+      - media-network
 </code></pre>
     </div>
     
-<ol start="2">
-<li>In your Prowlarr panel, go to Settings &gt; Tags. Add a tag for FlareSolverr pointing to your local IP on port 8191 (e.g., <a href="http://192.168.1.100:8191">http://192.168.1.100:8191</a>).</li>
-<li>Assign that same tag to the configuration of the indexer that is failing.</li>
+<p>Bring the service up:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> compose up <span class="tok-prop">-d</span> flaresolverr
+</code></pre>
+    </div>
+    
+<h3 id="step-2-configure-the-proxy-in-the-prowlarr-dashboard">Step 2: Configure the Proxy in the Prowlarr Dashboard</h3>
+<ol class="steps-list">
+
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="step-1-heading">Step 1</h4>
+            Open the Prowlarr web interface (<code>http://localhost:9696</code>).
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="step-2-heading">Step 2</h4>
+            Navigate to <strong>Settings</strong> &gt; <strong>Indexers</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="step-3-heading">Step 3</h4>
+            Under the <strong>Indexer Proxies</strong> section, click the <strong>+ (Add)</strong> button and select <strong>FlareSolverr</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-4">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="step-4-heading">Step 4</h4>
+            Configure the parameters:<ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="name">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="name-heading">Name:</h4>
+             <code>FlareSolverr Proxy</code>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="host">
+          <div class="step-number">6</div>
+          <div class="step-body">
+            <h4 id="host-heading">Host:</h4>
+             <code>http://flaresolverr:8191</code> (if running in the same Docker network) or <code>http://&lt;host-ip&gt;:8191</code>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="tags">
+          <div class="step-number">7</div>
+          <div class="step-body">
+            <h4 id="tags-heading">Tags:</h4>
+             Enter a custom tag, such as <code>flaresolverr</code>.</li>
+</ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-8">
+          <div class="step-number">8</div>
+          <div class="step-body">
+            <h4 id="step-8-heading">Step 8</h4>
+            Click <strong>Test</strong> to verify connection, then click <strong>Save</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-9">
+          <div class="step-number">9</div>
+          <div class="step-body">
+            <h4 id="step-9-heading">Step 9</h4>
+            Open your failing indexer&#39;s settings and add the <code>flaresolverr</code> tag to its configuration so all traffic routes through the headless solver.
+          </div>
+        </li>
+        
 </ol>
-<h3 id="step-2-ajustar-el-tiempo-de-espera-timeout-en-la-interfaz">Step 2: Ajustar el tiempo de espera (Timeout) en la interfaz</h3>
-<p>If the tracker is simply slow to respond due to saturation, increase the default limit in the app:</p>
+<h3 id="step-3-configure-explicit-dns-in-docker-compose">Step 3: Configure Explicit DNS in Docker Compose</h3>
+<p>If the indexer timeout occurs before reaching the tracker&#39;s servers, Docker&#39;s internal DNS resolver (<code>127.0.0.11</code>) may be failing to resolve public domain records through your local router:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  prowlarr:
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    dns:
+      - <span class="tok-num">1.1</span>.<span class="tok-num">1.1</span>
+      - <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
+    <span class="tok-kw">environment</span>:
+      - PUID=<span class="tok-num">1000</span>
+      - PGID=<span class="tok-num">1000</span>
+      - TZ=UTC
+    <span class="tok-kw">networks</span>:
+      - media-network
+</code></pre>
+    </div>
+    
+<p>Restart the container with <code>docker compose up -d --force-recreate prowlarr</code>.</p>
+<h3 id="step-4-increase-prowlarr-system-http-timeout-settings">Step 4: Increase Prowlarr System HTTP Timeout Settings</h3>
+<p>For heavily congested private trackers or slow overseas mirrors:</p>
 <ol>
-<li>In Prowlarr or Radarr, go to Settings &gt; General.</li>
-<li>Activate the advanced options (Show Advanced Options).</li>
-<li>Search for the System HTTP Timeout parameter and raise it from 30 to 60 or 90 seconds. Save changes.</li>
+<li>In Prowlarr, go to <strong>Settings</strong> &gt; <strong>General</strong>.</li>
+<li>Toggle on <strong>Show Advanced</strong>.</li>
+<li>Locate the <strong>HTTP Timeout</strong> setting under the <strong>Proxy &amp; Networking</strong> section.</li>
+<li>Increase the timeout from <code>30</code> seconds to <code>60</code> or <code>90</code> seconds.</li>
+<li>Click <strong>Save Changes</strong>.</li>
 </ol>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="why-does-flaresolverr-log-39challenge-not-detected39-when-an-indexer-times-out">Why does FlareSolverr log &#39;Challenge not detected&#39; when an indexer times out?</h3>
+<p>If FlareSolverr reports that no challenge was detected yet Prowlarr times out, the tracker is either undergoing server maintenance, experiencing downtime, or blocking the VPN IP address range assigned by your provider.</p>
+<h3 id="how-do-i-test-indexer-connectivity-from-inside-the-prowlarr-container">How do I test indexer connectivity from inside the Prowlarr container?</h3>
+<p>Open a terminal inside the container: <code>docker exec -it prowlarr curl -Iv https://tracker-domain.com</code>. This immediately isolates whether the timeout is caused by DNS resolution, TLS handshakes, or application logic.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -455,7 +834,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>If you use a VPN for your downloads, make sure Prowlarr and Radarr have static routes configured so they do not lose communication with the local network (LAN) of your home or home server.</li>
+              <li><strong>Isolate FlareSolverr Usage via Tags:</strong> Do not apply the FlareSolverr proxy globally to every indexer. Running every search query through a headless Chromium instance increases CPU utilization and memory overhead. Tag only indexers that actively enforce Cloudflare challenges.</li>
+<li><strong>Ensure Proper Subnet Routing with VPNs:</strong> If Prowlarr routes through a VPN container like <strong>Gluetun</strong>, make sure your local LAN subnets (e.g., <code>192.168.1.0/24</code>) are added to the VPN firewall&#39;s inbound/outbound exceptions so Sonarr and Radarr can communicate with Prowlarr over the local network.</li>
             </ul>
           </div>
 
@@ -505,7 +885,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -516,7 +896,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -560,35 +940,35 @@
       </article>
       
 
-      <!-- Related Card: Quick guide to recover a corrupt GRUB bootloader in Linux -->
+      <!-- Related Card: How to Recover and Reinstall a Corrupted GRUB Bootloader in Linux (UEFI & BIOS) -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/reparar-grub-boot-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Quick guide to recover a corrupt GRUB bootloader in Linux</a>
+              <a href="../articulos/reparar-grub-boot-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Recover and Reinstall a Corrupted GRUB Bootloader in Linux (UEFI & BIOS)</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: How to reset a forgotten root user password in Linux systems -->
+      <!-- Related Card: How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL) -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/restaurar-contrasenia-root-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to reset a forgotten root user password in Linux systems</a>
+              <a href="../articulos/restaurar-contrasenia-root-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Reset a Forgotten Root Password in Linux (Ubuntu, Debian, RHEL)</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -601,13 +981,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

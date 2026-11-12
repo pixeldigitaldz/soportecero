@@ -1,10 +1,7 @@
 ---
-title: >-
-  Cómo resolver: Error de CORS al consumir APIs externas desde plantillas de
-  Shopify
+title: Cómo solucionar el error CORS en Shopify (Allow CORS Policy en Storefront y APIs)
 description: >-
-  Aprende a solucionar fallos de Cross-Origin Resource Sharing (CORS) en Liquid,
-  JavaScript storefront y Proxies de Aplicación de Shopify.
+  Aprende cómo solucionar el error shopify cors policy y configurar allow cors en storefronts y APIs externas. Configuración de cabeceras y App Proxies.
 category: Web y Código
 tags:
   - Shopify
@@ -16,7 +13,7 @@ tags:
 readTime: 7 min
 date: '2026-06-27'
 ---
-Cuando realizas una petición `fetch()` o `axios` desde el archivo JavaScript de un tema de Shopify (`theme.liquid` o secciones storefront) hacia tu API externa, el navegador bloquea la respuesta con el error: `Access to fetch at 'https://mi-api.com' from origin 'https://mi-tienda.myshopify.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource`.
+Si al realizar peticiones fetch o axios desde tu tienda Shopify recibes un bloqueo por shopify cors policy ('No Access-Control-Allow-Origin header is present'), el navegador está protegiendo la sesión impidiendo leer datos de un origen no autorizado. En esta guía aprenderás cómo configurar allow cors en tus APIs externas y cómo implementar Shopify App Proxies para eludir restricciones de CORS en producción de forma 100% segura.
 
 ## Análisis de Arquitectura y Causa Raíz
 
@@ -33,16 +30,16 @@ Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorn
 
 | Causa | Solución |
 |---|---|
-| **Petición fetch() desde tema Liquid hacia servidor externo sin cabecera Access-Control-Allow-Origin** |
+| **Petición fetch() desde tema Liquid hacia servidor externo sin cabecera Access-Control-Allow-Origin** | Configurar cabeceras CORS adecuadas en el servidor externo or route via Shopify App Proxy |
 
 Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
 
 ```bash
 # 1. Comprobar el estado del servicio en el gestor de inicialización systemd
-sudo systemctl status --no-pager -l NOMBRE_SERVICIO
+sudo systemctl status --no-pager -l web-service
 
 # 2. Inspeccionar los registros del diario del sistema filtrando por unidad
-sudo journalctl -u NOMBRE_SERVICIO -n 50 --no-pager
+sudo journalctl -u web-service -n 50 --no-pager
 
 # 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados
 df -Th && df -ih
@@ -98,51 +95,6 @@ fetch('/apps/mi-proxy/obtener-datos', {
 
 ### Paso 3: Validar la respuesta preflight (OPTIONS)
 Asegúrate de que tu servidor responda con código HTTP `200 OK` o `204 No Content` a las peticiones con método `OPTIONS` que los navegadores envían antes de enviar datos en formato JSON (`application/json`).
-
-## Resolución de Casos Borde (Troubleshooting)
-
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
-
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
-
-Para verificar y solventar bloqueos por contexto de seguridad:
-```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
-
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
-```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
-```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
-```
-
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
-
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
-
-Para identificar y limpiar procesos bloqueados de forma segura:
-```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
-
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
-```
-
-### Verificación de Logs en Tiempo Real y Validación en Producción
-
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
-```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
-
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
-```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
 
 ## 🛡️ Consejos de Prevención
 

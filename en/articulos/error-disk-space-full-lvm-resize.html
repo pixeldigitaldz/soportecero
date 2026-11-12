@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Resize an LVM Volume in Linux When the Disk Runs Out of Space | SoporteCero</title>
-  <meta name="description" content="Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server.">
-  <meta name="keywords" content="Linux, Sysadmin, LVM">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out | SoporteCero</title>
+  <meta name="description" content="Learn how to safely extend an LVM logical volume and its ext4 or xfs filesystem hot in Linux without data loss and without rebooting the server.">
+  <meta name="keywords" content="Linux, Sysadmin, LVM, Storage, DevOps">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="How to Resize an LVM Volume in Linux When the Disk Runs Out of Space">
-  <meta property="og:description" content="Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server.">
+  <meta property="og:title" content="How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out">
+  <meta property="og:description" content="Learn how to safely extend an LVM logical volume and its ext4 or xfs filesystem hot in Linux without data loss and without rebooting the server.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="Sysadmin">
   <meta property="article:tag" content="LVM">
+  <meta property="article:tag" content="Storage">
+  <meta property="article:tag" content="DevOps">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Resize an LVM Volume in Linux When the Disk Runs Out of Space">
-  <meta name="twitter:description" content="Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server.">
+  <meta name="twitter:title" content="How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out">
+  <meta name="twitter:description" content="Learn how to safely extend an LVM logical volume and its ext4 or xfs filesystem hot in Linux without data loss and without rebooting the server.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to Resize an LVM Volume in Linux When the Disk Runs Out of Space",
-  "description": "Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server.",
+  "headline": "How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out",
+  "description": "Learn how to safely extend an LVM logical volume and its ext4 or xfs filesystem hot in Linux without data loss and without rebooting the server.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
-  "keywords": "Linux, Sysadmin, LVM",
+  "keywords": "Linux, Sysadmin, LVM, Storage, DevOps",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-26",
   "dateModified": "2026-07-26",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "How to Resize an LVM Volume in Linux When the Disk Runs Out of Space",
+      "name": "How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out",
       "item": "https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html"
     }
   ]
@@ -125,44 +127,44 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Resize an LVM Volume in Linux When the Disk Runs Out of Space",
-  "description": "Learn how to safely extend an LVM logical volume and its EXT4 or XFS filesystem without losing data and without shutting down the server.",
+  "name": "How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out",
+  "description": "Learn how to safely extend an LVM logical volume and its ext4 or xfs filesystem hot in Linux without data loss and without rebooting the server.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html#identificar-el-volumen-logico-y-el-espacio-disponible",
-      "name": "Identificar el volumen lógico y el espacio disponible",
+      "url": "https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html#step-1",
+      "name": "Step 1",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "First, verify which partition is saturated and locate the path of your logical volume: (Anota la ruta del volumen que quieres extender, por ejemplo /dev/mapper/vg_system-lv_root)."
+          "text": "Instruct the Linux kernel to re-scan the block device without rebooting:"
         }
       ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I resize an LVM partition while MySQL or Docker is actively writing to it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Both ext4 and XFS support online filesystem expansion. The Linux kernel pauses write locks for a fraction of a millisecond to update superblock block counts, allowing production database workloads to continue uninterrupted."
+      }
     },
     {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html#escanear-el-nuevo-almacenamiento-fisico",
-      "name": "Escanear el nuevo almacenamiento físico",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If you have expanded the virtual disk in your hypervisor (Proxmox, VMware, KVM), you must tell the Linux kernel to detect the physical disk size change (for example, /dev/sda):"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-disk-space-full-lvm-resize.html#extender-el-volumen-logico-y-el-sistema-de-archivos",
-      "name": "Extender el volumen lógico y el sistema de archivos",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Once the physical volume recognizes the new space, proceed to expand the logical volume and resize its internal structure in a single step:"
-        }
-      ]
+      "@type": "Question",
+      "name": "What should I do if &#39;pvs&#39; shows 0 free space after expanding the virtual disk?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If pvs shows no free space, you either forgot to trigger the kernel SCSI rescan (rescan), forgot to resize the partition with growpart, or forgot to run pvresize. Follow Step 2 in sequence to ensure each layer recognizes the newly added capacity."
+      }
     }
   ]
 }
@@ -178,7 +180,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -207,12 +209,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -242,7 +244,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -255,22 +257,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Systems & Servers</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">How to Resize an LVM Volume in Linux When the Disk Runs Out of Space</span>
+        <span style="color: var(--text-secondary);">How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">How to Resize an LVM Volume in Linux When the Disk Runs Out of Space</h1>
+        <h1 id="post-title">How to Resize an LVM Logical Volume in Linux When Disk Space Runs Out</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -282,7 +284,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -298,7 +300,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The disk full error (<code>No space left on device</code>) on a Linux server using LVM (Logical Volume Manager) can paralyze databases and services. The advantage of LVM is that it allows hot storage expansion, adding physical space to the logical volume and extending the file system without needing a reboot.</p>
+          <p>Running into an emergency <code>No space left on device</code> error on a production Linux server can instantly halt relational database engines (PostgreSQL, MySQL), stop container runtimes (Docker, containerd), and prevent SSH sessions from generating temporary authentication tokens. When the underlying storage architecture is built upon the <strong>Linux Logical Volume Manager (LVM)</strong>, however, system administrators possess the capability to perform <strong>online, non-disruptive storage expansion</strong>.</p>
+<p>Because LVM decouples physical storage disks from the operating system&#39;s logical file hierarchy, you can re-scan virtual disk buses in hypervisors (such as Proxmox VE, VMware ESXi, AWS EBS, or KVM), resize physical and logical volumes, and grow ext4 or XFS filesystems hot—with zero downtime and without rebooting the host.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -315,25 +318,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Logical Volume (LV) full while Volume Group (VG) has free space</strong></div>
+            <div class="diag-value"><strong>Volume Group (VG) has unallocated space while Logical Volume (LV) is full</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Extend logical volume: <code>lvextend -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv</code></div>
+            <div class="diag-value">Run <code>sudo lvextend -r -l +100%FREE /dev/mapper/vg-lv</code> to grow LV and filesystem</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Filesystem not expanded after extending the logical volume</strong></div>
+            <div class="diag-value"><strong>Virtual hypervisor disk expanded but Linux kernel has not re-scanned the SCSI bus</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Resize ext4/xfs filesystem using <code>resize2fs</code> or <code>xfs_growfs</code></div>
+            <div class="diag-value">Trigger a bus rescan: <code>echo 1 | sudo tee /sys/class/block/sdX/device/rescan</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Physical partition needs expansion before LVM can ingest new sectors</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Expand the partition table using <code>growpart /dev/sda 3</code> followed by <code>pvresize /dev/sda3</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Filesystem remains at old capacity after volume expansion</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Expand filesystem using <code>resize2fs</code> (for ext4) or <code>xfs_growfs</code> (for XFS)</div>
           </div></div></div>
       </div>
     </section>
@@ -378,6 +405,73 @@
             <span class="toc-number">02</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#step-1-identify-saturated-partitions-and-locate-logical-volume-paths" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 1: Identify Saturated Partitions and Locate Logical Volume Paths</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-2-trigger-kernel-scsi-rescan-and-resize-the-physical-partition" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 2: Trigger Kernel SCSI Rescan and Resize the Physical Partition</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-extend-the-logical-volume-and-filesystem-in-one-step" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Extend the Logical Volume and Filesystem in One Step</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-manual-filesystem-expansion-alternative-fallback" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Manual Filesystem Expansion (Alternative Fallback)</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-5-validate-the-new-storage-allocation" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 5: Validate the New Storage Allocation</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#can-i-resize-an-lvm-partition-while-mysql-or-docker-is-actively-writing-to-it" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can I resize an LVM partition while MySQL or Docker is actively writing to it?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-should-i-do-if-39pvs39-shows-0-free-space-after-expanding-the-virtual-disk" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What should I do if &#39;pvs&#39; shows 0 free space after expanding the virtual disk?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -391,13 +485,9 @@
           </svg>
           Step-by-Step Technical Implementation
         </h2>
-<ol class="steps-list">
 
-        <li class="step-item" id="identificar-el-volumen-logico-y-el-espacio-disponible">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="identificar-el-volumen-logico-y-el-espacio-disponible-heading">Step 1: Identificar el volumen lógico y el espacio disponible</h4>
-            <p>First, verify which partition is saturated and locate the path of your logical volume:</p>
+<h3 id="step-1-identify-saturated-partitions-and-locate-logical-volume-paths">Step 1: Identify Saturated Partitions and Locate Logical Volume Paths</h3>
+<p>Run storage inspection commands to identify the exact device mapper path of the exhausted partition:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -417,90 +507,267 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Ver el uso de disco de todas las particiones</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-h</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Check filesystem utilization across all mount points</span>
+<span class="tok-kw">df</span> <span class="tok-prop">-hT</span>
 <span class="tok-cmt">
-# Listar los volúmenes lógicos activos</span>
-<span class="tok-kw">sudo</span> lvdisplay
+# Display physical volumes (PV), volume groups (VG), and logical volumes (LV)</span>
+<span class="tok-kw">sudo</span> pvs
+<span class="tok-kw">sudo</span> vgs
+<span class="tok-kw">sudo</span> lvs
 </code></pre>
     </div>
     
-<p><em>(Anota la ruta del volumen que quieres extender, por ejemplo <code>/dev/mapper/vg_system-lv_root</code>).</em></p>
-          </div>
-        </li>
-        
+<p>Make note of the logical volume path displayed under <code>df</code> (e.g., <code>/dev/mapper/ubuntu--vg-ubuntu--lv</code> or <code>/dev/ubuntu-vg/root</code>) and determine whether the filesystem type is <strong>ext4</strong> or <strong>xfs</strong>.</p>
+<h3 id="step-2-trigger-kernel-scsi-rescan-and-resize-the-physical-partition">Step 2: Trigger Kernel SCSI Rescan and Resize the Physical Partition</h3>
+<p>If you increased the virtual disk size in your hypervisor (e.g., expanding from 50 GB to 100 GB in Proxmox or AWS):</p>
+<ol class="steps-list">
 
-        <li class="step-item" id="escanear-el-nuevo-almacenamiento-fisico">
-          <div class="step-number">2</div>
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="escanear-el-nuevo-almacenamiento-fisico-heading">Step 2: Escanear el nuevo almacenamiento físico</h4>
-            <p>If you have expanded the virtual disk in your hypervisor (Proxmox, VMware, KVM), you must tell the Linux kernel to detect the physical disk size change (for example, <code>/dev/sda</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Forzar un re-escaneo del bus SCSI para detectar la nueva capacidad</span>
-<span class="tok-kw">echo</span> <span class="tok-num">1</span> | <span class="tok-kw">sudo</span> tee /sys/class/block/sda/device/rescan
-<span class="tok-cmt">
-# Notificar a LVM que el volumen físico ha cambiado de tamaño</span>
-<span class="tok-kw">sudo</span> pvresize /dev/sda
-</code></pre>
-    </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="extender-el-volumen-logico-y-el-sistema-de-archivos">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="extender-el-volumen-logico-y-el-sistema-de-archivos-heading">Step 3: Extender el volumen lógico y el sistema de archivos</h4>
-            <p>Once the physical volume recognizes the new space, proceed to expand the logical volume and resize its internal structure in a single step:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Para sistemas con formato EXT4 (extiende volumen lógico y sistema de archivos simultáneamente)</span>
-<span class="tok-kw">sudo</span> lvextend <span class="tok-prop">-r</span> <span class="tok-prop">-l</span> +<span class="tok-num">100</span>%FREE /dev/mapper/vg_system-lv_root
-<span class="tok-cmt">
-# Si el sistema de archivos usa XFS, ejecuta la extensión de forma explícita</span>
-<span class="tok-kw">sudo</span> lvextend <span class="tok-prop">-l</span> +<span class="tok-num">100</span>%FREE /dev/mapper/vg_system-lv_root
-<span class="tok-kw">sudo</span> xfs_growfs /
-</code></pre>
-    </div>
+            <h4 id="step-1-heading">Step 1</h4>
+            Instruct the Linux kernel to re-scan the block device without rebooting:
           </div>
         </li>
         
 </ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Replace &#39;sda&#39; with your physical drive descriptor</span>
+<span class="tok-kw">echo</span> <span class="tok-num">1</span> | <span class="tok-kw">sudo</span> tee /sys/class/block/sda/device/rescan
+</code></pre>
+    </div>
+    
+<ol start="2">
+<li>Verify that the kernel recognizes the new geometry with <code>lsblk</code>:</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>lsblk
+</code></pre>
+    </div>
+    
+<ol start="3">
+<li>If LVM sits on a physical partition (such as <code>/dev/sda3</code>):</li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Install cloud-guest-utils if growpart is missing</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">-y</span> cloud-guest-utils <span class="tok-num">2</span>&gt;/dev/null || <span class="tok-kw">sudo</span> <span class="tok-kw">yum</span> install <span class="tok-prop">-y</span> cloud-utils-growpart
+<span class="tok-cmt">
+# Expand partition 3 to utilize all newly available sectors</span>
+<span class="tok-kw">sudo</span> growpart /dev/sda <span class="tok-num">3</span>
+<span class="tok-cmt">
+# Notify LVM that the physical volume has grown</span>
+<span class="tok-kw">sudo</span> pvresize /dev/sda3
+</code></pre>
+    </div>
+    
+<h3 id="step-3-extend-the-logical-volume-and-filesystem-in-one-step">Step 3: Extend the Logical Volume and Filesystem in One Step</h3>
+<p>Once the Physical Volume (PV) and Volume Group (VG) reflect unallocated free space, extend the Logical Volume. Using the <code>-r</code> (<code>--resizefs</code>) flag is the recommended best practice, as it automatically invokes the correct filesystem resizer (<code>resize2fs</code> for ext4 or <code>xfs_growfs</code> for XFS) in a single atomic transaction:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Extend the logical volume to consume 100% of remaining free space in the Volume Group</span><span class="tok-cmt">
+# and immediately expand the underlying filesystem online</span>
+<span class="tok-kw">sudo</span> lvextend <span class="tok-prop">-r</span> <span class="tok-prop">-l</span> +<span class="tok-num">100</span>%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+</code></pre>
+    </div>
+    
+<h3 id="step-4-manual-filesystem-expansion-alternative-fallback">Step 4: Manual Filesystem Expansion (Alternative Fallback)</h3>
+<p>If you already ran <code>lvextend</code> without the <code>-r</code> flag, the logical volume will be larger than the filesystem it hosts. Resize the filesystem manually according to its format:</p>
+<ul>
+<li><strong>For ext4 filesystems:</strong></li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Pass the device mapper path</span>
+<span class="tok-kw">sudo</span> resize2fs /dev/mapper/ubuntu--vg-ubuntu--lv
+</code></pre>
+    </div>
+    
+<ul>
+<li><strong>For XFS filesystems:</strong></li>
+</ul>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># XFS requires the mountpoint path (e.g., &#39;/&#39;), not the device path</span>
+<span class="tok-kw">sudo</span> xfs_growfs /
+</code></pre>
+    </div>
+    
+<h3 id="step-5-validate-the-new-storage-allocation">Step 5: Validate the New Storage Allocation</h3>
+<p>Confirm that the expanded capacity is actively recognized by the operating system:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-h</span> /
+</code></pre>
+    </div>
+    
+<p>You should now see the expanded storage volume available immediately with zero pending system reboots.</p>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="can-i-resize-an-lvm-partition-while-mysql-or-docker-is-actively-writing-to-it">Can I resize an LVM partition while MySQL or Docker is actively writing to it?</h3>
+<p>Yes. Both ext4 and XFS support online filesystem expansion. The Linux kernel pauses write locks for a fraction of a millisecond to update superblock block counts, allowing production database workloads to continue uninterrupted.</p>
+<h3 id="what-should-i-do-if-39pvs39-shows-0-free-space-after-expanding-the-virtual-disk">What should I do if &#39;pvs&#39; shows 0 free space after expanding the virtual disk?</h3>
+<p>If <code>pvs</code> shows no free space, you either forgot to trigger the kernel SCSI rescan (<code>rescan</code>), forgot to resize the partition with <code>growpart</code>, or forgot to run <code>pvresize</code>. Follow Step 2 in sequence to ensure each layer recognizes the newly added capacity.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -515,7 +782,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Never reduce the size of an LVM logical volume (<code>lvreduce</code>) hot or without having made a full backup of your database beforehand. While expanding storage is a safe task that executes in milliseconds, volume reduction is highly destructive and can permanently corrupt file descriptors if the assigned logical size falls below the actual volume of your data.</li>
+              <li><strong>Never Attempt Hot Volume Reduction (<code>lvreduce</code>):</strong> While storage expansion is safe and routine, shrinking a logical volume is dangerous. XFS does not support shrinking under any circumstances. Ext4 supports shrinking only while unmounted, and any calculation error in block sizes will permanently destroy filesystem superblocks and truncate data.</li>
+<li><strong>Maintain Automated Volume Monitoring:</strong> Configure Prometheus Node Exporter or Datadog alerts to trigger notifications when disk utilization reaches 80% to avoid emergency out-of-space incidents.</li>
             </ul>
           </div>
 
@@ -565,7 +833,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -576,7 +844,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -637,18 +905,18 @@
       </article>
       
 
-      <!-- Related Card: Why Is My Cron Job Not Running? Step-by-Step Diagnosis -->
+      <!-- Related Card: Why Is My Cron Job Not Running? Step-by-Step Linux Troubleshooting Guide -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cron-job-not-running.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Why Is My Cron Job Not Running? Step-by-Step Diagnosis</a>
+              <a href="../articulos/error-cron-job-not-running.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Why Is My Cron Job Not Running? Step-by-Step Linux Troubleshooting Guide</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -661,13 +929,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

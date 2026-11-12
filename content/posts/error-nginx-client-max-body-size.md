@@ -1,8 +1,7 @@
 ---
-title: Cómo solucionar el error 413 Request Entity Too Large en Nginx (Rápido)
+title: Cómo solucionar el error 413 Request Entity Too Large y 403 Forbidden en Nginx
 description: >-
-  ¿No puedes subir archivos o plugins a tu servidor Nginx? Soluciona el error
-  413 Request Entity Too Large en 3 simples pasos con esta guía práctica.
+  Aprende a solucionar el error 413 request entity too large y 403 forbidden nginx. Configura client_max_body_size y corrige permisos de archivos www-data en minutos.
 category: Sistemas y Servidores
 tags:
   - Nginx
@@ -11,7 +10,9 @@ tags:
 readTime: 7 min
 date: '2026-07-03'
 ---
-El error **413 request entity too large** en un servidor web Nginx ocurre cuando un cliente intenta subir un archivo (como una imagen, un plugin de WordPress o un backup pesado) cuyo tamaño supera el límite máximo de carga permitido en la directiva de configuración del proxy web.
+El error **413 request entity too large** en Nginx ocurre cuando el tamaño del archivo subido excede el límite permitido por defecto (1 MB). Para solucionarlo de inmediato, añade o modifica la directiva `client_max_body_size 64M;` dentro del bloque `http`, `server` o `location` en `/etc/nginx/nginx.conf` y recarga el servicio con `sudo nginx -s reload`.
+
+Por su parte, el error **403 forbidden nginx** surge cuando el usuario ejecutor del servidor web (comúnmente `www-data` o `nginx`) carece de permisos POSIX de lectura en los archivos estáticos o permisos de ejecución en los directorios. Para resolver el bloqueo 403 al instante, restablece la propiedad y permisos seguros ejecutando `sudo chown -R www-data:www-data /var/www/html && sudo find /var/www/html -type d -exec chmod 755 {} + && sudo find /var/www/html -type f -exec chmod 644 {} +`.
 
 ## Análisis de Arquitectura y Causa Raíz
 
@@ -28,7 +29,7 @@ Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorn
 
 | Causa | Solución |
 |---|---|
-| **Directiva client_max_body_size en Nginx con límite inferior al tamaño del archivo subido** |
+| **Directiva client_max_body_size en Nginx con límite inferior al tamaño del archivo subido** | Increase limit in `nginx.conf`: `client_max_body_size 64M;` |
 
 Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
 
@@ -84,51 +85,6 @@ sudo nginx -t
 sudo systemctl restart nginx
 sudo systemctl restart php8.2-fpm
 ```
-
-## Resolución de Casos Borde (Troubleshooting)
-
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
-
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
-
-Para verificar y solventar bloqueos por contexto de seguridad:
-```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
-
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
-```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
-```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
-```
-
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
-
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
-
-Para identificar y limpiar procesos bloqueados de forma segura:
-```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
-
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
-```
-
-### Verificación de Logs en Tiempo Real y Validación en Producción
-
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
-```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
-
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
-```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
 
 ## 🛡️ Consejos de Prevención
 

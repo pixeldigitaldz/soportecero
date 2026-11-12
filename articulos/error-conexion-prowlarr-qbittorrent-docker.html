@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker | SoporteCero</title>
-  <meta name="description" content="Aprende a corregir el error 'Connection Refused' configurando correctamente las redes internas de Docker para tus aplicaciones de automatización.">
+  <meta name="description" content="Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.">
   <meta name="keywords" content="Prowlarr, Docker, qBittorrent">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html">
@@ -22,7 +22,7 @@
   
   <!-- Open Graph -->
   <meta property="og:title" content="Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker">
-  <meta property="og:description" content="Aprende a corregir el error 'Connection Refused' configurando correctamente las redes internas de Docker para tus aplicaciones de automatización.">
+  <meta property="og:description" content="Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -41,7 +41,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker">
-  <meta name="twitter:description" content="Aprende a corregir el error 'Connection Refused' configurando correctamente las redes internas de Docker para tus aplicaciones de automatización.">
+  <meta name="twitter:description" content="Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -68,7 +68,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker",
-  "description": "Aprende a corregir el error 'Connection Refused' configurando correctamente las redes internas de Docker para tus aplicaciones de automatización.",
+  "description": "Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "es",
   "category": "Web y Código",
@@ -126,7 +126,7 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker",
-  "description": "Aprende a corregir el error 'Connection Refused' configurando correctamente las redes internas de Docker para tus aplicaciones de automatización.",
+  "description": "Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.",
   "step": [
     {
       "@type": "HowToStep",
@@ -136,7 +136,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Accede a la interfaz web de qBittorrent."
+          "text": "Abre la interfaz web de qBittorrent (http://IP_SERVIDOR:8080)."
         }
       ]
     },
@@ -148,7 +148,7 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Ve a Alt+O (Opciones) &gt; WebUI."
+          "text": "Ve a Opciones (icono de engranaje o Alt+O) &gt; pestaña Web UI."
         }
       ]
     },
@@ -160,21 +160,81 @@
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Desmarca la casilla Habilitar protección contra falsificación de petición en sitios cruzados (CSRF)."
+          "text": "Localiza la sección de Seguridad y desmarca:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 4,
-      "url": "https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html#paso-4",
-      "name": "Paso 4",
+      "url": "https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html#habilitar-la-proteccion-contra-la-falsificacion-de-peticion-en-sitios-cruzados-csrf",
+      "name": "Habilitar la protección contra la falsificación de petición en sitios cruzados (CSRF)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "En el campo Evitar la autenticación de clientes en subredes locales, ingresa la subred interna de Docker:"
+          "text": "Habilitar la protección contra la falsificación de petición en sitios cruzados (CSRF)"
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html#habilitar-la-validacion-de-la-cabecera-host",
+      "name": "Habilitar la validación de la cabecera Host",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "(Host header validation)."
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 6,
+      "url": "https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html#paso-6",
+      "name": "Paso 6",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "En el campo Evitar la autenticación de clientes en subredes locales, añade el rango de subredes internas de Docker:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 7,
+      "url": "https://soportecero.com/articulos/error-conexion-prowlarr-qbittorrent-docker.html#paso-7",
+      "name": "Paso 7",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Guarda los cambios. Si la WebUI no es accesible, detén el contenedor y edita directamente el archivo qBittorrent.conf en la carpeta montada:"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Por qué obtengo Connection Refused si puedo abrir la WebUI desde mi navegador?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tu navegador accede a qBittorrent desde la red física de tu hogar utilizando la IP del host y el puerto publicado (http://192.168.1.100:8080). Sin embargo, Prowlarr corre dentro de una red virtual aislada en Docker; si intentas usar localhost o la IP de red física sin una regla de enrutamiento NAT adecuada, la conexión se rechaza."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Es seguro desactivar la protección CSRF en qBittorrent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, siempre que la interfaz WebUI no esté expuesta directamente a Internet mediante apertura de puertos WAN en el router. Dentro de una red Docker privada o tras un Reverse Proxy con autenticación (como Nginx Proxy Manager, Traefik o Authelia), es una práctica habitual requerida por las APIs de automatización."
+      }
     }
   ]
 }
@@ -190,7 +250,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -219,11 +279,11 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web y Código</a></li>
-          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web y Código</a></li>
+          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
           <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
@@ -254,7 +314,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NUEVO EN SOPORTECERO:</strong> Suite de Calculadoras para Freelancers, Cotizador PDF en 1 Clic y Simuladores Financieros
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Abrir /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -267,7 +327,7 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../">INICIO</a>
+        <a href="../index.html">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Web y Código</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
@@ -282,7 +342,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            Por <a href="../sobre-mi.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -294,7 +354,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 8 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -310,15 +370,65 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>El error de conexión rechazada (<code>Connection Refused</code> o <code>Test failed: Connection refused</code>) al intentar vincular Prowlarr con qBittorrent en Docker ocurre porque ambos servicios corren en contenedores aislados que no comparten la misma red lógica virtual de Docker, o porque qBittorrent rechaza conexiones externas debido a una mala configuración en su API de control.</p>
+          <p>Al configurar qBittorrent como cliente de descargas (Download Client) en el panel de control de Prowlarr (o aplicaciones de la suite <code>*arr</code> como Sonarr y Radarr), el botón <strong>Test</strong> suele arrojar el fallo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>Test failed: Unable to connect to qBittorrent, Connection refused (<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">8080</span>)
+</code></pre>
+    </div>
+    
+<p>o bien:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>Test failed: Resource temporarily unavailable (qbittorrent:<span class="tok-num">8080</span>) / Connection refused
+</code></pre>
+    </div>
+    
+<p>Este fallo no responde habitualmente a una caída del servicio de qBittorrent, sino a una desconexión en el modelo de redes virtuales de Docker, a mecanismos de seguridad de la WebUI de qBittorrent (CSRF y validación de cabecera Host), o a arquitecturas donde el cliente torrent enruta su tráfico mediante un contenedor VPN (como Gluetun).</p>
+<hr>
 <h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En entornos contenerizados, el motor de <strong>Docker</strong> se apoya en primitivas fundamentales del kernel de Linux: <strong>Namespaces</strong> (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y <strong>Control Groups (cgroups v1/v2)</strong> para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).</p>
-<p>Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio <code>dockerd</code>, el runtime OCI (<code>containerd</code> / <code>runc</code>) y el subsistema de red del host:</p>
+<p>Para resolver la conectividad entre ambos contenedores es imprescindible entender cómo gestiona Docker el direccionamiento y la resolución DNS interna:</p>
 <ol>
-<li><strong>Comunicación con el socket IPC (<code>/var/run/docker.sock</code>):</strong> El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo <code>docker</code> o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error <code>EACCES</code> o <code>ECONNREFUSED</code>.</li>
-<li><strong>Ciclo de vida del contenedor y estados OCI:</strong> Durante la creación del contenedor (<code>container create / start</code>), <code>runc</code> solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento <strong>Overlay2</strong> (<code>lowerdir</code>, <code>upperdir</code> y <code>merged</code>). Si existe corrupción en las capas de imagen, agotamiento de inodos en <code>/var/lib/docker</code>, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).</li>
-<li><strong>Pila de red virtual y cadenas de iptables:</strong> Para exponer puertos (<code>-p</code>), Docker manipula directamente las tablas <code>nat</code> y <code>filter</code> del subsistema Netfilter mediante cadenas personalizadas (<code>DOCKER</code>, <code>DOCKER-USER</code>). Reinicios no sincronizados del firewall (<code>ufw</code> o <code>firewalld</code>) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.</li>
+<li><strong>El fallo de <code>localhost</code> o <code>127.0.0.1</code> dentro de un contenedor:</strong> Cada contenedor en Docker cuenta con su propio Network Namespace aislado. Cuando introduces <code>localhost:8080</code> dentro de la interfaz web de Prowlarr, la aplicación intenta establecer un socket TCP contra su propio espacio de red local (<code>lo</code>), donde no existe ningún servicio escuchando en el puerto 8080. La pila TCP/IP del kernel emite de inmediato un paquete TCP RST (<code>ECONNREFUSED</code>).</li>
+<li><strong>Redes por defecto frente a redes de usuario (Bridge):</strong> Los contenedores creados con <code>docker run</code> sin banderas de red se unen a la red <code>bridge</code> por defecto de Docker. En esta red predeterminada, el servidor DNS interno de Docker (<code>127.0.0.11</code>) <strong>está desactivado</strong>. Solo las redes personalizadas creadas por el usuario (o por <code>docker compose</code>) permiten la resolución de nombres de servicio (Service Discovery) mediante DNS.</li>
+<li><strong>Mecanismos de protección de qBittorrent WebUI:</strong> Las versiones modernas de qBittorrent incorporan protección contra ataques CSRF (<em>Cross-Site Request Forgery</em>) y validación de la cabecera HTTP <code>Host</code>. Si una petición procedente de Prowlarr incluye la cabecera <code>Host: qbittorrent:8080</code> y la protección está activa sin excepciones de subred, qBittorrent rechaza la llamada API con un código HTTP 401 o corta la conexión.</li>
+<li><strong>Pilas de red compartidas con VPN (Gluetun):</strong> En despliegues donde qBittorrent utiliza <code>network_mode: &quot;service:gluetun&quot;</code>, qBittorrent pierde su interfaz de red virtual propia (<code>eth0</code>) y comparte el namespace de red del contenedor VPN. En este caso, el nombre DNS <code>qbittorrent</code> no existe para otros contenedores en la red bridge: el tráfico debe dirigirse al nombre del servicio VPN (<code>gluetun</code>) y el puerto debe exponerse en el contenedor VPN.</li>
 </ol>
+<hr>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -333,15 +443,93 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>Connection refused (127.0.0.1:8080)</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Nombre de host de red de Docker no alcanzable entre contenedores</strong></div>
+            <div class="diag-value">Uso de dirección loopback local en lugar del nombre DNS del contenedor.</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value"></div>
+            <div class="diag-value">Cambiar el host a <code>qbittorrent</code> o <code>gluetun</code> en la configuración de Prowlarr.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>Name or service not known: qbittorrent</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Los contenedores pertenecen a redes Docker distintas o la red por defecto no tiene DNS interno.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Definir una red bridge compartida (<code>external</code> o común) en <code>docker-compose.yml</code>.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>Connection refused</code> (qBittorrent bajo VPN Gluetun)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Prowlarr apunta a <code>qbittorrent:8080</code> cuando la interfaz de red le pertenece a <code>gluetun</code>.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Apuntar el host a <code>gluetun</code> y mapear el puerto <code>8080:8080</code> en el servicio Gluetun.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>Unauthorized / Test failed: Unauthorized</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Contraseña incorrecta o bloqueo por subred no autorizada en qBittorrent.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Configurar excepción de subred Docker en qBittorrent o verificar usuario/password.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>403 Forbidden</code> tras conexión inicial</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Protección CSRF o validación de cabecera Host activa en qBittorrent WebUI.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Desactivar validación de Host y CSRF para clientes locales en <code>qBittorrent.conf</code>.</div>
           </div></div></div>
       </div>
     </section>
@@ -385,6 +573,14 @@
             </a>
           </li>
         
+
+          <li class="toc-subitem">
+            <a href="#comandos-de-inspeccion-de-red-docker" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Comandos de Inspección de Red Docker</span>
+            </a>
+          </li>
+        
         </ul>
         </li>
       
@@ -396,17 +592,25 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#paso-2-desactivar-la-proteccion-csrf-y-permitir-acceso-local-en-qbittorrent" class="toc-sublink">
+            <a href="#paso-1-configurar-una-red-bridge-compartida-en-docker-compose" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Paso 2: Desactivar la protección CSRF y permitir acceso local en qBittorrent</span>
+              <span class="toc-subtext">Paso 1: Configurar una Red Bridge Compartida en Docker Compose</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#paso-3-utilizar-el-nombre-del-contenedor-como-direccion-de-host" class="toc-sublink">
+            <a href="#paso-2-desactivar-csrf-y-host-header-validation-en-qbittorrent" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Paso 3: Utilizar el nombre del contenedor como dirección de Host</span>
+              <span class="toc-subtext">Paso 2: Desactivar CSRF y Host Header Validation en qBittorrent</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#paso-3-configurar-el-download-client-en-prowlarr" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Paso 3: Configurar el Download Client en Prowlarr</span>
             </a>
           </li>
         
@@ -421,25 +625,34 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor" class="toc-sublink">
+            <a href="#caso-borde-1-qbittorrent-enrutado-a-traves-de-gluetun-vpn" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</span>
+              <span class="toc-subtext">Caso Borde 1: qBittorrent Enrutado a través de Gluetun VPN</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#preguntas-frecuentes" class="toc-link">
+            <span class="toc-number">05</span>
+            <span class="toc-text">Preguntas Frecuentes</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#por-que-obtengo-connection-refused-si-puedo-abrir-la-webui-desde-mi-navegador" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">¿Por qué obtengo Connection Refused si puedo abrir la WebUI desde mi navegador?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos" class="toc-sublink">
+            <a href="#es-seguro-desactivar-la-proteccion-csrf-en-qbittorrent" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Verificación de Logs en Tiempo Real y Validación en Producción</span>
+              <span class="toc-subtext">¿Es seguro desactivar la protección CSRF en qBittorrent?</span>
             </a>
           </li>
         
@@ -451,7 +664,8 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h3 id="comandos-de-inspeccion-de-red-docker">Comandos de Inspección de Red Docker</h3>
+<p>Ejecuta estas instrucciones en la terminal del host para verificar el estado de los contenedores y sus redes:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -471,21 +685,21 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado general del demonio Docker</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-kw">docker</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar a qué redes virtuales están conectados los contenedores</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">-f</span> <span class="tok-cmt">&#39;{{json .NetworkSettings.Networks}}&#39; prowlarr | jq .</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">-f</span> <span class="tok-cmt">&#39;{{json .NetworkSettings.Networks}}&#39; qbittorrent | jq .</span>
 <span class="tok-cmt">
-# 2. Inspeccionar los últimos logs del contenedor afectado</span>
-<span class="tok-kw">docker</span> logs <span class="tok-prop">--tail</span> <span class="tok-num">50</span> <span class="tok-prop">--timestamps</span> NOMBRE_CONTENEDOR
+# 2. Probar la resolución DNS y conectividad TCP desde dentro del contenedor de Prowlarr</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> prowlarr nc <span class="tok-prop">-zv</span> qbittorrent 8080<span class="tok-cmt">
+# O utilizando curl:</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> prowlarr <span class="tok-kw">curl</span> <span class="tok-prop">-I</span> <span class="tok-prop">-m</span> <span class="tok-num">5</span> http://qbittorrent:<span class="tok-num">8080</span>/api/v2/app/webapiVersion
 <span class="tok-cmt">
-# 3. Verificar el uso de recursos y memoria en tiempo real</span>
-<span class="tok-kw">docker</span> stats <span class="tok-prop">--no-stream</span>
+# 3. Comprobar los puertos que están escuchando dentro del contenedor de qBittorrent</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> qbittorrent <span class="tok-kw">ss</span> <span class="tok-prop">-tulpn</span>
 </code></pre>
     </div>
     
-<ul>
-<li>El comando <code>docker logs</code> con el parámetro <code>--tail 50</code> extrae únicamente las últimas 50 líneas emitidas en <code>stdout</code> y <code>stderr</code>, mientras que <code>--timestamps</code> permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.</li>
-<li>El flag <code>--no-stream</code> en <code>docker stats</code> realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.</li>
-</ul>
+<hr>
 <h2 id="implementacion-tecnica-paso-a-paso">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -493,8 +707,8 @@
           Implementación Técnica Paso a Paso
         </h2>
 
-<p>Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:</p>
-<p>Si tus contenedores no pueden hablar entre sí usando sus nombres de servicio, crea una red dedicada en tu archivo <code>docker-compose.yml</code>:</p>
+<h3 id="paso-1-configurar-una-red-bridge-compartida-en-docker-compose">Paso 1: Configurar una Red Bridge Compartida en Docker Compose</h3>
+<p>Si Prowlarr y qBittorrent están definidos en el mismo archivo <code>docker-compose.yml</code>, define una red personalizada:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -514,14 +728,245 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Definir una red puente común en tu compose</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">version</span>: <span class="tok-cmt">&#39;3.8&#39;</span>
+
+<span class="tok-kw">services</span>:
+  qbittorrent:
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    <span class="tok-kw">environment</span>:
+      - PUID=<span class="tok-num">1000</span>
+      - PGID=<span class="tok-num">1000</span>
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=<span class="tok-num">8080</span>
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;8080:8080&quot;</span>
+      - <span class="tok-str">&quot;6881:6881&quot;</span>
+      - <span class="tok-str">&quot;6881:6881/udp&quot;</span>
+    <span class="tok-kw">volumes</span>:
+      - ./qbittorrent/config:/config
+      - /datos/torrents:/downloads
+    <span class="tok-kw">networks</span>:
+      - arr-net
+    <span class="tok-kw">restart</span>: unless-stopped
+
+  prowlarr:
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    <span class="tok-kw">environment</span>:
+      - PUID=<span class="tok-num">1000</span>
+      - PGID=<span class="tok-num">1000</span>
+      - TZ=Europe/Madrid
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;9696:9696&quot;</span>
+    <span class="tok-kw">volumes</span>:
+      - ./prowlarr/config:/config
+    <span class="tok-kw">networks</span>:
+      - arr-net
+    <span class="tok-kw">restart</span>: unless-stopped
+
 <span class="tok-kw">networks</span>:
-  arr-network:
+  arr-net:
+    name: arr-net
     driver: bridge
 </code></pre>
     </div>
     
-<p>Asegura que tanto el servicio de <code>prowlarr</code> como el de <code>qbittorrent</code> tengan asignada esta red:</p>
+<p>Si ejecutas los servicios en archivos compose independientes, declara la red como externa:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Crear la red manualmente una sola vez en el host</span>
+<span class="tok-kw">docker</span> network create arr-net
+</code></pre>
+    </div>
+    
+<p>Y en cada <code>docker-compose.yml</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">networks</span>:
+  arr-net:
+    external: true
+</code></pre>
+    </div>
+    
+<h3 id="paso-2-desactivar-csrf-y-host-header-validation-en-qbittorrent">Paso 2: Desactivar CSRF y Host Header Validation en qBittorrent</h3>
+<ol class="steps-list">
+
+        <li class="step-item" id="paso-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="paso-1-heading">Paso 1</h4>
+            Abre la interfaz web de qBittorrent (<code>http://IP_SERVIDOR:8080</code>).
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="paso-2-heading">Paso 2</h4>
+            Ve a <strong>Opciones</strong> (icono de engranaje o <code>Alt+O</code>) &gt; pestaña <strong>Web UI</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="paso-3-heading">Paso 3</h4>
+            Localiza la sección de <strong>Seguridad</strong> y desmarca:<ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="habilitar-la-proteccion-contra-la-falsificacion-de-peticion-en-sitios-cruzados-csrf">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="habilitar-la-proteccion-contra-la-falsificacion-de-peticion-en-sitios-cruzados-csrf-heading">Habilitar la protección contra la falsificación de petición en sitios cruzados (CSRF)</h4>
+            .
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="habilitar-la-validacion-de-la-cabecera-host">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="habilitar-la-validacion-de-la-cabecera-host-heading">Habilitar la validación de la cabecera Host</h4>
+             (Host header validation).</li>
+</ul>
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-6">
+          <div class="step-number">6</div>
+          <div class="step-body">
+            <h4 id="paso-6-heading">Paso 6</h4>
+            En el campo <strong>Evitar la autenticación de clientes en subredes locales</strong>, añade el rango de subredes internas de Docker:
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>, <span class="tok-num">10.0</span>.<span class="tok-num">0.0</span>/<span class="tok-num">8</span>
+</code></pre>
+    </div>
+    
+
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="paso-7">
+          <div class="step-number">7</div>
+          <div class="step-body">
+            <h4 id="paso-7-heading">Paso 7</h4>
+            Guarda los cambios. Si la WebUI no es accesible, detén el contenedor y edita directamente el archivo <code>qBittorrent.conf</code> en la carpeta montada:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>[Preferences]
+WebUI\CSRFProtection=<span class="tok-kw">false</span>
+WebUI\HostHeaderValidation=<span class="tok-kw">false</span>
+WebUI\LocalHostAuth=<span class="tok-kw">false</span>
+WebUI\AuthSubnetWhitelist=<span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>
+</code></pre>
+    </div>
+    
+<h3 id="paso-3-configurar-el-download-client-en-prowlarr">Paso 3: Configurar el Download Client en Prowlarr</h3>
+<ol>
+<li>Accede al panel web de Prowlarr (<code>http://IP_SERVIDOR:9696</code>).</li>
+<li>Dirígete a <strong>Settings</strong> &gt; <strong>Download Clients</strong> &gt; pulsa el botón <strong>+</strong> y selecciona <strong>qBittorrent</strong>.</li>
+<li>Rellena los campos con los siguientes valores exactos:<ul>
+<li><strong>Name:</strong> <code>qBittorrent</code></li>
+<li><strong>Enable:</strong> Marcado</li>
+<li><strong>Host:</strong> <code>qbittorrent</code> (el nombre del servicio o contenedor en Docker)</li>
+<li><strong>Port:</strong> <code>8080</code> (el puerto interno de la WebUI)</li>
+<li><strong>Use SSL:</strong> Desmarcado (a menos que hayas configurado certificados TLS inversos)</li>
+<li><strong>Username:</strong> Tu usuario de qBittorrent (por defecto <code>admin</code>)</li>
+<li><strong>Password:</strong> Tu contraseña configurada</li>
+</ul>
+</li>
+<li>Pulsa <strong>Test</strong>. La comprobación debe devolver una confirmación verde instantánea. Pulsa <strong>Save</strong>.</li>
+</ol>
+<hr>
+<h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
+<h3 id="caso-borde-1-qbittorrent-enrutado-a-traves-de-gluetun-vpn">Caso Borde 1: qBittorrent Enrutado a través de Gluetun VPN</h3>
+<p>Cuando qBittorrent se ejecuta tras una VPN como Gluetun, utiliza <code>network_mode: &quot;service:gluetun&quot;</code>. En este escenario:</p>
+<ol>
+<li>qBittorrent <strong>no puede tener puertos mapeados</strong> en su bloque de servicio; los puertos deben mapearse en <code>gluetun</code>.</li>
+<li>qBittorrent y Prowlarr no pueden comunicarse mediante el nombre <code>qbittorrent</code>.</li>
+</ol>
+<p><strong>Configuración correcta en <code>docker-compose.yml</code>:</strong></p>
 
     <div class="code-container">
       <div class="code-header">
@@ -542,222 +987,82 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
-  prowlarr:
-    ...
+  gluetun:
+    <span class="tok-kw">image</span>: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    <span class="tok-kw">ports</span>:
+      - <span class="tok-str">&quot;8080:8080&quot;</span><span class="tok-cmt"> # WebUI de qBittorrent expuesta a través de Gluetun</span>
+      - <span class="tok-str">&quot;6881:6881&quot;</span>
+      - <span class="tok-str">&quot;6881:6881/udp&quot;</span>
+    <span class="tok-kw">environment</span>:
+      - VPN_SERVICE_PROVIDER=airvpn<span class="tok-cmt"> # O tu proveedor habitual</span>
+      - VPN_TYPE=wireguard
     <span class="tok-kw">networks</span>:
-      - arr-network
+      - arr-net
+
   qbittorrent:
-    ...
-    <span class="tok-kw">networks</span>:
-      - arr-network
+    <span class="tok-kw">image</span>: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: <span class="tok-str">&quot;service:gluetun&quot;</span>
+    <span class="tok-kw">depends_on</span>:
+      - gluetun
+    <span class="tok-kw">volumes</span>:
+      - ./qbittorrent/config:/config
+      - /datos/torrents:/downloads
 </code></pre>
     </div>
     
-<h3 id="paso-2-desactivar-la-proteccion-csrf-y-permitir-acceso-local-en-qbittorrent">Paso 2: Desactivar la protección CSRF y permitir acceso local en qBittorrent</h3>
-<p>El motor de seguridad de qBittorrent bloqueará las llamadas a la API hechas desde otros contenedores dentro de la red privada si no configuras los parámetros de acceso seguro en tu cliente web:</p>
-<ol class="steps-list">
+<p><strong>Ajuste en Prowlarr:</strong> En el campo <strong>Host</strong> del cliente de descargas en Prowlarr, escribe <code>gluetun</code> (en lugar de <code>qbittorrent</code>) con el puerto <code>8080</code>.</p>
+<hr>
 
-        <li class="step-item" id="paso-1">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="paso-1-heading">Paso 1</h4>
-            Accede a la interfaz web de qBittorrent.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="paso-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="paso-2-heading">Paso 2</h4>
-            Ve a <strong>Alt+O</strong> (Opciones) &gt; <strong>WebUI</strong>.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="paso-3">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="paso-3-heading">Paso 3</h4>
-            Desmarca la casilla <strong>Habilitar protección contra falsificación de petición en sitios cruzados (CSRF)</strong>.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="paso-4">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h4 id="paso-4-heading">Paso 4</h4>
-            En el campo <strong>Evitar la autenticación de clientes en subredes locales</strong>, ingresa la subred interna de Docker:
-          </div>
-        </li>
-        
-</ol>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">PLAINTEXT</span>
+  <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">INGENIERÍA &bull; HERRAMIENTAS INTERACTIVAS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> EN VIVO EN /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Herramientas para Desarrolladores &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      En SoporteCero no solo resolvemos incidencias de infraestructura y código; también construimos herramientas interactivas de ingeniería financiera para desarrolladores, freelancers y administradores de sistemas. Si estás integrando pasarelas de cobro, cotizando servicios técnicos o auditando márgenes de ecommerce, accede a nuestras calculadoras verificadas en laboratorio con exportación formal en PDF en un solo clic:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calcular comisiones netas en Stripe, PayPal y plataformas de cobro">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calcular Comisiones PayPal / Wise / Stripe</span>
+          <span class="sys-tool-card-meta font-mono">Modo inverso · Importe neto exacto</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-num">172.16</span>.<span class="tok-num">0.0</span>/<span class="tok-num">12</span>, <span class="tok-num">192.168</span>.<span class="tok-num">0.0</span>/<span class="tok-num">16</span>
-</code></pre>
-    </div>
-    
-<h3 id="paso-3-utilizar-el-nombre-del-contenedor-como-direccion-de-host">Paso 3: Utilizar el nombre del contenedor como dirección de Host</h3>
-<p>Al configurar el cliente de Torrent dentro del panel de Prowlarr, nunca utilices <code>localhost</code> o <code>127.0.0.1</code>. En su lugar, ingresa el nombre exacto del contenedor asignado en Docker:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">PLAINTEXT</span>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Cotizar proyecto de desarrollo y generar propuesta formal en PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Cotizar Proyecto Web / Tarifa por Hora en PDF</span>
+          <span class="sys-tool-card-meta font-mono">Exportación en 1 clic lista para clientes</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>Host: qbittorrent
-Port: <span class="tok-num">8080</span>
-</code></pre>
-    </div>
-    
-<h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
-<h3 id="caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</h3>
-<p>En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan <strong>SELinux</strong> en modo Enforcing) o en Ubuntu/Debian (que implementan <strong>AppArmor</strong>), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales <code>chmod 777</code> y el usuario <code>root</code> están en uso.</p>
-<p>Para verificar y solventar bloqueos por contexto de seguridad:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulador ROAS y rentabilidad publicitaria">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Simulador ROAS &amp; Rentabilidad</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortizaciones</span>
         </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Consultar si SELinux generó denegaciones recientes en el log de auditoría</span>
-<span class="tok-kw">sudo</span> ausearch <span class="tok-prop">-m</span> avc <span class="tok-prop">-ts</span> recent <span class="tok-num">2</span>&gt;/dev/null
-<span class="tok-cmt">
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel</span>
-<span class="tok-kw">sudo</span> dmesg | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> apparmor | tail <span class="tok-prop">-n</span> <span class="tok-num">20</span>
-</code></pre>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
     </div>
-    
-<p>Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Restaurar etiquetas de contexto de seguridad recursivamente</span>
-<span class="tok-kw">sudo</span> restorecon <span class="tok-prop">-Rv</span> /ruta/afectada
-</code></pre>
-    </div>
-    
-<h3 id="caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</h3>
-<p>En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (<em>zombie processes</em>) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.</p>
-<p>Para identificar y limpiar procesos bloqueados de forma segura:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Identificar qué proceso tiene abierto el descriptor de archivo o socket</span>
-<span class="tok-kw">sudo</span> lsof +D /ruta/o/archivo/afectado
-<span class="tok-cmt">
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">kill</span> <span class="tok-prop">-15</span> PID_DEL_PROCESO
-</code></pre>
-    </div>
-    
-<h3 id="verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion">Verificación de Logs en Tiempo Real y Validación en Producción</h3>
-<p>Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Monitorear registros en vivo filtrando por palabras clave de fallo</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-f</span> <span class="tok-prop">-n</span> <span class="tok-num">100</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-Ei</span> <span class="tok-str">&quot;(error|fail|warn|critical)&quot;</span>
-<span class="tok-cmt">
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)</span>
-<span class="tok-kw">echo</span> $?
-</code></pre>
-    </div>
-    
-<p>Un valor de retorno <code>0</code> confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.</p>
+  </section>
+  
+<h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
+<h3 id="por-que-obtengo-connection-refused-si-puedo-abrir-la-webui-desde-mi-navegador">¿Por qué obtengo Connection Refused si puedo abrir la WebUI desde mi navegador?</h3>
+<p>Tu navegador accede a qBittorrent desde la red física de tu hogar utilizando la IP del host y el puerto publicado (<code>http://192.168.1.100:8080</code>). Sin embargo, Prowlarr corre dentro de una red virtual aislada en Docker; si intentas usar <code>localhost</code> o la IP de red física sin una regla de enrutamiento NAT adecuada, la conexión se rechaza.</p>
+<h3 id="es-seguro-desactivar-la-proteccion-csrf-en-qbittorrent">¿Es seguro desactivar la protección CSRF en qBittorrent?</h3>
+<p>Sí, siempre que la interfaz WebUI no esté expuesta directamente a Internet mediante apertura de puertos WAN en el router. Dentro de una red Docker privada o tras un Reverse Proxy con autenticación (como Nginx Proxy Manager, Traefik o Authelia), es una práctica habitual requerida por las APIs de automatización.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -772,7 +1077,7 @@ Port: <span class="tok-num">8080</span>
               Prácticas de seguridad recomendadas:
             </p>
             <ul class="prevention-list">
-              <li>No expongas directamente los puertos de control de la interfaz WebUI de qBittorrent o de la API de Prowlarr a Internet sin establecer una contraseña de acceso fuerte y robusta. Si deseas acceder de forma remota a estas herramientas de automatización, utiliza túneles VPN seguros (como WireGuard o Tailscale) en lugar de realizar mapeos de puertos directos en tu router de red doméstico, protegiendo tus descargas de intrusiones no autorizadas.</li>
+              
             </ul>
           </div>
 
@@ -822,7 +1127,7 @@ Port: <span class="tok-num">8080</span>
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../sobre-mi.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
@@ -918,7 +1223,8 @@ Port: <span class="tok-num">8080</span>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Inicio</a></li>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
         <li><a href="../nosotros.html">Sobre Nosotros</a></li>
         <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
         <li><a href="../legal/terminos.html">Términos de Servicio</a></li>

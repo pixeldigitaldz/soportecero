@@ -1,135 +1,239 @@
 ---
 title: 'Error Docker: failed to create shim task: OCI runtime create failed'
 description: >-
-  Cómo solucionar el fallo failed to create shim task OCI runtime create failed
-  executable file not found al iniciar contenedores Docker.
+  Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.
 category: Sistemas y Servidores
 tags:
   - Docker
   - DevOps
   - Contenedores
   - Linux
-readTime: 7 min
+readTime: 8 min
 date: '2026-09-11'
 ---
-Al ejecutar `docker run` o `docker compose up`, el demonio de containerd puede abortar con el error `failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "...": executable file not found in $PATH`. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el `ENTRYPOINT` o `CMD`.
+Al ejecutar `docker run` o `docker compose up`, el demonio de containerd puede abortar abruptamente el ciclo de vida del contenedor con el mensaje:
+
+```text
+failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/entrypoint.sh": executable file not found in $PATH: unknown
+```
+
+A pesar de que el desarrollador compruebe que el archivo existe físicamente en el repositorio o dentro de la imagen, el contenedor entra en estado `Exit 127` de forma inmediata. Este fallo se produce en la capa de interoperabilidad entre el runtime OCI (`runc`), el kernel de Linux (`execve`) y la estructura binaria del ejecutable o script invocado.
+
+---
 
 ## Análisis de Arquitectura y Causa Raíz
 
-En entornos contenerizados, el motor de **Docker** se apoya en primitivas fundamentales del kernel de Linux: **Namespaces** (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y **Control Groups (cgroups v1/v2)** para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).
+Para comprender por qué Docker emite un error de archivo no encontrado cuando el archivo sí existe, es indispensable examinar la cadena de ejecución de contenedores en Linux:
 
-Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio `dockerd`, el runtime OCI (`containerd` / `runc`) y el subsistema de red del host:
-1. **Comunicación con el socket IPC (`/var/run/docker.sock`):** El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo `docker` o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error `EACCES` o `ECONNREFUSED`.
-2. **Ciclo de vida del contenedor y estados OCI:** Durante la creación del contenedor (`container create / start`), `runc` solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento **Overlay2** (`lowerdir`, `upperdir` y `merged`). Si existe corrupción en las capas de imagen, agotamiento de inodos en `/var/lib/docker`, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).
-3. **Pila de red virtual y cadenas de iptables:** Para exponer puertos (`-p`), Docker manipula directamente las tablas `nat` y `filter` del subsistema Netfilter mediante cadenas personalizadas (`DOCKER`, `DOCKER-USER`). Reinicios no sincronizados del firewall (`ufw` o `firewalld`) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.
+1. **El rol de `containerd-shim` y `runc`:** Docker no ejecuta contenedores directamente; delega la orquestación a `containerd`, que a su vez instancia un proceso ligero `containerd-shim` por contenedor. El shim invoca a `runc`, la implementación de referencia del Open Container Initiative (OCI).
+2. **La llamada al sistema `execve`:** `runc` crea los namespaces de Linux (PID, Mount, Network, IPC) y el chroot / pivot_root sobre el sistema de archivos Overlay2. Posteriormente, ejecuta la syscall `execve(const char *filename, char *const argv[], char *const envp[])`.
+3. **El origen del código `ENOENT` (Error 2):** El kernel devuelve `ENOENT` ("No such file or directory") bajo tres circunstancias críticas:
+   * **El intérprete de la línea Shebang no existe:** Si el script declara `#!/bin/sh\r` (debido a retornos de carro de Windows CRLF) o `#!/bin/bash` en una imagen Alpine minimalista, el kernel no busca el script, sino que busca el intérprete binario indicado. Al no encontrar `/bin/sh\r` o `/bin/bash`, emite `ENOENT`.
+   * **Falta el cargador dinámico ELF (Dynamic Linker):** Si un binario compilado (en Go, C++, Rust o Node.js con módulos nativos) fue enlazado dinámicamente con `glibc` (`/lib64/ld-linux-x86-64.so.2`) y se ejecuta dentro de un contenedor Alpine Linux (que utiliza `musl libc`), el kernel intenta cargar el linker dinámico de la cabecera ELF. Al no existir `/lib64/ld-linux-x86-64.so.2`, la syscall `execve` falla con `executable file not found`, desconcertando al usuario.
+   * **Ruta relativa no presente en `$PATH`:** Declarar `ENTRYPOINT ["entrypoint.sh"]` sin una ruta absoluta (`/entrypoint.sh` o `/usr/local/bin/entrypoint.sh`) requiere que el directorio de trabajo (`WORKDIR`) esté explícitamente incorporado en la variable de entorno `$PATH`.
 
-## Entorno de Laboratorio y Diagnóstico
+---
 
-Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
+## Entorno de Laboratorio y Diagnóstico Previo
 
-| Causa | Solución |
-|---|---|
-| **El binario del ENTRYPOINT o CMD no existe dentro de la imagen o no tiene permisos de ejecución** |
+Antes de modificar el Dockerfile o la configuración de despliegue, utiliza esta matriz técnica para clasificar la causa raíz con exactitud:
 
-Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
+| Firma del Error | Causa Raíz Subyacente | Estrategia de Mitigación Técnica |
+|---|---|---|
+| `exec: "/entrypoint.sh": executable file not found in $PATH` (Script Shell) | Retornos de carro Windows CRLF (`\r\n`) en el archivo local o script sin permisos de ejecución. | Convertir terminadores de línea con `dos2unix` y aplicar `chmod +x` antes del build. |
+| `exec: "bash": executable file not found in $PATH` | Imagen base minimalista (Alpine Linux, BusyBox o Scratch) carece del intérprete Bash. | Cambiar el shebang a `#!/bin/sh` o instalar el paquete `bash` mediante el gestor del contenedor. |
+| `exec: "./app": executable file not found in $PATH` (Binario compilado) | Incompatibilidad de ABI: binario enlazado dinámicamente contra `glibc` ejecutado en entorno `musl libc`. | Compilar binario estático (`CGO_ENABLED=0`) o instalar `gcompat` / `libc6-compat` en Alpine. |
+| `exec: "entrypoint.sh": executable file not found in $PATH` | Sintaxis JSON exec con ruta relativa fuera de `$PATH`. | Especificar ruta canónica absoluta: `ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]`. |
+| `runc create failed: ... Permission denied` | Falta de bit ejecutable (+x) en la capa Overlay2 del contenedor. | Incorporar instrucción `RUN chmod +x /ruta/script` explícita en el Dockerfile. |
+
+### Comandos de Inspección Forense
+
+Para confirmar el diagnóstico sin alterar el entorno del servidor:
 
 ```bash
-# 1. Comprobar el estado general del demonio Docker
-sudo systemctl status docker --no-pager -l
+# 1. Comprobar las terminaciones de línea del script en el host (debe devolver 'ASCII text', NO 'with CRLF line terminators')
+file entrypoint.sh
 
-# 2. Inspeccionar los últimos logs del contenedor afectado
-docker logs --tail 50 --timestamps NOMBRE_CONTENEDOR
+# 2. Inspeccionar la primera línea exacta (Shebang) y verificar si contiene caracteres invisibles \r
+head -n 1 entrypoint.sh | cat -v
 
-# 3. Verificar el uso de recursos y memoria en tiempo real
-docker stats --no-stream
+# 3. Para binarios compilados, verificar el intérprete dinámico ELF requerido
+readelf -l app | grep "program interpreter"
+
+# 4. Inspeccionar interactivamente el contenedor sobrescribiendo el entrypoint a una shell nativa
+docker run --rm -it --entrypoint /bin/sh mi-imagen:tag
 ```
 
-- El comando `docker logs` con el parámetro `--tail 50` extrae únicamente las últimas 50 líneas emitidas en `stdout` y `stderr`, mientras que `--timestamps` permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.
-- El flag `--no-stream` en `docker stats` realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.
+---
 
 ## Implementación Técnica Paso a Paso
 
-Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:
+### Paso 1: Eliminar Retornos de Carro CRLF (Windows a Unix)
 
-Si editaste el archivo `entrypoint.sh` o scripts shell en Windows o con git autocrlf activo, el archivo contendrá caracteres de retorno de carro `\r`. Linux intentará ejecutar `/bin/sh\r`, lo cual falla inmediatamente:
+Si el proyecto fue clonado en Windows o procesado por un editor con configuración no estándar, convierte el archivo a terminaciones Unix estrictas (LF):
+
 ```bash
-# Instalar dos2unix y convertir el archivo a formato Unix
-sudo apt-get install -y dos2unix
+# Opción A: Mediante dos2unix en sistemas Debian/Ubuntu
+sudo apt-get update && sudo apt-get install -y dos2unix
 dos2unix entrypoint.sh
+
+# Opción B: Mediante sed (sin necesidad de paquetes adicionales)
+sed -i 's/\r$//' entrypoint.sh
 ```
 
-### Paso 2: Garantizar permisos de ejecución en el Dockerfile
-Verifica que el script tenga permisos de ejecución tanto en tu máquina como dentro de la imagen Docker:
-```dockerfile
-# En tu Dockerfile
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+Para prevenir que Git convierta los saltos de línea al sincronizar ramas entre equipos heterogéneos, crea o edita el archivo `.gitattributes` en la raíz de tu repositorio:
+
+```gitattributes
+# Forzar terminadores LF en todos los scripts de shell y archivos de configuración
+*.sh text eol=lf
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
 ```
 
-### Paso 3: Verificar la ruta absoluta y el intérprete (Shebang)
-Asegúrate de que la primera línea de tu script contenga un intérprete válido que realmente exista en la imagen base (por ejemplo, en imágenes Alpine no existe `/bin/bash`, debes usar `/bin/sh`):
+### Paso 2: Ajustar el Shebang y la Shell de la Imagen Base
+
+En imágenes ultraligeras como Alpine Linux (`alpine:3.20`), el binario `/bin/bash` no existe de forma predeterminada; el sistema utiliza `ash` enlazado a `/bin/sh`.
+
+Asegúrate de que tus scripts de inicio utilicen el shebang estándar POSIX:
+
 ```bash
 #!/bin/sh
-set -e
+set -eu
+
+# Script de arranque en entorno de producción
+echo "Iniciando servicio de aplicación..."
 exec "$@"
 ```
-Si utilizas `ENTRYPOINT ["entrypoint.sh"]` en formato exec (corchetes), debes asegurarte de que la ruta esté en el `$PATH` o especificar la ruta completa `["/usr/local/bin/entrypoint.sh"]`.
+
+Si el script utiliza extensiones exclusivas de Bash (como arrays asociativos, sintaxis `[[ ... ]]` o process substitution), instala `bash` explícitamente en el `Dockerfile`:
+
+```dockerfile
+FROM alpine:3.20
+
+# Instalar bash si el script requiere sintaxis no POSIX
+RUN apk add --no-cache bash ca-certificates
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["start"]
+```
+
+### Paso 3: Resolver Incompatibilidades de Enlazado Dinámico (glibc vs musl)
+
+Cuando desarrollas en Go, Rust o C++ y generas un binario en tu máquina de desarrollo (o en un contenedor Ubuntu) para luego transferirlo a un contenedor Alpine, el cargador dinámico fallará.
+
+#### Para proyectos en Golang:
+Genera un binario puramente estático desactivando CGO:
+
+```bash
+# Compilar binario completamente autocontenido
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o app main.go
+```
+
+#### Para binarios de terceros o compilados con CGO dependiente de glibc:
+Si es imperativo ejecutar un binario enlazado a `glibc` dentro de Alpine, instala la capa de compatibilidad:
+
+```dockerfile
+FROM alpine:3.20
+
+# Instalar librería de compatibilidad binaria para glibc en Alpine
+RUN apk add --no-cache gcompat libc6-compat
+
+WORKDIR /app
+COPY app /app/app
+RUN chmod +x /app/app
+
+ENTRYPOINT ["/app/app"]
+```
+
+O preferentemente, migra la imagen base de ejecución a una distribución con `glibc` nativo, como `debian:bookworm-slim`:
+
+```dockerfile
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY app /app/app
+RUN chmod +x /app/app
+
+ENTRYPOINT ["/app/app"]
+```
+
+### Paso 4: Validar Sintaxis Exec y Permisos de Ejecución
+
+El estándar OCI recomienda la forma vector (JSON array) para `ENTRYPOINT` y `CMD`:
+
+```dockerfile
+# CORRECTO: Ruta absoluta canónica y sintaxis exec
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 755 /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# INCORRECTO: Dependencia de ruta relativa que puede fallar según el WORKDIR
+# ENTRYPOINT ["entrypoint.sh"]
+```
+
+Si se utiliza un volumen montado en tiempo de ejecución (bind mount) durante el desarrollo local (`-v $(pwd):/app`), asegúrate de que el script en el host tenga el permiso de ejecución activo:
+
+```bash
+chmod +x ./entrypoint.sh
+```
+
+---
 
 ## Resolución de Casos Borde (Troubleshooting)
 
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
+### Caso Borde 1: Sobrescritura de Binarios por Bind Mounts en Docker Compose
 
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
+Un escenario frecuente en entornos de desarrollo ocurre cuando el Dockerfile compila o copia un archivo a `/app/entrypoint.sh`, pero `docker-compose.yml` monta la carpeta local sobre `/app`:
 
-Para verificar y solventar bloqueos por contexto de seguridad:
-```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
-
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
-```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
-```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
+```yaml
+services:
+  web:
+    build: .
+    volumes:
+      # PELIGRO: Si en el host ./entrypoint.sh no tiene permisos o tiene CRLF,
+      # sobreescribirá el archivo saneado por el Dockerfile
+      - .:/app
 ```
 
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
+**Solución:** Excluye el archivo montándolo individualmente o utiliza volúmenes anónimos para proteger las rutas críticas:
 
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
-
-Para identificar y limpiar procesos bloqueados de forma segura:
-```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
-
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
+```yaml
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/entrypoint.sh
 ```
 
-### Verificación de Logs en Tiempo Real y Validación en Producción
+### Caso Borde 2: Incompatibilidad de Arquitecturas de CPU (AMD64 vs ARM64)
 
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
+Al desplegar imágenes generadas en equipos Apple Silicon (M1/M2/M3) o servidores ARM64 (AWS Graviton) hacia servidores x86_64 sin emulación configurada, `runc` puede fallar con `executable file not found` o `exec format error`.
+
+Comprueba la arquitectura del binario y de la imagen:
+
 ```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
+# Inspeccionar la arquitectura registrada en los metadatos de la imagen
+docker inspect --format '{{.Architecture}}' mi-imagen:tag
 
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
+# Generar la imagen para la arquitectura de producción mediante buildx
+docker buildx build --platform linux/amd64 -t mi-imagen:tag . --load
 ```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
 
-## 🛡️ Consejos de Prevención
-
-* Añade un archivo `.gitattributes` con `* text eol=lf` en la raíz de tu proyecto para evitar que Git convierta finales de línea en Windows.
-* Comprueba siempre la disponibilidad de `/bin/bash` vs `/bin/sh` al cambiar entre imágenes base como Ubuntu y Alpine.
+---
 
 ## Preguntas Frecuentes
 
-### ¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?
-Alpine Linux utiliza musl libc y ash en lugar de GNU libc y bash. Si un binario compilado o script hace referencia a /bin/bash o librerías dinámicas glibc, fallará con executable file not found.
+### ¿Por qué `docker logs` no muestra nada cuando ocurre este error?
+Porque el proceso del contenedor nunca llega a iniciarse. El fallo ocurre en la llamada `execve` del runtime `runc` antes de que el kernel asigne el descriptor de archivo de salida estándar (`stdout`) al proceso de la aplicación.
 
-### ¿Cómo puedo depurar el contenedor si no llega a arrancar?
-Sobrescribe el punto de entrada desde la terminal ejecutando `docker run --rm -it --entrypoint /bin/sh mi-imagen` para inspeccionar los archivos internos interactivamente.
+### ¿Cuál es la diferencia entre la sintaxis Shell y la sintaxis Exec en ENTRYPOINT?
+La sintaxis Exec (`["binario", "arg1"]`) ejecuta el comando directamente como PID 1 en el contenedor, permitiendo la recepción limpia de señales UNIX (`SIGTERM`, `SIGINT`). La sintaxis Shell (`ENTRYPOINT binario arg1`) envuelve el comando en `/bin/sh -c`, lo que requiere que `/bin/sh` exista obligatoriamente en la imagen.

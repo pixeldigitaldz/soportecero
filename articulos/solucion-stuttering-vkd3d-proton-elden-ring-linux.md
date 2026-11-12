@@ -32,7 +32,7 @@ Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorn
 
 | Causa | Solución |
 |---|---|
-| **Compilación síncrona de sombreadores DirectX 12 en VKD3D al explorar nuevas regiones de las Tierras Intermedias** |
+| **Compilación síncrona de sombreadores DirectX 12 en VKD3D al explorar nuevas regiones de las Tierras Intermedias** | Enable Vulkan GPL (`RADV_PERFTEST=gpl`) and enable background shader pre-caching in Steam |
 
 Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
 
@@ -84,51 +84,6 @@ sudo sysctl --system
 Si juegas en modo individual sin multijugador y buscas la máxima fluidez absoluta:
 - Renombra `start_protected_game.exe` a `start_protected_game.exe.bak` en la carpeta del juego.
 - Haz una copia de `eldenring.exe` y nómbrala `start_protected_game.exe`.
-
-## Resolución de Casos Borde (Troubleshooting)
-
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
-
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
-
-Para verificar y solventar bloqueos por contexto de seguridad:
-```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
-
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
-```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
-```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
-```
-
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
-
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
-
-Para identificar y limpiar procesos bloqueados de forma segura:
-```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
-
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
-```
-
-### Verificación de Logs en Tiempo Real y Validación en Producción
-
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
-```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
-
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
-```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
 
 ## 🛡️ Consejos de Prevención
 

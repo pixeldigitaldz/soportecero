@@ -1,8 +1,7 @@
 ---
-title: How to Fix 413 Request Entity Too Large Error in Nginx (Quickly)
+title: How to Fix 413 Request Entity Too Large and 403 Forbidden Nginx Errors
 description: >-
-  Can't upload files or plugins to your Nginx server? Fix the frustrating 413
-  Request Entity Too Large error in 3 simple steps with our practical guide.
+  Learn how to fix 413 request entity too large and 403 forbidden nginx errors. Adjust client_max_body_size and fix file permissions in minutes.
 category: Systems & Servers
 tags:
   - Nginx
@@ -12,7 +11,9 @@ readTime: 3 min
 date: '2026-07-03'
 ---
 
-The **413 request entity too large** error on an Nginx web server occurs when a client attempts to upload a file (such as an image, a WordPress plugin, or a heavy backup) whose size exceeds the maximum upload limit configured in the web proxy settings.
+The **413 request entity too large** error in Nginx occurs when a client attempts to upload a file exceeding the default 1MB buffer limit. To fix this instantly, add or increase the `client_max_body_size 64M;` directive inside the `http`, `server`, or `location` block of `/etc/nginx/nginx.conf` and reload the service with `sudo nginx -s reload`.
+
+Similarly, the **403 forbidden nginx** error happens when the web server process user (typically `www-data` or `nginx`) lacks read permissions on static files or execute permissions on directories. You can resolve the 403 error immediately by setting ownership and secure permissions: run `sudo chown -R www-data:www-data /var/www/html && sudo find /var/www/html -type d -exec chmod 755 {} + && sudo find /var/www/html -type f -exec chmod 644 {} +`.
 
 ## Quick Diagnostics
 | Cause | Solution |

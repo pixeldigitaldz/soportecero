@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server | SoporteCero</title>
-  <meta name="description" content="Step-by-step guide to recover write access on home server hard drives that lock to protect your data from corruption.">
-  <meta name="keywords" content="BTRFS, Linux, Storage">
-  <meta name="robots" content="noindex, follow">
+  <title>How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers | SoporteCero</title>
+  <meta name="description" content="Step-by-step guide to diagnose and recover write access on BTRFS drives that have locked into read-only mode due to metadata corruption, sudden power loss, or I/O errors.">
+  <meta name="keywords" content="BTRFS, Linux, Storage, Sysadmin, Docker">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
@@ -21,8 +21,8 @@
   
   
   <!-- Open Graph -->
-  <meta property="og:title" content="How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server">
-  <meta property="og:description" content="Step-by-step guide to recover write access on home server hard drives that lock to protect your data from corruption.">
+  <meta property="og:title" content="How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers">
+  <meta property="og:description" content="Step-by-step guide to diagnose and recover write access on BTRFS drives that have locked into read-only mode due to metadata corruption, sudden power loss, or I/O errors.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -37,11 +37,13 @@
   <meta property="article:tag" content="BTRFS">
   <meta property="article:tag" content="Linux">
   <meta property="article:tag" content="Storage">
+  <meta property="article:tag" content="Sysadmin">
+  <meta property="article:tag" content="Docker">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server">
-  <meta name="twitter:description" content="Step-by-step guide to recover write access on home server hard drives that lock to protect your data from corruption.">
+  <meta name="twitter:title" content="How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers">
+  <meta name="twitter:description" content="Step-by-step guide to diagnose and recover write access on BTRFS drives that have locked into read-only mode due to metadata corruption, sudden power loss, or I/O errors.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -67,13 +69,13 @@
   {
   "@context": "https://schema.org",
   "@type": "TechArticle",
-  "headline": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server",
-  "description": "Step-by-step guide to recover write access on home server hard drives that lock to protect your data from corruption.",
+  "headline": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers",
+  "description": "Step-by-step guide to diagnose and recover write access on BTRFS drives that have locked into read-only mode due to metadata corruption, sudden power loss, or I/O errors.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "en",
   "category": "Systems & Servers",
   "articleSection": "Systems & Servers",
-  "keywords": "BTRFS, Linux, Storage",
+  "keywords": "BTRFS, Linux, Storage, Sysadmin, Docker",
   "proficiencyLevel": "Intermediate",
   "datePublished": "2026-07-23",
   "dateModified": "2026-07-23",
@@ -115,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server",
+      "name": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers",
       "item": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html"
     }
   ]
@@ -125,44 +127,92 @@
   {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  "name": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server",
-  "description": "Step-by-step guide to recover write access on home server hard drives that lock to protect your data from corruption.",
+  "name": "How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers",
+  "description": "Step-by-step guide to diagnose and recover write access on BTRFS drives that have locked into read-only mode due to metadata corruption, sudden power loss, or I/O errors.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#desmontar-la-unidad-afectada",
-      "name": "Desmontar la unidad afectada",
+      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#inspect-kernel-logs-for-the-triggering-error",
+      "name": "Inspect Kernel Logs for the Triggering Error",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Do not attempt to force writing data onto a locked disk. First, stop the Docker services that are using it and unmount the path: (Reemplaza /dev/sdb1 por la nomenclatura exacta de tu disco detectado)."
+          "text": "Before executing any write or repair commands, inspect the system kernel ring buffer to determine why BTRFS locked the filesystem: Common diagnostic triggers include: BTRFS: error (device sdb1) in btrfs_commit_transaction: The kernel could not flush the tree transaction block to the hardware. BTRFS critical: corrupt leaf/node: A metadata checksum mismatch occurred during leaf node verification."
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#ejecutar-una-verificacion-de-errores-limpia-check-scratch",
-      "name": "Ejecutar una verificación de errores limpia (Check Scratch)",
+      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#gracefully-stop-container-services-and-unmount-the-drive",
+      "name": "Gracefully Stop Container Services and Unmount the Drive",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "We will use BTRFS internal tools to scan the storage metadata tree without modifying blocks: Read the last lines in the terminal. If the system reports minor errors in the free space map (free space cache), we can order a safe repair of the file descriptors by running: (Nota: Ejecuta la reparación únicamente si el check previo te lo sugiere explícitamente)."
+          "text": "To prevent background Docker daemons or systemd units from attempting concurrent write retries: (Replace /dev/sdb1 with the exact block device identified via lsblk -f)."
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#remontar-el-disco-en-modo-de-rescate-limpio",
-      "name": "Remontar el disco en modo de rescate limpio",
+      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#run-a-non-destructive-offline-check",
+      "name": "Run a Non-Destructive Offline Check",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "If the volume continues to cause issues, force it to boot by cleaning the records of old corrupt transitions:"
+          "text": "Run the BTRFS integrity check tool in strictly read-only mode to evaluate extent tree integrity: Review the terminal output: If the report indicates only minor discrepancies in the free space cache (free-space-cache or free space tree), the file data itself is intact. Caution on --repair: Never run btrfs check --repair immediately on complex errors without creating a raw block image backup (e.g., via ddrescue), as aggressive metadata repair can delete orphaned subvolumes if trees cannot be reconnected."
         }
       ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#mount-with-btrfs-recovery-and-backup-root-flags",
+      "name": "Mount with BTRFS Recovery and Backup Root Flags",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "If standard mounting fails, use BTRFS recovery options to roll back to a previously healthy metadata tree root: If the filesystem still rejects write access, mount in read-only mode with the rescue=all option to immediately backup essential files to another drive:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 5,
+      "url": "https://soportecero.com/en/articulos/error-btrfs-read-only-umbrel.html#execute-an-online-scrub-to-validate-data-checksums",
+      "name": "Execute an Online Scrub to Validate Data Checksums",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Once the volume is remounted, run an online BTRFS scrub to recalculate and verify CRC32c/xxhash data checksums across all stored blocks: If your array is configured with RAID1 or DUP metadata, the scrub will automatically repair corrupted blocks using healthy parity copies."
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I fix a BTRFS read-only error with standard fsck?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Standard fsck.btrfs is merely a dummy wrapper that calls btrfs check. Never attempt to run fsck.ext4 or generic filesystem checkers on a BTRFS partition, as this will irreparably damage the partition table."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I do if smartctl reports reallocated sectors on the drive?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If smartctl -a /dev/sdb displays increasing Reallocated_Sector_Ct or Current_Pending_Sector, the disk hardware is failing physically. Immediately extract all data using btrfs restore or read-only rsync and replace the physical drive."
+      }
     }
   ]
 }
@@ -178,7 +228,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -207,12 +257,12 @@
       </a>
       <nav aria-label="Main Navigation">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
-          <li><a href="../?cat=sistemas">Systems &amp; Servers</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web &amp; Code</a></li>
-          <li><a href="../nosotros.html">About</a></li>
-          <li><a href="../contacto.html">Contact</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
         </ul>
       </nav>
       
@@ -242,7 +292,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Open /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -255,22 +305,22 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
-        <a href="../">HOME</a>
+        <a href="../index.html">HOME</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Systems & Servers</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span style="color: var(--text-secondary);">How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server</span>
+        <span style="color: var(--text-secondary);">How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers</span>
       </nav>
 
       <header class="post-header">
         <span class="card-category">Systems & Servers</span>
-        <h1 id="post-title">How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Your Server</h1>
+        <h1 id="post-title">How to Repair a BTRFS Filesystem Locked in Read-Only Mode on Linux Servers</h1>
         <div class="post-meta">
           <span class="post-author">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            By <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Replicated and tested in laboratory environment">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -282,7 +332,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -298,7 +348,8 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When a secondary hard drive configured with the modern BTRFS file system (very common in storage arrays and home servers like Umbrel or ZimaOS) detects a write error, a power outage, or corrupt sectors, the Linux kernel automatically changes its state to <code>Read-Only</code> to prevent existing information from being destroyed. This immediately freezes all your automation and download applications.</p>
+          <p>When a secondary storage drive or array formatted with the <strong>BTRFS (B-tree Filesystem)</strong> encounters an unrecoverable write transaction, an unexpected power loss during tree balancing, or underlying NAND/magnetic bad blocks, the Linux kernel immediately invokes its built-in safety mechanism: it drops the filesystem into an emergency <strong>read-only (<code>ro</code>) state</strong>. This fail-safe mechanism protects existing metadata trees and file extents from cascading corruption.</p>
+<p>On self-hosted homelabs, media servers, and appliances like <strong>Umbrel</strong>, <strong>CasaOS</strong>, or <strong>ZimaOS</strong>, this emergency lock instantly halts running Docker containers, corrupts SQLite databases (like Sonarr or Radarr), and causes write operations to fail with <code>Read-only file system (errno 30)</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -315,25 +366,37 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Btrfs filesystem errors caused by unexpected power loss</strong></div>
+            <div class="diag-value"><strong>BTRFS transaction aborted due to sudden power cut or crash</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Check kernel log <code>dmesg</code> and run <code>btrfs check --repair /dev/sdX</code></div>
+            <div class="diag-value">Inspect kernel logs with <code>dmesg -T | grep -i btrfs</code> and mount with <code>usebackuproot</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Storage drive damaged or switched to read-only fail-safe mode</strong></div>
+            <div class="diag-value"><strong>Corrupted free space tree cache or metadata balancing error</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Remount drive read/write: <code>mount -o remount,rw /data</code></div>
+            <div class="diag-value">Clear metadata cache with <code>mount -o remount,clear_cache,rw /mountpoint</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Physical I/O block degradation or cabling disconnects</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Check drive health with <code>sudo smartctl -H /dev/sdX</code> and run non-destructive <code>btrfs scrub</code></div>
           </div></div></div>
       </div>
     </section>
@@ -380,6 +443,31 @@
           </a>
         </li>
       
+        <li class="toc-item">
+          <a href="#frequently-asked-questions-faq" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#can-i-fix-a-btrfs-read-only-error-with-standard-fsck" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can I fix a BTRFS read-only error with standard fsck?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-should-i-do-if-smartctl-reports-reallocated-sectors-on-the-drive" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What should I do if smartctl reports reallocated sectors on the drive?</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
         </ul>
       </div>
     </nav>
@@ -393,11 +481,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="desmontar-la-unidad-afectada">
+        <li class="step-item" id="inspect-kernel-logs-for-the-triggering-error">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="desmontar-la-unidad-afectada-heading">Step 1: Desmontar la unidad afectada</h4>
-            <p>Do not attempt to force writing data onto a locked disk. First, stop the Docker services that are using it and unmount the path:</p>
+            <h4 id="inspect-kernel-logs-for-the-triggering-error-heading">Step 1: Inspect Kernel Logs for the Triggering Error</h4>
+            <p>Before executing any write or repair commands, inspect the system kernel ring buffer to determine why BTRFS locked the filesystem:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -417,21 +505,62 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> stop <span class="tok-kw">docker</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">umount</span> /dev/sdb1
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> dmesg <span class="tok-prop">-T</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-iE</span> <span class="tok-str">&quot;(btrfs|read-only|abort)&quot;</span>
 </code></pre>
     </div>
     
-<p><em>(Reemplaza <code>/dev/sdb1</code> por la nomenclatura exacta de tu disco detectado).</em></p>
+<p>Common diagnostic triggers include:</p>
+<ul>
+<li><code>BTRFS: error (device sdb1) in btrfs_commit_transaction</code>: The kernel could not flush the tree transaction block to the hardware.</li>
+<li><code>BTRFS critical: corrupt leaf/node</code>: A metadata checksum mismatch occurred during leaf node verification.</li>
+</ul>
           </div>
         </li>
         
 
-        <li class="step-item" id="ejecutar-una-verificacion-de-errores-limpia-check-scratch">
+        <li class="step-item" id="gracefully-stop-container-services-and-unmount-the-drive">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="ejecutar-una-verificacion-de-errores-limpia-check-scratch-heading">Step 2: Ejecutar una verificación de errores limpia (Check Scratch)</h4>
-            <p>We will use BTRFS internal tools to scan the storage metadata tree without modifying blocks:</p>
+            <h4 id="gracefully-stop-container-services-and-unmount-the-drive-heading">Step 2: Gracefully Stop Container Services and Unmount the Drive</h4>
+            <p>To prevent background Docker daemons or systemd units from attempting concurrent write retries:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Stop application services relying on the mount</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> stop <span class="tok-kw">docker</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> stop containerd
+<span class="tok-cmt">
+# Unmount the affected filesystem cleanly</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">umount</span> /dev/sdb1
+</code></pre>
+    </div>
+    
+<p><em>(Replace <code>/dev/sdb1</code> with the exact block device identified via <code>lsblk -f</code>).</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="run-a-non-destructive-offline-check">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="run-a-non-destructive-offline-check-heading">Step 3: Run a Non-Destructive Offline Check</h4>
+            <p>Run the BTRFS integrity check tool in strictly read-only mode to evaluate extent tree integrity:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -455,40 +584,20 @@
 </code></pre>
     </div>
     
-<p>Read the last lines in the terminal. If the system reports minor errors in the free space map (<em>free space cache</em>), we can order a safe repair of the file descriptors by running:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> btrfs check <span class="tok-prop">--repair</span> /dev/sdb1
-</code></pre>
-    </div>
-    
-<p><em>(Nota: Ejecuta la reparación únicamente si el check previo te lo sugiere explícitamente).</em></p>
+<p>Review the terminal output:</p>
+<ul>
+<li>If the report indicates only minor discrepancies in the free space cache (<code>free-space-cache</code> or <code>free space tree</code>), the file data itself is intact.</li>
+<li><strong>Caution on <code>--repair</code>:</strong> Never run <code>btrfs check --repair</code> immediately on complex errors without creating a raw block image backup (e.g., via <code>ddrescue</code>), as aggressive metadata repair can delete orphaned subvolumes if trees cannot be reconnected.</li>
+</ul>
           </div>
         </li>
         
 
-        <li class="step-item" id="remontar-el-disco-en-modo-de-rescate-limpio">
-          <div class="step-number">3</div>
+        <li class="step-item" id="mount-with-btrfs-recovery-and-backup-root-flags">
+          <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="remontar-el-disco-en-modo-de-rescate-limpio-heading">Step 3: Remontar el disco en modo de rescate limpio</h4>
-            <p>If the volume continues to cause issues, force it to boot by cleaning the records of old corrupt transitions:</p>
+            <h4 id="mount-with-btrfs-recovery-and-backup-root-flags-heading">Step 4: Mount with BTRFS Recovery and Backup Root Flags</h4>
+            <p>If standard mounting fails, use BTRFS recovery options to roll back to a previously healthy metadata tree root:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -508,13 +617,121 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,clear_cache,rw /dev/sdb1 /mnt/storage
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Mount utilizing valid backup superblocks and clearing corrupted transaction caches</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">mount</span> <span class="tok-prop">-o</span> usebackuproot,clear_cache,rw /dev/sdb1 /mnt/storage
 </code></pre>
     </div>
+    
+<p>If the filesystem still rejects write access, mount in read-only mode with the <code>rescue=all</code> option to immediately backup essential files to another drive:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">mount</span> <span class="tok-prop">-o</span> ro,rescue=all /dev/sdb1 /mnt/storage
+<span class="tok-kw">rsync</span> <span class="tok-prop">-avP</span> /mnt/storage/ /backup/safe_destination/
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="execute-an-online-scrub-to-validate-data-checksums">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="execute-an-online-scrub-to-validate-data-checksums-heading">Step 5: Execute an Online Scrub to Validate Data Checksums</h4>
+            <p>Once the volume is remounted, run an online BTRFS scrub to recalculate and verify CRC32c/xxhash data checksums across all stored blocks:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Start background scrub</span>
+<span class="tok-kw">sudo</span> btrfs scrub start /mnt/storage
+<span class="tok-cmt">
+# Monitor progress</span>
+<span class="tok-kw">sudo</span> btrfs scrub <span class="tok-prop">status</span> /mnt/storage
+</code></pre>
+    </div>
+    
+<p>If your array is configured with RAID1 or DUP metadata, the scrub will automatically repair corrupted blocks using healthy parity copies.</p>
           </div>
         </li>
         
 </ol>
+
+  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
+    <div class="sys-tool-bridge-header">
+      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
+      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+    </div>
+    <h3 class="sys-tool-bridge-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
+    </h3>
+    <p class="sys-tool-bridge-desc">
+      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
+    </p>
+    <div class="sys-tool-bridge-grid">
+      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
+          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
+          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
+        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="sys-tool-card-body">
+          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
+          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
+        </div>
+        <span class="sys-tool-card-arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+  
+<h2 id="frequently-asked-questions-faq">Frequently Asked Questions (FAQ)</h2>
+<h3 id="can-i-fix-a-btrfs-read-only-error-with-standard-fsck">Can I fix a BTRFS read-only error with standard fsck?</h3>
+<p>No. Standard <code>fsck.btrfs</code> is merely a dummy wrapper that calls <code>btrfs check</code>. Never attempt to run <code>fsck.ext4</code> or generic filesystem checkers on a BTRFS partition, as this will irreparably damage the partition table.</p>
+<h3 id="what-should-i-do-if-smartctl-reports-reallocated-sectors-on-the-drive">What should I do if smartctl reports reallocated sectors on the drive?</h3>
+<p>If <code>smartctl -a /dev/sdb</code> displays increasing <code>Reallocated_Sector_Ct</code> or <code>Current_Pending_Sector</code>, the disk hardware is failing physically. Immediately extract all data using <code>btrfs restore</code> or read-only <code>rsync</code> and replace the physical drive.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -529,7 +746,8 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Electrical power drops are the number one enemy of Linux-based servers. If you have your server connected directly to the wall outlet without an uninterruptible power supply (UPS), you run the latent risk of losing entire partitions due to a blackout. Configuring your hard drives with safe mount parameters like <code>noatime</code> reduces constant write cycles and protects the hardware life.</li>
+              <li><strong>Deploy an Uninterruptible Power Supply (UPS):</strong> Sudden power outages during BTRFS metadata tree splits are the leading cause of read-only locks. A basic line-interactive UPS configured with Network UPS Tools (NUT) prevents sudden dirty dismounts.</li>
+<li><strong>Enable <code>noatime</code> in Mount Options:</strong> In <code>/etc/fstab</code>, ensure your mount string includes <code>noatime,compress=zstd:1</code> to minimize unnecessary disk writes for access timestamps.</li>
             </ul>
           </div>
 
@@ -579,7 +797,7 @@
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Author • Web Designer & App Creator</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
@@ -590,7 +808,7 @@
                   Editorial Methodology
                 </a>
                 <span class="author-sep">•</span>
-                <a href="../contacto.html" class="author-action-link">
+                <a href="../contact.html" class="author-action-link">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   Report an issue
                 </a>
@@ -617,18 +835,18 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: How to Fix 403 Forbidden Error in Nginx Inside Docker -->
+      <!-- Related Card: How to Fix 403 Forbidden Nginx Errors in Docker (File Permissions & Volume Mounts) -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-403-forbidden-nginx-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix 403 Forbidden Error in Nginx Inside Docker</a>
+              <a href="../articulos/error-403-forbidden-nginx-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix 403 Forbidden Nginx Errors in Docker (File Permissions & Volume Mounts)</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -675,13 +893,13 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Home</a></li>
-        <li><a href="../nosotros.html">About</a></li>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
         <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
         <li><a href="../legal/terminos.html">Terms of Service</a></li>
         <li><a href="../legal/cookies.html">Cookie Policy</a></li>
-        <li><a href="../contacto.html">Contact</a></li>
-        <li><a href="../servicios.html">Services</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.

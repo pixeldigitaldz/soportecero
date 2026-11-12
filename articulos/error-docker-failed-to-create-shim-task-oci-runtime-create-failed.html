@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>Error Docker: failed to create shim task: OCI runtime create failed | SoporteCero</title>
-  <meta name="description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta name="description" content="Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.">
   <meta name="keywords" content="Docker, DevOps, Contenedores, Linux">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
@@ -22,7 +22,7 @@
   
   <!-- Open Graph -->
   <meta property="og:title" content="Error Docker: failed to create shim task: OCI runtime create failed">
-  <meta property="og:description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta property="og:description" content="Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">
   <meta property="og:site_name" content="SoporteCero">
@@ -42,7 +42,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Error Docker: failed to create shim task: OCI runtime create failed">
-  <meta name="twitter:description" content="Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.">
+  <meta name="twitter:description" content="Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.">
   <meta name="twitter:image" content="https://soportecero.com/og-image.png">
   
   <!-- Google Fonts (Inter & JetBrains Mono) -->
@@ -69,7 +69,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Error Docker: failed to create shim task: OCI runtime create failed",
-  "description": "Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.",
+  "description": "Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.",
   "image": "https://soportecero.com/og-image.png",
   "inLanguage": "es",
   "category": "Sistemas y Servidores",
@@ -127,29 +127,53 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "Error Docker: failed to create shim task: OCI runtime create failed",
-  "description": "Cómo solucionar el fallo failed to create shim task OCI runtime create failed executable file not found al iniciar contenedores Docker.",
+  "description": "Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y Alpine Linux.",
   "step": [
     {
       "@type": "HowToStep",
       "position": 1,
-      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#garantizar-permisos-de-ejecucion-en-el-dockerfile",
-      "name": "Garantizar permisos de ejecución en el Dockerfile",
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#eliminar-retornos-de-carro-crlf-windows-a-unix",
+      "name": "Eliminar Retornos de Carro CRLF (Windows a Unix)",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Verifica que el script tenga permisos de ejecución tanto en tu máquina como dentro de la imagen Docker:"
+          "text": "Si el proyecto fue clonado en Windows o procesado por un editor con configuración no estándar, convierte el archivo a terminaciones Unix estrictas (LF): Para prevenir que Git convierta los saltos de línea al sincronizar ramas entre equipos heterogéneos, crea o edita el archivo .gitattributes en la raíz de tu repositorio:"
         }
       ]
     },
     {
       "@type": "HowToStep",
       "position": 2,
-      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#verificar-la-ruta-absoluta-y-el-interprete-shebang",
-      "name": "Verificar la ruta absoluta y el intérprete (Shebang)",
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#ajustar-el-shebang-y-la-shell-de-la-imagen-base",
+      "name": "Ajustar el Shebang y la Shell de la Imagen Base",
       "itemListElement": [
         {
           "@type": "HowToDirection",
-          "text": "Asegúrate de que la primera línea de tu script contenga un intérprete válido que realmente exista en la imagen base (por ejemplo, en imágenes Alpine no existe /bin/bash, debes usar /bin/sh): Si utilizas ENTRYPOINT [&quot;entrypoint.sh&quot;] en formato exec (corchetes), debes asegurarte de que la ruta esté en el $PATH o especificar la ruta completa [&quot;/usr/local/bin/entrypoint.sh&quot;]."
+          "text": "En imágenes ultraligeras como Alpine Linux (alpine:3.20), el binario /bin/bash no existe de forma predeterminada; el sistema utiliza ash enlazado a /bin/sh. Asegúrate de que tus scripts de inicio utilicen el shebang estándar POSIX: Si el script utiliza extensiones exclusivas de Bash (como arrays asociativos, sintaxis [[ ... ]] o process substitution), instala bash explícitamente en el Dockerfile:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#resolver-incompatibilidades-de-enlazado-dinamico-glibc-vs-musl",
+      "name": "Resolver Incompatibilidades de Enlazado Dinámico (glibc vs musl)",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "Cuando desarrollas en Go, Rust o C++ y generas un binario en tu máquina de desarrollo (o en un contenedor Ubuntu) para luego transferirlo a un contenedor Alpine, el cargador dinámico fallará. Para proyectos en Golang: Genera un binario puramente estático desactivando CGO: Para binarios de terceros o compilados con CGO dependiente de glibc: Si es imperativo ejecutar un binario enlazado a glibc dentro de Alpine, instala la capa de compatibilidad: O preferentemente, migra la imagen base de ejecución a una distribución con glibc nativo, como debian:bookworm-slim:"
+        }
+      ]
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html#validar-sintaxis-exec-y-permisos-de-ejecucion",
+      "name": "Validar Sintaxis Exec y Permisos de Ejecución",
+      "itemListElement": [
+        {
+          "@type": "HowToDirection",
+          "text": "El estándar OCI recomienda la forma vector (JSON array) para ENTRYPOINT y CMD: Si se utiliza un volumen montado en tiempo de ejecución (bind mount) durante el desarrollo local (-v $(pwd):/app), asegúrate de que el script en el host tenga el permiso de ejecución activo:"
         }
       ]
     }
@@ -163,18 +187,18 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?",
+      "name": "¿Por qué docker logs no muestra nada cuando ocurre este error?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Alpine Linux utiliza musl libc y ash en lugar de GNU libc y bash. Si un binario compilado o script hace referencia a /bin/bash o librerías dinámicas glibc, fallará con executable file not found."
+        "text": "Porque el proceso del contenedor nunca llega a iniciarse. El fallo ocurre en la llamada execve del runtime runc antes de que el kernel asigne el descriptor de archivo de salida estándar (stdout) al proceso de la aplicación."
       }
     },
     {
       "@type": "Question",
-      "name": "¿Cómo puedo depurar el contenedor si no llega a arrancar?",
+      "name": "¿Cuál es la diferencia entre la sintaxis Shell y la sintaxis Exec en ENTRYPOINT?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sobrescribe el punto de entrada desde la terminal ejecutando docker run --rm -it --entrypoint /bin/sh mi-imagen para inspeccionar los archivos internos interactivamente."
+        "text": "La sintaxis Exec ([&quot;binario&quot;, &quot;arg1&quot;]) ejecuta el comando directamente como PID 1 en el contenedor, permitiendo la recepción limpia de señales UNIX (SIGTERM, SIGINT). La sintaxis Shell (ENTRYPOINT binario arg1) envuelve el comando en /bin/sh -c, lo que requiere que /bin/sh exista obligatoriamente en la imagen."
       }
     }
   ]
@@ -191,7 +215,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -220,11 +244,11 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../?cat=web">Web y Código</a></li>
-          <li><a href="../nosotros.html">Nosotros</a></li>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web y Código</a></li>
+          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
           <li><a href="../contacto.html">Contacto</a></li>
         </ul>
       </nav>
@@ -255,7 +279,7 @@
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NUEVO EN SOPORTECERO:</strong> Suite de Calculadoras para Freelancers, Cotizador PDF en 1 Clic y Simuladores Financieros
         </span>
       </div>
-      <a href="/tools/" class="sys-tools-btn">
+      <a href="/tools/index.html" class="sys-tools-btn">
         <span>Abrir /tools/</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -268,7 +292,7 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../">INICIO</a>
+        <a href="../index.html">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span>Sistemas y Servidores</span>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
@@ -283,7 +307,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
             </svg>
-            Por <a href="../nosotros.html#rodolfo-castro" class="author-link">Rodolfo Castro</a>
+            Por <a href="../sobre-mi.html" class="author-link">Rodolfo Castro</a>
           </span>
           <span class="post-verified" title="Revisado y verificado en laboratorio técnico">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -295,7 +319,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 8 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -311,15 +335,45 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Al ejecutar <code>docker run</code> o <code>docker compose up</code>, el demonio de containerd puede abortar con el error <code>failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: &quot;...&quot;: executable file not found in $PATH</code>. Este fallo impide que el contenedor arranque y se debe a que el kernel de Linux no puede ejecutar el comando de inicio declarado en el <code>ENTRYPOINT</code> o <code>CMD</code>.</p>
+          <p>Al ejecutar <code>docker run</code> o <code>docker compose up</code>, el demonio de containerd puede abortar abruptamente el ciclo de vida del contenedor con el mensaje:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: <span class="tok-str">&quot;/entrypoint.sh&quot;</span>: executable file not found <span class="tok-kw">in</span> $PATH: unknown
+</code></pre>
+    </div>
+    
+<p>A pesar de que el desarrollador compruebe que el archivo existe físicamente en el repositorio o dentro de la imagen, el contenedor entra en estado <code>Exit 127</code> de forma inmediata. Este fallo se produce en la capa de interoperabilidad entre el runtime OCI (<code>runc</code>), el kernel de Linux (<code>execve</code>) y la estructura binaria del ejecutable o script invocado.</p>
+<hr>
 <h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En entornos contenerizados, el motor de <strong>Docker</strong> se apoya en primitivas fundamentales del kernel de Linux: <strong>Namespaces</strong> (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y <strong>Control Groups (cgroups v1/v2)</strong> para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).</p>
-<p>Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio <code>dockerd</code>, el runtime OCI (<code>containerd</code> / <code>runc</code>) y el subsistema de red del host:</p>
+<p>Para comprender por qué Docker emite un error de archivo no encontrado cuando el archivo sí existe, es indispensable examinar la cadena de ejecución de contenedores en Linux:</p>
 <ol>
-<li><strong>Comunicación con el socket IPC (<code>/var/run/docker.sock</code>):</strong> El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo <code>docker</code> o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error <code>EACCES</code> o <code>ECONNREFUSED</code>.</li>
-<li><strong>Ciclo de vida del contenedor y estados OCI:</strong> Durante la creación del contenedor (<code>container create / start</code>), <code>runc</code> solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento <strong>Overlay2</strong> (<code>lowerdir</code>, <code>upperdir</code> y <code>merged</code>). Si existe corrupción en las capas de imagen, agotamiento de inodos en <code>/var/lib/docker</code>, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).</li>
-<li><strong>Pila de red virtual y cadenas de iptables:</strong> Para exponer puertos (<code>-p</code>), Docker manipula directamente las tablas <code>nat</code> y <code>filter</code> del subsistema Netfilter mediante cadenas personalizadas (<code>DOCKER</code>, <code>DOCKER-USER</code>). Reinicios no sincronizados del firewall (<code>ufw</code> o <code>firewalld</code>) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.</li>
+<li><strong>El rol de <code>containerd-shim</code> y <code>runc</code>:</strong> Docker no ejecuta contenedores directamente; delega la orquestación a <code>containerd</code>, que a su vez instancia un proceso ligero <code>containerd-shim</code> por contenedor. El shim invoca a <code>runc</code>, la implementación de referencia del Open Container Initiative (OCI).</li>
+<li><strong>La llamada al sistema <code>execve</code>:</strong> <code>runc</code> crea los namespaces de Linux (PID, Mount, Network, IPC) y el chroot / pivot_root sobre el sistema de archivos Overlay2. Posteriormente, ejecuta la syscall <code>execve(const char *filename, char *const argv[], char *const envp[])</code>.</li>
+<li><strong>El origen del código <code>ENOENT</code> (Error 2):</strong> El kernel devuelve <code>ENOENT</code> (&quot;No such file or directory&quot;) bajo tres circunstancias críticas:<ul>
+<li><strong>El intérprete de la línea Shebang no existe:</strong> Si el script declara <code>#!/bin/sh\r</code> (debido a retornos de carro de Windows CRLF) o <code>#!/bin/bash</code> en una imagen Alpine minimalista, el kernel no busca el script, sino que busca el intérprete binario indicado. Al no encontrar <code>/bin/sh\r</code> o <code>/bin/bash</code>, emite <code>ENOENT</code>.</li>
+<li><strong>Falta el cargador dinámico ELF (Dynamic Linker):</strong> Si un binario compilado (en Go, C++, Rust o Node.js con módulos nativos) fue enlazado dinámicamente con <code>glibc</code> (<code>/lib64/ld-linux-x86-64.so.2</code>) y se ejecuta dentro de un contenedor Alpine Linux (que utiliza <code>musl libc</code>), el kernel intenta cargar el linker dinámico de la cabecera ELF. Al no existir <code>/lib64/ld-linux-x86-64.so.2</code>, la syscall <code>execve</code> falla con <code>executable file not found</code>, desconcertando al usuario.</li>
+<li><strong>Ruta relativa no presente en <code>$PATH</code>:</strong> Declarar <code>ENTRYPOINT [&quot;entrypoint.sh&quot;]</code> sin una ruta absoluta (<code>/entrypoint.sh</code> o <code>/usr/local/bin/entrypoint.sh</code>) requiere que el directorio de trabajo (<code>WORKDIR</code>) esté explícitamente incorporado en la variable de entorno <code>$PATH</code>.</li>
+</ul>
+</li>
 </ol>
+<hr>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -334,15 +388,93 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
             </div>
-            <div class="diag-value"><strong>El binario del ENTRYPOINT o CMD no existe dentro de la imagen o no tiene permisos de ejecución</strong></div>
+            <div class="diag-value"><code>exec: &quot;/entrypoint.sh&quot;: executable file not found in $PATH</code> (Script Shell)</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"></div>
+            <div class="diag-value">Retornos de carro Windows CRLF (<code>\r\n</code>) en el archivo local o script sin permisos de ejecución.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ESTRATEGIA DE MITIGACIÓN TÉCNICA</span>
+            </div>
+            <div class="diag-value">Convertir terminadores de línea con <code>dos2unix</code> y aplicar <code>chmod +x</code> antes del build.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>exec: &quot;bash&quot;: executable file not found in $PATH</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Imagen base minimalista (Alpine Linux, BusyBox o Scratch) carece del intérprete Bash.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ESTRATEGIA DE MITIGACIÓN TÉCNICA</span>
+            </div>
+            <div class="diag-value">Cambiar el shebang a <code>#!/bin/sh</code> o instalar el paquete <code>bash</code> mediante el gestor del contenedor.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>exec: &quot;./app&quot;: executable file not found in $PATH</code> (Binario compilado)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Incompatibilidad de ABI: binario enlazado dinámicamente contra <code>glibc</code> ejecutado en entorno <code>musl libc</code>.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ESTRATEGIA DE MITIGACIÓN TÉCNICA</span>
+            </div>
+            <div class="diag-value">Compilar binario estático (<code>CGO_ENABLED=0</code>) o instalar <code>gcompat</code> / <code>libc6-compat</code> en Alpine.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>exec: &quot;entrypoint.sh&quot;: executable file not found in $PATH</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Sintaxis JSON exec con ruta relativa fuera de <code>$PATH</code>.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ESTRATEGIA DE MITIGACIÓN TÉCNICA</span>
+            </div>
+            <div class="diag-value">Especificar ruta canónica absoluta: <code>ENTRYPOINT [&quot;/usr/local/bin/entrypoint.sh&quot;]</code>.</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SÍNTOMA</span>
+            </div>
+            <div class="diag-value"><code>runc create failed: ... Permission denied</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Falta de bit ejecutable (+x) en la capa Overlay2 del contenedor.</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ESTRATEGIA DE MITIGACIÓN TÉCNICA</span>
+            </div>
+            <div class="diag-value">Incorporar instrucción <code>RUN chmod +x /ruta/script</code> explícita en el Dockerfile.</div>
           </div></div></div>
       </div>
     </section>
@@ -386,6 +518,14 @@
             </a>
           </li>
         
+
+          <li class="toc-subitem">
+            <a href="#comandos-de-inspeccion-forense" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Comandos de Inspección Forense</span>
+            </a>
+          </li>
+        
         </ul>
         </li>
       
@@ -404,25 +544,17 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor" class="toc-sublink">
+            <a href="#caso-borde-1-sobrescritura-de-binarios-por-bind-mounts-en-docker-compose" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</span>
+              <span class="toc-subtext">Caso Borde 1: Sobrescritura de Binarios por Bind Mounts en Docker Compose</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos" class="toc-sublink">
+            <a href="#caso-borde-2-incompatibilidad-de-arquitecturas-de-cpu-amd64-vs-arm64" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Verificación de Logs en Tiempo Real y Validación en Producción</span>
+              <span class="toc-subtext">Caso Borde 2: Incompatibilidad de Arquitecturas de CPU (AMD64 vs ARM64)</span>
             </a>
           </li>
         
@@ -437,17 +569,17 @@
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#por-que-ocurre-este-error-al-usar-imagenes-docker-basadas-en-alpine-linux" class="toc-sublink">
+            <a href="#por-que-docker-logs-no-muestra-nada-cuando-ocurre-este-error" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?</span>
+              <span class="toc-subtext">¿Por qué docker logs no muestra nada cuando ocurre este error?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#como-puedo-depurar-el-contenedor-si-no-llega-a-arrancar" class="toc-sublink">
+            <a href="#cual-es-la-diferencia-entre-la-sintaxis-shell-y-la-sintaxis-exec-en-entrypoint" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">¿Cómo puedo depurar el contenedor si no llega a arrancar?</span>
+              <span class="toc-subtext">¿Cuál es la diferencia entre la sintaxis Shell y la sintaxis Exec en ENTRYPOINT?</span>
             </a>
           </li>
         
@@ -459,7 +591,8 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h3 id="comandos-de-inspeccion-forense">Comandos de Inspección Forense</h3>
+<p>Para confirmar el diagnóstico sin alterar el entorno del servidor:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -479,21 +612,21 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado general del demonio Docker</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-kw">docker</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar las terminaciones de línea del script en el host (debe devolver &#39;ASCII text&#39;, NO &#39;with CRLF line terminators&#39;)</span>
+file entrypoint.sh
 <span class="tok-cmt">
-# 2. Inspeccionar los últimos logs del contenedor afectado</span>
-<span class="tok-kw">docker</span> logs <span class="tok-prop">--tail</span> <span class="tok-num">50</span> <span class="tok-prop">--timestamps</span> NOMBRE_CONTENEDOR
+# 2. Inspeccionar la primera línea exacta (Shebang) y verificar si contiene caracteres invisibles \r</span>
+head <span class="tok-prop">-n</span> <span class="tok-num">1</span> entrypoint.sh | <span class="tok-kw">cat</span> <span class="tok-prop">-v</span>
 <span class="tok-cmt">
-# 3. Verificar el uso de recursos y memoria en tiempo real</span>
-<span class="tok-kw">docker</span> stats <span class="tok-prop">--no-stream</span>
+# 3. Para binarios compilados, verificar el intérprete dinámico ELF requerido</span>
+readelf <span class="tok-prop">-l</span> app | <span class="tok-kw">grep</span> <span class="tok-str">&quot;program interpreter&quot;</span>
+<span class="tok-cmt">
+# 4. Inspeccionar interactivamente el contenedor sobrescribiendo el entrypoint a una shell nativa</span>
+<span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> <span class="tok-prop">-it</span> <span class="tok-prop">--entrypoint</span> /bin/sh mi-imagen:tag
 </code></pre>
     </div>
     
-<ul>
-<li>El comando <code>docker logs</code> con el parámetro <code>--tail 50</code> extrae únicamente las últimas 50 líneas emitidas en <code>stdout</code> y <code>stderr</code>, mientras que <code>--timestamps</code> permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.</li>
-<li>El flag <code>--no-stream</code> en <code>docker stats</code> realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.</li>
-</ul>
+<hr>
 <h2 id="implementacion-tecnica-paso-a-paso">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -502,11 +635,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="garantizar-permisos-de-ejecucion-en-el-dockerfile">
+        <li class="step-item" id="eliminar-retornos-de-carro-crlf-windows-a-unix">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="garantizar-permisos-de-ejecucion-en-el-dockerfile-heading">Paso 2: Garantizar permisos de ejecución en el Dockerfile</h4>
-            <p>Verifica que el script tenga permisos de ejecución tanto en tu máquina como dentro de la imagen Docker:</p>
+            <h4 id="eliminar-retornos-de-carro-crlf-windows-a-unix-heading">Paso 1: Eliminar Retornos de Carro CRLF (Windows a Unix)</h4>
+            <p>Si el proyecto fue clonado en Windows o procesado por un editor con configuración no estándar, convierte el archivo a terminaciones Unix estrictas (LF):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -516,7 +649,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">DOCKERFILE</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -526,21 +659,51 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># En tu Dockerfile</span>
-<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
-<span class="tok-kw">RUN</span> chmod +x /usr/local/bin/entrypoint.sh
-<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Opción A: Mediante dos2unix en sistemas Debian/Ubuntu</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">-y</span> dos2unix
+dos2unix entrypoint.sh
+<span class="tok-cmt">
+# Opción B: Mediante sed (sin necesidad de paquetes adicionales)</span>
+<span class="tok-kw">sed</span> <span class="tok-prop">-i</span> <span class="tok-cmt">&#39;s/\r$//&#39; entrypoint.sh</span>
+</code></pre>
+    </div>
+    
+<p>Para prevenir que Git convierta los saltos de línea al sincronizar ramas entre equipos heterogéneos, crea o edita el archivo <code>.gitattributes</code> en la raíz de tu repositorio:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">GITATTRIBUTES</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code># Forzar terminadores LF en todos los scripts de shell y archivos de configuración
+*.sh text eol=lf
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="verificar-la-ruta-absoluta-y-el-interprete-shebang">
+        <li class="step-item" id="ajustar-el-shebang-y-la-shell-de-la-imagen-base">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="verificar-la-ruta-absoluta-y-el-interprete-shebang-heading">Paso 3: Verificar la ruta absoluta y el intérprete (Shebang)</h4>
-            <p>Asegúrate de que la primera línea de tu script contenga un intérprete válido que realmente exista en la imagen base (por ejemplo, en imágenes Alpine no existe <code>/bin/bash</code>, debes usar <code>/bin/sh</code>):</p>
+            <h4 id="ajustar-el-shebang-y-la-shell-de-la-imagen-base-heading">Paso 2: Ajustar el Shebang y la Shell de la Imagen Base</h4>
+            <p>En imágenes ultraligeras como Alpine Linux (<code>alpine:3.20</code>), el binario <code>/bin/bash</code> no existe de forma predeterminada; el sistema utiliza <code>ash</code> enlazado a <code>/bin/sh</code>.</p>
+<p>Asegúrate de que tus scripts de inicio utilicen el shebang estándar POSIX:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -561,20 +724,280 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-cmt">#!/bin/sh</span>
-<span class="tok-kw">set</span> <span class="tok-prop">-e</span>
+<span class="tok-kw">set</span> <span class="tok-prop">-eu</span>
+<span class="tok-cmt">
+# Script de arranque en entorno de producción</span>
+<span class="tok-kw">echo</span> <span class="tok-str">&quot;Iniciando servicio de aplicación...&quot;</span>
 exec <span class="tok-str">&quot;$@&quot;</span>
 </code></pre>
     </div>
     
-<p>Si utilizas <code>ENTRYPOINT [&quot;entrypoint.sh&quot;]</code> en formato exec (corchetes), debes asegurarte de que la ruta esté en el <code>$PATH</code> o especificar la ruta completa <code>[&quot;/usr/local/bin/entrypoint.sh&quot;]</code>.</p>
+<p>Si el script utiliza extensiones exclusivas de Bash (como arrays asociativos, sintaxis <code>[[ ... ]]</code> o process substitution), instala <code>bash</code> explícitamente en el <code>Dockerfile</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> alpine:<span class="tok-num">3.20</span>
+<span class="tok-cmt">
+# Instalar bash si el script requiere sintaxis no POSIX</span>
+<span class="tok-kw">RUN</span> apk add --no-cache bash ca-certificates
+
+<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
+<span class="tok-kw">RUN</span> chmod +x /usr/local/bin/entrypoint.sh
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+<span class="tok-kw">CMD</span> [<span class="tok-str">&quot;start&quot;</span>]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="resolver-incompatibilidades-de-enlazado-dinamico-glibc-vs-musl">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="resolver-incompatibilidades-de-enlazado-dinamico-glibc-vs-musl-heading">Paso 3: Resolver Incompatibilidades de Enlazado Dinámico (glibc vs musl)</h4>
+            <p>Cuando desarrollas en Go, Rust o C++ y generas un binario en tu máquina de desarrollo (o en un contenedor Ubuntu) para luego transferirlo a un contenedor Alpine, el cargador dinámico fallará.</p>
+<h4>Para proyectos en Golang:</h4>
+<p>Genera un binario puramente estático desactivando CGO:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Compilar binario completamente autocontenido</span>
+CGO_ENABLED=<span class="tok-num">0</span> GOOS=linux GOARCH=amd64 go build <span class="tok-prop">-ldflags</span>=<span class="tok-str">&quot;-w -s&quot;</span> <span class="tok-prop">-o</span> app main.go
+</code></pre>
+    </div>
+    
+<h4>Para binarios de terceros o compilados con CGO dependiente de glibc:</h4>
+<p>Si es imperativo ejecutar un binario enlazado a <code>glibc</code> dentro de Alpine, instala la capa de compatibilidad:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> alpine:<span class="tok-num">3.20</span>
+<span class="tok-cmt">
+# Instalar librería de compatibilidad binaria para glibc en Alpine</span>
+<span class="tok-kw">RUN</span> apk add --no-cache gcompat libc6-compat
+
+<span class="tok-kw">WORKDIR</span> /app
+<span class="tok-kw">COPY</span> app /app/app
+<span class="tok-kw">RUN</span> chmod +x /app/app
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/app/app&quot;</span>]
+</code></pre>
+    </div>
+    
+<p>O preferentemente, migra la imagen base de ejecución a una distribución con <code>glibc</code> nativo, como <code>debian:bookworm-slim</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> debian:bookworm-slim
+
+<span class="tok-kw">RUN</span> apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+    ca-certificates \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+<span class="tok-kw">WORKDIR</span> /app
+<span class="tok-kw">COPY</span> app /app/app
+<span class="tok-kw">RUN</span> chmod +x /app/app
+
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/app/app&quot;</span>]
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validar-sintaxis-exec-y-permisos-de-ejecucion">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="validar-sintaxis-exec-y-permisos-de-ejecucion-heading">Paso 4: Validar Sintaxis Exec y Permisos de Ejecución</h4>
+            <p>El estándar OCI recomienda la forma vector (JSON array) para <code>ENTRYPOINT</code> y <code>CMD</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># CORRECTO: Ruta absoluta canónica y sintaxis exec</span>
+<span class="tok-kw">COPY</span> entrypoint.sh /usr/local/bin/entrypoint.sh
+<span class="tok-kw">RUN</span> chmod <span class="tok-num">755</span> /usr/local/bin/entrypoint.sh
+<span class="tok-kw">ENTRYPOINT</span> [<span class="tok-str">&quot;/usr/local/bin/entrypoint.sh&quot;</span>]
+<span class="tok-cmt">
+# INCORRECTO: Dependencia de ruta relativa que puede fallar según el WORKDIR</span><span class="tok-cmt">
+# ENTRYPOINT [&quot;entrypoint.sh&quot;]</span>
+</code></pre>
+    </div>
+    
+<p>Si se utiliza un volumen montado en tiempo de ejecución (bind mount) durante el desarrollo local (<code>-v $(pwd):/app</code>), asegúrate de que el script en el host tenga el permiso de ejecución activo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">chmod</span> +x ./entrypoint.sh
+</code></pre>
+    </div>
+    
+<hr>
           </div>
         </li>
         
 </ol>
 <h2 id="resolucion-de-casos-borde-troubleshooting">Resolución de Casos Borde (Troubleshooting)</h2>
-<h3 id="caso-borde-1-restricciones-de-seguridad-aplicadas-por-selinux-o-apparmor">Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor</h3>
-<p>En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan <strong>SELinux</strong> en modo Enforcing) o en Ubuntu/Debian (que implementan <strong>AppArmor</strong>), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales <code>chmod 777</code> y el usuario <code>root</code> están en uso.</p>
-<p>Para verificar y solventar bloqueos por contexto de seguridad:</p>
+<h3 id="caso-borde-1-sobrescritura-de-binarios-por-bind-mounts-en-docker-compose">Caso Borde 1: Sobrescritura de Binarios por Bind Mounts en Docker Compose</h3>
+<p>Un escenario frecuente en entornos de desarrollo ocurre cuando el Dockerfile compila o copia un archivo a <code>/app/entrypoint.sh</code>, pero <code>docker-compose.yml</code> monta la carpeta local sobre <code>/app</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  web:
+    build: .
+    <span class="tok-kw">volumes</span>:
+     <span class="tok-cmt"> # PELIGRO: Si en el host ./entrypoint.sh no tiene permisos o tiene CRLF,</span>
+     <span class="tok-cmt"> # sobreescribirá el archivo saneado por el Dockerfile</span>
+      - .:/app
+</code></pre>
+    </div>
+    
+<p><strong>Solución:</strong> Excluye el archivo montándolo individualmente o utiliza volúmenes anónimos para proteger las rutas críticas:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
+  web:
+    build: .
+    <span class="tok-kw">volumes</span>:
+      - .:/app
+      - /app/node_modules
+      - /app/entrypoint.sh
+</code></pre>
+    </div>
+    
+<h3 id="caso-borde-2-incompatibilidad-de-arquitecturas-de-cpu-amd64-vs-arm64">Caso Borde 2: Incompatibilidad de Arquitecturas de CPU (AMD64 vs ARM64)</h3>
+<p>Al desplegar imágenes generadas en equipos Apple Silicon (M1/M2/M3) o servidores ARM64 (AWS Graviton) hacia servidores x86_64 sin emulación configurada, <code>runc</code> puede fallar con <code>executable file not found</code> o <code>exec format error</code>.</p>
+<p>Comprueba la arquitectura del binario y de la imagen:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -594,99 +1017,15 @@ exec <span class="tok-str">&quot;$@&quot;</span>
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Consultar si SELinux generó denegaciones recientes en el log de auditoría</span>
-<span class="tok-kw">sudo</span> ausearch <span class="tok-prop">-m</span> avc <span class="tok-prop">-ts</span> recent <span class="tok-num">2</span>&gt;/dev/null
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspeccionar la arquitectura registrada en los metadatos de la imagen</span>
+<span class="tok-kw">docker</span> inspect <span class="tok-prop">--format</span> <span class="tok-cmt">&#39;{{.Architecture}}&#39; mi-imagen:tag</span>
 <span class="tok-cmt">
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel</span>
-<span class="tok-kw">sudo</span> dmesg | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> apparmor | tail <span class="tok-prop">-n</span> <span class="tok-num">20</span>
+# Generar la imagen para la arquitectura de producción mediante buildx</span>
+<span class="tok-kw">docker</span> buildx build <span class="tok-prop">--platform</span> linux/amd64 <span class="tok-prop">-t</span> mi-imagen:tag . <span class="tok-prop">--load</span>
 </code></pre>
     </div>
     
-<p>Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Restaurar etiquetas de contexto de seguridad recursivamente</span>
-<span class="tok-kw">sudo</span> restorecon <span class="tok-prop">-Rv</span> /ruta/afectada
-</code></pre>
-    </div>
-    
-<h3 id="caso-borde-2-persistencia-tras-reinicio-y-desincronizacion-de-procesos-huerfanos">Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos</h3>
-<p>En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (<em>zombie processes</em>) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.</p>
-<p>Para identificar y limpiar procesos bloqueados de forma segura:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Identificar qué proceso tiene abierto el descriptor de archivo o socket</span>
-<span class="tok-kw">sudo</span> lsof +D /ruta/o/archivo/afectado
-<span class="tok-cmt">
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">kill</span> <span class="tok-prop">-15</span> PID_DEL_PROCESO
-</code></pre>
-    </div>
-    
-<h3 id="verificacion-de-logs-en-tiempo-real-y-validacion-en-produccion">Verificación de Logs en Tiempo Real y Validación en Producción</h3>
-<p>Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Monitorear registros en vivo filtrando por palabras clave de fallo</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-f</span> <span class="tok-prop">-n</span> <span class="tok-num">100</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-Ei</span> <span class="tok-str">&quot;(error|fail|warn|critical)&quot;</span>
-<span class="tok-cmt">
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)</span>
-<span class="tok-kw">echo</span> $?
-</code></pre>
-    </div>
-    
-<p>Un valor de retorno <code>0</code> confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.</p>
+<hr>
 
   <section class="sys-tool-bridge" aria-label="Herramientas para Desarrolladores &amp; SysAdmins">
     <div class="sys-tool-bridge-header">
@@ -728,10 +1067,10 @@ exec <span class="tok-str">&quot;$@&quot;</span>
   </section>
   
 <h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
-<h3 id="por-que-ocurre-este-error-al-usar-imagenes-docker-basadas-en-alpine-linux">¿Por qué ocurre este error al usar imágenes Docker basadas en Alpine Linux?</h3>
-<p>Alpine Linux utiliza musl libc y ash en lugar de GNU libc y bash. Si un binario compilado o script hace referencia a /bin/bash o librerías dinámicas glibc, fallará con executable file not found.</p>
-<h3 id="como-puedo-depurar-el-contenedor-si-no-llega-a-arrancar">¿Cómo puedo depurar el contenedor si no llega a arrancar?</h3>
-<p>Sobrescribe el punto de entrada desde la terminal ejecutando <code>docker run --rm -it --entrypoint /bin/sh mi-imagen</code> para inspeccionar los archivos internos interactivamente.</p>
+<h3 id="por-que-docker-logs-no-muestra-nada-cuando-ocurre-este-error">¿Por qué <code>docker logs</code> no muestra nada cuando ocurre este error?</h3>
+<p>Porque el proceso del contenedor nunca llega a iniciarse. El fallo ocurre en la llamada <code>execve</code> del runtime <code>runc</code> antes de que el kernel asigne el descriptor de archivo de salida estándar (<code>stdout</code>) al proceso de la aplicación.</p>
+<h3 id="cual-es-la-diferencia-entre-la-sintaxis-shell-y-la-sintaxis-exec-en-entrypoint">¿Cuál es la diferencia entre la sintaxis Shell y la sintaxis Exec en ENTRYPOINT?</h3>
+<p>La sintaxis Exec (<code>[&quot;binario&quot;, &quot;arg1&quot;]</code>) ejecuta el comando directamente como PID 1 en el contenedor, permitiendo la recepción limpia de señales UNIX (<code>SIGTERM</code>, <code>SIGINT</code>). La sintaxis Shell (<code>ENTRYPOINT binario arg1</code>) envuelve el comando en <code>/bin/sh -c</code>, lo que requiere que <code>/bin/sh</code> exista obligatoriamente en la imagen.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -746,8 +1085,7 @@ exec <span class="tok-str">&quot;$@&quot;</span>
               Prácticas de seguridad recomendadas:
             </p>
             <ul class="prevention-list">
-              <li>Añade un archivo <code>.gitattributes</code> con <code>* text eol=lf</code> en la raíz de tu proyecto para evitar que Git convierta finales de línea en Windows.</li>
-<li>Comprueba siempre la disponibilidad de <code>/bin/bash</code> vs <code>/bin/sh</code> al cambiar entre imágenes base como Ubuntu y Alpine.</li>
+              
             </ul>
           </div>
 
@@ -797,7 +1135,7 @@ exec <span class="tok-str">&quot;$@&quot;</span>
             <div class="author-info">
               <div class="author-header">
                 <span class="author-role">Autor • Diseñador Web & Creador de Apps</span>
-                <h4 class="author-name"><a href="../nosotros.html#rodolfo-castro">Rodolfo Castro</a></h4>
+                <h4 class="author-name"><a href="../sobre-mi.html">Rodolfo Castro</a></h4>
               </div>
               <p class="author-bio">
                 Diseñador web, creador de aplicaciones y fundador de SoporteCero. Especialista en desarrollo de productos digitales, interfaz de usuario y arquitectura web (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Cada tutorial y solución de SoporteCero es reproducido y verificado en laboratorio técnico para ofrecer guías funcionales y actualizadas.
@@ -893,7 +1231,8 @@ exec <span class="tok-str">&quot;$@&quot;</span>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../">Inicio</a></li>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
         <li><a href="../nosotros.html">Sobre Nosotros</a></li>
         <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
         <li><a href="../legal/terminos.html">Términos de Servicio</a></li>

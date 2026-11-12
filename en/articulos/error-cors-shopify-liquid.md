@@ -1,8 +1,7 @@
 ---
-title: 'Solution: CORS Error When Consuming External APIs from Shopify Templates'
+title: 'How to Fix Shopify CORS Policy Error: Allow CORS on Storefront & APIs'
 description: >-
-  Learn how to resolve Cross-Origin Resource Sharing (CORS) errors in Liquid
-  themes, storefront JavaScript, and Shopify App Proxies.
+  Learn how to resolve shopify cors policy errors and configure allow cors headers on external backends and Shopify storefront App Proxies.
 category: Web & Code
 tags:
   - Shopify
@@ -15,7 +14,7 @@ readTime: 5 min
 date: '2026-07-24'
 ---
 
-When sending `fetch()` or `axios` requests from a Shopify theme storefront script to an external backend, the browser halts execution with: `Access to fetch at 'https://my-api.com' from origin 'https://my-store.myshopify.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present`.
+Encountering a shopify cors policy block ('No Access-Control-Allow-Origin header is present') when calling external APIs from your Shopify storefront stops asynchronous requests in their tracks. In this guide, you will learn how to configure allow cors headers on your Node.js/Python backends and set up Shopify App Proxies to seamlessly bypass browser CORS restrictions.
 
 ## Quick Diagnostics
 | Cause | Solution |

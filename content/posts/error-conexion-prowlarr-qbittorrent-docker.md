@@ -1,138 +1,224 @@
 ---
 title: Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker
 description: >-
-  Aprende a corregir el error 'Connection Refused' configurando correctamente
-  las redes internas de Docker para tus aplicaciones de automatización.
+  Guía técnica para solucionar el error 'Connection Refused' entre Prowlarr y qBittorrent en Docker Compose, redes bridge y stacks con Gluetun VPN.
 category: Web y Código
 tags:
   - Prowlarr
   - Docker
   - qBittorrent
-readTime: 7 min
+readTime: 8 min
 date: '2026-07-27'
 ---
-El error de conexión rechazada (`Connection Refused` o `Test failed: Connection refused`) al intentar vincular Prowlarr con qBittorrent en Docker ocurre porque ambos servicios corren en contenedores aislados que no comparten la misma red lógica virtual de Docker, o porque qBittorrent rechaza conexiones externas debido a una mala configuración en su API de control.
+
+Al configurar qBittorrent como cliente de descargas (Download Client) en el panel de control de Prowlarr (o aplicaciones de la suite `*arr` como Sonarr y Radarr), el botón **Test** suele arrojar el fallo:
+
+```text
+Test failed: Unable to connect to qBittorrent, Connection refused (127.0.0.1:8080)
+```
+o bien:
+```text
+Test failed: Resource temporarily unavailable (qbittorrent:8080) / Connection refused
+```
+
+Este fallo no responde habitualmente a una caída del servicio de qBittorrent, sino a una desconexión en el modelo de redes virtuales de Docker, a mecanismos de seguridad de la WebUI de qBittorrent (CSRF y validación de cabecera Host), o a arquitecturas donde el cliente torrent enruta su tráfico mediante un contenedor VPN (como Gluetun).
+
+---
 
 ## Análisis de Arquitectura y Causa Raíz
 
-En entornos contenerizados, el motor de **Docker** se apoya en primitivas fundamentales del kernel de Linux: **Namespaces** (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y **Control Groups (cgroups v1/v2)** para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).
+Para resolver la conectividad entre ambos contenedores es imprescindible entender cómo gestiona Docker el direccionamiento y la resolución DNS interna:
 
-Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio `dockerd`, el runtime OCI (`containerd` / `runc`) y el subsistema de red del host:
-1. **Comunicación con el socket IPC (`/var/run/docker.sock`):** El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo `docker` o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error `EACCES` o `ECONNREFUSED`.
-2. **Ciclo de vida del contenedor y estados OCI:** Durante la creación del contenedor (`container create / start`), `runc` solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento **Overlay2** (`lowerdir`, `upperdir` y `merged`). Si existe corrupción en las capas de imagen, agotamiento de inodos en `/var/lib/docker`, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).
-3. **Pila de red virtual y cadenas de iptables:** Para exponer puertos (`-p`), Docker manipula directamente las tablas `nat` y `filter` del subsistema Netfilter mediante cadenas personalizadas (`DOCKER`, `DOCKER-USER`). Reinicios no sincronizados del firewall (`ufw` o `firewalld`) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.
+1. **El fallo de `localhost` o `127.0.0.1` dentro de un contenedor:** Cada contenedor en Docker cuenta con su propio Network Namespace aislado. Cuando introduces `localhost:8080` dentro de la interfaz web de Prowlarr, la aplicación intenta establecer un socket TCP contra su propio espacio de red local (`lo`), donde no existe ningún servicio escuchando en el puerto 8080. La pila TCP/IP del kernel emite de inmediato un paquete TCP RST (`ECONNREFUSED`).
+2. **Redes por defecto frente a redes de usuario (Bridge):** Los contenedores creados con `docker run` sin banderas de red se unen a la red `bridge` por defecto de Docker. En esta red predeterminada, el servidor DNS interno de Docker (`127.0.0.11`) **está desactivado**. Solo las redes personalizadas creadas por el usuario (o por `docker compose`) permiten la resolución de nombres de servicio (Service Discovery) mediante DNS.
+3. **Mecanismos de protección de qBittorrent WebUI:** Las versiones modernas de qBittorrent incorporan protección contra ataques CSRF (*Cross-Site Request Forgery*) y validación de la cabecera HTTP `Host`. Si una petición procedente de Prowlarr incluye la cabecera `Host: qbittorrent:8080` y la protección está activa sin excepciones de subred, qBittorrent rechaza la llamada API con un código HTTP 401 o corta la conexión.
+4. **Pilas de red compartidas con VPN (Gluetun):** En despliegues donde qBittorrent utiliza `network_mode: "service:gluetun"`, qBittorrent pierde su interfaz de red virtual propia (`eth0`) y comparte el namespace de red del contenedor VPN. En este caso, el nombre DNS `qbittorrent` no existe para otros contenedores en la red bridge: el tráfico debe dirigirse al nombre del servicio VPN (`gluetun`) y el puerto debe exponerse en el contenedor VPN.
 
-## Entorno de Laboratorio y Diagnóstico
+---
 
-Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
+## Entorno de Laboratorio y Diagnóstico Previo
 
-| Causa | Solución |
-|---|---|
-| **Nombre de host de red de Docker no alcanzable entre contenedores** |
+Identifica la topología de tu entorno mediante esta matriz de diagnóstico:
 
-Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
+| Síntoma en Prowlarr | Causa Raíz Identificada | Solución de Ingeniería |
+|---|---|---|
+| `Connection refused (127.0.0.1:8080)` | Uso de dirección loopback local en lugar del nombre DNS del contenedor. | Cambiar el host a `qbittorrent` o `gluetun` en la configuración de Prowlarr. |
+| `Name or service not known: qbittorrent` | Los contenedores pertenecen a redes Docker distintas o la red por defecto no tiene DNS interno. | Definir una red bridge compartida (`external` o común) en `docker-compose.yml`. |
+| `Connection refused` (qBittorrent bajo VPN Gluetun) | Prowlarr apunta a `qbittorrent:8080` cuando la interfaz de red le pertenece a `gluetun`. | Apuntar el host a `gluetun` y mapear el puerto `8080:8080` en el servicio Gluetun. |
+| `Unauthorized / Test failed: Unauthorized` | Contraseña incorrecta o bloqueo por subred no autorizada en qBittorrent. | Configurar excepción de subred Docker en qBittorrent o verificar usuario/password. |
+| `403 Forbidden` tras conexión inicial | Protección CSRF o validación de cabecera Host activa en qBittorrent WebUI. | Desactivar validación de Host y CSRF para clientes locales en `qBittorrent.conf`. |
+
+### Comandos de Inspección de Red Docker
+
+Ejecuta estas instrucciones en la terminal del host para verificar el estado de los contenedores y sus redes:
 
 ```bash
-# 1. Comprobar el estado general del demonio Docker
-sudo systemctl status docker --no-pager -l
+# 1. Comprobar a qué redes virtuales están conectados los contenedores
+docker inspect -f '{{json .NetworkSettings.Networks}}' prowlarr | jq .
+docker inspect -f '{{json .NetworkSettings.Networks}}' qbittorrent | jq .
 
-# 2. Inspeccionar los últimos logs del contenedor afectado
-docker logs --tail 50 --timestamps NOMBRE_CONTENEDOR
+# 2. Probar la resolución DNS y conectividad TCP desde dentro del contenedor de Prowlarr
+docker exec -it prowlarr nc -zv qbittorrent 8080
+# O utilizando curl:
+docker exec -it prowlarr curl -I -m 5 http://qbittorrent:8080/api/v2/app/webapiVersion
 
-# 3. Verificar el uso de recursos y memoria en tiempo real
-docker stats --no-stream
+# 3. Comprobar los puertos que están escuchando dentro del contenedor de qBittorrent
+docker exec -it qbittorrent ss -tulpn
 ```
 
-- El comando `docker logs` con el parámetro `--tail 50` extrae únicamente las últimas 50 líneas emitidas en `stdout` y `stderr`, mientras que `--timestamps` permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.
-- El flag `--no-stream` en `docker stats` realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.
+---
 
 ## Implementación Técnica Paso a Paso
 
-Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:
+### Paso 1: Configurar una Red Bridge Compartida en Docker Compose
 
-Si tus contenedores no pueden hablar entre sí usando sus nombres de servicio, crea una red dedicada en tu archivo `docker-compose.yml`:
+Si Prowlarr y qBittorrent están definidos en el mismo archivo `docker-compose.yml`, define una red personalizada:
+
 ```yaml
-# Definir una red puente común en tu compose
+version: '3.8'
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=8080
+    ports:
+      - "8080:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    volumes:
+      - ./qbittorrent/config:/config
+      - /datos/torrents:/downloads
+    networks:
+      - arr-net
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    ports:
+      - "9696:9696"
+    volumes:
+      - ./prowlarr/config:/config
+    networks:
+      - arr-net
+    restart: unless-stopped
+
 networks:
-  arr-network:
+  arr-net:
+    name: arr-net
     driver: bridge
 ```
-Asegura que tanto el servicio de `prowlarr` como el de `qbittorrent` tengan asignada esta red:
+
+Si ejecutas los servicios en archivos compose independientes, declara la red como externa:
+
+```bash
+# Crear la red manualmente una sola vez en el host
+docker network create arr-net
+```
+
+Y en cada `docker-compose.yml`:
+
 ```yaml
-services:
-  prowlarr:
-    ...
-    networks:
-      - arr-network
-  qbittorrent:
-    ...
-    networks:
-      - arr-network
+networks:
+  arr-net:
+    external: true
 ```
 
-### Paso 2: Desactivar la protección CSRF y permitir acceso local en qBittorrent
-El motor de seguridad de qBittorrent bloqueará las llamadas a la API hechas desde otros contenedores dentro de la red privada si no configuras los parámetros de acceso seguro en tu cliente web:
-1. Accede a la interfaz web de qBittorrent.
-2. Ve a **Alt+O** (Opciones) > **WebUI**.
-3. Desmarca la casilla **Habilitar protección contra falsificación de petición en sitios cruzados (CSRF)**.
-4. En el campo **Evitar la autenticación de clientes en subredes locales**, ingresa la subred interna de Docker:
-```plaintext
-172.16.0.0/12, 192.168.0.0/16
+### Paso 2: Desactivar CSRF y Host Header Validation en qBittorrent
+
+1. Abre la interfaz web de qBittorrent (`http://IP_SERVIDOR:8080`).
+2. Ve a **Opciones** (icono de engranaje o `Alt+O`) > pestaña **Web UI**.
+3. Localiza la sección de **Seguridad** y desmarca:
+   * **Habilitar la protección contra la falsificación de petición en sitios cruzados (CSRF)**.
+   * **Habilitar la validación de la cabecera Host** (Host header validation).
+4. En el campo **Evitar la autenticación de clientes en subredes locales**, añade el rango de subredes internas de Docker:
+   ```text
+   172.16.0.0/12, 192.168.0.0/16, 10.0.0.0/8
+   ```
+5. Guarda los cambios. Si la WebUI no es accesible, detén el contenedor y edita directamente el archivo `qBittorrent.conf` en la carpeta montada:
+
+```ini
+[Preferences]
+WebUI\CSRFProtection=false
+WebUI\HostHeaderValidation=false
+WebUI\LocalHostAuth=false
+WebUI\AuthSubnetWhitelist=172.16.0.0/12, 192.168.0.0/16
 ```
 
-### Paso 3: Utilizar el nombre del contenedor como dirección de Host
-Al configurar el cliente de Torrent dentro del panel de Prowlarr, nunca utilices `localhost` o `127.0.0.1`. En su lugar, ingresa el nombre exacto del contenedor asignado en Docker:
-```plaintext
-Host: qbittorrent
-Port: 8080
-```
+### Paso 3: Configurar el Download Client en Prowlarr
+
+1. Accede al panel web de Prowlarr (`http://IP_SERVIDOR:9696`).
+2. Dirígete a **Settings** > **Download Clients** > pulsa el botón **+** y selecciona **qBittorrent**.
+3. Rellena los campos con los siguientes valores exactos:
+   * **Name:** `qBittorrent`
+   * **Enable:** Marcado
+   * **Host:** `qbittorrent` (el nombre del servicio o contenedor en Docker)
+   * **Port:** `8080` (el puerto interno de la WebUI)
+   * **Use SSL:** Desmarcado (a menos que hayas configurado certificados TLS inversos)
+   * **Username:** Tu usuario de qBittorrent (por defecto `admin`)
+   * **Password:** Tu contraseña configurada
+4. Pulsa **Test**. La comprobación debe devolver una confirmación verde instantánea. Pulsa **Save**.
+
+---
 
 ## Resolución de Casos Borde (Troubleshooting)
 
-### Caso Borde 1: Restricciones de seguridad aplicadas por SELinux o AppArmor
+### Caso Borde 1: qBittorrent Enrutado a través de Gluetun VPN
 
-En distribuciones de clase empresarial como Red Hat Enterprise Linux, AlmaLinux o Rocky Linux (que utilizan **SELinux** en modo Enforcing) o en Ubuntu/Debian (que implementan **AppArmor**), las políticas de confinamiento del sistema operativo pueden bloquear el acceso a archivos, sockets UNIX o puertos de red incluso cuando los permisos tradicionales `chmod 777` y el usuario `root` están en uso.
+Cuando qBittorrent se ejecuta tras una VPN como Gluetun, utiliza `network_mode: "service:gluetun"`. En este escenario:
 
-Para verificar y solventar bloqueos por contexto de seguridad:
-```bash
-# Consultar si SELinux generó denegaciones recientes en el log de auditoría
-sudo ausearch -m avc -ts recent 2>/dev/null
+1. qBittorrent **no puede tener puertos mapeados** en su bloque de servicio; los puertos deben mapearse en `gluetun`.
+2. qBittorrent y Prowlarr no pueden comunicarse mediante el nombre `qbittorrent`.
 
-# En caso de AppArmor, revisar eventos bloqueados en el diario del kernel
-sudo dmesg | grep -i apparmor | tail -n 20
+**Configuración correcta en `docker-compose.yml`:**
+
+```yaml
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "8080:8080" # WebUI de qBittorrent expuesta a través de Gluetun
+      - "6881:6881"
+      - "6881:6881/udp"
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn # O tu proveedor habitual
+      - VPN_TYPE=wireguard
+    networks:
+      - arr-net
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
+    volumes:
+      - ./qbittorrent/config:/config
+      - /datos/torrents:/downloads
 ```
-Si se confirma una denegación de contexto en SELinux, restaura el contexto de seguridad predeterminado del archivo o directorio afectado ejecutando:
-```bash
-# Restaurar etiquetas de contexto de seguridad recursivamente
-sudo restorecon -Rv /ruta/afectada
-```
 
-### Caso Borde 2: Persistencia tras reinicio y desincronización de procesos huérfanos
+**Ajuste en Prowlarr:** En el campo **Host** del cliente de descargas en Prowlarr, escribe `gluetun` (en lugar de `qbittorrent`) con el puerto `8080`.
 
-En ocasiones, tras aplicar una solución en caliente en la terminal, el problema reaparece inesperadamente en el siguiente reinicio del servidor o al finalizar la sesión SSH. Esto ocurre comúnmente cuando existen procesos huérfanos (*zombie processes*) que retienen el bloqueo de archivos o sockets en memoria sin permitir que el nuevo servicio tome control del recurso.
+---
 
-Para identificar y limpiar procesos bloqueados de forma segura:
-```bash
-# Identificar qué proceso tiene abierto el descriptor de archivo o socket
-sudo lsof +D /ruta/o/archivo/afectado
+## Preguntas Frecuentes
 
-# Si es necesario liberar el proceso huérfano de manera ordenada (señal SIGTERM)
-sudo kill -15 PID_DEL_PROCESO
-```
+### ¿Por qué obtengo Connection Refused si puedo abrir la WebUI desde mi navegador?
+Tu navegador accede a qBittorrent desde la red física de tu hogar utilizando la IP del host y el puerto publicado (`http://192.168.1.100:8080`). Sin embargo, Prowlarr corre dentro de una red virtual aislada en Docker; si intentas usar `localhost` o la IP de red física sin una regla de enrutamiento NAT adecuada, la conexión se rechaza.
 
-### Verificación de Logs en Tiempo Real y Validación en Producción
-
-Una vez aplicadas las modificaciones correctivas, valida en consola que el sistema opere con total estabilidad y sin emitir advertencias residuales:
-```bash
-# Monitorear registros en vivo filtrando por palabras clave de fallo
-sudo journalctl -f -n 100 | grep -Ei "(error|fail|warn|critical)"
-
-# Verificar que el código de retorno del último comando ejecutado sea exitoso (0)
-echo $?
-```
-Un valor de retorno `0` confirma la ejecución exitosa en el estándar POSIX, garantizando que el servicio o comando ha completado su ciclo sin excepciones pendientes.
-
-## 🛡️ Consejos de Prevención
-
-Prácticas de seguridad recomendadas:
-- No expongas directamente los puertos de control de la interfaz WebUI de qBittorrent o de la API de Prowlarr a Internet sin establecer una contraseña de acceso fuerte y robusta. Si deseas acceder de forma remota a estas herramientas de automatización, utiliza túneles VPN seguros (como WireGuard o Tailscale) en lugar de realizar mapeos de puertos directos en tu router de red doméstico, protegiendo tus descargas de intrusiones no autorizadas.
+### ¿Es seguro desactivar la protección CSRF en qBittorrent?
+Sí, siempre que la interfaz WebUI no esté expuesta directamente a Internet mediante apertura de puertos WAN en el router. Dentro de una red Docker privada o tras un Reverse Proxy con autenticación (como Nginx Proxy Manager, Traefik o Authelia), es una práctica habitual requerida por las APIs de automatización.

@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-ssh-permission-denied-key.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-ssh-permission-denied-key.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -81,15 +83,19 @@
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -119,76 +125,6 @@
       "position": 2,
       "name": "How to Fix 'Permission Denied (publickey)' Error in SSH Connections",
       "item": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Fix 'Permission Denied (publickey)' Error in SSH Connections",
-  "description": "Learn how to troubleshoot and resolve the 'Permission denied (publickey)' error in SSH. Fix client private key permissions, server authorized_keys configuration, and sshd StrictModes.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#diagnose-the-failure-with-verbose-ssh-output",
-      "name": "Diagnose the Failure with Verbose SSH Output",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Before altering files, run the SSH connection with maximum verbosity (-vvv) to inspect the exact handshake phase where authentication fails: Review the debug stream: Look for Offering public key: ... ED25519 SHA256:...: Confirms your client offered the key. Look for Server refused our key or Next authentication method: password: Confirms the server&#39;s sshd process evaluated the key and rejected it."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#enforce-strict-permissions-on-the-client-machine",
-      "name": "Enforce Strict Permissions on the Client Machine",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "OpenSSH client software will refuse to use a private key if it can be read by other users on your local machine:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#fix-permissions-on-the-remote-server-strictmodes-compliance",
-      "name": "Fix Permissions on the Remote Server (StrictModes Compliance)",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Log into the remote server (via your hosting provider&#39;s web VNC console, serial console, or password authentication) and audit your home directory permissions: (Crucial Note: If /home/username has permissions 777 or 775, sshd will reject public keys even if authorized_keys itself is 600, because another local user could theoretically rename or swap the .ssh directory)."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#verify-the-public-key-match-in-authorizedkeys",
-      "name": "Verify the Public Key Match in authorized_keys",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Confirm that your client&#39;s exact public key string is appended to the server&#39;s authorized_keys file without extraneous carriage returns or line wrapping: On your local machine, display the public key: On the remote server, verify that the exact string appears on a single line in ~/.ssh/authorized_keys: If you have password access, copy the key automatically using the standard utility:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/error-ssh-permission-denied-key.html#verify-openssh-server-configuration-sshdconfig",
-      "name": "Verify OpenSSH Server Configuration (sshd_config)",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Ensure the server daemon is configured to accept public key credentials. Inspect /etc/ssh/sshd_config (or /etc/ssh/sshd_config.d/*.conf): Confirm the presence of: If you made modifications to sshd_config, test the configuration syntax before restarting:"
-        }
-      ]
     }
   ]
 }

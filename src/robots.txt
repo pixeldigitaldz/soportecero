@@ -1,9 +1,56 @@
+# Directiva global para buscadores tradicionales y navegación
 User-agent: *
 Allow: /
 Disallow: /src/
 Disallow: /content/
 Disallow: /scripts/
-Disallow: /*?cat=*
 Content-Signal: ai-train=no, search=yes, ai-input=yes
+
+# Motores de búsqueda y citación en vivo de IA (AI Search / Grounding) — Permitidos
+User-agent: Googlebot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Rastreadores de entrenamiento de modelos (AI Model Training) — Bloqueados en coherencia con ai-train=no
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
 
 Sitemap: https://soportecero.com/sitemap.xml

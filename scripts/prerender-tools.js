@@ -52,7 +52,11 @@ if (!fs.existsSync(TEMPLATE_PATH)) {
   process.exit(1);
 }
 
-const baseTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
+// Clean baseTemplate in case tools/index.html already contains prerendered blocks from a previous run
+const rawTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
+const baseTemplate = rawTemplate
+  .replace(/\s*<!-- Structured Data JSON-LD -->[\s\S]*?<\/style>/i, '')
+  .replace(/<article[^>]*class="[^"]*seo-static-content"[\s\S]*?<\/article>/i, '');
 
 // 6 Tools definitions with rich SEO guides (+800 words each), formulas, tables, and FAQs
 const TOOLS_CONFIG = [
@@ -1572,4 +1576,79 @@ for (const tool of TOOLS_CONFIG) {
   generatedCount++;
 }
 
-console.log(`[PRERENDER] Total de páginas generadas: ${generatedCount} de 6.`);
+// 5. Prerender the Hub Index (tools/index.html) with CollectionPage JSON-LD and crawlable links to all 6 tools
+const hubSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://soportecero.com/tools/index.html#collection",
+  "name": "Finanzas Pro Hub | Suite de Calculadoras Financieras e Ingeniería Freelance | SoporteCero",
+  "url": "https://soportecero.com/tools/index.html",
+  "description": "Súper-Hub de calculadoras interactivas verificadas en laboratorio: comisiones de pasarelas internacionales, tarifas por hora freelance con exportación PDF, ROAS e-commerce, pricing, hipotecas e interés compuesto.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://soportecero.com/#website",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": TOOLS_CONFIG.map((t, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": t.title,
+      "description": t.description,
+      "url": t.canonical
+    }))
+  }
+};
+
+const hubCardsHtml = TOOLS_CONFIG.map(t => `
+  <div class="seo-case-card">
+    <span class="seo-header-tag" style="margin-bottom:0.5rem;">${t.badge}</span>
+    <h3 class="seo-h3" style="margin-top:0.25rem;">
+      <a href="/tools/${t.filename}" style="color:#38bdf8; text-decoration:underline;">${t.h1}</a>
+    </h3>
+    <p class="seo-p" style="margin-bottom:0.75rem;">${t.description}</p>
+    <a href="/tools/${t.filename}" style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:#22d3ee; font-weight:600;">Abrir calculadora interactiva &rarr;</a>
+  </div>
+`).join('\n');
+
+let hubHtml = baseTemplate;
+const hubHeadInjection = `
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+      ${JSON.stringify(hubSchema, null, 2)}
+    </script>
+    ${SEO_ARTICLE_CSS}
+  </head>`;
+hubHtml = hubHtml.replace('</head>', hubHeadInjection);
+
+const hubArticleBlock = `
+    <div id="root"></div>
+    <article class="max-w-5xl mx-auto px-4 py-12 text-slate-300 seo-static-content" role="article" aria-label="Directorio de Calculadoras Financieras SoporteCero">
+      <header class="seo-header">
+        <span class="seo-header-tag">Finanzas Pro Hub &bull; Suite Interactiva</span>
+        <h1 class="seo-h1">Suite de Calculadoras Financieras y Simulación para Freelancers, Desarrolladores y E-commerce</h1>
+        <div class="seo-meta-audit">
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-15 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Acceso Gratuito</span>
+        </div>
+      </header>
+      <section class="seo-section">
+        <div class="seo-lead-box">
+          <p class="seo-lead">
+            Bienvenido al portal central de herramientas cuantitativas de <strong>SoporteCero</strong>. Desarrollamos calculadoras financieras de precisión algebraica para profesionales independientes, agencias de software, comercios electrónicos y gestión patrimonial, con exportación de presupuestos formales en PDF y desglose completo de fórmulas matemáticas.
+          </p>
+        </div>
+        <h2 class="seo-h2">Catálogo de Calculadoras Interactivas Disponibles</h2>
+        <div class="seo-cards-grid">
+          ${hubCardsHtml}
+        </div>
+      </section>
+    </article>
+`;
+hubHtml = hubHtml.replace('<div id="root"></div>', hubArticleBlock);
+fs.writeFileSync(TEMPLATE_PATH, hubHtml, 'utf-8');
+console.log('[PRERENDER] Generado exitosamente Hub pre-renderizado: tools/index.html');
+
+console.log(`[PRERENDER] Total de páginas generadas: ${generatedCount} calculadoras + 1 Hub principal.`);

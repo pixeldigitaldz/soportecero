@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-nvidia-nvml-driver-library-version-mismatch.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -82,15 +84,19 @@
   "dateModified": "2026-10-26",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -120,76 +126,6 @@
       "position": 2,
       "name": "Fix Nvidia NVML Error: Driver/library version mismatch in Linux",
       "item": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Fix Nvidia NVML Error: Driver/library version mismatch in Linux",
-  "description": "Fix 'Failed to initialize NVML: Driver/library version mismatch' when running nvidia-smi on Linux without rebooting the server.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html#verify-version-discrepancy-between-kernel-and-nvml",
-      "name": "Verify version discrepancy between Kernel and NVML",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Check the currently loaded kernel module version against the installed system package version: If version numbers diverge (for example, kernel running 535.183.01 while userland libraries were upgraded to 535.183.06), the driver modules must be reloaded."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html#identify-and-stop-all-processes-utilizing-the-gpu",
-      "name": "Identify and stop all processes utilizing the GPU",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "To unload kernel modules cleanly, no active processes can hold open file descriptors on /dev/nvidia*: Stop services utilizing GPU acceleration (such as Docker daemons, inference engines, or display managers): If lingering orphaned processes remain, terminate them directly:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html#unload-nvidia-modules-from-kernel-memory",
-      "name": "Unload Nvidia modules from kernel memory",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Unload all Nvidia kernel modules in reverse dependency order: If rmmod: ERROR: Module nvidia is in use appears, verify with sudo lsof /dev/nvidia* to pinpoint any remaining process holding the module."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html#reload-the-updated-nvidia-kernel-modules",
-      "name": "Reload the updated Nvidia kernel modules",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Once unloaded, insert the freshly installed driver modules into the kernel:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/error-nvidia-nvml-driver-library-version-mismatch.html#confirm-with-nvidia-smi-and-restart-services",
-      "name": "Confirm with nvidia-smi and restart services",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Run the Nvidia management command to confirm NVML communication is fully restored: You should immediately see the GPU status table, temperature, utilization, and the synchronized driver version. Then, resume your application services:"
-        }
-      ]
     }
   ]
 }
@@ -919,13 +855,13 @@ dpkg <span class="tok-prop">-l</span> | <span class="tok-kw">grep</span> <span c
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: [FIXED] Docker Error 'failed to solve: process did not complete successfully' -->
+      <!-- Related Card: Docker Error 'failed to solve: process did not complete successfully' -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">[FIXED] Docker Error 'failed to solve: process did not complete successfully'</a>
+              <a href="../articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Docker Error 'failed to solve: process did not complete successfully'</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">

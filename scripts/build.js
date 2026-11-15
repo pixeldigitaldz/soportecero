@@ -753,7 +753,9 @@ function build() {
   copyDirSync(path.join(SRC_DIR, 'js'), path.join(DIST_DIR, 'js'));
 
   // Ensure empty .nojekyll is always maintained in root for GitHub Pages
-  fs.writeFileSync(path.join(DIST_DIR, '.nojekyll'), '', 'utf-8');
+  if (!fs.existsSync(path.join(DIST_DIR, '.nojekyll'))) {
+    fs.writeFileSync(path.join(DIST_DIR, '.nojekyll'), '', 'utf-8');
+  }
 
   fs.copyFileSync(path.join(SRC_DIR, 'robots.txt'), path.join(DIST_DIR, 'robots.txt'));
   if (fs.existsSync(path.join(SRC_DIR, 'ads.txt'))) {
@@ -787,7 +789,7 @@ function build() {
   compileStaticPage(path.join(SRC_DIR, 'sobre-mi.html'), path.join(DIST_DIR, 'sobre-mi.html'), 'sobre-mi.html', 'about.html', 'es');
   compileStaticPage(path.join(SRC_DIR, 'contacto.html'), path.join(DIST_DIR, 'contacto.html'), 'contacto.html', 'contact.html', 'es');
   compileStaticPage(path.join(SRC_DIR, 'servicios.html'), path.join(DIST_DIR, 'servicios.html'), 'servicios.html', 'servicios.html', 'es');
-  compileStaticPage(path.join(SRC_DIR, 'nosotros.html'), path.join(DIST_DIR, 'nosotros.html'), 'nosotros.html', 'about.html', 'es');
+  compileStaticPage(path.join(SRC_DIR, 'nosotros.html'), path.join(DIST_DIR, 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'es');
   
   fs.mkdirSync(path.join(DIST_DIR, 'legal'), { recursive: true });
   compileStaticPage(path.join(SRC_DIR, 'legal', 'cookies.html'), path.join(DIST_DIR, 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'es');
@@ -800,7 +802,7 @@ function build() {
   compileStaticPage(path.join(SRC_DIR, 'en', 'contact.html'), path.join(DIST_DIR, 'en', 'contact.html'), 'contacto.html', 'contact.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'contacto.html'), path.join(DIST_DIR, 'en', 'contacto.html'), 'contacto.html', 'contact.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'servicios.html'), path.join(DIST_DIR, 'en', 'servicios.html'), 'servicios.html', 'servicios.html', 'en');
-  compileStaticPage(path.join(SRC_DIR, 'en', 'nosotros.html'), path.join(DIST_DIR, 'en', 'nosotros.html'), 'nosotros.html', 'about.html', 'en');
+  compileStaticPage(path.join(SRC_DIR, 'en', 'nosotros.html'), path.join(DIST_DIR, 'en', 'nosotros.html'), 'nosotros.html', 'nosotros.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'cookies.html'), path.join(DIST_DIR, 'en', 'legal', 'cookies.html'), 'legal/cookies.html', 'legal/cookies.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'privacidad.html'), path.join(DIST_DIR, 'en', 'legal', 'privacidad.html'), 'legal/privacidad.html', 'legal/privacidad.html', 'en');
   compileStaticPage(path.join(SRC_DIR, 'en', 'legal', 'terminos.html'), path.join(DIST_DIR, 'en', 'legal', 'terminos.html'), 'legal/terminos.html', 'legal/terminos.html', 'en');
@@ -823,7 +825,7 @@ function build() {
     const filename = path.basename(file, '.md');
     const { data: frontMatter, content: markdownBody } = matter(fileContent);
     if (frontMatter.title) {
-      frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|Solucionado|Solved)\]\s*/i, '').trim();
+      frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|FIXED|Solucionado|Solved|Fixed)\]\s*/i, '').trim();
     }
 
     const postDate = new Date(frontMatter.date + 'T00:00:00');
@@ -854,7 +856,7 @@ function build() {
       const filename = path.basename(file, '.md');
       const { data: frontMatter, content: markdownBody } = matter(fileContent);
       if (frontMatter.title) {
-        frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|Solucionado|Solved)\]\s*/i, '').trim();
+        frontMatter.title = frontMatter.title.replace(/^\[(SOLUCIONADO|SOLVED|FIXED|Solucionado|Solved|Fixed)\]\s*/i, '').trim();
       }
 
       const postDate = new Date(frontMatter.date + 'T00:00:00');
@@ -930,15 +932,19 @@ function build() {
       "dateModified": post.dateModified || post.date,
       "author": {
         "@type": "Person",
+        "@id": "https://soportecero.com/sobre-mi.html#rodolfo-castro",
         "name": "Rodolfo Castro",
-        "jobTitle": "Diseñador Web & Creador de Apps",
-        "url": "https://soportecero.com/nosotros.html#rodolfo-castro",
+        "jobTitle": "Fundador, Desarrollador Full-Stack & Administrador de Sistemas",
+        "url": "https://soportecero.com/sobre-mi.html",
         "sameAs": [
+          "https://soportecero.com/sobre-mi.html",
+          "https://soportecero.com/nosotros.html#rodolfo-castro",
           "https://www.pixeldigitaldz.online/links"
         ]
       },
       "publisher": {
         "@type": "Organization",
+        "@id": "https://soportecero.com/#organization",
         "name": "SoporteCero",
         "url": "https://soportecero.com/",
         "logo": {
@@ -972,40 +978,6 @@ function build() {
       ]
     };
 
-    let howToSchemaScript = '';
-    if (steps && steps.length > 0) {
-      const howToSchema = {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": post.title,
-        "description": post.description,
-        "step": steps.map((s, idx) => {
-          let cleanText = s.body
-            .replace(/<div class="code-container"[\s\S]*?<\/pre>\s*<\/div>/gi, '')
-            .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
-            .replace(/<pre[\s\S]*?<\/pre>/gi, '')
-            .replace(/<button[\s\S]*?<\/button>/gi, '')
-            .replace(/<[^>]*>/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-          if (!cleanText || cleanText.length < 5) {
-            cleanText = s.title;
-          }
-          return {
-            "@type": "HowToStep",
-            "position": idx + 1,
-            "url": `${pageUrl}#${s.slug || slugify(s.title)}`,
-            "name": s.title,
-            "itemListElement": [{
-              "@type": "HowToDirection",
-              "text": cleanText
-            }]
-          };
-        })
-      };
-      howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
-    }
-
     let faqSchemaScript = '';
     if (faqs && faqs.length > 0) {
       const faqSchema = {
@@ -1029,7 +1001,7 @@ function build() {
   </script>
   <script type="application/ld+json">
   ${JSON.stringify(breadcrumbSchema, null, 2)}
-  </script>${howToSchemaScript}${faqSchemaScript}
+  </script>${faqSchemaScript}
     `;
 
     const langSelectorLink = hasEnTranslation 
@@ -1123,15 +1095,19 @@ function build() {
       "dateModified": post.dateModified || post.date,
       "author": {
         "@type": "Person",
+        "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
         "name": "Rodolfo Castro",
-        "jobTitle": "Web Designer & App Creator",
-        "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+        "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+        "url": "https://soportecero.com/en/about.html",
         "sameAs": [
+          "https://soportecero.com/en/about.html",
+          "https://soportecero.com/en/nosotros.html#rodolfo-castro",
           "https://www.pixeldigitaldz.online/links"
         ]
       },
       "publisher": {
         "@type": "Organization",
+        "@id": "https://soportecero.com/#organization",
         "name": "SoporteCero",
         "url": "https://soportecero.com/",
         "logo": {
@@ -1165,40 +1141,6 @@ function build() {
       ]
     };
 
-    let howToSchemaScript = '';
-    if (steps && steps.length > 0) {
-      const howToSchema = {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        "name": post.title,
-        "description": post.description,
-        "step": steps.map((s, idx) => {
-          let cleanText = s.body
-            .replace(/<div class="code-container"[\s\S]*?<\/pre>\s*<\/div>/gi, '')
-            .replace(/<div class="code-header"[\s\S]*?<\/div>/gi, '')
-            .replace(/<pre[\s\S]*?<\/pre>/gi, '')
-            .replace(/<button[\s\S]*?<\/button>/gi, '')
-            .replace(/<[^>]*>/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
-          if (!cleanText || cleanText.length < 5) {
-            cleanText = s.title;
-          }
-          return {
-            "@type": "HowToStep",
-            "position": idx + 1,
-            "url": `${pageUrl}#${s.slug || slugify(s.title)}`,
-            "name": s.title,
-            "itemListElement": [{
-              "@type": "HowToDirection",
-              "text": cleanText
-            }]
-          };
-        })
-      };
-      howToSchemaScript = `\n  <script type="application/ld+json">\n  ${JSON.stringify(howToSchema, null, 2)}\n  </script>`;
-    }
-
     let faqSchemaScript = '';
     if (faqs && faqs.length > 0) {
       const faqSchema = {
@@ -1222,7 +1164,7 @@ function build() {
   </script>
   <script type="application/ld+json">
   ${JSON.stringify(breadcrumbSchema, null, 2)}
-  </script>${howToSchemaScript}${faqSchemaScript}
+  </script>${faqSchemaScript}
     `;
 
     const langSelectorLink = hasEsCounterpart
@@ -1629,8 +1571,16 @@ function build() {
   console.log('[SITEMAP] Compilado: sitemap.xml');
 
   // 12. Generate llms-full.txt for comprehensive LLM & agent context
-  let llmsFullContent = `# SoporteCero - Directorio Extendido de Soluciones Técnicas\n\n`;
-  llmsFullContent += `> Base de conocimiento completa con tutoriales, soluciones paso a paso y comandos listos para copiar.\n\n`;
+  let llmsFullContent = `# SoporteCero - Directorio Extendido de Soluciones Técnicas y Herramientas\n\n`;
+  llmsFullContent += `> Base de conocimiento completa con tutoriales, soluciones paso a paso, comandos listos para copiar y suite de calculadoras financieras interactivas.\n\n`;
+  llmsFullContent += `## Calculadoras Interactivas y Simuladores (/tools/)\n\n`;
+  llmsFullContent += `- [Finanzas Pro Hub — Suite de Calculadoras](https://soportecero.com/tools/index.html): Portal central de herramientas financieras y cotizadores interactivos para desarrolladores, freelancers y e-commerce.\n`;
+  llmsFullContent += `- [Calculadora de Comisiones PayPal, Stripe, Wise y Binance](https://soportecero.com/tools/comisiones-pasarelas-pago.html): Cálculo directo e inverso de retenciones y spread cambiario en pasarelas de pago internacionales.\n`;
+  llmsFullContent += `- [Calculadora de Tarifa por Hora Freelance y Cotizador PDF](https://soportecero.com/tools/tarifa-hora-freelance.html): Cálculo de tarifa horaria mínima rentable y generación de propuestas formales en PDF en 1 clic.\n`;
+  llmsFullContent += `- [Calculadora de ROAS de Punto de Equilibrio y Max CPA](https://soportecero.com/tools/calculadora-roas-ecommerce.html): Simulador de rentabilidad publicitaria para Meta Ads, Google Ads y TikTok Ads descontando COGS y logística.\n`;
+  llmsFullContent += `- [Calculadora de Margen vs. Markup y Descuentos E-commerce](https://soportecero.com/tools/margen-descuentos-ecommerce.html): Conversor de margen bruto sobre ventas vs. recargo sobre costo e impacto de promociones.\n`;
+  llmsFullContent += `- [Simulador de Amortización de Hipotecas y Abonos a Capital](https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html): Proyección bajo sistema francés con ahorro de intereses y reducción de plazo por prepagos.\n`;
+  llmsFullContent += `- [Calculadora de Interés Compuesto, Inflación y Regla 4% FIRE](https://soportecero.com/tools/interes-compuesto-ahorro.html): Proyección patrimonial a largo plazo deflactada por inflación real y meta de retiro FIRE.\n\n`;
   llmsFullContent += `## Artículos y Guías en Español\n\n`;
   for (let post of postsEs) {
     llmsFullContent += `### [${post.title}](https://soportecero.com/articulos/${post.filename}.html)\n`;

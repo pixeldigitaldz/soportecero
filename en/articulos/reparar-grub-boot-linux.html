@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/reparar-grub-boot-linux.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/reparar-grub-boot-linux.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/reparar-grub-boot-linux.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -81,15 +83,19 @@
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -119,88 +125,6 @@
       "position": 2,
       "name": "How to Recover and Reinstall a Corrupted GRUB Bootloader in Linux (UEFI & BIOS)",
       "item": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Recover and Reinstall a Corrupted GRUB Bootloader in Linux (UEFI & BIOS)",
-  "description": "Step-by-step guide to restore a broken GRUB bootloader or 'grub rescue>' console using a Live USB and chroot. Fix UEFI boot entries, dual-boot Windows overwrites, and corrupt grub.cfg files.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#boot-into-a-live-linux-usb-environment",
-      "name": "Boot into a Live Linux USB Environment",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Create and boot a standard 64-bit Live USB (such as Ubuntu, Debian, or Arch Linux) matching your architecture. Ensure you boot the Live USB in UEFI mode if your primary operating system uses UEFI. Open a terminal and identify your physical drive partitions: Identify two critical partitions: Your Linux Root partition (/): Typically formatted as ext4, btrfs, or xfs (e.g., /dev/nvme0n1p2 or /dev/sda2). Your EFI System Partition (ESP): A FAT32 partition typically between 100 MB and 1 GB in size (e.g., /dev/nvme0n1p1 or /dev/sda1)."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#mount-root-and-kernel-virtual-filesystems",
-      "name": "Mount Root and Kernel Virtual Filesystems",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Mount your actual installed Linux root partition into the Live environment&#39;s /mnt directory: Bind-mount the host kernel virtual filesystems into /mnt so that tools executed inside the chroot can interact with the physical hardware: If your system boots via modern UEFI (the vast majority of machines manufactured after 2012), mount your EFI partition inside the target boot tree:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#enter-the-chroot-environment",
-      "name": "Enter the Chroot Environment",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Switch your active terminal shell into the root environment of your installed system: Your command prompt now reflects your actual system installation. Any command executed here acts directly upon your installed packages and configuration files."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#reinstall-the-grub-bootloader",
-      "name": "Reinstall the GRUB Bootloader",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Execute the appropriate installation command according to your system firmware: For Modern UEFI Systems (Standard): For Legacy BIOS / MBR Systems:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#regenerate-the-grub-configuration-file",
-      "name": "Regenerate the GRUB Configuration File",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Scan all connected storage drives for operating systems (including Windows via os-prober) and rebuild the main menu file (/boot/grub/grub.cfg): Confirm that the output logs detecting your Linux kernel images (vmlinuz) and initramfs files."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 6,
-      "url": "https://soportecero.com/en/articulos/reparar-grub-boot-linux.html#verify-nvram-entries-and-cleanly-reboot",
-      "name": "Verify NVRAM Entries and Cleanly Reboot",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If using UEFI, verify that GRUB is prioritized in the motherboard NVRAM boot queue: Exit the chroot and unmount all filesystems before rebooting: Remove the Live USB drive when prompted. Your system will now boot into the GRUB selection menu cleanly."
-        }
-      ]
     }
   ]
 }

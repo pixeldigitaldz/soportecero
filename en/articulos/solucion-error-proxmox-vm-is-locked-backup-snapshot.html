@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -79,15 +81,19 @@
   "dateModified": "2026-10-17",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -117,64 +123,6 @@
       "position": 2,
       "name": "How to Fix 'VM is locked (backup/snapshot)' Error in Proxmox VE",
       "item": "https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Fix 'VM is locked (backup/snapshot)' Error in Proxmox VE",
-  "description": "Step-by-step technical guide to unlock stuck virtual machines and LXC containers in Proxmox VE using qm unlock and pct unlock after failed backup tasks.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#check-for-and-terminate-orphaned-backup-processes",
-      "name": "Check for and terminate orphaned backup processes",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Before forcibly releasing the lock, make sure no background worker process is actively streaming data to or from the virtual disk. Access the Proxmox node shell over SSH or via the Web GUI console and list all running jobs associated with your VM ID: If an inactive or hung vzdump process is still lingering in the process table with no I/O progression, terminate it:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#release-virtual-machine-locks-using-qm-unlock",
-      "name": "Release virtual machine locks using qm unlock",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "For KVM/QEMU virtual machines, invoke the native Proxmox qm unlock CLI utility: Once executed, refresh the Proxmox Web GUI. The yellow padlock icon will immediately vanish, and power actions (Start, Shutdown, Reboot) will be restored."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#unlock-lxc-containers-using-pct-unlock",
-      "name": "Unlock LXC containers using pct unlock",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If the locked instance is an LXC container rather than a full virtual machine, use the pct management command: Confirm the container has returned to an operational state:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html#manually-clear-persistent-locks-from-configuration-files",
-      "name": "Manually clear persistent locks from configuration files",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "In rare scenarios where the unlock command returns no errors but the GUI still indicates that the instance is locked, manually inspect the configuration file: Locate the line beginning with lock: (such as lock: backup or lock: snapshot), delete that line completely, save with Ctrl + O, and exit with Ctrl + X. The Proxmox cluster filesystem (pmxcfs) automatically syncs the edit across the cluster in real time."
-        }
-      ]
     }
   ]
 }

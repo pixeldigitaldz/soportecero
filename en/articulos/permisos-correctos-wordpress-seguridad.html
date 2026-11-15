@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/permisos-correctos-wordpress-seguridad.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -81,15 +83,19 @@
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -119,76 +125,6 @@
       "position": 2,
       "name": "The Definitive Linux File and Folder Permissions Guide to Secure WordPress",
       "item": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "The Definitive Linux File and Folder Permissions Guide to Secure WordPress",
-  "description": "Learn how to harden WordPress file and folder permissions on Linux servers. Configure optimal chmod 755/644 masks, protect wp-config.php with chmod 600, and resolve uploads ownership issues.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#assign-proper-web-server-user-and-group-ownership",
-      "name": "Assign Proper Web Server User and Group Ownership",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Before adjusting permission masks, ensure that your files belong to the user account running the web server daemon: Ubuntu / Debian (Nginx or Apache): Default user is www-data:www-data. RHEL / CentOS / Rocky Linux / AlmaLinux: Default user is apache:apache or nginx:nginx. Docker Container Stacks: Usually runs under UID 33 (www-data) or 101 (nginx). Reclaim ownership of the entire WordPress root directory:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#apply-the-standard-755-644-permission-schema",
-      "name": "Apply the Standard 755 / 644 Permission Schema",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Never apply permissions uniformly across an entire directory tree using a single recursive command. Directories require the execute (+x) bit to allow directory traversal, whereas standard files must never possess execute rights: (Explanation: 755 gives the owner read/write/traverse rights and all others read/traverse rights. 644 gives the owner read/write access and all others read-only access)."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#hardening-the-critical-wp-configphp-file",
-      "name": "Hardening the Critical wp-config.php File",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "The wp-config.php file stores your raw MySQL database username, password, host, table prefix, and cryptographic authentication salts. No process other than the web server worker should be permitted to read this file: If your web server worker runs under www-data and you edit files over SSH as a distinct system user (e.g., ubuntu in the www-data group), use:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#secure-the-htaccess-and-nginx-server-blocks",
-      "name": "Secure the .htaccess and Nginx Server Blocks",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If your server runs Apache or LiteSpeed, protect the .htaccess routing file against plugin tampering: If your server runs Nginx, ensure your server configuration blocks direct browser requests to hidden files and sensitive locations:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/permisos-correctos-wordpress-seguridad.html#configure-direct-filesystem-access-in-wp-configphp",
-      "name": "Configure Direct Filesystem Access in wp-config.php",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If WordPress prompts for FTP credentials when installing plugins or updates, it indicates that the PHP worker process believes it does not own the webroot. Add this configuration to wp-config.php above the /* That&#39;s all, stop editing! */ line:"
-        }
-      ]
     }
   ]
 }

@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -79,15 +81,19 @@
   "dateModified": "2026-08-02",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -117,52 +123,6 @@
       "position": 2,
       "name": "How to Fix OBS Studio Black Screen under Wayland and PipeWire",
       "item": "https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Fix OBS Studio Black Screen under Wayland and PipeWire",
-  "description": "A complete technical guide to resolve black screen capture issues in OBS Studio using Wayland, PipeWire, and XDG Desktop Portal on Linux.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.html#install-xdg-desktop-portal-and-desktop-backends",
-      "name": "Install XDG Desktop Portal and Desktop Backends",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "For OBS to request screen captures from Wayland, both the core portal daemon and your specific desktop compositor backend must be present:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.html#restart-portal-and-pipewire-user-services",
-      "name": "Restart Portal and PipeWire User Services",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "If portals were recently installed or experienced a daemon socket disconnect, restart the corresponding systemd user units:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-wayland-obs-studio-screen-black-pipewire.html#enforce-native-wayland-execution-in-obs-studio",
-      "name": "Enforce Native Wayland Execution in OBS Studio",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Launching OBS Studio with environment variables forcing X11 fallback (QT_QPA_PLATFORM=xcb) will break PipeWire portal integration. Pass the Wayland platform flag explicitly: Inside OBS Studio, remove legacy &quot;Screen Capture (XSHM)&quot; or &quot;Window Capture (Xcomposite)&quot; sources, then add a new Screen Capture (PipeWire) source. The system will prompt a native portal dialog asking you to select the screen or window to stream."
-        }
-      ]
     }
   ]
 }

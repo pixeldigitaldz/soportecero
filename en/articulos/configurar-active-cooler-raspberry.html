@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/configurar-active-cooler-raspberry.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -81,15 +83,19 @@
   "dateModified": "2026-07-19",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -119,76 +125,6 @@
       "position": 2,
       "name": "How to Configure Active Cooler Fan Speeds and Temperature Thresholds on Raspberry Pi",
       "item": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Configure Active Cooler Fan Speeds and Temperature Thresholds on Raspberry Pi",
-  "description": "Learn how to customize Active Cooler PWM fan curves, temperature trip points, and cooling parameters on Raspberry Pi 5 via config.txt and the Linux terminal.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#measure-real-time-soc-temperatures-and-fan-rpm",
-      "name": "Measure Real-Time SoC Temperatures and Fan RPM",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Before altering thermal curves, inspect your current processor temperature and fan state using official hardware telemetry tools: A healthy baseline under light desktop or daemon loads should hover between 38°C and 45°C."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#edit-the-firmware-configuration-file",
-      "name": "Edit the Firmware Configuration File",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "On modern Debian/Ubuntu-based distributions for Raspberry Pi (such as Raspberry Pi OS Bookworm), Device Tree configuration is located in the dedicated firmware partition: (Note: On legacy operating system releases based on Bullseye or older kernels, this file was located directly at /boot/config.txt)."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#define-custom-temperature-trip-points-device-tree-overlays",
-      "name": "Define Custom Temperature Trip Points (Device Tree Overlays)",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Scroll to the end of /boot/firmware/config.txt and append custom dtparam cooling rules. Temperature values are expressed in millidegrees Celsius (e.g., 45000 corresponds to 45°C), while hyst values define hysteresis degrees to prevent the fan from constantly pulsing on and off around boundary temperatures: (Explanation: Speed values range from 0 to 255, where 75 corresponds to ~30% quiet whisper mode, 125 represents ~50% steady airflow, and 255 drives full 100% cooling capability). Save your edits by pressing Ctrl + O, confirm with Enter, and exit nano using Ctrl + X."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#reboot-to-apply-firmware-parameters",
-      "name": "Reboot to Apply Firmware Parameters",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Apply the new hardware registers by executing a clean system restart:"
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/configurar-active-cooler-raspberry.html#stress-test-thermal-stability-under-load",
-      "name": "Stress Test Thermal Stability Under Load",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Once your system boots, run a synthetic CPU stress test to verify that the fan ramps through each configured trip point smoothly:"
-        }
-      ]
     }
   ]
 }

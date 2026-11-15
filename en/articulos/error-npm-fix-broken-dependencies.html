@@ -18,6 +18,8 @@
   <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-npm-fix-broken-dependencies.html" />
   
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
   
   
   <!-- Open Graph -->
@@ -81,15 +83,19 @@
   "dateModified": "2026-07-27",
   "author": {
     "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
     "name": "Rodolfo Castro",
-    "jobTitle": "Web Designer & App Creator",
-    "url": "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
     "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
       "https://www.pixeldigitaldz.online/links"
     ]
   },
   "publisher": {
     "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
     "name": "SoporteCero",
     "url": "https://soportecero.com/",
     "logo": {
@@ -119,76 +125,6 @@
       "position": 2,
       "name": "How to Fix NPM Vulnerabilities Without Breaking Project Dependencies",
       "item": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html"
-    }
-  ]
-}
-  </script>
-  <script type="application/ld+json">
-  {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to Fix NPM Vulnerabilities Without Breaking Project Dependencies",
-  "description": "Learn how to safely remediate NPM audit security vulnerabilities without breaking changes. Use npm overrides, package resolutions, and targeted semver patches instead of npm audit fix --force.",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "position": 1,
-      "url": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html#isolate-production-vulnerabilities-from-development-tools",
-      "name": "Isolate Production Vulnerabilities from Development Tools",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Many reported CVEs affect build tooling (such as Webpack, Babel, or Vite plugins) or test runners (such as Jest or Mocha) that exist solely during local development and are never executed in production runtime environments. Run an audit omitting non-production dependencies: Review the resulting vulnerability tree. Focus your engineering effort strictly on vulnerabilities rated High or Critical that affect public-facing application pathways."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 2,
-      "url": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html#trace-the-transitive-vulnerability-path",
-      "name": "Trace the Transitive Vulnerability Path",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "To identify why a vulnerable package is present in your project: For example, running npm ls semver might reveal: This shows that @babel/core is requiring an older minor release of semver. You cannot simply run npm install semver@latest because your direct application code does not import it directly."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 3,
-      "url": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html#pin-safe-patch-versions-using-npm-overrides",
-      "name": "Pin Safe Patch Versions Using NPM Overrides",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Instead of forcing @babel/core to upgrade to an untested major release, use NPM&#39;s native overrides mechanism (available in npm v8.3.0+). Open your package.json and declare an overrides block to force the resolution algorithm to use the patched version across all dependency trees: (Package Manager Note: If you use Yarn, use the &quot;resolutions&quot; key; if you use pnpm, use &quot;pnpm.overrides&quot;)."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 4,
-      "url": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html#rebuild-lockfiles-and-re-verify-dependency-integrity",
-      "name": "Rebuild Lockfiles and Re-Verify Dependency Integrity",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "After declaring overrides in package.json, synchronize your lockfile and reinstall dependencies cleanly: The output will now confirm 0 vulnerabilities or indicate that remaining issues have been successfully patched without modifying your primary framework versions."
-        }
-      ]
-    },
-    {
-      "@type": "HowToStep",
-      "position": 5,
-      "url": "https://soportecero.com/en/articulos/error-npm-fix-broken-dependencies.html#validate-application-builds-and-test-suites",
-      "name": "Validate Application Builds and Test Suites",
-      "itemListElement": [
-        {
-          "@type": "HowToDirection",
-          "text": "Always run your test suite and production build step locally before committing lockfile modifications:"
-        }
-      ]
     }
   ]
 }

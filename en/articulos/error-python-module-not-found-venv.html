@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The exception <code>ModuleNotFoundError: No module named &#39;module_name&#39;</code> is one of the most frequent errors in Python development. It occurs when Python attempts to import a package that is missing from the search path (<code>sys.path</code>) of the active Python interpreter.</p>
+          <p>The exception <code>ModuleNotFoundError: No module named &#39;...&#39;</code> inside a Python <code>venv</code> or <code>virtualenv</code> project occurs when the Python interpreter executing your script differs from the interpreter where <code>pip</code> installed the package—leaving your target library absent from the active <code>sys.path</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,13 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong><code>ModuleNotFoundError: No module named &#39;package_name&#39;</code></strong>: Script is executed with global system Python or the package was installed outside the active virtual environment</div>
+            <div class="diag-value"><strong><code>which python</code> points to <code>/usr/bin/python3</code> instead of <code>venv/bin/python</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Activate virtualenv (<code>source venv/bin/activate</code>), check binary path, and install package using <code>python -m pip install</code></div>
+            <div class="diag-value">Activate the venv: <code>source .venv/bin/activate</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>pip install</code> wrote to global site-packages instead of venv</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Install strictly via <code>python -m pip install &lt;package&gt;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Works in terminal, fails in VS Code / PyCharm &quot;Run&quot;</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Select the <code>.venv</code> interpreter in IDE settings</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Virtualenv copied/moved to another folder</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Recreate the venv; shebangs in <code>bin/pip</code> hardcode absolute paths</div>
           </div></div></div>
       </div>
     </section>
@@ -322,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -333,6 +367,15 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>A Python virtual environment (<code>python3 -m venv .venv</code>) works by creating an isolated directory tree containing a <code>pyvenv.cfg</code> file, a symlinked <code>python</code> binary, and its own <code>lib/python3.x/site-packages/</code> directory. When you invoke <code>.venv/bin/python</code>, Python detects <code>pyvenv.cfg</code> next to the binary and restricts <code>sys.path</code> to that environment&#39;s <code>site-packages</code> (excluding global system packages unless <code>--system-site-packages</code> was passed).</p>
+<p>The trap happens when <code>PATH</code> resolution decouples <code>python</code> from <code>pip</code>. For example:</p>
+<ul>
+<li>You open a new terminal tab and run <code>python app.py</code> without re-activating <code>.venv</code>, hitting system Python.</li>
+<li>You run bare <code>pip install requests</code>, which resolves to <code>/usr/local/bin/pip</code> (Python 3.11) while <code>python3</code> resolves to Python 3.12.</li>
+<li>You run <code>sudo python app.py</code>, which resets <code>$PATH</code> and executes as system root Python.</li>
+<li>You renamed the project folder, breaking the hardcoded <code>#!</code> shebang on line 1 of <code>.venv/bin/pip</code>.</li>
+</ul>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -341,11 +384,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-virtual-environment-activation">
+        <li class="step-item" id="verify-which-python-and-pip-binaries-are-actually-executing">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-virtual-environment-activation-heading">Step 1: Verify Virtual Environment Activation</h4>
-            <p>Ensure your virtual environment is activated and check which Python binary is currently active:</p>
+            <h4 id="verify-which-python-and-pip-binaries-are-actually-executing-heading">Step 1: Verify which Python and pip binaries are actually executing</h4>
+            <p>Inspect the exact executable paths and <code>sys.path</code> in your current shell:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -365,28 +408,47 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># On Linux / macOS: activate virtualenv</span>
-<span class="tok-kw">source</span> venv/bin/activate
-<span class="tok-cmt">
-# On Windows (PowerShell):</span>
-.\venv\Scripts\Activate.ps1
-<span class="tok-cmt">
-# Verify the active Python binary path</span>
-<span class="tok-kw">which</span> python   <span class="tok-cmt"> # Linux/macOS</span>
-where python   <span class="tok-cmt"> # Windows</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">which</span> python python3 pip
+python <span class="tok-prop">-c</span> <span class="tok-str">&quot;import sys; print(sys.executable); print(sys.path)&quot;</span>
 </code></pre>
     </div>
     
-<p><em>(The path output should point to your project&#39;s <code>venv/bin/python</code> directory, not system <code>/usr/bin/python</code>).</em></p>
+<p>If <code>sys.executable</code> does not point inside your project&#39;s <code>.venv</code> or <code>venv</code> directory, activate it first:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Linux / macOS</span>
+<span class="tok-kw">source</span> .venv/bin/activate
+<span class="tok-cmt">
+# Windows PowerShell</span>
+.\.venv\Scripts\Activate.ps1
+</code></pre>
+    </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="install-packages-via-module-syntax">
+        <li class="step-item" id="install-packages-using-python-m-pip">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="install-packages-via-module-syntax-heading">Step 2: Install Packages via Module Syntax</h4>
-            <p>To guarantee that packages are installed into the virtual environment rather than system-wide Python, use <code>python -m pip</code>:</p>
+            <h4 id="install-packages-using-python-m-pip-heading">Step 2: Install packages using python -m pip</h4>
+            <p>Always invoke <code>pip</code> as a module of the active Python binary rather than calling a standalone <code>pip</code> executable:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -406,11 +468,12 @@ where python   <span class="tok-cmt"> # Windows</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>python <span class="tok-prop">-m</span> pip install module_name
+      <pre class="formatted-pre"><code>python <span class="tok-prop">-m</span> pip install <span class="tok-prop">--upgrade</span> pip
+python <span class="tok-prop">-m</span> pip install <span class="tok-prop">-r</span> requirements.txt
 </code></pre>
     </div>
     
-<p>Verify that the module is installed in the active environment:</p>
+<p>Verify the missing package is present in the exact interpreter&#39;s <code>site-packages</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -430,26 +493,71 @@ where python   <span class="tok-cmt"> # Windows</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>python <span class="tok-prop">-m</span> pip list
+      <pre class="formatted-pre"><code>python <span class="tok-prop">-m</span> pip show requests
+python <span class="tok-prop">-c</span> <span class="tok-str">&quot;import requests; print(requests.__file__)&quot;</span>
 </code></pre>
     </div>
+    
+<p><code>requests.__file__</code> must print a path inside <code>.venv/lib/python.../site-packages/</code>.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="select-the-correct-python-interpreter-in-your-ide">
+        <li class="step-item" id="fix-ide-interpreter-mismatches-vs-code-amp-pycharm">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="select-the-correct-python-interpreter-in-your-ide-heading">Step 3: Select the Correct Python Interpreter in Your IDE</h4>
-            <p>If the script runs in the terminal but fails inside your code editor (e.g., VS Code or PyCharm):</p>
+            <h4 id="fix-ide-interpreter-mismatches-vs-code-amp-pycharm-heading">Step 3: Fix IDE interpreter mismatches (VS Code &amp; PyCharm)</h4>
+            <p>If your terminal works but pressing <strong>Run</strong> in your editor throws <code>ModuleNotFoundError</code>:</p>
 <ul>
-<li><strong>VS Code</strong>: Press <code>Ctrl + Shift + P</code> (or <code>Cmd + Shift + P</code> on macOS), search for <code>Python: Select Interpreter</code>, and choose the interpreter inside <code>venv/bin/python</code>.</li>
-<li><strong>PyCharm</strong>: Navigate to <code>Settings</code> &gt; <code>Project</code> &gt; <code>Python Interpreter</code> and assign your project&#39;s virtual environment path.</li>
+<li><strong>VS Code:</strong> Open the Command Palette (<code>Ctrl+Shift+P</code> / <code>Cmd+Shift+P</code>), run <strong><code>Python: Select Interpreter</code></strong>, and pick <code>./.venv/bin/python</code> (or <code>.\.venv\Scripts\python.exe</code>). Also check that Code Runner extensions are not invoking global <code>python3 -u</code>.</li>
+<li><strong>PyCharm:</strong> Open <strong>Settings</strong> → <strong>Project</strong> → <strong>Python Interpreter</strong> → <strong>Add Interpreter</strong> → <strong>Existing</strong>, and browse to <code>.venv/bin/python</code>.</li>
 </ul>
           </div>
         </li>
         
+
+        <li class="step-item" id="rebuild-a-broken-or-relocated-virtual-environment">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="rebuild-a-broken-or-relocated-virtual-environment-heading">Step 4: Rebuild a broken or relocated virtual environment</h4>
+            <p>If you moved or renamed your project directory, recreate <code>.venv</code> cleanly:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>deactivate <span class="tok-num">2</span>&gt;/dev/null || true
+<span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> .venv
+python3 <span class="tok-prop">-m</span> venv .venv
+<span class="tok-kw">source</span> .venv/bin/activate
+python <span class="tok-prop">-m</span> pip install <span class="tok-prop">-r</span> requirements.txt
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why did <code>ModuleNotFoundError</code> happen for one of my own local <code>.py</code> files?</strong>
+If you run <code>python subdir/script.py</code>, Python adds <code>subdir/</code>—not the project root—to <code>sys.path[0]</code>. Run your code as a module from the project root instead: <code>python -m subdir.script</code>, and ensure <code>__init__.py</code> exists in package folders.</p>
+<p><strong>Why does <code>sudo python script.py</code> trigger <code>ModuleNotFoundError</code> even when the venv is active?</strong>
+<code>sudo</code> strips user environment variables including <code>$PATH</code> and <code>$VIRTUAL_ENV</code>, falling back to <code>/usr/bin/python3</code>. If root privileges are genuinely required, call the venv binary by full path: <code>sudo ./.venv/bin/python script.py</code>.</p>
+<p><strong>Can I share one <code>venv</code> across multiple projects?</strong>
+Technically yes, but it causes dependency version conflicts quickly. Keep one <code>.venv</code> per project or use <strong>uv</strong> / <strong>Poetry</strong> for deterministic lockfiles.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -464,51 +572,12 @@ where python   <span class="tok-cmt"> # Windows</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Use Dependency Files</strong>: Keep track of installed packages by maintaining a <code>requirements.txt</code> (<code>pip freeze &gt; requirements.txt</code>) or using modern tools like Poetry/uv.</li>
-<li><strong>Avoid Global <code>sudo pip</code> Installs</strong>: Never run <code>sudo pip install</code> for project dependencies to avoid corrupting system Python modules.</li>
-<li><strong>Always Invoke <code>python -m pip</code></strong>: Calling <code>python -m pip</code> prevents accidentally installing packages into a different Python executable when <code>$PATH</code> variables are mismatched.</li>
+              <li><strong>Always use <code>python -m pip</code>:</strong> Never rely on bare <code>pip</code> or <code>pip3</code> commands when multiple Python versions exist on the machine.</li>
+<li><strong>Keep <code>requirements.txt</code> or <code>pyproject.toml</code> updated:</strong> Run <code>python -m pip freeze &gt; requirements.txt</code> (or use <code>uv</code>/<code>Poetry</code>) so environments can be rebuilt in seconds.</li>
+<li><strong>Add <code>.venv/</code> to <code>.gitignore</code>:</strong> Never commit virtual environments to Git—recreate them per machine.</li>
+<li><strong>Avoid <code>sudo pip install</code>:</strong> Installing packages globally with <code>sudo</code> pollutes OS Python dependencies managed by <code>apt</code>/<code>dnf</code>.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -565,7 +634,7 @@ where python   <span class="tok-cmt"> # Windows</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">WordPress</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

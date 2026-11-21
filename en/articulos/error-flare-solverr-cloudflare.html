@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The FlareSolverr timeout error occurs when the tool attempts to solve a Cloudflare bypass challenge (such as JavaScript verification screens or CAPTCHAs) and the waiting time expires unsuccessfully, throwing <code>Error: The challenge could not be resolved</code> or <code>Too many attempts</code> errors. This happens due to the use of outdated browser signatures or direct IP blocks caused by a poor reputation of your internet service provider.</p>
+          <p>When <strong>FlareSolverr</strong> fails while integrating with Prowlarr, Jackett, or custom scraping workflows—throwing <code>Error: Error solving the challenge. Timeout after 60.0 seconds</code> or <code>Challenge could not be resolved</code>—the headless browser inside the container failed to pass Cloudflare&#39;s JS or Turnstile verification before the request deadline expired. This typically stems from outdated Chromium/undetected-chromedriver signatures, low IP reputation, or insufficient container timeouts.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>FlareSolverr blocked by Cloudflare Turnstile protection updates</strong></div>
+            <div class="diag-value"><strong>Outdated FlareSolverr browser fingerprint</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Update FlareSolverr container image to latest tag from Docker Hub</div>
+            <div class="diag-value">Pull the latest image: <code>ghcr.io/flaresolverr/flaresolverr:latest</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Response timeout while solving JS challenge due to resource limits</strong></div>
+            <div class="diag-value"><strong>Container hits 60s timeout on slow ARM/NAS hardware</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Increase <code>RESOURCE_TIMEOUT</code> to 60000ms in environment variables</div>
+            <div class="diag-value">Increase <code>maxTimeout</code> in API payload or <code>BROWSER_TIMEOUT</code> env var</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Cloudflare Turnstile / interactive checkbox loop</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Route container traffic through a clean residential/ISP proxy</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Missing shared memory (<code>/dev/shm</code>) crashing Chromium</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Mount <code>shm_size: &#39;2gb&#39;</code> in <code>docker-compose.yml</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,14 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>FlareSolverr operates as an HTTP proxy server wrapping headless <strong>Chromium</strong> via <code>undetected-chromedriver</code> and Selenium. When a client (such as Prowlarr) sends a <code>POST /v1</code> request, FlareSolverr spawns a browser tab, navigates to the target URL, waits for Cloudflare&#39;s <code>cf_clearance</code> cookie to be issued after JavaScript execution, and returns the HTML and cookies to the caller.</p>
+<p>Timeouts occur when any of three layers break down:</p>
+<ol>
+<li><strong>TLS &amp; Browser Fingerprint Detection:</strong> Cloudflare continuously updates its Bot Management and Turnstile heuristics—inspecting JA3/JA4 TLS fingerprints, <code>navigator.webdriver</code> flags, Canvas/WebGL entropy, and Chromium version headers. Running a FlareSolverr container that is even a few months old exposes an outdated Chromium build that Cloudflare traps in an infinite Turnstile verification loop until FlareSolverr&#39;s timer expires.</li>
+<li><strong>IP Reputation &amp; Datacenter ASN Blocking:</strong> If your server runs on a VPS/cloud provider (AWS, Hetzner, DigitalOcean) or behind a commercial VPN exit node with a flagged ASN, Cloudflare escalates from a passive JS challenge to an interactive Turnstile or hard <code>403</code> block that headless automation cannot solve natively.</li>
+<li><strong>Resource Starvation &amp; <code>/dev/shm</code> Exhaustion:</strong> Docker defaults <code>/dev/shm</code> to <code>64MB</code>. Chromium tabs inside FlareSolverr frequently crash or stall rendering heavy challenge scripts when <code>/dev/shm</code> fills up on low-power NAS devices (Raspberry Pi, Synology).</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +383,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="update-to-the-latest-official-docker-image">
+        <li class="step-item" id="1-update-flaresolverr-to-the-latest-ghcr-image">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="update-to-the-latest-official-docker-image-heading">Step 1: Update to the latest official Docker image</h4>
-            <p>Cloudflare challenges change constantly. Older versions of FlareSolverr use outdated internal web browsers that are immediately flagged as bots. Update your container to the latest official image:</p>
+            <h4 id="1-update-flaresolverr-to-the-latest-ghcr-image-heading">1. Update FlareSolverr to the Latest GHCR Image</h4>
+            <p>Ensure you are pulling from the official GitHub Container Registry (<code>ghcr.io</code>), as older Docker Hub mirrors may lag behind:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,31 +407,19 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Stop and remove the current container</span>
-<span class="tok-kw">docker</span> stop flaresolverr
-<span class="tok-kw">docker</span> <span class="tok-kw">rm</span> flaresolverr
-<span class="tok-cmt">
-# Pull the latest version from the GHCR registry</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> stop flaresolverr &amp;&amp; <span class="tok-kw">docker</span> <span class="tok-kw">rm</span> flaresolverr
 <span class="tok-kw">docker</span> pull ghcr.io/flaresolverr/flaresolverr:latest
-<span class="tok-cmt">
-# Bring the container up again</span>
-<span class="tok-kw">docker</span> run <span class="tok-prop">-d</span> \
-  <span class="tok-prop">--name</span>=flaresolverr \
-  <span class="tok-prop">-p</span> <span class="tok-num">8191</span>:<span class="tok-num">8191</span> \
-  <span class="tok-prop">-e</span> LOG_LEVEL=info \
-  <span class="tok-prop">--restart</span> unless-stopped \
-  ghcr.io/flaresolverr/flaresolverr:latest
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-the-captcha-solver-variable">
+        <li class="step-item" id="2-redeploy-with-increased-shared-memory-and-debug-logging">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="configure-the-captcha-solver-variable-heading">Step 2: Configure the CAPTCHA solver variable</h4>
-            <p>If the target website uses advanced hCaptcha challenges, you must force FlareSolverr to load it by defining the corresponding environment variable when launching the container. Add this parameter to your Docker command or your <code>docker-compose.yml</code> file:</p>
+            <h4 id="2-redeploy-with-increased-shared-memory-and-debug-logging-heading">2. Redeploy with Increased Shared Memory and Debug Logging</h4>
+            <p>Launch the container with <code>shm_size</code> increased (<code>--shm-size=2g</code>), explicit timezone alignment, and <code>LOG_LEVEL=debug</code> for diagnostics:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -411,7 +429,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">YAML</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -421,14 +439,117 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">environment</span>:
-  - CAPTCHA_SOLVER=hcaptcha
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">-d</span> \
+  <span class="tok-prop">--name</span>=flaresolverr \
+  <span class="tok-prop">-p</span> <span class="tok-num">8191</span>:<span class="tok-num">8191</span> \
+  <span class="tok-prop">--shm-size</span>=2g \
+  <span class="tok-prop">-e</span> LOG_LEVEL=debug \
+  <span class="tok-prop">-e</span> TZ=UTC \
+  <span class="tok-prop">--restart</span> unless-stopped \
+  ghcr.io/flaresolverr/flaresolverr:latest
+</code></pre>
+    </div>
+    
+<p><em>(Note: FlareSolverr v3+ removed third-party <code>CAPTCHA_SOLVER</code> integrations like hCaptcha/2Captcha; do not rely on deprecated <code>CAPTCHA_SOLVER</code> environment variables.)</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-test-with-an-explicit-maxtimeout-and-inspect-logs">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-test-with-an-explicit-maxtimeout-and-inspect-logs-heading">3. Test with an Explicit maxTimeout and Inspect Logs</h4>
+            <p>Send a direct test request to the FlareSolverr API with a 90-second <code>maxTimeout</code> (<code>90000</code> ms) to isolate whether Prowlarr/Jackett or FlareSolverr itself is timing out:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-s</span> <span class="tok-prop">-X</span> <span class="tok-prop">POST</span> http://localhost:<span class="tok-num">8191</span>/v1 \
+  <span class="tok-prop">-H</span> <span class="tok-str">&quot;Content-Type: application/json&quot;</span> \
+  <span class="tok-prop">-d</span> <span class="tok-cmt">&#39;{&quot;cmd&quot;: &quot;request.get&quot;, &quot;url&quot;: &quot;https://nowsecure.nl&quot;, &quot;maxTimeout&quot;: 90000}&#39; | jq .status,.message</span>
+</code></pre>
+    </div>
+    
+<p>Watch the container logs in real time to see if Chromium is hanging on Turnstile or crashing:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> logs <span class="tok-prop">-f</span> <span class="tok-prop">--tail</span> <span class="tok-num">50</span> flaresolverr
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-route-through-a-clean-proxy-if-your-ipasn-is-flagged">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-route-through-a-clean-proxy-if-your-ipasn-is-flagged-heading">4. Route Through a Clean Proxy (If Your IP/ASN Is Flagged)</h4>
+            <p>If <code>docker logs</code> shows Cloudflare repeatedly serving Turnstile challenges on a datacenter IP, pass a clean HTTP/SOCKS5 proxy via environment variable or per-request JSON:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-prop">-e</span> PROXY=http://user:password@proxy-<span class="tok-kw">ip</span>:port
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why does <code>CAPTCHA_SOLVER=hcaptcha</code> not solve Turnstile challenges anymore?</strong>
+Modern FlareSolverr (v3.x) deprecated external captcha solver hooks because Cloudflare migrated most sites from hCaptcha to <strong>Turnstile</strong>, which evaluates behavioral telemetry and IP reputation rather than image puzzles.</p>
+<p><strong>Why does FlareSolverr work on my home PC but time out on my Hetzner/OVH VPS?</strong>
+Cloudflare scores datacenter ASNs (Hetzner, OVH, AWS) much more strictly than residential ISPs, often presenting unsolvable Turnstile loops to headless browsers originating from datacenter IPs.</p>
+<p><strong>What should <code>maxTimeout</code> be set to in Prowlarr or Jackett?</strong>
+Set the indexer&#39;s FlareSolverr timeout to at least <code>60000</code>–<code>120000</code> ms (<code>60</code>–<code>120</code> seconds) so Prowlarr does not close the HTTP socket before FlareSolverr finishes solving.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -443,49 +564,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Avoid using residential IPs that are saturated or blacklisted in web reputation databases (such as Spamhaus or Project Honey Pot). Cloudflare drastically increases the security level of its challenges if your public IP has a low reputation score. In these cases, configure FlareSolverr to route its traffic through clean proxies using the <code>-e PROXY=http://user:pass@ip:port</code> variable.</li>
+              <li>Automate container updates with <strong>Watchtower</strong> or scheduled <code>docker compose pull &amp;&amp; docker compose up -d</code> so Chromium fingerprints stay current.</li>
+<li>Allocate <code>--shm-size=2g</code> (or <code>shm_size: &#39;2gb&#39;</code> in Compose) to prevent silent Chromium tab crashes during heavy JS challenges.</li>
+<li>Avoid running FlareSolverr over shared public VPN endpoints that are heavily abused and blacklisted by Cloudflare.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -559,7 +642,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NFS</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

@@ -9,39 +9,93 @@ tags:
   - Binance
   - API
   - Crypto
-readTime: 4 min
+readTime: 6 min
 date: '2026-07-27'
 ---
 
-The `Invalid Signature` or `Token Expired` error in the Binance Pay API occurs when you attempt to process a payment in USDT or another cryptocurrency and the Binance servers reject the request. The primary cause is a timestamp desynchronization between your local server and Binance's official clock, or incorrect concatenation of API keys when generating the HMAC-SHA512 cryptographic signature.
+Receiving an `Invalid Signature` (code `400002` / `-1022`) or `Timestamp for this request is outside of the recvWindow` / `Token Expired` response from the **Binance Pay API** means Binance's authentication gateway rejected your request before processing the payment. Because Binance Pay enforces strict cryptographic request signing and tight replay-window validation, even a 1-character mismatch in payload formatting or a few seconds of server clock drift invalidates the entire request.
 
 ## Quick Diagnostics
-| Cause | Solution |
+
+| Symptom / Cause | Immediate Action |
 |---|---|
-| **Binance API Key/Secret expired, copied incorrectly, or IP not whitelisted** | Generate new Binance API Key and whitelist server static IP |
-| **Local system clock out of sync with Binance server time** | Sync server clock with NTP: `sudo ntpdate pool.ntp.org` |
+| **Server clock out of sync with UTC** | Enable NTP sync (`timedatectl set-ntp true`) and compare against `/api/v3/time` |
+| **Malformed HMAC-SHA512 signature payload** | Verify exact `timestamp + "\n" + nonce + "\n" + body + "\n"` concatenation |
+| **JSON key order or whitespace mismatch** | Sign the exact serialized string sent in the HTTP body |
+| **Expired API key, wrong secret, or unwhitelisted IP** | Verify merchant API key permissions and server outbound IPv4 in Binance Merchant Portal |
 
-## 🚀 Step-by-Step Solution
+## Root Cause & Technical Mechanics
 
-### Step 1: Synchronize the server clock (NTP)
-Binance rejects any request whose timestamp varies by more than a few seconds from their server's time. On your Linux server, force time synchronization by running:
+Unlike standard OAuth bearer tokens, the Binance Pay Merchant API (`https://bpay.binanceapi.com`) authenticates every `POST` request using three custom headers:
+* `BinancePay-Timestamp`: Current Unix timestamp in **milliseconds** (13 digits).
+* `BinancePay-Nonce`: A random 32-character alphanumeric string unique per request.
+* `BinancePay-Signature`: An **uppercase hexadecimal** HMAC-SHA512 digest computed using your Merchant Secret Key.
+
+Binance rejects requests with `Invalid Signature` or `Expired` errors under four exact conditions:
+1. **Clock Drift & Replay Window:** Binance compares `BinancePay-Timestamp` against its own UTC servers. If your server's system clock drifts ahead or behind by more than a few seconds—or if you pass seconds (10 digits) instead of milliseconds (13 digits)—the request is rejected as expired.
+2. **Payload String Mismatch:** The HMAC-SHA512 input string must follow the exact format:
+   `timestamp + "\n" + nonce + "\n" + json_body + "\n"`
+   Notice the mandatory trailing newline (`\n`). Furthermore, if you sign `JSON.stringify(payload)` in one place and let an HTTP client (like Axios or Guzzle) re-serialize the object with different key spacing or Unicode escaping, the signature hash will not match what Binance computes from the raw HTTP body.
+3. **Lowercase Hex Digest:** Binance Pay expects the HMAC-SHA512 output in **UPPERCASE** hex (`digest('hex').toUpperCase()`). Passing lowercase hex triggers `Invalid Signature`.
+4. **API Key / IP Whitelist Mismatch:** Using a Spot Trading API key instead of a **Binance Pay Merchant API Key**, or sending requests from an IPv6 address when only IPv4 is whitelisted, also results in authentication rejection.
+
+## Step-by-Step Solution
+
+### 1. Synchronize Your Server Clock and Verify Offset Against Binance
+Enable NTP synchronization on your Linux host and confirm `System clock synchronized: yes`:
 ```bash
 sudo timedatectl set-ntp true
 sudo systemctl restart systemd-timesyncd
+timedatectl status
 ```
 
-Verify that the time is perfectly aligned using the `timedatectl` command.
+Compare your local UTC millisecond timestamp directly against Binance's server time:
+```bash
+echo "Local:   $(date +%s%3N)"
+curl -s https://api.binance.com/api/v3/time
+```
+The difference between `Local` and `serverTime` should be under `1000` ms.
 
-### Step 2: Order variables for the signature (Payload)
+### 2. Sign the Exact Raw JSON Body String in Uppercase HMAC-SHA512
+Always serialize your JSON body **once**, compute the HMAC-SHA512 signature over that exact string, and send that raw string in your HTTP client:
 
-The cryptographic signature requires you to join the timestamp, a random string (nonce), and the request body (JSON body string) in a strict format. Ensure your code concatenates the elements exactly in this order before hashing it:
-```plaintext
-TIMESTAMP + "\n" + NONCE + "\n" + BODY_JSON_STRING + "\n"
+```javascript
+import crypto from 'crypto';
+
+const timestamp = Date.now().toString(); // 13-digit ms
+const nonce = crypto.randomBytes(16).toString('hex'); // 32-char string
+const rawBody = JSON.stringify(orderPayload);
+
+const payloadToSign = `${timestamp}\n${nonce}\n${rawBody}\n`;
+const signature = crypto
+  .createHmac('sha512', process.env.BINANCE_PAY_SECRET)
+  .update(payloadToSign)
+  .digest('hex')
+  .toUpperCase();
 ```
 
-A common mistake is that the JSON in your code orders the keys differently than how they are sent in the HTTP body, immediately breaking the signature.
+Pass `rawBody` directly as the `body` / `data` argument to `fetch` or `axios` with `Content-Type: application/json`, rather than passing an unserialized JS object.
 
-## 🛡️ Prevention Advice
+### 3. Verify Merchant IP Whitelisting
+Confirm the exact outbound IPv4 address your server uses for HTTPS requests:
+```bash
+curl -4 -s https://ifconfig.me
+```
+Ensure that exact IPv4 address is listed in your **Binance Pay Merchant Portal -> Developer -> API Key** allowlist.
 
-Recommended security practices:
-- Never expose your private keys (Secret Key) in your application's frontend code (client-side JavaScript). Any user could inspect the page, steal your Binance Pay credentials, and drain the funds from your merchant account. Always handle signature requests strictly from the backend (Node.js, PHP, or Python).
+## Frequently Asked Questions
+
+**Why did my signature work in Postman/cURL but fail in Node.js or PHP?**
+In PHP (`json_encode`) and Node.js (`axios`), passing an object/array lets the HTTP client re-encode it, which can alter whitespace, float formatting (`10.00` vs `10`), or slash escaping (`/` vs `\/`). Always sign and transmit the exact same pre-serialized string (`JSON_UNESCAPED_SLASHES` in PHP).
+
+**Can I use my regular Binance Spot API keys for Binance Pay?**
+No. Binance Pay requires dedicated Merchant API credentials (`BinancePay-Certificate-Sn`) generated inside the **Binance Pay Merchant Portal**, not standard Spot/Futures API keys.
+
+**What if my server uses IPv6 by default when calling `bpay.binanceapi.com`?**
+If your VPS has both IPv4 and IPv6 enabled, `curl` or Node's `fetch` may connect over IPv6, which fails an IPv4-only whitelist. Force IPv4 or whitelist both addresses in the Merchant Portal.
+
+## Prevention Advice
+
+* Never store or use `BINANCE_PAY_SECRET` in frontend JavaScript or mobile app bundles; compute all HMAC-SHA512 signatures strictly on your backend server.
+* Monitor `systemd-timesyncd` or `chronyd` with health checks so container or VM clock drift never exceeds 1 second.
+* Store API keys in encrypted environment secrets (`Vault`, `.env` outside webroot, or cloud KMS) and rotate Merchant API keys immediately if a team member leaves.

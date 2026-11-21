@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>Error 1040: Too many connections</code> error immediately stops queries to your database and occurs when the number of open connection threads from your application exceeds the maximum directive defined in the internal settings of the MySQL or MariaDB server.</p>
+          <p>The <code>ERROR 1040 (HY000): Too many connections</code> failure immediately halts incoming database queries and locks out application workers. It triggers when the number of concurrent client threads exceeds the <code>max_connections</code> ceiling configured in your MySQL or MariaDB daemon.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Reached max_connections limit in MySQL/MariaDB</strong></div>
+            <div class="diag-value"><strong>Active thread count equals <code>max_connections</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Temporarily increase limit: <code>SET GLOBAL max_connections = 500;</code></div>
+            <div class="diag-value">Raise ceiling live via <code>SET GLOBAL max_connections = 300;</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Hanging persistent connections not closed by the application</strong></div>
+            <div class="diag-value"><strong>Hundreds of connections stuck in <code>Sleep</code> state</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Set <code>max_connections = 500</code> in <code>/etc/mysql/my.cnf</code> and restart service</div>
+            <div class="diag-value">Lower <code>wait_timeout</code> and <code>interactive_timeout</code> in <code>my.cnf</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Application opening unpooled connections per request</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Introduce connection pooling (ProxySQL, HikariCP, or PgBouncer-style app pool)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Admin locked out when slots are exhausted</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Connect via <code>extra_port</code> (MariaDB) or the reserved <code>SUPER</code> / <code>CONNECTION_ADMIN</code> slot</div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>MySQL and MariaDB allocate a dedicated OS thread (or thread-pool worker) and per-session memory buffers—such as <code>sort_buffer_size</code>, <code>read_buffer_size</code>, <code>join_buffer_size</code>, and <code>tmp_table_size</code>—for every client connection. By default, <code>max_connections</code> is set to <code>151</code>. MySQL reserves one extra slot (<code>max_connections + 1</code>) exclusively for accounts holding the <code>CONNECTION_ADMIN</code> (or legacy <code>SUPER</code>) privilege so an administrator can still log in to diagnose a saturated server.</p>
+<p>When a PHP-FPM worker, Node.js microservice, or Python script opens a persistent connection without closing it—or hangs on an unindexed table lock—the thread remains in the <code>Sleep</code> or <code>Locked</code> state until <code>wait_timeout</code> (default <code>28800</code> seconds, or 8 hours) expires. Under traffic spikes, these idle threads rapidly consume all 151 slots, causing <code>mysqld</code> to reject new TCP and Unix socket handshakes with error <code>1040</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +378,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="access-the-engine-and-diagnose-inactive-threads">
+        <li class="step-item" id="log-in-via-the-reserved-admin-slot-and-inspect-threads">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="access-the-engine-and-diagnose-inactive-threads-heading">Step 1: Access the engine and diagnose inactive threads</h4>
-            <p>If the web server still allows you to interact via console using the admin account, inspect which query processes are holding up the data traffic:</p>
+            <h4 id="log-in-via-the-reserved-admin-slot-and-inspect-threads-heading">Step 1: Log in via the reserved admin slot and inspect threads</h4>
+            <p>Use the root or admin account to claim the reserved administrative connection and inspect active states:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,24 +402,22 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Log in to the database engine</span>
-mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span>
-<span class="tok-cmt">
-# Execute the command to list processes</span>
-SHOW PROCESSLIST;
+      <pre class="formatted-pre"><code>mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;SHOW GLOBAL VARIABLES LIKE <span class="tok-cmt">&#39;max_connections&#39;;&quot;</span>
+mysql -u root -p -e &quot;</span>SHOW GLOBAL STATUS LIKE <span class="tok-cmt">&#39;Threads_connected&#39;;&quot;</span>
+mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;SHOW FULL PROCESSLIST;&quot;</span>
 </code></pre>
     </div>
     
-<p><em>(Look for queries with a prolonged &quot;Sleep&quot; state. If there are hundreds of them, the application is not closing connection channels after responding).</em></p>
+<p>Look closely at the <code>Command</code> and <code>Time</code> columns in <code>SHOW FULL PROCESSLIST;</code>. If you see dozens or hundreds of rows with <code>Command = Sleep</code> and <code>Time &gt; 60</code>, your application is leaking connections or holding idle persistent sockets open too long.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="adjust-global-limits-in-the-configuration-file">
+        <li class="step-item" id="apply-an-immediate-runtime-limit-increase-no-restart">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="adjust-global-limits-in-the-configuration-file-heading">Step 2: Adjust global limits in the configuration file</h4>
-            <p>Open the database server configuration file (<code>/etc/mysql/my.cnf</code> or <code>/etc/my.cnf.d/server.cnf</code> in MariaDB) and increase the maximum limit of concurrent connections allowed by your hardware:</p>
+            <h4 id="apply-an-immediate-runtime-limit-increase-no-restart-heading">Step 2: Apply an immediate runtime limit increase (no restart)</h4>
+            <p>To restore service availability without dropping active transactions, raise <code>max_connections</code> and tighten <code>wait_timeout</code> dynamically:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -404,7 +427,64 @@ SHOW PROCESSLIST;
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">SQL</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">SET</span> GLOBAL max_connections = <span class="tok-num">300</span>;
+<span class="tok-kw">SET</span> GLOBAL wait_timeout = <span class="tok-num">120</span>;
+<span class="tok-kw">SET</span> GLOBAL interactive_timeout = <span class="tok-num">120</span>;
+</code></pre>
+    </div>
+    
+<p>Verify the new runtime values took effect:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span> <span class="tok-prop">-e</span> &quot;SHOW VARIABLES WHERE Variable_name IN (<span class="tok-cmt">&#39;max_connections&#39;, &#39;wait_timeout&#39;);&quot;</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="persist-tuned-directives-in-the-configuration-file">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="persist-tuned-directives-in-the-configuration-file-heading">Step 3: Persist tuned directives in the configuration file</h4>
+            <p>Runtime <code>SET GLOBAL</code> changes vanish on service reboot. Edit <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> (Ubuntu/Debian MySQL) or <code>/etc/my.cnf.d/server.cnf</code> (MariaDB on RHEL/AlmaLinux) under the <code>[mysqld]</code> block:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -415,22 +495,26 @@ SHOW PROCESSLIST;
         </button>
       </div>
       <pre class="formatted-pre"><code>[mysqld]
-max_connections = <span class="tok-num">250</span>
-interactive_timeout = <span class="tok-num">180</span>
-wait_timeout = <span class="tok-num">60</span>
+max_connections = <span class="tok-num">300</span>
+wait_timeout = <span class="tok-num">120</span>
+interactive_timeout = <span class="tok-num">120</span>
+max_connect_errors = <span class="tok-num">10000</span>
+thread_cache_size = <span class="tok-num">32</span>
 </code></pre>
     </div>
     
-<p><em>(Note: Reducing <code>wait_timeout</code> forces the engine to kill inactive, unused connections after 60 seconds, automatically freeing up slots).</em></p>
+<p>If you run MariaDB and want a dedicated emergency admin port, you can also add <code>extra_port = 3307</code> and <code>extra_max_connections = 5</code>. Also verify that systemd allows enough file descriptors (<code>LimitNOFILE=65535</code>) so the OS does not cap <code>max_connections</code> below your setting.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="restart-the-service-to-free-memory">
-          <div class="step-number">3</div>
+        <li class="step-item" id="restart-and-verify-peak-connection-metrics">
+          <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="restart-the-service-to-free-memory-heading">Step 3: Restart the service to free memory</h4>
-            <div class="code-container">
+            <h4 id="restart-and-verify-peak-connection-metrics-heading">Step 4: Restart and verify peak connection metrics</h4>
+            <p>Validate configuration syntax before restarting:</p>
+
+    <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
           <div class="code-dots" aria-hidden="true">
@@ -448,14 +532,45 @@ wait_timeout = <span class="tok-num">60</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart mysql  <span class="tok-cmt"> # For MySQL</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart mariadb<span class="tok-cmt"> # For MariaDB</span>
+      <pre class="formatted-pre"><code>mysqld <span class="tok-prop">--validate-config</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart mysql  <span class="tok-cmt"> # or: sudo systemctl restart mariadb</span>
+</code></pre>
+    </div>
+    
+<p>Confirm the daemon is healthy and monitor <code>Max_used_connections</code> over the next few minutes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span> <span class="tok-prop">-e</span> &quot;SHOW GLOBAL STATUS WHERE Variable_name IN (<span class="tok-cmt">&#39;Max_used_connections&#39;, &#39;Threads_connected&#39;, &#39;Aborted_connects&#39;);&quot;</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why did MySQL ignore the higher <code>max_connections</code> value I put in <code>my.cnf</code>?</strong>
+If <code>open_files_limit</code> at the OS/systemd level is too low (for example, <code>1024</code>), MySQL silently caps <code>max_connections</code> to fit within available file descriptors. Check <code>SHOW VARIABLES LIKE &#39;open_files_limit&#39;;</code> and raise <code>LimitNOFILE</code> in a systemd override (<code>systemctl edit mysql</code>).</p>
+<p><strong>How much RAM does each MySQL connection actually consume?</strong>
+Each idle connection consumes roughly 256 KB to several megabytes for thread stack and session buffers, but active queries can allocate <code>sort_buffer_size + read_buffer_size + join_buffer_size</code> per thread. Setting <code>max_connections = 2000</code> on a 4 GB VPS risks triggering the Linux OOM killer under load.</p>
+<p><strong>Should I use <code>mysql_pconnect</code> or persistent connections in PHP?</strong>
+Generally no, unless paired with a carefully sized PHP-FPM <code>pm.max_children</code> ceiling. Each PHP-FPM worker holds its own persistent MySQL socket, which often creates more idle connections than short-lived pooled queries.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -470,49 +585,12 @@ wait_timeout = <span class="tok-num">60</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not arbitrarily increase the <code>max_connections</code> directive to astronomical values (such as 1000 or 2000) if your hardware has limited physical RAM. Each connection channel consumes processor resources and cache memory; exceeding the server&#39;s capacities will cause the system to freeze due to a lack of pagefile space or trigger critical crashes. Implement connection pooling in your web application to reuse channels instead of opening a new one for every query.</li>
+              <li><strong>Size <code>max_connections</code> to physical RAM:</strong> Calculate worst-case per-thread memory before raising limits; keep <code>Max_used_connections</code> below 75% of <code>max_connections</code> during peak traffic.</li>
+<li><strong>Enable slow query logging:</strong> Set <code>slow_query_log = 1</code> and <code>long_query_time = 1</code> so locking queries do not pile up threads.</li>
+<li><strong>Use application-level pooling:</strong> Configure bounded pools in Node.js (<code>mysql2</code>), Python (<code>SQLAlchemy</code>), or Java (<code>HikariCP</code>), or place <strong>ProxySQL</strong> in front of the database.</li>
+<li><strong>Alert on connection saturation:</strong> Track <code>Threads_connected / max_connections</code> in Prometheus (<code>mysqld_exporter</code>) and trigger warnings at 80%.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -569,7 +647,7 @@ wait_timeout = <span class="tok-num">60</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NextJS</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

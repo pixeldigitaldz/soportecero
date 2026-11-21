@@ -194,22 +194,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -243,7 +227,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -259,7 +243,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>A <strong>black screen when launching games via Gamescope on SteamOS or Linux Wayland desktops</strong> usually stems from resolution mismatching, overlay conflicts (such as MangoHud), or Proton versions failing to negotiate the Vulkan swapchain properly.</p>
+          <p>Launching a game inside <strong>Gamescope</strong> on SteamOS (Gaming Mode) or a Linux Wayland desktop only to hear audio playing behind a permanent black screen typically points to a Vulkan swapchain negotiation failure, an incompatible nested display resolution, or missing Windows video codecs during intro cutscenes. Because Gamescope acts as a micro-compositor wrapping XWayland and Vulkan surfaces, any mismatch between the game&#39;s requested mode and the host output breaks frame presentation.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,25 +260,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Unsupported display resolution in Gamescope compositor</strong></div>
+            <div class="diag-value"><strong>Nested resolution / fullscreen scaling mismatch</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Set explicit resolution: <code>gamescope -w 1280 -h 720 -- %command%</code></div>
+            <div class="diag-value">Force explicit bounds: <code>gamescope -w 1280 -h 720 -f -- %command%</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Refresh rate (Hz) mismatch in quick settings menu</strong></div>
+            <div class="diag-value"><strong>Black screen during intro logos / cutscenes</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Reset refresh rate to 60Hz or restart display server session</div>
+            <div class="diag-value">Switch to <code>GE-Proton</code> for Media Foundation (<code>mfplat</code>) codecs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>MangoHud hooking before Gamescope initializes</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Disable overlay temporarily with <code>MANGOHUD=0 %command%</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>External dock / 4K TV refresh-rate handshake hang</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Cap output refresh (<code>-r 60</code>) or toggle <strong>Allow Tearing</strong> in SteamOS</div>
           </div></div></div>
       </div>
     </section>
@@ -335,36 +343,58 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-set-explicit-resolution-parameters" class="toc-sublink">
+            <a href="#1-pass-explicit-internal-and-output-resolutions-to-gamescope" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Set Explicit Resolution Parameters</span>
+              <span class="toc-subtext">1. Pass Explicit Internal and Output Resolutions to Gamescope</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-disable-mangohud-overlay-temporarily" class="toc-sublink">
+            <a href="#2-isolate-overlay-and-hdr-conflicts" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Disable MangoHud Overlay Temporarily</span>
+              <span class="toc-subtext">2. Isolate Overlay and HDR Conflicts</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-switch-to-proton-ge-gloriouseggroll" class="toc-sublink">
+            <a href="#3-switch-to-ge-proton-for-video-codec-playback" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Switch to Proton GE (GloriousEggroll)</span>
+              <span class="toc-subtext">3. Switch to GE-Proton for Video Codec Playback</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#4-inspect-gamescope-logs-for-swapchain-errors" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">4. Inspect Gamescope Logs for Swapchain Errors</span>
             </a>
           </li>
         
         </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -372,9 +402,22 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-set-explicit-resolution-parameters">Step 1: Set Explicit Resolution Parameters</h3>
-<p>Right-click your game in Steam -&gt; <strong>Properties</strong> -&gt; <strong>General</strong> -&gt; <strong>Launch Options</strong>, and paste:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Gamescope is Valve&#39;s Wayland micro-compositor designed to isolate games inside a virtualized XWayland/Wayland display server and present scaled frames to the physical DRM/KMS plane (on Steam Deck) or a parent Wayland compositor (on desktop Linux). A black screen with active audio occurs through three mechanisms:</p>
+<ol>
+<li><strong>Swapchain &amp; Mode-Setting Desync:</strong> When a game requests an exclusive fullscreen resolution or refresh rate that conflicts with the Steam Deck&#39;s 800p panel or an external monitor&#39;s EDID modes, Gamescope&#39;s <code>wl_surface</code> fails to commit valid <code>dma_buf</code> frames. This is common when Gamescope runs without explicit <code>-w/-h</code> (internal render) and <code>-W/-H</code> (output) flags on multi-monitor Wayland desktops.</li>
+<li><strong>Pre-Swapchain Vulkan Layer Injection:</strong> Third-party Vulkan layers—notably MangoHud or older <code>vkBasalt</code> builds—can intercept <code>vkCreateSwapchainKHR</code> inside the nested Gamescope session before surface handoff finishes, leaving the framebuffer unpresented.</li>
+<li><strong>Unimplemented Media Foundation (<code>mfplat</code>) Codecs:</strong> Many Unreal Engine and Unity titles render splash screens using proprietary <code>H.264</code>/<code>WMV</code> streams. Standard Proton strips patented codecs and substitutes blank frames—or hangs the render thread if the game awaits a decode callback.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+
+<h3 id="1-pass-explicit-internal-and-output-resolutions-to-gamescope">1. Pass Explicit Internal and Output Resolutions to Gamescope</h3>
+<p>In Steam, right-click the game -&gt; <strong>Properties</strong> -&gt; <strong>General</strong> -&gt; <strong>Launch Options</strong>, and specify explicit render (<code>-w</code>/<code>-h</code>) and output (<code>-W</code>/<code>-H</code>) dimensions:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -398,13 +441,33 @@
 </code></pre>
     </div>
     
-<ul>
-<li><strong><code>-w</code> / <code>-h</code></strong>: Game internal render resolution.</li>
-<li><strong><code>-W</code> / <code>-H</code></strong>: Display output resolution.</li>
-<li><strong><code>-f</code></strong>: Force native fullscreen mode.</li>
-</ul>
-<h3 id="step-2-disable-mangohud-overlay-temporarily">Step 2: Disable MangoHud Overlay Temporarily</h3>
-<p>DirectX 11 games using DXVK may fail if MangoHud hooks into the swapchain before Gamescope initializes:</p>
+<p><em>(On a Steam Deck&#39;s built-in screen, use <code>-w 1280 -h 800 -W 1280 -H 800 -f -- %command%</code>.)</em></p>
+<p>If you are running Gamescope on a Wayland desktop with an NVIDIA GPU or HDR display, test with <code>--force-grab-cursor</code> and verify whether <code>--backend sdl</code> or <code>--backend wayland</code> resolves surface presentation:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>gamescope <span class="tok-prop">-w</span> <span class="tok-num">1920</span> <span class="tok-prop">-h</span> <span class="tok-num">1080</span> <span class="tok-prop">-f</span> <span class="tok-prop">--backend</span> wayland <span class="tok-prop">--</span> %command%
+</code></pre>
+    </div>
+    
+<h3 id="2-isolate-overlay-and-hdr-conflicts">2. Isolate Overlay and HDR Conflicts</h3>
+<p>If the game launches in Desktop Mode but black-screens in Gaming Mode, temporarily bypass MangoHud and Steam Deck&#39;s overlay hooks in Launch Options:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -428,13 +491,94 @@
 </code></pre>
     </div>
     
-<h3 id="step-3-switch-to-proton-ge-gloriouseggroll">Step 3: Switch to Proton GE (GloriousEggroll)</h3>
-<p>Missing proprietary video codecs (like Media Foundation) cause black screens during game introduction cutscenes:</p>
-<ol>
-<li>Install <strong>ProtonUp-Qt</strong> from the Discover store on your Steam Deck or Linux distro.</li>
-<li>Download the latest <strong>Proton-GE</strong> release (e.g., <code>GE-Proton9-10</code>).</li>
-<li>In Steam, navigate to Game Properties -&gt; <strong>Compatibility</strong> -&gt; Select <code>GE-Proton</code>.</li>
+<p>On Steam Deck OLED or HDR-capable monitors, also test disabling HDR output for that title if the game&#39;s tone-mapper outputs a blank scRGB buffer:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>DXVK_HDR=<span class="tok-num">0</span> gamescope <span class="tok-prop">-w</span> <span class="tok-num">1280</span> <span class="tok-prop">-h</span> <span class="tok-num">800</span> <span class="tok-prop">-f</span> <span class="tok-prop">--</span> %command%
+</code></pre>
+    </div>
+    
+<h3 id="3-switch-to-ge-proton-for-video-codec-playback">3. Switch to GE-Proton for Video Codec Playback</h3>
+<p>If the black screen occurs right after clicking Play (before the main menu appears), install <strong>GE-Proton</strong>:</p>
+<ol class="steps-list">
+
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="step-1-heading">Step 1</h4>
+            Switch to Desktop Mode (on Steam Deck) and open <strong>ProtonUp-Qt</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="step-2-heading">Step 2</h4>
+            Download the latest <code>GE-Proton9-*</code> release.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="step-3-heading">Step 3</h4>
+            Return to Steam -&gt; Game <strong>Properties</strong> -&gt; <strong>Compatibility</strong> -&gt; check <strong>Force the use of a specific Steam Play compatibility tool</strong> -&gt; select <strong>GE-Proton</strong>.
+          </div>
+        </li>
+        
 </ol>
+<h3 id="4-inspect-gamescope-logs-for-swapchain-errors">4. Inspect Gamescope Logs for Swapchain Errors</h3>
+<p>On desktop Linux, launch Steam or the game directly from a terminal to capture the exact Gamescope / Vulkan diagnostic output:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>gamescope <span class="tok-prop">-w</span> <span class="tok-num">1280</span> <span class="tok-prop">-h</span> <span class="tok-num">720</span> <span class="tok-prop">-f</span> <span class="tok-prop">--</span> glxgears <span class="tok-num">2</span>&gt;&amp;<span class="tok-num">1</span> | tee /tmp/gamescope.log
+</code></pre>
+    </div>
+    
+<p>Look for <code>Failed to create swapchain</code> or <code>wl_drm</code> errors, which confirm a compositor/driver mismatch rather than a game bug.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why does a game show a black screen in SteamOS Gaming Mode when docked to a 4K TV?</strong>
+Gamescope defaults to the external display&#39;s native 4K resolution, which can exhaust the Deck&#39;s VRAM or fail HDMI 2.0 bandwidth negotiation at 60Hz/120Hz. Setting Steam&#39;s <strong>Game Resolution</strong> to <code>1280x720</code> or <code>1920x1080</code> in the game&#39;s Properties prevents 4K swapchain allocation.</p>
+<p><strong>Can <code>ENABLE_GAMESCOPE_WSI=0</code> fix black screens on AMD or NVIDIA?</strong>
+Yes. On some desktop Linux configurations, Gamescope&#39;s WSI layer (<code>libVkLayer_FROG_gamescope_wsi</code>) conflicts with HDR or VRR negotiation. Prefixing <code>ENABLE_GAMESCOPE_WSI=0</code> in launch options bypasses the WSI layer for debugging.</p>
+<p><strong>Does deleting the Proton prefix fix a persistent black screen?</strong>
+Occasionally, yes—especially if a corrupted <code>user.reg</code> saved an invalid fullscreen resolution. Back up your saves first, then test with a clean prefix via Steam&#39;s <strong>Developer</strong> -&gt; <strong>Delete Proton files</strong>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -449,49 +593,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Avoid nesting Gamescope inside Gamescope (do not add <code>gamescope -- %command%</code> to Steam Launch Options if you are already running inside SteamOS Gaming Mode, unless specifically overriding resolution).</li>
+<li>Keep <code>gamescope</code>, <code>mesa</code> (<code>vulkan-radeon</code>), and <code>xorg-xwayland</code> updated together on rolling-release distributions like Arch or CachyOS.</li>
+<li>Set per-game resolution caps (<code>1280x720</code> or <code>1920x1080</code>) in Steam Properties before docking a Steam Deck to a 4K television.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -548,7 +654,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NVIDIA</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

@@ -11,72 +11,109 @@ tags:
   - Linux
   - SysAdmin
   - Storage
-readTime: 5 min
+readTime: '5 min'
 date: '2026-06-25'
 ---
 
-In CachyOS and Arch Linux environments, the Pacman package manager never automatically purges downloaded `.pkg.tar.zst` archive binaries from `/var/cache/pacman/pkg/`. Over time, this directory routinely swells to 20GB-50GB, triggering low storage warnings on root partitions.
+In CachyOS, Arch Linux, and EndeavourOS, `pacman` downloads compressed `.pkg.tar.zst` archives and their `.sig` signatures into `/var/cache/pacman/pkg/` during every `pacman -Syu` upgrade, but it never deletes old revisions automatically. On an active rolling-release workstation, this cache routinely balloons to 25 GB–60 GB and can fill the root (`/`) partition, causing failed kernel upgrades or broken initramfs generation.
 
 ## Quick Diagnostics
-| Cause | Solution |
+
+| Symptom / Cause | Immediate Action |
 |---|---|
-| **/var/lib/pacman and /var/cache/pacman/pkg directories accumulating dozens of package revisions** | Prune obsolete package tarballs while retaining the latest 2 versions via `sudo paccache -r` |
-| **AUR build cache bloating user directories (~/.cache/yay or ~/.cache/paru)** | Clean AUR cache using `yay -Sc --aur` or purge `~/.cache/yay` |
+| **`/var/cache/pacman/pkg/` consuming tens of gigabytes** | Keep last 2 versions with `sudo paccache -rk2` |
+| **Removed packages still sitting in cache** | Purge uninstalled tarballs via `sudo paccache -ruk0` |
+| **AUR helpers (`paru` / `yay`) hoarding Git & build artifacts** | Clear `~/.cache/paru/clone` or `~/.cache/yay` |
+| **Partial `.part` downloads blocking disk space** | Delete incomplete downloads with `sudo rm -f /var/cache/pacman/pkg/*.part` |
 
-## 🚀 Step-by-Step Solution
+## Root Cause & Technical Mechanics
 
-### Step 1: Measure Current Pacman Cache Footprint
-Evaluate exact disk utilization:
+Pacman retains every historical package tarball intentionally so you can perform an offline downgrade (`sudo pacman -U /var/cache/pacman/pkg/<pkg>-<oldver>.pkg.tar.zst`) if a rolling update breaks a GPU driver, Mesa build, or bootloader.
+
+Unlike `apt` or `dnf`, which often purge intermediate package archives by default, Arch-based distributions delegate cache retention to the administrator. CachyOS compounds cache growth slightly faster than vanilla Arch because it ships architecture-optimized repositories (`cachyos-v3`, `cachyos-v4`, `cachyos-znver4`) alongside frequent kernel (`linux-cachyos`) and compiler updates. Additionally, AUR helpers like `paru` (default on CachyOS) and `yay` clone full Git repositories and compile Rust/C++ targets inside `~/.cache/`, which `pacman` commands never touch.
+
+## Step-by-Step Solution
+
+### 1. Measure Current Cache and Root Partition Usage
+
+Check available root space and inspect the exact footprint of both the system cache and your AUR cache:
+
 ```bash
-# Inspect storage footprint of the Pacman cache
-du -sh /var/cache/pacman/pkg/
+df -h /
+sudo du -sh /var/cache/pacman/pkg/
+du -sh ~/.cache/paru/ ~/.cache/yay/ 2>/dev/null
 ```
 
-### Step 2: Prune Obsolete Versions Safely Using paccache
-The official `paccache` utility (from `pacman-contrib`) clears obsolete revisions while preserving safety rollbacks:
+### 2. Prune Old Versions Safely with `paccache`
+
+Install `pacman-contrib` (if not already present) and use `paccache` so you always retain the two most recent versions of installed packages for emergency rollbacks:
+
 ```bash
-# 1. Ensure pacman-contrib is installed
-sudo pacman -S pacman-contrib --noconfirm
-
-# 2. Retain only the 2 most recent package versions
-sudo paccache -r -k 2
-
-# 3. Purge cached files for uninstalled packages
+sudo pacman -S --needed pacman-contrib
+sudo paccache -rk2
 sudo paccache -ruk0
 ```
 
-### Step 3: Comprehensive Cache Flush (For Emergency Space Reclamation)
-When immediate disk recovery is mandatory:
-```bash
-# Purge uninstalled package archives
-sudo pacman -Sc --noconfirm
+- `-rk2` removes all cached versions except the latest 2 for currently installed packages.
+- `-ruk0` removes all cached versions of packages that are no longer installed on the system.
 
-# Purge ALL cached archives completely
-sudo pacman -Scc --noconfirm
+Verify how much space was reclaimed:
+
+```bash
+sudo du -sh /var/cache/pacman/pkg/
 ```
 
-### Step 4: Clear AUR Build Repositories (Yay / Paru)
-AUR helpers compile binaries inside user home directories:
-```bash
-# If using Yay:
-yay -Sc --aur --noconfirm
-rm -rf ~/.cache/yay/*
+### 3. Clean AUR Helper Build Caches (`paru` / `yay`)
 
-# If using Paru:
-paru -Scc --noconfirm
+If you use `paru` (standard in CachyOS) or `yay`, prune stale source clones and compiled `.pkg.tar.zst` artifacts from your home directory:
+
+```bash
+# For Paru users:
+paru -Sc
+
+# For Yay users:
+yay -Sc --aur
 ```
 
-## 🛡️ Prevention Advice
-- **Enable automated systemd cache cleanup:** Activate the built-in systemd timer for automated weekly pruning:
+If `du -sh ~/.cache/paru/clone` still shows several gigabytes of orphaned Git repositories (common with `-git` AUR packages), remove the clone directory safely:
+
+```bash
+rm -rf ~/.cache/paru/clone/*
+```
+
+### 4. Emergency Full Cache Flush (Low-Disk Recovery)
+
+Only if your root filesystem is at 99%–100% capacity and `paccache -rk2` is not enough, purge all cached packages completely:
+
+```bash
+sudo pacman -Scc
+```
+
+Confirm with `y` when prompted. Note that afterward, offline downgrades will require re-downloading from mirrors or the Arch Linux Archive.
+
+### 5. Automate Weekly Pruning with `paccache.timer`
+
+Enable the built-in systemd timer so `paccache` runs automatically every week (retaining 3 versions by default):
+
 ```bash
 sudo systemctl enable --now paccache.timer
+systemctl status paccache.timer
 ```
-- **Prune orphaned dependencies regularly:** Remove detached packages via `sudo pacman -Rns $(pacman -Qtdq)`.
 
-## ❓ Frequently Asked Questions (FAQ)
+## Frequently Asked Questions
 
-### Why does Pacman retain all downloaded tarballs?
-To allow instant offline package downgrades (`pacman -U /var/cache/pacman/pkg/pkgname-old.pkg.tar.zst`) if an upstream package update introduces regressions.
+### Will deleting `/var/cache/pacman/pkg/` break currently installed programs?
+No. Installed binaries, libraries, and configuration files live in `/usr/`, `/etc/`, and `/var/lib/pacman/local/`. The `/var/cache/pacman/pkg/` directory only stores compressed installation archives.
 
-### Is paccache.timer safe for production machines?
-Yes. The service runs weekly in the background, keeping the 3 most recent package versions intact for stability.
+### Why shouldn't I run `rm -rf /var/cache/pacman/pkg/*` directly?
+Deleting everything manually removes any fallback `.pkg.tar.zst` files needed for recovery and can also delete `download-*` temporary directories if a pacman lock is active. Using `paccache -rk2` or `pacman -Scc` is safer and respects pacman's directory structure.
+
+### Does `paccache` clean `/var/lib/pacman/sync/`?
+No. `/var/lib/pacman/sync/` holds repository metadata databases (`.db` files), which are small (typically under 100 MB) and required for `pacman -Ss` searches.
+
+## Prevention Advice
+
+- **Keep `paccache.timer` active:** Weekly automated pruning prevents multi-gigabyte surprises without losing rollback protection.
+- **Remove orphaned dependencies:** Periodically run `pacman -Qtdq` to list unneeded build/runtime dependencies and remove them with `sudo pacman -Rns $(pacman -Qtdq)`.
+- **Use a Pacman hook for automatic cleanup:** Drop a `/etc/pacman.d/hooks/clean_package_cache.hook` file to trigger `/usr/bin/paccache -rk2` after every `Upgrade` or `Remove` transaction.
+- **Watch `/boot` separately:** If you use `systemd-boot` on CachyOS, old kernels do not live in `/var/cache/pacman/pkg/`—they are managed by `mkinitcpio` and `sdboot-manage`.

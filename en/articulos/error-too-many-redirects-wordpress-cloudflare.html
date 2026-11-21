@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does the error disappear when I pause Cloudflare (grey cloud)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pausing Cloudflare bypasses the CDN proxy so the browser hits your origin directly on port 443, proving the origin certificate works and confirming the loop came from Flexible SSL or proxy header mismatch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can a Cloudflare Page Rule or Redirect Rule cause ERR_TOO_MANY_REDIRECTS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. If a Page Rule forces http:// to https:// while another rule or .htaccess forces the opposite (www vs apex), they loop. Keep canonical redirects in one place."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I still need an SSL certificate on my origin server if I use Cloudflare?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Full (Strict) requires a valid origin certificate. You can generate a free 15-year Cloudflare Origin CA certificate under SSL/TLS &gt; Origin Server."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>ERR_TOO_MANY_REDIRECTS</code> error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.</p>
+          <p>The browser error <code>ERR_TOO_MANY_REDIRECTS</code> (or <code>The page isn&#39;t redirecting properly</code> in Firefox) occurs on WordPress sites proxied through Cloudflare when the edge CDN and your origin web server disagree on whether the request is already encrypted. The client bounces endlessly between <code>https://yourdomain.com</code> and <code>https://yourdomain.com</code> until the browser aborts after ~20 consecutive <code>301</code>/<code>302</code> hops.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,13 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Browser displays <code>ERR_TOO_MANY_REDIRECTS</code> when attempting to open site</strong>: Cloudflare is set to &quot;Flexible&quot; SSL mode, sending unencrypted HTTP to origin while WordPress forces HTTP to HTTPS redirect</div>
+            <div class="diag-value">Cloudflare SSL/TLS set to <strong>Flexible</strong> while origin forces HTTPS</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>curl -I https://yourdomain.com</code> loops <code>301</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Change Cloudflare SSL/TLS mode to &quot;Full&quot; or &quot;Full (Strict)&quot; and update HTTPS proxy detection in <code>wp-config.php</code></div>
+            <div class="diag-value">Switch Cloudflare SSL/TLS mode to <strong>Full (Strict)</strong></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">WordPress unaware of HTTPS behind reverse proxy</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>$_SERVER[&#39;HTTPS&#39;]</code> is unset in PHP</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Map <code>HTTP_X_FORWARDED_PROTO</code> to <code>HTTPS=on</code> in <code>wp-config.php</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Conflicting <code>www</code> vs non-<code>www</code> rules in <code>.htaccess</code> and WordPress</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>WP_HOME</code> uses <code>www</code> while server redirects to apex</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Align <code>WP_HOME</code>, <code>WP_SITEURL</code>, and Nginx/Apache rules</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Cloudflare &quot;Always Use HTTPS&quot; + origin HTTP-to-HTTPS redirect</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value">Inspect <code>Location</code> header in <code>curl -IL</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Let Cloudflare handle edge redirect or fix proxy headers</div>
           </div></div></div>
       </div>
     </section>
@@ -322,32 +398,80 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-change-cloudflare-ssltls-encryption-mode" class="toc-sublink">
+            <a href="#step-1-inspect-the-redirect-headers-with-curl" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Change Cloudflare SSL/TLS Encryption Mode</span>
+              <span class="toc-subtext">Step 1: Inspect the Redirect Headers With curl</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-configure-reverse-proxy-https-headers-in-wp-configphp" class="toc-sublink">
+            <a href="#step-2-set-cloudflare-ssltls-mode-to-full-strict" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Configure Reverse Proxy HTTPS Headers in wp-config.php</span>
+              <span class="toc-subtext">Step 2: Set Cloudflare SSL/TLS Mode to Full (Strict)</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-purge-cache-and-verify-site" class="toc-sublink">
+            <a href="#step-3-teach-wordpress-to-trust-reverse-proxy-https-headers" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Purge Cache and Verify Site</span>
+              <span class="toc-subtext">Step 3: Teach WordPress to Trust Reverse Proxy HTTPS Headers</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-purge-edge-and-origin-caches-then-verify" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Purge Edge and Origin Caches, Then Verify</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-the-error-disappear-when-i-pause-cloudflare-grey-cloud" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does the error disappear when I pause Cloudflare (grey cloud)?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-a-cloudflare-page-rule-or-redirect-rule-cause-errtoomanyredirects" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can a Cloudflare Page Rule or Redirect Rule cause ERR_TOO_MANY_REDIRECTS?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#do-i-still-need-an-ssl-certificate-on-my-origin-server-if-i-use-cloudflare" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Do I still need an SSL certificate on my origin server if I use Cloudflare?</span>
             </a>
           </li>
         
@@ -359,6 +483,10 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>When Cloudflare proxies a domain (orange cloud enabled), it terminates the visitor&#39;s TLS session at the edge and opens a second connection to your origin server.</p>
+<p>In <strong>Flexible</strong> SSL/TLS mode, Cloudflare connects to your origin over <strong>unencrypted HTTP (port 80)</strong> even when the visitor requested <code>https://</code>. Your origin server or WordPress sees a port 80 request, assumes the visitor is on HTTP, and replies with <code>301 Moved Permanently</code> to <code>https://yourdomain.com</code>. Cloudflare forwards that redirect to the browser, the browser retries <code>https://yourdomain.com</code>, Cloudflare hits port 80 again, and the loop repeats indefinitely.</p>
+<p>A secondary cause occurs even in <strong>Full</strong> mode when an internal reverse proxy forwards HTTP without setting <code>HTTPS=on</code> for PHP, causing WordPress&#39;s <code>is_ssl()</code> check to return <code>false</code> and trigger a self-redirect.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -366,14 +494,40 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<h3 id="step-1-change-cloudflare-ssltls-encryption-mode">Step 1: Change Cloudflare SSL/TLS Encryption Mode</h3>
+<h3 id="step-1-inspect-the-redirect-headers-with-curl">Step 1: Inspect the Redirect Headers With <code>curl</code></h3>
+<p>Run <code>curl</code> against your domain to confirm the exact <code>301</code>/<code>302</code> loop and see which server header (<code>Server: cloudflare</code> vs origin) is issuing the redirect:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-sI</span> https://yourdomain.com | <span class="tok-kw">grep</span> <span class="tok-prop">-iE</span> <span class="tok-str">&quot;HTTP/|location:|server:|cf-ray:&quot;</span>
+</code></pre>
+    </div>
+    
+<p>If you see <code>HTTP/2 301</code> with <code>location: https://yourdomain.com/</code> pointing right back to the same HTTPS URL, you have confirmed the edge-to-origin SSL loop.</p>
+<h3 id="step-2-set-cloudflare-ssltls-mode-to-full-strict">Step 2: Set Cloudflare SSL/TLS Mode to Full (Strict)</h3>
 <ol class="steps-list">
 
         <li class="step-item" id="step-1">
           <div class="step-number">1</div>
           <div class="step-body">
             <h4 id="step-1-heading">Step 1</h4>
-            Log into your <strong>Cloudflare Dashboard</strong>.
+            Log in to the <strong>Cloudflare Dashboard</strong> and select your domain.
           </div>
         </li>
         
@@ -382,7 +536,7 @@
           <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="step-2-heading">Step 2</h4>
-            Select your domain and navigate to <strong>SSL/TLS</strong> &gt; <strong>Overview</strong>.
+            Navigate to <strong>SSL/TLS &gt; Overview</strong>.
           </div>
         </li>
         
@@ -391,14 +545,14 @@
           <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="step-3-heading">Step 3</h4>
-            Change the encryption mode from <strong>Flexible</strong> to <strong>Full</strong> or <strong>Full (Strict)</strong>.
+            Change the encryption mode from <strong>Flexible</strong> to <strong>Full (Strict)</strong> (if your origin has a valid Let&#39;s Encrypt or Cloudflare Origin CA certificate) or <strong>Full</strong> (if your origin uses a self-signed certificate).
           </div>
         </li>
         
 </ol>
-<p><em>(Flexible mode connects to your origin server over HTTP. If WordPress enforces HTTPS, it will reply with a 301 redirect back to HTTPS, triggering a loop).</em></p>
-<h3 id="step-2-configure-reverse-proxy-https-headers-in-wp-configphp">Step 2: Configure Reverse Proxy HTTPS Headers in wp-config.php</h3>
-<p>Edit your WordPress site&#39;s <code>wp-config.php</code> file and place the following code snippet above the line <code>/* That&#39;s all, stop editing! Happy publishing. */</code>:</p>
+<p>Never leave a production WordPress site on <strong>Flexible</strong> or <strong>Off</strong>.</p>
+<h3 id="step-3-teach-wordpress-to-trust-reverse-proxy-https-headers">Step 3: Teach WordPress to Trust Reverse Proxy HTTPS Headers</h3>
+<p>If your origin sits behind an internal reverse proxy or Apache/Nginx still reports non-SSL to PHP, edit <code>wp-config.php</code> and insert the following snippet <strong>above</strong> <code>/* That&#39;s all, stop editing! Happy publishing. */</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -418,8 +572,11 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt">// Detect Cloudflare reverse proxy HTTPS header</span>
-<span class="tok-kw">if</span> (isset($_SERVER[<span class="tok-str">&#39;HTTP_X_FORWARDED_PROTO&#39;</span>]) &amp;&amp; $_SERVER[<span class="tok-str">&#39;HTTP_X_FORWARDED_PROTO&#39;</span>] === <span class="tok-str">&#39;https&#39;</span>) {
+      <pre class="formatted-pre"><code><span class="tok-cmt">// Recognize HTTPS terminated by Cloudflare or an upstream reverse proxy</span>
+<span class="tok-kw">if</span> (
+    (isset($_SERVER[<span class="tok-str">&#39;HTTP_X_FORWARDED_PROTO&#39;</span>]) &amp;&amp; strpos($_SERVER[<span class="tok-str">&#39;HTTP_X_FORWARDED_PROTO&#39;</span>], <span class="tok-str">&#39;https&#39;</span>) !== <span class="tok-kw">false</span>) ||
+    (isset($_SERVER[<span class="tok-str">&#39;HTTP_CF_VISITOR&#39;</span>]) &amp;&amp; strpos($_SERVER[<span class="tok-str">&#39;HTTP_CF_VISITOR&#39;</span>], <span class="tok-str">&#39;&quot;scheme&quot;:&quot;https&quot;&#39;</span>) !== <span class="tok-kw">false</span>)
+) {
     $_SERVER[<span class="tok-str">&#39;HTTPS&#39;</span>] = <span class="tok-str">&#39;on&#39;</span>;
 }
 
@@ -428,12 +585,40 @@ define(<span class="tok-str">&#39;WP_SITEURL&#39;</span>, <span class="tok-str">
 </code></pre>
     </div>
     
-<h3 id="step-3-purge-cache-and-verify-site">Step 3: Purge Cache and Verify Site</h3>
-<ol>
-<li>In the Cloudflare dashboard, go to <strong>Caching</strong> &gt; <strong>Configuration</strong> and click <strong>Purge Everything</strong>.</li>
-<li>Clear your web browser cache or test the site in an Incognito/Private window.</li>
-<li>If using WordPress caching plugins (e.g., WP Rocket or LiteSpeed Cache), purge the plugin cache as well.</li>
-</ol>
+<p>Also verify <code>WP_HOME</code> and <code>WP_SITEURL</code> match the exact canonical host (<code>www</code> vs non-<code>www</code>) configured in your <code>.htaccess</code> or Nginx <code>server</code> block.</p>
+<h3 id="step-4-purge-edge-and-origin-caches-then-verify">Step 4: Purge Edge and Origin Caches, Then Verify</h3>
+<p>Browsers and Cloudflare cache <code>301</code> redirects aggressively. Purge Cloudflare (<strong>Caching &gt; Configuration &gt; Purge Everything</strong>) and any WordPress page/object cache (<code>wp cache flush</code>), then verify from the terminal:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-sIL</span> <span class="tok-prop">--max-redirs</span> <span class="tok-num">5</span> https://yourdomain.com | <span class="tok-kw">grep</span> <span class="tok-prop">-iE</span> <span class="tok-str">&quot;HTTP/|location:&quot;</span>
+</code></pre>
+    </div>
+    
+<p>You should see a clean <code>HTTP/2 200</code> response (or at most one canonical <code>301</code> followed by <code>200</code>).</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-the-error-disappear-when-i-pause-cloudflare-grey-cloud">Why does the error disappear when I pause Cloudflare (grey cloud)?</h3>
+<p>Pausing Cloudflare bypasses the CDN proxy so the browser hits your origin directly on port 443, proving the origin certificate works and confirming the loop came from Flexible SSL or proxy header mismatch.</p>
+<h3 id="can-a-cloudflare-page-rule-or-redirect-rule-cause-errtoomanyredirects">Can a Cloudflare Page Rule or Redirect Rule cause <code>ERR_TOO_MANY_REDIRECTS</code>?</h3>
+<p>Yes. If a Page Rule forces <code>http://</code> to <code>https://</code> while another rule or <code>.htaccess</code> forces the opposite (<code>www</code> vs apex), they loop. Keep canonical redirects in one place.</p>
+<h3 id="do-i-still-need-an-ssl-certificate-on-my-origin-server-if-i-use-cloudflare">Do I still need an SSL certificate on my origin server if I use Cloudflare?</h3>
+<p>Yes. <strong>Full (Strict)</strong> requires a valid origin certificate. You can generate a free 15-year <strong>Cloudflare Origin CA</strong> certificate under <strong>SSL/TLS &gt; Origin Server</strong>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -448,51 +633,12 @@ define(<span class="tok-str">&#39;WP_SITEURL&#39;</span>, <span class="tok-str">
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Never Use Flexible SSL in Production</strong>: Always configure Cloudflare SSL/TLS encryption mode to <strong>Full</strong> or <strong>Full (Strict)</strong> by installing an SSL certificate (such as Let&#39;s Encrypt or a Cloudflare Origin CA certificate) on your origin server.</li>
-<li><strong>Avoid Overlapping Redirect Rules</strong>: When turning on Cloudflare&#39;s &quot;Always Use HTTPS&quot;, ensure you don&#39;t have duplicate or conflicting HTTP-to-HTTPS redirect rules in <code>.htaccess</code> or Nginx.</li>
-<li><strong>Install Cloudflare Official Plugin</strong>: Use the official WordPress Cloudflare plugin to properly handle client IP restoration and cache invalidation.</li>
+              <li><strong>Standardize on Full (Strict) SSL:</strong> Install a Let&#39;s Encrypt or Cloudflare Origin CA certificate on every origin server before enabling Cloudflare proxy mode.</li>
+<li><strong>Avoid duplicate HTTPS plugins:</strong> Remove WordPress plugins like &quot;Really Simple SSL&quot; once server-level HTTPS and <code>WP_HOME</code>/<code>WP_SITEURL</code> are properly configured.</li>
+<li><strong>Match canonical hostnames everywhere:</strong> Ensure WordPress Settings, <code>.htaccess</code>/Nginx redirects, and Cloudflare Page Rules agree on <code>https://</code> and <code>www</code> vs apex.</li>
+<li><strong>Test redirects with <code>curl -IL</code>:</strong> Always verify redirect chains from the command line after changing SSL or DNS proxy settings.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -583,7 +729,7 @@ define(<span class="tok-str">&#39;WP_SITEURL&#39;</span>, <span class="tok-str">
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

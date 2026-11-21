@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What if I cannot log into Emergency Mode because the root account is locked?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On Ubuntu and some cloud images where the root password is disabled, reboot and press Esc or Shift to open the GRUB menu, press e to edit the kernel line, append systemd.unit=rescue.target or rw init=/bin/bash, and press Ctrl+X to boot directly into a writable shell."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to run systemctl daemon-reload after editing /etc/fstab?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if you are testing mounts on a running system. Because systemd-fstab-generator only converts /etc/fstab into .mount units at boot or during a reload, running systemctl daemon-reload ensures systemd picks up your edits immediately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should the 5th (dump) and 6th (pass) fields be for secondary disks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set dump to 0 (the legacy dump backup utility is rarely used). Set pass to 1 only for the root / filesystem, 2 for other local Linux filesystems you want fsck to check at boot, and 0 for swap, network shares (NFS/SMB), or removable drives."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -258,7 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Modifying the <code>/etc/fstab</code> file to mount secondary hard drives or swap partitions (SWAP) is common, but a single typo, an extra space, or a non-existent disk UUID will cause your Linux distribution to fail to boot, sending you directly to a black screen displaying the error message <code>Welcome to emergency mode!</code>.</p>
+          <p>Modifying <code>/etc/fstab</code> to auto-mount secondary drives, NVMe partitions, or swap files is routine sysadmin work, but a single typo, wrong UUID, or missing mount option can halt the Linux boot sequence and drop the system into <code>Welcome to emergency mode!</code>. Because <code>systemd</code> treats <code>/etc/fstab</code> entries as mandatory dependencies by default, any unresolvable device blocks <code>local-fs.target</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +291,55 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Incorrect syntax or invalid UUID in /etc/fstab file</strong></div>
+            <div class="diag-value">Typo, wrong UUID, or invalid filesystem type in <code>/etc/fstab</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>journalctl -xb -p err</code> or <code>findmnt --verify</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Boot into rescue mode and fix broken entry in <code>/etc/fstab</code></div>
+            <div class="diag-value">Remount <code>/</code> as <code>rw</code> and fix or comment out the broken line</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Unavailable partition at boot preventing system startup</strong></div>
+            <div class="diag-value">External USB/secondary disk disconnected at boot</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>lsblk -f</code> shows device missing</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Add <code>nofail</code> option to secondary partition in <code>/etc/fstab</code></div>
+            <div class="diag-value">Add <code>nofail,x-systemd.device-timeout=5</code> to mount options</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Root filesystem locked read-only in emergency shell</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>mount | grep &quot; / &quot;</code> shows <code>(ro,</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Run <code>mount -o remount,rw /</code> before editing</div>
           </div></div></div>
       </div>
     </section>
@@ -334,10 +380,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#what-if-i-cannot-log-into-emergency-mode-because-the-root-account-is-locked" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What if I cannot log into Emergency Mode because the root account is locked?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#do-i-need-to-run-systemctl-daemon-reload-after-editing-etcfstab" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Do I need to run systemctl daemon-reload after editing /etc/fstab?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-should-the-5th-dump-and-6th-pass-fields-be-for-secondary-disks" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What should the 5th (dump) and 6th (pass) fields be for secondary disks?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -345,6 +431,15 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During early userspace initialization, <code>systemd-fstab-generator</code> parses <code>/etc/fstab</code> and dynamically generates <code>.mount</code> and <code>.swap</code> unit files inside <code>/run/systemd/generator/</code>. By default, each generated unit is linked as a <code>Requires=</code> and <code>Before=</code> dependency of <code>local-fs.target</code>.</p>
+<p>When <code>systemd</code> attempts to activate those units:</p>
+<ol>
+<li><strong>Missing block device or mismatched UUID:</strong> <code>udev</code> waits up to <code>90s</code> (the default <code>JobTimeoutSec</code>) for the device node (such as <code>/dev/disk/by-uuid/...</code>) to appear. Once the timer expires, the <code>.device</code> unit times out, failing <code>local-fs.target</code> and triggering <code>emergency.target</code>.</li>
+<li><strong>Malformed columns or unsupported mount options:</strong> <code>mount(8)</code> exits with a non-zero status code (commonly <code>32</code> for mount failure or <code>1</code> for incorrect invocation), which immediately aborts boot without waiting 90 seconds.</li>
+<li><strong>Filesystem corruption on a checked partition:</strong> If the sixth field (<code>fs_passno</code>) is <code>1</code> or <code>2</code>, <code>systemd-fsck</code> runs before mounting. Unrecoverable metadata errors pause boot for manual <code>fsck</code> intervention.</li>
+</ol>
+<p>In emergency mode, the kernel mounts <code>/</code> read-only (<code>ro</code>) to protect against further corruption, which is why editors like <code>nano</code> or <code>vi</code> fail to save until you remount read-write.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +448,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="gain-write-access">
+        <li class="step-item" id="enter-the-emergency-shell-and-remount-root-as-read-write">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="gain-write-access-heading">Step 1: Gain write access</h4>
-            <p>In emergency mode, the file system is typically locked in &quot;Read-Only&quot; mode, meaning you won&#39;t be able to save any corrections. Execute this command to unlock it:</p>
+            <h4 id="enter-the-emergency-shell-and-remount-root-as-read-write-heading">Step 1: Enter the Emergency Shell and Remount Root as Read-Write</h4>
+            <p>At the <code>Give root password for maintenance</code> prompt, enter the root password (or press <code>Ctrl+D</code> if prompted on systems with a locked root account, or boot with <code>init=/bin/bash</code> from GRUB). Unlock the root filesystem for editing:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -380,15 +475,98 @@
       <pre class="formatted-pre"><code><span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /
 </code></pre>
     </div>
+    
+<p>Verify the root mount is now writable:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>findmnt / <span class="tok-prop">-o</span> TARGET,SOURCE,FSTYPE,<span class="tok-prop">OPTIONS</span>
+</code></pre>
+    </div>
+    
+<p>Confirm <code>rw</code> appears in the <code>OPTIONS</code> column.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="edit-the-file-with-caution">
+        <li class="step-item" id="identify-the-failing-entry-and-actual-device-uuids">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="edit-the-file-with-caution-heading">Step 2: Edit the file with caution</h4>
-            <p>Open the configuration file using the console&#39;s built-in text editor:</p>
+            <h4 id="identify-the-failing-entry-and-actual-device-uuids-heading">Step 2: Identify the Failing Entry and Actual Device UUIDs</h4>
+            <p>Check the boot journal to see which exact mount unit failed:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">journalctl</span> <span class="tok-prop">-xb</span> <span class="tok-prop">-p</span> err <span class="tok-prop">--no-pager</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;mount|fstab|Timed out&quot;</span>
+</code></pre>
+    </div>
+    
+<p>List all attached block devices along with their exact UUIDs and filesystem types:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>lsblk <span class="tok-prop">-f</span>
+</code></pre>
+    </div>
+    
+<p>Compare the <code>UUID</code> and <code>FSTYPE</code> columns from <code>lsblk -f</code> against <code>/etc/fstab</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="repair-or-comment-out-the-broken-line">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="repair-or-comment-out-the-broken-line-heading">Step 3: Repair or Comment Out the Broken Line</h4>
+            <p>Open <code>/etc/fstab</code> with a terminal editor:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -411,15 +589,8 @@
       <pre class="formatted-pre"><code><span class="tok-kw">nano</span> /etc/fstab
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="comment-out-or-repair-the-corrupt-line">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="comment-out-or-repair-the-corrupt-line-heading">Step 3: Comment out or repair the corrupt line</h4>
-            <p>Find the last line you added (the one for the new disk or SWAP). If you are not sure what the syntax error is, insert a hash symbol # at the beginning of that entire line. This tells Linux to ignore that instruction during boot:</p>
+    
+<p>Either correct the six space/tab-separated fields (<code>&lt;file system&gt; &lt;mount point&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;</code>), or temporarily comment out the offending entry with <code>#</code> so the system can boot:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -439,20 +610,21 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code># /swapfile none swap sw <span class="tok-num">0</span> <span class="tok-num">0</span>
+      <pre class="formatted-pre"><code># UUID=bad-uuid-value /mnt/backup ext4 defaults <span class="tok-num">0</span> <span class="tok-num">2</span>
+UUID=9a1b2c3d-4e5f-<span class="tok-num">6789</span>-abcd-0123456789ef /mnt/backup ext4 defaults,nofail,x-systemd.device-timeout=<span class="tok-num">5</span> <span class="tok-num">0</span> <span class="tok-num">2</span>
 </code></pre>
     </div>
     
-<p>Save the changes by pressing Ctrl + O, press Enter, and exit with Ctrl + X.</p>
+<p>Ensure the target mount directory actually exists (for example, <code>mkdir -p /mnt/backup</code>).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="test-and-reboot">
+        <li class="step-item" id="validate-syntax-and-test-mounts-before-rebooting">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="test-and-reboot-heading">Step 4: Test and reboot</h4>
-            <p>Before rebooting blindly, tell the system to check if the syntax of the fstab file is correct:</p>
+            <h4 id="validate-syntax-and-test-mounts-before-rebooting-heading">Step 4: Validate Syntax and Test Mounts Before Rebooting</h4>
+            <p>Always validate <code>/etc/fstab</code> before rebooting so <code>findmnt</code> catches syntax, UUID, or option errors:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -472,37 +644,23 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>findmnt <span class="tok-prop">--verify</span>
+      <pre class="formatted-pre"><code>findmnt <span class="tok-prop">--verify</span> <span class="tok-prop">--verbose</span>
+<span class="tok-kw">systemctl</span> daemon-reload &amp;&amp; <span class="tok-kw">mount</span> <span class="tok-prop">-a</span>
 </code></pre>
     </div>
     
-<p>If the terminal does not output red error lines, you can perform a clean reboot to return to your desktop environment:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">reboot</span>
-</code></pre>
-    </div>
+<p>If <code>findmnt --verify</code> reports zero errors and <code>mount -a</code> exits with status <code>0</code>, reboot safely with <code>systemctl reboot</code>.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="what-if-i-cannot-log-into-emergency-mode-because-the-root-account-is-locked">What if I cannot log into Emergency Mode because the root account is locked?</h3>
+<p>On Ubuntu and some cloud images where the root password is disabled, reboot and press <code>Esc</code> or <code>Shift</code> to open the GRUB menu, press <code>e</code> to edit the kernel line, append <code>systemd.unit=rescue.target</code> or <code>rw init=/bin/bash</code>, and press <code>Ctrl+X</code> to boot directly into a writable shell.</p>
+<h3 id="do-i-need-to-run-systemctl-daemon-reload-after-editing-etcfstab">Do I need to run <code>systemctl daemon-reload</code> after editing <code>/etc/fstab</code>?</h3>
+<p>Yes, if you are testing mounts on a running system. Because <code>systemd-fstab-generator</code> only converts <code>/etc/fstab</code> into <code>.mount</code> units at boot or during a reload, running <code>systemctl daemon-reload</code> ensures <code>systemd</code> picks up your edits immediately.</p>
+<h3 id="what-should-the-5th-dump-and-6th-pass-fields-be-for-secondary-disks">What should the 5th (<code>dump</code>) and 6th (<code>pass</code>) fields be for secondary disks?</h3>
+<p>Set <code>dump</code> to <code>0</code> (the legacy <code>dump</code> backup utility is rarely used). Set <code>pass</code> to <code>1</code> only for the root <code>/</code> filesystem, <code>2</code> for other local Linux filesystems you want <code>fsck</code> to check at boot, and <code>0</code> for swap, network shares (NFS/SMB), or removable drives.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -517,49 +675,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>When adding secondary disks in /etc/fstab, always use the nofail property in the parameters (e.g., defaults,nofail). This way, if the external disk is disconnected or fails, Linux will bypass mounting it and boot normally instead of crashing into emergency mode.</li>
+              <li><strong>Always test with <code>mount -a</code>:</strong> Immediately after editing <code>/etc/fstab</code>, run <code>sudo findmnt --verify &amp;&amp; sudo mount -a</code> before closing your terminal or rebooting.</li>
+<li><strong>Use <code>nofail</code> on non-root disks:</strong> Add <code>nofail,x-systemd.device-timeout=5</code> to secondary, external, or data partitions so a missing drive never blocks boot.</li>
+<li><strong>Back up before editing:</strong> Run <code>sudo cp /etc/fstab /etc/fstab.bak</code> prior to any modification.</li>
+<li><strong>Prefer UUIDs over <code>/dev/sdX</code>:</strong> Kernel device letters (<code>/dev/sdb1</code>) can shift between boots when hardware is added or removed, whereas <code>UUID=</code> stays constant.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -616,7 +737,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NFS</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -650,7 +771,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Proxmox</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

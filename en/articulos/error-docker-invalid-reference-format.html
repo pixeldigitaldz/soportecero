@@ -194,22 +194,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -243,7 +227,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -259,7 +243,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <strong><code>docker: invalid reference format</code></strong> (or <code>invalid reference format: repository name must be lowercase</code>) occurs when executing <code>docker run</code>, <code>docker pull</code>, or <code>docker build</code> commands with malformed quotes, uppercase characters in image names, or invalid volume syntax (<code>-v</code>).</p>
+          <p>The error <code>docker: invalid reference format</code> (or <code>invalid reference format: repository name must be lowercase</code>) aborts <code>docker run</code>, <code>docker pull</code>, <code>docker tag</code>, or <code>docker build</code> before a container is ever created. It means the Docker CLI&#39;s image-reference parser rejected the positional argument it interpreted as the image name—either because the repository name violates OCI naming rules or because a shell syntax mistake shifted a flag value into the image position.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,25 +260,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Syntax error in image name or flags of docker run command</strong></div>
+            <div class="diag-value"><strong>Uppercase letters in image or tag name</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Ensure image tag is lowercase and free of illegal characters</div>
+            <div class="diag-value">Convert repository name to lowercase: <code>mycompany/api:v1</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Unquoted volume mount paths containing spaces</strong></div>
+            <div class="diag-value"><strong>Unquoted spaces in <code>-v</code> volume mount path</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Enclose paths in quotes: <code>-v &quot;/local path:/container path&quot;</code></div>
+            <div class="diag-value">Wrap the entire mount mapping in double quotes: <code>-v &quot;/path with spaces:/app&quot;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Wrong working-directory variable for OS shell</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Use <code>$(pwd)</code> in Bash, <code>&quot;${PWD}&quot;</code> in PowerShell, <code>&quot;%cd%&quot;</code> in CMD</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Trailing space after <code>\</code> in multiline command</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Remove any whitespace after <code>\</code> or join lines into one command</div>
           </div></div></div>
       </div>
     </section>
@@ -335,36 +343,24 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#step-1-use-lowercase-repository-amp-image-names" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Use Lowercase Repository &amp; Image Names</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-2-fix-volume-mounting-syntax-across-os-shells" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Fix Volume Mounting Syntax Across OS Shells</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-3-check-multiline-backslash-escapes" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Check Multiline Backslash Escapes</span>
-            </a>
-          </li>
-        
-        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -372,17 +368,28 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-use-lowercase-repository-amp-image-names">Step 1: Use Lowercase Repository &amp; Image Names</h3>
-<p>Docker strictly enforces lowercase names for image repositories:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>The Docker CLI parses every <code>docker run [OPTIONS] IMAGE [COMMAND]</code> invocation strictly. Everything after the options must begin with a valid OCI image reference matching <code>[registry/][namespace/]repository[:tag|@digest]</code>. Under the OCI Distribution Specification, repository names only allow lowercase ASCII letters, digits, and separators (<code>.</code>, <code>_</code>, <code>-</code>). Any uppercase character immediately fails regex validation.</p>
+<p>More subtly, <code>invalid reference format</code> is often a <strong>shell tokenization bug</strong> rather than an image-naming mistake. For example:</p>
 <ul>
-<li>❌ <strong>Incorrect:</strong> <code>docker run -d MyCompany/Backend:v1</code></li>
-<li>✅ <strong>Correct:</strong> <code>docker run -d mycompany/backend:v1</code></li>
+<li>If a path passed to <code>-v /Users/John Doe/app:/app</code> is unquoted, the shell splits it on the space. <code>-v</code> consumes <code>/Users/John</code>, and the parser treats <code>Doe/app:/app</code> as the <code>IMAGE</code> argument—which fails reference validation because of the uppercase <code>D</code> and colon placement.</li>
+<li>On Windows PowerShell, <code>$(pwd)</code> returns a <code>PathInfo</code> object or fails inside unquoted strings, while copying smart/curly quotes (<code>“</code> <code>”</code>) from a blog or chat tool passes literal Unicode quote characters into the image string.</li>
+<li>In multiline Bash scripts, a single space after a line-continuation backslash (<code>\ </code>) cancels the escape, prematurely terminating <code>docker run</code> and turning the next line&#39;s flags or image into invalid tokens.</li>
 </ul>
-<h3 id="step-2-fix-volume-mounting-syntax-across-os-shells">Step 2: Fix Volume Mounting Syntax Across OS Shells</h3>
-<p>Copying Linux commands directly into Windows shell environments often triggers this error:</p>
-<ul>
-<li><strong>Linux / macOS (Bash / Zsh):</strong>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="1-enforce-lowercase-oci-repository-names">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="1-enforce-lowercase-oci-repository-names-heading">1. Enforce Lowercase OCI Repository Names</h4>
+            <p>Verify that your image repository and namespace contain zero uppercase characters:</p>
+
     <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
@@ -401,7 +408,45 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">-v</span> $(pwd):/app my-image:latest
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Incorrect (fails with invalid reference format)</span>
+<span class="tok-kw">docker</span> build <span class="tok-prop">-t</span> MyOrg/WebApp:Latest .
+<span class="tok-cmt">
+# Correct</span>
+<span class="tok-kw">docker</span> build <span class="tok-prop">-t</span> myorg/webapp:latest .
+</code></pre>
+    </div>
+    
+<p><em>(Note: Tags after the colon technically allow uppercase letters, though lowercase is standard; repository names before the colon strictly forbid uppercase.)</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-use-correct-shell-specific-path-expansion-and-quoting">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-use-correct-shell-specific-path-expansion-and-quoting-heading">2. Use Correct Shell-Specific Path Expansion and Quoting</h4>
+            <p>Always quote bind-mount paths and match the current-directory syntax to your active shell:</p>
+<ul>
+<li><strong>Linux / macOS (Bash or Zsh):</strong>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> <span class="tok-prop">-v</span> <span class="tok-str">&quot;$(pwd):/app&quot;</span> <span class="tok-prop">-w</span> /app <span class="tok-kw">node</span>:<span class="tok-num">22</span>-alpine <span class="tok-kw">node</span> <span class="tok-prop">-v</span>
 </code></pre>
     </div>
     
@@ -425,12 +470,12 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">-v</span> <span class="tok-str">&quot;${PWD}:/app&quot;</span> my-image:latest
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> <span class="tok-prop">-v</span> <span class="tok-str">&quot;${PWD}:/app&quot;</span> <span class="tok-prop">-w</span> /app <span class="tok-kw">node</span>:<span class="tok-num">22</span>-alpine <span class="tok-kw">node</span> <span class="tok-prop">-v</span>
 </code></pre>
     </div>
     
 </li>
-<li><strong>Windows CMD:</strong>
+<li><strong>Windows Command Prompt (CMD):</strong>
     <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
@@ -449,14 +494,46 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">-v</span> <span class="tok-str">&quot;%cd%:/app&quot;</span> my-image:latest
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> <span class="tok-prop">-v</span> <span class="tok-str">&quot;%cd%:/app&quot;</span> <span class="tok-prop">-w</span> /app <span class="tok-kw">node</span>:<span class="tok-num">22</span>-alpine <span class="tok-kw">node</span> <span class="tok-prop">-v</span>
 </code></pre>
     </div>
     
 </li>
 </ul>
-<h3 id="step-3-check-multiline-backslash-escapes">Step 3: Check Multiline Backslash Escapes</h3>
-<p>In multiline shell scripts, trailing whitespace after a backslash <code>\</code> breaks the command:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-inspect-multiline-scripts-for-trailing-whitespace-or-smart-quotes">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-inspect-multiline-scripts-for-trailing-whitespace-or-smart-quotes-heading">3. Inspect Multiline Scripts for Trailing Whitespace or Smart Quotes</h4>
+            <p>If you are running a multiline command from a script or documentation, strip trailing spaces after backslashes and check for non-ASCII quotes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspect invisible spaces after backslashes</span>
+<span class="tok-kw">cat</span> <span class="tok-prop">-A</span> run-container.sh
+</code></pre>
+    </div>
+    
+<p>Any line ending in <code>\ $</code> instead of <code>\$</code> has a trailing space that breaks line continuation. Remove the trailing spaces so every backslash is immediately followed by a newline:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -477,13 +554,56 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run <span class="tok-prop">-d</span> \
-  <span class="tok-prop">--name</span> my-container \
+  <span class="tok-prop">--name</span> app-server \
   <span class="tok-prop">-p</span> <span class="tok-num">8080</span>:<span class="tok-num">80</span> \
+  <span class="tok-prop">-v</span> <span class="tok-str">&quot;${HOME}/data:/data&quot;</span> \
   nginx:alpine
 </code></pre>
     </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-verify-variable-expansion-before-running-docker">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-verify-variable-expansion-before-running-docker-heading">4. Verify Variable Expansion Before Running Docker</h4>
+            <p>When using shell variables like <code>$IMAGE_NAME</code> or <code>$CI_COMMIT_SHA</code>, echo the full command first to ensure no variable is empty:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;docker run --rm ${IMAGE_REPO}:${IMAGE_TAG}&quot;</span>
+</code></pre>
+    </div>
     
-<p>Ensure no spaces follow any trailing <code>\</code> escape character.</p>
+<p>If <code>$IMAGE_REPO</code> is empty, <code>docker run :latest</code> triggers <code>invalid reference format</code>.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why does <code>docker run -v $(pwd):/app</code> fail when my folder name has a space?</strong>
+Without double quotes around <code>&quot;$(pwd):/app&quot;</code>, Bash performs word splitting on the expanded path. Wrapping the entire <code>-v</code> argument in double quotes keeps it as a single token.</p>
+<p><strong>Can <code>docker compose</code> also throw <code>invalid reference format</code>?</strong>
+Yes. In <code>compose.yaml</code>, if an <code>image:</code> field references an unset <code>.env</code> variable like <code>image: ${REGISTRY}/api:${TAG}</code> and <code>REGISTRY</code> is empty, Compose passes <code>/api:</code> to the daemon, triggering the exact same parser error.</p>
+<p><strong>Why did copying a working command from Notion or Slack trigger this error?</strong>
+Rich-text editors often auto-convert straight ASCII quotes (<code>&quot;</code>) into typographic curly quotes (<code>“</code> or <code>”</code>) and hyphens into en-dashes (<code>–</code>). Docker rejects those characters.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -498,49 +618,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Always quote bind mounts (<code>-v &quot;$(pwd):/workspace&quot;</code>) and environment variable expansions (<code>&quot;${IMAGE}:${TAG}&quot;</code>) in shell scripts.</li>
+<li>Enable <code>set -u</code> (<code>nounset</code>) in Bash deployment scripts so unset image or tag variables fail immediately instead of passing malformed references to Docker.</li>
+<li>Move complex <code>docker run</code> invocations with multiple mounts and flags into a <code>compose.yaml</code> file to eliminate shell-escaping differences across macOS, Linux, and Windows.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -597,7 +679,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -631,7 +713,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Certbot</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

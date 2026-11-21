@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Does this warning impact production build output?",
+      "name": "Does Unknown at rule @tailwind affect my production bundle?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. The warning is strictly an IDE linting quirk. PostCSS evaluates and replaces @tailwind directives during compilation without issue."
+        "text": "When it appears only in the VS Code Problems panel, no—it is purely an IDE diagnostic. Your bundler&#39;s PostCSS pipeline still transforms @tailwind and @apply into standard CSS rules."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does @apply fail inside nested SCSS selectors?",
+      "name": "Why did @apply break after upgrading to Tailwind CSS v4?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "PostCSS must run after Sass compilation. Ensure your bundler executes sass-loader before postcss-loader in your asset pipeline."
+        "text": "In Tailwind v4, @tailwind base/components/utilities is replaced by @import &quot;tailwindcss&quot;;, and custom CSS files using @apply inside Vue/Svelte &lt;style&gt; blocks or CSS Modules may require @reference &quot;../app.css&quot;; so Tailwind can resolve theme tokens."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does @apply fail when used inside .scss files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PostCSS must process CSS after Sass compiles nested selectors and variables. Verify your bundler runs sass-loader first and postcss-loader second."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Upon opening <code>globals.css</code> or <code>style.css</code> in projects utilizing Tailwind CSS, Visual Studio Code paints squiggly warnings under <code>@tailwind base;</code>, <code>@apply</code>, and <code>@layer</code> stating: <code>Unknown at rule @tailwind(unknownAtRules)</code> or <code>Unknown at rule @apply</code>. While production builds compile cleanly, these false alarms clutter the editor and distract from actual CSS defects.</p>
+          <p>Opening <code>globals.css</code> or <code>index.css</code> in a Tailwind CSS project inside Visual Studio Code often displays yellow squiggly diagnostics under <code>@tailwind base;</code>, <code>@apply</code>, <code>@layer</code>, or Tailwind v4&#39;s <code>@import &quot;tailwindcss&quot;;</code> / <code>@theme</code>: <code>Unknown at rule @tailwind (unknownAtRules)</code>. Even though Vite, Next.js, or PostCSS compiles your stylesheet cleanly, VS Code&#39;s built-in CSS validator flags Tailwind&#39;s custom directives as invalid CSS.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>VS Code built-in standard CSS language server does not recognize custom Tailwind @-rules</strong></div>
+            <div class="diag-value"><strong>VS Code built-in CSS linter</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>Unknown at rule @tailwind</code> / <code>@apply</code> in Problems tab</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Install the official Tailwind CSS IntelliSense extension and map file associations</div>
+            <div class="diag-value">Install Tailwind CSS IntelliSense &amp; map <code>*.css</code> to <code>tailwindcss</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Default CSS linter settings flagging valid preprocessor at-rules as syntax errors</strong></div>
+            <div class="diag-value"><strong>Missing <code>css.lint.unknownAtRules</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Warnings persist in <code>.scss</code> or non-Tailwind CSS files</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Configure css.lint.unknownAtRules to &quot;ignore&quot; inside VS Code settings.json</div>
+            <div class="diag-value">Set <code>&quot;css.lint.unknownAtRules&quot;: &quot;ignore&quot;</code> in <code>settings.json</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>PostCSS pipeline missing Tailwind</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Actual build error: <code>SyntaxError: Unknown word</code> or uncompiled <code>@tailwind</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Register <code>@tailwindcss/postcss</code> or <code>tailwindcss</code> in <code>postcss.config.js</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>SCSS running after PostCSS</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>@apply</code> fails inside nested Sass selectors</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Ensure <code>sass-loader</code> executes before <code>postcss-loader</code></div>
           </div></div></div>
       </div>
     </section>
@@ -359,57 +399,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#step-1-suppress-unknown-at-rule-warnings-in-vs-code-settings" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Suppress Unknown At-Rule Warnings in VS Code Settings</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-2-install-tailwind-css-intellisense-extension" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Install Tailwind CSS IntelliSense Extension</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-3-map-css-file-associations-to-tailwind-mode" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Map CSS File Associations to Tailwind Mode</span>
-            </a>
-          </li>
-        
-        </ul>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#does-this-warning-impact-production-build-output" class="toc-sublink">
+            <a href="#does-unknown-at-rule-tailwind-affect-my-production-bundle" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Does this warning impact production build output?</span>
+              <span class="toc-subtext">Does Unknown at rule @tailwind affect my production bundle?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#why-does-apply-fail-inside-nested-scss-selectors" class="toc-sublink">
+            <a href="#why-did-apply-break-after-upgrading-to-tailwind-css-v4" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does @apply fail inside nested SCSS selectors?</span>
+              <span class="toc-subtext">Why did @apply break after upgrading to Tailwind CSS v4?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-apply-fail-when-used-inside-scss-files" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does @apply fail when used inside .scss files?</span>
             </a>
           </li>
         
@@ -421,76 +450,22 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Visual Studio Code ships with <code>vscode-css-languageservice</code>, a built-in language server that parses <code>.css</code> files strictly against the W3C CSS specification. Standard CSS only defines a fixed set of at-rules (<code>@media</code>, <code>@import</code>, <code>@keyframes</code>, <code>@layer</code>, <code>@supports</code>). Directives such as <code>@tailwind</code>, <code>@apply</code>, <code>@screen</code>, <code>@theme</code>, and <code>@utility</code> are <strong>compile-time preprocessor directives</strong> consumed by PostCSS (Tailwind v3) or Tailwind&#39;s Oxide engine / <code>@tailwindcss/postcss</code> (Tailwind v4) during bundling—not native browser CSS.</p>
+<p>Because the default language server has no knowledge of your <code>postcss.config.js</code> or Tailwind plugin, it emits <code>unknownAtRules</code> warnings in the editor. Note that if you see <code>@tailwind</code> or <code>@apply</code> failing <em>during <code>npm run build</code></em> rather than just in the editor, the root cause is a missing or misordered PostCSS configuration rather than a VS Code setting.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           Step-by-Step Technical Implementation
         </h2>
-
-<h3 id="step-1-suppress-unknown-at-rule-warnings-in-vs-code-settings">Step 1: Suppress Unknown At-Rule Warnings in VS Code Settings</h3>
-<p>Instruct the built-in language server to disregard custom directives:</p>
 <ol class="steps-list">
 
-        <li class="step-item" id="step-1">
+        <li class="step-item" id="install-tailwind-css-intellisense-and-associate-css-files">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Press <code>Ctrl + Shift + P</code> (<code>Cmd + Shift + P</code> on macOS).
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            Select <strong>Preferences: Open User Settings (JSON)</strong>.
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-3">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="step-3-heading">Step 3</h4>
-            Append these properties to your <code>settings.json</code>:
-          </div>
-        </li>
-        
-</ol>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">JSON</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>{
-  <span class="tok-str">&quot;css.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>,
-  <span class="tok-str">&quot;scss.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>,
-  <span class="tok-str">&quot;less.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>
-}
-</code></pre>
-    </div>
-    
-<h3 id="step-2-install-tailwind-css-intellisense-extension">Step 2: Install Tailwind CSS IntelliSense Extension</h3>
-<p>Install the verified <strong>Tailwind CSS IntelliSense</strong> extension from the Visual Studio Code marketplace.
-This extension equips the editor with autocomplete tooltips, linting for utility classes, and native recognition of <code>@tailwind</code>, <code>@config</code>, and <code>@apply</code> syntax.</p>
-<h3 id="step-3-map-css-file-associations-to-tailwind-mode">Step 3: Map CSS File Associations to Tailwind Mode</h3>
-<p>Assign <code>.css</code> files to Tailwind&#39;s grammar parser rather than the generic browser CSS validator:</p>
+            <h4 id="install-tailwind-css-intellisense-and-associate-css-files-heading">Step 1: Install Tailwind CSS IntelliSense and Associate .css Files</h4>
+            <p>Install the official <strong>Tailwind CSS IntelliSense</strong> extension (<code>bradlc.vscode-tailwindcss</code>) from the VS Code Marketplace. Then open <code>.vscode/settings.json</code> in your project root (or User Settings JSON via <code>Ctrl+Shift+P</code> -&gt; <code>Preferences: Open User Settings (JSON)</code>) and associate <code>.css</code> files with the <code>tailwindcss</code> language mode:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -518,52 +493,128 @@ This extension equips the editor with autocomplete tooltips, linting for utility
 </code></pre>
     </div>
     
-<p>This replaces the legacy CSS scanner with full Tailwind-native AST understanding.</p>
+<p>This hands <code>.css</code> parsing directly to Tailwind&#39;s language server, removing false <code>unknownAtRules</code> warnings while enabling utility class autocomplete and hover previews.</p>
+          </div>
+        </li>
+        
 
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+        <li class="step-item" id="suppress-linter-warnings-for-scss-legacy-stylesheets">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="suppress-linter-warnings-for-scss-legacy-stylesheets-heading">Step 2: Suppress Linter Warnings for SCSS / Legacy Stylesheets</h4>
+            <p>If your project also uses <code>.scss</code> or <code>.less</code> files where <code>files.associations</code> cannot be switched to <code>tailwindcss</code>, silence the built-in validator&#39;s unknown at-rule check:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JSON</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>{
+  <span class="tok-str">&quot;css.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>,
+  <span class="tok-str">&quot;scss.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>,
+  <span class="tok-str">&quot;less.lint.unknownAtRules&quot;</span>: <span class="tok-str">&quot;ignore&quot;</span>
+}
+</code></pre>
     </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-postcss-configuration-if-production-build-also-fails">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="verify-postcss-configuration-if-production-build-also-fails-heading">Step 3: Verify PostCSS Configuration (If Production Build Also Fails)</h4>
+            <p>If your bundler outputs raw <code>@tailwind</code> or throws a PostCSS build error, confirm <code>postcss.config.mjs</code> (or <code>.js</code>) registers Tailwind properly:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
         </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt">// Tailwind v3 (postcss.config.js)</span>
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+<span class="tok-cmt">
+// Tailwind v4 (postcss.config.mjs)</span>
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> {
+  plugins: {
+    <span class="tok-str">&quot;@tailwindcss/postcss&quot;</span>: {},
+  },
+};
+</code></pre>
     </div>
-  </section>
-  
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-clean-build-and-zero-editor-diagnostics">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-clean-build-and-zero-editor-diagnostics-heading">Step 4: Verify Clean Build and Zero Editor Diagnostics</h4>
+            <p>Restart the Tailwind CSS language server (<code>Ctrl+Shift+P</code> -&gt; <code>Tailwind CSS: Restart Language Server</code>) and run your production build to verify zero PostCSS errors:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> run build
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="does-this-warning-impact-production-build-output">Does this warning impact production build output?</h3>
-<p>No. The warning is strictly an IDE linting quirk. PostCSS evaluates and replaces <code>@tailwind</code> directives during compilation without issue.</p>
-<h3 id="why-does-apply-fail-inside-nested-scss-selectors">Why does @apply fail inside nested SCSS selectors?</h3>
-<p>PostCSS must run after Sass compilation. Ensure your bundler executes sass-loader before postcss-loader in your asset pipeline.</p>
+<h3 id="does-unknown-at-rule-tailwind-affect-my-production-bundle">Does <code>Unknown at rule @tailwind</code> affect my production bundle?</h3>
+<p>When it appears only in the VS Code Problems panel, no—it is purely an IDE diagnostic. Your bundler&#39;s PostCSS pipeline still transforms <code>@tailwind</code> and <code>@apply</code> into standard CSS rules.</p>
+<h3 id="why-did-apply-break-after-upgrading-to-tailwind-css-v4">Why did <code>@apply</code> break after upgrading to Tailwind CSS v4?</h3>
+<p>In Tailwind v4, <code>@tailwind base/components/utilities</code> is replaced by <code>@import &quot;tailwindcss&quot;;</code>, and custom CSS files using <code>@apply</code> inside Vue/Svelte <code>&lt;style&gt;</code> blocks or CSS Modules may require <code>@reference &quot;../app.css&quot;;</code> so Tailwind can resolve theme tokens.</p>
+<h3 id="why-does-apply-fail-when-used-inside-scss-files">Why does <code>@apply</code> fail when used inside <code>.scss</code> files?</h3>
+<p>PostCSS must process CSS <em>after</em> Sass compiles nested selectors and variables. Verify your bundler runs <code>sass-loader</code> first and <code>postcss-loader</code> second.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -578,50 +629,12 @@ This extension equips the editor with autocomplete tooltips, linting for utility
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Commit a workspace <code>.vscode/settings.json</code> file to enforce uniform developer experience across team repositories.</li>
-<li>Verify <code>postcss.config.js</code> declares <code>tailwindcss</code> and <code>autoprefixer</code> in project root.</li>
+              <li>Commit a shared <code>.vscode/settings.json</code> and <code>.vscode/extensions.json</code> (recommending <code>bradlc.vscode-tailwindcss</code>) so every contributor gets identical editor support.</li>
+<li>Use <code>files.associations: { &quot;*.css&quot;: &quot;tailwindcss&quot; }</code> rather than disabling all CSS linting globally whenever possible, so genuine CSS syntax errors are still caught.</li>
+<li>Keep <code>postcss.config.mjs</code> in the project root and avoid duplicating conflicting PostCSS configs in subdirectories.</li>
+<li>Run <code>npm run build</code> in CI on every pull request to catch genuine PostCSS or <code>@apply</code> resolution errors early.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -678,7 +691,7 @@ This extension equips the editor with autocomplete tooltips, linting for utility
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">npm</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -712,7 +725,7 @@ This extension equips the editor with autocomplete tooltips, linting for utility
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Vite</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

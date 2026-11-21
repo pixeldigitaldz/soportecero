@@ -137,18 +137,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does Pacman retain all downloaded tarballs?",
+      "name": "Will deleting /var/cache/pacman/pkg/ break currently installed programs?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "To allow instant offline package downgrades (pacman -U /var/cache/pacman/pkg/pkgname-old.pkg.tar.zst) if an upstream package update introduces regressions."
+        "text": "No. Installed binaries, libraries, and configuration files live in /usr/, /etc/, and /var/lib/pacman/local/. The /var/cache/pacman/pkg/ directory only stores compressed installation archives."
       }
     },
     {
       "@type": "Question",
-      "name": "Is paccache.timer safe for production machines?",
+      "name": "Why shouldn&#39;t I run rm -rf /var/cache/pacman/pkg/* directly?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The service runs weekly in the background, keeping the 3 most recent package versions intact for stability."
+        "text": "Deleting everything manually removes any fallback .pkg.tar.zst files needed for recovery and can also delete download-* temporary directories if a pacman lock is active. Using paccache -rk2 or pacman -Scc is safer and respects pacman&#39;s directory structure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does paccache clean /var/lib/pacman/sync/?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. /var/lib/pacman/sync/ holds repository metadata databases (.db files), which are small (typically under 100 MB) and required for pacman -Ss searches."
       }
     }
   ]
@@ -220,22 +228,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -285,7 +277,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>In CachyOS and Arch Linux environments, the Pacman package manager never automatically purges downloaded <code>.pkg.tar.zst</code> archive binaries from <code>/var/cache/pacman/pkg/</code>. Over time, this directory routinely swells to 20GB-50GB, triggering low storage warnings on root partitions.</p>
+          <p>In CachyOS, Arch Linux, and EndeavourOS, <code>pacman</code> downloads compressed <code>.pkg.tar.zst</code> archives and their <code>.sig</code> signatures into <code>/var/cache/pacman/pkg/</code> during every <code>pacman -Syu</code> upgrade, but it never deletes old revisions automatically. On an active rolling-release workstation, this cache routinely balloons to 25 GB–60 GB and can fill the root (<code>/</code>) partition, causing failed kernel upgrades or broken initramfs generation.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -302,25 +294,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>/var/lib/pacman and /var/cache/pacman/pkg directories accumulating dozens of package revisions</strong></div>
+            <div class="diag-value"><strong><code>/var/cache/pacman/pkg/</code> consuming tens of gigabytes</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Prune obsolete package tarballs while retaining the latest 2 versions via <code>sudo paccache -r</code></div>
+            <div class="diag-value">Keep last 2 versions with <code>sudo paccache -rk2</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>AUR build cache bloating user directories (~/.cache/yay or ~/.cache/paru)</strong></div>
+            <div class="diag-value"><strong>Removed packages still sitting in cache</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Clean AUR cache using <code>yay -Sc --aur</code> or purge <code>~/.cache/yay</code></div>
+            <div class="diag-value">Purge uninstalled tarballs via <code>sudo paccache -ruk0</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>AUR helpers (<code>paru</code> / <code>yay</code>) hoarding Git &amp; build artifacts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Clear <code>~/.cache/paru/clone</code> or <code>~/.cache/yay</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Partial <code>.part</code> downloads blocking disk space</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Delete incomplete downloads with <code>sudo rm -f /var/cache/pacman/pkg/*.part</code></div>
           </div></div></div>
       </div>
     </section>
@@ -361,31 +377,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions-faq" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-pacman-retain-all-downloaded-tarballs" class="toc-sublink">
+            <a href="#will-deleting-varcachepacmanpkg-break-currently-installed-programs" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does Pacman retain all downloaded tarballs?</span>
+              <span class="toc-subtext">Will deleting /var/cache/pacman/pkg/ break currently installed programs?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#is-paccachetimer-safe-for-production-machines" class="toc-sublink">
+            <a href="#why-shouldn39t-i-run-rm-rf-varcachepacmanpkg-directly" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Is paccache.timer safe for production machines?</span>
+              <span class="toc-subtext">Why shouldn&#39;t I run rm -rf /var/cache/pacman/pkg/* directly?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#does-paccache-clean-varlibpacmansync" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Does paccache clean /var/lib/pacman/sync/?</span>
             </a>
           </li>
         
@@ -397,6 +428,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Pacman retains every historical package tarball intentionally so you can perform an offline downgrade (<code>sudo pacman -U /var/cache/pacman/pkg/&lt;pkg&gt;-&lt;oldver&gt;.pkg.tar.zst</code>) if a rolling update breaks a GPU driver, Mesa build, or bootloader.</p>
+<p>Unlike <code>apt</code> or <code>dnf</code>, which often purge intermediate package archives by default, Arch-based distributions delegate cache retention to the administrator. CachyOS compounds cache growth slightly faster than vanilla Arch because it ships architecture-optimized repositories (<code>cachyos-v3</code>, <code>cachyos-v4</code>, <code>cachyos-znver4</code>) alongside frequent kernel (<code>linux-cachyos</code>) and compiler updates. Additionally, AUR helpers like <code>paru</code> (default on CachyOS) and <code>yay</code> clone full Git repositories and compile Rust/C++ targets inside <code>~/.cache/</code>, which <code>pacman</code> commands never touch.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -405,11 +439,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="measure-current-pacman-cache-footprint">
+        <li class="step-item" id="1-measure-current-cache-and-root-partition-usage">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="measure-current-pacman-cache-footprint-heading">Step 1: Measure Current Pacman Cache Footprint</h4>
-            <p>Evaluate exact disk utilization:</p>
+            <h4 id="1-measure-current-cache-and-root-partition-usage-heading">1. Measure Current Cache and Root Partition Usage</h4>
+            <p>Check available root space and inspect the exact footprint of both the system cache and your AUR cache:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,19 +463,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspect storage footprint of the Pacman cache</span>
-du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</span>/pkg/
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-h</span> /
+<span class="tok-kw">sudo</span> du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</span>/pkg/
+du <span class="tok-prop">-sh</span> ~/.cache/paru/ ~/.cache/yay/ <span class="tok-num">2</span>&gt;/dev/null
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="prune-obsolete-versions-safely-using-paccache">
+        <li class="step-item" id="2-prune-old-versions-safely-with-paccache">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="prune-obsolete-versions-safely-using-paccache-heading">Step 2: Prune Obsolete Versions Safely Using paccache</h4>
-            <p>The official <code>paccache</code> utility (from <code>pacman-contrib</code>) clears obsolete revisions while preserving safety rollbacks:</p>
+            <h4 id="2-prune-old-versions-safely-with-paccache-heading">2. Prune Old Versions Safely with paccache</h4>
+            <p>Install <code>pacman-contrib</code> (if not already present) and use <code>paccache</code> so you always retain the two most recent versions of installed packages for emergency rollbacks:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -461,25 +496,17 @@ du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</spa
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Ensure pacman-contrib is installed</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> <span class="tok-kw">pacman</span>-contrib <span class="tok-prop">--noconfirm</span>
-<span class="tok-cmt">
-# 2. Retain only the 2 most recent package versions</span>
-<span class="tok-kw">sudo</span> paccache <span class="tok-prop">-r</span> <span class="tok-prop">-k</span> <span class="tok-num">2</span>
-<span class="tok-cmt">
-# 3. Purge cached files for uninstalled packages</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> <span class="tok-prop">--needed</span> <span class="tok-kw">pacman</span>-contrib
+<span class="tok-kw">sudo</span> paccache <span class="tok-prop">-rk2</span>
 <span class="tok-kw">sudo</span> paccache <span class="tok-prop">-ruk0</span>
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="comprehensive-cache-flush-for-emergency-space-reclamation">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="comprehensive-cache-flush-for-emergency-space-reclamation-heading">Step 3: Comprehensive Cache Flush (For Emergency Space Reclamation)</h4>
-            <p>When immediate disk recovery is mandatory:</p>
+    
+<ul>
+<li><code>-rk2</code> removes all cached versions except the latest 2 for currently installed packages.</li>
+<li><code>-ruk0</code> removes all cached versions of packages that are no longer installed on the system.</li>
+</ul>
+<p>Verify how much space was reclaimed:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -499,22 +526,18 @@ du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</spa
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Purge uninstalled package archives</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-Sc</span> <span class="tok-prop">--noconfirm</span>
-<span class="tok-cmt">
-# Purge ALL cached archives completely</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-Scc</span> <span class="tok-prop">--noconfirm</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</span>/pkg/
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="clear-aur-build-repositories-yay-paru">
-          <div class="step-number">4</div>
+        <li class="step-item" id="3-clean-aur-helper-build-caches-paru-yay">
+          <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="clear-aur-build-repositories-yay-paru-heading">Step 4: Clear AUR Build Repositories (Yay / Paru)</h4>
-            <p>AUR helpers compile binaries inside user home directories:</p>
+            <h4 id="3-clean-aur-helper-build-caches-paru-yay-heading">3. Clean AUR Helper Build Caches (paru / yay)</h4>
+            <p>If you use <code>paru</code> (standard in CachyOS) or <code>yay</code>, prune stale source clones and compiled <code>.pkg.tar.zst</code> artifacts from your home directory:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -534,63 +557,113 @@ du <span class="tok-prop">-sh</span> /var/cache/<span class="tok-kw">pacman</spa
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># If using Yay:</span>
-yay <span class="tok-prop">-Sc</span> <span class="tok-prop">--aur</span> <span class="tok-prop">--noconfirm</span>
-<span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> ~/.cache/yay/*
+      <pre class="formatted-pre"><code><span class="tok-cmt"># For Paru users:</span>
+paru <span class="tok-prop">-Sc</span>
 <span class="tok-cmt">
-# If using Paru:</span>
-paru <span class="tok-prop">-Scc</span> <span class="tok-prop">--noconfirm</span>
+# For Yay users:</span>
+yay <span class="tok-prop">-Sc</span> <span class="tok-prop">--aur</span>
+</code></pre>
+    </div>
+    
+<p>If <code>du -sh ~/.cache/paru/clone</code> still shows several gigabytes of orphaned Git repositories (common with <code>-git</code> AUR packages), remove the clone directory safely:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> ~/.cache/paru/clone/*
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-emergency-full-cache-flush-low-disk-recovery">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-emergency-full-cache-flush-low-disk-recovery-heading">4. Emergency Full Cache Flush (Low-Disk Recovery)</h4>
+            <p>Only if your root filesystem is at 99%–100% capacity and <code>paccache -rk2</code> is not enough, purge all cached packages completely:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-Scc</span>
+</code></pre>
+    </div>
+    
+<p>Confirm with <code>y</code> when prompted. Note that afterward, offline downgrades will require re-downloading from mirrors or the Arch Linux Archive.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="5-automate-weekly-pruning-with-paccachetimer">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="5-automate-weekly-pruning-with-paccachetimer-heading">5. Automate Weekly Pruning with paccache.timer</h4>
+            <p>Enable the built-in systemd timer so <code>paccache</code> runs automatically every week (retaining 3 versions by default):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> enable <span class="tok-prop">--now</span> paccache.timer
+<span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> paccache.timer
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
-<h3 id="why-does-pacman-retain-all-downloaded-tarballs">Why does Pacman retain all downloaded tarballs?</h3>
-<p>To allow instant offline package downgrades (<code>pacman -U /var/cache/pacman/pkg/pkgname-old.pkg.tar.zst</code>) if an upstream package update introduces regressions.</p>
-<h3 id="is-paccachetimer-safe-for-production-machines">Is paccache.timer safe for production machines?</h3>
-<p>Yes. The service runs weekly in the background, keeping the 3 most recent package versions intact for stability.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="will-deleting-varcachepacmanpkg-break-currently-installed-programs">Will deleting <code>/var/cache/pacman/pkg/</code> break currently installed programs?</h3>
+<p>No. Installed binaries, libraries, and configuration files live in <code>/usr/</code>, <code>/etc/</code>, and <code>/var/lib/pacman/local/</code>. The <code>/var/cache/pacman/pkg/</code> directory only stores compressed installation archives.</p>
+<h3 id="why-shouldn39t-i-run-rm-rf-varcachepacmanpkg-directly">Why shouldn&#39;t I run <code>rm -rf /var/cache/pacman/pkg/*</code> directly?</h3>
+<p>Deleting everything manually removes any fallback <code>.pkg.tar.zst</code> files needed for recovery and can also delete <code>download-*</code> temporary directories if a pacman lock is active. Using <code>paccache -rk2</code> or <code>pacman -Scc</code> is safer and respects pacman&#39;s directory structure.</p>
+<h3 id="does-paccache-clean-varlibpacmansync">Does <code>paccache</code> clean <code>/var/lib/pacman/sync/</code>?</h3>
+<p>No. <code>/var/lib/pacman/sync/</code> holds repository metadata databases (<code>.db</code> files), which are small (typically under 100 MB) and required for <code>pacman -Ss</code> searches.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -605,50 +678,12 @@ paru <span class="tok-prop">-Scc</span> <span class="tok-prop">--noconfirm</span
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Enable automated systemd cache cleanup:</strong> Activate the built-in systemd timer for automated weekly pruning:</li>
-<li><strong>Prune orphaned dependencies regularly:</strong> Remove detached packages via <code>sudo pacman -Rns $(pacman -Qtdq)</code>.</li>
+              <li><strong>Keep <code>paccache.timer</code> active:</strong> Weekly automated pruning prevents multi-gigabyte surprises without losing rollback protection.</li>
+<li><strong>Remove orphaned dependencies:</strong> Periodically run <code>pacman -Qtdq</code> to list unneeded build/runtime dependencies and remove them with <code>sudo pacman -Rns $(pacman -Qtdq)</code>.</li>
+<li><strong>Use a Pacman hook for automatic cleanup:</strong> Drop a <code>/etc/pacman.d/hooks/clean_package_cache.hook</code> file to trigger <code>/usr/bin/paccache -rk2</code> after every <code>Upgrade</code> or <code>Remove</code> transaction.</li>
+<li><strong>Watch <code>/boot</code> separately:</strong> If you use <code>systemd-boot</code> on CachyOS, old kernels do not live in <code>/var/cache/pacman/pkg/</code>—they are managed by <code>mkinitcpio</code> and <code>sdboot-manage</code>.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -694,6 +729,40 @@ paru <span class="tok-prop">-Scc</span> <span class="tok-prop">--noconfirm</span
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Cloudflare Error 522 Connection Timed Out in Nginx and UFW -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cloudflare Error 522 Connection Timed Out in Nginx and UFW</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Cloudflare</span>
+            <span>Read Time: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: How to Fix Linux OOM Killer and Systemd Out of Memory Crashes -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-systemd-oom-killer-memory-leak-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Linux OOM Killer and Systemd Out of Memory Crashes</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Fix Next.js Error ReferenceError: document is not defined (App Router & SSR) -->
       <article class="related-card">
         <div class="related-card-content">
@@ -705,40 +774,6 @@ paru <span class="tok-prop">-Scc</span> <span class="tok-prop">--noconfirm</span
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
-            <span>Read Time: 4 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Fix Nvidia NVML Error: Driver/library version mismatch in Linux -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nvidia-nvml-driver-library-version-mismatch.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Nvidia NVML Error: Driver/library version mismatch in Linux</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Nvidia</span>
-            <span>Read Time: 5 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Docker Error 'failed to solve: process did not complete successfully' -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Docker Error 'failed to solve: process did not complete successfully'</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Docker</span>
             <span>Read Time: 4 min</span>
           </div>
         </div>

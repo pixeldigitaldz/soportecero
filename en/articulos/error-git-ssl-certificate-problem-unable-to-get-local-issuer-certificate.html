@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why is http.sslVerify false dangerous?",
+      "name": "Why should I never fix this with git config --global http.sslVerify false?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Disabling verification turns off certificate authentication completely, allowing rogue actors on local networks to intercept private code and OAuth tokens."
+        "text": "Setting http.sslVerify false disables certificate verification globally, exposing your Git credentials, Personal Access Tokens, and source code to trivial man-in-the-middle interception on untrusted Wi-Fi or compromised networks."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I migrate an existing HTTPS repo to SSH?",
+      "name": "Can I trust a self-signed certificate for just one internal repository?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Run git remote set-url origin git@github.com:user/repo.git after uploading your public key (~/.ssh/id_ed25519.pub) to your Git host."
+        "text": "Yes. Scope http.sslCAInfo to a single repository or URL prefix rather than globally: git config --global http.&quot;https://git.internal.corp/&quot;.sslCAInfo /path/to/internal-ca.crt."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I bypass HTTPS certificate issues permanently by switching to SSH?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Generate an Ed25519 key (ssh-keygen -t ed25519), add the public key to your Git host, and update the remote: git remote set-url origin git@github.com:org/repo.git."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When running <code>git clone</code>, <code>git fetch</code>, or <code>git push</code> against remote endpoints (GitHub, GitLab, Bitbucket), Git frequently halts with: <code>fatal: unable to access &quot;https://...&quot;: SSL certificate problem: unable to get local issuer certificate</code>. This security exception indicates that the underlying cURL transport library inside Git cannot verify the remote certificate against trusted local root authorities.</p>
+          <p>Running <code>git clone</code>, <code>git fetch</code>, or <code>git push</code> against HTTPS remotes such as GitHub, GitLab, or an internal enterprise server can fail abruptly with <code>fatal: unable to access &quot;https://...&quot;: SSL certificate problem: unable to get local issuer certificate</code>. This TLS verification error means Git&#39;s underlying HTTP transport library (<code>libcurl</code> or Schannel) could not build a valid trust chain from the remote server&#39;s leaf certificate up to a trusted root Certificate Authority (CA) on your machine.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Local Git CA bundle is missing, corrupted, or out of sync with upstream certificate chains</strong></div>
+            <div class="diag-value"><strong>Corporate proxy / VPN SSL inspection</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Fails on all HTTPS repos inside company network</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Reinstall system ca-certificates and link path using git config --global http.sslCAInfo</div>
+            <div class="diag-value">Export corporate root CA PEM and set <code>http.sslCAInfo</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Corporate proxy, enterprise VPN, or antivirus performing SSL man-in-the-middle decryption</strong></div>
+            <div class="diag-value"><strong>Outdated or missing system CA bundle</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Fails after OS install or container minimal image</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Import corporate root certificate into Git configuration using http.sslCAInfo</div>
+            <div class="diag-value">Reinstall <code>ca-certificates</code> and run <code>update-ca-certificates</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Self-hosted Git server missing intermediate</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Works in browser, fails in <code>git</code> CLI</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Fix server chain or append intermediate CA to trust bundle</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Windows Schannel vs OpenSSL mismatch</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Fails in Git for Windows behind enterprise proxy</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Switch <code>http.sslBackend</code> to <code>schannel</code> or point <code>sslCAInfo</code></div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +399,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-is-httpsslverify-false-dangerous" class="toc-sublink">
+            <a href="#why-should-i-never-fix-this-with-git-config-global-httpsslverify-false" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why is http.sslVerify false dangerous?</span>
+              <span class="toc-subtext">Why should I never fix this with git config --global http.sslVerify false?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#how-do-i-migrate-an-existing-https-repo-to-ssh" class="toc-sublink">
+            <a href="#can-i-trust-a-self-signed-certificate-for-just-one-internal-repository" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How do I migrate an existing HTTPS repo to SSH?</span>
+              <span class="toc-subtext">Can I trust a self-signed certificate for just one internal repository?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#how-do-i-bypass-https-certificate-issues-permanently-by-switching-to-ssh" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">How do I bypass HTTPS certificate issues permanently by switching to SSH?</span>
             </a>
           </li>
         
@@ -395,6 +450,14 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During a <code>git</code> HTTPS operation, Git delegates the TLS handshake to <code>libcurl</code>, which validates the server&#39;s X.509 certificate chain against a local CA bundle (such as <code>/etc/ssl/certs/ca-certificates.crt</code> on Debian/Ubuntu or <code>ca-bundle.crt</code> on RHEL/Git for Windows).</p>
+<p><code>unable to get local issuer certificate</code> (OpenSSL error code 20) occurs in three distinct scenarios:</p>
+<ol>
+<li><strong>TLS Interception (MITM Proxy):</strong> Enterprise firewalls like Zscaler, Palo Alto, or Netskope terminate outbound HTTPS connections and re-sign them using an internal corporate root CA. While browsers often trust this root via OS or group policy stores, <code>libcurl</code> inside Git only checks its configured PEM bundle unless explicitly told otherwise.</li>
+<li><strong>Incomplete Server Certificate Chain:</strong> A self-hosted GitLab or Gitea instance serves only its leaf certificate without the intermediate CA certificate. Browsers may fetch intermediates via AIA, whereas <code>libcurl</code> strictly rejects incomplete chains.</li>
+<li><strong>Stale or Stripped CA Store:</strong> Minimal Docker images (<code>alpine</code>, <code>debian-slim</code>) or isolated Snap/Flatpak Git builds ship without updated root certificates.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +466,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="refresh-operating-system-certificate-authorities">
+        <li class="step-item" id="inspect-the-remote-certificate-chain-with-openssl">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="refresh-operating-system-certificate-authorities-heading">Step 1: Refresh Operating System Certificate Authorities</h4>
-            <p>Expired intermediate CA certs cause immediate rejection of modern TLS handshakes. Refresh your system bundle:</p>
+            <h4 id="inspect-the-remote-certificate-chain-with-openssl-heading">Step 1: Inspect the Remote Certificate Chain with OpenSSL</h4>
+            <p>Identify which CA is signing the connection before changing any Git settings:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,25 +490,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># On Debian / Ubuntu</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">--reinstall</span> ca-certificates
-<span class="tok-kw">sudo</span> update-ca-certificates
-<span class="tok-cmt">
-# On RHEL / Fedora</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">dnf</span> reinstall ca-certificates
-<span class="tok-kw">sudo</span> update-ca-trust
+      <pre class="formatted-pre"><code>openssl s_client <span class="tok-prop">-showcerts</span> <span class="tok-prop">-connect</span> github.com:<span class="tok-num">443</span> &lt;/dev/null <span class="tok-num">2</span>&gt;/dev/null | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;s:|i:&quot;</span>
 </code></pre>
     </div>
+    
+<p>If the issuer (<code>i:</code>) shows your company proxy or firewall vendor rather than DigiCert/Let&#39;s Encrypt, you need to trust your corporate root CA.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-explicit-ca-bundle-location-in-git">
+        <li class="step-item" id="refresh-operating-system-ca-certificates">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="configure-explicit-ca-bundle-location-in-git-heading">Step 2: Configure Explicit CA Bundle Location in Git</h4>
-            <p>Isolated Git installs (Flatpak, Snap, custom toolchains) may fail to discover default system stores. Set path explicitly:</p>
+            <h4 id="refresh-operating-system-ca-certificates-heading">Step 2: Refresh Operating System CA Certificates</h4>
+            <p>On Linux servers or containers, reinstall and rebuild the system trust store:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -466,26 +524,22 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-cmt"># Debian / Ubuntu</span>
-<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">--reinstall</span> <span class="tok-prop">-y</span> ca-certificates
+<span class="tok-kw">sudo</span> update-ca-certificates
 <span class="tok-cmt">
-# RHEL / CentOS</span>
-<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /etc/pki/tls/certs/ca-bundle.crt
-<span class="tok-cmt">
-# Windows (Git for Windows standard path)</span>
-<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo <span class="tok-str">&quot;C:/Program Files/Git/mingw64/etc/ssl/certs/ca-bundle.crt&quot;</span>
+# RHEL / Fedora / Rocky Linux</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">dnf</span> reinstall <span class="tok-prop">-y</span> ca-certificates &amp;&amp; <span class="tok-kw">sudo</span> update-ca-trust
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="resolve-corporate-proxy-vpn-ssl-interception">
+        <li class="step-item" id="point-git-to-the-explicit-ca-bundle-or-corporate-root">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="resolve-corporate-proxy-vpn-ssl-interception-heading">Step 3: Resolve Corporate Proxy / VPN SSL Interception</h4>
-            <p>Enterprise security appliances (Zscaler, Fortinet) decrypt HTTPS traffic using private root certs.
-<strong>Never disable verification with <code>git config --global http.sslVerify false</code></strong>, which invites MITM credential theft.
-Instead, export your organization&#39;s internal root certificate in PEM format and instruct Git to trust it:</p>
+            <h4 id="point-git-to-the-explicit-ca-bundle-or-corporate-root-heading">Step 3: Point Git to the Explicit CA Bundle or Corporate Root</h4>
+            <p><strong>On Linux / macOS:</strong> Append your organization&#39;s Base64-encoded <code>.crt</code>/<code>.pem</code> root certificate to a combined bundle (or reference the system bundle) and configure <code>http.sslCAInfo</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -505,58 +559,102 @@ Instead, export your organization&#39;s internal root certificate in PEM format 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /path/to/corporate-root.crt
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
+</code></pre>
+    </div>
+    
+<p>If using a corporate proxy certificate, combine the system CA bundle and your corporate root so both public and internal repos validate:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> /etc/ssl/certs/ca-certificates.crt /path/to/corporate-root.crt &gt; ~/.<span class="tok-kw">git</span>-ca-bundle.pem
+<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo ~/.<span class="tok-kw">git</span>-ca-bundle.pem
+</code></pre>
+    </div>
+    
+<p><strong>On Windows (Git for Windows):</strong> Switch Git&#39;s TLS backend to Windows native <code>schannel</code>, which automatically reads certificates pushed by Active Directory / Group Policy:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslBackend schannel
 </code></pre>
     </div>
           </div>
         </li>
         
-</ol>
 
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+        <li class="step-item" id="verify-the-tls-handshake">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-the-tls-handshake-heading">Step 4: Verify the TLS Handshake</h4>
+            <p>Test a read-only remote reference lookup to confirm Git validates the chain cleanly:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>GIT_CURL_VERBOSE=<span class="tok-num">1</span> <span class="tok-kw">git</span> <span class="tok-kw">ls</span>-remote https://github.com/<span class="tok-kw">git</span>/<span class="tok-kw">git</span>.<span class="tok-kw">git</span> <span class="tok-prop">HEAD</span>
+</code></pre>
     </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
+    
+<p>Look for <code>SSL certificate verify ok.</code> in the verbose output.</p>
+          </div>
+        </li>
+        
+</ol>
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-is-httpsslverify-false-dangerous">Why is http.sslVerify false dangerous?</h3>
-<p>Disabling verification turns off certificate authentication completely, allowing rogue actors on local networks to intercept private code and OAuth tokens.</p>
-<h3 id="how-do-i-migrate-an-existing-https-repo-to-ssh">How do I migrate an existing HTTPS repo to SSH?</h3>
-<p>Run <code>git remote set-url origin git@github.com:user/repo.git</code> after uploading your public key (<code>~/.ssh/id_ed25519.pub</code>) to your Git host.</p>
+<h3 id="why-should-i-never-fix-this-with-git-config-global-httpsslverify-false">Why should I never fix this with <code>git config --global http.sslVerify false</code>?</h3>
+<p>Setting <code>http.sslVerify false</code> disables certificate verification globally, exposing your Git credentials, Personal Access Tokens, and source code to trivial man-in-the-middle interception on untrusted Wi-Fi or compromised networks.</p>
+<h3 id="can-i-trust-a-self-signed-certificate-for-just-one-internal-repository">Can I trust a self-signed certificate for just one internal repository?</h3>
+<p>Yes. Scope <code>http.sslCAInfo</code> to a single repository or URL prefix rather than globally: <code>git config --global http.&quot;https://git.internal.corp/&quot;.sslCAInfo /path/to/internal-ca.crt</code>.</p>
+<h3 id="how-do-i-bypass-https-certificate-issues-permanently-by-switching-to-ssh">How do I bypass HTTPS certificate issues permanently by switching to SSH?</h3>
+<p>Generate an Ed25519 key (<code>ssh-keygen -t ed25519</code>), add the public key to your Git host, and update the remote: <code>git remote set-url origin git@github.com:org/repo.git</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -571,50 +669,12 @@ Instead, export your organization&#39;s internal root certificate in PEM format 
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Never leave <code>http.sslVerify false</code> active on development machines.</li>
-<li>Prefer SSH remotes (<code>git@github.com:...</code>) to bypass HTTP SSL handshake complexities on enterprise networks.</li>
+              <li>Never commit <code>sslVerify = false</code> in <code>.gitconfig</code>, Dockerfile layers, or CI/CD runner scripts.</li>
+<li>Use <code>http.&lt;url&gt;.sslCAInfo</code> per domain when working with internal Git servers so public GitHub/GitLab validation remains strict.</li>
+<li>In Docker CI images, always include <code>ca-certificates</code> in your base image installation step.</li>
+<li>Prefer SSH remotes with hardware-backed keys or short-lived OIDC/deploy tokens in automated pipelines.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -671,7 +731,7 @@ Instead, export your organization&#39;s internal root certificate in PEM format 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -688,7 +748,7 @@ Instead, export your organization&#39;s internal root certificate in PEM format 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">PostgreSQL</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -705,7 +765,7 @@ Instead, export your organization&#39;s internal root certificate in PEM format 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The disk space exhausted error on Proxmox VE local storage (<code>No space left on device</code> or VM startup failures) occurs due to the accumulation of obsolete OS installation ISOs, unused LXC templates, old backup dumps, and bloated persistent system logs under the <code>/var/log</code> directory.</p>
+          <p>Seeing <code>No space left on device</code> in the Proxmox VE web UI, failing to start VMs or LXC containers, or watching the <code>pveproxy</code> and <code>pvedaemon</code> services crash usually means the root filesystem (<code>/</code>) or the <code>local</code> storage pool (<code>/var/lib/vz</code>) has hit 100% capacity. Because Proxmox stores cluster state (<code>/etc/pve</code>), ISO images, container templates, and systemd journals on the root volume by default, filling it halts both management and guest operations.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Proxmox local (root) storage at 100% preventing VM startup</strong></div>
+            <div class="diag-value"><strong>Root <code>/</code> filesystem at 100% (<code>df -h</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Delete old ISO images and backups under <code>/var/lib/vz/template/iso/</code></div>
+            <div class="diag-value">Identify largest directories with <code>du -xh --max-depth=2 /</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Saturated Proxmox log files under /var/log/</strong></div>
+            <div class="diag-value"><strong>Accumulated ISOs and LXC template tarballs</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Clean old compressed log files: <code>rm -f /var/log/*.gz /var/log/pve/tasks/*</code></div>
+            <div class="diag-value">Clean <code>/var/lib/vz/template/iso/</code> and <code>/var/lib/vz/template/cache/</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Bloated <code>systemd</code> journal or task logs</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Vacuum logs: <code>journalctl --vacuum-size=100M</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Old <code>vzdump</code> backups stored on <code>local</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Remove obsolete dumps in <code>/var/lib/vz/dump/</code> via GUI or CLI</div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,15 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>In a default Proxmox VE installation, the installer partitions the boot drive into an LVM volume group (<code>pve</code>) with <code>pve-root</code> mounted at <code>/</code> (often capped at 25–100 GB) and <code>pve-data</code> (<code>local-lvm</code> thin pool) reserved for VM disks. Everything outside <code>local-lvm</code>—including <code>/var/lib/vz</code> (<code>local</code> storage), <code>/var/log</code>, and <code>/var/cache/apt</code>—competes for space on <code>pve-root</code>.</p>
+<p>Four common factors exhaust <code>pve-root</code>:</p>
+<ol>
+<li><strong>Unpruned ISOs, Templates, and <code>vzdump</code> Backups:</strong> Uploading multiple OS installers to <code>/var/lib/vz/template/iso/</code>, downloading LXC templates to <code>/var/lib/vz/template/cache/</code>, or accidentally targeting <code>local</code> instead of a dedicated NAS/PBS for scheduled <code>vzdump</code> backups rapidly consumes tens of gigabytes.</li>
+<li><strong>Unbounded <code>systemd-journald</code> and PVE Task Logs:</strong> Continuous hardware/PCIe AER warnings or failing cluster sync jobs can inflate <code>/var/log/journal/</code> and <code>/var/log/pve/tasks/</code> to several gigabytes.</li>
+<li><strong>Deleted-but-Open File Descriptors:</strong> Removing a massive log file while a daemon still holds an open file descriptor (<code>lsof +L1</code>) prevents the kernel from reclaiming blocks until the process restarts.</li>
+<li><strong>Old Proxmox Kernel Headers/Images:</strong> <code>apt</code> retains superseded <code>proxmox-kernel-*</code> packages until <code>apt autoremove</code> runs.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +384,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="analyze-disk-space-distribution">
+        <li class="step-item" id="1-audit-disk-usage-without-crossing-filesystem-boundaries">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="analyze-disk-space-distribution-heading">Step 1: Analyze disk space distribution</h4>
-            <p>Connect to your Proxmox VE node via SSH and execute a disk space usage check on your local partitions:</p>
+            <h4 id="1-audit-disk-usage-without-crossing-filesystem-boundaries-heading">1. Audit Disk Usage Without Crossing Filesystem Boundaries</h4>
+            <p>Connect to your Proxmox node via SSH (or the node <strong>Shell</strong> in the web GUI) and inspect mounted filesystems and inode usage:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,22 +408,43 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Check disk space on system partitions</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-h</span>
-<span class="tok-cmt">
-# Identify directory sizes in default storage locations</span>
-du <span class="tok-prop">-sh</span> /var/lib/pve/local-bgs/* /var/lib/vz/*
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-hT</span>
+<span class="tok-kw">df</span> <span class="tok-prop">-i</span> /
+</code></pre>
+    </div>
+    
+<p>Find which top-level directories on <code>/</code> are consuming space (<code>-x</code> avoids scanning <code>/mnt</code>, <code>/proc</code>, or ZFS mounts):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>du <span class="tok-prop">-xh</span> <span class="tok-prop">--max-depth</span>=<span class="tok-num">2</span> / | sort <span class="tok-prop">-rh</span> | head <span class="tok-prop">-n</span> <span class="tok-num">20</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="remove-unused-installation-isos-and-lxc-templates">
+        <li class="step-item" id="2-clean-unused-isos-lxc-templates-and-old-backups">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="remove-unused-installation-isos-and-lxc-templates-heading">Step 2: Remove unused installation ISOs and LXC templates</h4>
-            <p>You can safely clean up operating system installation ISO files and downloaded container templates to recover space instantly:</p>
+            <h4 id="2-clean-unused-isos-lxc-templates-and-old-backups-heading">2. Clean Unused ISOs, LXC Templates, and Old Backups</h4>
+            <p>Inspect <code>/var/lib/vz</code> before deleting so you only remove obsolete files:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -412,22 +464,46 @@ du <span class="tok-prop">-sh</span> /var/lib/pve/local-bgs/* /var/lib/vz/*
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Delete obsolete ISOs from the vz storage pool</span>
-<span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /var/lib/vz/template/iso/*.iso
-<span class="tok-cmt">
-# Delete unused LXC container template tarballs</span>
-<span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /var/lib/vz/template/cache/*.<span class="tok-kw">tar</span>.xz
+      <pre class="formatted-pre"><code><span class="tok-kw">ls</span> <span class="tok-prop">-lh</span> /var/lib/vz/template/iso/
+<span class="tok-kw">ls</span> <span class="tok-prop">-lh</span> /var/lib/vz/template/cache/
+<span class="tok-kw">ls</span> <span class="tok-prop">-lh</span> /var/lib/vz/dump/
+</code></pre>
+    </div>
+    
+<p>Remove specific outdated ISOs, LXC tarballs, or old <code>vzdump</code> backups (or delete them cleanly from <strong>Datacenter -&gt; Node -&gt; local -&gt; ISO Images / CT Templates / Backups</strong>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Example: remove old Ubuntu ISO and stale container template</span>
+<span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /var/lib/vz/template/iso/ubuntu-<span class="tok-num">22.04</span>*.iso
+<span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /var/lib/vz/template/cache/debian-<span class="tok-num">11</span>*.<span class="tok-kw">tar</span>.zst
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="vacuum-bloated-systemd-journal-logs">
+        <li class="step-item" id="3-vacuum-systemd-journals-pve-logs-and-apt-cache">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="vacuum-bloated-systemd-journal-logs-heading">Step 3: Vacuum bloated systemd journal logs</h4>
-            <p>System logs on Proxmox VE can grow to several gigabytes if your virtual machines generate continuous alerts due to hardware or internal network service warnings:</p>
+            <h4 id="3-vacuum-systemd-journals-pve-logs-and-apt-cache-heading">3. Vacuum Systemd Journals, PVE Logs, and APT Cache</h4>
+            <p>Shrink the <code>systemd</code> journal to 100 MB and purge orphaned <code>apt</code> packages and cached <code>.deb</code> archives:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -447,14 +523,80 @@ du <span class="tok-prop">-sh</span> /var/lib/pve/local-bgs/* /var/lib/vz/*
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Force rotation and limit persistent logs to 100 Megabytes</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">--vacuum-size</span>=100M
+      <pre class="formatted-pre"><code><span class="tok-kw">journalctl</span> <span class="tok-prop">--vacuum-size</span>=100M
+<span class="tok-kw">apt</span> autoremove <span class="tok-prop">--purge</span> <span class="tok-prop">-y</span>
+<span class="tok-kw">apt</span> clean
+</code></pre>
+    </div>
+    
+<p>Check for deleted files still held open by running daemons:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>lsof +L1 | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> deleted
+</code></pre>
+    </div>
+    
+<p>If a large deleted log file appears, restart its owning service (for example, <code>systemctl restart rsyslog</code> or <code>systemctl restart pveproxy</code>) to release the blocks.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-verify-recovered-space-and-cluster-health">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-verify-recovered-space-and-cluster-health-heading">4. Verify Recovered Space and Cluster Health</h4>
+            <p>Confirm <code>/</code> has sufficient free space and that Proxmox services are healthy:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-h</span> /
+<span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> pve-cluster pvedaemon pveproxy
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Can I delete <code>.qcow2</code> or <code>.raw</code> files directly from <code>/var/lib/vz/images/</code>?</strong>
+No. Never delete virtual disk files manually with <code>rm</code> while a VM or CT still references them in <code>/etc/pve/qemu-server/</code> or <code>/etc/pve/lxc/</code>. Always detach and remove unused disks through the Proxmox web UI (<code>Hardware -&gt; Hard Disk -&gt; Detach -&gt; Remove</code>) or <code>qm set &lt;VMID&gt; --delete &lt;disk&gt;</code>.</p>
+<p><strong>Why does <code>df -h</code> say <code>/</code> is full even after I deleted a 20 GB backup file?</strong>
+Either an active process (like <code>vzdump</code> or <code>rsync</code>) still holds an open file descriptor to that deleted file (<code>lsof +L1</code>), or the file was on a ZFS dataset with snapshots still referencing the old blocks (<code>zfs list -t snapshot</code>).</p>
+<p><strong>How do I cap <code>systemd-journald</code> permanently on Proxmox?</strong>
+Edit <code>/etc/systemd/journald.conf</code>, set <code>SystemMaxUse=200M</code>, and run <code>systemctl restart systemd-journald</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -469,49 +611,12 @@ du <span class="tok-prop">-sh</span> /var/lib/pve/local-bgs/* /var/lib/vz/*
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not manually delete virtual disk images (<code>.raw</code> or <code>.qcow2</code>) located directly in the data paths <code>/var/lib/vz/images/</code> without first removing or detaching them from the Proxmox VE web GUI. Deleting raw disk descriptors manually corrupts the cluster database (<code>pve-cluster</code>), creating logical inconsistencies that block server migration and restore processes.</li>
+              <li>Store VM backups on a dedicated <strong>Proxmox Backup Server (PBS)</strong>, NFS/SMB share, or secondary disk—never on the <code>local</code> root filesystem.</li>
+<li>Set <code>SystemMaxUse=200M</code> in <code>/etc/systemd/journald.conf</code> on every Proxmox node to prevent log runaway.</li>
+<li>Configure backup retention policies (<code>prune-backups</code>) on every scheduled <code>vzdump</code> job so old archives expire automatically.</li>
+<li>Monitor root partition usage with Zabbix, Prometheus Node Exporter, or Proxmox&#39;s built-in email notifications before <code>/</code> exceeds 85%.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -568,7 +673,7 @@ du <span class="tok-prop">-sh</span> /var/lib/pve/local-bgs/* /var/lib/vz/*
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

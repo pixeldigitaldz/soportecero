@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does VS Code Remote-SSH trigger this error more than a normal terminal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "VS Code Remote-SSH, Git extensions, and file watchers often open multiple simultaneous SSH connections or tunnels in rapid succession, tripping ufw limit (6 connections/30s) or OpenSSH&#39;s default MaxStartups 10:30:100."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can an ISP or corporate proxy cause kex_exchange_identification errors?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Deep Packet Inspection (DPI) firewalls or transparent proxies that block port 22 or reset non-HTTP traffic after inspecting the SSH-2.0 banner will produce the exact same Connection closed by remote host message on the client even though sshd on the server never saw a problem."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does MaxStartups affect already-authenticated SSH sessions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. MaxStartups only caps concurrent unauthenticated connections in the pre-login handshake state. Once a user authenticates, the connection no longer counts toward MaxStartups."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <code>kex_exchange_identification: Connection closed by remote host</code> (or <code>read: Connection reset by peer</code>) occurs prior to user authentication during the initial cryptographic Key Exchange phase, typically caused by <code>MaxStartups</code> concurrency limits, Fail2ban jails, or TCP Wrapper restrictions.</p>
-<p>When the remote SSH daemon terminates the connection socket during the initial TCP handshake, the client never reaches the public key or password challenge prompt.</p>
+          <p>The error <code>kex_exchange_identification: Connection closed by remote host</code> (often paired with <code>Connection reset by peer</code>) occurs <strong>before</strong> user authentication during the initial SSH protocol handshake. Because the remote <code>sshd</code> daemon or an intermediary security layer severs the TCP socket right after the banner/key-exchange phase begins, your client never reaches the password or public-key prompt.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,37 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Simultaneous connection limit exceeded (<code>MaxStartups</code>)</strong></div>
+            <div class="diag-value">Concurrent unauthenticated connections exceed <code>MaxStartups</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo grep MaxStartups /etc/ssh/sshd_config</code> &amp; <code>journalctl -u sshd</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Increase <code>MaxStartups</code> limit in <code>/etc/ssh/sshd_config</code></div>
+            <div class="diag-value">Increase <code>MaxStartups 50:30:100</code> in <code>sshd_config</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Client IP banned by Fail2ban or <code>/etc/hosts.deny</code></strong></div>
+            <div class="diag-value">Client IP banned by <code>fail2ban</code> jail</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo fail2ban-client status sshd</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Unban using <code>fail2ban-client set sshd unbanip YOUR_IP</code> or check TCP Wrappers</div>
+            <div class="diag-value">Unban IP with <code>fail2ban-client set sshd unbanip &lt;IP&gt;</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Firewall rate-limiting (UFW/iptables limit)</strong></div>
+            <div class="diag-value">TCP Wrappers blocking client in <code>/etc/hosts.deny</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>cat /etc/hosts.deny</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Inspect SSH connection throttling rules on firewall</div>
+            <div class="diag-value">Whitelist IP in <code>/etc/hosts.allow</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Firewall rate-limiting (<code>ufw limit</code> / <code>iptables recent</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo ufw status</code> or <code>sudo iptables -L -n</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Raise burst threshold or whitelist trusted CIDR</div>
           </div></div></div>
       </div>
     </section>
@@ -347,10 +398,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-solution" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Solution</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-vs-code-remote-ssh-trigger-this-error-more-than-a-normal-terminal" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does VS Code Remote-SSH trigger this error more than a normal terminal?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-an-isp-or-corporate-proxy-cause-kexexchangeidentification-errors" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can an ISP or corporate proxy cause kex_exchange_identification errors?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#does-maxstartups-affect-already-authenticated-ssh-sessions" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Does MaxStartups affect already-authenticated SSH sessions?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -358,9 +449,28 @@
     </nav>
     
     
-<h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Run SSH in full verbose debugging mode</strong>
-Run the SSH client with <code>-vvv</code> to pinpoint the exact stage where the remote server drops the connection:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>An SSH connection progresses through three phases: TCP handshake, <strong>Protocol Version &amp; Key Exchange (<code>KEX</code>)</strong>, and User Authentication. When <code>kex_exchange_identification: Connection closed by remote host</code> appears, the TCP handshake succeeded, but the server closed the socket right after <code>SSH2_MSG_KEXINIT</code> or before sending its <code>SSH-2.0</code> banner.</p>
+<p>This pre-auth termination has four primary causes:</p>
+<ol>
+<li><strong><code>MaxStartups</code> exhaustion:</strong> OpenSSH defaults to <code>MaxStartups 10:30:100</code>—once 10 concurrent <em>unauthenticated</em> connections exist, <code>sshd</code> drops 30% of new connections and 100% at 100. CI/CD runners, Ansible, or VS Code Remote-SSH often hit this ceiling.</li>
+<li><strong>Fail2ban or firewall throttling:</strong> Rapid bursts (e.g., <code>ufw limit ssh</code>, 6 connections/30s) or failed auth bans cause <code>netfilter</code> to reset or drop handshakes.</li>
+<li><strong>TCP Wrappers (<code>libwrap</code>):</strong> Builds compiled with <code>libwrap</code> check <code>/etc/hosts.deny</code> right after <code>accept()</code> and close the socket if <code>sshd: ALL</code> is denied.</li>
+<li><strong>Corrupt host keys or <code>Match</code> errors:</strong> Missing <code>/etc/ssh/ssh_host_*_key</code> files cause the forked <code>sshd</code> worker to exit mid-handshake.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="capture-verbose-client-output">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="capture-verbose-client-output-heading">Step 1: Capture Verbose Client Output</h4>
+            <p>Run SSH with <code>-vvv</code> to see the exact line where the remote host drops the socket:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -380,13 +490,78 @@ Run the SSH client with <code>-vvv</code> to pinpoint the exact stage where the 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">ssh</span> <span class="tok-prop">-vvv</span> user@server-<span class="tok-kw">ip</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">ssh</span> <span class="tok-prop">-vvv</span> <span class="tok-prop">-o</span> ConnectTimeout=<span class="tok-num">10</span> user@<span class="tok-num">203.0</span>.<span class="tok-num">113.45</span>
 </code></pre>
     </div>
     
-<p>If the connection is severed immediately following <code>SSH2_MSG_KEXINIT sent</code>, the remote daemon is actively closing the socket due to security filtering or connection throttling.</p>
-<p><strong>Tune MaxStartups on the remote SSH daemon</strong>
-When multiple CI/CD runners, deployment scripts, or IDEs (like VS Code Remote SSH) establish concurrent sessions, <code>sshd</code> drops unauthenticated handshakes by default. Edit <code>/etc/ssh/sshd_config</code>:</p>
+<p>If it fails right after <code>Local version string SSH-2.0-OpenSSH_...</code> or <code>SSH2_MSG_KEXINIT sent</code>, connect to the server via your cloud provider&#39;s serial/VNC console (or an already-open session) and check server logs:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> <span class="tok-kw">ssh</span> <span class="tok-prop">-u</span> sshd <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
+</code></pre>
+    </div>
+    
+<p>Look for messages such as <code>drop connection #10 from [...]</code> (<code>MaxStartups</code>), <code>refused connect from ...</code> (TCP Wrappers), or <code>error: Could not load host key</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="check-and-unban-ips-in-fail2ban">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="check-and-unban-ips-in-fail2ban-heading">Step 2: Check and Unban IPs in Fail2ban</h4>
+            <p>Inspect the <code>sshd</code> jail to see if your workstation or NAT gateway IP was banned:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> fail2ban-client <span class="tok-prop">status</span> sshd
+<span class="tok-kw">sudo</span> fail2ban-client <span class="tok-kw">set</span> sshd unbanip <span class="tok-num">198.51</span>.<span class="tok-num">100.25</span>
+</code></pre>
+    </div>
+    
+<p>If you are using <code>ufw limit</code>, check <code>sudo ufw status numbered</code> and replace <code>LIMIT</code> with <code>ALLOW</code> for trusted static IPs.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="tune-maxstartups-and-maxsessions">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="tune-maxstartups-and-maxsessions-heading">Step 3: Tune MaxStartups and MaxSessions</h4>
+            <p>If parallel automation or IDE sessions trigger <code>drop connection</code> in <code>journalctl</code>, edit <code>/etc/ssh/sshd_config</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -406,13 +581,14 @@ When multiple CI/CD runners, deployment scripts, or IDEs (like VS Code Remote SS
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Format: start:rate:full</span>
-MaxStartups <span class="tok-num">50</span>:<span class="tok-num">30</span>:<span class="tok-num">100</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Allow up to 50 unauthenticated handshakes before probabilistic dropping</span>
+MaxStartups <span class="tok-num">50</span>:<span class="tok-num">30</span>:100<span class="tok-cmt">
+# Allow more multiplexed channels per TCP connection</span>
 MaxSessions <span class="tok-num">50</span>
 </code></pre>
     </div>
     
-<p>Restart the SSH daemon:</p>
+<p>Validate syntax before restarting <code>sshd</code> so you do not lock yourself out:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -432,12 +608,18 @@ MaxSessions <span class="tok-num">50</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart sshd
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> sshd <span class="tok-prop">-t</span> &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart sshd
 </code></pre>
     </div>
-    
-<p><strong>Check Fail2ban status for banned IP addresses</strong>
-If multiple fast connections or bad key attempts triggered a security jail:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="inspect-tcp-wrappers-and-host-keys">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="inspect-tcp-wrappers-and-host-keys-heading">Step 4: Inspect TCP Wrappers and Host Keys</h4>
+            <p>Verify <code>/etc/hosts.deny</code> is not blocking SSH:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -457,38 +639,11 @@ If multiple fast connections or bad key attempts triggered a security jail:</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> fail2ban-client <span class="tok-prop">status</span> sshd<span class="tok-cmt">
-# Unban specific IP:</span>
-<span class="tok-kw">sudo</span> fail2ban-client <span class="tok-kw">set</span> sshd unbanip <span class="tok-num">203.0</span>.<span class="tok-num">113.45</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> /etc/hosts.deny
 </code></pre>
     </div>
     
-<p><strong>Verify TCP Wrappers configuration</strong>
-On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">cat</span> /etc/hosts.deny
-</code></pre>
-    </div>
-    
-<p>If <code>sshd: ALL</code> is present, whitelist your trusted IP in <code>/etc/hosts.allow</code>:</p>
+<p>If <code>ALL: ALL</code> or <code>sshd: ALL</code> is present, add your trusted subnet to <code>/etc/hosts.allow</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -508,10 +663,76 @@ On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>sshd: <span class="tok-num">203.0</span>.<span class="tok-num">113.45</span>, <span class="tok-num">192.168</span>.<span class="tok-num">1.0</span>/<span class="tok-num">24</span>
+      <pre class="formatted-pre"><code>sshd: <span class="tok-num">198.51</span>.<span class="tok-num">100.25</span>, <span class="tok-num">10.0</span>.<span class="tok-num">0.0</span>/<span class="tok-num">8</span>
 </code></pre>
     </div>
     
+<p>If <code>journalctl</code> reported missing or unreadable host keys, regenerate them cleanly:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ssh</span>-keygen <span class="tok-prop">-A</span>
+<span class="tok-kw">sudo</span> sshd <span class="tok-prop">-t</span> &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart sshd
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-from-the-client">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="verify-from-the-client-heading">Step 5: Verify From the Client</h4>
+            <p>Test the connection again with <code>-v</code> to confirm <code>KEX</code> completes and authentication starts:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">ssh</span> <span class="tok-prop">-v</span> user@<span class="tok-num">203.0</span>.<span class="tok-num">113.45</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-vs-code-remote-ssh-trigger-this-error-more-than-a-normal-terminal">Why does VS Code Remote-SSH trigger this error more than a normal terminal?</h3>
+<p>VS Code Remote-SSH, Git extensions, and file watchers often open multiple simultaneous SSH connections or tunnels in rapid succession, tripping <code>ufw limit</code> (6 connections/30s) or OpenSSH&#39;s default <code>MaxStartups 10:30:100</code>.</p>
+<h3 id="can-an-isp-or-corporate-proxy-cause-kexexchangeidentification-errors">Can an ISP or corporate proxy cause <code>kex_exchange_identification</code> errors?</h3>
+<p>Yes. Deep Packet Inspection (DPI) firewalls or transparent proxies that block port 22 or reset non-HTTP traffic after inspecting the <code>SSH-2.0</code> banner will produce the exact same <code>Connection closed by remote host</code> message on the client even though <code>sshd</code> on the server never saw a problem.</p>
+<h3 id="does-maxstartups-affect-already-authenticated-ssh-sessions">Does <code>MaxStartups</code> affect already-authenticated SSH sessions?</h3>
+<p>No. <code>MaxStartups</code> only caps concurrent <strong>unauthenticated</strong> connections in the pre-login handshake state. Once a user authenticates, the connection no longer counts toward <code>MaxStartups</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -526,50 +747,12 @@ On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Fail2ban whitelisting:</strong> Add administrative static IPs and VPN subnets to the <code>ignoreip</code> setting in <code>/etc/fail2ban/jail.local</code>.</li>
-<li><strong>SSH Connection Multiplexing:</strong> Enable <code>ControlMaster</code> in your local <code>~/.ssh/config</code> to reuse a single authenticated TCP connection across multiple terminals and remote tools.</li>
+              <li><strong>Enable SSH connection multiplexing:</strong> Configure <code>ControlMaster auto</code>, <code>ControlPath ~/.ssh/cm-%r@%h:%p</code>, and <code>ControlPersist 10m</code> in <code>~/.ssh/config</code> so multiple terminals and IDEs share one TCP socket.</li>
+<li><strong>Whitelist admin IPs in Fail2ban:</strong> Add your VPN or static office IP to <code>ignoreip</code> in <code>/etc/fail2ban/jail.local</code>.</li>
+<li><strong>Use <code>sshd -t</code> before every restart:</strong> Always validate <code>/etc/ssh/sshd_config</code> syntax before reloading the daemon.</li>
+<li><strong>Replace <code>ufw limit</code> with Fail2ban for CI/CD hosts:</strong> Rate-limiting at the packet layer breaks legitimate parallel deployments; use Fail2ban on failed auth logs instead.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -626,7 +809,7 @@ On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -643,7 +826,7 @@ On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -660,7 +843,7 @@ On systems utilizing TCP Wrappers, check <code>/etc/hosts.deny</code>:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

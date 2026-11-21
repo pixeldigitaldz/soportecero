@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>Invalid Signature</code> or <code>Token Expired</code> error in the Binance Pay API occurs when you attempt to process a payment in USDT or another cryptocurrency and the Binance servers reject the request. The primary cause is a timestamp desynchronization between your local server and Binance&#39;s official clock, or incorrect concatenation of API keys when generating the HMAC-SHA512 cryptographic signature.</p>
+          <p>Receiving an <code>Invalid Signature</code> (code <code>400002</code> / <code>-1022</code>) or <code>Timestamp for this request is outside of the recvWindow</code> / <code>Token Expired</code> response from the <strong>Binance Pay API</strong> means Binance&#39;s authentication gateway rejected your request before processing the payment. Because Binance Pay enforces strict cryptographic request signing and tight replay-window validation, even a 1-character mismatch in payload formatting or a few seconds of server clock drift invalidates the entire request.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Binance API Key/Secret expired, copied incorrectly, or IP not whitelisted</strong></div>
+            <div class="diag-value"><strong>Server clock out of sync with UTC</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Generate new Binance API Key and whitelist server static IP</div>
+            <div class="diag-value">Enable NTP sync (<code>timedatectl set-ntp true</code>) and compare against <code>/api/v3/time</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Local system clock out of sync with Binance server time</strong></div>
+            <div class="diag-value"><strong>Malformed HMAC-SHA512 signature payload</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Sync server clock with NTP: <code>sudo ntpdate pool.ntp.org</code></div>
+            <div class="diag-value">Verify exact <code>timestamp + &quot;\n&quot; + nonce + &quot;\n&quot; + body + &quot;\n&quot;</code> concatenation</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>JSON key order or whitespace mismatch</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Sign the exact serialized string sent in the HTTP body</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Expired API key, wrong secret, or unwhitelisted IP</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Verify merchant API key permissions and server outbound IPv4 in Binance Merchant Portal</div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,22 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Unlike standard OAuth bearer tokens, the Binance Pay Merchant API (<code>https://bpay.binanceapi.com</code>) authenticates every <code>POST</code> request using three custom headers:</p>
+<ul>
+<li><code>BinancePay-Timestamp</code>: Current Unix timestamp in <strong>milliseconds</strong> (13 digits).</li>
+<li><code>BinancePay-Nonce</code>: A random 32-character alphanumeric string unique per request.</li>
+<li><code>BinancePay-Signature</code>: An <strong>uppercase hexadecimal</strong> HMAC-SHA512 digest computed using your Merchant Secret Key.</li>
+</ul>
+<p>Binance rejects requests with <code>Invalid Signature</code> or <code>Expired</code> errors under four exact conditions:</p>
+<ol>
+<li><strong>Clock Drift &amp; Replay Window:</strong> Binance compares <code>BinancePay-Timestamp</code> against its own UTC servers. If your server&#39;s system clock drifts ahead or behind by more than a few seconds—or if you pass seconds (10 digits) instead of milliseconds (13 digits)—the request is rejected as expired.</li>
+<li><strong>Payload String Mismatch:</strong> The HMAC-SHA512 input string must follow the exact format:
+<code>timestamp + &quot;\n&quot; + nonce + &quot;\n&quot; + json_body + &quot;\n&quot;</code>
+Notice the mandatory trailing newline (<code>\n</code>). Furthermore, if you sign <code>JSON.stringify(payload)</code> in one place and let an HTTP client (like Axios or Guzzle) re-serialize the object with different key spacing or Unicode escaping, the signature hash will not match what Binance computes from the raw HTTP body.</li>
+<li><strong>Lowercase Hex Digest:</strong> Binance Pay expects the HMAC-SHA512 output in <strong>UPPERCASE</strong> hex (<code>digest(&#39;hex&#39;).toUpperCase()</code>). Passing lowercase hex triggers <code>Invalid Signature</code>.</li>
+<li><strong>API Key / IP Whitelist Mismatch:</strong> Using a Spot Trading API key instead of a <strong>Binance Pay Merchant API Key</strong>, or sending requests from an IPv6 address when only IPv4 is whitelisted, also results in authentication rejection.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +391,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="synchronize-the-server-clock-ntp">
+        <li class="step-item" id="1-synchronize-your-server-clock-and-verify-offset-against-binance">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="synchronize-the-server-clock-ntp-heading">Step 1: Synchronize the server clock (NTP)</h4>
-            <p>Binance rejects any request whose timestamp varies by more than a few seconds from their server&#39;s time. On your Linux server, force time synchronization by running:</p>
+            <h4 id="1-synchronize-your-server-clock-and-verify-offset-against-binance-heading">1. Synchronize Your Server Clock and Verify Offset Against Binance</h4>
+            <p>Enable NTP synchronization on your Linux host and confirm <code>System clock synchronized: yes</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -379,19 +417,11 @@
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> timedatectl <span class="tok-kw">set</span>-ntp true
 <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart systemd-timesyncd
+timedatectl <span class="tok-prop">status</span>
 </code></pre>
     </div>
     
-<p>Verify that the time is perfectly aligned using the <code>timedatectl</code> command.</p>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="order-variables-for-the-signature-payload">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="order-variables-for-the-signature-payload-heading">Step 2: Order variables for the signature (Payload)</h4>
-            <p>The cryptographic signature requires you to join the timestamp, a random string (nonce), and the request body (JSON body string) in a strict format. Ensure your code concatenates the elements exactly in this order before hashing it:</p>
+<p>Compare your local UTC millisecond timestamp directly against Binance&#39;s server time:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -401,7 +431,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -411,15 +441,100 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>TIMESTAMP + <span class="tok-str">&quot;\n&quot;</span> + NONCE + <span class="tok-str">&quot;\n&quot;</span> + BODY_JSON_STRING + <span class="tok-str">&quot;\n&quot;</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;Local:   $(date +%s%3N)&quot;</span>
+<span class="tok-kw">curl</span> <span class="tok-prop">-s</span> https://api.binance.com/api/v3/time
 </code></pre>
     </div>
     
-<p>A common mistake is that the JSON in your code orders the keys differently than how they are sent in the HTTP body, immediately breaking the signature.</p>
+<p>The difference between <code>Local</code> and <code>serverTime</code> should be under <code>1000</code> ms.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-sign-the-exact-raw-json-body-string-in-uppercase-hmac-sha512">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-sign-the-exact-raw-json-body-string-in-uppercase-hmac-sha512-heading">2. Sign the Exact Raw JSON Body String in Uppercase HMAC-SHA512</h4>
+            <p>Always serialize your JSON body <strong>once</strong>, compute the HMAC-SHA512 signature over that exact string, and send that raw string in your HTTP client:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">import</span> crypto <span class="tok-kw">from</span> <span class="tok-str">&#39;crypto&#39;</span>;
+
+<span class="tok-kw">const</span> timestamp = Date.<span class="tok-prop">now</span>().<span class="tok-prop">toString</span>();<span class="tok-cmt"> // 13-digit ms</span>
+<span class="tok-kw">const</span> nonce = crypto.<span class="tok-prop">randomBytes</span>(<span class="tok-num">16</span>).<span class="tok-prop">toString</span>(<span class="tok-str">&#39;hex&#39;</span>);<span class="tok-cmt"> // 32-char string</span>
+<span class="tok-kw">const</span> rawBody = JSON.<span class="tok-prop">stringify</span>(orderPayload);
+
+<span class="tok-kw">const</span> payloadToSign = <span class="tok-str">`${timestamp}\n${nonce}\n${rawBody}\n`</span>;
+<span class="tok-kw">const</span> signature = crypto
+  .<span class="tok-prop">createHmac</span>(<span class="tok-str">&#39;sha512&#39;</span>, process.env.BINANCE_PAY_SECRET)
+  .<span class="tok-prop">update</span>(payloadToSign)
+  .<span class="tok-prop">digest</span>(<span class="tok-str">&#39;hex&#39;</span>)
+  .<span class="tok-prop">toUpperCase</span>();
+</code></pre>
+    </div>
+    
+<p>Pass <code>rawBody</code> directly as the <code>body</code> / <code>data</code> argument to <code>fetch</code> or <code>axios</code> with <code>Content-Type: application/json</code>, rather than passing an unserialized JS object.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-verify-merchant-ip-whitelisting">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-verify-merchant-ip-whitelisting-heading">3. Verify Merchant IP Whitelisting</h4>
+            <p>Confirm the exact outbound IPv4 address your server uses for HTTPS requests:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-4</span> <span class="tok-prop">-s</span> https://ifconfig.me
+</code></pre>
+    </div>
+    
+<p>Ensure that exact IPv4 address is listed in your <strong>Binance Pay Merchant Portal -&gt; Developer -&gt; API Key</strong> allowlist.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why did my signature work in Postman/cURL but fail in Node.js or PHP?</strong>
+In PHP (<code>json_encode</code>) and Node.js (<code>axios</code>), passing an object/array lets the HTTP client re-encode it, which can alter whitespace, float formatting (<code>10.00</code> vs <code>10</code>), or slash escaping (<code>/</code> vs <code>\/</code>). Always sign and transmit the exact same pre-serialized string (<code>JSON_UNESCAPED_SLASHES</code> in PHP).</p>
+<p><strong>Can I use my regular Binance Spot API keys for Binance Pay?</strong>
+No. Binance Pay requires dedicated Merchant API credentials (<code>BinancePay-Certificate-Sn</code>) generated inside the <strong>Binance Pay Merchant Portal</strong>, not standard Spot/Futures API keys.</p>
+<p><strong>What if my server uses IPv6 by default when calling <code>bpay.binanceapi.com</code>?</strong>
+If your VPS has both IPv4 and IPv6 enabled, <code>curl</code> or Node&#39;s <code>fetch</code> may connect over IPv6, which fails an IPv4-only whitelist. Force IPv4 or whitelist both addresses in the Merchant Portal.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -434,49 +549,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Never expose your private keys (Secret Key) in your application&#39;s frontend code (client-side JavaScript). Any user could inspect the page, steal your Binance Pay credentials, and drain the funds from your merchant account. Always handle signature requests strictly from the backend (Node.js, PHP, or Python).</li>
+              <li>Never store or use <code>BINANCE_PAY_SECRET</code> in frontend JavaScript or mobile app bundles; compute all HMAC-SHA512 signatures strictly on your backend server.</li>
+<li>Monitor <code>systemd-timesyncd</code> or <code>chronyd</code> with health checks so container or VM clock drift never exceeds 1 second.</li>
+<li>Store API keys in encrypted environment secrets (<code>Vault</code>, <code>.env</code> outside webroot, or cloud KMS) and rotate Merchant API keys immediately if a team member leaves.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -533,7 +610,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">MySQL</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -550,7 +627,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NextJS</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

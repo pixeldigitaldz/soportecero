@@ -11,70 +11,103 @@ tags:
   - Audio
   - SteamDeck
   - Linux
-readTime: 4 min
+readTime: '6 min'
 date: '2026-09-29'
 ---
 
-When gaming on Linux (Steam Deck, Bazzite, Fedora, Arch) through Gamescope or Proton, players often notice metallic clicking, static pops, or sound cutting out (*audio crackling*). This annoyance is rooted in **xruns** (buffer underruns), where PipeWire fails to deliver rendered audio buffers within the tight deadline demanded by the sound card.
+Metallic clicking, robotic distortion, and static pops when launching games through Proton or Gamescope on Steam Deck, Bazzite, Fedora, or Arch Linux are almost always caused by **PipeWire xruns** (audio buffer underruns). When the audio graph fails to deliver a filled PCM buffer to the ALSA sink before the hardware ring buffer empties, the sound card repeats or zeroes out samples—producing audible clicks.
 
 ## Quick Diagnostics
-| Cause | Solution |
+
+| Symptom / Cause | Immediate Action |
 |---|---|
-| **Audio buffer quantum is configured too aggressively, inducing buffer underruns (xruns)** | Enforce a stable 1024 quantum buffer size in PipeWire user settings |
-| **Sampling rate mismatch between the PipeWire graph (48kHz) and the game process** | Standardize clock rate and disable aggressive ALSA resampling in pipewire.conf.d |
+| **`ERR` counter climbing in `pw-top` during gameplay** | Raise `default.clock.quantum` to `1024` or `2048` |
+| **Crackling only after waking Steam Deck from sleep** | Set `PULSE_LATENCY_MSEC=60` in Steam launch options |
+| **Distortion in specific Proton/Wine titles** | Lock `alsa.rate = 48000` in PipeWire client config |
+| **Audio glitches during CPU shader compilation spikes** | Verify `rtkit-daemon` is active for real-time priority |
 
-## 🚀 Step-by-Step Solution
+## Root Cause & Technical Mechanics
 
-### Step 1: Detect Audio Buffer Underruns (xruns) Live
-Run the interactive PipeWire performance profiler while your game is active:
+PipeWire schedules audio nodes in a single processing graph driven by a **quantum** (number of samples per cycle) and a **clock rate** (typically `48000` Hz). By default, PipeWire dynamically scales the quantum down to `128` or `256` samples (~2.6 ms–5.3 ms) when low-latency clients request it.
+
+Under heavy 3D gaming—especially inside **Gamescope** (micro-compositor) + **Proton/Wine**—two bottlenecks collide:
+1. **CPU Scheduling Starvation:** When a game saturates all CPU threads compiling DXVK/VKD3D shaders, a 256-sample deadline (5.3 ms) is too tight for the Wine audio bridge (`winepulse` or `winealsa`) to wake up and write its buffer, causing continuous xruns.
+2. **Sample Rate Mismatches:** Many Windows games output `44100` Hz audio while PipeWire's hardware sink runs at `48000` Hz. If WirePlumber or Wine repeatedly resamples or switches node clocks mid-frame, the ALSA driver resets the stream and emits a sharp pop.
+
+## Step-by-Step Solution
+
+### 1. Measure Live Buffer Underruns with `pw-top`
+
+Launch your game, open a terminal (or SSH into your Steam Deck), and monitor PipeWire's real-time profiler:
+
 ```bash
 pw-top
 ```
-Observe the **ERR** column. If counter values increment in tandem with audible pops, your system is dropping audio frames due to buffer starvation.
 
-### Step 2: Configure a Resilient Audio Quantum Latency Profile
-Create a dedicated configuration drop-in file to enforce stable buffer sizes:
+Watch the **`ERR`** column next to your game stream (`wine64-preloader` or `proton`) and your hardware sink (`alsa_output.*`). If `ERR` increments every time you hear a pop, and `QUANT` is sitting at `128`, `256`, or `512`, your buffer window is too small for the CPU load.
+
+### 2. Enforce a Stable Quantum Profile (`1024` Samples)
+
+Create a user-level PipeWire drop-in file so PipeWire never drops below a safe gaming floor:
+
 ```bash
 mkdir -p ~/.config/pipewire/pipewire.conf.d/
-nano ~/.config/pipewire/pipewire.conf.d/99-quantum-latency.conf
-```
-Add the following blocks:
-```plaintext
+cat << 'EOF' > ~/.config/pipewire/pipewire.conf.d/99-gaming-quantum.conf
 context.properties = {
-    default.clock.rate = 48000
-    default.clock.quantum = 1024
-    default.clock.min-quantum = 512
-    default.clock.max-quantum = 2048
+    default.clock.rate          = 48000
+    default.clock.allowed-rates = [ 44100 48000 ]
+    default.clock.quantum       = 1024
+    default.clock.min-quantum   = 512
+    default.clock.max-quantum   = 2048
 }
+EOF
 ```
 
-### Step 3: Tune ALSA and Proton Wine Audio Emulation
-Games running under Proton interface through ALSA or PulseAudio bridges. Prevent resampling distortions:
+### 3. Stabilize Wine/Proton PulseAudio Bridge Latency
+
+For games that still crackle after resuming from suspend or during heavy loading screens, add `PULSE_LATENCY_MSEC` to the game's **Steam -> Properties -> Launch Options**:
+
+```bash
+PULSE_LATENCY_MSEC=60 %command%
+```
+
+To fix resampling glitches globally for ALSA-bridged applications, create a client drop-in:
+
 ```bash
 mkdir -p ~/.config/pipewire/client.conf.d/
-nano ~/.config/pipewire/client.conf.d/alsa-resample.conf
-```
-Paste:
-```plaintext
+cat << 'EOF' > ~/.config/pipewire/client.conf.d/99-alsa-gaming.conf
 alsa.properties = {
-    alsa.deny = false
     alsa.format = "S16LE"
-    alsa.rate = 48000
+    alsa.rate   = 48000
 }
-```
-Apply the adjustments by restarting user audio daemons:
-```bash
-systemctl --user restart pipewire pipewire-pulse wireplumber
+EOF
 ```
 
-## 🛡️ Prevention Tips
-* Avoid forcing ultralow latency buffers (64 or 128) during intensive 3D gaming.
-* Ensure `rtkit` is running to grant PipeWire real-time scheduling priority under load.
+### 4. Restart Audio Daemons and Verify Real-Time Priority
+
+Reload PipeWire, WirePlumber, and verify `rtkit` is granting real-time scheduling:
+
+```bash
+systemctl --user restart pipewire pipewire-pulse wireplumber
+systemctl status rtkit-daemon --no-pager
+```
+
+Re-run `pw-top` in-game and confirm `QUANT` stays at `1024` (or `512`) and `ERR` remains `0`.
 
 ## Frequently Asked Questions
 
-### Does a 1024 quantum introduce noticeable input lag?
-At 48 kHz, a 1024 sample window equals approximately 21 milliseconds of total audio latency—completely unnoticeable during gameplay while eliminating pops.
+### Will setting `default.clock.quantum = 1024` create noticeable audio lag?
+No. At `48000` Hz, `1024` samples equals `21.3 ms` of buffer latency—well below human perception for single-player and action games, while completely eliminating xruns.
 
-### How do I revert custom PipeWire overrides?
-Delete the custom files in `~/.config/pipewire/` and reload with `systemctl --user restart pipewire`.
+### Why does Steam Deck audio crackle specifically after waking from sleep?
+Suspending the APU pauses PipeWire's ALSA clock while Wine's `dsound`/`wasapi` ring buffer stays out of sync upon resume. Setting `PULSE_LATENCY_MSEC=60` gives `winepulse` enough headroom to resynchronize pointers cleanly.
+
+### Should I disable power saving on the sound card (`snd_hda_intel`)?
+Yes, if you hear a sharp "pop" right when audio starts or stops after silence. Disable codec power-saving with `options snd_hda_intel power_save=0` in `/etc/modprobe.d/audio-powersave.conf`.
+
+## Prevention Advice
+
+- **Avoid forcing `64` or `128` quantum globally:** Reserve ultra-low-latency quantums for DAW/music production profiles, not 3D gaming.
+- **Keep `rtkit` installed and enabled:** Without `rtkit-daemon`, PipeWire runs at normal user nice priority and loses CPU time to shader compilers.
+- **Prefer native 48 kHz HDMI/USB DAC output:** If using an external USB DAC, verify its supported rates via `cat /proc/asound/card*/stream0` so PipeWire does not thrash clock rates.
+- **Test changes incrementally:** Keep custom overrides isolated in `~/.config/pipewire/pipewire.conf.d/` rather than editing `/usr/share/pipewire/`, which gets overwritten on package updates.

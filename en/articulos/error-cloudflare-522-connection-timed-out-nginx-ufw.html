@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Cloudflare Error 522 Connection Timed Out in Nginx and UFW | SoporteCero</title>
+  <meta name="description" content="Technical guide to diagnosing and fixing Cloudflare Error 522 (Connection Timed Out) on Linux origin servers running Nginx, UFW, iptables, and TCP keepalive tuning.">
+  <meta name="keywords" content="Cloudflare, Nginx, UFW, Linux">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" />
+  
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Cloudflare Error 522 Connection Timed Out in Nginx and UFW">
+  <meta property="og:description" content="Technical guide to diagnosing and fixing Cloudflare Error 522 (Connection Timed Out) on Linux origin servers running Nginx, UFW, iptables, and TCP keepalive tuning.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:secure_url" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SoporteCero - Cero Errores">
+  <meta property="article:published_time" content="2026-11-21">
+  <meta property="article:section" content="Systems & Servers">
+  <meta property="article:tag" content="Cloudflare">
+  <meta property="article:tag" content="Nginx">
+  <meta property="article:tag" content="UFW">
+  <meta property="article:tag" content="Linux">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cloudflare Error 522 Connection Timed Out in Nginx and UFW">
+  <meta name="twitter:description" content="Technical guide to diagnosing and fixing Cloudflare Error 522 (Connection Timed Out) on Linux origin servers running Nginx, UFW, iptables, and TCP keepalive tuning.">
+  <meta name="twitter:image" content="https://soportecero.com/og-image.png">
+  
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cloudflare Error 522 Connection Timed Out in Nginx and UFW",
+  "description": "Technical guide to diagnosing and fixing Cloudflare Error 522 (Connection Timed Out) on Linux origin servers running Nginx, UFW, iptables, and TCP keepalive tuning.",
+  "image": "https://soportecero.com/og-image.png",
+  "inLanguage": "en",
+  "category": "Systems & Servers",
+  "articleSection": "Systems & Servers",
+  "keywords": "Cloudflare, Nginx, UFW, Linux",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-11-21",
+  "dateModified": "2026-11-21",
+  "author": {
+    "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
+    "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Cloudflare Error 522 Connection Timed Out in Nginx and UFW",
+      "item": "https://soportecero.com/en/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between Cloudflare Error 521 and Error 522?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Error 521, the origin server actively refuses the connection by sending a TCP RST packet (usually because the web server daemon is stopped). In Error 522, the origin never responds within the 15-second TCP handshake or 90-second HTTP timeout window, typically due to silent firewall DROP rules or queue exhaustion."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does disabling the Cloudflare proxy (grey cloud) fix Error 522?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Switching to DNS-only mode bypasses Cloudflare&#39;s proxy layer, so the Cloudflare 522 error page disappears. However, if your origin firewall or web server is actually unreachable or overloaded, visitors will still encounter a browser-level ERR_CONNECTION_TIMED_OUT."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <!-- Logo Soporte Cero - Edición Ingeniería -->
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <!-- Isotipo Cero Técnico -->
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Cero Técnico Cortado '0' Centrado -->
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <!-- Punto de telemetría esquina superior derecha -->
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+
+        <!-- Logotipo Tipográfico -->
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">
+            Soporte
+          </span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">
+            Cero
+          </span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
+            ENGINEERING
+          </span>
+        </div>
+      </a>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
+        <a href="../index.html">HOME</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span>Systems & Servers</span>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span style="color: var(--text-secondary);">Cloudflare Error 522 Connection Timed Out in Nginx and UFW</span>
+      </nav>
+
+      <header class="post-header">
+        <span class="card-category">Systems & Servers</span>
+        <h1 id="post-title">Cloudflare Error 522 Connection Timed Out in Nginx and UFW</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Replicated and tested in laboratory environment">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+            Lab Verified
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Read time: 7 min
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            Updated: 2026-11-21
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p><strong><code>Error 522: Connection timed out</code></strong> occurs when Cloudflare&#39;s edge proxy attempts to open or reuse a TCP connection to your origin server (usually on port <code>80</code> or <code>443</code>) and receives no response within the allowed timeout window. Unlike Error 521—where the origin actively refuses the connection with a <code>TCP RST</code> packet—Error 522 means <code>SYN</code> packets or HTTP requests are being silently dropped or stalled in a saturated queue.</p>
+
+    <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
+    <section class="diagnostic-console" aria-labelledby="diag-heading">
+      <div class="diagnostic-console-header">
+        <div class="diag-console-title-group">
+          <span class="diag-pulse-dot" aria-hidden="true"></span>
+          <h3 id="technical-diagnostics-amp-root-cause-analysis">Technical Diagnostics &amp; Root Cause Analysis</h3>
+        </div>
+        <span class="diag-console-badge">Lab Environment</span>
+      </div>
+      <div class="diagnostic-console-body">
+        <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Cloudflare edge IPs blocked or rate-limited by UFW / Fail2Ban</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Whitelist official Cloudflare IPv4/IPv6 ranges on port <code>443</code> and restore real client IPs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Exhausted Nginx <code>worker_connections</code> or low <code>keepalive_timeout</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Increase <code>worker_connections</code>, kernel <code>somaxconn</code>, and set <code>keepalive_timeout 75s</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Stale origin IP address in Cloudflare DNS records</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Verify the server&#39;s public IP with <code>curl -4 ifconfig.me</code> and update <code>A</code> / <code>AAAA</code> records</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Network interface stall or unresponsive upstream socket</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Inspect listening sockets with <code>ss -tulpn</code> and test direct origin reachability</div>
+          </div></div></div>
+      </div>
+    </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-header">
+        <div class="toc-header-left">
+          <svg class="toc-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="toc-header-title">TABLE OF CONTENTS</span>
+        </div>
+        <span class="toc-header-badge">Technical Index</span>
+      </div>
+      <div class="toc-body">
+        <ul class="toc-list">
+
+        <li class="toc-item">
+          <a href="#lab-environment-amp-diagnostics" class="toc-link">
+            <span class="toc-number">01</span>
+            <span class="toc-text">Lab Environment &amp; Diagnostics</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#technical-diagnostics-amp-root-cause-analysis" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Technical Diagnostics &amp; Root Cause Analysis</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#root-cause-amp-technical-mechanics-of-error-522" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics of Error 522</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#common-production-triggers" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Common Production Triggers</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#what-is-the-difference-between-cloudflare-error-521-and-error-522" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What is the difference between Cloudflare Error 521 and Error 522?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#does-disabling-the-cloudflare-proxy-grey-cloud-fix-error-522" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Does disabling the Cloudflare proxy (grey cloud) fix Error 522?</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        </ul>
+      </div>
+    </nav>
+    
+    
+<hr>
+<h2 id="root-cause-amp-technical-mechanics-of-error-522">Root Cause &amp; Technical Mechanics of Error 522</h2>
+<p>Cloudflare enforces two strict timeout thresholds when communicating with your origin server:</p>
+<ol>
+<li><strong>Initial TCP Handshake Timeout (15 seconds):</strong> When a Cloudflare edge node sends a <code>TCP SYN</code> packet to your origin IP, it expects a <code>SYN-ACK</code> within 15 seconds. If a stateful firewall configured with a <code>DROP</code> policy (such as <code>UFW</code>, <code>iptables</code>, or cloud security groups) discards the packet silently, Cloudflare surfaces an <code>Error 522</code>.</li>
+<li><strong>HTTP Response &amp; Keepalive Timeout (90 seconds):</strong> Once the TCP handshake succeeds, the origin must send the initial HTTP response bytes within 90 seconds. Additionally, if Nginx closes an idle <code>keepalive</code> socket aggressively while Cloudflare is simultaneously reusing it, a race condition occurs and the edge times out waiting for a reply.</li>
+</ol>
+<h3 id="common-production-triggers">Common Production Triggers</h3>
+<ul>
+<li><strong>Fail2Ban or Nginx rate-limiting false positives:</strong> Without <code>set_real_ip_from</code> and <code>real_ip_header CF-Connecting-IP</code>, Nginx sees every visitor as coming from Cloudflare&#39;s edge IPs. Rate limiters (<code>limit_req_zone</code>) or Fail2Ban jails eventually ban Cloudflare itself.</li>
+<li><strong>Kernel <code>SYN</code> backlog saturation:</strong> During traffic bursts, default Linux limits for <code>net.core.somaxconn</code> and <code>net.ipv4.tcp_max_syn_backlog</code> fill up rapidly, causing the kernel to silently drop incoming <code>SYN</code> packets from Cloudflare.</li>
+</ul>
+<hr>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="test-direct-origin-reachability-bypassing-cloudflare">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="test-direct-origin-reachability-bypassing-cloudflare-heading">Step 1: Test Direct Origin Reachability Bypassing Cloudflare</h4>
+            <p>From an external machine, test whether your origin responds directly on port <code>443</code> using <code>--resolve</code> to simulate the exact domain <code>Host</code> header:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-I</span> <span class="tok-prop">--resolve</span> soportecero.com:<span class="tok-num">443</span>:YOUR_ORIGIN_IP https://soportecero.com/
+</code></pre>
+    </div>
+    
+<p>If this direct request hangs and times out, the issue lies in your hosting provider&#39;s network firewall, an incorrect DNS IP, or a stalled Nginx/application process. If it responds immediately with <code>200 OK</code>, your origin is specifically blocking or throttling Cloudflare&#39;s edge IPs.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="whitelist-official-cloudflare-ip-ranges-in-ufw">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="whitelist-official-cloudflare-ip-ranges-in-ufw-heading">Step 2: Whitelist Official Cloudflare IP Ranges in UFW</h4>
+            <p>Ensure no local firewall rule drops or rate-limits Cloudflare edge nodes. Allow all official Cloudflare IPv4 ranges on ports <code>80</code> and <code>443</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>for <span class="tok-kw">ip</span> in $(<span class="tok-kw">curl</span> <span class="tok-prop">-s</span> https://www.cloudflare.com/ips-v4); do
+  <span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> allow proto tcp from <span class="tok-str">&quot;$ip&quot;</span> to any port <span class="tok-num">80</span>,<span class="tok-num">443</span> comment <span class="tok-cmt">&#39;Cloudflare Edge&#39;</span>
+done
+<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> reload
+</code></pre>
+    </div>
+    
+<p>If your DNS includes an <code>AAAA</code> record, repeat the loop against <code>https://www.cloudflare.com/ips-v6</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="restore-visitor-real-ips-in-nginx">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="restore-visitor-real-ips-in-nginx-heading">Step 3: Restore Visitor Real IPs in Nginx</h4>
+            <p>Create <code>/etc/nginx/conf.d/cloudflare-realip.conf</code> so Nginx logs and rate-limits the actual end-user IP instead of Cloudflare&#39;s proxy addresses:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">NGINX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>set_real_ip_from <span class="tok-num">173.245</span>.<span class="tok-num">48.0</span>/<span class="tok-num">20</span>;
+set_real_ip_from <span class="tok-num">103.21</span>.<span class="tok-num">244.0</span>/<span class="tok-num">22</span>;
+set_real_ip_from <span class="tok-num">103.22</span>.<span class="tok-num">200.0</span>/<span class="tok-num">22</span>;
+set_real_ip_from <span class="tok-num">103.31</span>.<span class="tok-num">4.0</span>/<span class="tok-num">22</span>;
+set_real_ip_from <span class="tok-num">141.101</span>.<span class="tok-num">64.0</span>/<span class="tok-num">18</span>;
+set_real_ip_from <span class="tok-num">108.162</span>.<span class="tok-num">192.0</span>/<span class="tok-num">18</span>;
+set_real_ip_from <span class="tok-num">190.93</span>.<span class="tok-num">240.0</span>/<span class="tok-num">20</span>;
+set_real_ip_from <span class="tok-num">188.114</span>.<span class="tok-num">96.0</span>/<span class="tok-num">20</span>;
+set_real_ip_from <span class="tok-num">197.234</span>.<span class="tok-num">240.0</span>/<span class="tok-num">22</span>;
+set_real_ip_from <span class="tok-num">198.41</span>.<span class="tok-num">128.0</span>/<span class="tok-num">17</span>;
+real_ip_header CF-Connecting-IP;
+</code></pre>
+    </div>
+    
+<p>Validate the configuration and reload Nginx:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> nginx <span class="tok-prop">-t</span> &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> reload nginx
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="tune-nginx-keepalive-and-linux-kernel-tcp-queues">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="tune-nginx-keepalive-and-linux-kernel-tcp-queues-heading">Step 4: Tune Nginx Keepalive and Linux Kernel TCP Queues</h4>
+            <p>Set a balanced <code>keepalive_timeout</code> in <code>/etc/nginx/nginx.conf</code> to prevent premature socket closures during Cloudflare connection reuse:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">NGINX</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">keepalive_timeout</span> 75s;
+keepalive_requests <span class="tok-num">1000</span>;
+</code></pre>
+    </div>
+    
+<p>Then raise the kernel listen backlog in <code>/etc/sysctl.d/99-network-tuning.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>net.core.somaxconn = <span class="tok-num">4096</span>
+net.ipv4.tcp_max_syn_backlog = <span class="tok-num">4096</span>
+</code></pre>
+    </div>
+    
+<p>Apply the kernel parameters immediately:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> sysctl <span class="tok-prop">--system</span>
+</code></pre>
+    </div>
+    
+<hr>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="what-is-the-difference-between-cloudflare-error-521-and-error-522">What is the difference between Cloudflare Error 521 and Error 522?</h3>
+<p>In Error 521, the origin server actively refuses the connection by sending a <code>TCP RST</code> packet (usually because the web server daemon is stopped). In Error 522, the origin never responds within the 15-second TCP handshake or 90-second HTTP timeout window, typically due to silent firewall <code>DROP</code> rules or queue exhaustion.</p>
+<h3 id="does-disabling-the-cloudflare-proxy-grey-cloud-fix-error-522">Does disabling the Cloudflare proxy (grey cloud) fix Error 522?</h3>
+<p>Switching to DNS-only mode bypasses Cloudflare&#39;s proxy layer, so the Cloudflare 522 error page disappears. However, if your origin firewall or web server is actually unreachable or overloaded, visitors will still encounter a browser-level <code>ERR_CONNECTION_TIMED_OUT</code>.</p>
+<hr>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li>Automate weekly updates of Cloudflare&#39;s IP list in both your firewall and Nginx <code>set_real_ip_from</code> config via a scheduled cron job.</li>
+<li>Enable Cloudflare Authenticated Origin Pulls (mTLS) so your origin only accepts TLS handshakes from verified Cloudflare edge certificates.</li>
+<li>Monitor TCP socket states and listen-queue overflows using <code>ss -s</code> and <code>nstat -az TcpExtListenDrops</code> during traffic spikes.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="author">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Author • Web Designer & App Creator</span>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Editorial Methodology
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contact.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Report an issue
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Links & Portfolio
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: How to Fix Linux OOM Killer and Systemd Out of Memory Crashes -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-systemd-oom-killer-memory-leak-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Linux OOM Killer and Systemd Out of Memory Crashes</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 7 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Fix Next.js Error ReferenceError: document is not defined (App Router & SSR) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nextjs-referenceerror-document-is-not-defined.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Next.js Error ReferenceError: document is not defined (App Router & SSR)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Next.js</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Fix Nvidia NVML Error: Driver/library version mismatch in Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nvidia-nvml-driver-library-version-mismatch.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Nvidia NVML Error: Driver/library version mismatch in Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nvidia</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -9,35 +9,59 @@ tags:
   - WordPress
   - Cloudflare
   - SSL
-readTime: 4 min
+readTime: 5 min
 date: '2026-07-27'
 ---
 
-The `ERR_TOO_MANY_REDIRECTS` error (or infinite redirect loop) occurs on WordPress sites hosted behind Cloudflare when the CDN proxy and origin web server enter a cycle of conflicting HTTP/HTTPS redirect responses.
+The browser error `ERR_TOO_MANY_REDIRECTS` (or `The page isn't redirecting properly` in Firefox) occurs on WordPress sites proxied through Cloudflare when the edge CDN and your origin web server disagree on whether the request is already encrypted. The client bounces endlessly between `https://yourdomain.com` and `https://yourdomain.com` until the browser aborts after ~20 consecutive `301`/`302` hops.
 
 ## Quick Diagnostics
 
-| Cause | Solution |
-|---|---|
-| **Browser displays `ERR_TOO_MANY_REDIRECTS` when attempting to open site**: Cloudflare is set to "Flexible" SSL mode, sending unencrypted HTTP to origin while WordPress forces HTTP to HTTPS redirect | Change Cloudflare SSL/TLS mode to "Full" or "Full (Strict)" and update HTTPS proxy detection in `wp-config.php` |
+| Symptom / Cause | Verification | Immediate Fix |
+|---|---|---|
+| Cloudflare SSL/TLS set to **Flexible** while origin forces HTTPS | `curl -I https://yourdomain.com` loops `301` | Switch Cloudflare SSL/TLS mode to **Full (Strict)** |
+| WordPress unaware of HTTPS behind reverse proxy | `$_SERVER['HTTPS']` is unset in PHP | Map `HTTP_X_FORWARDED_PROTO` to `HTTPS=on` in `wp-config.php` |
+| Conflicting `www` vs non-`www` rules in `.htaccess` and WordPress | `WP_HOME` uses `www` while server redirects to apex | Align `WP_HOME`, `WP_SITEURL`, and Nginx/Apache rules |
+| Cloudflare "Always Use HTTPS" + origin HTTP-to-HTTPS redirect | Inspect `Location` header in `curl -IL` | Let Cloudflare handle edge redirect or fix proxy headers |
 
-## 🚀 How to Fix the Error Step-by-Step
+## Root Cause & Technical Mechanics
 
-### Step 1: Change Cloudflare SSL/TLS Encryption Mode
+When Cloudflare proxies a domain (orange cloud enabled), it terminates the visitor's TLS session at the edge and opens a second connection to your origin server.
 
-1. Log into your **Cloudflare Dashboard**.
-2. Select your domain and navigate to **SSL/TLS** > **Overview**.
-3. Change the encryption mode from **Flexible** to **Full** or **Full (Strict)**.
+In **Flexible** SSL/TLS mode, Cloudflare connects to your origin over **unencrypted HTTP (port 80)** even when the visitor requested `https://`. Your origin server or WordPress sees a port 80 request, assumes the visitor is on HTTP, and replies with `301 Moved Permanently` to `https://yourdomain.com`. Cloudflare forwards that redirect to the browser, the browser retries `https://yourdomain.com`, Cloudflare hits port 80 again, and the loop repeats indefinitely.
 
-*(Flexible mode connects to your origin server over HTTP. If WordPress enforces HTTPS, it will reply with a 301 redirect back to HTTPS, triggering a loop).*
+A secondary cause occurs even in **Full** mode when an internal reverse proxy forwards HTTP without setting `HTTPS=on` for PHP, causing WordPress's `is_ssl()` check to return `false` and trigger a self-redirect.
 
-### Step 2: Configure Reverse Proxy HTTPS Headers in wp-config.php
+## Step-by-Step Solution
 
-Edit your WordPress site's `wp-config.php` file and place the following code snippet above the line `/* That's all, stop editing! Happy publishing. */`:
+### Step 1: Inspect the Redirect Headers With `curl`
+
+Run `curl` against your domain to confirm the exact `301`/`302` loop and see which server header (`Server: cloudflare` vs origin) is issuing the redirect:
+
+```bash
+curl -sI https://yourdomain.com | grep -iE "HTTP/|location:|server:|cf-ray:"
+```
+
+If you see `HTTP/2 301` with `location: https://yourdomain.com/` pointing right back to the same HTTPS URL, you have confirmed the edge-to-origin SSL loop.
+
+### Step 2: Set Cloudflare SSL/TLS Mode to Full (Strict)
+
+1. Log in to the **Cloudflare Dashboard** and select your domain.
+2. Navigate to **SSL/TLS > Overview**.
+3. Change the encryption mode from **Flexible** to **Full (Strict)** (if your origin has a valid Let's Encrypt or Cloudflare Origin CA certificate) or **Full** (if your origin uses a self-signed certificate).
+
+Never leave a production WordPress site on **Flexible** or **Off**.
+
+### Step 3: Teach WordPress to Trust Reverse Proxy HTTPS Headers
+
+If your origin sits behind an internal reverse proxy or Apache/Nginx still reports non-SSL to PHP, edit `wp-config.php` and insert the following snippet **above** `/* That's all, stop editing! Happy publishing. */`:
 
 ```php
-// Detect Cloudflare reverse proxy HTTPS header
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+// Recognize HTTPS terminated by Cloudflare or an upstream reverse proxy
+if (
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) ||
+    (isset($_SERVER['HTTP_CF_VISITOR']) && strpos($_SERVER['HTTP_CF_VISITOR'], '"scheme":"https"') !== false)
+) {
     $_SERVER['HTTPS'] = 'on';
 }
 
@@ -45,14 +69,32 @@ define('WP_HOME', 'https://yourdomain.com');
 define('WP_SITEURL', 'https://yourdomain.com');
 ```
 
-### Step 3: Purge Cache and Verify Site
+Also verify `WP_HOME` and `WP_SITEURL` match the exact canonical host (`www` vs non-`www`) configured in your `.htaccess` or Nginx `server` block.
 
-1. In the Cloudflare dashboard, go to **Caching** > **Configuration** and click **Purge Everything**.
-2. Clear your web browser cache or test the site in an Incognito/Private window.
-3. If using WordPress caching plugins (e.g., WP Rocket or LiteSpeed Cache), purge the plugin cache as well.
+### Step 4: Purge Edge and Origin Caches, Then Verify
 
-## 🛡️ Prevention Advice
+Browsers and Cloudflare cache `301` redirects aggressively. Purge Cloudflare (**Caching > Configuration > Purge Everything**) and any WordPress page/object cache (`wp cache flush`), then verify from the terminal:
 
-- **Never Use Flexible SSL in Production**: Always configure Cloudflare SSL/TLS encryption mode to **Full** or **Full (Strict)** by installing an SSL certificate (such as Let's Encrypt or a Cloudflare Origin CA certificate) on your origin server.
-- **Avoid Overlapping Redirect Rules**: When turning on Cloudflare's "Always Use HTTPS", ensure you don't have duplicate or conflicting HTTP-to-HTTPS redirect rules in `.htaccess` or Nginx.
-- **Install Cloudflare Official Plugin**: Use the official WordPress Cloudflare plugin to properly handle client IP restoration and cache invalidation.
+```bash
+curl -sIL --max-redirs 5 https://yourdomain.com | grep -iE "HTTP/|location:"
+```
+
+You should see a clean `HTTP/2 200` response (or at most one canonical `301` followed by `200`).
+
+## Frequently Asked Questions
+
+### Why does the error disappear when I pause Cloudflare (grey cloud)?
+Pausing Cloudflare bypasses the CDN proxy so the browser hits your origin directly on port 443, proving the origin certificate works and confirming the loop came from Flexible SSL or proxy header mismatch.
+
+### Can a Cloudflare Page Rule or Redirect Rule cause `ERR_TOO_MANY_REDIRECTS`?
+Yes. If a Page Rule forces `http://` to `https://` while another rule or `.htaccess` forces the opposite (`www` vs apex), they loop. Keep canonical redirects in one place.
+
+### Do I still need an SSL certificate on my origin server if I use Cloudflare?
+Yes. **Full (Strict)** requires a valid origin certificate. You can generate a free 15-year **Cloudflare Origin CA** certificate under **SSL/TLS > Origin Server**.
+
+## Prevention Advice
+
+- **Standardize on Full (Strict) SSL:** Install a Let's Encrypt or Cloudflare Origin CA certificate on every origin server before enabling Cloudflare proxy mode.
+- **Avoid duplicate HTTPS plugins:** Remove WordPress plugins like "Really Simple SSL" once server-level HTTPS and `WP_HOME`/`WP_SITEURL` are properly configured.
+- **Match canonical hostnames everywhere:** Ensure WordPress Settings, `.htaccess`/Nginx redirects, and Cloudflare Page Rules agree on `https://` and `www` vs apex.
+- **Test redirects with `curl -IL`:** Always verify redirect chains from the command line after changing SSL or DNS proxy settings.

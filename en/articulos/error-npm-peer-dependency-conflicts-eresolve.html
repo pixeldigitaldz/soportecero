@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is the operational difference between --legacy-peer-deps and --force?",
+      "name": "What is the difference between --legacy-peer-deps and --force?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "--legacy-peer-deps ignores peerDependency graph collisions entirely. --force aggressively overwrites conflicting modules in node_modules, frequently causing subtle runtime bugs."
+        "text": "--legacy-peer-deps skips automatic installation and conflict checking of peerDependencies altogether. --force continues installing even on conflict by overwriting or fetching duplicate incompatible versions, which frequently introduces subtle runtime crashes in singleton libraries like React."
       }
     },
     {
       "@type": "Question",
-      "name": "Is --legacy-peer-deps safe to deploy to production?",
+      "name": "Why does npm ci fail in CI even after npm install --legacy-peer-deps worked locally?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, provided your application builds and passes automated unit tests, as most minor/major peer mismatches maintain backward-compatible core APIs."
+        "text": "npm ci reads package-lock.json strictly and still validates peer compatibility unless legacy-peer-deps=true is present in .npmrc or passed as a CLI flag (npm ci --legacy-peer-deps)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can overrides cause runtime bugs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if the overridden package relies on a removed API from the older major version. Always run your unit/integration test suite and TypeScript check (npx tsc --noEmit) after adding an overrides entry."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When running <code>npm install</code> or pulling a new dependency into a Node.js project, the execution halts with: <code>npm ERR! code ERESOLVE</code> and <code>npm ERR! ERESOLVE unable to resolve dependency tree</code>. Starting with npm version 7, the package manager automatically attempts to install peer dependencies and enforces strict semantic version compatibility trees.</p>
+          <p>Running <code>npm install</code> in modern JavaScript and TypeScript repositories frequently aborts with <code>npm ERR! code ERESOLVE</code> and <code>npm ERR! ERESOLVE unable to resolve dependency tree</code>. This happens when npm&#39;s Arborist dependency resolver detects incompatible <code>peerDependencies</code> version ranges between your root project and one or more third-party packages.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Strict peer dependency resolution checks enforced automatically since npm v7+</strong></div>
+            <div class="diag-value"><strong>React / framework major version mismatch</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>peer react@&quot;^17.0.0&quot;</code> vs root <code>react@18/19</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Install using --legacy-peer-deps or reconcile mismatched packages via npm overrides</div>
+            <div class="diag-value">Upgrade package, or add <code>overrides</code> in <code>package.json</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Version divergence between React 18/19 and unmaintained third-party ecosystem packages</strong></div>
+            <div class="diag-value"><strong>Legacy plugin lagging behind ESLint/Vite</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>ERESOLVE</code> on <code>@typescript-eslint</code> or <code>eslint@9</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Configure .npmrc with legacy-peer-deps=true or declare overrides in package.json</div>
+            <div class="diag-value">Align plugin versions or use <code>--legacy-peer-deps</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Stale <code>package-lock.json</code> conflict</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Works on fresh clone, fails locally</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Delete <code>package-lock.json</code> + <code>node_modules</code> and reinstall</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>CI/CD pipeline failing on <code>npm ci</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Local install used <code>--legacy-peer-deps</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Persist <code>legacy-peer-deps=true</code> in <code>.npmrc</code> or fix <code>overrides</code></div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +399,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#what-is-the-operational-difference-between-legacy-peer-deps-and-force" class="toc-sublink">
+            <a href="#what-is-the-difference-between-legacy-peer-deps-and-force" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">What is the operational difference between --legacy-peer-deps and --force?</span>
+              <span class="toc-subtext">What is the difference between --legacy-peer-deps and --force?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#is-legacy-peer-deps-safe-to-deploy-to-production" class="toc-sublink">
+            <a href="#why-does-npm-ci-fail-in-ci-even-after-npm-install-legacy-peer-deps-worked-locally" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Is --legacy-peer-deps safe to deploy to production?</span>
+              <span class="toc-subtext">Why does npm ci fail in CI even after npm install --legacy-peer-deps worked locally?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-overrides-cause-runtime-bugs" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can overrides cause runtime bugs?</span>
             </a>
           </li>
         
@@ -395,6 +450,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Starting with <strong>npm v7</strong>, the package manager replaced its permissive v6 installer with <strong>Arborist</strong>, which automatically installs <code>peerDependencies</code> and enforces strict semantic versioning (SemVer) satisfaction across the entire dependency graph.</p>
+<p>Unlike regular <code>dependencies</code>—which npm can nest at multiple versions inside <code>node_modules/&lt;pkg&gt;/node_modules/</code>—<code>peerDependencies</code> must resolve to a <strong>single shared instance</strong> at the top of the tree (for example, a single copy of <code>react</code> or <code>@angular/core</code> so hooks and context singletons do not break). When package <code>A</code> declares <code>peerDependencies: { &quot;react&quot;: &quot;^18.0.0&quot; }</code> while your <code>package.json</code> pins <code>&quot;react&quot;: &quot;^19.0.0&quot;</code>, Arborist refuses to guess which version to hoist and aborts with <code>ERESOLVE</code> before writing to <code>node_modules</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +461,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="analyze-the-conflicting-dependency-tree-branch">
+        <li class="step-item" id="read-the-arborist-conflict-tree">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="analyze-the-conflicting-dependency-tree-branch-heading">Step 1: Analyze the Conflicting Dependency Tree Branch</h4>
-            <p>Examine the error stack printed in your terminal. npm shows the precise mismatch causing the lockup:</p>
+            <h4 id="read-the-arborist-conflict-tree-heading">Step 1: Read the Arborist Conflict Tree</h4>
+            <p>Inspect the <code>While resolving:</code> and <code>Could not resolve dependency:</code> lines in the terminal output to pinpoint the exact package causing the mismatch:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -417,7 +475,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">TEXT</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -427,23 +485,89 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>Could not resolve dependency:
-peer react@<span class="tok-str">&quot;^17.0.0&quot;</span> <span class="tok-kw">from</span> legacy-ui-lib@<span class="tok-num">1.2</span>.<span class="tok-num">0</span>
-node_modules/legacy-ui-lib
-  legacy-ui-lib@<span class="tok-str">&quot;^1.2.0&quot;</span> <span class="tok-kw">from</span> the root project
+      <pre class="formatted-pre"><code>npm error Could not resolve dependency:
+npm error peer react@<span class="tok-str">&quot;^17.0.0 || ^18.0.0&quot;</span> <span class="tok-kw">from</span> legacy-chart-lib@<span class="tok-num">2.4</span>.<span class="tok-num">0</span>
+npm error node_modules/legacy-chart-lib
+npm error   legacy-chart-lib@<span class="tok-str">&quot;^2.4.0&quot;</span> <span class="tok-kw">from</span> the root project
 </code></pre>
     </div>
     
-<p>Here, the root project requires React 18+, but the legacy UI package specifies an incompatible peer dependency on React 17.</p>
+<p>First check if a newer release of <code>legacy-chart-lib</code> already supports your React or ESLint major version (<code>npm view legacy-chart-lib versions --json</code>).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="bypass-peer-dependency-trees-with-legacy-peer-deps">
+        <li class="step-item" id="pin-deterministic-versions-with-packagejson-overrides">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="bypass-peer-dependency-trees-with-legacy-peer-deps-heading">Step 2: Bypass Peer Dependency Trees with --legacy-peer-deps</h4>
-            <p>The <code>--legacy-peer-deps</code> flag tells npm to ignore conflicting peerDependencies, restoring the classic behavior of npm v6:</p>
+            <h4 id="pin-deterministic-versions-with-packagejson-overrides-heading">Step 2: Pin Deterministic Versions with package.json overrides</h4>
+            <p>When an upstream library works at runtime on a newer peer version but has an outdated <code>peerDependencies</code> range, use <code>overrides</code> (npm 8.3+) to force a single deterministic resolution without disabling checks globally:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JSON</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>{
+  <span class="tok-str">&quot;dependencies&quot;</span>: {
+    <span class="tok-str">&quot;react&quot;</span>: <span class="tok-str">&quot;^19.0.0&quot;</span>,
+    <span class="tok-str">&quot;legacy-chart-lib&quot;</span>: <span class="tok-str">&quot;^2.4.0&quot;</span>
+  },
+  <span class="tok-str">&quot;overrides&quot;</span>: {
+    <span class="tok-str">&quot;legacy-chart-lib&quot;</span>: {
+      <span class="tok-str">&quot;react&quot;</span>: <span class="tok-str">&quot;$react&quot;</span>
+    }
+  }
+}
+</code></pre>
+    </div>
+    
+<p>The <code>$react</code> syntax tells npm to reuse the exact <code>react</code> version declared in your root <code>dependencies</code>. Regenerate the lockfile afterward:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> node_modules package-lock.<span class="tok-prop">json</span>
+<span class="tok-kw">npm</span> install
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="bypass-peer-resolution-with-legacy-peer-deps-fallback">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="bypass-peer-resolution-with-legacy-peer-deps-fallback-heading">Step 3: Bypass Peer Resolution with --legacy-peer-deps (Fallback)</h4>
+            <p>If multiple transitive packages have incompatible peer ranges and <code>overrides</code> is impractical during an urgent build, instruct npm to restore v6 peer-ignoring behavior:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -467,7 +591,7 @@ node_modules/legacy-ui-lib
 </code></pre>
     </div>
     
-<p>To persist this across CI/CD runners (GitHub Actions, Vercel, Netlify), declare it in your local <code>.npmrc</code>:</p>
+<p>To ensure <code>npm ci</code> in CI/CD runners (GitHub Actions, Vercel) honors the same rule, commit a project-level <code>.npmrc</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -487,53 +611,18 @@ node_modules/legacy-ui-lib
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># .npmrc</span>
-legacy-peer-deps=<span class="tok-kw">true</span>
+      <pre class="formatted-pre"><code>legacy-peer-deps=<span class="tok-kw">true</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="pin-uniform-versions-via-packagejson-overrides">
-          <div class="step-number">3</div>
+        <li class="step-item" id="verify-the-resolved-dependency-graph">
+          <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="pin-uniform-versions-via-packagejson-overrides-heading">Step 3: Pin Uniform Versions via package.json overrides</h4>
-            <p>For a clean, deterministic package resolution without bypassing validations, declare an <code>overrides</code> block in <code>package.json</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">JSON</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>{
-  <span class="tok-str">&quot;name&quot;</span>: <span class="tok-str">&quot;my-app&quot;</span>,
-  <span class="tok-str">&quot;dependencies&quot;</span>: {
-    <span class="tok-str">&quot;react&quot;</span>: <span class="tok-str">&quot;^18.3.1&quot;</span>
-  },
-  <span class="tok-str">&quot;overrides&quot;</span>: {
-    <span class="tok-str">&quot;legacy-ui-lib&quot;</span>: {
-      <span class="tok-str">&quot;react&quot;</span>: <span class="tok-str">&quot;$react&quot;</span>
-    }
-  }
-}
-</code></pre>
-    </div>
-    
-<p>Delete your lockfile and reinstall:</p>
+            <h4 id="verify-the-resolved-dependency-graph-heading">Step 4: Verify the Resolved Dependency Graph</h4>
+            <p>Confirm the installed tree has no broken or duplicate peer singletons:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -553,59 +642,23 @@ legacy-peer-deps=<span class="tok-kw">true</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> package-lock.<span class="tok-prop">json</span> node_modules
-<span class="tok-kw">npm</span> install
+      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> <span class="tok-kw">ls</span> react
+<span class="tok-kw">npm</span> explain legacy-chart-lib
 </code></pre>
     </div>
+    
+<p>If <code>npm ls react</code> exits with <code>0</code> and shows a single shared version, your tree is consistent.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="what-is-the-operational-difference-between-legacy-peer-deps-and-force">What is the operational difference between --legacy-peer-deps and --force?</h3>
-<p>--legacy-peer-deps ignores peerDependency graph collisions entirely. --force aggressively overwrites conflicting modules in node_modules, frequently causing subtle runtime bugs.</p>
-<h3 id="is-legacy-peer-deps-safe-to-deploy-to-production">Is --legacy-peer-deps safe to deploy to production?</h3>
-<p>Yes, provided your application builds and passes automated unit tests, as most minor/major peer mismatches maintain backward-compatible core APIs.</p>
+<h3 id="what-is-the-difference-between-legacy-peer-deps-and-force">What is the difference between <code>--legacy-peer-deps</code> and <code>--force</code>?</h3>
+<p><code>--legacy-peer-deps</code> skips automatic installation and conflict checking of <code>peerDependencies</code> altogether. <code>--force</code> continues installing even on conflict by overwriting or fetching duplicate incompatible versions, which frequently introduces subtle runtime crashes in singleton libraries like React.</p>
+<h3 id="why-does-npm-ci-fail-in-ci-even-after-npm-install-legacy-peer-deps-worked-locally">Why does <code>npm ci</code> fail in CI even after <code>npm install --legacy-peer-deps</code> worked locally?</h3>
+<p><code>npm ci</code> reads <code>package-lock.json</code> strictly and still validates peer compatibility unless <code>legacy-peer-deps=true</code> is present in <code>.npmrc</code> or passed as a CLI flag (<code>npm ci --legacy-peer-deps</code>).</p>
+<h3 id="can-overrides-cause-runtime-bugs">Can <code>overrides</code> cause runtime bugs?</h3>
+<p>Yes, if the overridden package relies on a removed API from the older major version. Always run your unit/integration test suite and TypeScript check (<code>npx tsc --noEmit</code>) after adding an <code>overrides</code> entry.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -620,50 +673,12 @@ legacy-peer-deps=<span class="tok-kw">true</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Audit package maintenance status on npm before introducing dependencies with outdated peer requirements.</li>
-<li>Run <code>npm outdated</code> periodically to maintain modern dependency hygiene.</li>
+              <li>Prefer <code>overrides</code> (or <code>resolutions</code> in Yarn / <code>pnpm.overrides</code> in pnpm) over global <code>legacy-peer-deps=true</code> so you only relax the specific package that lags behind.</li>
+<li>Run <code>npm outdated</code> and upgrade ecosystem plugins together when bumping major framework versions (e.g., React, Next.js, ESLint).</li>
+<li>Commit <code>package-lock.json</code> and <code>.npmrc</code> to version control so local machines and CI runners resolve identical graphs.</li>
+<li>Check a package&#39;s maintenance activity and <code>peerDependencies</code> (<code>npm info &lt;pkg&gt; peerDependencies</code>) before adopting it.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -737,7 +752,7 @@ legacy-peer-deps=<span class="tok-kw">true</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Vite</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -754,7 +769,7 @@ legacy-peer-deps=<span class="tok-kw">true</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

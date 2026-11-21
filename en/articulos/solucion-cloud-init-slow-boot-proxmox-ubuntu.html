@@ -194,22 +194,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -243,7 +227,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -259,7 +243,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The message <strong><code>cloud-init: waiting for network config</code></strong> or a 2 to 5-minute boot delay on Ubuntu Server virtual machines running on <strong>Proxmox VE, KVM, or Cloud VPS</strong> occurs when <code>cloud-init</code> stalls waiting for DHCP responses on unconfigured secondary network interfaces.</p>
+          <p>When an Ubuntu Server virtual machine running on Proxmox VE, KVM, or a cloud hypervisor hangs for 2 to 5 minutes at <code>A start job is running for Wait for Network to be Configured</code> or <code>cloud-init: waiting for network config</code>, <code>systemd-networkd-wait-online</code> is blocking the boot sequence. This happens because <code>cloud-init</code> or Netplan expects DHCP or metadata responses on every defined network interface before allowing multi-user targets to proceed.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,25 +260,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>cloud-init process waiting for network response during VM boot</strong></div>
+            <div class="diag-value"><strong><code>cloud-init</code> querying unreachable metadata endpoints</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Disable unused network metadata lookup in <code>/etc/cloud/cloud.cfg</code></div>
+            <div class="diag-value">Disable <code>cloud-init</code> post-provisioning via <code>/etc/cloud/cloud-init.disabled</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>cloud-init services delaying systemd startup</strong></div>
+            <div class="diag-value"><strong><code>systemd-networkd-wait-online</code> timing out (120s)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Disable unused modules: <code>systemctl disable cloud-init</code></div>
+            <div class="diag-value">Add <code>optional: true</code> to unused interfaces in <code>/etc/netplan/</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Proxmox Cloud-Init drive attached without DHCP</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Configure static IP in Proxmox Cloud-Init tab or detach the <code>cloudinit</code> ISO</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Slow DNS / reverse lookup during boot</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Verify <code>/etc/hosts</code> contains the VM&#39;s local hostname</div>
           </div></div></div>
       </div>
     </section>
@@ -335,36 +343,24 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#step-1-diagnose-boot-bottlenecks" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Diagnose Boot Bottlenecks</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-2-disable-cloud-init-post-provisioning" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Disable cloud-init Post-Provisioning</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-3-configure-non-blocking-netplan-interfaces" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Configure Non-Blocking Netplan Interfaces</span>
-            </a>
-          </li>
-        
-        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -372,9 +368,25 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-diagnose-boot-bottlenecks">Step 1: Diagnose Boot Bottlenecks</h3>
-<p>Inspect boot time duration per service using <code>systemd-analyze</code>:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During early boot, Ubuntu Server executes <code>cloud-init-local.service</code> and <code>systemd-networkd-wait-online.service</code> in sequence. In a Proxmox VE environment, two conditions routinely stall this pipeline:</p>
+<ol>
+<li><strong>Unconfigured or disconnected NICs in Netplan:</strong> When a VM template is cloned with multiple virtual NICs (<code>ens18</code>, <code>ens19</code>) or when <code>cloud-init</code> generates <code>/etc/netplan/50-cloud-init.yaml</code> with <code>dhcp4: true</code> on an isolated VLAN without a DHCP server, <code>systemd-networkd-wait-online.service</code> blocks boot for its hardcoded default timeout of <strong>120 seconds</strong> waiting for every interface to reach the <code>routable</code> state.</li>
+<li><strong>Repeated Metadata Datasource Probing:</strong> Even after initial provisioning completes, <code>cloud-init.service</code> and <code>cloud-final.service</code> run on every subsequent reboot. If Proxmox&#39;s <code>NoCloud</code> config drive was detached or if <code>cloud-init</code> falls back to probing AWS/OpenStack link-local metadata endpoints (<code>169.254.169.254</code>), each HTTP retry adds 15–60 seconds of blocking delay before <code>sshd</code> starts.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="1-measure-exact-boot-service-timings">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="1-measure-exact-boot-service-timings-heading">1. Measure Exact Boot Service Timings</h4>
+            <p>Log into your Proxmox VM via SSH or the noVNC console and inspect which unit is consuming boot time:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -394,13 +406,11 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>systemd-analyze blame | <span class="tok-kw">grep</span> cloud-init
+      <pre class="formatted-pre"><code>systemd-analyze blame | head <span class="tok-prop">-n</span> <span class="tok-num">15</span>
 </code></pre>
     </div>
     
-<p>If <code>cloud-init-local.service</code> or <code>cloud-config.service</code> reports times over 30 seconds, cloud-init is stuck on network queries.</p>
-<h3 id="step-2-disable-cloud-init-post-provisioning">Step 2: Disable cloud-init Post-Provisioning</h3>
-<p>Once your virtual machine has been fully created and configured with its static IP/hostname:</p>
+<p>Inspect the critical dependency chain to confirm whether <code>systemd-networkd-wait-online.service</code> or <code>cloud-init</code> is the blocker:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -420,19 +430,74 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Prevent cloud-init execution on subsequent boots</span>
-<span class="tok-kw">sudo</span> touch /etc/cloud/cloud-init.disabled
-<span class="tok-cmt">
-# Disable systemd services</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-init.<span class="tok-kw">service</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-init-local.<span class="tok-kw">service</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-config.<span class="tok-kw">service</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> disable cloud-final.<span class="tok-kw">service</span>
+      <pre class="formatted-pre"><code>systemd-analyze critical-chain
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-disable-cloud-init-on-already-provisioned-vms">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-disable-cloud-init-on-already-provisioned-vms-heading">2. Disable cloud-init on Already-Provisioned VMs</h4>
+            <p>If your VM already has its hostname, SSH keys, and static IP configured, prevent <code>cloud-init</code> from running on future boots without uninstalling the package (which could break template cloning if you revert):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> touch /etc/cloud/cloud-init.disabled
 </code></pre>
     </div>
     
-<h3 id="step-3-configure-non-blocking-netplan-interfaces">Step 3: Configure Non-Blocking Netplan Interfaces</h3>
-<p>On Ubuntu Server, edit <code>/etc/netplan/50-cloud-init.yaml</code>:</p>
+<p>If you want to permanently remove <code>cloud-init</code> from a standalone production VM (not a template):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> dpkg-reconfigure cloud-init  <span class="tok-cmt"> # Uncheck all datasources except None</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> purge <span class="tok-prop">-y</span> cloud-init &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> /etc/cloud/ /var/lib/cloud/
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-configure-non-blocking-netplan-interfaces">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-configure-non-blocking-netplan-interfaces-heading">3. Configure Non-Blocking Netplan Interfaces</h4>
+            <p>Open <code>/etc/netplan/50-cloud-init.yaml</code> (or your active <code>.yaml</code> file under <code>/etc/netplan/</code>) and mark secondary or slow-negotiating interfaces as <code>optional: true</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -455,13 +520,14 @@
       <pre class="formatted-pre"><code>network:
   <span class="tok-kw">version</span>: <span class="tok-num">2</span>
   ethernets:
-    eth0:
+    ens18:
       dhcp4: true
       optional: true
 </code></pre>
     </div>
     
-<p>Adding <code>optional: true</code> allows Ubuntu to complete booting immediately even if DHCP network resolution is slow. Apply changes:</p>
+<p><em>(Note: Replace <code>ens18</code> with your actual interface name from <code>ip -br link</code>.)</em></p>
+<p>Validate and apply the Netplan configuration:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -481,10 +547,104 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> netplan apply
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> netplan try
+<span class="tok-kw">sudo</span> netplan apply
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-limit-systemd-networkd-wait-online-timeout-optional">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-limit-systemd-networkd-wait-online-timeout-optional-heading">4. Limit systemd-networkd-wait-online Timeout (Optional)</h4>
+            <p>If the VM has multiple interfaces and only one needs to be online for services to start, override the wait service so it succeeds as soon as <em>any</em> interface is up:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> edit systemd-networkd-wait-online.<span class="tok-kw">service</span>
 </code></pre>
     </div>
     
+<p>Add:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>[Service]
+ExecStart=
+ExecStart=/lib/systemd/systemd-networkd-wait-online --any --timeout=<span class="tok-num">10</span>
+</code></pre>
+    </div>
+    
+<p>Reboot the VM and verify the new boot duration:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> reboot<span class="tok-cmt">
+# After reconnecting:</span>
+systemd-analyze time
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Will creating <code>/etc/cloud/cloud-init.disabled</code> break Proxmox Cloud-Init if I convert the VM back to a template later?</strong>
+Yes. If you plan to clone the VM and inject new IPs or SSH keys via Proxmox&#39;s Cloud-Init tab, remove <code>/etc/cloud/cloud-init.disabled</code> and run <code>sudo cloud-init clean --logs</code> before shutting down the template.</p>
+<p><strong>Why did <code>systemd-analyze blame</code> show <code>systemd-networkd-wait-online.service</code> taking exactly 2 minutes?</strong>
+<code>120s</code> is the built-in default timeout for <code>systemd-networkd-wait-online</code>. It triggers whenever an interface defined in Netplan lacks <code>optional: true</code> and fails to obtain a carrier or DHCP lease.</p>
+<p><strong>Is it safe to mask <code>systemd-networkd-wait-online.service</code> completely?</strong>
+Not always. Services like Docker, NFS mounts, or databases bound to a specific LAN IP may fail on boot if they start before the primary interface receives its address. Using <code>--any --timeout=10</code> is safer than masking it.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -499,49 +659,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Always configure static IPs or verify DHCP availability on the target Proxmox bridge (<code>vmbr0</code>) before cloning Cloud-Init templates.</li>
+<li>Use <code>optional: true</code> in <code>/etc/netplan/</code> for secondary storage, heartbeat, or isolated management interfaces that do not carry default routes.</li>
+<li>Run <code>sudo cloud-init clean --logs</code> right before converting a customized Ubuntu VM into a Proxmox template so stale instance IDs are cleared cleanly.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

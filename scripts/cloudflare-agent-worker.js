@@ -32,6 +32,11 @@ export default {
     const acceptHeader = request.headers.get('accept') || '';
     const wantsMarkdown = acceptHeader.includes('text/markdown');
 
+    // Redirect legacy duplicate contact URL in English to canonical /en/contact.html
+    if (url.pathname === '/en/contacto.html') {
+      return Response.redirect('https://soportecero.com/en/contact.html', 301);
+    }
+
     // Handle CORS preflight for agent endpoints
     if (request.method === 'OPTIONS' && (url.pathname === '/mcp' || url.pathname === '/a2a' || url.pathname.startsWith('/.well-known/'))) {
       return new Response(null, {

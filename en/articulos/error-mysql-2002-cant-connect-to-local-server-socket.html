@@ -137,18 +137,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does 127.0.0.1 connect while localhost fails?",
+      "name": "Why does mysql -h 127.0.0.1 work when mysql -h localhost fails?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "In UNIX environments, connecting to localhost forces UNIX domain socket communication, while 127.0.0.1 utilizes network TCP/IP sockets on port 3306."
+        "text": "In MySQL clients, localhost is a special keyword that forces UNIX domain socket IPC. Specifying 127.0.0.1 forces a standard TCP/IP connection to port 3306, bypassing the .sock file completely."
       }
     },
     {
       "@type": "Question",
-      "name": "What does error code (2) represent?",
+      "name": "What is the difference between (2) and (111) at the end of Error 2002?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The (2) suffix corresponds to the standard Linux POSIX error ENOENT (No such file or directory), confirming the physical socket file is absent from disk."
+        "text": "(2) maps to POSIX ENOENT (the .sock file does not exist at that path). (111) maps to ECONNREFUSED (a stale .sock file still sits on disk from a crashed mysqld process, or mysqld crashed before binding)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I keep mysqld from crashing on a 1 GB RAM VPS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Add a 1–2 GB swap file and lower innodb_buffer_pool_size = 256M in /etc/mysql/mysql.conf.d/mysqld.cnf so the Linux OOM killer does not terminate mysqld during traffic spikes."
       }
     }
   ]
@@ -220,22 +228,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -269,7 +261,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 5 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -285,7 +277,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The exception <code>ERROR 2002 (HY000): Can&#39;t connect to local MySQL server through socket &#39;/var/run/mysqld/mysqld.sock&#39; (2)</code> occurs when local CLI clients or web applications attempt communication via the UNIX domain socket IPC endpoint and find the socket file missing or the <code>mysqld</code> daemon in a failed state.</p>
+          <p>The error <code>ERROR 2002 (HY000): Can&#39;t connect to local MySQL server through socket &#39;/var/run/mysqld/mysqld.sock&#39; (2)</code> means the <code>mysql</code> CLI client (or PHP/Python/Node driver) tried to open a local UNIX domain socket for inter-process communication (IPC), and the kernel returned <code>ENOENT</code> (<code>(2)</code> — No such file or directory) because either <code>mysqld</code> is not running or its socket file lives at a different path.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -302,25 +294,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>MySQL / MariaDB daemon stopped or unable to create UNIX socket due to exhausted storage</strong></div>
+            <div class="diag-value"><strong><code>mysql</code> or <code>mariadb</code> systemd service stopped</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Inspect disk with <code>df -h</code> and start service with <code>sudo systemctl start mysql</code></div>
+            <div class="diag-value">Run <code>sudo systemctl start mysql</code> (or <code>mariadb</code>)</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Socket path mismatch between my.cnf (/var/run/mysqld/mysqld.sock vs /tmp/mysql.sock)</strong></div>
+            <div class="diag-value"><strong>Root disk 100% full preventing InnoDB &amp; socket creation</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Create compatibility symlink or synchronize socket paths across <code>[client]</code> and <code>[mysqld]</code></div>
+            <div class="diag-value">Free space (<code>df -h</code>) before restarting <code>mysqld</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Missing <code>/var/run/mysqld</code> directory on <code>tmpfs</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Recreate directory owned by <code>mysql:mysql</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Client expects <code>/tmp/mysql.sock</code> instead of <code>/var/run/mysqld/mysqld.sock</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Align <code>socket</code> in <code>/etc/mysql/my.cnf</code> under <code>[mysqld]</code> and <code>[client]</code></div>
           </div></div></div>
       </div>
     </section>
@@ -361,31 +377,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions-faq" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-127001-connect-while-localhost-fails" class="toc-sublink">
+            <a href="#why-does-mysql-h-127001-work-when-mysql-h-localhost-fails" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does 127.0.0.1 connect while localhost fails?</span>
+              <span class="toc-subtext">Why does mysql -h 127.0.0.1 work when mysql -h localhost fails?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#what-does-error-code-2-represent" class="toc-sublink">
+            <a href="#what-is-the-difference-between-2-and-111-at-the-end-of-error-2002" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">What does error code (2) represent?</span>
+              <span class="toc-subtext">What is the difference between (2) and (111) at the end of Error 2002?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#how-do-i-keep-mysqld-from-crashing-on-a-1-gb-ram-vps" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">How do I keep mysqld from crashing on a 1 GB RAM VPS?</span>
             </a>
           </li>
         
@@ -397,6 +428,14 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>On Linux and macOS, passing <code>-h localhost</code> (or omitting <code>-h</code> entirely) instructs the MySQL/MariaDB client library (<code>libmysqlclient</code>) to bypass TCP/IP port <code>3306</code> and instead connect via a <strong>UNIX domain socket</strong>—a special filesystem endpoint created by <code>mysqld</code> at startup.</p>
+<p>Error <code>2002</code> with trailing code <code>(2)</code> (<code>ENOENT</code>) or <code>(111)</code> (<code>ECONNREFUSED</code>) occurs under three common conditions:</p>
+<ol>
+<li><strong>Daemon Failure or OOM Kill:</strong> If InnoDB crashes due to exhausted disk space, a full <code>/tmp</code>, or the Linux OOM killer terminating <code>mysqld</code> on a low-RAM VPS, the daemon never creates (or leaves behind a dead) <code>.sock</code> file.</li>
+<li><strong>Volatile <code>/run</code> (<code>tmpfs</code>) Permissions:</strong> <code>/var/run</code> is a symlink to <code>/run</code>, which is mounted on volatile RAM (<code>tmpfs</code>) and wiped on every reboot. If packaging scripts or manual edits fail to recreate <code>/var/run/mysqld</code> with <code>mysql:mysql</code> ownership, <code>mysqld</code> cannot write <code>mysqld.sock</code>.</li>
+<li><strong>Config Path Drift:</strong> Compiling or mixing packages (e.g., MariaDB vs. Oracle MySQL, or Docker/Homebrew vs. APT) often places the server socket at <code>/run/mysqld/mysqld.sock</code> while the client reads <code>/tmp/mysql.sock</code>.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -405,11 +444,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-service-health-and-storage-headroom">
+        <li class="step-item" id="1-check-disk-space-and-service-status">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-service-health-and-storage-headroom-heading">Step 1: Verify Service Health and Storage Headroom</h4>
-            <p>Confirm whether the daemon is actively running and storage is unconstrained:</p>
+            <h4 id="1-check-disk-space-and-service-status-heading">1. Check Disk Space and Service Status</h4>
+            <p>Before restarting the database, verify that your root and <code>/var</code> partitions are not at 100% capacity, then inspect the service:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,25 +468,43 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Check disk capacity</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-h</span>
-<span class="tok-cmt">
-# 2. Inspect MySQL / MariaDB daemon state</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> mysql<span class="tok-cmt"> # or mariadb</span>
-<span class="tok-cmt">
-# 3. Start daemon if inactive</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> start mysql
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-h</span> / /var/lib/mysql
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> mysql <span class="tok-prop">--no-pager</span> || <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> mariadb <span class="tok-prop">--no-pager</span>
+</code></pre>
+    </div>
+    
+<p>If the service is stopped, inspect the error log for the exact crash reason:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> tail <span class="tok-prop">-n</span> <span class="tok-num">30</span> /var/log/mysql/error.log
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="recreate-socket-directory-and-fix-permissions">
+        <li class="step-item" id="2-recreate-varrunmysqld-with-correct-ownership">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="recreate-socket-directory-and-fix-permissions-heading">Step 2: Recreate Socket Directory and Fix Permissions</h4>
-            <p>If volatile <code>tmpfs</code> mounting cleared the parent runtime directory on reboot:</p>
+            <h4 id="2-recreate-varrunmysqld-with-correct-ownership-heading">2. Recreate /var/run/mysqld with Correct Ownership</h4>
+            <p>If logs report <code>Can&#39;t start server : Bind on unix socket: No such file or directory</code> or <code>Permission denied</code>, create the runtime directory and assign it to the <code>mysql</code> user:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -467,26 +524,70 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Create target socket directory</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">mkdir</span> <span class="tok-prop">-p</span> /var/run/mysqld
-<span class="tok-cmt">
-# Grant ownership to system &#39;mysql&#39; account</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">mkdir</span> <span class="tok-prop">-p</span> /var/run/mysqld
 <span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> <span class="tok-prop">-R</span> mysql:mysql /var/run/mysqld
-<span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-prop">-R</span> <span class="tok-num">755</span> /var/run/mysqld
-<span class="tok-cmt">
-# Restart database service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">755</span> /var/run/mysqld
 <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart mysql
 </code></pre>
     </div>
+    
+<p>Verify the socket file now exists and is actively listening:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">ls</span> <span class="tok-prop">-la</span> /var/run/mysqld/mysqld.sock
+<span class="tok-kw">ss</span> <span class="tok-prop">-xlp</span> | <span class="tok-kw">grep</span> mysqld
+</code></pre>
+    </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="align-socket-directives-in-mycnf">
+        <li class="step-item" id="3-synchronize-socket-paths-in-mycnf">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="align-socket-directives-in-mycnf-heading">Step 3: Align Socket Directives in my.cnf</h4>
-            <p>Ensure client and server configuration blocks share identical socket paths:</p>
+            <h4 id="3-synchronize-socket-paths-in-mycnf-heading">3. Synchronize Socket Paths in my.cnf</h4>
+            <p>If <code>mysqld</code> is running (<code>systemctl is-active mysql</code> returns <code>active</code>) yet <code>mysql</code> still throws Error 2002, check where the server actually placed the socket:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">find</span> /run /var/run /tmp <span class="tok-prop">-name</span> <span class="tok-str">&quot;*.sock&quot;</span> <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
+    
+<p>Align both <code>[mysqld]</code> and <code>[client]</code> in <code>/etc/mysql/my.cnf</code> (or <code>/etc/my.cnf</code> on RHEL/CentOS):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -506,23 +607,15 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># /etc/mysql/my.cnf</span>
-[mysqld]
+      <pre class="formatted-pre"><code>[mysqld]
 socket = /<span class="tok-kw">var</span>/run/mysqld/mysqld.sock
 
 [client]
 socket = /<span class="tok-kw">var</span>/run/mysqld/mysqld.sock
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="create-a-compatibility-symlink">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h4 id="create-a-compatibility-symlink-heading">Step 4: Create a Compatibility Symlink</h4>
-            <p>If legacy applications expect the socket at <code>/tmp/mysql.sock</code>:</p>
+    
+<p>Restart the service and test local CLI access:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -542,58 +635,21 @@ socket = /<span class="tok-kw">var</span>/run/mysqld/mysqld.sock
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ln</span> <span class="tok-prop">-s</span> /var/run/mysqld/mysqld.sock /tmp/mysql.sock
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart mysql
+mysql <span class="tok-prop">-u</span> root <span class="tok-prop">-p</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;SELECT VERSION();&quot;</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
-<h3 id="why-does-127001-connect-while-localhost-fails">Why does 127.0.0.1 connect while localhost fails?</h3>
-<p>In UNIX environments, connecting to <code>localhost</code> forces UNIX domain socket communication, while <code>127.0.0.1</code> utilizes network TCP/IP sockets on port 3306.</p>
-<h3 id="what-does-error-code-2-represent">What does error code (2) represent?</h3>
-<p>The (2) suffix corresponds to the standard Linux POSIX error <code>ENOENT</code> (No such file or directory), confirming the physical socket file is absent from disk.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-mysql-h-127001-work-when-mysql-h-localhost-fails">Why does <code>mysql -h 127.0.0.1</code> work when <code>mysql -h localhost</code> fails?</h3>
+<p>In MySQL clients, <code>localhost</code> is a special keyword that forces UNIX domain socket IPC. Specifying <code>127.0.0.1</code> forces a standard TCP/IP connection to port <code>3306</code>, bypassing the <code>.sock</code> file completely.</p>
+<h3 id="what-is-the-difference-between-2-and-111-at-the-end-of-error-2002">What is the difference between <code>(2)</code> and <code>(111)</code> at the end of Error 2002?</h3>
+<p><code>(2)</code> maps to POSIX <code>ENOENT</code> (the <code>.sock</code> file does not exist at that path). <code>(111)</code> maps to <code>ECONNREFUSED</code> (a stale <code>.sock</code> file still sits on disk from a crashed <code>mysqld</code> process, or <code>mysqld</code> crashed before binding).</p>
+<h3 id="how-do-i-keep-mysqld-from-crashing-on-a-1-gb-ram-vps">How do I keep <code>mysqld</code> from crashing on a 1 GB RAM VPS?</h3>
+<p>Add a 1–2 GB swap file and lower <code>innodb_buffer_pool_size = 256M</code> in <code>/etc/mysql/mysql.conf.d/mysqld.cnf</code> so the Linux OOM killer does not terminate <code>mysqld</code> during traffic spikes.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -608,50 +664,12 @@ socket = /<span class="tok-kw">var</span>/run/mysqld/mysqld.sock
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Audit MySQL Error Logs:</strong> Periodically inspect <code>/var/log/mysql/error.log</code> to identify InnoDB table corruption before unexpected crashes.</li>
-<li><strong>Tune memory allocation on lean instances:</strong> On 1GB VPS instances, set <code>innodb_buffer_pool_size = 256M</code> to avoid OOM Killer invocations.</li>
+              <li><strong>Use <code>systemd-tmpfiles</code> for <code>/run/mysqld</code>:</strong> Ensure <code>/usr/lib/tmpfiles.d/mysql.conf</code> exists (<code>d /run/mysqld 0755 mysql mysql -</code>) so reboots never lose the socket directory.</li>
+<li><strong>Monitor <code>/var/log/mysql/error.log</code>:</strong> Set up log rotation and alerts for InnoDB page errors or OOM kills.</li>
+<li><strong>Standardize app DSNs on <code>127.0.0.1</code>:</strong> Configure PHP (<code>PDO</code>), Python, and Node.js drivers to use <code>127.0.0.1:3306</code> when you want predictable TCP behavior across host and container environments.</li>
+<li><strong>Keep 10%+ free disk headroom:</strong> InnoDB binary logs (<code>binlog</code>) can silently fill <code>/var/lib/mysql</code> unless <code>binlog_expire_logs_seconds</code> is configured.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -742,7 +760,7 @@ socket = /<span class="tok-kw">var</span>/run/mysqld/mysqld.sock
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">TypeScript</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

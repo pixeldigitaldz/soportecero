@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The status <strong><code>interactive rebase in progress</code></strong> (or the contradictory error <code>fatal: No rebase in progress</code>) occurs when running <code>git rebase</code> if Git encounters conflicts mid-sequence and halts execution pending manual resolution. If terminal sessions disconnect or <code>.git/rebase-merge</code> locks become stale, your repository remains locked in rebase state.</p>
+          <p>Getting stuck in an <code>interactive rebase in progress</code> state—or hitting the contradictory <code>fatal: No rebase in progress?</code> error when trying to cancel it—happens when a <code>git rebase</code> halts mid-flight due to merge conflicts, an aborted editor session, or corrupted state metadata inside <code>.git/</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -273,27 +257,75 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>Pending or interrupted Rebase operation due to merge conflicts</strong></div>
+            <div class="diag-value"><strong>Prompt shows <code>(branch|REBASE 2/5)</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">ROOT CONDITION</span>
             </div>
-            <div class="diag-value">Resolve conflicts and run <code>git rebase --continue</code> or abort with <code>git rebase --abort</code></div>
+            <div class="diag-value">Active rebase paused on conflict</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE COMMAND</span>
+            </div>
+            <div class="diag-value"><code>git rebase --abort</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>Stale .git/rebase-merge directory blocking new commands</strong></div>
+            <div class="diag-value"><strong><code>fatal: No rebase in progress?</code> despite rebase prompt</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">ROOT CONDITION</span>
             </div>
-            <div class="diag-value">Abort pending rebase operation to restore clean working tree</div>
+            <div class="diag-value">Stale <code>.git/rebase-merge</code> or <code>.git/rebase-apply</code> folder</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE COMMAND</span>
+            </div>
+            <div class="diag-value"><code>rm -rf .git/rebase-merge .git/rebase-apply</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>Want to finish rebase after fixing conflicts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ROOT CONDITION</span>
+            </div>
+            <div class="diag-value">Conflict markers resolved, ready to advance</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE COMMAND</span>
+            </div>
+            <div class="diag-value"><code>git add &lt;files&gt; &amp;&amp; git rebase --continue</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>Rebase already finished or aborted but HEAD is detached</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">ROOT CONDITION</span>
+            </div>
+            <div class="diag-value"><code>HEAD</code> points to a commit hash instead of branch</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE COMMAND</span>
+            </div>
+            <div class="diag-value"><code>git checkout &lt;branch-name&gt;</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,36 +366,24 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#step-1-cleanly-abort-the-rebase" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Cleanly Abort the Rebase</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-2-force-clear-phantom-rebase-state" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Force Clear Phantom Rebase State</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-3-complete-rebase-after-conflict-resolution" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Complete Rebase After Conflict Resolution</span>
-            </a>
-          </li>
-        
-        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -371,15 +391,56 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>When you run <code>git rebase</code> (or <code>git rebase -i</code>), Git detaches <code>HEAD</code> from your branch and replays each commit sequentially onto the new base. To track progress across pauses, Git writes state files inside <code>.git/rebase-merge/</code> (for interactive and merge-backend rebases) or <code>.git/rebase-apply/</code> (for <code>git am</code> and legacy apply-backend rebases). These directories store <code>head-name</code>, <code>orig-head</code>, <code>onto</code>, and the <code>git-rebase-todo</code> script.</p>
+<p>If a terminal crashes, a disk fills up, or an IDE plugin deletes half of those tracking files, Git enters a split-brain state: your shell prompt (such as <code>git-prompt.sh</code> or Oh My Zsh) detects the presence of <code>.git/rebase-merge</code> and displays <code>REBASE</code>, while <code>git rebase --abort</code> checks for specific files inside that directory (like <code>orig-head</code>), fails to find them, and throws <code>fatal: No rebase in progress?</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           Step-by-Step Technical Implementation
         </h2>
+<ol class="steps-list">
 
-<h3 id="step-1-cleanly-abort-the-rebase">Step 1: Cleanly Abort the Rebase</h3>
-<p>To cancel all intermediate commit rewrites and return your branch to its exact state prior to running rebase:</p>
+        <li class="step-item" id="inspect-the-repository-state-and-git-tracking-folders">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="inspect-the-repository-state-and-git-tracking-folders-heading">Step 1: Inspect the repository state and .git tracking folders</h4>
+            <p>Before deleting anything, check what Git thinks is happening and whether <code>.git/rebase-merge</code> or <code>.git/rebase-apply</code> exists:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> <span class="tok-prop">status</span>
+<span class="tok-kw">ls</span> <span class="tok-prop">-la</span> .<span class="tok-kw">git</span>/ | <span class="tok-kw">grep</span> rebase
+</code></pre>
+    </div>
+    
+<p>If <code>git status</code> clearly states <code>You are currently rebasing branch &#39;feature&#39; on &#39;...&#39;</code>, a standard abort will work cleanly.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="try-a-clean-abort-first">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="try-a-clean-abort-first-heading">Step 2: Try a clean abort first</h4>
+            <p>Run the built-in abort command to restore <code>HEAD</code> and your branch pointer to <code>orig-head</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -403,9 +464,7 @@
 </code></pre>
     </div>
     
-<h3 id="step-2-force-clear-phantom-rebase-state">Step 2: Force Clear Phantom Rebase State</h3>
-<p>If your shell prompt continues to display <code>(main|REBASE 1/5)</code> but running <code>git rebase --abort</code> responds with <code>fatal: No rebase in progress</code>:</p>
-<p>Manually purge residual rebase tracking folders:</p>
+<p>Verify that your working tree is back on your original branch:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -425,64 +484,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> .<span class="tok-kw">git</span>/rebase-apply
-<span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> .<span class="tok-kw">git</span>/rebase-merge
-<span class="tok-cmt">
-# Reset branch pointer to main</span>
-<span class="tok-kw">git</span> checkout main
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> <span class="tok-prop">status</span>
+<span class="tok-kw">git</span> log <span class="tok-prop">-n</span> <span class="tok-num">3</span> <span class="tok-prop">--oneline</span>
 </code></pre>
     </div>
-    
-<h3 id="step-3-complete-rebase-after-conflict-resolution">Step 3: Complete Rebase After Conflict Resolution</h3>
-<p>If you prefer to <strong>finish</strong> the rebase sequence rather than aborting:</p>
-<ol class="steps-list">
-
-        <li class="step-item" id="step-1">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Resolve merge conflicts inside affected files.
           </div>
         </li>
         
 
-        <li class="step-item" id="step-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            Stage modified files:
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">git</span> add .
-</code></pre>
-    </div>
-    
-
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-3">
+        <li class="step-item" id="clear-a-phantom-rebase-fatal-no-rebase-in-progress">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="step-3-heading">Step 3</h4>
-            Continue the execution chain:
+            <h4 id="clear-a-phantom-rebase-fatal-no-rebase-in-progress-heading">Step 3: Clear a phantom rebase (fatal: No rebase in progress?)</h4>
+            <p>If <code>git rebase --abort</code> fails with <code>fatal: No rebase in progress?</code> while your prompt still shows <code>REBASE</code>, inspect the contents of <code>.git/rebase-merge</code> or <code>.git/rebase-apply</code> and remove the stale directory:</p>
+
     <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
@@ -501,15 +516,106 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">git</span> rebase <span class="tok-prop">--continue</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> .<span class="tok-kw">git</span>/rebase-merge/orig-head <span class="tok-num">2</span>&gt;/dev/null
+<span class="tok-kw">rm</span> <span class="tok-prop">-rf</span> .<span class="tok-kw">git</span>/rebase-merge .<span class="tok-kw">git</span>/rebase-apply
 </code></pre>
     </div>
     
+<p>If <code>HEAD</code> was left detached on an intermediate commit, use <code>git reflog</code> to locate the exact commit your branch pointed to before the rebase started, then reset back to it:</p>
 
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> reflog <span class="tok-prop">-n</span> <span class="tok-num">10</span>
+<span class="tok-kw">git</span> checkout main  <span class="tok-cmt"> # or your feature branch</span>
+<span class="tok-kw">git</span> reset <span class="tok-prop">--hard</span> &lt;pre-rebase-commit-hash&gt;
+</code></pre>
+    </div>
+    
+<p>Confirm the repository is completely clean:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> <span class="tok-prop">status</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="complete-the-rebase-instead-of-aborting-optional">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="complete-the-rebase-instead-of-aborting-optional-heading">Step 4: Complete the rebase instead of aborting (optional)</h4>
+            <p>If you actually want to finish the rebase after resolving conflicts in your editor:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> diff <span class="tok-prop">--name-only</span> <span class="tok-prop">--diff-filter</span>=U  <span class="tok-cmt"> # list remaining unmerged files</span>
+<span class="tok-kw">git</span> add path/to/resolved-file
+<span class="tok-kw">git</span> rebase <span class="tok-prop">--continue</span>
+</code></pre>
+    </div>
+    
+<p>If a replayed commit becomes empty because its changes are already upstream, run <code>git rebase --skip</code>.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Will <code>rm -rf .git/rebase-merge</code> delete my committed code?</strong>
+No. Removing <code>.git/rebase-merge</code> only deletes rebase progress metadata. Your commits remain safely stored in <code>.git/objects</code> and reachable via <code>git reflog</code> for at least 30–90 days by default.</p>
+<p><strong>Why did <code>git rebase --abort</code> leave untracked files behind?</strong>
+<code>git rebase --abort</code> restores tracked files to <code>orig-head</code>, but any brand-new untracked files you created manually during conflict resolution stay in the working directory. Run <code>git clean -fd</code> only if you are sure you want to discard them.</p>
+<p><strong>What is the difference between <code>.git/rebase-merge</code> and <code>.git/rebase-apply</code>?</strong>
+Modern Git uses the <code>ort</code> merge backend (<code>.git/rebase-merge</code>) by default for <code>git rebase</code>. Older versions or <code>git rebase --apply</code> / <code>git am</code> use <code>.git/rebase-apply</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -524,49 +630,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li><strong>Create a safety branch before complex rebases:</strong> Run <code>git branch backup-before-rebase</code> so you have an instant pointer to return to if a 20-commit rebase goes sideways.</li>
+<li><strong>Avoid running two Git GUIs simultaneously:</strong> Background IDE Git extensions can lock <code>.git/index.lock</code> or race with CLI rebases.</li>
+<li><strong>Enable <code>rerere</code> (Reuse Recorded Resolution):</strong> Run <code>git config --global rerere.enabled true</code> so Git remembers how you resolved recurring conflicts during multi-step rebases.</li>
+<li><strong>Abort cleanly instead of closing the terminal:</strong> Always run <code>git rebase --abort</code> before switching tasks or branches.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -623,7 +692,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">PostgreSQL</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -640,7 +709,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -657,7 +726,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

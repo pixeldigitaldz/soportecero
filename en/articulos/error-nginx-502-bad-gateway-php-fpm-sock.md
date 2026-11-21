@@ -9,64 +9,106 @@ tags:
   - PHP-FPM
   - Sysadmin
   - Linux
-readTime: 4 min
+readTime: 5 min
 date: '2026-08-12'
 ---
 
-The **`502 Bad Gateway`** error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at `/var/log/nginx/error.log` usually states:
-`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)` or `Connection refused`.
+An HTTP **`502 Bad Gateway`** error on an Nginx + PHP-FPM stack occurs when Nginx successfully accepts the client's HTTP request and forwards it via FastCGI, but the PHP-FPM upstream either fails to answer, drops the socket connection, or denies access to its Unix socket file.
 
 ## Quick Diagnostics
-| Cause | Solution |
+
+| Nginx `error.log` Message | Immediate Action |
 |---|---|
-| **php-fpm daemon service stopped or not started** | Start PHP daemon: `sudo systemctl start php-fpm` (or `php8.2-fpm`) |
-| **Insufficient permissions on UNIX socket /var/run/php/php-fpm.sock** | Change socket owner to `www-data:www-data` in `/etc/php/fpm/pool.d/www.conf` |
+| **`connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)`** | Start `php8.2-fpm` or update `fastcgi_pass` to the installed PHP version |
+| **`failed (13: Permission denied)` on `.sock`** | Match `listen.owner` / `listen.group` in `www.conf` to Nginx's user (`www-data`) |
+| **`recv() failed (104: Connection reset by peer)`** | PHP-FPM worker crashed/OOM'd or `pm.max_children` is exhausted |
+| **`upstream sent too big header`** | Increase `fastcgi_buffers` and `fastcgi_buffer_size` in Nginx |
 
-## 🚀 Step-by-Step Fixes
+## Root Cause & Technical Mechanics
 
-### Step 1: Check PHP-FPM Daemon Status
-Verify that PHP-FPM is active and running:
+In a LEMP stack, Nginx does not execute PHP code itself; it proxies `.php` requests over the FastCGI binary protocol to a separate `php-fpm` master process, which manages a pool of worker processes. Communication happens either over a TCP loopback socket (`127.0.0.1:9000`) or, more commonly on Linux, a filesystem Unix domain socket (`/run/php/php8.2-fpm.sock`).
+
+Three specific breakdowns produce a 502:
+1. **Version/path mismatch:** After an OS or PHP upgrade (e.g., PHP 8.1 → 8.3), `php8.3-fpm` creates `/run/php/php8.3-fpm.sock`, while the Nginx server block still points `fastcgi_pass` to the obsolete `php8.2-fpm.sock` path (`ENOENT`).
+2. **Socket ownership mismatch:** On Ubuntu/Debian, Nginx workers run as `www-data`, whereas on RHEL/AlmaLinux Nginx runs as `nginx` while PHP-FPM pools may default to `apache` or `root:root` with `0660` permissions—blocking Nginx from writing to the socket (`EACCES`).
+3. **Worker crash or OOM:** A fatal segmentation fault or `pm.max_children` exhaustion kills the PHP worker mid-response, closing the socket before FastCGI headers are returned.
+
+## Step-by-Step Solution
+
+### Step 1: Read the exact Nginx error log and PHP-FPM status
+
+Never guess a 502—read the last 20 lines of `/var/log/nginx/error.log` and check the PHP-FPM systemd unit:
 
 ```bash
-sudo systemctl status php8.2-fpm
+sudo tail -n 20 /var/log/nginx/error.log
+sudo systemctl status 'php*-fpm' --no-pager
 ```
-If status reports `inactive` or `failed`, enable and start it:
+
+If the service is inactive or failed, start and enable it:
+
 ```bash
 sudo systemctl enable --now php8.2-fpm
 ```
 
-### Step 2: Verify Exact Socket (`.sock`) Path
-Check the active socket location created by PHP:
+### Step 2: Match the exact `.sock` path in Nginx
+
+List the actual socket files created in `/run/php/` (or `/var/run/php-fpm/` on RHEL derivatives):
 
 ```bash
 ls -la /run/php/
 ```
-Expected output: `php8.2-fpm.sock` or `php8.3-fpm.sock`.
 
-Open your Nginx site configuration file at `/etc/nginx/sites-available/yourdomain.conf`:
+Open your Nginx virtual host file (e.g., `/etc/nginx/sites-available/yourdomain.conf`) and ensure `fastcgi_pass` matches the exact filename shown by `ls`:
+
 ```nginx
 location ~ \.php$ {
     include snippets/fastcgi-php.conf;
-    # MUST match your active .sock file path:
     fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
 }
 ```
 
-### Step 3: Fix PHP-FPM Socket Permissions
-If the `.sock` file exists but Nginx returns `Permission denied` in its logs:
+### Step 3: Align socket ownership and permissions in `www.conf`
 
-Edit your PHP-FPM pool configuration:
+Check which user Nginx workers run as:
+
 ```bash
-sudo nano /etc/php/8.2/fpm/pool.d/www.conf
+ps aux | grep "nginx: worker"
 ```
-Ensure the socket owner matches Nginx (`www-data`):
+
+Edit `/etc/php/8.2/fpm/pool.d/www.conf` (adjusting for your PHP version) and confirm `listen.owner`, `listen.group`, and `listen.mode` match that user (`www-data` on Debian/Ubuntu, `nginx` on RHEL):
+
 ```ini
+listen = /run/php/php8.2-fpm.sock
 listen.owner = www-data
 listen.group = www-data
 listen.mode = 0660
 ```
-Restart services:
+
+Also verify PHP-FPM config syntax, restart both services, and test a PHP endpoint:
+
 ```bash
-sudo systemctl restart php8.2-fpm
-sudo systemctl restart nginx
+sudo php-fpm8.2 -t
+sudo nginx -t
+sudo systemctl restart php8.2-fpm nginx
+curl -I https://yourdomain.com/index.php
 ```
+
+## Frequently Asked Questions
+
+**Should I use a Unix socket (`/run/php/php8.2-fpm.sock`) or TCP (`127.0.0.1:9000`)?**
+Unix sockets avoid TCP/IP stack overhead and are faster when Nginx and PHP-FPM share the same host. Use TCP `127.0.0.1:9000` (or container service name `php:9000`) when PHP-FPM runs in a separate Docker container or remote node.
+
+**Why do I get 502 only on heavy WordPress or Laravel admin pages?**
+Your PHP-FPM worker is likely hitting `memory_limit` or `max_execution_time`, or `fastcgi_buffer_size` is too small for large response headers (like huge cookies). Check `/var/log/php8.2-fpm.log` for `SIGSEGV` or `server reached pm.max_children`.
+
+**Why did `/run/php/` disappear after a reboot?**
+`/run` is a `tmpfs` mounted in RAM. If `php8.2-fpm` is not enabled via `systemctl enable php8.2-fpm`, it will not boot and recreate `/run/php/` after a restart.
+
+## Prevention Advice
+
+- **Tune `pm.max_children` to available RAM:** Divide free RAM by average PHP worker footprint (typically 40–80 MB) so traffic spikes do not trigger OOM kills.
+- **Enable `php-fpm` slowlog:** Set `slowlog = /var/log/php-fpm-slow.log` and `request_slowlog_timeout = 5s` to catch hung scripts before workers saturate.
+- **Use a symlink or explicit version pinning:** Update Nginx `fastcgi_pass` paths immediately as part of any `apt` PHP upgrade checklist.
+- **Monitor `error.log`:** Alert on `connect() to unix:` and `upstream prematurely closed connection` lines.

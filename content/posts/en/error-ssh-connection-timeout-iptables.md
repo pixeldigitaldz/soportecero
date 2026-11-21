@@ -8,48 +8,100 @@ tags:
   - SSH
   - Sysadmin
   - Firewall
-readTime: 4 min
+readTime: 5 min
 date: '2026-07-25'
 ---
 
-The time limit reached error on **port 22** (`ssh: connect to host ... port 22: Connection timed out`) occurs when the destination server's firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.
+The error `ssh: connect to host <ip> port 22: Connection timed out` occurs when your SSH client sends a TCP `SYN` packet to port 22 (or a custom SSH port) and receives no `SYN-ACK` or `RST` response within the kernel's retransmission window. Unlike `Connection refused`—which means the host is reachable but `sshd` is not listening—a timeout almost always indicates silent packet dropping by a firewall or cloud security group.
 
 ## Quick Diagnostics
-| Cause | Solution |
-|---|---|
-| **iptables or UFW firewall rules blocking SSH port (22)** | Allow SSH port 22 in firewall: `sudo ufw allow 22/tcp` |
-| **SSH server daemon not listening on expected IP address** | Check SSH daemon status: `sudo systemctl status sshd` |
 
-## 🚀 Step-by-Step Solution
+| Symptom / Cause | Verification | Immediate Fix |
+|---|---|---|
+| UFW enabled without allowing SSH | `sudo ufw status verbose` | Run `sudo ufw allow 22/tcp` before enabling UFW |
+| `iptables` / `nftables` `DROP` policy on `INPUT` | `sudo iptables -L INPUT -v -n` | Insert `ACCEPT` rule for `--dport 22` |
+| Cloud Security Group or ISP blocking port 22 | `nc -zv -w 5 <ip> 22` from external host | Add inbound TCP/22 rule in AWS/GCP/Azure/VPS panel |
+| `sshd` listening on a non-standard port or wrong IP | `sudo ss -tlnp \| grep sshd` | Connect with `ssh -p <port>` or fix `ListenAddress` |
 
-### Step 1: Diagnose if the SSH port is blocked or closed
-Perform a direct network check towards the server's port from your local terminal to verify if it responds to TCP handshakes:
+## Root Cause & Technical Mechanics
+
+During a TCP three-way handshake, your client sends a `SYN` packet to the server's SSH port. Two firewall actions produce different client errors:
+
+- **`REJECT` (returns ICMP unreachable or TCP `RST`):** Fails immediately with `Connection refused`.
+- **`DROP` (silently discards the packet):** No reply leaves the server. Your local TCP stack retries `SYN` with exponential backoff until the socket times out after ~60–120 seconds, printing `Connection timed out`.
+
+Silent `DROP` behavior typically occurs in host firewalls (`ufw`, `iptables`, `nftables`, `firewalld`), cloud Security Groups/ACLs (AWS, Azure, GCP), or intermediate NAT port-forwarding rules. Enabling `ufw` on a remote VPS without allowing SSH first immediately drops all new handshakes under its default `deny (incoming)` policy.
+
+## Step-by-Step Solution
+
+### Step 1: Confirm Whether Packets Reach the Server
+
+From your local machine, test raw TCP connectivity on port 22 with a 5-second timeout:
+
 ```bash
-# Check port 22 (SSH) status on your remote server
-nc -zv 192.168.1.100 22
-```
-*(If the output returns "Connection timed out" or hangs indefinitely, the port is being blocked by a local or cloud network firewall).*
-
-### Step 2: Allow SSH traffic in UFW (Uncomplicated Firewall)
-If your server uses UFW, explicitly allow secure remote access and reload kernel rules:
-```bash
-# Allow incoming TCP traffic on the default SSH port
-sudo ufw allow 22/tcp
-
-# Enable UFW if inactive, then reload active rules
-sudo ufw enable && sudo ufw reload
-```
-
-### Step 3: Configure explicit rules in IPTables
-If you do not use UFW or need fine-grained rules in raw IPTables, open port 22 directly in your input chain:
-```bash
-# Accept incoming TCP packets on port 22
-sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-
-# Save the active rules to persist across system reboots
-sudo iptables-save | sudo tee /etc/iptables/rules.v4
+nc -zv -w 5 203.0.113.10 22
 ```
 
-## 🛡️ Prevention Advice
-Recommended security practices:
-- Do not expose your default SSH port (22) openly to all Internet IP addresses (`0.0.0.0/0`). Doing so will saturate your authentication logs with automated brute-force attempts in minutes. Instead, restrict access to your specific subnet or VPN IP range, or change the listening port in `/etc/ssh/sshd_config` to a non-standard one.
+If it hangs and times out, packets are being dropped in transit or by the server's firewall. Log in via your hosting provider's web/VNC/serial console to inspect the host directly.
+
+### Step 2: Verify the SSH Daemon Is Listening
+
+On the server, confirm `sshd` is active and bound to the expected interface and port:
+
+```bash
+sudo systemctl status sshd --no-pager
+sudo ss -tlnp | grep sshd
+```
+
+You should see `LISTEN` on `0.0.0.0:22` or `[::]:22` (or your custom port). If `sshd` is stopped, start it with `sudo systemctl enable --now sshd`.
+
+### Step 3: Allow SSH in UFW (Ubuntu / Debian)
+
+If your server uses UFW, check its current rules and allow OpenSSH or your custom port:
+
+```bash
+sudo ufw status numbered
+sudo ufw allow 22/tcp comment 'Allow SSH'
+sudo ufw reload
+```
+
+If you are enabling UFW for the first time, **always** run `sudo ufw allow 22/tcp` before `sudo ufw enable`.
+
+### Step 4: Allow SSH in Raw IPTables (or Firewalld)
+
+If the system uses raw `iptables`, inspect the `INPUT` chain and insert the `ACCEPT` rule **above** any catch-all `DROP` rule using `-I INPUT 1`:
+
+```bash
+sudo iptables -L INPUT -n --line-numbers
+sudo iptables -I INPUT 1 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+sudo netfilter-persistent save
+```
+
+*(On RHEL/Rocky/AlmaLinux with `firewalld`, run `sudo firewall-cmd --permanent --add-service=ssh && sudo firewall-cmd --reload`.)*
+
+### Step 5: Verify From Your Local Machine
+
+```bash
+nc -zv -w 5 203.0.113.10 22
+ssh -v user@203.0.113.10
+```
+
+`nc` should report `succeeded!` and `ssh` should proceed to key exchange.
+
+## Frequently Asked Questions
+
+### Why did `iptables -A INPUT -p tcp --dport 22 -j ACCEPT` not fix the timeout?
+`iptables` evaluates rules top-to-bottom. If a `DROP` or `REJECT` rule appears earlier in `INPUT`, `-A` appends your `ACCEPT` rule *after* the drop rule, so it is never reached. Use `-I INPUT 1` instead.
+
+### What if UFW is inactive and `iptables` has no rules, yet SSH still times out?
+Check your cloud provider's external firewall (AWS Security Group, GCP VPC Firewall, Azure NSG). Cloud firewalls drop traffic before it reaches the Linux kernel.
+
+### Could `fail2ban` cause a Connection Timed Out error?
+Yes. When `fail2ban` uses a `DROP` action instead of `REJECT`, banned IPs experience `Connection timed out` while other IPs connect normally.
+
+## Prevention Advice
+
+- **Restrict SSH by source IP:** Instead of allowing `0.0.0.0/0`, restrict port 22 to your office/VPN CIDR (e.g., `sudo ufw allow from 198.51.100.0/24 to any port 22 proto tcp`).
+- **Keep a second session open:** When editing firewall rules over SSH, keep an active root/sudo terminal open and test a *new* SSH connection in a separate window before disconnecting.
+- **Avoid running conflicting firewalls:** Do not run `ufw`, `firewalld`, and manual `iptables` scripts simultaneously, as they overwrite each other's chains on boot.
+- **Use out-of-band console access:** Verify your VPS provider's serial/VNC console works before locking down network rules.

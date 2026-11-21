@@ -140,15 +140,23 @@
       "name": "Why does ping 8.8.8.8 succeed while ping google.com fails?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because low-level IP routing is functional, but the Application layer hostname-to-IP translation (DNS) subsystem is offline."
+        "text": "ping 8.8.8.8 tests Layer 3 IP routing directly without name lookup. When it succeeds while hostnames fail, your default gateway and NIC are healthy, and the fault lies strictly in DNS resolution (/etc/resolv.conf, systemd-resolved, or UDP/TCP port 53 firewall rules)."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the role of 127.0.0.53 in resolv.conf?",
+      "name": "What is 127.0.0.53 inside /etc/resolv.conf?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "127.0.0.53 is the local stub listener managed by systemd-resolved to provide local caching and DNSSEC validation."
+        "text": "127.0.0.53 is the loopback IP where systemd-resolved listens for local DNS queries, providing in-memory caching, per-interface split-DNS routing (for VPNs), and optional DNSSEC/DNS-over-TLS validation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why did resolvectl query work while curl still failed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "resolvectl talks directly to systemd-resolved over D-Bus, whereas curl and apt use glibc&#39;s getaddrinfo(). If /etc/nsswitch.conf lacks resolve or dns on the hosts: line, applications fail even when systemd-resolved is healthy."
       }
     }
   ]
@@ -220,22 +228,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -285,7 +277,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The systemic failure <code>Temporary failure in name resolution</code>, <code>Could not resolve host: google.com</code> or <code>Failed to start Network Name Resolution</code> in Linux occurs when the local domain resolver daemon or <code>/etc/resolv.conf</code> loses valid upstream nameserver configurations, halting outbound network connections requiring hostname resolution.</p>
+          <p>When Linux servers or workstations suddenly fail with <code>Temporary failure in name resolution</code>, <code>Could not resolve host</code>, or <code>Failed to start Network Name Resolution</code> (<code>systemd-resolved.service</code>), outbound connections by hostname break even though raw IP traffic still routes normally. Restoring DNS requires repairing the <code>/etc/resolv.conf</code> symlink, clearing port 53 collisions, and verifying upstream resolvers via <code>resolvectl</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -302,25 +294,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Broken symlink at /etc/resolv.conf pointing to an inactive systemd-resolved stub file</strong></div>
+            <div class="diag-value"><strong>Broken <code>/etc/resolv.conf</code> symlink</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>ping 1.1.1.1</code> works; <code>ping google.com</code> fails</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Recreate symlink pointing to <code>/run/systemd/resolve/stub-resolv.conf</code> or apply static nameservers</div>
+            <div class="diag-value">Relink <code>/etc/resolv.conf</code> to <code>/run/systemd/resolve/stub-resolv.conf</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>systemd-resolved unit in failed state due to configuration errors or port 53 collision</strong></div>
+            <div class="diag-value"><strong>Port 53 listener conflict</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>systemd-resolved</code> fails with <code>Address already in use</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Restart daemon with <code>sudo systemctl restart systemd-resolved</code> and declare upstream DNS</div>
+            <div class="diag-value">Stop <code>dnsmasq</code>/<code>bind9</code> or set <code>DNSStubListener=no</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Empty or stale DHCP DNS leases</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>resolvectl status</code> shows no <code>Current DNS Server</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Configure <code>DNS=</code> and <code>FallbackDNS=</code> in <code>resolved.conf</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Corrupted <code>nsswitch.conf</code> order</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>resolvectl query</code> works, but <code>curl</code> fails</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Ensure <code>resolve [!UNAVAIL=return] dns</code> in <code>/etc/nsswitch.conf</code></div>
           </div></div></div>
       </div>
     </section>
@@ -361,16 +401,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions-faq" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
@@ -383,9 +430,17 @@
         
 
           <li class="toc-subitem">
-            <a href="#what-is-the-role-of-1270053-in-resolvconf" class="toc-sublink">
+            <a href="#what-is-1270053-inside-etcresolvconf" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">What is the role of 127.0.0.53 in resolv.conf?</span>
+              <span class="toc-subtext">What is 127.0.0.53 inside /etc/resolv.conf?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-did-resolvectl-query-work-while-curl-still-failed" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why did resolvectl query work while curl still failed?</span>
             </a>
           </li>
         
@@ -397,6 +452,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Modern Ubuntu, Debian, and Arch systems route DNS lookups through two cooperating layers: the GNU C Library Name Service Switch (<code>/etc/nsswitch.conf</code>) and the <code>systemd-resolved</code> daemon.</p>
+<p>By default, <code>systemd-resolved</code> binds a local caching stub listener on <code>127.0.0.53:53</code> and exposes its dynamically generated configuration at <code>/run/systemd/resolve/stub-resolv.conf</code> (or <code>resolv.conf</code> for direct upstream servers). When <code>/etc/resolv.conf</code> is replaced by a static file, deleted during a container build, or points to a stale target, glibc falls back to <code>127.0.0.1:53</code> or fails with <code>EAI_AGAIN</code> (<code>Temporary failure in name resolution</code>). Conversely, if <code>dnsmasq</code>, <code>pihole-FTL</code>, or <code>named</code> already binds <code>0.0.0.0:53</code>, <code>systemd-resolved</code> crashes on startup with <code>Failed to start Network Name Resolution</code> because its stub socket cannot bind port 53.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -405,11 +463,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="restore-immediate-connectivity-via-static-nameservers">
+        <li class="step-item" id="inspect-systemd-resolved-logs-and-port-53-bindings">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="restore-immediate-connectivity-via-static-nameservers-heading">Step 1: Restore Immediate Connectivity via Static Nameservers</h4>
-            <p>If your server cannot fetch packages due to missing nameservers, inject temporary fallback resolvers:</p>
+            <h4 id="inspect-systemd-resolved-logs-and-port-53-bindings-heading">Step 1: Inspect systemd-resolved Logs and Port 53 Bindings</h4>
+            <p>Check the unit status and journal logs to see whether <code>systemd-resolved</code> is crashing or missing upstream servers:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,43 +487,22 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Direct public Cloudflare and Google nameservers</span>
-<span class="tok-kw">echo</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;nameserver 1.1.1.1\nnameserver 8.8.8.8&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/resolv.conf
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> systemd-resolved <span class="tok-prop">--no-pager</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> systemd-resolved <span class="tok-prop">-n</span> <span class="tok-num">30</span> <span class="tok-prop">--no-pager</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tulnp</span> | <span class="tok-kw">grep</span> <span class="tok-cmt">&#39;:53 &#39;</span>
 </code></pre>
     </div>
     
-<p>Verify connectivity:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>ping <span class="tok-prop">-c</span> <span class="tok-num">3</span> google.com
-</code></pre>
-    </div>
+<p>If another daemon (such as <code>dnsmasq</code>) holds port 53 and you intend to keep it, disable the systemd stub listener in <code>/etc/systemd/resolved.conf</code> (<code>DNSStubListener=no</code>) and point <code>/etc/resolv.conf</code> to <code>/run/systemd/resolve/resolv.conf</code>.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="reconstruct-official-systemd-resolved-symlink">
+        <li class="step-item" id="restore-emergency-connectivity-if-downloading-packages">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="reconstruct-official-systemd-resolved-symlink-heading">Step 2: Reconstruct Official systemd-resolved Symlink</h4>
-            <p>On modern Linux distributions, <code>/etc/resolv.conf</code> must link directly to the runtime stub resolver:</p>
+            <h4 id="restore-emergency-connectivity-if-downloading-packages-heading">Step 2: Restore Emergency Connectivity (If Downloading Packages)</h4>
+            <p>If the machine is completely offline for DNS and you need to install missing packages first, inject temporary resolvers:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -485,26 +522,43 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Remove broken symlink or stale file</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /etc/resolv.conf
-<span class="tok-cmt">
-# 2. Re-establish official stub symlink</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">ln</span> <span class="tok-prop">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
-<span class="tok-cmt">
-# 3. Restart and enable resolver daemon</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart systemd-resolved
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> enable systemd-resolved
+      <pre class="formatted-pre"><code>printf <span class="tok-str">&quot;nameserver 1.1.1.1\nnameserver 8.8.8.8\n&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/resolv.conf
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-upstream-resolvers-in-resolvedconf">
+        <li class="step-item" id="repair-the-etcresolvconf-symlink-and-upstream-resolvers">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="configure-upstream-resolvers-in-resolvedconf-heading">Step 3: Configure Upstream Resolvers in resolved.conf</h4>
-            <p>Open your master configuration file (<code>/etc/systemd/resolved.conf</code>):</p>
+            <h4 id="repair-the-etcresolvconf-symlink-and-upstream-resolvers-heading">Step 3: Repair the /etc/resolv.conf Symlink and Upstream Resolvers</h4>
+            <p>Remove any stale static file and recreate the canonical symlink to <code>systemd-resolved</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">rm</span> <span class="tok-prop">-f</span> /etc/resolv.conf
+<span class="tok-kw">sudo</span> <span class="tok-kw">ln</span> <span class="tok-prop">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+</code></pre>
+    </div>
+    
+<p>Next, declare deterministic upstream and fallback resolvers in <code>/etc/systemd/resolved.conf</code> (or a drop-in <code>/etc/systemd/resolved.conf.d/dns.conf</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -525,14 +579,13 @@
         </button>
       </div>
       <pre class="formatted-pre"><code>[Resolve]
-DNS=<span class="tok-num">1.1</span>.<span class="tok-num">1.1</span> <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
-FallbackDNS=<span class="tok-num">1.0</span>.<span class="tok-num">0.1</span> <span class="tok-num">8.8</span>.<span class="tok-num">4.4</span>
-Domains=~.
+DNS=<span class="tok-num">1.1</span>.<span class="tok-num">1.1</span> <span class="tok-num">9.9</span>.<span class="tok-num">9.9</span>
+FallbackDNS=<span class="tok-num">8.8</span>.<span class="tok-num">8.8</span> <span class="tok-num">1.0</span>.<span class="tok-num">0.1</span>
 DNSSEC=allow-downgrade
 </code></pre>
     </div>
     
-<p>Restart daemon to load new nameserver bindings:</p>
+<p>Enable and restart the daemon:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -552,18 +605,19 @@ DNSSEC=allow-downgrade
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart systemd-resolved
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> enable <span class="tok-prop">--now</span> systemd-resolved
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart systemd-resolved
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="verify-resolution-state-with-resolvectl">
+        <li class="step-item" id="verify-resolution-with-resolvectl-and-getent">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="verify-resolution-state-with-resolvectl-heading">Step 4: Verify Resolution State with resolvectl</h4>
-            <p>Confirm that active network interfaces hold valid DNS assignments:</p>
+            <h4 id="verify-resolution-with-resolvectl-and-getent-heading">Step 4: Verify Resolution with resolvectl and getent</h4>
+            <p>Confirm both the systemd resolver and glibc NSS stack resolve hostnames cleanly:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -583,59 +637,22 @@ DNSSEC=allow-downgrade
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Query active DNS resolver telemetry</span>
-resolvectl <span class="tok-prop">status</span>
+      <pre class="formatted-pre"><code>resolvectl <span class="tok-prop">status</span>
+resolvectl query github.com
+getent hosts github.com
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
-<h3 id="why-does-ping-8888-succeed-while-ping-googlecom-fails">Why does ping 8.8.8.8 succeed while ping google.com fails?</h3>
-<p>Because low-level IP routing is functional, but the Application layer hostname-to-IP translation (DNS) subsystem is offline.</p>
-<h3 id="what-is-the-role-of-1270053-in-resolvconf">What is the role of 127.0.0.53 in resolv.conf?</h3>
-<p><code>127.0.0.53</code> is the local stub listener managed by systemd-resolved to provide local caching and DNSSEC validation.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-ping-8888-succeed-while-ping-googlecom-fails">Why does <code>ping 8.8.8.8</code> succeed while <code>ping google.com</code> fails?</h3>
+<p><code>ping 8.8.8.8</code> tests Layer 3 IP routing directly without name lookup. When it succeeds while hostnames fail, your default gateway and NIC are healthy, and the fault lies strictly in DNS resolution (<code>/etc/resolv.conf</code>, <code>systemd-resolved</code>, or UDP/TCP port 53 firewall rules).</p>
+<h3 id="what-is-1270053-inside-etcresolvconf">What is <code>127.0.0.53</code> inside <code>/etc/resolv.conf</code>?</h3>
+<p><code>127.0.0.53</code> is the loopback IP where <code>systemd-resolved</code> listens for local DNS queries, providing in-memory caching, per-interface split-DNS routing (for VPNs), and optional DNSSEC/DNS-over-TLS validation.</p>
+<h3 id="why-did-resolvectl-query-work-while-curl-still-failed">Why did <code>resolvectl query</code> work while <code>curl</code> still failed?</h3>
+<p><code>resolvectl</code> talks directly to <code>systemd-resolved</code> over D-Bus, whereas <code>curl</code> and <code>apt</code> use glibc&#39;s <code>getaddrinfo()</code>. If <code>/etc/nsswitch.conf</code> lacks <code>resolve</code> or <code>dns</code> on the <code>hosts:</code> line, applications fail even when <code>systemd-resolved</code> is healthy.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -650,50 +667,12 @@ resolvectl <span class="tok-prop">status</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Prevent NetworkManager collisions:</strong> Ensure NetworkManager delegates DNS lookups to systemd-resolved by adding <code>dns=systemd-resolved</code> in <code>/etc/NetworkManager/NetworkManager.conf</code>.</li>
-<li><strong>Lock resolv.conf during emergencies:</strong> If third-party daemons keep overwriting your configuration, enforce immutability with <code>sudo chattr +i /etc/resolv.conf</code>.</li>
+              <li>Configure NetworkManager to cooperate rather than compete by setting <code>dns=systemd-resolved</code> in <code>/etc/NetworkManager/NetworkManager.conf</code>.</li>
+<li>Use drop-in files under <code>/etc/systemd/resolved.conf.d/</code> instead of editing <code>/etc/systemd/resolved.conf</code> directly so package upgrades never overwrite your settings.</li>
+<li>In Docker or cloud-init templates, verify that <code>/etc/resolv.conf</code> is not overwritten with <code>127.0.0.53</code> inside chroot environments where <code>systemd-resolved</code> is not running.</li>
+<li>Allow outbound UDP and TCP port <code>53</code> (and TCP <code>853</code> if using DNS-over-TLS) in <code>ufw</code> or <code>nftables</code> egress rules.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -756,35 +735,35 @@ resolvectl <span class="tok-prop">status</span>
       </article>
       
 
-      <!-- Related Card: Fix Next.js Error ReferenceError: document is not defined (App Router & SSR) -->
+      <!-- Related Card: Cloudflare Error 522 Connection Timed Out in Nginx and UFW -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nextjs-referenceerror-document-is-not-defined.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Next.js Error ReferenceError: document is not defined (App Router & SSR)</a>
+              <a href="../articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cloudflare Error 522 Connection Timed Out in Nginx and UFW</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Next.js</span>
-            <span>Read Time: 4 min</span>
+            <span class="card-tag">Cloudflare</span>
+            <span>Read Time: 7 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Fix Nvidia NVML Error: Driver/library version mismatch in Linux -->
+      <!-- Related Card: How to Fix Linux OOM Killer and Systemd Out of Memory Crashes -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nvidia-nvml-driver-library-version-mismatch.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Nvidia NVML Error: Driver/library version mismatch in Linux</a>
+              <a href="../articulos/error-systemd-oom-killer-memory-leak-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">How to Fix Linux OOM Killer and Systemd Out of Memory Crashes</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Nvidia</span>
-            <span>Read Time: 5 min</span>
+            <span class="card-tag">Linux</span>
+            <span>Read Time: 7 min</span>
           </div>
         </div>
       </article>

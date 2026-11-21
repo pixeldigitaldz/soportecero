@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does audio persist when the visual render thread freezes?",
+      "name": "Why does game audio keep playing when the screen is frozen?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The audio thread runs independently on host CPU cores. When the GPU Vulkan presentation queue encounters a deadlock, graphics output halts but sound pipelines stay responsive."
+        "text": "Audio mixing (FMOD/Wwise/PipeWire) runs on separate CPU threads. When the Vulkan presentation queue or GPU scheduler deadlocks, only the graphics pipeline halts while CPU-side audio and game logic loops continue until a synchronization barrier blocks them."
       }
     },
     {
       "@type": "Question",
-      "name": "Does single_queue degrade gaming frame rates?",
+      "name": "Does VKD3D_CONFIG=single_queue reduce FPS?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Benchmark differences are negligible (less than 1%), while completely safeguarding against fatal GPU queue hangs."
+        "text": "In most DX12 titles, the FPS impact is under 1–3% because NVIDIA&#39;s hardware scheduler already serializes many async compute workloads internally, while completely eliminating multi-queue semaphore hangs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use DX11 mode instead of DX12 if the game offers a choice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If a game supports both DX11 (via DXVK) and DX12 (via VKD3D-Proton) and you do not need DX12-exclusive features like Ray Tracing, DXVK is often more mature and exhibits lower VRAM overhead on 8 GB GeForce cards."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When launching modern DirectX 12 games (Cyberpunk 2077, Forza Horizon 5, Elden Ring) on Linux with NVIDIA GeForce hardware, players often endure hard screen freezes where graphics completely lock up while game background music and ambient audio continue playing. This condition is triggered by Vulkan queue stalls inside VKD3D-Proton when communicating with NVIDIA proprietary drivers.</p>
+          <p>When running DirectX 12 titles (such as <em>Cyberpunk 2077</em>, <em>Elden Ring</em>, or <em>Forza Horizon 5</em>) on Linux via Proton and <strong>VKD3D-Proton</strong>, NVIDIA GeForce users frequently experience hard frame freezes where the game image locks solid while background audio and mouse/controller inputs continue working—or the entire Wayland/X11 desktop stalls until a TTY switch or hard reboot.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Implicit synchronization stalls prior to NVIDIA 555 driver series</strong></div>
+            <div class="diag-value">Driver older than 555 lacking Explicit Sync on Wayland</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>nvidia-smi</code> &amp; <code>echo $XDG_SESSION_TYPE</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Update to NVIDIA 555/560+ drivers featuring native Explicit Sync architecture</div>
+            <div class="diag-value">Upgrade to NVIDIA <strong>555.58 / 560+</strong> with <code>xorg-xwayland</code> 24.1+</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>GPU command queue contention during parallel compute/graphics dispatches</strong></div>
+            <div class="diag-value">Async compute/graphics Vulkan queue deadlock in VKD3D</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>dmesg -T | grep -iE &quot;NVRM|Xid&quot;</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Enforce VKD3D_CONFIG=single_queue in Steam game launch parameters</div>
+            <div class="diag-value">Add <code>VKD3D_CONFIG=single_queue %command%</code> in Steam</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">GPU VRAM exhaustion or Resizable BAR / GSP firmware stall</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>nvidia-smi dmon -s mu</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Cap pre-rendered frames with <code>__GL_MaxFramesAllowed=1</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Corrupt VKD3D shader cache or Proton prefix mismatch</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value">Game freezes on level load or RT toggle</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Clear <code>shadercache</code> and switch to Proton Experimental</div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +399,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-audio-persist-when-the-visual-render-thread-freezes" class="toc-sublink">
+            <a href="#why-does-game-audio-keep-playing-when-the-screen-is-frozen" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does audio persist when the visual render thread freezes?</span>
+              <span class="toc-subtext">Why does game audio keep playing when the screen is frozen?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#does-singlequeue-degrade-gaming-frame-rates" class="toc-sublink">
+            <a href="#does-vkd3dconfigsinglequeue-reduce-fps" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Does single_queue degrade gaming frame rates?</span>
+              <span class="toc-subtext">Does VKD3D_CONFIG=single_queue reduce FPS?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#should-i-use-dx11-mode-instead-of-dx12-if-the-game-offers-a-choice" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Should I use DX11 mode instead of DX12 if the game offers a choice?</span>
             </a>
           </li>
         
@@ -395,6 +450,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>VKD3D-Proton translates Direct3D 12 API calls into <strong>Vulkan</strong>. Unlike DirectX 11 (DXVK), DirectX 12 exposes explicit command queues (<code>DIRECT</code>, <code>COMPUTE</code>, <code>COPY</code>) and low-level resource barriers. On NVIDIA GeForce GPUs on Linux, freezes stem from three subsystems:</p>
+<ol>
+<li><strong>Implicit vs. Explicit Sync deadlocks:</strong> Prior to NVIDIA <strong>555</strong> (<code>linux-drm-syncobj-v1</code> support), Wayland/XWayland relied on implicit sync. Under heavy DX12 frame pacing, the compositor and driver could desynchronize over buffer ownership, stalling the Vulkan swapchain queue indefinitely.</li>
+<li><strong>Multi-queue contention:</strong> Concurrent async compute shaders (ray tracing denoising, volumetric fog) alongside the main graphics queue can hit semaphore deadlocks (<code>Xid 13</code>/<code>31</code>/<code>109</code> in <code>dmesg</code>) on Turing, Ampere, and Ada GPUs, freezing rendering while CPU audio keeps playing.</li>
+<li><strong>GSP Firmware &amp; VRAM pressure:</strong> Overcommitting 8 GB VRAM with DX12 RT or Frame Generation spills allocations over PCIe into system RAM, triggering multi-second driver timeouts.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +465,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="deploy-nvidia-555-explicit-sync-graphics-drivers">
+        <li class="step-item" id="verify-your-nvidia-driver-branch-and-kernel-logs">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="deploy-nvidia-555-explicit-sync-graphics-drivers-heading">Step 1: Deploy NVIDIA 555+ Explicit Sync Graphics Drivers</h4>
-            <p>Driver versions earlier than branch 555 suffered from implicit buffer presentation race conditions in modern Linux compositors:</p>
+            <h4 id="verify-your-nvidia-driver-branch-and-kernel-logs-heading">Step 1: Verify Your NVIDIA Driver Branch and Kernel Logs</h4>
+            <p>Check your active driver version and inspect the kernel ring buffer for NVIDIA <code>Xid</code> GPU fault codes:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,21 +489,21 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Query active driver version</span>
-nvidia-smi
+      <pre class="formatted-pre"><code>nvidia-smi
+<span class="tok-kw">sudo</span> dmesg <span class="tok-prop">-T</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-iE</span> <span class="tok-str">&quot;NVRM|Xid|vulkan&quot;</span> | tail <span class="tok-prop">-n</span> <span class="tok-num">20</span>
 </code></pre>
     </div>
     
-<p>Upgrade to NVIDIA <strong>555.58</strong> or <strong>560+</strong> through your distribution package manager to resolve compositor desynchronization.</p>
+<p>If your driver is older than <strong>555.58</strong>, upgrade to the <strong>560+</strong> or <strong>565+</strong> production branch via your distro&#39;s repository (and ensure <code>xwayland</code> is &gt;= <code>24.1</code> and Wayland compositor supports <code>linux-drm-syncobj-v1</code>, such as KDE Plasma 6.1+ or GNOME 46.1+).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="enforce-single-queue-dispatch-in-vkd3d-proton">
+        <li class="step-item" id="force-single-queue-execution-in-vkd3d-proton">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="enforce-single-queue-dispatch-in-vkd3d-proton-heading">Step 2: Enforce Single Queue Dispatch in VKD3D-Proton</h4>
-            <p>Certain GeForce microarchitectures lock up when simultaneous asynchronous compute queues collide with primary render passes. Restrict scheduling to a stable single queue:</p>
+            <h4 id="force-single-queue-execution-in-vkd3d-proton-heading">Step 2: Force Single-Queue Execution in VKD3D-Proton</h4>
+            <p>Eliminate asynchronous compute/graphics queue deadlocks by instructing VKD3D-Proton to serialize D3D12 command queues onto a single Vulkan graphics queue. In <strong>Steam &gt; Game Properties &gt; Launch Options</strong>, set:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -461,19 +523,11 @@ nvidia-smi
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Set inside Steam Launch Options</span>
-VKD3D_CONFIG=single_queue %command%
+      <pre class="formatted-pre"><code>VKD3D_CONFIG=single_queue %command%
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="cap-pre-rendered-frame-queue-depth">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="cap-pre-rendered-frame-queue-depth-heading">Step 3: Cap Pre-Rendered Frame Queue Depth</h4>
-            <p>Throttle speculative frame queuing to avoid driver memory saturation:</p>
+    
+<p>If you also want to prevent speculative swapchain buffering from exhausting VRAM, cap max pre-rendered frames to <code>1</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -496,57 +550,84 @@ VKD3D_CONFIG=single_queue %command%
       <pre class="formatted-pre"><code>__GL_MaxFramesAllowed=<span class="tok-num">1</span> VKD3D_CONFIG=single_queue %command%
 </code></pre>
     </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="disable-gsp-firmware-temporarily-if-xid-errors-persist">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="disable-gsp-firmware-temporarily-if-xid-errors-persist-heading">Step 3: Disable GSP Firmware Temporarily (If Xid Errors Persist)</h4>
+            <p>If <code>dmesg</code> still shows <code>NVRM: Xid</code> hangs on proprietary closed-source NVIDIA modules, test disabling GSP firmware offload in <code>/etc/modprobe.d/nvidia-gsp.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;options nvidia NVreg_EnableGpuFirmware=0&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/modprobe.d/nvidia-gsp.conf
+<span class="tok-kw">sudo</span> update-initramfs <span class="tok-prop">-u</span>  <span class="tok-cmt"> # Use &#39;sudo dracut --force&#39; on Fedora/RHEL</span>
+</code></pre>
+    </div>
     
-<p>This minimizes render-ahead latency and stops buffer exhaustion events from freezing the frame loop.</p>
+<p>Reboot and test the game again. <em>(Note: the <code>nvidia-open</code> kernel module requires GSP and ignores <code>NVreg_EnableGpuFirmware=0</code>.)</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-frame-pacing-and-gpu-health">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-frame-pacing-and-gpu-health-heading">Step 4: Verify Frame Pacing and GPU Health</h4>
+            <p>Launch the game with MangoHud enabled (<code>MANGOHUD=1</code>) or monitor GPU utilization and VRAM in a second terminal or SSH session:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>nvidia-smi dmon <span class="tok-prop">-s</span> pucvmet <span class="tok-prop">-d</span> <span class="tok-num">2</span>
+</code></pre>
+    </div>
+    
+<p>Confirm VRAM usage remains below 95% of physical card capacity and no new <code>Xid</code> messages appear in <code>dmesg</code>.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-does-audio-persist-when-the-visual-render-thread-freezes">Why does audio persist when the visual render thread freezes?</h3>
-<p>The audio thread runs independently on host CPU cores. When the GPU Vulkan presentation queue encounters a deadlock, graphics output halts but sound pipelines stay responsive.</p>
-<h3 id="does-singlequeue-degrade-gaming-frame-rates">Does single_queue degrade gaming frame rates?</h3>
-<p>Benchmark differences are negligible (less than 1%), while completely safeguarding against fatal GPU queue hangs.</p>
+<h3 id="why-does-game-audio-keep-playing-when-the-screen-is-frozen">Why does game audio keep playing when the screen is frozen?</h3>
+<p>Audio mixing (FMOD/Wwise/PipeWire) runs on separate CPU threads. When the Vulkan presentation queue or GPU scheduler deadlocks, only the graphics pipeline halts while CPU-side audio and game logic loops continue until a synchronization barrier blocks them.</p>
+<h3 id="does-vkd3dconfigsinglequeue-reduce-fps">Does <code>VKD3D_CONFIG=single_queue</code> reduce FPS?</h3>
+<p>In most DX12 titles, the FPS impact is under 1–3% because NVIDIA&#39;s hardware scheduler already serializes many async compute workloads internally, while completely eliminating multi-queue semaphore hangs.</p>
+<h3 id="should-i-use-dx11-mode-instead-of-dx12-if-the-game-offers-a-choice">Should I use DX11 mode instead of DX12 if the game offers a choice?</h3>
+<p>If a game supports both DX11 (via DXVK) and DX12 (via VKD3D-Proton) and you do not need DX12-exclusive features like Ray Tracing, DXVK is often more mature and exhibits lower VRAM overhead on 8 GB GeForce cards.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -561,50 +642,12 @@ VKD3D_CONFIG=single_queue %command%
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Enforce maximum performance profiles via <code>nvidia-settings -a &quot;[gpu:0]/GpuPowerMizerMode=1&quot;</code>.</li>
-<li>If playing under Wayland (KDE 6 / GNOME 46), ensure XWayland packages are fully synchronized.</li>
+              <li><strong>Keep Proton and Mesa/Vulkan ICDs updated:</strong> Use <strong>Proton Experimental</strong> or recent <strong>Proton-GE</strong> releases, which ship the latest VKD3D-Proton NVIDIA workarounds.</li>
+<li><strong>Avoid exceeding physical VRAM:</strong> Lower texture quality or disable Ray Tracing on 8 GB GPUs; DX12 allocates aggressively and Linux VRAM eviction is less forgiving than Windows WDDM.</li>
+<li><strong>Use X11 as a fallback:</strong> If your distro ships an older compositor without Explicit Sync (<code>wp_linux_drm_syncobj_manager_v1</code>), test an X11 session to isolate Wayland presentation bugs.</li>
+<li><strong>Lock PowerMizer to Prefer Maximum Performance</strong> during gaming sessions via <code>nvidia-settings -a &quot;[gpu:0]/GpuPowerMizerMode=1&quot;</code> to prevent aggressive clock-state transitions mid-frame.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -661,7 +704,7 @@ VKD3D_CONFIG=single_queue %command%
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -695,7 +738,7 @@ VKD3D_CONFIG=single_queue %command%
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">PipeWire</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

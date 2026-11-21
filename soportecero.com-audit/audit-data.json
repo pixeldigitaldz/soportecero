@@ -1,0 +1,161 @@
+{
+  "summary": {
+    "health_score": 81,
+    "business_type": "Technical Publisher / Developer Knowledge Base & Interactive Financial Tools Suite",
+    "top_findings": [
+      "El hub principal /tools/index.html es un shell CSR vacío (<div id=\"root\"></div>) con 0 palabras visibles sin JavaScript, invisible para rastreadores IA que no ejecutan JS.",
+      "Contradicción en robots.txt: Disallow: /*?cat=* bloquea las URLs de categoría (?cat=sistemas, ?cat=gaming, ?cat=web) enlazadas en el menú principal, en llms.txt y en la herramienta WebMCP list_categories.",
+      "Endpoints de descubrimiento de agentes en /.well-known/ fallan en vivo: https://soportecero.com/mcp devuelve 503 Service Unavailable, https://soportecero.com/a2a devuelve 404 Not Found y /.well-known/api-catalog se sirve como application/octet-stream.",
+      "Ruptura de reciprocidad hreflang en nosotros.html y en/nosotros.html (apuntan a en/about.html en el <head> contradiciendo a sitemap.xml) y enlaces FEATURED GUIDES en en/index.html apuntando a artículos en español.",
+      "Ausencia de cabeceras HTTP de seguridad (HSTS, CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy) en respuestas 200 OK porque GitHub Pages ignora _headers y las rutas del Worker en wrangler.toml están comentadas."
+    ],
+    "quick_wins": [
+      "Corregir el parámetro de hreflang de nosotros.html y en/nosotros.html en scripts/build.js (cambiar 'about.html' por 'nosotros.html').",
+      "Corregir los enlaces de FEATURED GUIDES en src/en/index-template.html de ../articulos/ a articulos/ y añadir FIXED a la regex que limpia prefijos de títulos.",
+      "Eliminar la generación del Schema HowTo deprecado (sept. 2023) en scripts/build.js y añadir Organization + WebSite en index.html y ProfilePage en sobre-mi.html.",
+      "Añadir <link rel=\"alternate\" type=\"text/markdown\"> en el <head> de index.html y de los artículos apuntando a /index.md y /articulos/<slug>.md.",
+      "Actualizar los media types en /.well-known/ai-catalog.json a los tipos oficiales de la especificación ARD 1.0 e incluir las 6 calculadoras en llms.txt."
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 78,
+      "what_works": [
+        "Redirecciones 301 limpias en 1 salto (HTTP a HTTPS y www a non-www).",
+        "Códigos HTTP 404 reales para rutas inexistentes (sin soft-404).",
+        "Sitemap XML bilingüe bien estructurado con 308 URLs.",
+        "285 artículos y 6 calculadoras pre-renderizadas en HTML estático rápido."
+      ],
+      "findings": [
+        {
+          "title": "/tools/index.html es un shell CSR vacío sin contenido estático",
+          "severity": "High",
+          "description": "El archivo tools/index.html contiene únicamente <div id=\"root\"></div> (0 palabras sin JS), pese a tener prioridad 1.0 en el sitemap y recibir el enlace principal de Calculadoras en todo el sitio.",
+          "recommendation": "Extender scripts/prerender-tools.js para inyectar HTML estático indexable con enlaces <a href> a las 6 calculadoras dentro de tools/index.html."
+        },
+        {
+          "title": "Ausencia de cabeceras de seguridad HTTP en respuestas 200 OK",
+          "severity": "Medium",
+          "description": "GitHub Pages ignora el archivo _headers y las rutas del Worker en wrangler.toml están desactivadas, por lo que faltan HSTS, CSP, X-Content-Type-Options, X-Frame-Options y Referrer-Policy.",
+          "recommendation": "Inyectar las cabeceras de seguridad mediante Cloudflare Response Header Transform Rules o activando el Worker de Cloudflare."
+        },
+        {
+          "title": "Ruptura de reciprocidad hreflang en nosotros.html y en/nosotros.html",
+          "severity": "High",
+          "description": "En scripts/build.js (líneas 790 y 803), nosotros.html y en/nosotros.html declaran hreflang=\"en\" hacia en/about.html, dejando a en/nosotros.html sin etiqueta autorreferenciada y contradiciendo a sitemap.xml.",
+          "recommendation": "Actualizar scripts/build.js para pasar 'nosotros.html' como ruta en inglés al compilar nosotros.html y en/nosotros.html."
+        },
+        {
+          "title": "Contradicción entre Disallow: /*?cat=* en robots.txt y navegación interna",
+          "severity": "Medium",
+          "description": "robots.txt bloquea /*?cat=*, pero el menú principal, llms.txt y WebMCP enlazan a /?cat=sistemas, /?cat=gaming y /?cat=web.",
+          "recommendation": "Crear páginas estáticas por categoría o ajustar robots.txt y llms.txt para no bloquear las URLs de categoría promovidas."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness (GEO & Agentic)",
+      "score": 81,
+      "what_works": [
+        "Excelente estructura de pasajes citables: consola de Diagnóstico Técnico (Síntoma / Causa / Solución) en el primer 25% de cada artículo.",
+        "Archivos /llms.txt (2.1 KB) y /llms-full.txt (124 KB) válidos y accesibles (pasan el check llms-txt de Lighthouse 13.5).",
+        "Archivos Markdown hermanos (/index.md y /articulos/*.md) generados automáticamente y servidos con Content-Type: text/markdown.",
+        "Implementación temprana de WebMCP (document.modelContext || navigator.modelContext) con 2 herramientas imperativas y formulario buscador anotado."
+      ],
+      "findings": [
+        {
+          "title": "Endpoints de agentes anunciados en /.well-known/ devuelven 503 y 404",
+          "severity": "High",
+          "description": "/.well-known/mcp/server-card.json apunta a https://soportecero.com/mcp (devuelve 503 Service Unavailable) y /.well-known/agent-card.json apunta a https://soportecero.com/a2a (devuelve 404 Not Found).",
+          "recommendation": "Desplegar los handlers correspondientes en el Worker de Cloudflare o retirar temporalmente los endpoints inactivos de los manifiestos de descubrimiento."
+        },
+        {
+          "title": "Negociación Accept: text/markdown inactiva y falta de <link rel=\"alternate\" type=\"text/markdown\">",
+          "severity": "Medium",
+          "description": "Al estar comentadas las rutas en wrangler.toml, las peticiones con Accept: text/markdown reciben text/html sin Vary: Accept, y el HTML no enlaza a las copias .md mediante <link rel=\"alternate\">.",
+          "recommendation": "Añadir <link rel=\"alternate\" type=\"text/markdown\"> en src/index-template.html y src/post-template.html, y reactivar el Worker corrigiendo su bloque fallback."
+        },
+        {
+          "title": "Discrepancia entre Content-Signal: ai-train=no y Allow: / en robots.txt",
+          "severity": "Medium",
+          "description": "robots.txt incluye un único grupo User-agent: * con Allow: / y Content-Signal: ai-train=no. Como Content-Signal es una preferencia no vinculante y Google no la procesa, GPTBot, ClaudeBot y Google-Extended tienen permitido el rastreo para entrenamiento.",
+          "recommendation": "Separar en robots.txt los grupos de bots de búsqueda IA (OAI-SearchBot, Claude-SearchBot, PerplexityBot: Allow: /) de los bots de entrenamiento (GPTBot, ClaudeBot, Google-Extended, CCBot: Disallow: / si se desea impedir entrenamiento)."
+        },
+        {
+          "title": "Tipos MIME no estándar en /.well-known/ai-catalog.json y /.well-known/api-catalog",
+          "severity": "Low",
+          "description": "ai-catalog.json utiliza application/json y application/linkset+json en 3 entradas (generando advertencias en ard-schema de Lighthouse 13.5), y /.well-known/api-catalog se sirve como application/octet-stream.",
+          "recommendation": "Usar los tipos ARD 1.0 oficiales en ai-catalog.json y configurar Content-Type: application/linkset+json para /.well-known/api-catalog."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 72,
+      "what_works": [
+        "Los 285 artículos incluyen TechArticle y BreadcrumbList válidos en el HTML estático.",
+        "Las 6 calculadoras en /tools/ incluyen SoftwareApplication y FAQPage."
+      ],
+      "findings": [
+        {
+          "title": "Inyección masiva de Schema HowTo deprecado",
+          "severity": "Medium",
+          "description": "scripts/build.js inyecta un bloque JSON-LD HowTo en todos los artículos. Google retiró los resultados enriquecidos de HowTo en septiembre de 2023.",
+          "recommendation": "Eliminar la generación de HowTo en scripts/build.js para limpiar el marcado y reducir el tamaño del HTML."
+        },
+        {
+          "title": "Ausencia de JSON-LD en Home (index.html) y páginas de autoridad (sobre-mi.html, nosotros.html, servicios.html)",
+          "severity": "Medium",
+          "description": "Las páginas principales carecen de marcado Organization, WebSite, ProfilePage y Service, y el jobTitle del autor en TechArticle ('Diseñador Web & Creador de Apps') no refleja sus credenciales de SysAdmin/Full-Stack.",
+          "recommendation": "Añadir Organization + WebSite en index-template.html, ProfilePage en sobre-mi.html y actualizar author.jobTitle y sameAs en scripts/build.js."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical & High-Priority Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Pre-renderizar /tools/index.html en scripts/prerender-tools.js para eliminar el shell CSR vacío.",
+          "Corregir el hreflang de nosotros.html y en/nosotros.html en scripts/build.js y los enlaces FEATURED GUIDES en src/en/index-template.html.",
+          "Alinear robots.txt y llms.txt (resolver Disallow: /*?cat=* y definir grupos explícitos para bots de búsqueda IA vs entrenamiento).",
+          "Corregir o retirar los endpoints /mcp (503) y /a2a (404) anunciados en /.well-known/."
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Technical & Schema Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Configurar cabeceras de seguridad HTTP (HSTS, CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy) en Cloudflare.",
+          "Añadir <link rel=\"alternate\" type=\"text/markdown\"> en las plantillas HTML apuntando a /index.md y /articulos/<slug>.md.",
+          "Retirar Schema HowTo deprecado, añadir Organization/WebSite/ProfilePage JSON-LD y unificar credenciales E-E-A-T de Rodolfo Castro.",
+          "Traducir los 3 artículos pilares restantes al inglés y limpiar el prefijo [FIXED] en scripts/build.js."
+        ]
+      },
+      {
+        "name": "Phase 3: Authority, Multimodal & IndexNow",
+        "timeframe": "Month 2",
+        "items": [
+          "Implementar envío automático a IndexNow en scripts/build.js para indexación inmediata en Bing y Microsoft Copilot.",
+          "Crear páginas estáticas indexables por categoría (/categorias/sistemas.html, etc.).",
+          "Añadir diagramas técnicos SVG o capturas de laboratorio propias en los artículos principales."
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Monitorear indexación y visibilidad en Google Search Console y Bing Webmaster Tools.",
+          "Verificar periódicamente la fracción Lighthouse Agentic Browsing (X/N) tras cada cambio en /.well-known/ y formularios."
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

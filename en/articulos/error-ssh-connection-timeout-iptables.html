@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why did iptables -A INPUT -p tcp --dport 22 -j ACCEPT not fix the timeout?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "iptables evaluates rules top-to-bottom. If a DROP or REJECT rule appears earlier in INPUT, -A appends your ACCEPT rule after the drop rule, so it is never reached. Use -I INPUT 1 instead."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if UFW is inactive and iptables has no rules, yet SSH still times out?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check your cloud provider&#39;s external firewall (AWS Security Group, GCP VPC Firewall, Azure NSG). Cloud firewalls drop traffic before it reaches the Linux kernel."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Could fail2ban cause a Connection Timed Out error?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. When fail2ban uses a DROP action instead of REJECT, banned IPs experience Connection timed out while other IPs connect normally."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The time limit reached error on <strong>port 22</strong> (<code>ssh: connect to host ... port 22: Connection timed out</code>) occurs when the destination server&#39;s firewall (typically IPTables or UFW on Ubuntu/Debian) silently drops or blocks incoming network packets on port 22, preventing client authentication.</p>
+          <p>The error <code>ssh: connect to host &lt;ip&gt; port 22: Connection timed out</code> occurs when your SSH client sends a TCP <code>SYN</code> packet to port 22 (or a custom SSH port) and receives no <code>SYN-ACK</code> or <code>RST</code> response within the kernel&#39;s retransmission window. Unlike <code>Connection refused</code>—which means the host is reachable but <code>sshd</code> is not listening—a timeout almost always indicates silent packet dropping by a firewall or cloud security group.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>iptables or UFW firewall rules blocking SSH port (22)</strong></div>
+            <div class="diag-value">UFW enabled without allowing SSH</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo ufw status verbose</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Allow SSH port 22 in firewall: <code>sudo ufw allow 22/tcp</code></div>
+            <div class="diag-value">Run <code>sudo ufw allow 22/tcp</code> before enabling UFW</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>SSH server daemon not listening on expected IP address</strong></div>
+            <div class="diag-value"><code>iptables</code> / <code>nftables</code> <code>DROP</code> policy on <code>INPUT</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo iptables -L INPUT -v -n</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Check SSH daemon status: <code>sudo systemctl status sshd</code></div>
+            <div class="diag-value">Insert <code>ACCEPT</code> rule for <code>--dport 22</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Cloud Security Group or ISP blocking port 22</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>nc -zv -w 5 &lt;ip&gt; 22</code> from external host</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Add inbound TCP/22 rule in AWS/GCP/Azure/VPS panel</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><code>sshd</code> listening on a non-standard port or wrong IP</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>sudo ss -tlnp | grep sshd</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Connect with <code>ssh -p &lt;port&gt;</code> or fix <code>ListenAddress</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,10 +398,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-did-iptables-a-input-p-tcp-dport-22-j-accept-not-fix-the-timeout" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why did iptables -A INPUT -p tcp --dport 22 -j ACCEPT not fix the timeout?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-if-ufw-is-inactive-and-iptables-has-no-rules-yet-ssh-still-times-out" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What if UFW is inactive and iptables has no rules, yet SSH still times out?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#could-fail2ban-cause-a-connection-timed-out-error" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Could fail2ban cause a Connection Timed Out error?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -345,6 +449,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During a TCP three-way handshake, your client sends a <code>SYN</code> packet to the server&#39;s SSH port. Two firewall actions produce different client errors:</p>
+<ul>
+<li><strong><code>REJECT</code> (returns ICMP unreachable or TCP <code>RST</code>):</strong> Fails immediately with <code>Connection refused</code>.</li>
+<li><strong><code>DROP</code> (silently discards the packet):</strong> No reply leaves the server. Your local TCP stack retries <code>SYN</code> with exponential backoff until the socket times out after ~60–120 seconds, printing <code>Connection timed out</code>.</li>
+</ul>
+<p>Silent <code>DROP</code> behavior typically occurs in host firewalls (<code>ufw</code>, <code>iptables</code>, <code>nftables</code>, <code>firewalld</code>), cloud Security Groups/ACLs (AWS, Azure, GCP), or intermediate NAT port-forwarding rules. Enabling <code>ufw</code> on a remote VPS without allowing SSH first immediately drops all new handshakes under its default <code>deny (incoming)</code> policy.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +464,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="diagnose-if-the-ssh-port-is-blocked-or-closed">
+        <li class="step-item" id="confirm-whether-packets-reach-the-server">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="diagnose-if-the-ssh-port-is-blocked-or-closed-heading">Step 1: Diagnose if the SSH port is blocked or closed</h4>
-            <p>Perform a direct network check towards the server&#39;s port from your local terminal to verify if it responds to TCP handshakes:</p>
+            <h4 id="confirm-whether-packets-reach-the-server-heading">Step 1: Confirm Whether Packets Reach the Server</h4>
+            <p>From your local machine, test raw TCP connectivity on port 22 with a 5-second timeout:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,21 +488,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Check port 22 (SSH) status on your remote server</span>
-nc <span class="tok-prop">-zv</span> <span class="tok-num">192.168</span>.<span class="tok-num">1.100</span> <span class="tok-num">22</span>
+      <pre class="formatted-pre"><code>nc <span class="tok-prop">-zv</span> <span class="tok-prop">-w</span> <span class="tok-num">5</span> <span class="tok-num">203.0</span>.<span class="tok-num">113.10</span> <span class="tok-num">22</span>
 </code></pre>
     </div>
     
-<p><em>(If the output returns &quot;Connection timed out&quot; or hangs indefinitely, the port is being blocked by a local or cloud network firewall).</em></p>
+<p>If it hangs and times out, packets are being dropped in transit or by the server&#39;s firewall. Log in via your hosting provider&#39;s web/VNC/serial console to inspect the host directly.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="allow-ssh-traffic-in-ufw-uncomplicated-firewall">
+        <li class="step-item" id="verify-the-ssh-daemon-is-listening">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="allow-ssh-traffic-in-ufw-uncomplicated-firewall-heading">Step 2: Allow SSH traffic in UFW (Uncomplicated Firewall)</h4>
-            <p>If your server uses UFW, explicitly allow secure remote access and reload kernel rules:</p>
+            <h4 id="verify-the-ssh-daemon-is-listening-heading">Step 2: Verify the SSH Daemon Is Listening</h4>
+            <p>On the server, confirm <code>sshd</code> is active and bound to the expected interface and port:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -411,22 +521,21 @@ nc <span class="tok-prop">-zv</span> <span class="tok-num">192.168</span>.<span 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Allow incoming TCP traffic on the default SSH port</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> allow <span class="tok-num">22</span>/tcp
-<span class="tok-cmt">
-# Enable UFW if inactive, then reload active rules</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> enable &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> reload
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> sshd <span class="tok-prop">--no-pager</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tlnp</span> | <span class="tok-kw">grep</span> sshd
 </code></pre>
     </div>
+    
+<p>You should see <code>LISTEN</code> on <code>0.0.0.0:22</code> or <code>[::]:22</code> (or your custom port). If <code>sshd</code> is stopped, start it with <code>sudo systemctl enable --now sshd</code>.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-explicit-rules-in-iptables">
+        <li class="step-item" id="allow-ssh-in-ufw-ubuntu-debian">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="configure-explicit-rules-in-iptables-heading">Step 3: Configure explicit rules in IPTables</h4>
-            <p>If you do not use UFW or need fine-grained rules in raw IPTables, open port 22 directly in your input chain:</p>
+            <h4 id="allow-ssh-in-ufw-ubuntu-debian-heading">Step 3: Allow SSH in UFW (Ubuntu / Debian)</h4>
+            <p>If your server uses UFW, check its current rules and allow OpenSSH or your custom port:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -446,17 +555,91 @@ nc <span class="tok-prop">-zv</span> <span class="tok-num">192.168</span>.<span 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Accept incoming TCP packets on port 22</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">iptables</span> <span class="tok-prop">-A</span> INPUT <span class="tok-prop">-p</span> tcp <span class="tok-prop">--dport</span> <span class="tok-num">22</span> <span class="tok-prop">-j</span> ACCEPT
-<span class="tok-cmt">
-# Save the active rules to persist across system reboots</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">iptables</span>-save | <span class="tok-kw">sudo</span> tee /etc/<span class="tok-kw">iptables</span>/rules.v4
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> <span class="tok-prop">status</span> numbered
+<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> allow <span class="tok-num">22</span>/tcp comment <span class="tok-cmt">&#39;Allow SSH&#39;</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> reload
 </code></pre>
     </div>
+    
+<p>If you are enabling UFW for the first time, <strong>always</strong> run <code>sudo ufw allow 22/tcp</code> before <code>sudo ufw enable</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="allow-ssh-in-raw-iptables-or-firewalld">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="allow-ssh-in-raw-iptables-or-firewalld-heading">Step 4: Allow SSH in Raw IPTables (or Firewalld)</h4>
+            <p>If the system uses raw <code>iptables</code>, inspect the <code>INPUT</code> chain and insert the <code>ACCEPT</code> rule <strong>above</strong> any catch-all <code>DROP</code> rule using <code>-I INPUT 1</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">iptables</span> <span class="tok-prop">-L</span> INPUT <span class="tok-prop">-n</span> <span class="tok-prop">--line-numbers</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">iptables</span> <span class="tok-prop">-I</span> INPUT <span class="tok-num">1</span> <span class="tok-prop">-p</span> tcp <span class="tok-prop">--dport</span> <span class="tok-num">22</span> <span class="tok-prop">-m</span> state <span class="tok-prop">--state</span> NEW,ESTABLISHED <span class="tok-prop">-j</span> ACCEPT
+<span class="tok-kw">sudo</span> netfilter-persistent save
+</code></pre>
+    </div>
+    
+<p><em>(On RHEL/Rocky/AlmaLinux with <code>firewalld</code>, run <code>sudo firewall-cmd --permanent --add-service=ssh &amp;&amp; sudo firewall-cmd --reload</code>.)</em></p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-from-your-local-machine">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="verify-from-your-local-machine-heading">Step 5: Verify From Your Local Machine</h4>
+            <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>nc <span class="tok-prop">-zv</span> <span class="tok-prop">-w</span> <span class="tok-num">5</span> <span class="tok-num">203.0</span>.<span class="tok-num">113.10</span> <span class="tok-num">22</span>
+<span class="tok-kw">ssh</span> <span class="tok-prop">-v</span> user@<span class="tok-num">203.0</span>.<span class="tok-num">113.10</span>
+</code></pre>
+    </div>
+    
+<p><code>nc</code> should report <code>succeeded!</code> and <code>ssh</code> should proceed to key exchange.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-did-iptables-a-input-p-tcp-dport-22-j-accept-not-fix-the-timeout">Why did <code>iptables -A INPUT -p tcp --dport 22 -j ACCEPT</code> not fix the timeout?</h3>
+<p><code>iptables</code> evaluates rules top-to-bottom. If a <code>DROP</code> or <code>REJECT</code> rule appears earlier in <code>INPUT</code>, <code>-A</code> appends your <code>ACCEPT</code> rule <em>after</em> the drop rule, so it is never reached. Use <code>-I INPUT 1</code> instead.</p>
+<h3 id="what-if-ufw-is-inactive-and-iptables-has-no-rules-yet-ssh-still-times-out">What if UFW is inactive and <code>iptables</code> has no rules, yet SSH still times out?</h3>
+<p>Check your cloud provider&#39;s external firewall (AWS Security Group, GCP VPC Firewall, Azure NSG). Cloud firewalls drop traffic before it reaches the Linux kernel.</p>
+<h3 id="could-fail2ban-cause-a-connection-timed-out-error">Could <code>fail2ban</code> cause a Connection Timed Out error?</h3>
+<p>Yes. When <code>fail2ban</code> uses a <code>DROP</code> action instead of <code>REJECT</code>, banned IPs experience <code>Connection timed out</code> while other IPs connect normally.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -471,49 +654,12 @@ nc <span class="tok-prop">-zv</span> <span class="tok-num">192.168</span>.<span 
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not expose your default SSH port (22) openly to all Internet IP addresses (<code>0.0.0.0/0</code>). Doing so will saturate your authentication logs with automated brute-force attempts in minutes. Instead, restrict access to your specific subnet or VPN IP range, or change the listening port in <code>/etc/ssh/sshd_config</code> to a non-standard one.</li>
+              <li><strong>Restrict SSH by source IP:</strong> Instead of allowing <code>0.0.0.0/0</code>, restrict port 22 to your office/VPN CIDR (e.g., <code>sudo ufw allow from 198.51.100.0/24 to any port 22 proto tcp</code>).</li>
+<li><strong>Keep a second session open:</strong> When editing firewall rules over SSH, keep an active root/sudo terminal open and test a <em>new</em> SSH connection in a separate window before disconnecting.</li>
+<li><strong>Avoid running conflicting firewalls:</strong> Do not run <code>ufw</code>, <code>firewalld</code>, and manual <code>iptables</code> scripts simultaneously, as they overwrite each other&#39;s chains on boot.</li>
+<li><strong>Use out-of-band console access:</strong> Verify your VPS provider&#39;s serial/VNC console works before locking down network rules.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

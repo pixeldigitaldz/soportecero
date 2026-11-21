@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does Next.js exhaust connections in next dev even with one user?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "During development, Next.js re-evaluates module scopes on file saves, creating a new pg.Pool or PrismaClient on every reload unless you cache it on globalThis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I just set max_connections = 1000 in PostgreSQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Raising max_connections too high without a pooler increases context-switching overhead, lock contention on ProcArray, and memory usage (~5–10 MB per backend), risking Linux OOM kills."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between pg_cancel_backend and pg_terminate_backend?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "pg_cancel_backend(pid) aborts only the active query while keeping the socket open. pg_terminate_backend(pid) sends SIGTERM, closing the connection and freeing the max_connections slot immediately."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <code>FATAL: sorry, too many clients already</code> in PostgreSQL occurs when the number of active and idle client connections exceeds the limit configured in the <code>max_connections</code> parameter (which defaults to 100 on standard PostgreSQL server installations).</p>
-<p>In modern web stacks using Node.js, Next.js, or Serverless functions (AWS Lambda, Vercel), instantiating direct database clients on every HTTP request rapidly exhausts the database process pool and memory.</p>
+          <p>The error <code>FATAL: sorry, too many clients already</code> in PostgreSQL occurs when the total number of active, idle, and <code>idle in transaction</code> client backend processes reaches the ceiling defined by <code>max_connections</code> (which defaults to <code>100</code> on most standard installations). Once that threshold is hit, the postmaster process refuses all new TCP or UNIX socket handshakes, causing immediate 500 errors across Node.js, Next.js, and serverless APIs.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,37 +291,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Unclosed connection leaks</strong></div>
+            <div class="diag-value"><strong>Unclosed client checkouts (<code>pg</code> or ORM leaks)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Always invoke <code>client.release()</code> inside <code>finally</code> blocks when using client checkouts</div>
+            <div class="diag-value">Ensure <code>client.release()</code> runs inside a <code>finally</code> block</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Serverless functions spawning unpooled connections</strong></div>
+            <div class="diag-value"><strong>Serverless functions opening per-invocation sockets</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Implement a centralized Connection Pooler such as <strong>PgBouncer</strong> or <strong>Supabase / Prisma Pooler</strong></div>
+            <div class="diag-value">Route traffic through <strong>PgBouncer</strong> in <code>transaction</code> pooling mode</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong><code>max_connections</code> limit set too low for hardware</strong></div>
+            <div class="diag-value"><strong>Long-running <code>idle in transaction</code> sessions</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Increase <code>max_connections</code> in <code>postgresql.conf</code> if the server has sufficient RAM</div>
+            <div class="diag-value">Set <code>idle_in_transaction_session_timeout</code> and terminate stuck PIDs</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Insufficient <code>max_connections</code> for dedicated RAM</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Tune <code>max_connections</code> and <code>shared_buffers</code> in <code>postgresql.conf</code></div>
           </div></div></div>
       </div>
     </section>
@@ -347,10 +374,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-solution" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Solution</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-nextjs-exhaust-connections-in-next-dev-even-with-one-user" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does Next.js exhaust connections in next dev even with one user?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#should-i-just-set-maxconnections-1000-in-postgresql" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Should I just set max_connections = 1000 in PostgreSQL?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-is-the-difference-between-pgcancelbackend-and-pgterminatebackend" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What is the difference between pg_cancel_backend and pg_terminate_backend?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -358,9 +425,26 @@
     </nav>
     
     
-<h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Inspect active and idle connection distribution</strong>
-Connect to PostgreSQL using <code>psql</code> and execute the following diagnostic query:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>PostgreSQL uses a process-per-connection model: every incoming socket causes the <code>postgres</code> postmaster to <code>fork()</code> a backend worker with its own private memory (<code>work_mem</code>, <code>temp_buffers</code>) and shared-memory <code>PGPROC</code> slot. When all slots up to <code>max_connections</code> (minus <code>superuser_reserved_connections</code>, default <code>3</code>) fill up, normal roles receive <code>FATAL: sorry, too many clients already</code>.</p>
+<p>Two Node.js patterns exhaust this pool rapidly:</p>
+<ol>
+<li><strong>Per-request instantiation:</strong> Calling <code>new Client()</code> inside a route handler without closing it leaves sockets sitting <code>idle</code> until TCP keepalive expires.</li>
+<li><strong>Serverless concurrency spikes:</strong> Platforms like AWS Lambda or Vercel spin up dozens of isolated containers simultaneously; 15 containers opening a <code>Pool</code> of 10 connections instantly saturate a default PostgreSQL server.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="1-audit-active-and-idle-connections-via-psql">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="1-audit-active-and-idle-connections-via-psql-heading">1. Audit Active and Idle Connections via psql</h4>
+            <p>Log in using a superuser role (which uses the reserved slots) and group current sessions by state:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -380,13 +464,14 @@ Connect to PostgreSQL using <code>psql</code> and execute the following diagnost
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> state, count(*) 
-<span class="tok-kw">FROM</span> pg_stat_activity 
-<span class="tok-kw">GROUP</span> <span class="tok-kw">BY</span> state;
+      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> state, usename, application_name, count(*)
+<span class="tok-kw">FROM</span> pg_stat_activity
+<span class="tok-kw">GROUP</span> <span class="tok-kw">BY</span> state, usename, application_name
+<span class="tok-kw">ORDER</span> <span class="tok-kw">BY</span> count(*) DESC;
 </code></pre>
     </div>
     
-<p>To inspect which queries are consuming connection slots:</p>
+<p>Identify long-lived <code>idle in transaction</code> or stalled queries holding locks and sockets:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -406,15 +491,22 @@ Connect to PostgreSQL using <code>psql</code> and execute the following diagnost
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> pid, usename, client_addr, state, query_start, query 
-<span class="tok-kw">FROM</span> pg_stat_activity 
-<span class="tok-kw">WHERE</span> state != <span class="tok-str">&#39;idle&#39;</span> 
-<span class="tok-kw">ORDER</span> <span class="tok-kw">BY</span> query_start DESC;
+      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> pid, usename, client_addr, state, now() - state_change AS duration, <span class="tok-kw">left</span>(query, <span class="tok-num">80</span>) AS query_snippet
+<span class="tok-kw">FROM</span> pg_stat_activity
+<span class="tok-kw">WHERE</span> state <span class="tok-kw">IS</span> <span class="tok-kw">NOT</span> <span class="tok-kw">NULL</span>
+<span class="tok-kw">ORDER</span> <span class="tok-kw">BY</span> duration DESC
+<span class="tok-kw">LIMIT</span> <span class="tok-num">20</span>;
 </code></pre>
     </div>
-    
-<p><strong>Terminate stuck or zombie connections</strong>
-If you need immediate database recovery access:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-terminate-zombie-or-stalled-backends">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-terminate-zombie-or-stalled-backends-heading">2. Terminate Zombie or Stalled Backends</h4>
+            <p>If your application is locked out and you need immediate recovery, terminate idle backends older than 5 minutes without killing your own <code>psql</code> session:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -434,14 +526,24 @@ If you need immediate database recovery access:</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> pg_terminate_backend(pid) 
-<span class="tok-kw">FROM</span> pg_stat_activity 
-<span class="tok-kw">WHERE</span> state = <span class="tok-str">&#39;idle&#39;</span> <span class="tok-kw">AND</span> pid &lt;&gt; pg_backend_pid();
+      <pre class="formatted-pre"><code><span class="tok-kw">SELECT</span> pg_terminate_backend(pid)
+<span class="tok-kw">FROM</span> pg_stat_activity
+<span class="tok-kw">WHERE</span> state <span class="tok-kw">IN</span> (<span class="tok-str">&#39;idle&#39;</span>, <span class="tok-str">&#39;idle in transaction&#39;</span>)
+  <span class="tok-kw">AND</span> now() - state_change &gt; interval <span class="tok-str">&#39;5 minutes&#39;</span>
+  <span class="tok-kw">AND</span> pid &lt;&gt; pg_backend_pid();
 </code></pre>
     </div>
     
-<p><strong>Configure global Connection Pooling in Node.js</strong>
-Never create <code>new Client()</code> per API endpoint. Always reuse a single shared <code>Pool</code>:</p>
+<p>Verify that connection slots are freed by re-running the count query or checking <code>SELECT count(*) FROM pg_stat_activity;</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-enforce-a-singleton-pgpool-in-nodejs">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-enforce-a-singleton-pgpool-in-nodejs-heading">3. Enforce a Singleton pg.Pool in Node.js</h4>
+            <p>Never instantiate <code>new Client()</code> per HTTP request. Export a single module-level <code>Pool</code> (and attach it to <code>globalThis</code> in Next.js dev mode so Hot Module Replacement does not leak pools):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -463,26 +565,36 @@ Never create <code>new Client()</code> per API endpoint. Always reuse a single s
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">import</span> { Pool } <span class="tok-kw">from</span> <span class="tok-str">&#39;pg&#39;</span>;
 
-<span class="tok-kw">const</span> pool = <span class="tok-kw">new</span> Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: <span class="tok-num">20</span>,<span class="tok-cmt"> // Max concurrent connections per worker</span>
-  idleTimeoutMillis: <span class="tok-num">30000</span>,
-  connectionTimeoutMillis: <span class="tok-num">2000</span>,
-});
+<span class="tok-kw">export</span> <span class="tok-kw">const</span> pool =
+  globalThis.pgPool ||
+  <span class="tok-kw">new</span> Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: <span class="tok-num">15</span>,
+    idleTimeoutMillis: <span class="tok-num">30000</span>,
+    connectionTimeoutMillis: <span class="tok-num">5000</span>,
+  });
 
-<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> query(text, params) {
+<span class="tok-kw">if</span> (process.env.NODE_ENV !== <span class="tok-str">&#39;production&#39;</span>) globalThis.pgPool = pool;
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> runQuery(text, params) {
   <span class="tok-kw">const</span> client = <span class="tok-kw">await</span> pool.<span class="tok-prop">connect</span>();
   <span class="tok-kw">try</span> {
     <span class="tok-kw">return</span> <span class="tok-kw">await</span> client.<span class="tok-prop">query</span>(text, params);
   } <span class="tok-kw">finally</span> {
-    client.<span class="tok-prop">release</span>();<span class="tok-cmt"> // Crucial: return connection back to pool</span>
+    client.<span class="tok-prop">release</span>();
   }
 }
 </code></pre>
     </div>
-    
-<p><strong>Increase <code>max_connections</code> in postgresql.conf</strong>
-For dedicated production servers with 8GB+ RAM, adjust <code>/etc/postgresql/16/main/postgresql.conf</code>:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-deploy-pgbouncer-for-serverless-or-high-concurrency-workloads">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-deploy-pgbouncer-for-serverless-or-high-concurrency-workloads-heading">4. Deploy PgBouncer for Serverless or High-Concurrency Workloads</h4>
+            <p>For microservices or serverless functions, place <strong>PgBouncer</strong> in front of PostgreSQL using <code>pool_mode = transaction</code> in <code>/etc/pgbouncer/pgbouncer.ini</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -502,12 +614,75 @@ For dedicated production servers with 8GB+ RAM, adjust <code>/etc/postgresql/16/
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>max_connections = <span class="tok-num">250</span>
-shared_buffers = 2GB
+      <pre class="formatted-pre"><code>[pgbouncer]
+listen_addr = <span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>
+listen_port = <span class="tok-num">6432</span>
+auth_type = scram-sha-<span class="tok-num">256</span>
+pool_mode = transaction
+max_client_conn = <span class="tok-num">1000</span>
+default_pool_size = <span class="tok-num">25</span>
 </code></pre>
     </div>
     
-<p>Restart the service to apply changes:</p>
+<p>Reload PgBouncer and inspect active pools:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> reload pgbouncer
+psql <span class="tok-prop">-p</span> <span class="tok-num">6432</span> <span class="tok-prop">-U</span> postgres pgbouncer <span class="tok-prop">-c</span> <span class="tok-str">&quot;SHOW POOLS;&quot;</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="5-tune-postgresqlconf-timeouts-and-limits">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="5-tune-postgresqlconf-timeouts-and-limits-heading">5. Tune postgresql.conf Timeouts and Limits</h4>
+            <p>On servers with 8 GB+ RAM, raise <code>max_connections</code> cautiously and enforce cleanup for abandoned transactions in <code>/etc/postgresql/16/main/postgresql.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">INI</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>max_connections = <span class="tok-num">200</span>
+shared_buffers = 2GB
+idle_in_transaction_session_timeout = <span class="tok-cmt">&#39;60s&#39;</span>
+</code></pre>
+    </div>
+    
+<p>Restart and verify:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -528,9 +703,20 @@ shared_buffers = 2GB
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart postgresql
+psql <span class="tok-prop">-U</span> postgres <span class="tok-prop">-c</span> <span class="tok-str">&quot;SHOW max_connections;&quot;</span>
 </code></pre>
     </div>
-    
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-nextjs-exhaust-connections-in-next-dev-even-with-one-user">Why does Next.js exhaust connections in <code>next dev</code> even with one user?</h3>
+<p>During development, Next.js re-evaluates module scopes on file saves, creating a new <code>pg.Pool</code> or <code>PrismaClient</code> on every reload unless you cache it on <code>globalThis</code>.</p>
+<h3 id="should-i-just-set-maxconnections-1000-in-postgresql">Should I just set <code>max_connections = 1000</code> in PostgreSQL?</h3>
+<p>No. Raising <code>max_connections</code> too high without a pooler increases context-switching overhead, lock contention on <code>ProcArray</code>, and memory usage (~5–10 MB per backend), risking Linux OOM kills.</p>
+<h3 id="what-is-the-difference-between-pgcancelbackend-and-pgterminatebackend">What is the difference between <code>pg_cancel_backend</code> and <code>pg_terminate_backend</code>?</h3>
+<p><code>pg_cancel_backend(pid)</code> aborts only the active query while keeping the socket open. <code>pg_terminate_backend(pid)</code> sends <code>SIGTERM</code>, closing the connection and freeing the <code>max_connections</code> slot immediately.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -545,50 +731,12 @@ shared_buffers = 2GB
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Deploy PgBouncer in transaction mode:</strong> Place PgBouncer in front of PostgreSQL in production. This allows serving over 10,000 concurrent client requests using only 50 physical backend database connections.</li>
-<li><strong>Connection monitoring:</strong> Configure automated alerts when active connections exceed 80% of <code>max_connections</code>.</li>
+              <li><strong>Use transaction-mode pooling:</strong> Route all stateless and serverless workloads through PgBouncer or a managed pooler rather than connecting directly to port <code>5432</code>.</li>
+<li><strong>Set <code>idle_in_transaction_session_timeout</code>:</strong> Always configure a 30s–60s timeout in <code>postgresql.conf</code> so crashed clients cannot hold locks and slots indefinitely.</li>
+<li><strong>Monitor <code>pg_stat_activity</code> utilization:</strong> Trigger alerts when active connections cross 75% of <code>max_connections</code>.</li>
+<li><strong>Verify ORM pool limits:</strong> Explicitly set <code>connection_limit</code> in Prisma (<code>?connection_limit=5</code> in <code>DATABASE_URL</code>) or <code>max</code> in Drizzle/Knex when deploying multiple app replicas.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -645,7 +793,7 @@ shared_buffers = 2GB
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Next.js</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -662,7 +810,7 @@ shared_buffers = 2GB
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

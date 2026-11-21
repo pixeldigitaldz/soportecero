@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <code>permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</code> occurs when you attempt to run Docker commands without <code>sudo</code> and your current Linux user account does not belong to the group authorized to access the Docker UNIX socket.</p>
+          <p>The error <code>permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock</code> appears when you invoke the Docker CLI as an unprivileged user without <code>sudo</code>. Because the Docker daemon (<code>dockerd</code>) runs as <code>root</code> and exposes its REST API over a local UNIX domain socket, the Linux kernel blocks <code>connect()</code> syscalls from any user outside the <code>docker</code> group.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,13 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Permission Denied when connecting to socket (<code>unix:///var/run/docker.sock</code>)</strong>: Current Linux user is not a member of the <code>docker</code> system group</div>
+            <div class="diag-value"><strong>User not in the <code>docker</code> UNIX group</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Add user to <code>docker</code> group with <code>usermod</code> and refresh session</div>
+            <div class="diag-value">Add user with <code>sudo usermod -aG docker $USER</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Group added, but current shell session is stale</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Refresh active groups with <code>newgrp docker</code> or re-login</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>~/.docker</code> config directory owned by <code>root</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Fix ownership: <code>sudo chown -R &quot;$USER&quot;:&quot;$USER&quot; ~/.docker</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Rootless Docker socket mismatch (<code>DOCKER_HOST</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Check <code>echo $DOCKER_HOST</code> and <code>docker context ls</code></div>
           </div></div></div>
       </div>
     </section>
@@ -322,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -333,6 +367,10 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>The Docker Engine uses a client-server architecture. The <code>docker</code> CLI binary does not start containers directly; instead, it serializes commands into HTTP requests sent over the UNIX socket <code>/var/run/docker.sock</code>. By default, <code>systemd</code> socket activation (<code>docker.socket</code>) creates <code>/var/run/docker.sock</code> with mode <code>0660</code> (<code>srw-rw----</code>) and ownership <code>root:docker</code>.</p>
+<p>Under POSIX discretionary access control (DAC), read and write permissions on a UNIX domain socket are required to open a connection. While <code>root</code> always passes this check (which is why <code>sudo docker ps</code> succeeds), an ordinary user&#39;s process credentials only pass if their supplementary group list (<code>groups</code>) includes the GID of <code>docker</code>.</p>
+<p>A second, frequently overlooked cause occurs when a developer previously ran <code>sudo docker login</code> or <code>sudo docker buildx</code>. That creates <code>~/.docker/</code> owned by <code>root:root</code>, causing subsequent non-root Docker commands to fail when reading <code>config.json</code> or Buildx state.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -341,11 +379,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="create-the-docker-group-and-add-your-user">
+        <li class="step-item" id="1-verify-socket-ownership-and-group-membership">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="create-the-docker-group-and-add-your-user-heading">Step 1: Create the Docker Group and Add Your User</h4>
-            <p>Check if the <code>docker</code> group exists on your system and add your current user using <code>usermod</code>:</p>
+            <h4 id="1-verify-socket-ownership-and-group-membership-heading">1. Verify Socket Ownership and Group Membership</h4>
+            <p>Check the current permissions on the Docker socket and your user&#39;s active groups:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -365,22 +403,53 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Create docker group if it doesn&#39;t already exist</span>
-<span class="tok-kw">sudo</span> groupadd <span class="tok-kw">docker</span>
-<span class="tok-cmt">
-# Add your active user ($USER) to the docker group</span>
-<span class="tok-kw">sudo</span> usermod <span class="tok-prop">-aG</span> <span class="tok-kw">docker</span> $USER
+      <pre class="formatted-pre"><code><span class="tok-kw">ls</span> <span class="tok-prop">-l</span> /var/run/<span class="tok-kw">docker</span>.sock
+id
+</code></pre>
+    </div>
+    
+<p>The socket should display <code>srw-rw---- 1 root docker</code>. If <code>docker</code> is missing from your <code>id</code> output, proceed to Step 2.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-create-the-docker-group-and-add-your-user">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-create-the-docker-group-and-add-your-user-heading">2. Create the docker Group and Add Your User</h4>
+            <p>Ensure the <code>docker</code> group exists and append your current username (<code>-aG</code> preserves existing groups):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> groupadd <span class="tok-prop">-f</span> <span class="tok-kw">docker</span>
+<span class="tok-kw">sudo</span> usermod <span class="tok-prop">-aG</span> <span class="tok-kw">docker</span> <span class="tok-str">&quot;$USER&quot;</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="apply-group-membership-changes-to-current-session">
-          <div class="step-number">2</div>
+        <li class="step-item" id="3-refresh-your-session-credentials">
+          <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="apply-group-membership-changes-to-current-session-heading">Step 2: Apply Group Membership Changes to Current Session</h4>
-            <p>For group changes to take effect immediately without rebooting or logging out entirely, execute:</p>
+            <h4 id="3-refresh-your-session-credentials-heading">3. Refresh Your Session Credentials</h4>
+            <p>Linux evaluates group memberships only at login time. Apply the new group immediately in your current terminal without rebooting:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -404,16 +473,16 @@
 </code></pre>
     </div>
     
-<p>Alternatively, if connected via SSH or a desktop terminal, log out of your session and log back in.</p>
+<p><em>(Note: <code>newgrp</code> spawns a subshell for the current terminal tab. For GUI IDEs like VS Code or desktop sessions, log out and log back in so every child process inherits the updated GID.)</em></p>
           </div>
         </li>
         
 
-        <li class="step-item" id="verify-varrundockersock-ownership-and-test">
-          <div class="step-number">3</div>
+        <li class="step-item" id="4-repair-docker-ownership-if-needed">
+          <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="verify-varrundockersock-ownership-and-test-heading">Step 3: Verify /var/run/docker.sock Ownership and Test</h4>
-            <p>Ensure that <code>/var/run/docker.sock</code> is owned by the <code>docker</code> group:</p>
+            <h4 id="4-repair-docker-ownership-if-needed-heading">4. Repair ~/.docker Ownership (If Needed)</h4>
+            <p>If you previously ran Docker commands with <code>sudo</code> and still see permission errors on <code>~/.docker/config.json</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -433,38 +502,55 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">ls</span> <span class="tok-prop">-l</span> /var/run/<span class="tok-kw">docker</span>.sock
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> <span class="tok-prop">-R</span> <span class="tok-str">&quot;$USER&quot;</span>:<span class="tok-str">&quot;$USER&quot;</span> <span class="tok-str">&quot;$HOME/.docker&quot;</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-prop">-R</span> g+rwx <span class="tok-str">&quot;$HOME/.docker&quot;</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="5-verify-unprivileged-execution">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="5-verify-unprivileged-execution-heading">5. Verify Unprivileged Execution</h4>
+            <p>Run a non-root container check and inspect the active Docker context:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> context <span class="tok-kw">ls</span>
+<span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> hello-world
 </code></pre>
     </div>
     
-<p><em>(Output should indicate ownership such as <code>root:docker</code> with <code>srw-rw----</code> permissions).</em></p>
-<p>Test running a Docker container without <code>sudo</code>:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> run hello-world
-</code></pre>
-    </div>
+<p>If <code>hello-world</code> pulls and prints its confirmation banner without <code>sudo</code>, socket permissions are fixed.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why is <code>chmod 666 /var/run/docker.sock</code> or <code>chmod 777</code> dangerous?</strong>
+Any user who can write to <code>/var/run/docker.sock</code> can bind-mount <code>/</code> from the host into a privileged container (<code>docker run -v /:/host alpine</code>) and gain instant root access. Never make the Docker socket world-writable.</p>
+<p><strong>I added my user to <code>docker</code> and ran <code>newgrp docker</code>, so why does VS Code still show <code>permission denied</code>?</strong>
+<code>newgrp</code> only updates the shell where you ran it. Background desktop processes and IDE terminals started before the change still hold the old group token until you fully log out of your desktop session or reboot.</p>
+<p><strong>How do I check if I am accidentally pointing to Rootless Docker?</strong>
+Run <code>env | grep DOCKER_HOST</code>. If it points to <code>/run/user/1000/docker.sock</code> while you are trying to use the system daemon (or vice versa), unset <code>DOCKER_HOST</code> or switch with <code>docker context use default</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -479,51 +565,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Avoid using <code>chmod 777</code> on the socket file</strong>: Never grant world-writable permissions to <code>/var/run/docker.sock</code>, as doing so gives unprivileged users full root access to the host system.</li>
-<li><strong>Consider Rootless Docker</strong>: In high-security environments, evaluate setting up Rootless Docker mode to run the daemon and containers inside a non-root user namespace.</li>
-<li><strong>Configure CI/CD Runner Permissions</strong>: Ensure automated build runners (such as GitHub Actions self-hosted runners or GitLab Runners) are assigned to the <code>docker</code> group on the host.</li>
+              <li>Use <strong>Rootless Docker</strong> (<code>dockerd-rootless-setuptool.sh install</code>) on multi-tenant servers so containers run inside an unprivileged user namespace rather than granting <code>docker</code> group root-equivalent access.</li>
+<li>Never prefix <code>docker</code> commands with <code>sudo</code> once your user is in the <code>docker</code> group, as doing so can recreate root-owned files inside <code>$HOME/.docker</code>.</li>
+<li>In CI/CD environments (GitHub Actions, GitLab Runner), add the dedicated runner service account (<code>gitlab-runner</code>) to the <code>docker</code> group during provisioning.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -580,7 +626,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">SSH</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

@@ -8,51 +8,98 @@ tags:
   - Umbrel
   - Docker
   - DNS
-readTime: 4 min
+readTime: 5 min
 date: '2026-07-27'
 ---
 
-A very common critical failure in home servers based on the **Umbrel OS** ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing `Temporary failure in name resolution` errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.
+A widespread failure on **Umbrel OS** home servers occurs when Docker containers (such as Nextcloud, Sonarr, Home Assistant, or Bitcoin/Lightning nodes) suddenly fail to fetch updates or reach APIs, logging `Temporary failure in name resolution` or `lookup ... on 127.0.0.11:53: read udp ... i/o timeout`—even though the host itself has internet access.
 
 ## Quick Diagnostics
-| Cause | Solution |
+
+| Symptom / Cause | Immediate Action |
 |---|---|
-| **Internal Docker DNS resolver failing on Umbrel OS** | Set public DNS in `/etc/docker/daemon.json` (e.g. `"dns": ["1.1.1.1"]`) |
-| **Port 53 conflict with systemd-resolved service** | Set `DNSStubListener=no` in `/etc/systemd/resolved.conf` |
+| **`ping 8.8.8.8` works inside container, `ping google.com` fails** | Set explicit public DNS servers in `/etc/docker/daemon.json` |
+| **Host `/etc/resolv.conf` points to `127.0.0.53` (`systemd-resolved`)** | Docker skips `127.0.0.x` loopbacks and falls back to unreachable defaults |
+| **Pi-hole / AdGuard container crashed on the same Umbrel host** | Temporarily bypass local DNS in `daemon.json` so Umbrel can pull fixes |
+| **IPv6 DNS unreachable on LAN** | Disable IPv6 inside Docker or use reliable IPv4 resolvers (`1.1.1.1`, `9.9.9.9`) |
 
-## 🚀 Step-by-Step Solution
+## Root Cause & Technical Mechanics
 
-### Step 1: Verify the internal network block
-Access your Umbrel server via SSH and enter the affected container to check if it responds to a direct numerical ping but fails to resolve text names:
+Docker containers attached to user-defined bridge networks (which Umbrel OS uses for all apps) receive `/etc/resolv.conf` pointing to Docker's embedded DNS server at `127.0.0.11`. When a container resolves an external domain like `registry-1.docker.io`, `127.0.0.11` forwards the query to the upstream nameservers listed in the host's `/etc/resolv.conf`.
+
+Here is where Umbrel OS (Debian/Ubuntu-based) breaks: if the host uses `systemd-resolved`, `/etc/resolv.conf` contains `nameserver 127.0.0.53`. Because `127.0.0.53` is a loopback address, a container's network namespace cannot route to it. Docker attempts to strip `127.0.0.x` entries and read `/run/systemd/resolve/resolv.conf` instead—or falls back to Google's `8.8.8.8`—which fails if `systemd-resolved` is misconfigured, if your router hands out an IPv6 DNS server that lacks IPv6 routing, or if you pointed your router's DHCP DNS to a Pi-hole/AdGuard container running on the *same* Umbrel machine (creating a circular dependency when Docker restarts).
+
+## Step-by-Step Solution
+
+### Step 1: Isolate DNS failure vs. full routing loss
+
+SSH into your Umbrel server and test raw IP connectivity versus DNS resolution from inside an affected container (replace `<container_name>` with a running app from `docker ps`):
+
 ```bash
-# Test direct Google IP (If it responds, there is internet but no DNS)
-docker exec -it nombre_contenedor ping -c 3 8.8.8.8
+docker ps --format "table {{.Names}}\t{{.Status}}"
+docker exec -it <container_name> ping -c 3 1.1.1.1
+docker exec -it <container_name> nslookup github.com
 ```
 
-### Step 2: Force global public DNS in the Docker configuration
+If `ping 1.1.1.1` succeeds with 0% packet loss while `nslookup github.com` times out, your routing and NAT are healthy—only DNS forwarding is broken. Inspect what Docker currently sees as upstream DNS:
 
-To bypass Umbrel's routing blocks, we can define static and immutable DNS servers for the entire Docker engine. Edit the global configuration file:
+```bash
+cat /etc/resolv.conf
+```
+
+### Step 2: Configure static upstream DNS in `/etc/docker/daemon.json`
+
+Bypass `systemd-resolved` stub loopbacks and circular LAN DNS by defining explicit, reliable resolvers in `/etc/docker/daemon.json`. First check if the file already exists so you do not overwrite Umbrel's existing daemon settings (such as log rotation):
+
+```bash
+cat /etc/docker/daemon.json 2>/dev/null
+```
+
+Edit `/etc/docker/daemon.json`:
+
 ```bash
 sudo nano /etc/docker/daemon.json
 ```
 
-Add or merge the following lines with the stable DNS of Cloudflare and Google inside the JSON object:
+Merge the `"dns"` array into the existing JSON object (or create it if empty):
+
 ```json
 {
-  "dns": ["1.1.1.1", "8.8.8.8"]
+  "dns": ["1.1.1.1", "9.9.9.9"]
 }
 ```
 
-Save the file (`Ctrl + O`, `Enter`) and close the editor (`Ctrl + X`).
+### Step 3: Restart Docker and verify container DNS resolution
 
-### Step 3: Restart the Docker service
+Validate the JSON syntax before restarting Docker (invalid JSON will prevent `dockerd` from booting):
 
-Apply a forced restart to the system service so it brings up all network interfaces with the new injected DNS:
 ```bash
+python3 -m json.tool /etc/docker/daemon.json
 sudo systemctl restart docker
 ```
 
-## 🛡️ Prevention Advice
+Wait 15–30 seconds for Umbrel's containers to come back up, then verify DNS resolution inside a container:
 
-Recommended security practices:
-- Avoid manually modifying the `/etc/resolv.conf` file directly in Umbrel OS, as this file is dynamically managed by the system and will be completely overwritten upon every physical reboot of your Mini PC or Raspberry Pi, erasing your fixes.
+```bash
+docker exec -it <container_name> getent hosts hub.docker.com
+```
+
+It should immediately return valid IPv4 addresses.
+
+## Frequently Asked Questions
+
+**Why shouldn't I just edit `/etc/resolv.conf` on Umbrel OS?**
+`/etc/resolv.conf` is dynamically regenerated by `systemd-resolved`, `NetworkManager`, or `dhcpcd` on every DHCP lease renewal and reboot. Any manual `nameserver` edits there are silently wiped.
+
+**Can I still use Pi-hole or AdGuard Home for my LAN if I set `"dns": ["1.1.1.1"]` in `daemon.json`?**
+Yes. Setting `"dns"` in `daemon.json` only controls what *Docker containers* use for outbound name resolution. Your LAN devices will continue using Pi-hole/AdGuard via your router's DHCP settings, and you break the circular boot deadlock where Pi-hole needs DNS before it has started.
+
+**What if containers on `host` network mode still fail DNS?**
+Containers using `network_mode: host` read the host's `/etc/resolv.conf` directly rather than `daemon.json`. For those, configure `DNS=1.1.1.1 9.9.9.9` in `/etc/systemd/resolved.conf` and restart `systemd-resolved`.
+
+## Prevention Advice
+
+- **Avoid circular DNS on your Docker host:** Never point the Umbrel host itself to a DNS sinkhole container running on that same Umbrel node; keep the host on `1.1.1.1` or `9.9.9.9`.
+- **Validate JSON before restarting `dockerd`:** Always run `python3 -m json.tool /etc/docker/daemon.json` or `jq . /etc/docker/daemon.json` after editing.
+- **Check `ufw` / `iptables` after Docker restarts:** If you run a host firewall on Umbrel, ensure `ufw` allows `DOCKER-USER` outbound UDP/TCP port `53` traffic.
+- **Pin log limits alongside DNS:** Keep `"log-driver": "json-file"` with `"max-size": "10m"` in `daemon.json` to prevent SD card or SSD exhaustion on Raspberry Pi / mini PCs.

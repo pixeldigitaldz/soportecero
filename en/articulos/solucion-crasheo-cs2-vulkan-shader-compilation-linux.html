@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Crashes and micro-stuttering in Counter-Strike 2 on Linux are predominantly caused by on-the-fly Vulkan shader compilation spikes, XWayland fractional scaling bottlenecks, or low system-level file descriptor allocations (<code>max_map_count</code>).</p>
-<p>Configuring targeted Steam launch parameters and taking advantage of Vulkan Graphics Pipeline Library (GPL) removes frametime spikes during intense smoke grenade explosions and gunfights.</p>
+          <p>Crashes to desktop, 1% low FPS drops, and multi-second freezes during smoke grenades or gunfights in <strong>Counter-Strike 2 (CS2)</strong> on Linux are primarily driven by real-time Vulkan shader pipeline compilation, Wayland/XWayland frame-pacing overhead, or Linux kernel virtual memory mapping limits (<code>vm.max_map_count</code>).</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,37 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Real-time shader compilation stutter</strong></div>
+            <div class="diag-value"><strong>Severe stutter on first smoke/molotov/gunshot</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Enable Graphics Pipeline Library (GPL) in Mesa or enable Steam background shader pre-caching</div>
+            <div class="diag-value">Enable Steam Shader Pre-caching &amp; verify Mesa RADV GPL support</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>XWayland compositor frame pacing latency</strong></div>
+            <div class="diag-value"><strong>Crash during map load (<code>Engine Error</code> / <code>Out of memory</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Run under native X11 or set <code>SDL_VIDEO_DRIVER=x11</code> launch option</div>
+            <div class="diag-value">Raise <code>vm.max_map_count</code> to <code>2147483642</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Low virtual memory mapping limits</strong></div>
+            <div class="diag-value"><strong>Input lag or micro-stutter on GNOME/KDE Wayland</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Increase <code>vm.max_map_count</code> to prevent crashes when loading map assets</div>
+            <div class="diag-value">Test native X11 or <code>SDL_VIDEO_DRIVER=x11</code> / Wayland direct scanout</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Black screen or Vulkan device lost on AMD/NVIDIA</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Verify <code>vulkaninfo</code> ICD loader and update Mesa/NVIDIA driver</div>
           </div></div></div>
       </div>
     </section>
@@ -347,9 +342,57 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#step-1-raise-vmmaxmapcount-to-prevent-map-load-crashes" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 1: Raise vm.max_map_count to prevent map-load crashes</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-2-verify-vulkan-driver-and-radv-gpl-support-amd-amp-nvidia" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 2: Verify Vulkan driver and RADV GPL support (AMD &amp; NVIDIA)</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-enable-steam-shader-pre-caching-and-tune-launch-options" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Enable Steam Shader Pre-Caching and tune Launch Options</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-verify-frametime-stability-with-mangohud" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Verify frametime stability with MangoHud</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -358,6 +401,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>CS2 runs natively on Linux using <strong>Source 2&#39;s Vulkan renderer</strong> (via SDL3/SDL2). Unlike OpenGL or older DX9 titles, Vulkan requires explicit compilation of Graphics Pipeline Objects (PSO) combining shaders, blend states, and render-pass attachments. Whenever a new particle effect—such as volumetric smoke interacting with HE grenade blasts—renders for the first time, the GPU driver must compile that pipeline synchronously unless it was pre-cached or split using <strong><code>VK_EXT_graphics_pipeline_library</code> (GPL)</strong>.</p>
+<p>On AMD GPUs running <strong>Mesa RADV</strong> older than 23.1, GPL is disabled or incomplete, causing 50–300 ms frametime spikes mid-duel. Meanwhile, Source 2&#39;s asset streaming and Vulkan memory allocator allocate tens of thousands of virtual memory areas (<code>mmap</code> calls). Distributions that ship with the default Linux kernel limit (<code>vm.max_map_count = 65530</code>) exhaust available map descriptors during heavy maps like Ancient or Train, triggering an immediate <code>ENOMEM</code> segfault.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -365,8 +411,8 @@
           Step-by-Step Technical Implementation
         </h2>
 
-<p><strong>Configure optimal Steam launch options</strong>
-Open Steam, right-click on <strong>Counter-Strike 2</strong> &gt; <strong>Properties</strong>, and input the following into the <em>Launch Options</em> field:</p>
+<h3 id="step-1-raise-vmmaxmapcount-to-prevent-map-load-crashes">Step 1: Raise <code>vm.max_map_count</code> to prevent map-load crashes</h3>
+<p>Check your current kernel map limit:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -386,84 +432,11 @@ Open Steam, right-click on <strong>Counter-Strike 2</strong> &gt; <strong>Proper
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-prop">-nojoy</span> <span class="tok-prop">-vulkan</span> <span class="tok-prop">-high</span> +exec autoexec.cfg
+      <pre class="formatted-pre"><code>sysctl vm.max_map_count
 </code></pre>
     </div>
     
-<p><em>Tip: On Wayland desktop sessions, you can prefix the command with <code>SDL_VIDEO_DRIVER=x11 %command% -nojoy -vulkan</code> to bypass display compositor stutter.</em></p>
-<p><strong>Enable Steam background shader pre-caching</strong>
-Within Steam Settings, navigate to <strong>Downloads</strong> &gt; <strong>Shader Pre-caching</strong> and verify the following options are enabled:</p>
-<ol class="steps-list">
-
-        <li class="step-item" id="step-1">
-          <div class="step-number">1</div>
-          <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            <em>Enable Shader Pre-caching</em>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="step-2">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="step-2-heading">Step 2</h4>
-            <em>Allow background processing of Vulkan shaders</em>
-          </div>
-        </li>
-        
-</ol>
-<p><strong>Confirm RADV Graphics Pipeline Library (Mesa / AMD)</strong>
-For AMD Radeon graphics cards, verify you are running Mesa 23.1 or newer where GPL is enabled by default to eliminate stutter:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>glxinfo | <span class="tok-kw">grep</span> <span class="tok-str">&quot;OpenGL version&quot;</span>
-</code></pre>
-    </div>
-    
-<p>To force GPL shader compilation in your launch options:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>RADV_PERFTEST=gpl %command%
-</code></pre>
-    </div>
-    
-<p><strong>Increase Linux virtual memory map count</strong>
-Prevent CS2 from crashing during map transitions by adjusting memory limits:</p>
+<p>If it prints <code>65530</code>, raise it immediately to the SteamOS/Fedora standard (<code>2147483642</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -487,7 +460,121 @@ Prevent CS2 from crashing during map transitions by adjusting memory limits:</p>
 </code></pre>
     </div>
     
-<p>To make this persistent across reboots, add <code>vm.max_map_count=2147483642</code> to <code>/etc/sysctl.d/99-gaming.conf</code>.</p>
+<p>Persist the setting across reboots by creating <code>/etc/sysctl.d/99-cs2-gaming.conf</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;vm.max_map_count=2147483642&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/sysctl.d/<span class="tok-num">99</span>-cs2-gaming.conf
+<span class="tok-kw">sudo</span> sysctl <span class="tok-prop">--system</span>
+</code></pre>
+    </div>
+    
+<h3 id="step-2-verify-vulkan-driver-and-radv-gpl-support-amd-amp-nvidia">Step 2: Verify Vulkan driver and RADV GPL support (AMD &amp; NVIDIA)</h3>
+<p>Confirm your active Vulkan ICD and Mesa/NVIDIA driver version:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>vulkaninfo <span class="tok-prop">--summary</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;driverName|driverInfo|apiVersion&quot;</span>
+</code></pre>
+    </div>
+    
+<p>For AMD GPUs, ensure <code>driverInfo</code> reports <strong>Mesa 23.1 or newer</strong> (24.x+ recommended), where <code>RADV_PERFTEST=gpl</code> is enabled by default. If you are on an older LTS distro (such as Ubuntu 22.04), upgrade Mesa via the <code>kisak-mesa</code> PPA or Flatpak Steam runtime. For NVIDIA users, use driver <strong>550+</strong> and ensure <code>nvidia_drm.modeset=1</code> is set in your kernel parameters.</p>
+<h3 id="step-3-enable-steam-shader-pre-caching-and-tune-launch-options">Step 3: Enable Steam Shader Pre-Caching and tune Launch Options</h3>
+<p>In Steam:</p>
+<ol class="steps-list">
+
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="step-1-heading">Step 1</h4>
+            Open <strong>Steam</strong> → <strong>Settings</strong> → <strong>Downloads</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="step-2-heading">Step 2</h4>
+            Enable <strong>Shader Pre-Caching</strong> and <strong>Allow background processing of Vulkan shaders</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-3">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="step-3-heading">Step 3</h4>
+            Right-click <strong>Counter-Strike 2</strong> → <strong>Properties</strong> → <strong>Launch Options</strong> and set:
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>gamemoderun %command% <span class="tok-prop">-nojoy</span> <span class="tok-prop">-high</span>
+</code></pre>
+    </div>
+    
+<p><em>(Note: CS2 on Linux uses <code>-vulkan</code> by default; avoid forcing <code>-gl</code> as it is unsupported.)</em> If you experience Wayland fractional-scaling blur or XWayland cursor/pacing stutter on KDE or GNOME, test forcing <code>SDL_VIDEO_DRIVER=wayland</code> (on SDL3/modern Wayland) or switching to an X11 session to compare 1% lows.</p>
+<h3 id="step-4-verify-frametime-stability-with-mangohud">Step 4: Verify frametime stability with MangoHud</h3>
+<p>Install <code>mangohud</code> and launch CS2 with <code>MANGOHUD=1 gamemoderun %command% -nojoy</code> to inspect the live frametime graph in Deathmatch. A healthy setup shows a flat frametime line under 8 ms with zero multi-frame spikes when smokes detonate.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Should I use Proton to run the Windows version of CS2 on Linux?</strong>
+No. VAC (Valve Anti-Cheat) blocks matchmaking on the Windows version running through Proton. You must use the native Linux Vulkan build.</p>
+<p><strong>Why does Steam download gigabytes of shader caches before launching CS2?</strong>
+Steam&#39;s Fossilize service distributes pre-compiled Vulkan pipeline caches matching your exact GPU and driver version so your CPU does not have to compile them during live matches.</p>
+<p><strong>Does disabling <code>gamemode</code> or <code>mangohud</code> fix random crashes?</strong>
+Occasionally, outdated <code>libgamemode</code> or overlay hooks (<code>LD_PRELOAD</code>) conflict with CS2 updates. If CS2 crashes immediately on launch, strip all wrappers from Launch Options and test bare <code>%command%</code> first.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -502,50 +589,12 @@ Prevent CS2 from crashing during map transitions by adjusting memory limits:</p>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Keep Mesa drivers updated:</strong> On Ubuntu or Debian derivatives, use the Kisak-Mesa PPA to ensure you have the latest Vulkan driver optimizations.</li>
-<li><strong>Frametime diagnostics:</strong> Use <code>MangoHud</code> (<code>mangohud %command%</code>) to monitor frametime consistency and detect GPU thermal throttling in real time.</li>
+              <li><strong>Keep Mesa and kernel updated:</strong> Use current Mesa (24.x+) and Linux kernel 6.6+ for optimal AMD RADV and schedutil CPU frequency scaling.</li>
+<li><strong>Avoid mixed Vulkan ICDs:</strong> Ensure <code>amdvlk</code> is not installed alongside <code>mesa-vulkan-drivers</code> (RADV), as <code>amdvlk</code> causes severe CS2 shader stutter and crashes.</li>
+<li><strong>Disable background browser hardware acceleration:</strong> Close Chromium/Discord GPU-accelerated streams if VRAM is tight (8 GB or less).</li>
+<li><strong>Verify game files after major CS2 patches:</strong> Run <strong>Verify integrity of game files</strong> in Steam if crashes start immediately after a game update.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -602,7 +651,7 @@ Prevent CS2 from crashing during map transitions by adjusting memory limits:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -636,7 +685,7 @@ Prevent CS2 from crashing during map transitions by adjusting memory limits:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

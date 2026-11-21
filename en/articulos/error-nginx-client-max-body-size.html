@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why is setting client_max_body_size 0; dangerous in production?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Setting client_max_body_size 0 disables body size checks entirely. Attackers can send multi-gigabyte POST requests to exhaust disk space in client_body_temp_path or tie up worker connections."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do I still get a 413 error after updating nginx.conf?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Check two places: another client_max_body_size directive in a more specific location block overriding your server block, or an upstream CDN/load balancer (such as Cloudflare&#39;s 100 MB free-tier upload limit) rejecting the request before it reaches Nginx."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does Nginx return 403 when serving files from /home/user/site?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Because user home directories commonly default to 0700 or 0750. Even if site/ is 0755, the www-data user cannot traverse /home/user without o+x (chmod 711 /home/user) or moving the web root to /var/www/."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <strong>413 request entity too large</strong> error in Nginx occurs when a client attempts to upload a file exceeding the default 1MB buffer limit. To fix this instantly, add or increase the <code>client_max_body_size 64M;</code> directive inside the <code>http</code>, <code>server</code>, or <code>location</code> block of <code>/etc/nginx/nginx.conf</code> and reload the service with <code>sudo nginx -s reload</code>.</p>
-<p>Similarly, the <strong>403 forbidden nginx</strong> error happens when the web server process user (typically <code>www-data</code> or <code>nginx</code>) lacks read permissions on static files or execute permissions on directories. You can resolve the 403 error immediately by setting ownership and secure permissions: run <code>sudo chown -R www-data:www-data /var/www/html &amp;&amp; sudo find /var/www/html -type d -exec chmod 755 {} + &amp;&amp; sudo find /var/www/html -type f -exec chmod 644 {} +</code>.</p>
+          <p>Two of the most common HTTP errors encountered when deploying web applications behind Nginx are <strong>413 Request Entity Too Large</strong> and <strong>403 Forbidden</strong>. A <code>413</code> status blocks file uploads or large JSON payloads that exceed Nginx&#39;s default 1 MB request body ceiling, while a <code>403</code> status indicates the Nginx worker process cannot traverse directories, read target files, or resolve a valid <code>index</code> file.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -274,27 +289,75 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>413 Request Entity Too Large</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Nginx client_max_body_size directive limit below uploaded file size</strong></div>
+            <div class="diag-value"><code>client_max_body_size</code> defaults to <code>1m</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Increase limit in <code>nginx.conf</code>: <code>client_max_body_size 64M;</code></div>
+            <div class="diag-value">Set <code>client_max_body_size 64M;</code> in <code>http</code>, <code>server</code>, or <code>location</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>413 Request Entity Too Large</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>php.ini upload_max_filesize or post_max_size restricting upload size</strong></div>
+            <div class="diag-value">Upstream PHP-FPM or app server limit is lower</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Update <code>upload_max_filesize = 64M</code> in PHP configuration file</div>
+            <div class="diag-value">Align <code>upload_max_filesize</code> and <code>post_max_size</code> in <code>php.ini</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>403 Forbidden</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Missing <code>x</code> (traverse) bit on dirs or <code>r</code> on files</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Set <code>755</code> on directories, <code>644</code> on files, and proper owner</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>403 Forbidden</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Missing <code>index</code> file or SELinux context block</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Verify <code>index index.php index.html;</code> and <code>restorecon</code> context</div>
           </div></div></div>
       </div>
     </section>
@@ -335,10 +398,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-is-setting-clientmaxbodysize-0-dangerous-in-production" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why is setting client_max_body_size 0; dangerous in production?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-do-i-still-get-a-413-error-after-updating-nginxconf" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why do I still get a 413 error after updating nginx.conf?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-nginx-return-403-when-serving-files-from-homeusersite" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does Nginx return 403 when serving files from /home/user/site?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -346,6 +449,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>In Nginx, the <code>ngx_http_core_module</code> inspects the incoming <code>Content-Length</code> header (or accumulates streamed chunks for <code>Transfer-Encoding: chunked</code>) against <code>client_max_body_size</code> before forwarding the request to an upstream proxy or FastCGI worker. If the payload exceeds the configured threshold—which defaults to <code>1m</code> if omitted—Nginx immediately terminates the request and returns <code>413</code>. Even after raising Nginx&#39;s limit, backends such as PHP-FPM (<code>post_max_size</code>) or Express (<code>body-parser</code>) enforce independent limits that can reject the same upload downstream.</p>
+<p>For <strong>403 Forbidden</strong>, Nginx worker processes run as an unprivileged user (typically <code>www-data</code> on Debian/Ubuntu or <code>nginx</code> on RHEL/Rocky). At the Linux VFS layer, the worker needs read (<code>r</code>) permission on the served file <em>and</em> execute/search (<code>x</code>) permission on <strong>every parent directory</strong> from <code>/</code> down to the web root. If a site lives under <code>/home/deploy/app/dist</code> and <code>/home/deploy</code> has mode <code>700</code>, Nginx cannot traverse into it and logs <code>Permission denied</code> alongside a <code>403</code> response. A <code>403</code> also occurs when a client requests a directory URL without a matching <code>index</code> file while <code>autoindex</code> is <code>off</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -354,36 +460,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="configure-upload-limit-in-nginx">
+        <li class="step-item" id="increase-clientmaxbodysize-in-nginx">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="configure-upload-limit-in-nginx-heading">Step 1: Configure upload limit in Nginx</h4>
-            <p>Open the global Nginx configuration file or the specific website server block configuration:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Open main Nginx configuration file</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/nginx/nginx.conf
-</code></pre>
-    </div>
-    
-<p>Inside the <code>http</code>, <code>server</code>, or <code>location</code> block, add or modify the following directive to increase the upload limit (for example, to 64 Megabytes):</p>
+            <h4 id="increase-clientmaxbodysize-in-nginx-heading">Step 1: Increase client_max_body_size in Nginx</h4>
+            <p>Edit <code>/etc/nginx/nginx.conf</code> (for a global setting) or your site file under <code>/etc/nginx/sites-available/</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -403,44 +484,30 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Allow uploads up to 64MB</span>
-<span class="tok-kw">client_max_body_size</span> 64M;
+      <pre class="formatted-pre"><code><span class="tok-kw">server</span> {
+    <span class="tok-kw">listen</span> <span class="tok-num">80</span>;
+    <span class="tok-kw">server_name</span> example.com;
+
+   <span class="tok-cmt"> # Allow request bodies up to 64 MB</span>
+    <span class="tok-kw">client_max_body_size</span> 64M;
+
+    <span class="tok-kw">location</span> /api/upload {
+       <span class="tok-cmt"> # Optional stricter or larger per-route override</span>
+        <span class="tok-kw">client_max_body_size</span> 128M;
+        <span class="tok-kw">proxy_pass</span> <span class="tok-kw">http</span>://<span class="tok-num">127.0</span>.<span class="tok-num">0.1</span>:<span class="tok-num">3000</span>;
+    }
+}
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="adjust-php-fpm-upload-limits-if-applicable">
+        <li class="step-item" id="align-upstream-application-limits-php-fpm-nodejs">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="adjust-php-fpm-upload-limits-if-applicable-heading">Step 2: Adjust PHP-FPM upload limits (if applicable)</h4>
-            <p>If your website runs on PHP (such as WordPress, Drupal, or Laravel), you must align Nginx&#39;s limits with your PHP interpreter configurations:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Open the active PHP configuration file (adjust for your active PHP version)</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/php/<span class="tok-num">8.2</span>/fpm/php.ini
-</code></pre>
-    </div>
-    
-<p>Find and edit the following variables to match your Nginx configuration limits:</p>
+            <h4 id="align-upstream-application-limits-php-fpm-nodejs-heading">Step 2: Align Upstream Application Limits (PHP-FPM / Node.js)</h4>
+            <p>If Nginx proxies to PHP-FPM, update <code>/etc/php/8.2/fpm/php.ini</code> (adjusting for your PHP version) so <code>post_max_size</code> is at least equal to <code>upload_max_filesize</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -469,11 +536,11 @@ memory_limit = 256M
         </li>
         
 
-        <li class="step-item" id="validate-syntax-and-restart-services">
+        <li class="step-item" id="resolve-403-forbidden-ownership-and-directory-traversal-bits">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="validate-syntax-and-restart-services-heading">Step 3: Validate syntax and restart services</h4>
-            <p>Test your Nginx configuration syntax for correctness before applying changes to production:</p>
+            <h4 id="resolve-403-forbidden-ownership-and-directory-traversal-bits-heading">Step 3: Resolve 403 Forbidden Ownership and Directory Traversal Bits</h4>
+            <p>Verify which user Nginx workers run as (<code>ps aux | grep nginx</code>), then apply ownership and POSIX permissions across your document root:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -493,18 +560,103 @@ memory_limit = 256M
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Test web server configuration syntax</span>
-<span class="tok-kw">sudo</span> nginx <span class="tok-prop">-t</span>
-<span class="tok-cmt">
-# Restart system services to apply the new configurations</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart nginx
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> <span class="tok-prop">-R</span> www-data:www-data /var/www/html
+<span class="tok-kw">sudo</span> <span class="tok-kw">find</span> /var/www/html <span class="tok-prop">-type</span> d <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">755</span> {} +
+<span class="tok-kw">sudo</span> <span class="tok-kw">find</span> /var/www/html <span class="tok-prop">-type</span> f <span class="tok-prop">-exec</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> {} +
+</code></pre>
+    </div>
+    
+<p>Confirm your <code>server</code> block declares the expected entry file (<code>index index.html index.php;</code>). On RHEL/Rocky Linux with SELinux enforcing, restore the web context:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> restorecon <span class="tok-prop">-Rv</span> /var/www/html
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validate-syntax-reload-and-verify">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="validate-syntax-reload-and-verify-heading">Step 4: Validate Syntax, Reload, and Verify</h4>
+            <p>Test the configuration before reloading so a syntax typo never drops live traffic:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> nginx <span class="tok-prop">-t</span> &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> reload nginx
 <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart php8.<span class="tok-num">2</span>-fpm
+</code></pre>
+    </div>
+    
+<p>Verify the <code>403</code> fix and inspect the error log if any request still fails:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-I</span> http://localhost/
+<span class="tok-kw">sudo</span> tail <span class="tok-prop">-n</span> <span class="tok-num">20</span> /var/log/nginx/error.log
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-is-setting-clientmaxbodysize-0-dangerous-in-production">Why is setting <code>client_max_body_size 0;</code> dangerous in production?</h3>
+<p>Setting <code>client_max_body_size 0</code> disables body size checks entirely. Attackers can send multi-gigabyte POST requests to exhaust disk space in <code>client_body_temp_path</code> or tie up worker connections.</p>
+<h3 id="why-do-i-still-get-a-413-error-after-updating-nginxconf">Why do I still get a 413 error after updating <code>nginx.conf</code>?</h3>
+<p>Check two places: another <code>client_max_body_size</code> directive in a more specific <code>location</code> block overriding your <code>server</code> block, or an upstream CDN/load balancer (such as Cloudflare&#39;s 100 MB free-tier upload limit) rejecting the request before it reaches Nginx.</p>
+<h3 id="why-does-nginx-return-403-when-serving-files-from-homeusersite">Why does Nginx return 403 when serving files from <code>/home/user/site</code>?</h3>
+<p>Because user home directories commonly default to <code>0700</code> or <code>0750</code>. Even if <code>site/</code> is <code>0755</code>, the <code>www-data</code> user cannot traverse <code>/home/user</code> without <code>o+x</code> (<code>chmod 711 /home/user</code>) or moving the web root to <code>/var/www/</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -519,49 +671,12 @@ memory_limit = 256M
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not set the <code>client_max_body_size</code> directive to <code>0</code> (which disables size checking completely). Configuring an infinite upload limit exposes your Nginx web server to Denial of Service (DoS) attacks, allowing malicious actors to saturate your system storage by continuously uploading massive files.</li>
+              <li>Keep <code>client_max_body_size</code> scoped to specific upload endpoints (<code>/upload</code>, <code>/wp-admin</code>) rather than raising it globally to hundreds of megabytes.</li>
+<li>Deploy static and PHP sites under <code>/var/www/</code> rather than <code>/home/</code> to avoid home-directory traversal blocks and SELinux mismatches.</li>
+<li>Always run <code>sudo nginx -t</code> in CI/CD deployment scripts before executing <code>systemctl reload nginx</code>.</li>
+<li>Monitor <code>/var/log/nginx/error.log</code> for <code>client intended to send too large body</code> and <code>directory index of &quot;...&quot; is forbidden</code> entries after each release.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -635,7 +750,7 @@ memory_limit = 256M
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">SSH</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

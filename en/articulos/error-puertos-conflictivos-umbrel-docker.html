@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The port binding error (<code>bind: address already in use</code> or <code>port already allocated</code>) when attempting to start a custom container in Umbrel OS occurs because the platform&#39;s internal web proxy (based on Nginx or Traefik) has already reserved ports 80 and 443 to manage the app store interface and secure dashboard access.</p>
+          <p>The Docker error <code>Bind for 0.0.0.0:80 failed: port is already allocated</code> (or <code>listen tcp4 :80: bind: address already in use</code>) on <strong>Umbrel OS</strong> occurs when a custom container or host service tries to claim ports <code>80</code>, <code>443</code>, or <code>53</code> that Umbrel&#39;s core web proxy and DNS stack already hold.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Port 80 or 443 required by Umbrel app occupied by another service</strong></div>
+            <div class="diag-value"><strong>Custom container maps <code>- &quot;80:80&quot;</code> or <code>- &quot;443:443&quot;</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Modify port mapping in App&#39;s <code>docker-compose.yml</code> file</div>
+            <div class="diag-value">Remap host side in <code>docker-compose.yml</code> (e.g., <code>&quot;8085:80&quot;</code>)</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Local Nginx or Apache process blocking host ports</strong></div>
+            <div class="diag-value"><strong>Two Umbrel apps requesting the same host port</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Identify and stop conflicting service: <code>sudo systemctl stop nginx</code></div>
+            <div class="diag-value">Inspect <code>docker ps</code> ports and reassign the custom app</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Host <code>nginx</code> or <code>apache2</code> installed alongside Umbrel</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Stop/disable conflicting host daemon (<code>sudo systemctl disable --now nginx</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Port 53 conflict with Pi-hole / AdGuard Home</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Disable <code>DNSStubListener</code> in <code>/etc/systemd/resolved.conf</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Umbrel OS runs an integrated reverse proxy and authentication gateway on the host&#39;s TCP ports <code>80</code> and <code>443</code> to serve the Umbrel dashboard (<code>umbrel.local</code>) and route traffic to installed apps over internal Docker bridge networks. Each official Umbrel app inside <code>~/umbrel/app-data/</code> is assigned a unique internal port by the Umbrel app manager to avoid collisions.</p>
+<p>When you manually deploy a third-party <code>docker-compose.yml</code> stack (such as Portainer, Nginx Proxy Manager, or a custom web app) with standard <code>ports: - &quot;80:80&quot;</code>, the Linux kernel&#39;s network stack rejects the <code>bind()</code> syscall because <code>0.0.0.0:80</code> already has an active listening socket owned by Umbrel&#39;s proxy or another container. Similarly, deploying DNS sinks like AdGuard Home on port <code>53</code> often collides with <code>systemd-resolved</code>&#39;s local stub listener on <code>127.0.0.53:53</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +378,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="identify-which-process-or-container-is-using-the-port">
+        <li class="step-item" id="identify-the-exact-process-or-container-holding-the-port">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="identify-which-process-or-container-is-using-the-port-heading">Step 1: Identify which process or container is using the port</h4>
-            <p>Before modifying any compose files, connect to your Umbrel via SSH and identify precisely which service is binding to the target port:</p>
+            <h4 id="identify-the-exact-process-or-container-holding-the-port-heading">Step 1: Identify the exact process or container holding the port</h4>
+            <p>Connect to your Umbrel node over SSH and inspect both host sockets and Docker port mappings:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,22 +402,21 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Locate processes listening on the conflicting port (e.g., port 80)</span>
-<span class="tok-kw">sudo</span> lsof <span class="tok-prop">-i</span> :<span class="tok-num">80</span>
-<span class="tok-cmt">
-# List active Docker container port mappings</span>
-<span class="tok-kw">docker</span> ps <span class="tok-prop">--format</span> <span class="tok-str">&quot;table {{.ID}}\t{{.Names}}\t{{.Ports}}&quot;</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tulpn</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-cmt">&#39;:80\b|:443\b|:8080\b&#39;</span>
+<span class="tok-kw">docker</span> ps <span class="tok-prop">--format</span> <span class="tok-str">&quot;table {{.Names}}\t{{.Status}}\t{{.Ports}}&quot;</span>
 </code></pre>
     </div>
+    
+<p>Note which process owns the port. If it belongs to <code>umbrel</code> or <code>app_proxy</code>, <strong>do not kill it</strong>—doing so will break your Umbrel dashboard and app routing.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="update-port-mapping-in-your-docker-composeyml-file">
+        <li class="step-item" id="remap-the-host-port-in-your-custom-docker-composeyml">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="update-port-mapping-in-your-docker-composeyml-file-heading">Step 2: Update port mapping in your docker-compose.yml file</h4>
-            <p>Do not attempt to kill or remove processes belonging to Umbrel&#39;s native dashboard. Instead, modify the port mapping of the container you want to deploy, changing its host-facing port to an unallocated one (e.g., change <code>80:80</code> to <code>8085:80</code>):</p>
+            <h4 id="remap-the-host-port-in-your-custom-docker-composeyml-heading">Step 2: Remap the host port in your custom docker-compose.yml</h4>
+            <p>In Docker Compose port syntax (<code>HOST_PORT:CONTAINER_PORT</code>), only the left-hand side binds to the Umbrel host. Keep the container&#39;s internal port unchanged and move the host port to an unused high port (such as <code>8085</code> or <code>8443</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -413,22 +437,32 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">services</span>:
-  app-custom:
+  custom-web:
     <span class="tok-kw">image</span>: nginx:alpine
+    container_name: custom-web
+    <span class="tok-kw">restart</span>: unless-stopped
     <span class="tok-kw">ports</span>:
-     <span class="tok-cmt"> # Map free host port 8085 to container port 80</span>
       - <span class="tok-str">&quot;8085:80&quot;</span>
+      - <span class="tok-str">&quot;8443:443&quot;</span>
+    <span class="tok-kw">networks</span>:
+      - custom_isolated_net
+
+<span class="tok-kw">networks</span>:
+  custom_isolated_net:
+    driver: bridge
 </code></pre>
     </div>
+    
+<p>If you are fixing a port <code>53</code> DNS conflict for a custom Pi-hole/AdGuard container, bind only to your Umbrel&#39;s LAN IP (e.g., <code>192.168.1.50:53:53/udp</code>) or disable <code>systemd-resolved</code>&#39;s stub listener cleanly.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="recreate-and-start-the-container">
+        <li class="step-item" id="recreate-the-stack-and-verify-port-binding">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="recreate-and-start-the-container-heading">Step 3: Recreate and start the container</h4>
-            <p>Apply the configuration changes by recreating the container:</p>
+            <h4 id="recreate-the-stack-and-verify-port-binding-heading">Step 3: Recreate the stack and verify port binding</h4>
+            <p>Apply the updated Compose file and confirm the container starts without errors:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -448,14 +482,46 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Bring the container stack down and recreate it in detached mode</span>
-<span class="tok-kw">docker</span> compose down &amp;&amp; <span class="tok-kw">docker</span> compose up <span class="tok-prop">-d</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> compose down
+<span class="tok-kw">docker</span> compose up <span class="tok-prop">-d</span>
+<span class="tok-kw">docker</span> compose ps
+</code></pre>
+    </div>
+    
+<p>Verify the new port is listening and serving HTTP traffic:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-I</span> http://localhost:<span class="tok-num">8085</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Can I change Umbrel&#39;s own dashboard port away from 80?</strong>
+It is strongly discouraged. Umbrel&#39;s <code>umbrel-os</code> scripts and app store updates expect the core proxy on ports 80/443 and will overwrite manual edits during OS updates. Always move your custom container&#39;s host port instead.</p>
+<p><strong>What if I need a custom container accessible on port 80 with a domain name?</strong>
+Keep the custom container on an unprivileged port like <code>127.0.0.1:8085:80</code>, or run a dedicated reverse proxy (like Cloudflare Tunnel <code>cloudflared</code> or Tailscale Serve) that forwards external HTTPS traffic directly to <code>localhost:8085</code> without touching host port <code>80</code>.</p>
+<p><strong>Why does <code>docker ps</code> show a port conflict even after I stopped the old container?</strong>
+Check for <code>docker-proxy</code> zombie processes or another stopped/restarting Compose project still reserving the port. Run <code>docker ps -a</code> and <code>sudo ss -tulpn | grep &lt;port&gt;</code> to spot lingering listeners.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -470,49 +536,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Avoid modifying Umbrel&#39;s main system Docker network interfaces (<code>docker0</code> or the native host network) when running custom third-party applications. Always declare isolated bridge networks (<code>bridge</code>) within your custom Compose files. This prevents accidental port and DNS routing conflicts, keeping your Bitcoin node and server applications fully secure.</li>
+              <li><strong>Maintain a port registry:</strong> Keep a simple note or comment block listing every custom host port (<code>8085</code>, <code>8090</code>, <code>9443</code>) you assign outside Umbrel&#39;s App Store.</li>
+<li><strong>Bind internal services to <code>127.0.0.1</code>:</strong> If a container only needs to be reached via Cloudflare Tunnel or a local reverse proxy, use <code>&quot;127.0.0.1:8085:80&quot;</code> instead of exposing <code>0.0.0.0</code>.</li>
+<li><strong>Use isolated bridge networks:</strong> Declare a dedicated <code>bridge</code> network per custom stack rather than attaching containers to Umbrel&#39;s internal <code>umbrel_main_network</code>.</li>
+<li><strong>Back up custom Compose files outside <code>~/umbrel</code>:</strong> Store custom stacks in <code>~/custom-stacks/</code> so Umbrel OS upgrades never touch them.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

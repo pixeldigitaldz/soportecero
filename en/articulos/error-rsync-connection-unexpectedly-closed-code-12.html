@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does rsync trigger Out of Memory before code 12 on budget VPSs?",
+      "name": "Why does rsync fail with code 12 when copying from macOS or to a Synology NAS?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Building recursive in-memory file indexes for millions of files exhausts constrained RAM. Pass --no-inc-recursive or sync partitioned subtrees."
+        "text": "Non-standard systems often install rsync outside /usr/bin. Specify the remote binary path explicitly with --rsync-path=/usr/local/bin/rsync (or sudo rsync if elevated destination permissions are needed)."
       }
     },
     {
       "@type": "Question",
-      "name": "How can I inspect the exact reason for the abrupt termination?",
+      "name": "Does -z (compression) ever cause code 12?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Invoke rsync in hyper-verbose mode combined with SSH debugging: rsync -vvv -e &quot;ssh -vvv&quot; ... to expose the initiating termination signal."
+        "text": "On CPU-constrained servers transferring already-compressed archives (.zip, .mp4, .tar.gz), -z wastes CPU cycles and can stall the stream. Omit -z on fast LANs or for pre-compressed media."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I check if the remote disk filled up mid-transfer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Run ssh user@server &quot;df -h &amp;&amp; df -i&quot;—exhausting either disk blocks or filesystem inodes (df -i) will cause the remote rsync receiver to abort with code 12."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>While transferring backups or replicating directory trees over SSH, your transfer abruptly aborts with <code>rsync: connection unexpectedly closed (0 bytes received so far) [sender]</code> followed by <code>rsync error: error in rsync protocol data stream (code 12) at io.c</code>. Exit code 12 signifies that the bidirectional data stream between the local sender and remote receiver process collapsed prematurely.</p>
+          <p>When synchronizing backups or large directory trees over SSH, <code>rsync</code> can abort abruptly with <code>rsync: connection unexpectedly closed (0 bytes received so far) [sender]</code> followed by <code>rsync error: error in rsync protocol data stream (code 12) at io.c</code>. Exit code 12 means the bidirectional multiplexed data stream between the local <code>rsync</code> sender and the remote <code>rsync --server</code> receiver collapsed before the transfer finished.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>rsync binary is missing or not in $PATH on the destination remote server</strong></div>
+            <div class="diag-value"><strong>Missing <code>rsync</code> on remote host</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Fails instantly at <code>0 bytes received so far</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Install rsync on the remote host with sudo apt install rsync</div>
+            <div class="diag-value">Install <code>rsync</code> on remote or pass <code>--rsync-path</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>SSH connection timeout or stateful NAT firewall killing idle TCP pipes</strong></div>
+            <div class="diag-value"><strong>Noisy <code>.bashrc</code> / MOTD on remote SSH</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Protocol stream corrupted at handshake</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Configure ServerAliveInterval and leverage -P --partial in rsync commands</div>
+            <div class="diag-value">Guard interactive output in remote <code>~/.bashrc</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Idle SSH / NAT firewall timeout</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Fails mid-transfer on huge files or slow disks</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Pass <code>-e &quot;ssh -o ServerAliveInterval=15&quot;</code> and <code>-P</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Remote OOM killer or full disk</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Drops after scanning millions of files</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Pass <code>--no-inc-recursive</code> or check <code>df -h</code> / <code>dmesg</code></div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +399,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-rsync-trigger-out-of-memory-before-code-12-on-budget-vpss" class="toc-sublink">
+            <a href="#why-does-rsync-fail-with-code-12-when-copying-from-macos-or-to-a-synology-nas" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does rsync trigger Out of Memory before code 12 on budget VPSs?</span>
+              <span class="toc-subtext">Why does rsync fail with code 12 when copying from macOS or to a Synology NAS?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#how-can-i-inspect-the-exact-reason-for-the-abrupt-termination" class="toc-sublink">
+            <a href="#does-z-compression-ever-cause-code-12" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How can I inspect the exact reason for the abrupt termination?</span>
+              <span class="toc-subtext">Does -z (compression) ever cause code 12?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#how-can-i-check-if-the-remote-disk-filled-up-mid-transfer" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">How can I check if the remote disk filled up mid-transfer?</span>
             </a>
           </li>
         
@@ -395,6 +450,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p><code>rsync</code> operates as a client-server pair over a single SSH channel: the local process invokes <code>ssh user@host rsync --server ...</code> on the remote machine and exchanges a binary protocol stream over <code>stdin</code>/<code>stdout</code>.</p>
+<p>Exit code 12 (<code>RERR_STREAMIO</code>) is triggered whenever that pipe closes unexpectedly:</p>
+<ol>
+<li><strong>Immediate Failure (0 bytes received):</strong> Either the <code>rsync</code> binary is missing from the remote <code>$PATH</code> (common in minimal container images or Synology/BSD NAS setups where <code>rsync</code> lives in <code>/usr/local/bin/rsync</code>), or the remote user&#39;s shell startup script (<code>~/.bashrc</code> / <code>/etc/profile</code>) prints text to <code>stdout</code> on non-interactive SSH logins, corrupting the binary <code>rsync</code> handshake.</li>
+<li><strong>Mid-Transfer Failure:</strong> During multi-gigabyte transfers or heavy delta-checksum computation, the TCP connection sits idle from the perspective of stateful NAT gateways, causing firewall state expiration. Alternatively, on low-RAM VPS instances, <code>rsync</code>&#39;s file-list index can trigger the Linux OOM killer on the remote receiver, or the destination partition hits 100% capacity (<code>ENOSPC</code>).</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +465,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-and-install-rsync-on-remote-destination-host">
+        <li class="step-item" id="verify-remote-rsync-binary-and-clean-non-interactive-ssh-output">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-and-install-rsync-on-remote-destination-host-heading">Step 1: Verify and Install rsync on Remote Destination Host</h4>
-            <p>The most common root cause when rsync fails instantly at 0 bytes transferred is the absence of the rsync executable on the target machine:</p>
+            <h4 id="verify-remote-rsync-binary-and-clean-non-interactive-ssh-output-heading">Step 1: Verify Remote rsync Binary and Clean Non-Interactive SSH Output</h4>
+            <p>Test whether <code>rsync</code> is reachable and whether the remote shell emits stray output on non-interactive SSH:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,126 +489,115 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># On remote Ubuntu / Debian</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> <span class="tok-kw">rsync</span>
-<span class="tok-cmt">
-# On remote RHEL / Rocky Linux / AlmaLinux</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">dnf</span> install <span class="tok-prop">-y</span> <span class="tok-kw">rsync</span>
-</code></pre>
-    </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="block-stateful-nat-dropouts-with-ssh-keepalive-flags">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="block-stateful-nat-dropouts-with-ssh-keepalive-flags-heading">Step 2: Block Stateful NAT Dropouts with SSH KeepAlive Flags</h4>
-            <p>When syncing multi-gigabyte ISOs or databases, intermediate firewalls frequently drop connections deemed idle. Enforce active probing packets:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">rsync</span> <span class="tok-prop">-avzP</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=4&quot;</span> /local/dir/ user@server:/remote/dir/
-</code></pre>
-    </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="enable-resumable-partial-transfers-p">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="enable-resumable-partial-transfers-p-heading">Step 3: Enable Resumable Partial Transfers (-P)</h4>
-            <p>Prevent network blips from forcing a complete restart of huge transfers by adding the <code>-P</code> argument (combines <code>--partial</code> and <code>--progress</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">rsync</span> <span class="tok-prop">-avhP</span> /var/backups/ user@server:/backups/
+      <pre class="formatted-pre"><code><span class="tok-kw">ssh</span> user@server <span class="tok-str">&quot;which rsync &amp;&amp; df -h /remote/dir&quot;</span>
 </code></pre>
     </div>
     
-<p>If a network disconnect occurs, re-running the command resumes transmission from the exact byte where it paused.</p>
+<p>If <code>rsync</code> is missing, install it on the remote host (<code>sudo apt install -y rsync</code> or <code>sudo dnf install -y rsync</code>). If your remote <code>~/.bashrc</code> prints a banner, ensure it exits early for non-interactive shells (<code>[[ $- != *i* ]] &amp;&amp; return</code>).</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="keep-the-ssh-tunnel-alive-and-enable-resumable-transfers">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="keep-the-ssh-tunnel-alive-and-enable-resumable-transfers-heading">Step 2: Keep the SSH Tunnel Alive and Enable Resumable Transfers</h4>
+            <p>Configure SSH keepalive probes so NAT firewalls never drop the connection during long checksum phases, and pass <code>-P</code> (<code>--partial --progress</code>) so interrupted files resume rather than restarting from zero:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">rsync</span> <span class="tok-prop">-avhP</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=4&quot;</span> /local/dir/ user@server:/remote/dir/
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="prevent-out-of-memory-crashes-on-huge-file-trees">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="prevent-out-of-memory-crashes-on-huge-file-trees-heading">Step 3: Prevent Out-of-Memory Crashes on Huge File Trees</h4>
+            <p>If <code>dmesg</code> on the remote server shows <code>Out of memory: Killed process ... (rsync)</code>, reduce memory overhead or limit bandwidth so disk I/O does not saturate:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">rsync</span> <span class="tok-prop">-avhP</span> <span class="tok-prop">--no-inc-recursive</span> <span class="tok-prop">--bwlimit</span>=<span class="tok-num">50000</span> /local/dir/ user@server:/remote/dir/
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="diagnose-exact-termination-cause">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="diagnose-exact-termination-cause-heading">Step 4: Diagnose Exact Termination Cause</h4>
+            <p>If code 12 persists, run both <code>rsync</code> and <code>ssh</code> in verbose debug mode to capture the exact remote stderr line before the pipe closes:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">rsync</span> <span class="tok-prop">-vvv</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;ssh -vv&quot;</span> /local/dir/ user@server:/remote/dir/
+</code></pre>
+    </div>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-does-rsync-trigger-out-of-memory-before-code-12-on-budget-vpss">Why does rsync trigger Out of Memory before code 12 on budget VPSs?</h3>
-<p>Building recursive in-memory file indexes for millions of files exhausts constrained RAM. Pass <code>--no-inc-recursive</code> or sync partitioned subtrees.</p>
-<h3 id="how-can-i-inspect-the-exact-reason-for-the-abrupt-termination">How can I inspect the exact reason for the abrupt termination?</h3>
-<p>Invoke rsync in hyper-verbose mode combined with SSH debugging: <code>rsync -vvv -e &quot;ssh -vvv&quot; ...</code> to expose the initiating termination signal.</p>
+<h3 id="why-does-rsync-fail-with-code-12-when-copying-from-macos-or-to-a-synology-nas">Why does <code>rsync</code> fail with code 12 when copying from macOS or to a Synology NAS?</h3>
+<p>Non-standard systems often install <code>rsync</code> outside <code>/usr/bin</code>. Specify the remote binary path explicitly with <code>--rsync-path=/usr/local/bin/rsync</code> (or <code>sudo rsync</code> if elevated destination permissions are needed).</p>
+<h3 id="does-z-compression-ever-cause-code-12">Does <code>-z</code> (compression) ever cause code 12?</h3>
+<p>On CPU-constrained servers transferring already-compressed archives (<code>.zip</code>, <code>.mp4</code>, <code>.tar.gz</code>), <code>-z</code> wastes CPU cycles and can stall the stream. Omit <code>-z</code> on fast LANs or for pre-compressed media.</p>
+<h3 id="how-can-i-check-if-the-remote-disk-filled-up-mid-transfer">How can I check if the remote disk filled up mid-transfer?</h3>
+<p>Run <code>ssh user@server &quot;df -h &amp;&amp; df -i&quot;</code>—exhausting either disk blocks <em>or</em> filesystem inodes (<code>df -i</code>) will cause the remote <code>rsync</code> receiver to abort with code 12.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -561,50 +612,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Add <code>ClientAliveInterval 30</code> inside remote <code>/etc/ssh/sshd_config</code> to sustain background batch transfers.</li>
-<li>For enterprise-scale migrations, wrap rsync commands inside detachable sessions using <code>tmux</code> or <code>screen</code>.</li>
+              <li>Configure <code>ClientAliveInterval 30</code> and <code>ClientAliveCountMax 5</code> in <code>/etc/ssh/sshd_config</code> on backup targets so long-running transfers stay alive.</li>
+<li>Wrap large unattended migrations inside <code>tmux</code> or <code>screen</code> on the initiating host so local terminal disconnects never kill the transfer.</li>
+<li>Never place <code>echo</code> or <code>neofetch</code> commands in <code>~/.bashrc</code> without checking <code>[[ $- != *i* ]] &amp;&amp; return</code> first.</li>
+<li>Monitor destination disk space and inode usage before scheduled <code>cron</code> or <code>systemd</code> <code>rsync</code> backup jobs run.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -661,7 +674,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Linux</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

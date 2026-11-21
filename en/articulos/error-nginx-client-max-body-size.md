@@ -7,58 +7,105 @@ tags:
   - Nginx
   - Sysadmin
   - Web
-readTime: 3 min
+readTime: 5 min
 date: '2026-07-03'
 ---
 
-The **413 request entity too large** error in Nginx occurs when a client attempts to upload a file exceeding the default 1MB buffer limit. To fix this instantly, add or increase the `client_max_body_size 64M;` directive inside the `http`, `server`, or `location` block of `/etc/nginx/nginx.conf` and reload the service with `sudo nginx -s reload`.
-
-Similarly, the **403 forbidden nginx** error happens when the web server process user (typically `www-data` or `nginx`) lacks read permissions on static files or execute permissions on directories. You can resolve the 403 error immediately by setting ownership and secure permissions: run `sudo chown -R www-data:www-data /var/www/html && sudo find /var/www/html -type d -exec chmod 755 {} + && sudo find /var/www/html -type f -exec chmod 644 {} +`.
+Two of the most common HTTP errors encountered when deploying web applications behind Nginx are **413 Request Entity Too Large** and **403 Forbidden**. A `413` status blocks file uploads or large JSON payloads that exceed Nginx's default 1 MB request body ceiling, while a `403` status indicates the Nginx worker process cannot traverse directories, read target files, or resolve a valid `index` file.
 
 ## Quick Diagnostics
-| Cause | Solution |
-|---|---|
-| **Nginx client_max_body_size directive limit below uploaded file size** | Increase limit in `nginx.conf`: `client_max_body_size 64M;` |
-| **php.ini upload_max_filesize or post_max_size restricting upload size** | Update `upload_max_filesize = 64M` in PHP configuration file |
 
-## 🚀 Step-by-Step Solution
+| Error | Cause | Solution |
+|---|---|---|
+| **413 Request Entity Too Large** | `client_max_body_size` defaults to `1m` | Set `client_max_body_size 64M;` in `http`, `server`, or `location` |
+| **413 Request Entity Too Large** | Upstream PHP-FPM or app server limit is lower | Align `upload_max_filesize` and `post_max_size` in `php.ini` |
+| **403 Forbidden** | Missing `x` (traverse) bit on dirs or `r` on files | Set `755` on directories, `644` on files, and proper owner |
+| **403 Forbidden** | Missing `index` file or SELinux context block | Verify `index index.php index.html;` and `restorecon` context |
 
-### Step 1: Configure upload limit in Nginx
-Open the global Nginx configuration file or the specific website server block configuration:
-```bash
-# Open main Nginx configuration file
-sudo nano /etc/nginx/nginx.conf
-```
-Inside the `http`, `server`, or `location` block, add or modify the following directive to increase the upload limit (for example, to 64 Megabytes):
+## Root Cause & Technical Mechanics
+
+In Nginx, the `ngx_http_core_module` inspects the incoming `Content-Length` header (or accumulates streamed chunks for `Transfer-Encoding: chunked`) against `client_max_body_size` before forwarding the request to an upstream proxy or FastCGI worker. If the payload exceeds the configured threshold—which defaults to `1m` if omitted—Nginx immediately terminates the request and returns `413`. Even after raising Nginx's limit, backends such as PHP-FPM (`post_max_size`) or Express (`body-parser`) enforce independent limits that can reject the same upload downstream.
+
+For **403 Forbidden**, Nginx worker processes run as an unprivileged user (typically `www-data` on Debian/Ubuntu or `nginx` on RHEL/Rocky). At the Linux VFS layer, the worker needs read (`r`) permission on the served file *and* execute/search (`x`) permission on **every parent directory** from `/` down to the web root. If a site lives under `/home/deploy/app/dist` and `/home/deploy` has mode `700`, Nginx cannot traverse into it and logs `Permission denied` alongside a `403` response. A `403` also occurs when a client requests a directory URL without a matching `index` file while `autoindex` is `off`.
+
+## Step-by-Step Solution
+
+### Step 1: Increase `client_max_body_size` in Nginx
+
+Edit `/etc/nginx/nginx.conf` (for a global setting) or your site file under `/etc/nginx/sites-available/`:
+
 ```nginx
-# Allow uploads up to 64MB
-client_max_body_size 64M;
+server {
+    listen 80;
+    server_name example.com;
+
+    # Allow request bodies up to 64 MB
+    client_max_body_size 64M;
+
+    location /api/upload {
+        # Optional stricter or larger per-route override
+        client_max_body_size 128M;
+        proxy_pass http://127.0.0.1:3000;
+    }
+}
 ```
 
-### Step 2: Adjust PHP-FPM upload limits (if applicable)
-If your website runs on PHP (such as WordPress, Drupal, or Laravel), you must align Nginx's limits with your PHP interpreter configurations:
-```bash
-# Open the active PHP configuration file (adjust for your active PHP version)
-sudo nano /etc/php/8.2/fpm/php.ini
-```
-Find and edit the following variables to match your Nginx configuration limits:
+### Step 2: Align Upstream Application Limits (PHP-FPM / Node.js)
+
+If Nginx proxies to PHP-FPM, update `/etc/php/8.2/fpm/php.ini` (adjusting for your PHP version) so `post_max_size` is at least equal to `upload_max_filesize`:
+
 ```ini
 upload_max_filesize = 64M
 post_max_size = 64M
 memory_limit = 256M
 ```
 
-### Step 3: Validate syntax and restart services
-Test your Nginx configuration syntax for correctness before applying changes to production:
-```bash
-# Test web server configuration syntax
-sudo nginx -t
+### Step 3: Resolve 403 Forbidden Ownership and Directory Traversal Bits
 
-# Restart system services to apply the new configurations
-sudo systemctl restart nginx
+Verify which user Nginx workers run as (`ps aux | grep nginx`), then apply ownership and POSIX permissions across your document root:
+
+```bash
+sudo chown -R www-data:www-data /var/www/html
+sudo find /var/www/html -type d -exec chmod 755 {} +
+sudo find /var/www/html -type f -exec chmod 644 {} +
+```
+
+Confirm your `server` block declares the expected entry file (`index index.html index.php;`). On RHEL/Rocky Linux with SELinux enforcing, restore the web context:
+
+```bash
+sudo restorecon -Rv /var/www/html
+```
+
+### Step 4: Validate Syntax, Reload, and Verify
+
+Test the configuration before reloading so a syntax typo never drops live traffic:
+
+```bash
+sudo nginx -t && sudo systemctl reload nginx
 sudo systemctl restart php8.2-fpm
 ```
 
-## 🛡️ Prevention Advice
-Recommended security practices:
-- Do not set the `client_max_body_size` directive to `0` (which disables size checking completely). Configuring an infinite upload limit exposes your Nginx web server to Denial of Service (DoS) attacks, allowing malicious actors to saturate your system storage by continuously uploading massive files.
+Verify the `403` fix and inspect the error log if any request still fails:
+
+```bash
+curl -I http://localhost/
+sudo tail -n 20 /var/log/nginx/error.log
+```
+
+## Frequently Asked Questions
+
+### Why is setting `client_max_body_size 0;` dangerous in production?
+Setting `client_max_body_size 0` disables body size checks entirely. Attackers can send multi-gigabyte POST requests to exhaust disk space in `client_body_temp_path` or tie up worker connections.
+
+### Why do I still get a 413 error after updating `nginx.conf`?
+Check two places: another `client_max_body_size` directive in a more specific `location` block overriding your `server` block, or an upstream CDN/load balancer (such as Cloudflare's 100 MB free-tier upload limit) rejecting the request before it reaches Nginx.
+
+### Why does Nginx return 403 when serving files from `/home/user/site`?
+Because user home directories commonly default to `0700` or `0750`. Even if `site/` is `0755`, the `www-data` user cannot traverse `/home/user` without `o+x` (`chmod 711 /home/user`) or moving the web root to `/var/www/`.
+
+## Prevention Advice
+
+- Keep `client_max_body_size` scoped to specific upload endpoints (`/upload`, `/wp-admin`) rather than raising it globally to hundreds of megabytes.
+- Deploy static and PHP sites under `/var/www/` rather than `/home/` to avoid home-directory traversal blocks and SELinux mismatches.
+- Always run `sudo nginx -t` in CI/CD deployment scripts before executing `systemctl reload nginx`.
+- Monitor `/var/log/nginx/error.log` for `client intended to send too large body` and `directory index of "..." is forbidden` entries after each release.

@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <strong><code>error: externally-managed-environment</code></strong> occurs when running <code>pip install &lt;package&gt;</code> on modern Linux distributions such as <strong>Ubuntu 24.04 LTS, Debian 12 (Bookworm), and Arch Linux / CachyOS</strong>. This restriction (defined in <strong>PEP 668</strong>) prevents <code>pip</code> from overwriting system Python libraries managed by <code>apt</code> or <code>pacman</code>.</p>
+          <p>Running <code>pip install &lt;package&gt;</code> on modern Linux distributions—including <strong>Ubuntu 24.04 LTS, Debian 12 (Bookworm), Fedora 38+, and Arch Linux / CachyOS</strong>—now aborts with <code>error: externally-managed-environment</code>. This is not a broken Python installation; it is an intentional safeguard defined in <strong>PEP 668</strong> to stop <code>pip</code> from overwriting or corrupting Python packages owned by your OS package manager (<code>apt</code>, <code>dnf</code>, or <code>pacman</code>).</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>PEP 668 protection in modern Python preventing system-wide pip install</strong></div>
+            <div class="diag-value"><strong>Installing project dependencies globally</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Create and activate virtual environment: <code>python3 -m venv venv &amp;&amp; source venv/bin/activate</code></div>
+            <div class="diag-value">Create a virtual environment: <code>python3 -m venv .venv &amp;&amp; source .venv/bin/activate</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Requirement to install Python package via system package manager</strong></div>
+            <div class="diag-value"><strong>Installing standalone Python CLI tools (<code>ansible</code>, <code>yt-dlp</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Install package via system package manager (e.g. <code>apt install python3-pkg</code>)</div>
+            <div class="diag-value">Use <code>pipx</code>: <code>pipx install &lt;tool&gt;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Need a library for system Python scripts</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Install via OS repo: <code>sudo apt install python3-&lt;pkg&gt;</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Ephemeral Docker build container</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Pass <code>--break-system-packages</code> or use a <code>venv</code> inside <code>Dockerfile</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,33 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#verifying-your-python-environment-path" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Verifying Your Python Environment Path</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -344,6 +376,36 @@
       </div>
     </nav>
     
+    
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Historically, Linux distributions relied heavily on system Python (<code>/usr/bin/python3</code>) for core OS utilities like <code>apt</code>, <code>ufw</code>, <code>dnf</code>, and <code>cloud-init</code>. Running <code>sudo pip install</code> or <code>pip install --user</code> globally wrote wheels into <code>/usr/lib/python3*/site-packages</code> or <code>~/.local/lib/python3*/site-packages</code>, silently upgrading or downgrading shared dependencies (such as <code>urllib3</code>, <code>cryptography</code>, or <code>PyYAML</code>) required by system tools.</p>
+<p>To eliminate these dependency collisions, Python Enhancement Proposal <strong>PEP 668</strong> introduced a sentinel file named <code>EXTERNALLY-MANAGED</code> inside the standard library directory (e.g., <code>/usr/lib/python3.12/EXTERNALLY-MANAGED</code>). When <code>pip</code> (<code>23.0+</code>) detects this marker file, it refuses to modify the global or user site-packages directory outside an isolated environment. Inspecting the marker file directly (<code>cat /usr/lib/python3.*/EXTERNALLY-MANAGED</code>) confirms that the distribution&#39;s package maintainer explicitly delegates Python dependency resolution to the OS package manager.</p>
+<h3 id="verifying-your-python-environment-path">Verifying Your Python Environment Path</h3>
+<p>Before creating a virtual environment, check which <code>python3</code> and <code>pip</code> binaries are active in your <code>PATH</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">which</span> python3
+python3 <span class="tok-prop">-m</span> pip <span class="tok-prop">--version</span>
+<span class="tok-kw">ls</span> /usr/lib/python3.*/EXTERNALLY-MANAGED <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
     
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -353,11 +415,12 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="method-1-use-python-virtual-environment-recommended">
+        <li class="step-item" id="1-use-a-python-virtual-environment-best-for-projects">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="method-1-use-python-virtual-environment-recommended-heading">Method 1: Use Python Virtual Environment (Recommended)</h4>
-            <p>This is the official best practice for Python development:</p>
+            <h4 id="1-use-a-python-virtual-environment-best-for-projects-heading">1. Use a Python Virtual Environment (Best for Projects)</h4>
+            <p>A virtual environment creates an isolated Python interpreter and <code>site-packages</code> folder inside your project directory, which has no <code>EXTERNALLY-MANAGED</code> marker.</p>
+<p>On Ubuntu/Debian, ensure <code>python3-venv</code> is installed first:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,30 +440,48 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Install python3-venv if missing (Ubuntu/Debian)</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install python3-venv
-<span class="tok-cmt">
-# 2. Create virtual environment inside your project</span>
-python3 <span class="tok-prop">-m</span> venv .venv
-<span class="tok-cmt">
-# 3. Activate the environment</span>
-<span class="tok-kw">source</span> .venv/bin/activate
-<span class="tok-cmt">
-# 4. Run pip without errors</span>
-pip install requests pandas numpy
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> python3-venv
 </code></pre>
     </div>
+    
+<p>Create, activate, and verify your virtual environment:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>python3 <span class="tok-prop">-m</span> venv .venv
+<span class="tok-kw">source</span> .venv/bin/activate
+<span class="tok-kw">which</span> pip
+pip install requests pandas
+</code></pre>
+    </div>
+    
+<p><code>which pip</code> should output <code>/path/to/your/project/.venv/bin/pip</code>.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="method-2-install-via-os-package-manager">
+        <li class="step-item" id="2-use-pipx-for-global-cli-applications">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="method-2-install-via-os-package-manager-heading">Method 2: Install via OS Package Manager</h4>
-            <p>Popular Python packages are available directly through Linux package managers:</p>
-<ul>
-<li><strong>Ubuntu / Debian (<code>apt</code>):</strong>
+            <h4 id="2-use-pipx-for-global-cli-applications-heading">2. Use pipx for Global CLI Applications</h4>
+            <p>If you want a Python CLI tool (like <code>black</code>, <code>poetry</code>, <code>httpie</code>, or <code>ansible</code>) available everywhere in your terminal without activating a <code>venv</code> each time, install it with <code>pipx</code>:</p>
+
     <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
@@ -419,12 +500,17 @@ pip install requests pandas numpy
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install python3-requests python3-pip
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Ubuntu / Debian</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> pipx
+pipx ensurepath
+<span class="tok-cmt">
+# Arch Linux / CachyOS</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> python-pipx
 </code></pre>
     </div>
     
-</li>
-<li><strong>Arch Linux / CachyOS (<code>pacman</code>):</strong>
+<p>Then install CLI tools in isolated per-app environments:</p>
+
     <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
@@ -443,21 +529,18 @@ pip install requests pandas numpy
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> python-requests
+      <pre class="formatted-pre"><code>pipx install httpie
 </code></pre>
     </div>
-    
-</li>
-</ul>
           </div>
         </li>
         
 
-        <li class="step-item" id="method-3-use-break-system-packages-flag-use-with-caution">
+        <li class="step-item" id="3-install-system-packaged-modules-via-apt-or-pacman">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="method-3-use-break-system-packages-flag-use-with-caution-heading">Method 3: Use --break-system-packages Flag (Use With Caution)</h4>
-            <p>If you must install a global package on a personal machine:</p>
+            <h4 id="3-install-system-packaged-modules-via-apt-or-pacman-heading">3. Install System-Packaged Modules via apt or pacman</h4>
+            <p>For libraries needed by system-wide scripts, install the distribution&#39;s pre-tested package:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -477,15 +560,55 @@ pip install requests pandas numpy
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>pip install package-name <span class="tok-prop">--break-system-packages</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Ubuntu / Debian</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> python3-requests python3-yaml
+<span class="tok-cmt">
+# Arch Linux</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-S</span> python-requests python-yaml
 </code></pre>
     </div>
-    
-<p><em>Note:</em> Avoid using this flag in production servers or system automation scripts.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-override-in-ephemeral-containers-only-break-system-packages">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-override-in-ephemeral-containers-only-break-system-packages-heading">4. Override in Ephemeral Containers Only (--break-system-packages)</h4>
+            <p>Inside disposable CI/CD runners or single-purpose Docker containers where no OS Python tools are at risk, you may explicitly bypass PEP 668:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>pip install <span class="tok-prop">--no-cache-dir</span> <span class="tok-prop">--break-system-packages</span> <span class="tok-prop">-r</span> requirements.txt
+</code></pre>
+    </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Can I just delete <code>/usr/lib/python3.*/EXTERNALLY-MANAGED</code> to make <code>pip</code> work like before?</strong>
+Do not delete that file. Removing <code>EXTERNALLY-MANAGED</code> disables PEP 668 protection system-wide, allowing <code>pip</code> to overwrite <code>apt</code>/<code>pacman</code>-managed libraries, and OS upgrades will restore the marker file anyway.</p>
+<p><strong>Why does <code>pip install</code> inside my Dockerfile fail on <code>python:3.12-slim</code> vs <code>ubuntu:24.04</code>?</strong>
+Official <code>python:3.12-slim</code> Docker images build Python from source without <code>EXTERNALLY-MANAGED</code>, whereas <code>ubuntu:24.04</code> and <code>debian:12</code> base images include PEP 668 markers. Using a <code>venv</code> (<code>ENV PATH=&quot;/opt/venv/bin:$PATH&quot;</code>) works cleanly across both.</p>
+<p><strong>Does <code>uv</code> or <code>poetry</code> hit <code>externally-managed-environment</code>?</strong>
+By default, <code>uv</code> and <code>poetry</code> manage isolated virtual environments automatically, avoiding PEP 668 errors altogether.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -500,49 +623,11 @@ pip install requests pandas numpy
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Always commit a <code>requirements.txt</code> or <code>pyproject.toml</code> and add <code>.venv/</code> to <code>.gitignore</code> for every Python project.</li>
+<li>Use <code>pipx</code> (or <code>uv tool install</code>) for global developer CLI tools instead of <code>pip install --user</code>.</li>
+<li>In Dockerfiles based on Debian/Ubuntu, create a dedicated virtual environment in <code>/opt/venv</code> and prepend <code>/opt/venv/bin</code> to <code>PATH</code>.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -633,7 +718,7 @@ pip install requests pandas numpy
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nodejs</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

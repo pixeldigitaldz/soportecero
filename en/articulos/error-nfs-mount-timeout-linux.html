@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is soft safe to use for all NFS mounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For read-mostly media shares, backups, or home directories where an I/O error is preferable to a frozen desktop, soft is ideal. However, for databases or active virtual machine disk images where silent partial writes could corrupt data, keep hard,intr (or hard) and rely on x-systemd.automount to avoid boot delays."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my system still hang during shutdown or reboot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If an NFS share is mounted when the Wi-Fi or Ethernet interface goes down during shutdown, the kernel cannot flush pending RPCs. Ensuring _netdev is present in /etc/fstab tells systemd to unmount the NFS share before stopping NetworkManager or systemd-networkd."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use NFSv4 only to avoid rpcbind (port 111) issues?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Adding nfsvers=4.2 (or vers=4) to your /etc/fstab options forces NFSv4 over a single TCP port (2049), eliminating rpcbind/portmapper firewall headaches."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When you configure network shared folders using the NFS (Network File System) protocol to move movies or backups between your main computer and your home server, the <code>/etc/fstab</code> file attempts to connect to the external server during system boot. If the storage server is offline or there is no local network connection, Linux freezes the boot screen for a strict timeout of <strong>90 seconds</strong> before allowing you to log in.</p>
+          <p>When an NFS (Network File System) share is defined in <code>/etc/fstab</code> with standard synchronous options, Linux attempts to mount the remote export during system startup. If the NAS is powered off, the network interface is not yet ready, or port <code>2049</code> is unreachable, the boot process stalls for a strict <strong>90-second</strong> <code>systemd</code> job timeout before dropping to a shell or continuing without the share.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>NFS port (2049) or rpcbind blocked by firewall on target server</strong></div>
+            <div class="diag-value">Boot hangs for 90s on <code>A start job is running for /mnt/nfs</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>systemd-analyze blame</code> / <code>journalctl -b | grep nfs</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Allow NFS traffic in firewall: <code>ufw allow 2049/tcp</code></div>
+            <div class="diag-value">Add <code>noauto,x-systemd.automount</code> in <code>/etc/fstab</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>NFS server service inactive or export unlisted in /etc/exports</strong></div>
+            <div class="diag-value">NFS server unreachable or port <code>2049</code> firewalled</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>nc -zv -w 3 &lt;server_ip&gt; 2049</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Verify exported path with <code>showmount -e SERVER_IP</code></div>
+            <div class="diag-value">Allow TCP/UDP <code>2049</code> on server firewall</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Export path missing or client IP unauthorized</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>showmount -e &lt;server_ip&gt;</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Update <code>/etc/exports</code> and run <code>exportfs -ra</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><code>fstab</code> mounts before Wi-Fi/DHCP finishes</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>journalctl -u NetworkManager-wait-online</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Use <code>x-systemd.automount</code> or <code>_netdev</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,24 +398,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-modify-network-mount-parameters" class="toc-sublink">
+            <a href="#is-soft-safe-to-use-for-all-nfs-mounts" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Modify network mount parameters</span>
+              <span class="toc-subtext">Is soft safe to use for all NFS mounts?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-understand-the-new-added-variables" class="toc-sublink">
+            <a href="#why-does-my-system-still-hang-during-shutdown-or-reboot" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Understand the new added variables</span>
+              <span class="toc-subtext">Why does my system still hang during shutdown or reboot?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-i-use-nfsv4-only-to-avoid-rpcbind-port-111-issues" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can I use NFSv4 only to avoid rpcbind (port 111) issues?</span>
             </a>
           </li>
         
@@ -363,26 +449,62 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>At boot, <code>systemd-fstab-generator</code> translates every <code>/etc/fstab</code> line into a <code>.mount</code> unit. Even when <code>_netdev</code> is specified—which orders the mount after <code>network-online.target</code>—the mount still executes synchronously during startup.</p>
+<p>If the target NFS server is offline or packet-filtered:</p>
+<ol>
+<li>The Linux kernel&#39;s RPC/NFS client (<code>sunrpc</code>) sends <code>TCP SYN</code> or <code>PORTMAP</code>/<code>NFSv4</code> requests and enters exponential retry loops.</li>
+<li><code>systemd</code> monitors the mount job with a default <code>JobTimeoutSec=90s</code>. Until that timer expires or the server responds, <code>remote-fs.target</code> blocks boot progress.</li>
+<li>With <code>hard</code> mounts (the kernel default), any subsequent I/O to a hung NFS mount point can also freeze file managers or terminal commands (<code>df</code>, <code>ls</code>) indefinitely unless <code>soft</code> or <code>timeo</code> bounds are configured.</li>
+</ol>
+<p>Switching to <strong>on-demand automounting</strong> (<code>x-systemd.automount</code>) decouples boot from network availability: <code>systemd</code> creates a lightweight <code>.automount</code> stub at boot in milliseconds and only triggers the actual <code>mount.nfs</code> call when a process accesses the directory.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           Step-by-Step Technical Implementation
         </h2>
-
-<h3 id="step-1-modify-network-mount-parameters">Step 1: Modify network mount parameters</h3>
-<p>We will configure the system to treat the network mount as a non-critical secondary element that should not block the machine&#39;s boot process if it does not respond immediately.</p>
 <ol class="steps-list">
 
-        <li class="step-item" id="step-1">
+        <li class="step-item" id="verify-nfs-server-reachability-and-exports">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="step-1-heading">Step 1</h4>
-            Open your terminal and edit the configuration table:
+            <h4 id="verify-nfs-server-reachability-and-exports-heading">Step 1: Verify NFS Server Reachability and Exports</h4>
+            <p>Before modifying <code>/etc/fstab</code>, confirm the NFS server is exporting the share and port <code>2049</code> (NFSv4) is open:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>nc <span class="tok-prop">-zv</span> <span class="tok-prop">-w</span> <span class="tok-num">3</span> <span class="tok-num">192.168</span>.<span class="tok-num">1.50</span> <span class="tok-num">2049</span>
+showmount <span class="tok-prop">-e</span> <span class="tok-num">192.168</span>.<span class="tok-num">1.50</span>
+</code></pre>
+    </div>
+    
+<p>If <code>showmount</code> fails with a timeout, open port <code>2049/tcp</code> (and <code>111/tcp</code> + <code>111/udp</code> for NFSv3) on the NAS/server firewall.</p>
           </div>
         </li>
         
-</ol>
+
+        <li class="step-item" id="update-etcfstab-with-systemd-automount-options">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="update-etcfstab-with-systemd-automount-options-heading">Step 2: Update /etc/fstab With Systemd Automount Options</h4>
+            <p>Open <code>/etc/fstab</code> as root:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -406,10 +528,7 @@
 </code></pre>
     </div>
     
-<ol start="2">
-<li>Locate the line pointing to your NFS network IP address. It will look similar to this: <code>192.168.1.50:/share /mnt/nfs nfs defaults 0 0</code>.</li>
-<li>Modify the parameters section by replacing <code>defaults</code> with the following protection options:</li>
-</ol>
+<p>Locate your NFS entry and replace <code>defaults</code> with non-blocking automount and timeout parameters:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,16 +548,90 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-num">192.168</span>.<span class="tok-num">1.50</span>:/share /mnt/nfs nfs defaults,noauto,x-systemd.automount,x-systemd.device-timeout=<span class="tok-num">5</span>,timeo=<span class="tok-num">14</span> <span class="tok-num">0</span> <span class="tok-num">0</span>
+      <pre class="formatted-pre"><code><span class="tok-num">192.168</span>.<span class="tok-num">1.50</span>:/share /mnt/nfs nfs _netdev,noauto,x-systemd.automount,x-systemd.device-timeout=<span class="tok-num">5</span>,x-systemd.idle-timeout=<span class="tok-num">300</span>,timeo=<span class="tok-num">14</span>,retrans=<span class="tok-num">3</span>,soft <span class="tok-num">0</span> <span class="tok-num">0</span>
 </code></pre>
     </div>
     
-<h3 id="step-2-understand-the-new-added-variables">Step 2: Understand the new added variables</h3>
+<p>What each option controls:</p>
 <ul>
-<li><code>noauto</code>: Prevents the system from trying to establish the connection immediately upon booting.</li>
-<li><code>x-systemd.automount</code>: Transparently mounts the shared folder at the exact millisecond you double-click the folder in the file manager.</li>
-<li><code>x-systemd.device-timeout=5</code>: If the server does not respond within 5 seconds, it immediately gives up, allowing you to use your computer without delays.</li>
+<li><code>_netdev</code>: Marks the mount as network-dependent so <code>systemd</code> waits for <code>network-online.target</code> and unmounts cleanly before shutting down the network at poweroff.</li>
+<li><code>noauto</code>: Prevents <code>remote-fs.target</code> from blocking boot to mount the share immediately.</li>
+<li><code>x-systemd.automount</code>: Creates an automount unit that mounts <code>/mnt/nfs</code> transparently on first file access.</li>
+<li><code>x-systemd.device-timeout=5</code>: Bounds device wait time to 5 seconds instead of 90.</li>
+<li><code>x-systemd.idle-timeout=300</code>: Automatically unmounts the share after 5 minutes of inactivity, preventing stale mounts when a laptop changes networks.</li>
+<li><code>timeo=14,retrans=3,soft</code>: Configures a 1.4-second RPC timeout (<code>timeo</code> is in tenths of a second) with 3 retries, returning an I/O error instead of hanging processes forever if the NAS vanishes mid-session.</li>
 </ul>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="reload-systemd-and-activate-the-automount-unit">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="reload-systemd-and-activate-the-automount-unit-heading">Step 3: Reload Systemd and Activate the Automount Unit</h4>
+            <p>Apply the updated <code>/etc/fstab</code> without rebooting:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> daemon-reload
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart remote-fs.target
+</code></pre>
+    </div>
+    
+<p>Verify the automount unit is active and trigger it by listing the directory:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> mnt-nfs.automount <span class="tok-prop">--no-pager</span>
+<span class="tok-kw">ls</span> <span class="tok-prop">-la</span> /mnt/nfs
+findmnt /mnt/nfs
+</code></pre>
+    </div>
+    
+<p><code>findmnt /mnt/nfs</code> will show both the <code>autofs</code> trigger and the live <code>nfs4</code> mount once accessed.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="is-soft-safe-to-use-for-all-nfs-mounts">Is <code>soft</code> safe to use for all NFS mounts?</h3>
+<p>For read-mostly media shares, backups, or home directories where an I/O error is preferable to a frozen desktop, <code>soft</code> is ideal. However, for databases or active virtual machine disk images where silent partial writes could corrupt data, keep <code>hard,intr</code> (or <code>hard</code>) and rely on <code>x-systemd.automount</code> to avoid boot delays.</p>
+<h3 id="why-does-my-system-still-hang-during-shutdown-or-reboot">Why does my system still hang during shutdown or reboot?</h3>
+<p>If an NFS share is mounted when the Wi-Fi or Ethernet interface goes down during shutdown, the kernel cannot flush pending RPCs. Ensuring <code>_netdev</code> is present in <code>/etc/fstab</code> tells <code>systemd</code> to unmount the NFS share <em>before</em> stopping <code>NetworkManager</code> or <code>systemd-networkd</code>.</p>
+<h3 id="can-i-use-nfsv4-only-to-avoid-rpcbind-port-111-issues">Can I use NFSv4 only to avoid <code>rpcbind</code> (port 111) issues?</h3>
+<p>Yes. Adding <code>nfsvers=4.2</code> (or <code>vers=4</code>) to your <code>/etc/fstab</code> options forces NFSv4 over a single TCP port (<code>2049</code>), eliminating <code>rpcbind</code>/<code>portmapper</code> firewall headaches.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -453,49 +646,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>If you work with wireless local networks (Wi-Fi), never use rigid NFS mounts during the boot process of mobile devices or laptops. Since wireless connections take a few extra seconds to authenticate with the router after the desktop environment starts, automatic requests from fstab will systematically fail, leaving your shortcuts broken until you force a manual refresh using commands.</li>
+              <li><strong>Never use synchronous NFS mounts on laptops:</strong> Wireless interfaces authenticate after login; always pair mobile clients with <code>noauto,x-systemd.automount</code>.</li>
+<li><strong>Use <code>nofail</code> on non-critical shares:</strong> Add <code>nofail</code> alongside <code>noauto</code> so missing network paths never trigger emergency mode.</li>
+<li><strong>Test with <code>systemd-analyze blame</code>:</strong> After updating <code>/etc/fstab</code>, reboot and run <code>systemd-analyze blame</code> to confirm no mount unit takes longer than a few hundred milliseconds.</li>
+<li><strong>Pin static server IPs or local DNS:</strong> Use a reserved DHCP lease or <code>/etc/hosts</code> entry for your NAS so IP changes do not break automounts.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -569,7 +725,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Proxmox</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -586,7 +742,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

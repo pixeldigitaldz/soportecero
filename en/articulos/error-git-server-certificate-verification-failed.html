@@ -137,18 +137,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I bypass sslVerify for a single emergency command?",
+      "name": "Why does GitHub work in Chrome/Edge but fail in Git CLI?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Pass the configuration inline without mutating global defaults: git -c http.sslVerify=false clone https://...."
+        "text": "Chrome and Edge query the operating system&#39;s native certificate store (Windows Certificate Store or macOS Keychain), which includes corporate or enterprise root CAs. Git CLI using OpenSSL reads a standalone .crt file unless you switch to schannel on Windows or set http.sslCAInfo."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does GitHub load in Chrome but fail in Git CLI?",
+      "name": "Is git config --global http.sslVerify false a good permanent fix?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Web browsers leverage the operating system native certificate store, while Git CLI may depend on a distinct OpenSSL bundle."
+        "text": "No. Disabling sslVerify globally turns off all TLS server authentication, allowing anyone on the same network to intercept your Personal Access Tokens (PATs) or inject malicious commits. Use GIT_SSL_NO_VERIFY=1 only as a one-off emergency command if you have verified the endpoint."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I switch to SSH to avoid HTTPS certificate issues?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Cloning via git@github.com:org/repo.git uses SSH host keys (~/.ssh/known_hosts) over port 22 (or ssh.github.com:443) and bypasses X.509 CA bundles entirely."
       }
     }
   ]
@@ -220,22 +228,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -285,7 +277,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <code>fatal: unable to access &#39;https://github.com/...&#39;: server certificate verification failed. CAfile: none CRLfile: none</code> occurs when the local Git client cannot validate the remote SSL/TLS certificate chain against its local trusted Certificate Authority bundle.</p>
+          <p>The Git error <code>fatal: unable to access &#39;https://...&#39;: server certificate verification failed. CAfile: none CRLfile: none</code> (or <code>SSL certificate problem: unable to get local issuer certificate</code>) occurs when Git&#39;s underlying TLS library (<code>libcurl</code> + OpenSSL/GnuTLS/Schannel) cannot build a trusted chain from the remote Git server&#39;s leaf certificate up to a root Certificate Authority (CA) in your local trust store.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -302,25 +294,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Outdated Certificate Authority (CA) root store on the host operating system</strong></div>
+            <div class="diag-value"><strong><code>CAfile: none</code> in minimal Linux/Docker image</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Update <code>ca-certificates</code> package on Linux via <code>sudo update-ca-certificates</code></div>
+            <div class="diag-value">Install and refresh <code>ca-certificates</code> package</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Enterprise proxy SSL inspection or untrusted internal CA certificate bundle</strong></div>
+            <div class="diag-value"><strong>Corporate proxy / TLS inspection (Zscaler, Netskope)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Register certificate bundle with <code>git config --global http.sslCAInfo /path/ca.crt</code></div>
+            <div class="diag-value">Export corporate root CA and set <code>http.sslCAInfo</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Windows Git failing behind enterprise PKI</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Switch Git TLS backend to <code>http.sslBackend schannel</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>System clock skewed into past or future</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Sync system clock with NTP (<code>timedatectl set-ntp true</code>)</div>
           </div></div></div>
       </div>
     </section>
@@ -361,31 +377,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions-faq" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#how-do-i-bypass-sslverify-for-a-single-emergency-command" class="toc-sublink">
+            <a href="#why-does-github-work-in-chromeedge-but-fail-in-git-cli" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How do I bypass sslVerify for a single emergency command?</span>
+              <span class="toc-subtext">Why does GitHub work in Chrome/Edge but fail in Git CLI?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#why-does-github-load-in-chrome-but-fail-in-git-cli" class="toc-sublink">
+            <a href="#is-git-config-global-httpsslverify-false-a-good-permanent-fix" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does GitHub load in Chrome but fail in Git CLI?</span>
+              <span class="toc-subtext">Is git config --global http.sslVerify false a good permanent fix?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-i-switch-to-ssh-to-avoid-https-certificate-issues" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can I switch to SSH to avoid HTTPS certificate issues?</span>
             </a>
           </li>
         
@@ -397,6 +428,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During an HTTPS <code>git clone</code>, <code>git fetch</code>, or <code>git push</code>, Git delegates network transport to <code>libcurl</code>. When the remote server (GitHub, GitLab, Bitbucket, or a self-hosted Gitea/GitLab instance) completes the TLS handshake, <code>libcurl</code> validates three things:</p>
+<ol>
+<li><strong>Chain of Trust:</strong> The server&#39;s leaf and intermediate certificates must chain to a root CA stored in the <code>CAfile</code> or <code>CApath</code> configured for OpenSSL/GnuTLS. Minimal container images (Alpine, Debian slim) often omit <code>ca-certificates</code>, leaving <code>CAfile: none</code>.</li>
+<li><strong>Enterprise TLS Interception:</strong> Corporate firewalls frequently terminate outbound HTTPS traffic and re-sign it with an internal root CA. Browsers read the OS trust store, whereas Git on Linux or Git for Windows (when configured with OpenSSL) reads a separate static PEM bundle that lacks the corporate root.</li>
+<li><strong>Validity Window:</strong> X.509 certificates carry <code>Not Before</code> and <code>Not After</code> timestamps. A drifted CMOS/VM clock causes valid certificates to fail verification.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -405,11 +443,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="update-operating-system-root-certificates">
+        <li class="step-item" id="1-inspect-the-certificate-chain-with-openssl">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="update-operating-system-root-certificates-heading">Step 1: Update Operating System Root Certificates</h4>
-            <p>Expired intermediate or root certificates trigger validation rejections across network endpoints:</p>
+            <h4 id="1-inspect-the-certificate-chain-with-openssl-heading">1. Inspect the Certificate Chain with openssl</h4>
+            <p>Diagnose which certificate is failing (missing root CA, self-signed proxy, or expired chain) by querying the remote host directly:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,28 +467,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># On Debian / Ubuntu:</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">--reinstall</span> ca-certificates <span class="tok-prop">-y</span>
-<span class="tok-kw">sudo</span> update-ca-certificates
-<span class="tok-cmt">
-# On Arch Linux / CachyOS:</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-Sy</span> ca-certificates <span class="tok-prop">--noconfirm</span>
-<span class="tok-cmt">
-# On RHEL / Fedora / Rocky Linux:</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">dnf</span> reinstall ca-certificates <span class="tok-prop">-y</span>
-<span class="tok-kw">sudo</span> update-ca-trust
+      <pre class="formatted-pre"><code>openssl s_client <span class="tok-prop">-connect</span> github.com:<span class="tok-num">443</span> <span class="tok-prop">-showcerts</span> &lt;/dev/null <span class="tok-num">2</span>&gt;/dev/null | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;s:|i:|Verify return code&quot;</span>
 </code></pre>
     </div>
+    
+<p>If you see <code>Verify return code: 20 (unable to get local issuer certificate)</code> or an unfamiliar <code>i:</code> (issuer) belonging to your company firewall, you are missing a root CA in Git&#39;s trust bundle.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="declare-explicit-ca-bundle-in-git-config">
+        <li class="step-item" id="2-refresh-the-os-root-certificate-store-linux">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="declare-explicit-ca-bundle-in-git-config-heading">Step 2: Declare Explicit CA Bundle in Git Config</h4>
-            <p>If operating behind a corporate intercepting firewall:</p>
+            <h4 id="2-refresh-the-os-root-certificate-store-linux-heading">2. Refresh the OS Root Certificate Store (Linux)</h4>
+            <p>On Debian/Ubuntu, Arch/CachyOS, or RHEL/Fedora, reinstall <code>ca-certificates</code> and rebuild the trust store:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -470,55 +500,52 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Define global CA certificate path in Linux:</span>
-<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Debian / Ubuntu</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> update &amp;&amp; <span class="tok-kw">sudo</span> <span class="tok-kw">apt-get</span> install <span class="tok-prop">--reinstall</span> <span class="tok-prop">-y</span> ca-certificates
+<span class="tok-kw">sudo</span> update-ca-certificates
 <span class="tok-cmt">
-# In Windows Git Bash:</span>
-<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo <span class="tok-str">&quot;C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt&quot;</span>
+# Arch Linux / CachyOS</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">pacman</span> <span class="tok-prop">-Sy</span> <span class="tok-prop">--noconfirm</span> ca-certificates
+<span class="tok-cmt">
+# Fedora / RHEL / Rocky</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">dnf</span> reinstall <span class="tok-prop">-y</span> ca-certificates &amp;&amp; <span class="tok-kw">sudo</span> update-ca-trust
 </code></pre>
     </div>
+    
+<p>Verify that Git points to the updated bundle if <code>CAfile: none</code> appeared previously:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.sslCAInfo /etc/ssl/certs/ca-certificates.crt
+</code></pre>
+    </div>
+    
+<p><em>(On RHEL/Fedora, use <code>/etc/pki/tls/certs/ca-bundle.crt</code> instead).</em></p>
           </div>
         </li>
         
 
-        <li class="step-item" id="synchronize-system-clock-with-ntp">
+        <li class="step-item" id="3-switch-to-native-windows-trust-store-windows">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="synchronize-system-clock-with-ntp-heading">Step 3: Synchronize System Clock with NTP</h4>
-            <p>Clock skew invalidates valid certificates:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Enforce system time synchronization on Linux</span>
-<span class="tok-kw">sudo</span> timedatectl <span class="tok-kw">set</span>-ntp true
-timedatectl <span class="tok-prop">status</span>
-</code></pre>
-    </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="configure-windows-native-certificate-backend-schannel">
-          <div class="step-number">4</div>
-          <div class="step-body">
-            <h4 id="configure-windows-native-certificate-backend-schannel-heading">Step 4: Configure Windows Native Certificate Backend (Schannel)</h4>
-            <p>On Windows workstations, instruct Git to leverage the native Windows Certificate Manager:</p>
+            <h4 id="3-switch-to-native-windows-trust-store-windows-heading">3. Switch to Native Windows Trust Store (Windows)</h4>
+            <p>On Windows, corporate CAs are pushed via Group Policy into the Windows Certificate Store, not Git&#39;s bundled <code>ca-bundle.crt</code>. Switch Git to use Microsoft&#39;s native Schannel backend:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -544,52 +571,104 @@ timedatectl <span class="tok-prop">status</span>
           </div>
         </li>
         
-</ol>
 
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
+        <li class="step-item" id="4-register-a-custom-corporate-or-self-signed-ca">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-register-a-custom-corporate-or-self-signed-ca-heading">4. Register a Custom Corporate or Self-Signed CA</h4>
+            <p>If your organization uses a custom root CA (<code>.crt</code> or <code>.pem</code> exported from your IT team or browser), configure Git to trust it globally or per-domain without disabling TLS:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Scope to a specific internal Git server</span>
+<span class="tok-kw">git</span> config <span class="tok-prop">--global</span> http.<span class="tok-str">&quot;https://git.internal.corp/&quot;</span>.sslCAInfo /etc/ssl/certs/corp-root-ca.pem
+</code></pre>
     </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
+    
+<p>Verify the fix by running a lightweight read operation:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
         </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>GIT_CURL_VERBOSE=<span class="tok-num">1</span> <span class="tok-kw">git</span> <span class="tok-kw">ls</span>-remote https://github.com/torvalds/linux.<span class="tok-kw">git</span> <span class="tok-prop">HEAD</span>
+</code></pre>
     </div>
-  </section>
-  
-<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
-<h3 id="how-do-i-bypass-sslverify-for-a-single-emergency-command">How do I bypass sslVerify for a single emergency command?</h3>
-<p>Pass the configuration inline without mutating global defaults: <code>git -c http.sslVerify=false clone https://...</code>.</p>
-<h3 id="why-does-github-load-in-chrome-but-fail-in-git-cli">Why does GitHub load in Chrome but fail in Git CLI?</h3>
-<p>Web browsers leverage the operating system native certificate store, while Git CLI may depend on a distinct OpenSSL bundle.</p>
+    
+<p>Look for <code>SSL certificate verify ok.</code> in the verbose output.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="5-synchronize-system-clock">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h4 id="5-synchronize-system-clock-heading">5. Synchronize System Clock</h4>
+            <p>If your VM or WSL2 instance drifted out of sync, re-enable NTP:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> timedatectl <span class="tok-kw">set</span>-ntp true
+date <span class="tok-prop">-u</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-github-work-in-chromeedge-but-fail-in-git-cli">Why does GitHub work in Chrome/Edge but fail in Git CLI?</h3>
+<p>Chrome and Edge query the operating system&#39;s native certificate store (Windows Certificate Store or macOS Keychain), which includes corporate or enterprise root CAs. Git CLI using OpenSSL reads a standalone <code>.crt</code> file unless you switch to <code>schannel</code> on Windows or set <code>http.sslCAInfo</code>.</p>
+<h3 id="is-git-config-global-httpsslverify-false-a-good-permanent-fix">Is <code>git config --global http.sslVerify false</code> a good permanent fix?</h3>
+<p>No. Disabling <code>sslVerify</code> globally turns off all TLS server authentication, allowing anyone on the same network to intercept your Personal Access Tokens (PATs) or inject malicious commits. Use <code>GIT_SSL_NO_VERIFY=1</code> only as a one-off emergency command if you have verified the endpoint.</p>
+<h3 id="can-i-switch-to-ssh-to-avoid-https-certificate-issues">Can I switch to SSH to avoid HTTPS certificate issues?</h3>
+<p>Yes. Cloning via <code>git@github.com:org/repo.git</code> uses SSH host keys (<code>~/.ssh/known_hosts</code>) over port 22 (or <code>ssh.github.com:443</code>) and bypasses X.509 CA bundles entirely.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -604,50 +683,12 @@ timedatectl <span class="tok-prop">status</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Avoid global http.sslVerify false:</strong> Setting <code>git config --global http.sslVerify false</code> strips encryption validation, exposing repository commits to MitM credential harvesting.</li>
-<li><strong>Adopt SSH authentication:</strong> Clone repositories over SSH (<code>git@github.com:user/repo.git</code>) to bypass HTTPS SSL validation layers entirely.</li>
+              <li><strong>Include <code>ca-certificates</code> in Dockerfiles:</strong> Always install <code>ca-certificates</code> in CI/CD build images before running <code>git clone</code> or <code>npm install</code>.</li>
+<li><strong>Use per-URL <code>http.&lt;url&gt;.sslCAInfo</code>:</strong> Scope custom self-signed certificates to internal hostnames rather than overwriting the global CA bundle for public repositories.</li>
+<li><strong>Prefer SSH keys with passphrases:</strong> Configure SSH authentication for daily development to decouple Git transport from corporate HTTPS proxies.</li>
+<li><strong>Check WSL2 clock drift:</strong> On Windows laptops that hibernate frequently, run <code>sudo hwclock -s</code> if WSL2 timestamps lag behind the host.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -704,7 +745,7 @@ timedatectl <span class="tok-prop">status</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">MongoDB</span>
-            <span>Read Time: 5 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -721,7 +762,7 @@ timedatectl <span class="tok-prop">status</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">MySQL</span>
-            <span>Read Time: 5 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Thermal throttling on Raspberry Pi 5 occurs when the CPU temperature exceeds 80 °C under heavy workloads. To prevent heat damage, the PMIC (Power Management IC) automatically drops the processor frequency from 2.4 GHz to under 1.5 GHz, drastically degrading container or emulator performance.</p>
+          <p>Thermal throttling on the Raspberry Pi 5 occurs when the BCM2712 SoC approaches its 80 °C soft limit or 85 °C hard limit under sustained workloads. When triggered, the board&#39;s firmware and PMIC step down the ARM Cortex-A76 cores from 2.4 GHz to 1.5 GHz or lower, causing severe latency spikes in Docker containers, media transcoding, and compilation jobs.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -273,27 +257,51 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>SoC temperature reaching 80°C threshold under heavy load</strong></div>
+            <div class="diag-value"><strong><code>vcgencmd measure_temp</code> exceeds 80.0 °C</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Install official Raspberry Pi Active Cooler fan assembly</div>
+            <div class="diag-value">Install an active PWM cooler or improve enclosure airflow</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>Inadequate heat dissipation inside enclosure</strong></div>
+            <div class="diag-value"><strong><code>vcgencmd get_throttled</code> returns <code>0x20002</code> or <code>0x40004</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Use aluminum case with passive cooling or PWM-controlled fan</div>
+            <div class="diag-value">CPU is currently throttled due to temperature limit</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong><code>vcgencmd get_throttled</code> returns <code>0x50000</code> or <code>0x50005</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Undervoltage detected; upgrade to an official 5V/5A USB-C PD PSU</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong>Fan stays silent until 60 °C+ under burst loads</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Lower <code>fan_temp0</code> thresholds in <code>/boot/firmware/config.txt</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>The Raspberry Pi 5 pairs a 16 nm quad-core Cortex-A76 SoC (BCM2712) with the custom RP1 I/O controller and a Renesas DA9091 PMIC. Under full multi-core load, the SoC draws roughly 10–12 W—nearly double the thermal density of the Raspberry Pi 4. Because the board lacks a large heat spreader, bare silicon temperatures climb from 45 °C idle to over 82 °C in less than 90 seconds without active airflow.</p>
+<p>The VideoCore VII firmware enforces two thermal protection tiers: at <strong>80 °C</strong>, the <code>soft_temp_limit</code> begins reducing CPU clock multipliers; at <strong>85 °C</strong>, aggressive throttling clamps frequencies and voltages to prevent permanent silicon degradation. Simultaneously, the kernel&#39;s <code>thermal_zone0</code> governor drives the dedicated 4-pin JST PWM fan header using four temperature trip points (<code>fan_temp0</code> through <code>fan_temp3</code>). Out of the box, the default curve waits until 50 °C to spin up at low RPM and only reaches full speed at 75 °C, allowing sudden CPU bursts to hit the 80 °C ceiling before airflow catches up.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +378,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="monitor-cpu-temperature-and-throttling-flags-in-real-time">
+        <li class="step-item" id="inspect-live-temperature-clock-speed-and-throttle-bitmask">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="monitor-cpu-temperature-and-throttling-flags-in-real-time-heading">Step 1: Monitor CPU temperature and throttling flags in real time</h4>
-            <p>You can check current CPU temperatures and verify if the kernel has triggered clock speed reduction alerts via console:</p>
+            <h4 id="inspect-live-temperature-clock-speed-and-throttle-bitmask-heading">Step 1: Inspect live temperature, clock speed, and throttle bitmask</h4>
+            <p>Run <code>vcgencmd</code> to separate thermal throttling from power-delivery undervoltage:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,22 +402,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Query current CPU temperature in Celsius</span>
-vcgencmd measure_temp
-<span class="tok-cmt">
-# Check throttling history (a value other than 0x0 indicates heat or voltage limits hit)</span>
+      <pre class="formatted-pre"><code>vcgencmd measure_temp
+vcgencmd measure_clock arm
 vcgencmd get_throttled
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="adjust-fan-cooling-thresholds-active-cooler">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="adjust-fan-cooling-thresholds-active-cooler-heading">Step 2: Adjust fan cooling thresholds (Active Cooler)</h4>
-            <p>Configure your official active cooler fan to spin up to 100% capacity before reaching the critical 80 °C threshold by adjusting firmware parameters:</p>
+    
+<p>Decode the hexadecimal bitmask from <code>vcgencmd get_throttled</code>:</p>
+<ul>
+<li><code>0x0</code>: No throttling or undervoltage has occurred since boot.</li>
+<li>Bit 1 (<code>0x2</code>) / Bit 17 (<code>0x20000</code>): ARM frequency capped currently / since boot.</li>
+<li>Bit 2 (<code>0x4</code>) / Bit 18 (<code>0x40000</code>): Currently thermally throttled / throttled since boot.</li>
+<li>Bit 0 (<code>0x1</code>) / Bit 16 (<code>0x10000</code>): Undervoltage detected—check your 5V/5A (27W) USB-C PD power supply.</li>
+</ul>
+<p>You can also read the sysfs PWM fan state directly:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -412,12 +435,43 @@ vcgencmd get_throttled
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Open boot configuration file</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /boot/firmware/config.txt
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> /sys/class/thermal/thermal_zone0/temp
+<span class="tok-kw">cat</span> /sys/class/hwmon/hwmon*/fan1_input
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="tune-the-pwm-fan-curve-in-firmware-configuration">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="tune-the-pwm-fan-curve-in-firmware-configuration-heading">Step 2: Tune the PWM fan curve in firmware configuration</h4>
+            <p>Open <code>/boot/firmware/config.txt</code> (on Raspberry Pi OS Bookworm and newer; older builds use <code>/boot/config.txt</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /boot/firmware/config.txt
 </code></pre>
     </div>
     
-<p>Append the following lines to enforce more aggressive cooling starting at 65 °C:</p>
+<p>Append these <code>dtparam</code> trip points (values are in millidegrees Celsius, so <code>45000</code> equals 45 °C) under <code>[all]</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,7 +481,7 @@ vcgencmd get_throttled
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">INI</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -437,24 +491,32 @@ vcgencmd get_throttled
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code># Force aggressive fan curves
-dtparam=fan_temp0=<span class="tok-num">50000</span>
+      <pre class="formatted-pre"><code>[all]
+dtparam=fan_temp0=<span class="tok-num">45000</span>
 dtparam=fan_temp0_hyst=<span class="tok-num">5000</span>
-dtparam=fan_temp1=<span class="tok-num">58000</span>
+dtparam=fan_temp0_speed=<span class="tok-num">75</span>
+dtparam=fan_temp1=<span class="tok-num">55000</span>
 dtparam=fan_temp1_hyst=<span class="tok-num">5000</span>
-dtparam=fan_temp2=<span class="tok-num">65000</span>
+dtparam=fan_temp1_speed=<span class="tok-num">125</span>
+dtparam=fan_temp2=<span class="tok-num">63000</span>
 dtparam=fan_temp2_hyst=<span class="tok-num">5000</span>
+dtparam=fan_temp2_speed=<span class="tok-num">200</span>
+dtparam=fan_temp3=<span class="tok-num">70000</span>
+dtparam=fan_temp3_hyst=<span class="tok-num">5000</span>
+dtparam=fan_temp3_speed=<span class="tok-num">255</span>
 </code></pre>
     </div>
+    
+<p>This ramps the fan smoothly from ~30% PWM at 45 °C to 100% (<code>255</code>) at 70 °C, giving a 10 °C safety margin before the 80 °C throttle line.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="apply-and-verify-config-changes">
+        <li class="step-item" id="reboot-and-stress-test-thermal-stability">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="apply-and-verify-config-changes-heading">Step 3: Apply and verify config changes</h4>
-            <p>Save the configuration by pressing <code>Ctrl + O</code> and restart the board to load the new firmware parameters:</p>
+            <h4 id="reboot-and-stress-test-thermal-stability-heading">Step 3: Reboot and stress-test thermal stability</h4>
+            <p>Reboot to apply the device tree parameters:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -474,14 +536,47 @@ dtparam=fan_temp2_hyst=<span class="tok-num">5000</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Reboot the Raspberry Pi</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">reboot</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">reboot</span>
 </code></pre>
     </div>
+    
+<p>After rebooting, run a 3-minute synthetic load using <code>stress-ng</code> (install via <code>sudo apt install -y stress-ng</code>) while watching temperature and clock frequency:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>watch <span class="tok-prop">-n</span> <span class="tok-num">2</span> <span class="tok-str">&quot;vcgencmd measure_temp &amp;&amp; vcgencmd measure_clock arm &amp;&amp; vcgencmd get_throttled&quot;</span> &amp;
+stress-ng <span class="tok-prop">--cpu</span> <span class="tok-num">4</span> <span class="tok-prop">--timeout</span> 180s
+</code></pre>
+    </div>
+    
+<p>Your ARM clock should remain locked at <code>2400000000</code> Hz (2.4 GHz) and <code>get_throttled</code> should stay <code>0x0</code>.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Can I raise <code>temp_limit</code> above 85 °C in <code>config.txt</code>?</strong>
+No. While <code>temp_soft_limit</code> can be adjusted slightly on some older boards, Raspberry Pi 5 firmware caps the hard limit at 85 °C for silicon safety. Overriding it is unsupported and risks hardware failure.</p>
+<p><strong>Does an NVMe HAT affect Raspberry Pi 5 CPU temperatures?</strong>
+Yes. M.2 HATs mounted directly above the SoC trap rising heat and add 3–5 W of SSD thermal load. Use taller brass standoffs, a bottom-mounted NVMe base, or the official Active Cooler underneath the HAT.</p>
+<p><strong>Why does <code>vcgencmd get_throttled</code> show <code>0x50000</code> even when my CPU is cool?</strong>
+Bits 16 and 18 (<code>0x50000</code>) indicate past undervoltage and throttling, often caused by a phone charger or thin USB-C cable dropping voltage below 4.63 V under load. Always use a 5V/5A USB-C PD supply.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -496,49 +591,12 @@ dtparam=fan_temp2_hyst=<span class="tok-num">5000</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not deploy Raspberry Pi 5 servers in completely closed cases lacking active ventilation. Under maximum load, the Pi 5 generates nearly double the thermal output of the Pi 4, meaning passive heatsinks alone will saturate thermal limits quickly, keeping your CPU throttled.</li>
+              <li><strong>Use active PWM cooling:</strong> Passive stick-on heatsinks saturate quickly on the Pi 5; pair an aluminum heatsink with a 4-pin PWM fan connected to the onboard fan header.</li>
+<li><strong>Avoid sealed plastic enclosures:</strong> Choose open-frame cases or ventilated aluminum chassis with intake/exhaust slots.</li>
+<li><strong>Keep firmware updated:</strong> Run <code>sudo rpi-eeprom-update</code> periodically to receive PMIC and thermal governor improvements.</li>
+<li><strong>Monitor NVMe and RP1 temperatures:</strong> Ensure airflow also passes over the RP1 southbridge and any PCIe NVMe SSD during sustained I/O.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -595,7 +653,7 @@ dtparam=fan_temp2_hyst=<span class="tok-num">5000</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Network</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does this error happen in the Next.js App Router (app/api/.../route.ts)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, not with the same message. App Router Route Handlers require you to return a standard Web Response or NextResponse object directly (return NextResponse.json(...)). If an App Router handler finishes without returning a Response, Next.js throws a TypeError: No response is returned from route handler."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my API still return data in next dev even when the warning appears?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In development, Node.js keeps the underlying HTTP socket open until your unawaited callback eventually calls res.json(). However, in serverless production (Vercel, AWS Lambda), the runtime freezes or kills the execution context the instant the handler Promise resolves, causing 502/504 failures."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can try/catch hide a missing response?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes—if your catch block only runs console.error(err) without calling res.status(500).json(...), any thrown error will leave the request hanging and trigger this warning."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The warning <code>API resolved without sending a response for /api/...</code> in Next.js occurs when an API Route Handler or Pages API endpoint executes asynchronous logic (such as database queries, third-party APIs, or webhooks) without <code>await</code> or without resolving a returned Promise before the handler function finishes execution.</p>
-<p>This issue can cause Node.js server connections to hang, resulting in frontend request timeouts, memory leaks, and dropped HTTP responses.</p>
+          <p>The warning <code>API resolved without sending a response for /api/..., this may result in stalled requests</code> appears in Next.js Pages Router (<code>pages/api/*</code>) when your handler function&#39;s returned <code>Promise</code> resolves—or the synchronous function exits—before <code>res.send()</code>, <code>res.json()</code>, or <code>res.end()</code> is ever invoked. Left unresolved, clients hang until the gateway times out with <code>504 Gateway Timeout</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,37 +291,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Unawaited async Promise (<code>missing await</code>)</strong></div>
+            <div class="diag-value"><strong>Missing <code>await</code> before async DB or <code>fetch</code> call</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Prefix all database queries and external fetch requests with <code>await</code></div>
+            <div class="diag-value"><code>await</code> every Promise before returning from <code>handler</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Callback-based middleware (Stripe webhooks, JWT)</strong></div>
+            <div class="diag-value"><strong>Legacy callback library (<code>jwt.verify</code>, <code>formidable</code>, <code>multer</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Wrap legacy callback functions in <code>new Promise((resolve, reject) =&gt; ...)</code></div>
+            <div class="diag-value">Wrap the callback in <code>await new Promise((resolve, reject) =&gt; ...)</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Missing response in conditional branch</strong></div>
+            <div class="diag-value"><strong>Conditional <code>if</code> branch exits without <code>return res...</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Ensure every <code>if/else</code> execution path returns a valid <code>res.status()</code> or <code>Response</code></div>
+            <div class="diag-value">Add an explicit <code>return res.status(405).end()</code> fallback</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Streaming / WebSocket / external <code>res.end()</code> intentional</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Export <code>config = { api: { externalResolver: true } }</code></div>
           </div></div></div>
       </div>
     </section>
@@ -347,10 +374,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-solution" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Solution</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#does-this-error-happen-in-the-nextjs-app-router-appapiroutets" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Does this error happen in the Next.js App Router (app/api/.../route.ts)?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-my-api-still-return-data-in-next-dev-even-when-the-warning-appears" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does my API still return data in next dev even when the warning appears?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-trycatch-hide-a-missing-response" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can try/catch hide a missing response?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -358,9 +425,27 @@
     </nav>
     
     
-<h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Ensure proper async/await flow in your handler</strong>
-If you are using the Pages Router (<code>pages/api/...</code>), every asynchronous database call must be completed before returning the response:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Next.js&#39;s Pages Router API wrapper monitors the lifecycle of <code>export default async function handler(req, res)</code>. Because <code>handler</code> is an <code>async</code> function, Next.js awaits its returned <code>Promise</code>. As soon as that <code>Promise</code> settles, Next.js checks <code>res.writableEnded</code> (whether a response was flushed to the Node.js <code>http.ServerResponse</code> stream).</p>
+<p>Three coding patterns cause <code>handler</code> to settle prematurely while work is still pending:</p>
+<ol>
+<li><strong>Fire-and-Forget Promises:</strong> Calling <code>db.query(...)</code> or <code>axios.post(...)</code> without <code>await</code> schedules a microtask and immediately returns <code>undefined</code> from <code>handler</code>. Next.js logs the warning while the response is still open.</li>
+<li><strong>Event-Loop Callbacks:</strong> Node.js callback APIs (such as <code>crypto.pbkdf2</code>, <code>jsonwebtoken</code>, or <code>busboy</code>) register a callback and return <code>undefined</code> synchronously. <code>handler</code> finishes before the callback ever fires <code>res.status(200).json(...)</code>.</li>
+<li><strong>Unreturned Switch/If Branches:</strong> Checking <code>if (req.method === &#39;POST&#39;)</code> without a trailing <code>else</code> or <code>return res.status(405).json(...)</code> lets <code>GET</code> requests fall off the end of the function silently.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="1-await-all-asynchronous-calls-and-return-every-branch">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="1-await-all-asynchronous-calls-and-return-every-branch-heading">1. Await All Asynchronous Calls and Return Every Branch</h4>
+            <p>Ensure every async operation is awaited and every control-flow path explicitly ends the response:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -380,21 +465,32 @@ If you are using the Pages Router (<code>pages/api/...</code>), every asynchrono
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt">// pages/api/users.js</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt">// pages/api/orders.js</span>
 <span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> handler(req, res) {
+  <span class="tok-kw">if</span> (req.<span class="tok-prop">method</span> !== <span class="tok-str">&#39;POST&#39;</span>) {
+    res.<span class="tok-prop">setHeader</span>(<span class="tok-str">&#39;Allow&#39;</span>, [<span class="tok-str">&#39;POST&#39;</span>]);
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">405</span>).<span class="tok-prop">json</span>({ error: <span class="tok-str">`Method ${req.method} Not Allowed`</span> });
+  }
+
   <span class="tok-kw">try</span> {
-   <span class="tok-cmt"> // Omitting await will trigger the unhandled resolution warning</span>
-    <span class="tok-kw">const</span> users = <span class="tok-kw">await</span> db.<span class="tok-prop">collection</span>(<span class="tok-str">&#39;users&#39;</span>).<span class="tok-prop">find</span>().<span class="tok-prop">toArray</span>();
-    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ success: <span class="tok-kw">true</span>, data: users });
-  } <span class="tok-kw">catch</span> (error) {
-    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">500</span>).<span class="tok-prop">json</span>({ success: <span class="tok-kw">false</span>, error: error.message });
+    <span class="tok-kw">const</span> orders = <span class="tok-kw">await</span> db.<span class="tok-prop">collection</span>(<span class="tok-str">&#39;orders&#39;</span>).<span class="tok-prop">find</span>({ active: <span class="tok-kw">true</span> }).<span class="tok-prop">toArray</span>();
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ orders });
+  } <span class="tok-kw">catch</span> (err) {
+    console.<span class="tok-prop">error</span>(<span class="tok-str">&#39;Orders API failed:&#39;</span>, err);
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">500</span>).<span class="tok-prop">json</span>({ error: <span class="tok-str">&#39;Internal Server Error&#39;</span> });
   }
 }
 </code></pre>
     </div>
-    
-<p><strong>Wrap callback-based libraries inside Promises</strong>
-When dealing with older packages that do not provide native Promises (e.g. <code>jsonwebtoken</code> or <code>multer</code>), explicitly wrap the call:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="2-promisify-callback-based-middleware-and-libraries">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-promisify-callback-based-middleware-and-libraries-heading">2. Promisify Callback-Based Middleware and Libraries</h4>
+            <p>When using callback-style libraries (like <code>multer</code>, <code>formidable</code>, or <code>jwt.verify</code>), wrap them in a <code>Promise</code> and <code>await</code> it so Next.js does not exit early:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -414,23 +510,37 @@ When dealing with older packages that do not provide native Promises (e.g. <code
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> handler(req, res) {
-  <span class="tok-kw">await</span> <span class="tok-kw">new</span> Promise((resolve) =&gt; {
-    jwt.<span class="tok-prop">verify</span>(token, secretKey, (err, decoded) =&gt; {
-      <span class="tok-kw">if</span> (err) {
-        res.<span class="tok-prop">status</span>(<span class="tok-num">401</span>).<span class="tok-prop">json</span>({ error: <span class="tok-str">&#39;Invalid token&#39;</span> });
-        <span class="tok-kw">return</span> resolve();
-      }
-      res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ user: decoded });
-      <span class="tok-kw">return</span> resolve();
+      <pre class="formatted-pre"><code><span class="tok-kw">import</span> jwt <span class="tok-kw">from</span> <span class="tok-str">&#39;jsonwebtoken&#39;</span>;
+
+<span class="tok-kw">function</span> verifyToken(token, secret) {
+  <span class="tok-kw">return</span> <span class="tok-kw">new</span> Promise((resolve, reject) =&gt; {
+    jwt.<span class="tok-prop">verify</span>(token, secret, (err, decoded) =&gt; {
+      <span class="tok-kw">if</span> (err) <span class="tok-kw">return</span> reject(err);
+      resolve(decoded);
     });
   });
 }
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> handler(req, res) {
+  <span class="tok-kw">try</span> {
+    <span class="tok-kw">const</span> token = req.<span class="tok-prop">headers</span>.authorization?.<span class="tok-prop">split</span>(<span class="tok-str">&#39; &#39;</span>)[<span class="tok-num">1</span>];
+    <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> verifyToken(token, process.env.JWT_SECRET);
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">200</span>).<span class="tok-prop">json</span>({ user });
+  } <span class="tok-kw">catch</span> {
+    <span class="tok-kw">return</span> res.<span class="tok-prop">status</span>(<span class="tok-num">401</span>).<span class="tok-prop">json</span>({ error: <span class="tok-str">&#39;Unauthorized&#39;</span> });
+  }
+}
 </code></pre>
     </div>
-    
-<p><strong>Use App Router Route Handlers (Next.js 13+)</strong>
-For the modern App Router (<code>app/api/.../route.js</code>), return native web standard <code>Response</code> or <code>NextResponse</code> instances:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-silence-false-positives-for-custom-proxies-externalresolver">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-silence-false-positives-for-custom-proxies-externalresolver-heading">3. Silence False Positives for Custom Proxies (externalResolver)</h4>
+            <p>If you deliberately delegate <code>res</code> to an external Express middleware or <code>http-proxy-middleware</code> that closes the socket itself, tell Next.js not to warn:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -450,16 +560,55 @@ For the modern App Router (<code>app/api/.../route.js</code>), return native web
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt">// app/api/users/route.js</span>
-<span class="tok-kw">import</span> { NextResponse } <span class="tok-kw">from</span> <span class="tok-str">&#39;next/server&#39;</span>;
-
-<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-prop">GET</span>(request) {
-  <span class="tok-kw">const</span> data = <span class="tok-kw">await</span> fetchUserData();
-  <span class="tok-kw">return</span> NextResponse.<span class="tok-prop">json</span>(data);
-}
+      <pre class="formatted-pre"><code><span class="tok-kw">export</span> <span class="tok-kw">const</span> config = {
+  api: {
+    externalResolver: <span class="tok-kw">true</span>,
+  },
+};
 </code></pre>
     </div>
-    
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-verify-response-termination-locally">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-verify-response-termination-locally-heading">4. Verify Response Termination Locally</h4>
+            <p>Test your endpoint with <code>curl -i</code> and confirm it returns a complete HTTP status and closes cleanly with zero warnings in your <code>next dev</code> terminal:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-i</span> <span class="tok-prop">-X</span> <span class="tok-prop">GET</span> http://localhost:<span class="tok-num">3000</span>/api/orders
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="does-this-error-happen-in-the-nextjs-app-router-appapiroutets">Does this error happen in the Next.js App Router (<code>app/api/.../route.ts</code>)?</h3>
+<p>No, not with the same message. App Router Route Handlers require you to return a standard Web <code>Response</code> or <code>NextResponse</code> object directly (<code>return NextResponse.json(...)</code>). If an App Router handler finishes without returning a <code>Response</code>, Next.js throws a <code>TypeError: No response is returned from route handler</code>.</p>
+<h3 id="why-does-my-api-still-return-data-in-next-dev-even-when-the-warning-appears">Why does my API still return data in <code>next dev</code> even when the warning appears?</h3>
+<p>In development, Node.js keeps the underlying HTTP socket open until your unawaited callback eventually calls <code>res.json()</code>. However, in serverless production (Vercel, AWS Lambda), the runtime freezes or kills the execution context the instant the handler <code>Promise</code> resolves, causing <code>502</code>/<code>504</code> failures.</p>
+<h3 id="can-trycatch-hide-a-missing-response">Can <code>try/catch</code> hide a missing response?</h3>
+<p>Yes—if your <code>catch</code> block only runs <code>console.error(err)</code> without calling <code>res.status(500).json(...)</code>, any thrown error will leave the request hanging and trigger this warning.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -474,50 +623,12 @@ For the modern App Router (<code>app/api/.../route.js</code>), return native web
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>ESLint floating promise rule:</strong> Enable <code>@typescript-eslint/no-floating-promises</code> to catch unhandled async promises at build time.</li>
-<li><strong>Client timeout limits:</strong> Configure timeout handlers on database drivers to guarantee requests fail gracefully instead of hanging connections indefinitely.</li>
+              <li><strong>Enable <code>@typescript-eslint/no-floating-promises</code>:</strong> Catch unawaited <code>Promise</code> calls directly in your IDE and CI pipeline before they reach production.</li>
+<li><strong>Prefer <code>return res.status(...).json(...)</code>:</strong> Always prefix <code>res.json()</code> or <code>res.end()</code> with <code>return</code> so execution cannot accidentally continue into another branch.</li>
+<li><strong>Migrate new endpoints to App Router <code>route.ts</code>:</strong> Returning <code>NextResponse.json()</code> enforces compile-time type safety on every branch when using TypeScript.</li>
+<li><strong>Add integration tests with <code>supertest</code> or <code>node-mocks-http</code>:</strong> Assert both HTTP status codes and <code>res._isEndCalled()</code> across all HTTP methods (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>OPTIONS</code>).</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -574,7 +685,7 @@ For the modern App Router (<code>app/api/.../route.js</code>), return native web
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -608,7 +719,7 @@ For the modern App Router (<code>app/api/.../route.js</code>), return native web
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">cURL</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

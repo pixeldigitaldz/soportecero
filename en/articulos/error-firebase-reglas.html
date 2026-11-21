@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does getDoc work while getDocs on the same collection throws permission-denied?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "getDoc targets a single document where Firestore can inspect resource.data directly. getDocs is a list query evaluated statically before reading documents; if the query lacks a .where() clause proving every returned document satisfies the rule, Firestore rejects it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can permission-denied come from Firebase App Check instead of Firestore Rules?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. If you enabled Enforce for Cloud Firestore under App Check in the Firebase Console, requests missing a valid X-Firebase-AppCheck token are rejected with permission-denied regardless of your firestore.rules."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do Admin SDK scripts bypass permission-denied?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The firebase-admin SDK authenticates using a Google Cloud service account with IAM privileges, which intentionally bypasses client-facing Security Rules."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>Firebase Error: [code=permission-denied]</code> error occurs when your frontend application (web or mobile) attempts to read, write, or update data in Cloud Firestore or Realtime Database, but the Firebase server rejects the request because the project&#39;s <strong>Security Rules</strong> do not grant the necessary permissions.</p>
-<p>This failure is extremely common when moving a project from local development to production, or when the &quot;Test mode&quot; grace period (which typically lasts 30 days) expires.</p>
+          <p>The exception <code>FirebaseError: [code=permission-denied]: Missing or insufficient permissions</code> occurs when a client SDK request to Cloud Firestore or Realtime Database is rejected at the Google Cloud edge before any document is read or written. Unlike SQL permission errors, Firebase evaluates declarative CEL (Common Expression Language) security rules on every incoming request path, returning <code>permission-denied</code> whenever no matching <code>allow</code> rule evaluates to <code>true</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,25 +291,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Firestore/Storage security rules blocking requests (Permission Denied)</strong></div>
+            <div class="diag-value"><strong>Expired 30-day Test Mode timestamp</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Review and update rules in Firebase Console or <code>firestore.rules</code> file</div>
+            <div class="diag-value">Replace <code>request.time &lt; timestamp.date(...)</code> with real auth rules</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Request sent without a valid authentication token</strong></div>
+            <div class="diag-value"><strong>Query broader than the security rule</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Ensure user is authenticated (<code>request.auth != null</code>)</div>
+            <div class="diag-value">Align client <code>where()</code> filters with rule conditions (Rules are not filters)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Unauthenticated request (<code>request.auth == null</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Wait for <code>onAuthStateChanged</code> before firing Firestore listeners</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>App Check enforcement enabled without token</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Initialize <code>initializeAppCheck</code> or temporarily unenforce in Console</div>
           </div></div></div>
       </div>
     </section>
@@ -335,10 +374,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#why-does-getdoc-work-while-getdocs-on-the-same-collection-throws-permission-denied" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does getDoc work while getDocs on the same collection throws permission-denied?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-permission-denied-come-from-firebase-app-check-instead-of-firestore-rules" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can permission-denied come from Firebase App Check instead of Firestore Rules?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-do-admin-sdk-scripts-bypass-permission-denied" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why do Admin SDK scripts bypass permission-denied?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -346,6 +425,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Firebase Security Rules operate on a <strong>deny-by-default, fail-closed</strong> model. Every read, list, create, update, or delete operation must match an explicit <code>allow</code> statement in <code>firestore.rules</code>. Three mechanical behaviors cause most production failures:</p>
+<ol>
+<li><strong>Test Mode Expiration:</strong> Creating a Firestore database in Test Mode inserts a rule such as <code>allow read, write: if request.time &lt; timestamp.date(2026, 8, 26);</code>. Exactly 30 days later, every client operation fails instantaneously with <code>permission-denied</code>.</li>
+<li><strong>Rules Are Not Filters:</strong> Firestore does not filter out unauthorized documents from a collection query. If your rule states <code>allow read: if resource.data.ownerId == request.auth.uid;</code>, calling <code>getDocs(collection(db, &#39;orders&#39;))</code> without a matching <code>.where(&#39;ownerId&#39;, &#39;==&#39;, user.uid)</code> fails completely—even if every document in the collection happens to belong to that user.</li>
+<li><strong>Auth Hydration Race Conditions:</strong> On initial page load, <code>firebase/auth</code> restores the session asynchronously from IndexedDB. Firing a <code>getDoc()</code> or <code>onSnapshot()</code> call before <code>onAuthStateChanged</code> resolves sends <code>request.auth == null</code> to the server.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -354,21 +440,44 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="identify-the-database-environment">
+        <li class="step-item" id="1-inspect-failing-requests-in-the-local-emulator-or-rules-playground">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="identify-the-database-environment-heading">Step 1: Identify the database environment</h4>
-            <p>Go to your Firebase console, select your project, and navigate to the <strong>Cloud Firestore</strong> or <strong>Realtime Database</strong> section in the left menu, then click on the <strong>Rules</strong> tab.</p>
+            <h4 id="1-inspect-failing-requests-in-the-local-emulator-or-rules-playground-heading">1. Inspect Failing Requests in the Local Emulator or Rules Playground</h4>
+            <p>Before editing production rules, reproduce the exact failing path locally using the Firebase CLI:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>firebase emulators:start <span class="tok-prop">--only</span> firestore,auth
+</code></pre>
+    </div>
+    
+<p>Open the Emulator UI (<code>http://127.0.0.1:4000/firestore</code>) and check the <strong>Requests</strong> tab, which logs the exact rule line and evaluated <code>request.auth</code> payload for every denied call.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-secure-rules-for-firestore">
+        <li class="step-item" id="2-author-granular-least-privilege-firestorerules">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="configure-secure-rules-for-firestore-heading">Step 2: Configure secure rules (For Firestore)</h4>
-            <p>If your database was in test mode, you will see a rule that blocked access after a specific date. <strong>Never use rules that allow global public read and write access (<code>allow read, write: if true;</code>) in production</strong>, as anyone could delete your entire database.</p>
-<p>Implement a conditional structure that requires the user to be authenticated to modify data:</p>
+            <h4 id="2-author-granular-least-privilege-firestorerules-heading">2. Author Granular, Least-Privilege firestore.rules</h4>
+            <p>Never revert to <code>allow read, write: if true;</code> in production. Separate public read-only data from user-owned documents and validate incoming writes:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -391,15 +500,24 @@
       <pre class="formatted-pre"><code>rules_version = <span class="tok-str">&#39;2&#39;</span>;
 service cloud.firestore {
   match /databases/{database}/documents {
-   <span class="tok-cmt"> // Allow any web user to read the product catalog or public content</span>
-    match /public_content/{document} {
+   <span class="tok-cmt"> // Public catalog: anyone can read, only admin custom claims can write</span>
+    match /products/{productId} {
       allow read: <span class="tok-kw">if</span> <span class="tok-kw">true</span>;
-      allow write: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span>;<span class="tok-cmt"> // Only registered users can write</span>
+      allow write: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span> &amp;&amp; request.auth.token.admin == <span class="tok-kw">true</span>;
     }
-    
-   <span class="tok-cmt"> // Restrict private user collections (e.g. carts, orders, personal data)</span>
+
+   <span class="tok-cmt"> // User-owned profiles: strict UID match</span>
     match /users/{userId} {
-      allow read, write: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span> &amp;&amp; request.auth.uid == userId;
+      allow read, update, <span class="tok-kw">delete</span>: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span> &amp;&amp; request.auth.uid == userId;
+      allow create: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span>
+                    &amp;&amp; request.auth.uid == userId
+                    &amp;&amp; request.resource.data.<span class="tok-prop">keys</span>().<span class="tok-prop">hasOnly</span>([<span class="tok-str">&#39;displayName&#39;</span>, <span class="tok-str">&#39;email&#39;</span>, <span class="tok-str">&#39;createdAt&#39;</span>]);
+    }
+
+   <span class="tok-cmt"> // Orders collection: must match query filter on ownerId</span>
+    match /orders/{orderId} {
+      allow read: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span> &amp;&amp; resource.data.ownerId == request.auth.uid;
+      allow create: <span class="tok-kw">if</span> request.auth != <span class="tok-kw">null</span> &amp;&amp; request.resource.data.ownerId == request.auth.uid;
     }
   }
 }
@@ -409,15 +527,85 @@ service cloud.firestore {
         </li>
         
 
-        <li class="step-item" id="publish-changes">
+        <li class="step-item" id="3-align-client-queries-with-security-rules">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="publish-changes-heading">Step 3: Publish changes</h4>
-            <p>Click the <strong>Publish</strong> button in the Firebase console. Security rule changes take 1 to 2 minutes to propagate globally. Restart your client application and the permission errors will disappear.</p>
+            <h4 id="3-align-client-queries-with-security-rules-heading">3. Align Client Queries with Security Rules</h4>
+            <p>Ensure your frontend query explicitly constrains the exact field checked by the rule, and wait for authentication state readiness:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JAVASCRIPT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">import</span> { onAuthStateChanged } <span class="tok-kw">from</span> <span class="tok-str">&#39;firebase/auth&#39;</span>;
+<span class="tok-kw">import</span> { collection, query, where, getDocs } <span class="tok-kw">from</span> <span class="tok-str">&#39;firebase/firestore&#39;</span>;
+
+onAuthStateChanged(auth, <span class="tok-kw">async</span> (user) =&gt; {
+  <span class="tok-kw">if</span> (!user) <span class="tok-kw">return</span>;
+  <span class="tok-kw">const</span> q = query(collection(db, <span class="tok-str">&#39;orders&#39;</span>), where(<span class="tok-str">&#39;ownerId&#39;</span>, <span class="tok-str">&#39;==&#39;</span>, user.uid));
+  <span class="tok-kw">const</span> snapshot = <span class="tok-kw">await</span> getDocs(q);
+  console.<span class="tok-prop">log</span>(<span class="tok-str">&#39;Authorized orders:&#39;</span>, snapshot.size);
+});
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-deploy-and-verify-rules-via-firebase-cli">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-deploy-and-verify-rules-via-firebase-cli-heading">4. Deploy and Verify Rules via Firebase CLI</h4>
+            <p>Deploy only your security rules to avoid redeploying hosting or functions:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>firebase deploy <span class="tok-prop">--only</span> firestore:rules
+</code></pre>
+    </div>
+    
+<p>Confirm the active ruleset version in the output (<code>cloud.firestore: rules file firestore.rules compiled successfully</code>) and test a read/write cycle in your app after 60 seconds of edge propagation.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-getdoc-work-while-getdocs-on-the-same-collection-throws-permission-denied">Why does <code>getDoc</code> work while <code>getDocs</code> on the same collection throws <code>permission-denied</code>?</h3>
+<p><code>getDoc</code> targets a single document where Firestore can inspect <code>resource.data</code> directly. <code>getDocs</code> is a <code>list</code> query evaluated statically before reading documents; if the query lacks a <code>.where()</code> clause proving every returned document satisfies the rule, Firestore rejects it.</p>
+<h3 id="can-permission-denied-come-from-firebase-app-check-instead-of-firestore-rules">Can <code>permission-denied</code> come from Firebase App Check instead of Firestore Rules?</h3>
+<p>Yes. If you enabled <strong>Enforce</strong> for Cloud Firestore under App Check in the Firebase Console, requests missing a valid <code>X-Firebase-AppCheck</code> token are rejected with <code>permission-denied</code> regardless of your <code>firestore.rules</code>.</p>
+<h3 id="why-do-admin-sdk-scripts-bypass-permission-denied">Why do Admin SDK scripts bypass <code>permission-denied</code>?</h3>
+<p>The <code>firebase-admin</code> SDK authenticates using a Google Cloud service account with IAM privileges, which intentionally bypasses client-facing Security Rules.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -432,50 +620,12 @@ service cloud.firestore {
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Use the built-in Rules Playground in the Firebase console before releasing changes to production.</li>
-<li>Monitor the &quot;Usage&quot; tab to detect abnormal spikes in denied reads, which could indicate a bug in your client code or an external scanning attempt.</li>
+              <li><strong>Version-control <code>firestore.rules</code>:</strong> Always manage rules in Git and deploy via <code>firebase deploy --only firestore:rules</code> instead of manual edits in the web console.</li>
+<li><strong>Write automated rule unit tests:</strong> Use <code>@firebase/rules-unit-testing</code> against the local Firestore Emulator in CI to assert both allowed and denied paths.</li>
+<li><strong>Separate <code>create</code> and <code>update</code> rules:</strong> Always validate <code>request.resource.data</code> on <code>create</code> and protect immutable fields like <code>ownerId</code> or <code>role</code> on <code>update</code>.</li>
+<li><strong>Monitor denied requests:</strong> Check the <strong>Firestore -&gt; Usage</strong> metrics weekly for sudden spikes in denied reads, which signal either broken client queries or automated probing.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -532,7 +682,7 @@ service cloud.firestore {
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -549,7 +699,7 @@ service cloud.firestore {
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Git</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -566,7 +716,7 @@ service cloud.firestore {
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Binance</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

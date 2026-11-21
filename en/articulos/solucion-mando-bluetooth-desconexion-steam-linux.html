@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does DualSense disconnect when clicking the touchpad?",
+      "name": "Why does my controller refuse to pair on Linux after dual-booting Windows?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Linux maps the touchpad as an auxiliary pointing device. If Steam Input and desktop mouse control fight for handle events, collisions occur. Disable touchpad mouse mode in Steam settings."
+        "text": "Both OSes share the same Bluetooth adapter MAC address but generate separate cryptographic Link Keys. Re-pair the controller or sync the Windows registry Link Key into /var/lib/bluetooth/."
       }
     },
     {
       "@type": "Question",
-      "name": "How can I measure Bluetooth link quality on Linux?",
+      "name": "Does xpadneo affect PS5 DualSense or Nintendo Switch Pro controllers?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Run bluetoothctl info &lt;CONTROLLER_MAC&gt; and check the RSSI metric. Any signal worse than -75 dBm suggests physical interference."
+        "text": "No. xpadneo binds only to Microsoft Xbox Bluetooth IDs. DualSense uses hid_playstation (Linux 5.12+) and Switch Pro uses hid_nintendo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do disconnects happen only when an external SSD is plugged in?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unshielded USB 3.0 cables emit broadband RF noise across 2.4 GHz—the exact band used by Bluetooth. Move your Bluetooth dongle to a USB 2.0 port or shielded extension cable."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When gaming on Linux or Steam Deck with wireless controllers (Xbox Series X|S, PS5 DualSense, Switch Pro), gamers regularly confront erratic dropouts, blinking LEDs, or unresponsiveness after pausing. This instability is driven by Linux kernel aggressive power management suspending the Bluetooth radio and missing wireless feedback rumble drivers.</p>
+          <p>Randomly losing controller input, watching the Xbox button blink mid-match, or experiencing multi-second input spikes on a PS5 DualSense under Linux and SteamOS is rarely caused by a dead battery. Instead, it stems from a combination of Linux USB autosuspend policies, BlueZ Enhanced Retransmission Mode (ERTM) incompatibilities, and missing Bluetooth LE HID drivers for modern controller firmware.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Aggressive USB Bluetooth autosuspend power management in Linux kernel</strong></div>
+            <div class="diag-value"><strong>Xbox Series X|S controller pairs then disconnects in a loop</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Disable Bluetooth autosuspend via custom udev power rules</div>
+            <div class="diag-value">Install <code>xpadneo-dkms</code> and disable BlueZ ERTM</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Stock kernel xpad driver incompatibilities with recent Xbox wireless firmware</strong></div>
+            <div class="diag-value"><strong>Bluetooth USB dongle drops out during quiet menus</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Deploy the xpadneo DKMS kernel module for modern Xbox gamepad support</div>
+            <div class="diag-value">Disable USB autosuspend for class <code>e0</code> via udev rules</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>DualSense drops when touching the center touchpad</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Disable Steam Desktop Layout mouse bindings or <code>ps_pad</code> conflicts</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>2.4 GHz Wi-Fi / USB 3.0 interference causing &gt;20 ms jitter</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Move dongle to a USB 2.0 port or shielded extension cable</div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +375,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-dualsense-disconnect-when-clicking-the-touchpad" class="toc-sublink">
+            <a href="#why-does-my-controller-refuse-to-pair-on-linux-after-dual-booting-windows" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does DualSense disconnect when clicking the touchpad?</span>
+              <span class="toc-subtext">Why does my controller refuse to pair on Linux after dual-booting Windows?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#how-can-i-measure-bluetooth-link-quality-on-linux" class="toc-sublink">
+            <a href="#does-xpadneo-affect-ps5-dualsense-or-nintendo-switch-pro-controllers" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How can I measure Bluetooth link quality on Linux?</span>
+              <span class="toc-subtext">Does xpadneo affect PS5 DualSense or Nintendo Switch Pro controllers?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-do-disconnects-happen-only-when-an-external-ssd-is-plugged-in" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why do disconnects happen only when an external SSD is plugged in?</span>
             </a>
           </li>
         
@@ -395,6 +426,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Modern gamepads rely on different Bluetooth transports that interact sensitively with the Linux kernel&#39;s <code>bluetooth</code>, <code>hid_playstation</code>, and <code>hid_microsoft</code> modules:</p>
+<ol>
+<li><strong>Xbox Firmware &amp; BLE GATT Profiles:</strong> Microsoft&#39;s 2021+ firmware (v5.x+) switched Xbox One S and Xbox Series X|S controllers from Classic Bluetooth HID to <strong>Bluetooth Low Energy (BLE)</strong> over GATT. Older in-tree <code>xpad</code>/<code>hid-microsoft</code> drivers mishandle BLE connection intervals and rumble packets, causing the controller&#39;s internal watchdog to drop the link.</li>
+<li><strong>USB Autosuspend (<code>bInterfaceClass == e0</code>):</strong> Linux power management (<code>power/control=auto</code>) suspends idle USB HCI Bluetooth radios after 2 seconds of inactivity. When a controller wakes or sends a keepalive burst, the host controller fails to resume in time, timing out the L2CAP channel.</li>
+<li><strong>BlueZ ERTM &amp; Privacy Collisions:</strong> Enhanced Retransmission Mode (<code>disable_ertm=N</code>) breaks L2CAP socket negotiation on many Xbox controllers, while dual-boot Windows/Linux setups share the same Bluetooth MAC address with mismatched Link Keys.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +441,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="install-xpadneo-advanced-xbox-gamepad-driver">
+        <li class="step-item" id="1-disable-bluetooth-ertm-and-install-xpadneo-xbox-controllers">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="install-xpadneo-advanced-xbox-gamepad-driver-heading">Step 1: Install xpadneo Advanced Xbox Gamepad Driver</h4>
-            <p>The in-tree Linux <code>xpad</code> driver cannot handle newer Bluetooth LE packets from Xbox controllers properly. Install <code>xpadneo</code> via DKMS:</p>
+            <h4 id="1-disable-bluetooth-ertm-and-install-xpadneo-xbox-controllers-heading">1. Disable Bluetooth ERTM and Install xpadneo (Xbox Controllers)</h4>
+            <p>For Xbox One S, Series X|S, and Elite Series 2 controllers, install <code>xpadneo</code> via DKMS so the kernel properly handles BLE HID descriptors and impulse triggers:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,25 +465,17 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># On Arch / Manjaro</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Arch Linux / CachyOS / EndeavourOS</span>
 yay <span class="tok-prop">-S</span> xpadneo-dkms
 <span class="tok-cmt">
-# On Ubuntu / Debian / Pop!_OS</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> dkms linux-<span class="tok-prop">headers</span>-$(uname <span class="tok-prop">-r</span>)
-<span class="tok-kw">git</span> clone https://github.com/atar-axis/xpadneo
-<span class="tok-kw">cd</span> xpadneo
-<span class="tok-kw">sudo</span> ./install.sh
+# Ubuntu / Debian / Pop!_OS</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">apt</span> install <span class="tok-prop">-y</span> dkms linux-<span class="tok-prop">headers</span>-$(uname <span class="tok-prop">-r</span>) <span class="tok-kw">git</span>
+<span class="tok-kw">git</span> clone https://github.com/atar-axis/xpadneo.<span class="tok-kw">git</span>
+<span class="tok-kw">cd</span> xpadneo &amp;&amp; <span class="tok-kw">sudo</span> ./install.sh
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="block-usb-bluetooth-dongle-autosuspend-via-udev">
-          <div class="step-number">2</div>
-          <div class="step-body">
-            <h4 id="block-usb-bluetooth-dongle-autosuspend-via-udev-heading">Step 2: Block USB Bluetooth Dongle Autosuspend via Udev</h4>
-            <p>Prevent the Linux power governor from sleeping your Bluetooth hardware:</p>
+    
+<p>Verify the module loaded and ERTM is disabled (<code>Y</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -465,20 +495,76 @@ yay <span class="tok-prop">-S</span> xpadneo-dkms
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-cmt">&#39;ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ATTR{idVendor}==&quot;*&quot;, ATTR{bInterfaceClass}==&quot;e0&quot;, ATTR{power/control}=&quot;on&quot;&#39; | sudo tee /etc/udev/rules.d/50-bluetooth-power.rules</span>
-<span class="tok-kw">sudo</span> udevadm control <span class="tok-prop">--reload-rules</span>
-<span class="tok-kw">sudo</span> udevadm trigger
+      <pre class="formatted-pre"><code>lsmod | <span class="tok-kw">grep</span> hid_xpadneo
+<span class="tok-kw">cat</span> /sys/module/bluetooth/parameters/disable_ertm
+</code></pre>
+    </div>
+    
+<p>If <code>disable_ertm</code> outputs <code>N</code>, persist it in modprobe:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-str">&quot;options bluetooth disable_ertm=Y&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/modprobe.d/bluetooth-ertm.conf
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="tune-bluez-service-for-instant-resumption">
+        <li class="step-item" id="2-prevent-kernel-usb-autosuspend-on-bluetooth-radios">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="2-prevent-kernel-usb-autosuspend-on-bluetooth-radios-heading">2. Prevent Kernel USB Autosuspend on Bluetooth Radios</h4>
+            <p>Create a <code>udev</code> rule targeting all USB Bluetooth HCI controllers (USB class <code>0xe0</code>) so the kernel keeps the radio permanently powered:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-cmt">&#39;ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ATTR{bInterfaceClass}==&quot;e0&quot;, ATTR{power/control}=&quot;on&quot;&#39; | sudo tee /etc/udev/rules.d/50-bluetooth-power.rules</span>
+<span class="tok-kw">sudo</span> udevadm control <span class="tok-prop">--reload-rules</span>
+<span class="tok-kw">sudo</span> udevadm trigger <span class="tok-prop">--subsystem-match</span>=usb
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-tune-bluez-connection-amp-reconnect-parameters">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="tune-bluez-service-for-instant-resumption-heading">Step 3: Tune BlueZ Service for Instant Resumption</h4>
-            <p>Edit <code>/etc/bluetooth/main.conf</code> to optimize reconnection handshake latency:</p>
+            <h4 id="3-tune-bluez-connection-amp-reconnect-parameters-heading">3. Tune BlueZ Connection &amp; Reconnect Parameters</h4>
+            <p>Edit <code>/etc/bluetooth/main.conf</code> to enable fast reconnection and prevent aggressive idle timeouts:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -499,14 +585,14 @@ yay <span class="tok-prop">-S</span> xpadneo-dkms
         </button>
       </div>
       <pre class="formatted-pre"><code>[General]
-FastConnectable=<span class="tok-kw">true</span>
-ReconnectAttempts=<span class="tok-num">7</span>
-ReconnectIntervals=<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">4</span>, <span class="tok-num">8</span>, <span class="tok-num">16</span>, <span class="tok-num">32</span>, <span class="tok-num">64</span>
-AutoEnable=<span class="tok-kw">true</span>
+FastConnectable = <span class="tok-kw">true</span>
+ReconnectAttempts = <span class="tok-num">7</span>
+ReconnectIntervals = <span class="tok-num">1</span>,<span class="tok-num">2</span>,<span class="tok-num">4</span>,<span class="tok-num">8</span>,<span class="tok-num">16</span>,<span class="tok-num">32</span>,<span class="tok-num">64</span>
+AutoEnable = <span class="tok-kw">true</span>
 </code></pre>
     </div>
     
-<p>Restart daemon:</p>
+<p>Restart the Bluetooth daemon and verify controller link quality (RSSI):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -527,57 +613,31 @@ AutoEnable=<span class="tok-kw">true</span>
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart bluetooth
+bluetoothctl info &lt;CONTROLLER_MAC&gt; | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;Connected|RSSI|Name&quot;</span>
 </code></pre>
     </div>
+    
+<p>An RSSI stronger than <code>-65 dBm</code> indicates a healthy RF link; anything below <code>-78 dBm</code> points to physical shielding or USB 3.0 RF noise.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-isolate-steam-input-from-desktop-touchpad-events-dualsense">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-isolate-steam-input-from-desktop-touchpad-events-dualsense-heading">4. Isolate Steam Input from Desktop Touchpad Events (DualSense)</h4>
+            <p>If your PS5 DualSense disconnects or stutters when clicking the touchpad, Linux&#39;s <code>hid_playstation</code> driver exposes the touchpad as a secondary mouse. In <strong>Steam -&gt; Settings -&gt; Controller</strong>, enable <strong>PlayStation Controller Support</strong> and set <strong>Non-Game Controller Layouts -&gt; Desktop Layout</strong> to <em>Disabled</em> or <em>Gamepad</em>, preventing X11/Wayland pointer grabs from colliding with Proton&#39;s <code>hidraw</code> passthrough.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-does-dualsense-disconnect-when-clicking-the-touchpad">Why does DualSense disconnect when clicking the touchpad?</h3>
-<p>Linux maps the touchpad as an auxiliary pointing device. If Steam Input and desktop mouse control fight for handle events, collisions occur. Disable touchpad mouse mode in Steam settings.</p>
-<h3 id="how-can-i-measure-bluetooth-link-quality-on-linux">How can I measure Bluetooth link quality on Linux?</h3>
-<p>Run <code>bluetoothctl info &lt;CONTROLLER_MAC&gt;</code> and check the RSSI metric. Any signal worse than -75 dBm suggests physical interference.</p>
+<h3 id="why-does-my-controller-refuse-to-pair-on-linux-after-dual-booting-windows">Why does my controller refuse to pair on Linux after dual-booting Windows?</h3>
+<p>Both OSes share the same Bluetooth adapter MAC address but generate separate cryptographic Link Keys. Re-pair the controller or sync the Windows registry Link Key into <code>/var/lib/bluetooth/</code>.</p>
+<h3 id="does-xpadneo-affect-ps5-dualsense-or-nintendo-switch-pro-controllers">Does <code>xpadneo</code> affect PS5 DualSense or Nintendo Switch Pro controllers?</h3>
+<p>No. <code>xpadneo</code> binds only to Microsoft Xbox Bluetooth IDs. DualSense uses <code>hid_playstation</code> (Linux 5.12+) and Switch Pro uses <code>hid_nintendo</code>.</p>
+<h3 id="why-do-disconnects-happen-only-when-an-external-ssd-is-plugged-in">Why do disconnects happen only when an external SSD is plugged in?</h3>
+<p>Unshielded USB 3.0 cables emit broadband RF noise across 2.4 GHz—the exact band used by Bluetooth. Move your Bluetooth dongle to a USB 2.0 port or shielded extension cable.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -592,50 +652,12 @@ AutoEnable=<span class="tok-kw">true</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Connect Xbox gamepads to a Windows device periodically to apply Microsoft wireless firmware updates.</li>
-<li>Plug USB Bluetooth adapters into front panel ports or USB extension cables away from RF-noisy USB 3.0 external storage hubs.</li>
+              <li><strong>Update controller firmware:</strong> Connect Xbox pads to Windows (Xbox Accessories app) and DualSense pads via Sony&#39;s Firmware Updater to patch radio bugs.</li>
+<li><strong>Keep 2.4 GHz Wi-Fi off Bluetooth channels:</strong> Move home routers to 5 GHz or 6 GHz to eliminate co-channel interference.</li>
+<li><strong>Upgrade older CSR 4.0 dongles:</strong> Older Bluetooth 4.0 adapters saturate when polling multiple 250 Hz gamepads with rumble; use a Class 1 Bluetooth 5.3 adapter.</li>
+<li><strong>Check <code>dmesg</code> after drops:</strong> Run <code>dmesg -T | grep -iE &quot;bluetooth|hid|xpad&quot;</code> after a disconnect to spot USB resets or firmware crashes.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -709,7 +731,7 @@ AutoEnable=<span class="tok-kw">true</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">PipeWire</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -726,7 +748,7 @@ AutoEnable=<span class="tok-kw">true</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Proton</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

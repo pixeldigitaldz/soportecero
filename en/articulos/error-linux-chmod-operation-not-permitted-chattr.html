@@ -137,18 +137,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Does the immutable flag (+i) block root?",
+      "name": "Does chattr +i protect a file from root permanently?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The immutable flag is enforced directly by the Linux kernel VFS layer. No process—even UID 0—can delete or mutate the file until chattr -i is issued."
+        "text": "It blocks accidental edits, deletions, and chmod by root scripts or daemons, but any process running as root with CAP_LINUX_IMMUTABLE can still unlock it with chattr -i."
       }
     },
     {
       "@type": "Question",
-      "name": "Does chattr work on FAT32 or NTFS mounts?",
+      "name": "Why does lsattr print Inappropriate ioctl for device on my external drive?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Extended attributes are exclusive to native Linux filesystems such as ext4, XFS, and Btrfs."
+        "text": "Extended attributes (lsattr/chattr) are supported only on native Linux filesystems (ext4, XFS, Btrfs, F2FS). Non-Linux filesystems like FAT32, exFAT, and NTFS do not implement the FS_IOC_GETFLAGS ioctl."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Could malware have set chattr +i on my server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Persistence scripts and cryptominers frequently apply chattr +i to malicious cron jobs, authorized_keys, or modified binaries so administrators cannot remove them with rm -rf alone. Always audit unexpected +i flags."
       }
     }
   ]
@@ -220,22 +228,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -285,7 +277,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Encountering <code>chmod: changing permissions of &#39;file&#39;: Operation not permitted</code> or <code>chown: changing ownership of &#39;file&#39;: Operation not permitted</code> while executing commands as superuser <code>root</code> indicates the file is locked by Linux kernel extended filesystem attributes or the storage partition has degraded to Read-Only mode.</p>
+          <p>Encountering <code>chmod: changing permissions of &#39;file&#39;: Operation not permitted</code> or <code>chown: changing ownership of &#39;file&#39;: Operation not permitted</code> while running commands as <code>root</code> (UID 0) is a classic Linux sysadmin puzzle. Because standard POSIX permission checks do not block UID 0, this <code>EPERM</code> error points to kernel-level extended inode attributes, a read-only filesystem mount, container capability restrictions, or non-POSIX mount semantics.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -302,25 +294,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>File protected by kernel immutable (+i) or append-only (+a) filesystem attribute</strong></div>
+            <div class="diag-value"><strong>Immutable (<code>+i</code>) or append-only (<code>+a</code>) flag</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><code>chmod</code>/<code>chown</code>/<code>rm</code> fails even as root</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Check with <code>lsattr &lt;file&gt;</code> and clear attributes using <code>sudo chattr -i &lt;file&gt;</code></div>
+            <div class="diag-value">Inspect with <code>lsattr</code> and clear via <code>chattr -i</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Underlying filesystem mounted in Read-Only (ro) mode following disk I/O errors</strong></div>
+            <div class="diag-value"><strong>Read-only (<code>ro</code>) filesystem mount</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Kernel remounted volume after I/O errors</div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Remount read-write via <code>sudo mount -o remount,rw /</code> or verify SELinux context</div>
+            <div class="diag-value">Check <code>findmnt</code> and remount <code>rw</code> after <code>fsck</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>NFS <code>root_squash</code> export</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Root on client mapped to <code>nobody</code> on server</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Run <code>chmod</code> on the NFS server or adjust export</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Container missing <code>CAP_FOWNER</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value">Unprivileged container or dropped capabilities</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Run on host or grant required capability</div>
           </div></div></div>
       </div>
     </section>
@@ -361,31 +401,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
-          <a href="#frequently-asked-questions-faq" class="toc-link">
-            <span class="toc-number">03</span>
-            <span class="toc-text">Frequently Asked Questions (FAQ)</span>
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#does-the-immutable-flag-i-block-root" class="toc-sublink">
+            <a href="#does-chattr-i-protect-a-file-from-root-permanently" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Does the immutable flag (+i) block root?</span>
+              <span class="toc-subtext">Does chattr +i protect a file from root permanently?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#does-chattr-work-on-fat32-or-ntfs-mounts" class="toc-sublink">
+            <a href="#why-does-lsattr-print-inappropriate-ioctl-for-device-on-my-external-drive" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Does chattr work on FAT32 or NTFS mounts?</span>
+              <span class="toc-subtext">Why does lsattr print Inappropriate ioctl for device on my external drive?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#could-malware-have-set-chattr-i-on-my-server" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Could malware have set chattr +i on my server?</span>
             </a>
           </li>
         
@@ -397,6 +452,12 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>In the Linux kernel&#39;s Virtual File System (VFS) layer, <code>chmod</code> and <code>chown</code> invoke <code>notify_change()</code> to update an inode&#39;s metadata. Before standard UID 0 privileges take effect, the kernel checks two lower-level guards:</p>
+<ol>
+<li><strong>Extended Inode Flags (<code>FS_IMMUTABLE_FL</code> / <code>FS_APPEND_FL</code>):</strong> Native Linux filesystems—including <code>ext4</code>, <code>XFS</code>, and <code>Btrfs</code>—store extra attribute bits directly in the inode structure. When the immutable bit (<code>i</code>) is set, the kernel explicitly returns <code>-EPERM</code> (<code>Operation not permitted</code>) for any attempt to modify data, rename, unlink, or alter permissions/ownership—even for <code>root</code>. Only a process holding <code>CAP_LINUX_IMMUTABLE</code> calling <code>chattr -i</code> (via the <code>FS_IOC_SETFLAGS</code> ioctl) can clear it.</li>
+<li><strong>Filesystem State and Mount Options:</strong> If a storage device encounters hardware I/O errors or journal corruption, <code>errors=remount-ro</code> flips the superblock to read-only (<code>EROFS</code>). Likewise, Windows filesystems (<code>NTFS</code>, <code>vfat</code>/<code>FAT32</code>) lack POSIX inode ownership tables, and NFS shares with <code>root_squash</code> (the default) translate client UID 0 to <code>nfsnobody</code>, causing <code>EPERM</code> on metadata changes.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -405,11 +466,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="inspect-extended-attributes-with-lsattr">
+        <li class="step-item" id="inspect-extended-inode-attributes-with-lsattr">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="inspect-extended-attributes-with-lsattr-heading">Step 1: Inspect Extended Attributes with lsattr</h4>
-            <p>Standard <code>ls -l</code> commands only expose conventional POSIX permission bits. Extended kernel flags require <code>lsattr</code>:</p>
+            <h4 id="inspect-extended-inode-attributes-with-lsattr-heading">Step 1: Inspect Extended Inode Attributes with lsattr</h4>
+            <p>Standard <code>ls -l</code> output does not show kernel extended attributes. Query the file (or directory) with <code>lsattr</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -429,22 +490,42 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspect extended filesystem attributes</span>
-lsattr /path/to/file
-<span class="tok-cmt">
-# Typical output showing immutable bit:</span><span class="tok-cmt">
-# ----i---------e---- /path/to/file  (Letter &#39;i&#39; denotes immutable)</span>
+      <pre class="formatted-pre"><code>lsattr /path/to/file
+</code></pre>
+    </div>
+    
+<p>Look for <code>i</code> (immutable) or <code>a</code> (append-only) in the attribute string:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>----i---------e------- /path/to/file
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="clear-immutable-flags-with-chattr">
+        <li class="step-item" id="clear-immutable-or-append-only-flags-with-chattr">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="clear-immutable-flags-with-chattr-heading">Step 2: Clear Immutable Flags with chattr</h4>
-            <p>As superuser, strip the immutable and append-only flags:</p>
+            <h4 id="clear-immutable-or-append-only-flags-with-chattr-heading">Step 2: Clear Immutable or Append-Only Flags with chattr</h4>
+            <p>Strip the locking flags as <code>root</code> or via <code>sudo</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -464,11 +545,10 @@ lsattr /path/to/file
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Remove immutable (-i) and append-only (-a) flags</span>
-<span class="tok-kw">sudo</span> chattr <span class="tok-prop">-i</span> /path/to/file
-<span class="tok-kw">sudo</span> chattr <span class="tok-prop">-a</span> /path/to/file
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Clear immutable and append-only attributes on a single file</span>
+<span class="tok-kw">sudo</span> chattr <span class="tok-prop">-i</span> <span class="tok-prop">-a</span> /path/to/file
 <span class="tok-cmt">
-# Recursively clear across an entire directory tree:</span>
+# Or clear recursively across a directory tree</span>
 <span class="tok-kw">sudo</span> chattr <span class="tok-prop">-R</span> <span class="tok-prop">-i</span> /path/to/directory
 </code></pre>
     </div>
@@ -476,11 +556,11 @@ lsattr /path/to/file
         </li>
         
 
-        <li class="step-item" id="apply-desired-permissions-via-chmod-chown">
+        <li class="step-item" id="apply-permissions-and-verify-inode-metadata">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="apply-desired-permissions-via-chmod-chown-heading">Step 3: Apply Desired Permissions via chmod / chown</h4>
-            <p>With the kernel lock removed, mutate permissions normally:</p>
+            <h4 id="apply-permissions-and-verify-inode-metadata-heading">Step 3: Apply Permissions and Verify Inode Metadata</h4>
+            <p>Once <code>lsattr</code> shows no <code>i</code> or <code>a</code> flags, run <code>chmod</code> or <code>chown</code> and verify with <code>stat</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -500,22 +580,20 @@ lsattr /path/to/file
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Grant standard file read/write permissions</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> /path/to/file
-<span class="tok-cmt">
-# Update ownership</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> user:group /path/to/file
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chmod</span> <span class="tok-num">644</span> /path/to/file
+<span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> www-data:www-data /path/to/file
+stat <span class="tok-prop">-c</span> <span class="tok-str">&quot;%a %U:%G %n&quot;</span> /path/to/file
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="check-filesystem-mount-status">
+        <li class="step-item" id="check-mount-options-nfs-exports-and-container-capabilities">
           <div class="step-number">4</div>
           <div class="step-body">
-            <h4 id="check-filesystem-mount-status-heading">Step 4: Check Filesystem Mount Status</h4>
-            <p>If <code>lsattr</code> reports no flags yet modification is denied, verify partition write availability:</p>
+            <h4 id="check-mount-options-nfs-exports-and-container-capabilities-heading">Step 4: Check Mount Options, NFS Exports, and Container Capabilities</h4>
+            <p>If <code>lsattr</code> reports <code>Operation not supported</code> or shows no flags yet <code>chmod</code> still fails, inspect the mount point and kernel logs:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -535,62 +613,50 @@ lsattr /path/to/file
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Inspect root partition mount options</span>
-<span class="tok-kw">mount</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-i</span> <span class="tok-str">&quot; / &quot;</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Verify mount options (look for &#39;ro&#39;, &#39;vfat&#39;, &#39;ntfs&#39;, or &#39;nfs&#39;)</span>
+findmnt <span class="tok-prop">-T</span> /path/to/file
 <span class="tok-cmt">
-# Remount filesystem read-write</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /
+# Check for kernel disk errors triggering read-only remounts</span>
+dmesg <span class="tok-prop">-T</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-iE</span> <span class="tok-str">&quot;remount|I/O error|EXT4-fs error&quot;</span>
 </code></pre>
     </div>
+    
+<p>If the partition is mounted <code>ro</code> without underlying hardware failure, remount it read-write:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /<span class="tok-kw">mount</span>/point
+</code></pre>
+    </div>
+    
+<p>On FAT32/exFAT/NTFS mounts, permissions must be set globally at mount time using <code>uid=</code>, <code>gid=</code>, <code>fmask=</code>, and <code>dmask=</code> options in <code>/etc/fstab</code>.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
-<h2 id="frequently-asked-questions-faq">❓ Frequently Asked Questions (FAQ)</h2>
-<h3 id="does-the-immutable-flag-i-block-root">Does the immutable flag (+i) block root?</h3>
-<p>Yes. The immutable flag is enforced directly by the Linux kernel VFS layer. No process—even UID 0—can delete or mutate the file until <code>chattr -i</code> is issued.</p>
-<h3 id="does-chattr-work-on-fat32-or-ntfs-mounts">Does chattr work on FAT32 or NTFS mounts?</h3>
-<p>No. Extended attributes are exclusive to native Linux filesystems such as ext4, XFS, and Btrfs.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="does-chattr-i-protect-a-file-from-root-permanently">Does <code>chattr +i</code> protect a file from <code>root</code> permanently?</h3>
+<p>It blocks accidental edits, deletions, and <code>chmod</code> by <code>root</code> scripts or daemons, but any process running as <code>root</code> with <code>CAP_LINUX_IMMUTABLE</code> can still unlock it with <code>chattr -i</code>.</p>
+<h3 id="why-does-lsattr-print-inappropriate-ioctl-for-device-on-my-external-drive">Why does <code>lsattr</code> print <code>Inappropriate ioctl for device</code> on my external drive?</h3>
+<p>Extended attributes (<code>lsattr</code>/<code>chattr</code>) are supported only on native Linux filesystems (<code>ext4</code>, <code>XFS</code>, <code>Btrfs</code>, <code>F2FS</code>). Non-Linux filesystems like <code>FAT32</code>, <code>exFAT</code>, and <code>NTFS</code> do not implement the <code>FS_IOC_GETFLAGS</code> ioctl.</p>
+<h3 id="could-malware-have-set-chattr-i-on-my-server">Could malware have set <code>chattr +i</code> on my server?</h3>
+<p>Yes. Persistence scripts and cryptominers frequently apply <code>chattr +i</code> to malicious cron jobs, <code>authorized_keys</code>, or modified binaries so administrators cannot remove them with <code>rm -rf</code> alone. Always audit unexpected <code>+i</code> flags.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -605,50 +671,12 @@ lsattr /path/to/file
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Leverage immutability for critical security files:</strong> Protect critical infrastructure files (such as <code>/etc/resolv.conf</code>) against rogue daemon overrides with <code>sudo chattr +i /etc/resolv.conf</code>.</li>
-<li><strong>Audit unauthorized attribute modifications:</strong> Malware scripts frequently apply <code>+i</code> flags to prevent administrative deletion.</li>
+              <li>Use <code>sudo chattr +i /etc/resolv.conf</code> intentionally only when preventing rogue DHCP/network daemons from overwriting static DNS configurations, and document it in your runbook.</li>
+<li>Avoid running <code>chmod</code>/<code>chown</code> on Windows-formatted USB drives or SMB/CIFS shares; configure <code>uid</code>/<code>gid</code> mount options instead.</li>
+<li>Schedule periodic <code>lsattr</code> integrity checks on <code>/etc</code>, <code>/usr/local/bin</code>, and <code>~/.ssh/authorized_keys</code> as part of host intrusion detection.</li>
+<li>Monitor SMART health and <code>dmesg</code> for storage I/O errors so read-only remounts are caught before deployments fail.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -728,18 +756,18 @@ lsattr /path/to/file
       </article>
       
 
-      <!-- Related Card: Fix Next.js Error ReferenceError: document is not defined (App Router & SSR) -->
+      <!-- Related Card: Cloudflare Error 522 Connection Timed Out in Nginx and UFW -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Systems & Servers</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-nextjs-referenceerror-document-is-not-defined.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fix Next.js Error ReferenceError: document is not defined (App Router & SSR)</a>
+              <a href="../articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cloudflare Error 522 Connection Timed Out in Nginx and UFW</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Next.js</span>
-            <span>Read Time: 4 min</span>
+            <span class="card-tag">Cloudflare</span>
+            <span>Read Time: 7 min</span>
           </div>
         </div>
       </article>

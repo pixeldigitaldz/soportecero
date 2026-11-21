@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When is active (exited) actually the intended, healthy state?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For one-time configuration units (Type=oneshot with RemainAfterExit=yes), such as ufw.service, netfilter-persistent.service, or systemd-sysctl.service. They apply kernel settings at boot and exit cleanly, leaving no daemon running in memory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does my service work when I run it manually in the terminal, but fail under systemd?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Interactive shells load /etc/profile, ~/.bashrc, and custom $PATH or environment variables (like NVM paths or DATABASE_URL). systemd runs in a minimal, clean environment; you must pass variables via Environment= or EnvironmentFile= and specify full binary paths."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What causes Start request repeated too quickly (start-limit-hit)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If a broken service crashes multiple times within StartLimitIntervalSec (default 10s, 5 restarts), systemd stops retrying and locks the unit in failed. Fix the underlying crash, then run sudo systemctl reset-failed &lt;unit&gt; before starting it again."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,8 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <code>active (exited)</code> status in Systemd indicates that the command configured under <code>ExecStart</code> successfully completed its execution and finished, while a <code>failed</code> or <code>activating (auto-restart)</code> status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.</p>
-<p>Understanding the difference between <code>Type=oneshot</code> and <code>Type=simple</code> service definitions is essential to know whether your application is running as expected or silently dropping connections.</p>
+          <p>When inspecting a Linux service with <code>systemctl status</code>, seeing <code>active (exited)</code> or <code>failed</code> (with <code>Result: exit-code</code>) indicates two very different behaviors in <code>systemd</code>. <code>active (exited)</code> means the process launched by <code>ExecStart=</code> terminated with exit code <code>0</code> and <code>systemd</code> considers the unit healthy—which is normal for initialization scripts, but a bug if you expected a persistent daemon. Conversely, <code>failed</code> means the binary crashed or returned a non-zero exit status.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -276,37 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Service configured as <code>Type=oneshot</code></strong></div>
+            <div class="diag-value">Persistent app shows <code>active (exited)</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>systemctl show -p Type,RemainAfterExit &lt;unit&gt;</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Expected behavior for single-run provisioning scripts or cron alternatives</div>
+            <div class="diag-value">Change <code>Type=oneshot</code> to <code>Type=simple</code> (or <code>exec</code>)</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Configuration file error or missing env vars</strong></div>
+            <div class="diag-value"><code>status=203/EXEC</code> (binary not found or not executable)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>journalctl -u &lt;unit&gt; -n 30 --no-pager</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Inspect runtime logs with <code>journalctl -u service-name -e --no-pager</code></div>
+            <div class="diag-value">Use absolute path in <code>ExecStart=</code> and <code>chmod +x</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Permission denied on binary or working directory</strong></div>
+            <div class="diag-value"><code>status=200/CHDIR</code> or permission denied</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>ls -ld &lt;WorkingDirectory&gt;</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Ensure the user configured under <code>User=</code> has access to <code>WorkingDirectory=</code></div>
+            <div class="diag-value">Fix <code>User=</code> / <code>Group=</code> ownership or directory path</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Daemon forks to background then gets killed</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>systemctl show -p Type &lt;unit&gt;</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Use <code>Type=forking</code> with <code>PIDFile=</code>, or run in foreground</div>
           </div></div></div>
       </div>
     </section>
@@ -347,10 +398,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-solution" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Solution</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#when-is-active-exited-actually-the-intended-healthy-state" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">When is active (exited) actually the intended, healthy state?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-my-service-work-when-i-run-it-manually-in-the-terminal-but-fail-under-systemd" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does my service work when I run it manually in the terminal, but fail under systemd?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#what-causes-start-request-repeated-too-quickly-start-limit-hit" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What causes Start request repeated too quickly (start-limit-hit)?</span>
+            </a>
+          </li>
+        
+        </ul>
         </li>
       
         </ul>
@@ -358,9 +449,27 @@
     </nav>
     
     
-<h2 id="step-by-step-solution">Step-by-Step Solution</h2>
-<p><strong>Inspect detailed service logs</strong>
-When a service crashes or produces unexpected exit codes, standard <code>systemctl status</code> only shows truncated lines. Use <code>journalctl</code> to view the full stderr stream:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p><code>systemd</code> tracks a service&#39;s lifecycle based on its <code>Type=</code> directive in the <code>[Service]</code> section:</p>
+<ul>
+<li><strong><code>Type=simple</code> (default):</strong> <code>systemd</code> expects the process spawned by <code>ExecStart=</code> to stay in the foreground as the main service PID. If that process forks into the background and exits <code>0</code>, <code>systemd</code> assumes the service finished and tears down any remaining cgroup child processes.</li>
+<li><strong><code>Type=oneshot</code> + <code>RemainAfterExit=yes</code>:</strong> Designed for setup tasks (e.g., applying <code>iptables</code> rules or running a migration). Once <code>ExecStart=</code> exits <code>0</code>, <code>systemd</code> marks the unit <code>active (exited)</code> and keeps it marked active without supervising any running process.</li>
+<li><strong><code>Type=forking</code>:</strong> Used for legacy daemons that daemonize (<code>fork()</code> + parent exit). If <code>PIDFile=</code> is missing or wrong, <code>systemd</code> loses track of the child PID and marks the unit <code>failed</code>.</li>
+</ul>
+<p>When a unit enters <strong><code>failed</code></strong>, <code>systemd</code> logs numeric exit codes (<code>status=203/EXEC</code>, <code>status=217/USER</code>, <code>status=1/FAILURE</code>) or signals (<code>SIGKILL</code>/<code>OOM</code>). Additionally, <code>systemd</code> does <strong>not</strong> load your interactive <code>~/.bashrc</code> or <code>$PATH</code>, so relative commands like <code>node server.js</code> fail immediately with <code>203/EXEC</code>.</p>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="read-the-full-journal-and-exit-status">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="read-the-full-journal-and-exit-status-heading">Step 1: Read the Full Journal and Exit Status</h4>
+            <p>Never rely solely on the truncated output of <code>systemctl status</code>. Query <code>journalctl</code> and <code>systemctl show</code> for the exact exit code and stderr output:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -380,12 +489,21 @@ When a service crashes or produces unexpected exit codes, standard <code>systemc
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> my-<span class="tok-kw">service</span>.<span class="tok-kw">service</span> <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> my-app.<span class="tok-kw">service</span> <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
+<span class="tok-kw">systemctl</span> show my-app.<span class="tok-kw">service</span> <span class="tok-prop">-p</span> ActiveState,SubState,ExecMainStatus,Result
 </code></pre>
     </div>
     
-<p><strong>Verify the service type in the unit file</strong>
-Open the Systemd unit file located at <code>/etc/systemd/system/my-service.service</code>. If your app is a persistent background worker (like a Node, Python, or Go daemon) but has <code>Type=oneshot</code>, Systemd will not supervise it as an ongoing daemon:</p>
+<p>Match <code>ExecMainStatus</code> against common <code>systemd</code> codes (<code>203</code> = exec path/permissions, <code>200</code> = bad <code>WorkingDirectory</code>, <code>1</code>–<code>255</code> = application-level error).</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="fix-the-unit-definition-type-and-absolute-paths">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="fix-the-unit-definition-type-and-absolute-paths-heading">Step 2: Fix the Unit Definition (Type= and Absolute Paths)</h4>
+            <p>Open the unit file (e.g., <code>/etc/systemd/system/my-app.service</code>) and ensure it uses <code>Type=simple</code> (or <code>Type=exec</code>) for foreground daemons, an absolute binary path, and explicit <code>User=</code>/<code>WorkingDirectory=</code> settings:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -406,13 +524,16 @@ Open the Systemd unit file located at <code>/etc/systemd/system/my-service.servi
         </button>
       </div>
       <pre class="formatted-pre"><code>[Unit]
-Description=My Background Daemon
-After=network.target
+Description=My Node.js API Service
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
 User=www-data
+Group=www-data
 WorkingDirectory=/<span class="tok-kw">var</span>/www/my-app
+EnvironmentFile=/<span class="tok-kw">var</span>/www/my-app/.env
 ExecStart=/usr/bin/node /<span class="tok-kw">var</span>/www/my-app/server.js
 Restart=on-failure
 RestartSec=5s
@@ -422,8 +543,40 @@ WantedBy=multi-user.target
 </code></pre>
     </div>
     
-<p><strong>Reload the Systemd daemon and restart the unit</strong>
-Whenever you modify a <code>.service</code> configuration file, inform the Linux init system before restarting the service:</p>
+<p>Find exact binary paths with <code>command -v node</code> or <code>which python3</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="validate-syntax-reload-daemon-and-restart">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="validate-syntax-reload-daemon-and-restart-heading">Step 3: Validate Syntax, Reload Daemon, and Restart</h4>
+            <p>Before starting the service, run <code>systemd-analyze verify</code> to catch typos, missing paths, or invalid unit directives:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> systemd-analyze verify /etc/systemd/system/my-app.<span class="tok-kw">service</span>
+</code></pre>
+    </div>
+    
+<p>Reload <code>systemd</code> so it parses the updated unit file, reset any <code>failed</code> latch, and restart:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -444,13 +597,19 @@ Whenever you modify a <code>.service</code> configuration file, inform the Linux
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> daemon-reload
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart my-<span class="tok-kw">service</span>.<span class="tok-kw">service</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> my-<span class="tok-kw">service</span>.<span class="tok-kw">service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> reset-failed my-app.<span class="tok-kw">service</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart my-app.<span class="tok-kw">service</span>
 </code></pre>
     </div>
-    
-<p><strong>Use absolute paths for all executables</strong>
-Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. Always provide the full absolute path to binaries (e.g., <code>/usr/bin/python3</code> instead of <code>python3</code>). Find absolute paths using:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-active-running-state">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-active-running-state-heading">Step 4: Verify active (running) State</h4>
+            <p>Confirm the unit now reports <code>active (running)</code> with a live <code>Main PID</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -470,11 +629,20 @@ Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">which</span> <span class="tok-kw">node</span>
-<span class="tok-kw">which</span> python3
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> my-app.<span class="tok-kw">service</span> <span class="tok-prop">--no-pager</span>
 </code></pre>
     </div>
-    
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="when-is-active-exited-actually-the-intended-healthy-state">When is <code>active (exited)</code> actually the intended, healthy state?</h3>
+<p>For one-time configuration units (<code>Type=oneshot</code> with <code>RemainAfterExit=yes</code>), such as <code>ufw.service</code>, <code>netfilter-persistent.service</code>, or <code>systemd-sysctl.service</code>. They apply kernel settings at boot and exit cleanly, leaving no daemon running in memory.</p>
+<h3 id="why-does-my-service-work-when-i-run-it-manually-in-the-terminal-but-fail-under-systemd">Why does my service work when I run it manually in the terminal, but fail under <code>systemd</code>?</h3>
+<p>Interactive shells load <code>/etc/profile</code>, <code>~/.bashrc</code>, and custom <code>$PATH</code> or environment variables (like <code>NVM</code> paths or <code>DATABASE_URL</code>). <code>systemd</code> runs in a minimal, clean environment; you must pass variables via <code>Environment=</code> or <code>EnvironmentFile=</code> and specify full binary paths.</p>
+<h3 id="what-causes-start-request-repeated-too-quickly-start-limit-hit">What causes <code>Start request repeated too quickly</code> (<code>start-limit-hit</code>)?</h3>
+<p>If a broken service crashes multiple times within <code>StartLimitIntervalSec</code> (default 10s, 5 restarts), <code>systemd</code> stops retrying and locks the unit in <code>failed</code>. Fix the underlying crash, then run <code>sudo systemctl reset-failed &lt;unit&gt;</code> before starting it again.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -489,50 +657,12 @@ Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. 
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li><strong>Syntax validation:</strong> Run <code>systemd-analyze verify /etc/systemd/system/my-service.service</code> to catch syntax and path warnings prior to deploying.</li>
-<li><strong>Restart throttle limits:</strong> Always declare <code>RestartSec=5s</code> and <code>StartLimitBurst=5</code> to prevent broken binaries from entering aggressive CPU-hogging restart loops.</li>
+              <li><strong>Always run <code>systemd-analyze verify</code>:</strong> Catch invalid directives and missing <code>ExecStart</code> binaries prior to reloading.</li>
+<li><strong>Configure <code>Restart=on-failure</code> with <code>RestartSec=5s</code>:</strong> Avoid tight crash loops that exhaust CPU and hit <code>start-limit-hit</code>.</li>
+<li><strong>Keep daemons in the foreground:</strong> Modern apps (Node, Go, Python, Gunicorn) should not daemonize themselves; run them in foreground mode with <code>Type=simple</code> or <code>Type=exec</code>.</li>
+<li><strong>Isolate secrets in <code>EnvironmentFile=</code>:</strong> Store API keys and DB strings in a <code>0600</code> file rather than hardcoding them in world-readable <code>/etc/systemd/system/*.service</code> files.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -589,7 +719,7 @@ Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -606,7 +736,7 @@ Systemd does not inherit your personal shell&#39;s <code>$PATH</code> variable. 
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Nginx</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Intermittent network speed issues, interrupted downloads, or the inability to load certain secure web portals often occur due to a poor configuration of the <strong>Maximum Transmission Unit (MTU)</strong> size of your network card. If your provider requires packages smaller than your system&#39;s standard, intermediate routers must fragment the data, degrading performance.</p>
+          <p>Severe throughput drops, stalled SSH sessions, or TLS handshakes hanging mid-transfer are classic symptoms of a <strong>Maximum Transmission Unit (MTU)</strong> mismatch on Linux. When your NIC transmits frames larger than an upstream PPPoE link, WireGuard tunnel, or cloud VPC fabric can carry—and ICMP &quot;Fragmentation Needed&quot; packets are dropped—TCP connections stall or crawl at kilobytes per second.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Misconfigured MTU causing packet fragmentation</strong></div>
+            <div class="diag-value"><strong><code>ping -M do -s 1472</code> fails with <code>Message too long</code> / <code>Frag needed</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Set MTU to 1500 (or 1492 for PPPoE): <code>ip link set dev eth0 mtu 1500</code></div>
+            <div class="diag-value">Probe lower payloads to find Path MTU (<code>payload + 28</code>)</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Failed network speed auto-negotiation</strong></div>
+            <div class="diag-value"><strong>PPPoE DSL or VLAN-tagged fiber dropping large packets</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Force Gigabit speed: <code>ethtool -s eth0 speed 1000 duplex full autoneg on</code></div>
+            <div class="diag-value">Set interface MTU to <code>1492</code> or <code>1480</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>WireGuard / IPSec / GRE VPN choking on HTTPS traffic</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Lower tunnel MTU (e.g., <code>1420</code> for WireGuard) and clamp MSS</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>NIC stuck at 100 Mbps half-duplex instead of 1 Gbps</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Inspect link negotiation with <code>ethtool eth0</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Standard Ethernet frames carry a 1500-byte L3 MTU (20 bytes IPv4 header + 20 bytes TCP header + 1460 bytes MSS payload). However, encapsulation protocols shrink the available payload space: <strong>PPPoE</strong> consumes 8 bytes (max MTU <code>1492</code>), <strong>WireGuard</strong> over IPv4 consumes 60 bytes (<code>1420</code> recommended), and <strong>VXLAN</strong> in cloud overlays consumes 50 bytes (<code>1450</code>).</p>
+<p>Normally, <strong>Path MTU Discovery (PMTUD)</strong> prevents oversized packets by setting the IP <code>Don&#39;t Fragment</code> (DF) bit; any router with a smaller egress MTU returns an <code>ICMP Type 3 Code 4 (Fragmentation Needed)</code> message so the sender shrinks its TCP segment size. Unfortunately, misconfigured firewalls frequently drop all ICMP traffic—creating a <strong>PMTUD black hole</strong>. Small packets like DNS queries and SSH keystrokes pass normally, while bulk data transfers and TLS certificates exceed the hidden bottleneck and silently time out.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +378,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="diagnose-packet-fragmentation-using-ping-tests">
+        <li class="step-item" id="measure-the-exact-path-mtu-with-ping">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="diagnose-packet-fragmentation-using-ping-tests-heading">Step 1: Diagnose packet fragmentation using ping tests</h4>
-            <p>We are going to find the maximum packet size that your network can transfer without needing to split the data. Run the test by subtracting the 28-byte IP/ICMP header from your target:</p>
+            <h4 id="measure-the-exact-path-mtu-with-ping-heading">Step 1: Measure the exact Path MTU with ping</h4>
+            <p>Identify your active network interface and current MTU:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,21 +402,68 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Test packet size on Linux (example for 1472 bytes of payload)</span>
-ping <span class="tok-prop">-M</span> do <span class="tok-prop">-s</span> <span class="tok-num">1472</span> <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">ip</span> <span class="tok-prop">-br</span> link show
 </code></pre>
     </div>
     
-<p><em>(If the terminal returns <code>Packet needs to be fragmented but DF set</code>, the packet is too large. Reduce the size in increments of 10 until finding the exact payload that does not fragment, e.g., 1420 bytes, then add the 28-byte header: <code>1420 + 28 = 1448 MTU</code>).</em></p>
+<p>Run a binary-search <code>ping</code> test with the <code>Don&#39;t Fragment</code> flag (<code>-M do</code>) against a reliable external host (such as <code>8.8.8.8</code> or your VPN gateway). Remember that IPv4 + ICMP headers add <strong>28 bytes</strong> to the <code>-s</code> payload size (<code>1472 + 28 = 1500</code>):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>ping <span class="tok-prop">-M</span> do <span class="tok-prop">-c</span> <span class="tok-num">3</span> <span class="tok-prop">-s</span> <span class="tok-num">1472</span> <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
+</code></pre>
+    </div>
+    
+<p>If you see <code>ping: local error: message too long, mtu=1450</code> or 100% packet loss, reduce <code>-s</code> until replies succeed cleanly:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>ping <span class="tok-prop">-M</span> do <span class="tok-prop">-c</span> <span class="tok-num">3</span> <span class="tok-prop">-s</span> <span class="tok-num">1422</span> <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
+</code></pre>
+    </div>
+    
+<p>Once you find the highest working payload (for example, <code>1422</code>), add <code>28</code> to get your optimal MTU (<code>1450</code>).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="apply-optimal-mtu-size-to-your-network-interface">
+        <li class="step-item" id="apply-the-mtu-immediately-and-verify-throughput">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="apply-optimal-mtu-size-to-your-network-interface-heading">Step 2: Apply optimal MTU size to your network interface</h4>
-            <p>Once the correct value is detected, configure your operating system&#39;s network interface (replace <code>eth0</code> with your active card):</p>
+            <h4 id="apply-the-mtu-immediately-and-verify-throughput-heading">Step 2: Apply the MTU immediately and verify throughput</h4>
+            <p>Set the discovered MTU on your active interface (replace <code>eth0</code> with your interface name, such as <code>enp3s0</code> or <code>wg0</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -411,17 +483,136 @@ ping <span class="tok-prop">-M</span> do <span class="tok-prop">-s</span> <span 
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Temporarily set MTU on Linux</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">ip</span> link <span class="tok-kw">set</span> dev eth0 mtu <span class="tok-num">1448</span>
-<span class="tok-cmt">
-# Verify updated network parameters</span>
-<span class="tok-kw">ip</span> link show eth0
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ip</span> link <span class="tok-kw">set</span> dev eth0 mtu <span class="tok-num">1450</span>
+<span class="tok-kw">ip</span> link show dev eth0
+</code></pre>
+    </div>
+    
+<p>Also verify physical link speed and duplexing to rule out bad cabling or auto-negotiation fallback:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> ethtool eth0 | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;Speed|Duplex|Link detected&quot;</span>
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="persist-mtu-across-reboots-and-clamp-tcp-mss">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="persist-mtu-across-reboots-and-clamp-tcp-mss-heading">Step 3: Persist MTU across reboots and clamp TCP MSS</h4>
+            <p>Temporary <code>ip link</code> changes reset on reboot. Persist the MTU in your distribution&#39;s network manager:</p>
+<ul>
+<li><p><strong>Netplan (Ubuntu Server)</strong> — edit <code>/etc/netplan/01-netcfg.yaml</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">YAML</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>network:
+  <span class="tok-kw">version</span>: <span class="tok-num">2</span>
+  ethernets:
+    eth0:
+      dhcp4: true
+      mtu: <span class="tok-num">1450</span>
+</code></pre>
+    </div>
+    
+<p>Apply with <code>sudo netplan apply</code>.</p>
+</li>
+<li><p><strong>NetworkManager (<code>nmcli</code>)</strong>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> nmcli connection modify <span class="tok-str">&quot;Wired connection 1&quot;</span> <span class="tok-num">802</span>-<span class="tok-num">3</span>-ethernet.mtu <span class="tok-num">1450</span>
+<span class="tok-kw">sudo</span> nmcli connection up <span class="tok-str">&quot;Wired connection 1&quot;</span>
+</code></pre>
+    </div>
+    
+</li>
+</ul>
+<p>If your Linux host acts as a router or VPN gateway for LAN clients, clamp TCP MSS to the Path MTU using <code>iptables</code> or <code>nftables</code> so downstream devices do not send oversized segments:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">iptables</span> <span class="tok-prop">-t</span> mangle <span class="tok-prop">-A</span> FORWARD <span class="tok-prop">-p</span> tcp <span class="tok-prop">--tcp-flags</span> SYN,RST SYN <span class="tok-prop">-j</span> TCPMSS <span class="tok-prop">--clamp-mss-to-pmtu</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Should I enable Jumbo Frames (MTU 9000) to get faster internet speeds?</strong>
+No. Jumbo Frames only work on isolated local LANs or storage networks (iSCSI/NFS) where every switch, NIC, and router supports MTU 9000. On the public internet, MTU is capped at 1500.</p>
+<p><strong>Why does <code>ping -M do -s 1472</code> work, yet WireGuard traffic still stalls?</strong>
+The outer physical interface may support 1500 bytes, while the virtual <code>wg0</code> tunnel adds 60–80 bytes of UDP/ChaCha20 overhead. Test Path MTU <em>through</em> the tunnel by pinging the remote WireGuard peer IP directly.</p>
+<p><strong>How do I test Path MTU on IPv6?</strong>
+IPv6 headers are 40 bytes plus 8 bytes for ICMPv6 (48 bytes total). Use <code>ping -6 -M do -s 1452 2001:4860:4860::8888</code> to test a 1500-byte IPv6 path.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -436,49 +627,12 @@ ping <span class="tok-prop">-M</span> do <span class="tok-prop">-s</span> <span 
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not arbitrarily increase the MTU size to values higher than 1500 (Jumbo Frames) unless you are certain that all switches and routers in your local network support this feature via hardware. Configuring an oversized MTU will cause network requests to be completely dropped due to buffer mismatches, leaving your machine cut off immediately.</li>
+              <li><strong>Never block all ICMP traffic blindly:</strong> Always allow <code>ICMP Type 3 Code 4</code> (IPv4) and <code>ICMPv6 Type 2</code> (Packet Too Big) in host and edge firewalls so PMTUD functions properly.</li>
+<li><strong>Document encapsulation overhead:</strong> Explicitly set <code>MTU = 1420</code> (or <code>1380</code> over PPPoE) in WireGuard, OpenVPN, and Docker overlay networks.</li>
+<li><strong>Verify cloud VPC defaults:</strong> AWS, GCP, and Hetzner private networks often use <code>1450</code> or <code>1460</code> MTU; match your container bridge MTU to the host interface.</li>
+<li><strong>Test after ISP or router changes:</strong> Re-run <code>ping -M do</code> whenever switching from cable/fiber DHCP to PPPoE or adding VLAN tags.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

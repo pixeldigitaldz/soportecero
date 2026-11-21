@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Encountering the ssh connection refused error on port 22 means your remote Linux server actively rejected the incoming TCP handshake because the OpenSSH daemon is down or unreachable. In this guide, you will learn how to verify if sshd is running, fix firewall blocks in UFW or iptables, and restore secure access immediately.</p>
+          <p>Encountering <code>ssh: connect to host &lt;IP&gt; port 22: Connection refused</code> means your client reached the target host&#39;s network stack, but the server immediately returned a TCP <code>RST</code> (Reset) packet because no process is listening on TCP port 22—or a local firewall is actively rejecting the handshake. Unlike a <code>Connection timed out</code> error (which indicates packets are being silently dropped), <code>Connection refused</code> points directly to daemon state, socket binding, or port mismatch on the destination machine.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>SSH daemon service (sshd) stopped on target server</strong></div>
+            <div class="diag-value"><strong><code>sshd</code> service stopped or crashed</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Start SSH service daemon: <code>sudo systemctl start sshd</code></div>
+            <div class="diag-value">Start and enable the daemon: <code>sudo systemctl enable --now ssh</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Security filter or custom port blocked</strong></div>
+            <div class="diag-value"><strong>SSH bound to a non-standard port</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Test connection on custom port: <code>ssh -p PORT user@host</code></div>
+            <div class="diag-value">Inspect <code>sshd_config</code> and connect using <code>ssh -p &lt;PORT&gt; user@host</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>UFW / firewalld / iptables rejecting port 22</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Allow SSH traffic: <code>sudo ufw allow 22/tcp &amp;&amp; sudo ufw reload</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>ListenAddress</code> bound only to <code>127.0.0.1</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Update <code>ListenAddress 0.0.0.0</code> in <code>/etc/ssh/sshd_config</code> and restart</div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,14 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>During an SSH connection attempt, the client initiates a standard TCP three-way handshake by sending a <code>SYN</code> packet to port 22. When the Linux kernel receives a <code>SYN</code> on a port with no bound <code>LISTEN</code> socket in the TCP state table, it responds immediately with a <code>TCP RST/ACK</code> packet. The OpenSSH client translates that <code>RST</code> into <code>Connection refused</code>.</p>
+<p>Three mechanisms commonly trigger this response:</p>
+<ol>
+<li><strong>Unstarted or failed <code>sshd</code> daemon:</strong> On fresh container images, minimal server installs, or after a syntax error in <code>/etc/ssh/sshd_config</code>, <code>systemd</code> either never started <code>ssh.service</code> (Debian/Ubuntu) / <code>sshd.service</code> (RHEL/Arch) or aborted startup during configuration parsing. On Ubuntu 24.04+, <code>ssh.socket</code> activation may also fail if port overrides conflict with <code>sshd_config</code>.</li>
+<li><strong>Socket binding restrictions:</strong> If <code>/etc/ssh/sshd_config</code> defines a specific <code>Port</code> (e.g., <code>2222</code>) or restricts <code>ListenAddress</code> to loopback (<code>127.0.0.1</code>), port 22 on the public interface has no listener.</li>
+<li><strong>Active firewall rejection:</strong> Rules configured with <code>REJECT</code> (rather than <code>DROP</code>) in <code>iptables</code>, <code>nftables</code>, or <code>firewalld</code> explicitly send back an ICMP port-unreachable or TCP <code>RST</code> packet.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +383,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-the-service-status-on-the-server">
+        <li class="step-item" id="1-check-sshd-service-status-and-configuration-syntax">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-the-service-status-on-the-server-heading">Step 1: Verify the service status on the server</h4>
-            <p>If you have local access or access through your VPS web console, execute:</p>
+            <h4 id="1-check-sshd-service-status-and-configuration-syntax-heading">1. Check sshd Service Status and Configuration Syntax</h4>
+            <p>Inspect whether the OpenSSH daemon is running (use <code>ssh</code> on Ubuntu/Debian or <code>sshd</code> on RHEL/CentOS/Arch):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,11 +407,35 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-kw">ssh</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-kw">ssh</span> || <span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> sshd
 </code></pre>
     </div>
     
-<p>If the status is inactive (dead), start and enable the service so it loads with the system immediately:</p>
+<p>If the service is inactive or failed, validate <code>/etc/ssh/sshd_config</code> before starting it so syntax errors are caught immediately:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> sshd <span class="tok-prop">-t</span>
+</code></pre>
+    </div>
+    
+<p>If <code>sshd -t</code> returns no errors, enable and start the daemon:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -408,11 +462,11 @@
         </li>
         
 
-        <li class="step-item" id="check-the-active-port">
+        <li class="step-item" id="2-verify-listening-sockets-and-active-port">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="check-the-active-port-heading">Step 2: Check the active port</h4>
-            <p>If the service is running, verify if the default port 22 was changed for security reasons:</p>
+            <h4 id="2-verify-listening-sockets-and-active-port-heading">2. Verify Listening Sockets and Active Port</h4>
+            <p>Confirm which IP addresses and ports <code>sshd</code> is actually bound to using <code>ss</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -432,20 +486,120 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">grep</span> <span class="tok-str">&quot;Port&quot;</span> /etc/<span class="tok-kw">ssh</span>/sshd_config
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tlnp</span> | <span class="tok-kw">grep</span> sshd
 </code></pre>
     </div>
     
-<p>If the output shows an alternative port (e.g., Port 2222), connect by specifying it in your local terminal using: <code>ssh user@ip -p 2222</code>.</p>
+<p>Check <code>/etc/ssh/sshd_config</code> and <code>/etc/ssh/sshd_config.d/*.conf</code> for custom <code>Port</code> or <code>ListenAddress</code> directives:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;^(Port|ListenAddress)&quot;</span> /etc/<span class="tok-kw">ssh</span>/sshd_config /etc/<span class="tok-kw">ssh</span>/sshd_config.d/*.conf <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
+    
+<p>If <code>sshd</code> is listening on a custom port such as <code>2222</code>, connect from your local machine using:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">ssh</span> <span class="tok-prop">-p</span> <span class="tok-num">2222</span> user@server-<span class="tok-kw">ip</span>
+</code></pre>
+    </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-firewall-rules-ufw">
+        <li class="step-item" id="3-open-the-port-in-your-host-firewall">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="configure-firewall-rules-ufw-heading">Step 3: Configure Firewall rules (UFW)</h4>
-            <p>Ensure the firewall allows incoming connections on the SSH port:</p>
+            <h4 id="3-open-the-port-in-your-host-firewall-heading">3. Open the Port in Your Host Firewall</h4>
+            <p>Ensure your host firewall permits incoming TCP traffic on the configured SSH port:</p>
+<ul>
+<li><strong>UFW (Ubuntu/Debian):</strong>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> allow <span class="tok-num">22</span>/tcp
+<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> reload
+<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> <span class="tok-prop">status</span> numbered
+</code></pre>
+    </div>
+    
+</li>
+<li><strong>firewalld (RHEL/AlmaLinux/Fedora):</strong>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">firewall-cmd</span> <span class="tok-prop">--permanent</span> <span class="tok-prop">--add-<span class="tok-kw">service</span></span>=<span class="tok-kw">ssh</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">firewall-cmd</span> <span class="tok-prop">--reload</span>
+</code></pre>
+    </div>
+    
+</li>
+</ul>
+<p>From your client workstation, verify TCP reachability before initiating a full SSH session:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -465,14 +619,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> allow <span class="tok-kw">ssh</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">ufw</span> reload
+      <pre class="formatted-pre"><code>nc <span class="tok-prop">-zv</span> server-<span class="tok-kw">ip</span> <span class="tok-num">22</span>
 </code></pre>
     </div>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>What is the difference between <code>Connection refused</code> and <code>Connection timed out</code>?</strong>
+<code>Connection refused</code> means the server is reachable and actively rejected the TCP <code>SYN</code> with a <code>RST</code> packet (service down, wrong port, or firewall <code>REJECT</code>). <code>Connection timed out</code> means packets are being dropped silently by a cloud security group, NAT gateway, or <code>DROP</code> firewall rule.</p>
+<p><strong>Why does <code>systemctl restart ssh</code> still keep port 22 on Ubuntu 24.04 after I changed <code>Port</code> in <code>sshd_config</code>?</strong>
+Ubuntu 24.04 uses <code>ssh.socket</code> systemd socket activation by default, which overrides <code>Port</code> in <code>sshd_config</code>. You must run <code>sudo systemctl edit ssh.socket</code> to change <code>ListenStream</code>, followed by <code>sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart ssh.socket</code>.</p>
+<p><strong>Could <code>fail2ban</code> cause <code>Connection refused</code>?</strong>
+Yes, if your <code>fail2ban</code> action uses <code>iptables</code> with <code>--reject-with icmp-port-unreachable</code> or <code>tcp-reset</code> instead of <code>DROP</code>, banned client IPs will see <code>Connection refused</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -487,51 +647,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Do not use the default port 22 on public servers.</li>
-<li>Disable direct access for the root user by modifying the sshd_config file.</li>
-<li>Force authentication using SSH Keys instead of conventional passwords.</li>
+              <li>Always run <code>sudo sshd -t</code> to validate configuration syntax before restarting the SSH daemon on a remote server.</li>
+<li>Keep an existing SSH session open while testing new <code>sshd_config</code> or firewall rules in a second terminal window.</li>
+<li>Disable root password login (<code>PermitRootLogin prohibit-password</code>) and enforce Ed25519 key-based authentication (<code>PasswordAuthentication no</code>).</li>
+<li>Install and configure <code>fail2ban</code> or move SSH to a non-standard port alongside cloud security group IP allowlisting.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

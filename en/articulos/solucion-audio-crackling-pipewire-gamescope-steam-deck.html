@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Does a 1024 quantum introduce noticeable input lag?",
+      "name": "Will setting default.clock.quantum = 1024 create noticeable audio lag?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "At 48 kHz, a 1024 sample window equals approximately 21 milliseconds of total audio latency—completely unnoticeable during gameplay while eliminating pops."
+        "text": "No. At 48000 Hz, 1024 samples equals 21.3 ms of buffer latency—well below human perception for single-player and action games, while completely eliminating xruns."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I revert custom PipeWire overrides?",
+      "name": "Why does Steam Deck audio crackle specifically after waking from sleep?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Delete the custom files in ~/.config/pipewire/ and reload with systemctl --user restart pipewire."
+        "text": "Suspending the APU pauses PipeWire&#39;s ALSA clock while Wine&#39;s dsound/wasapi ring buffer stays out of sync upon resume. Setting PULSE_LATENCY_MSEC=60 gives winepulse enough headroom to resynchronize pointers cleanly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I disable power saving on the sound card (snd_hda_intel)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if you hear a sharp &quot;pop&quot; right when audio starts or stops after silence. Disable codec power-saving with options snd_hda_intel power_save=0 in /etc/modprobe.d/audio-powersave.conf."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>When gaming on Linux (Steam Deck, Bazzite, Fedora, Arch) through Gamescope or Proton, players often notice metallic clicking, static pops, or sound cutting out (<em>audio crackling</em>). This annoyance is rooted in <strong>xruns</strong> (buffer underruns), where PipeWire fails to deliver rendered audio buffers within the tight deadline demanded by the sound card.</p>
+          <p>Metallic clicking, robotic distortion, and static pops when launching games through Proton or Gamescope on Steam Deck, Bazzite, Fedora, or Arch Linux are almost always caused by <strong>PipeWire xruns</strong> (audio buffer underruns). When the audio graph fails to deliver a filled PCM buffer to the ALSA sink before the hardware ring buffer empties, the sound card repeats or zeroes out samples—producing audible clicks.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Audio buffer quantum is configured too aggressively, inducing buffer underruns (xruns)</strong></div>
+            <div class="diag-value"><strong><code>ERR</code> counter climbing in <code>pw-top</code> during gameplay</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Enforce a stable 1024 quantum buffer size in PipeWire user settings</div>
+            <div class="diag-value">Raise <code>default.clock.quantum</code> to <code>1024</code> or <code>2048</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Sampling rate mismatch between the PipeWire graph (48kHz) and the game process</strong></div>
+            <div class="diag-value"><strong>Crackling only after waking Steam Deck from sleep</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Standardize clock rate and disable aggressive ALSA resampling in pipewire.conf.d</div>
+            <div class="diag-value">Set <code>PULSE_LATENCY_MSEC=60</code> in Steam launch options</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Distortion in specific Proton/Wine titles</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Lock <code>alsa.rate = 48000</code> in PipeWire client config</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Audio glitches during CPU shader compilation spikes</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Verify <code>rtkit-daemon</code> is active for real-time priority</div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +375,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#does-a-1024-quantum-introduce-noticeable-input-lag" class="toc-sublink">
+            <a href="#will-setting-defaultclockquantum-1024-create-noticeable-audio-lag" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Does a 1024 quantum introduce noticeable input lag?</span>
+              <span class="toc-subtext">Will setting default.clock.quantum = 1024 create noticeable audio lag?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#how-do-i-revert-custom-pipewire-overrides" class="toc-sublink">
+            <a href="#why-does-steam-deck-audio-crackle-specifically-after-waking-from-sleep" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">How do I revert custom PipeWire overrides?</span>
+              <span class="toc-subtext">Why does Steam Deck audio crackle specifically after waking from sleep?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#should-i-disable-power-saving-on-the-sound-card-sndhdaintel" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Should I disable power saving on the sound card (snd_hda_intel)?</span>
             </a>
           </li>
         
@@ -395,6 +426,13 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>PipeWire schedules audio nodes in a single processing graph driven by a <strong>quantum</strong> (number of samples per cycle) and a <strong>clock rate</strong> (typically <code>48000</code> Hz). By default, PipeWire dynamically scales the quantum down to <code>128</code> or <code>256</code> samples (~2.6 ms–5.3 ms) when low-latency clients request it.</p>
+<p>Under heavy 3D gaming—especially inside <strong>Gamescope</strong> (micro-compositor) + <strong>Proton/Wine</strong>—two bottlenecks collide:</p>
+<ol>
+<li><strong>CPU Scheduling Starvation:</strong> When a game saturates all CPU threads compiling DXVK/VKD3D shaders, a 256-sample deadline (5.3 ms) is too tight for the Wine audio bridge (<code>winepulse</code> or <code>winealsa</code>) to wake up and write its buffer, causing continuous xruns.</li>
+<li><strong>Sample Rate Mismatches:</strong> Many Windows games output <code>44100</code> Hz audio while PipeWire&#39;s hardware sink runs at <code>48000</code> Hz. If WirePlumber or Wine repeatedly resamples or switches node clocks mid-frame, the ALSA driver resets the stream and emits a sharp pop.</li>
+</ol>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +441,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="detect-audio-buffer-underruns-xruns-live">
+        <li class="step-item" id="1-measure-live-buffer-underruns-with-pw-top">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="detect-audio-buffer-underruns-xruns-live-heading">Step 1: Detect Audio Buffer Underruns (xruns) Live</h4>
-            <p>Run the interactive PipeWire performance profiler while your game is active:</p>
+            <h4 id="1-measure-live-buffer-underruns-with-pw-top-heading">1. Measure Live Buffer Underruns with pw-top</h4>
+            <p>Launch your game, open a terminal (or SSH into your Steam Deck), and monitor PipeWire&#39;s real-time profiler:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -431,16 +469,16 @@
 </code></pre>
     </div>
     
-<p>Observe the <strong>ERR</strong> column. If counter values increment in tandem with audible pops, your system is dropping audio frames due to buffer starvation.</p>
+<p>Watch the <strong><code>ERR</code></strong> column next to your game stream (<code>wine64-preloader</code> or <code>proton</code>) and your hardware sink (<code>alsa_output.*</code>). If <code>ERR</code> increments every time you hear a pop, and <code>QUANT</code> is sitting at <code>128</code>, <code>256</code>, or <code>512</code>, your buffer window is too small for the CPU load.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="configure-a-resilient-audio-quantum-latency-profile">
+        <li class="step-item" id="2-enforce-a-stable-quantum-profile-1024-samples">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="configure-a-resilient-audio-quantum-latency-profile-heading">Step 2: Configure a Resilient Audio Quantum Latency Profile</h4>
-            <p>Create a dedicated configuration drop-in file to enforce stable buffer sizes:</p>
+            <h4 id="2-enforce-a-stable-quantum-profile-1024-samples-heading">2. Enforce a Stable Quantum Profile (1024 Samples)</h4>
+            <p>Create a user-level PipeWire drop-in file so PipeWire never drops below a safe gaming floor:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -461,11 +499,26 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">mkdir</span> <span class="tok-prop">-p</span> ~/.config/pipewire/pipewire.conf.d/
-<span class="tok-kw">nano</span> ~/.config/pipewire/pipewire.conf.d/<span class="tok-num">99</span>-quantum-latency.conf
+<span class="tok-kw">cat</span> &lt;&lt; <span class="tok-cmt">&#39;EOF&#39; &gt; ~/.config/pipewire/pipewire.conf.d/99-gaming-quantum.conf</span>
+context.properties = {
+    default.clock.rate          = <span class="tok-num">48000</span>
+    default.clock.allowed-rates = [ <span class="tok-num">44100</span> <span class="tok-num">48000</span> ]
+    default.clock.quantum       = <span class="tok-num">1024</span>
+    default.clock.min-quantum   = <span class="tok-num">512</span>
+    default.clock.max-quantum   = <span class="tok-num">2048</span>
+}
+EOF
 </code></pre>
     </div>
-    
-<p>Add the following blocks:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="3-stabilize-wineproton-pulseaudio-bridge-latency">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="3-stabilize-wineproton-pulseaudio-bridge-latency-heading">3. Stabilize Wine/Proton PulseAudio Bridge Latency</h4>
+            <p>For games that still crackle after resuming from suspend or during heavy loading screens, add <code>PULSE_LATENCY_MSEC</code> to the game&#39;s <strong>Steam -&gt; Properties -&gt; Launch Options</strong>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -475,7 +528,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -485,23 +538,11 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>context.properties = {
-    <span class="tok-kw">default</span>.clock.rate = <span class="tok-num">48000</span>
-    <span class="tok-kw">default</span>.clock.quantum = <span class="tok-num">1024</span>
-    <span class="tok-kw">default</span>.clock.min-quantum = <span class="tok-num">512</span>
-    <span class="tok-kw">default</span>.clock.max-quantum = <span class="tok-num">2048</span>
-}
+      <pre class="formatted-pre"><code>PULSE_LATENCY_MSEC=<span class="tok-num">60</span> %command%
 </code></pre>
     </div>
-          </div>
-        </li>
-        
-
-        <li class="step-item" id="tune-alsa-and-proton-wine-audio-emulation">
-          <div class="step-number">3</div>
-          <div class="step-body">
-            <h4 id="tune-alsa-and-proton-wine-audio-emulation-heading">Step 3: Tune ALSA and Proton Wine Audio Emulation</h4>
-            <p>Games running under Proton interface through ALSA or PulseAudio bridges. Prevent resampling distortions:</p>
+    
+<p>To fix resampling glitches globally for ALSA-bridged applications, create a client drop-in:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -522,39 +563,23 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">mkdir</span> <span class="tok-prop">-p</span> ~/.config/pipewire/client.conf.d/
-<span class="tok-kw">nano</span> ~/.config/pipewire/client.conf.d/alsa-resample.conf
-</code></pre>
-    </div>
-    
-<p>Paste:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">PLAINTEXT</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code>alsa.properties = {
-    alsa.deny = <span class="tok-kw">false</span>
+<span class="tok-kw">cat</span> &lt;&lt; <span class="tok-cmt">&#39;EOF&#39; &gt; ~/.config/pipewire/client.conf.d/99-alsa-gaming.conf</span>
+alsa.properties = {
     alsa.format = <span class="tok-str">&quot;S16LE&quot;</span>
-    alsa.rate = <span class="tok-num">48000</span>
+    alsa.rate   = <span class="tok-num">48000</span>
 }
+EOF
 </code></pre>
     </div>
-    
-<p>Apply the adjustments by restarting user audio daemons:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="4-restart-audio-daemons-and-verify-real-time-priority">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="4-restart-audio-daemons-and-verify-real-time-priority-heading">4. Restart Audio Daemons and Verify Real-Time Priority</h4>
+            <p>Reload PipeWire, WirePlumber, and verify <code>rtkit</code> is granting real-time scheduling:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -575,57 +600,22 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">systemctl</span> <span class="tok-prop">--user</span> restart pipewire pipewire-pulse wireplumber
+<span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> rtkit-daemon <span class="tok-prop">--no-pager</span>
 </code></pre>
     </div>
+    
+<p>Re-run <code>pw-top</code> in-game and confirm <code>QUANT</code> stays at <code>1024</code> (or <code>512</code>) and <code>ERR</code> remains <code>0</code>.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="does-a-1024-quantum-introduce-noticeable-input-lag">Does a 1024 quantum introduce noticeable input lag?</h3>
-<p>At 48 kHz, a 1024 sample window equals approximately 21 milliseconds of total audio latency—completely unnoticeable during gameplay while eliminating pops.</p>
-<h3 id="how-do-i-revert-custom-pipewire-overrides">How do I revert custom PipeWire overrides?</h3>
-<p>Delete the custom files in <code>~/.config/pipewire/</code> and reload with <code>systemctl --user restart pipewire</code>.</p>
+<h3 id="will-setting-defaultclockquantum-1024-create-noticeable-audio-lag">Will setting <code>default.clock.quantum = 1024</code> create noticeable audio lag?</h3>
+<p>No. At <code>48000</code> Hz, <code>1024</code> samples equals <code>21.3 ms</code> of buffer latency—well below human perception for single-player and action games, while completely eliminating xruns.</p>
+<h3 id="why-does-steam-deck-audio-crackle-specifically-after-waking-from-sleep">Why does Steam Deck audio crackle specifically after waking from sleep?</h3>
+<p>Suspending the APU pauses PipeWire&#39;s ALSA clock while Wine&#39;s <code>dsound</code>/<code>wasapi</code> ring buffer stays out of sync upon resume. Setting <code>PULSE_LATENCY_MSEC=60</code> gives <code>winepulse</code> enough headroom to resynchronize pointers cleanly.</p>
+<h3 id="should-i-disable-power-saving-on-the-sound-card-sndhdaintel">Should I disable power saving on the sound card (<code>snd_hda_intel</code>)?</h3>
+<p>Yes, if you hear a sharp &quot;pop&quot; right when audio starts or stops after silence. Disable codec power-saving with <code>options snd_hda_intel power_save=0</code> in <code>/etc/modprobe.d/audio-powersave.conf</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -640,50 +630,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Avoid forcing ultralow latency buffers (64 or 128) during intensive 3D gaming.</li>
-<li>Ensure <code>rtkit</code> is running to grant PipeWire real-time scheduling priority under load.</li>
+              <li><strong>Avoid forcing <code>64</code> or <code>128</code> quantum globally:</strong> Reserve ultra-low-latency quantums for DAW/music production profiles, not 3D gaming.</li>
+<li><strong>Keep <code>rtkit</code> installed and enabled:</strong> Without <code>rtkit-daemon</code>, PipeWire runs at normal user nice priority and loses CPU time to shader compilers.</li>
+<li><strong>Prefer native 48 kHz HDMI/USB DAC output:</strong> If using an external USB DAC, verify its supported rates via <code>cat /proc/asound/card*/stream0</code> so PipeWire does not thrash clock rates.</li>
+<li><strong>Test changes incrementally:</strong> Keep custom overrides isolated in <code>~/.config/pipewire/pipewire.conf.d/</code> rather than editing <code>/usr/share/pipewire/</code>, which gets overwritten on package updates.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -740,7 +692,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Proton</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -757,7 +709,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

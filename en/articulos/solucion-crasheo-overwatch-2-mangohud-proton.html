@@ -195,22 +195,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -244,7 +228,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 6 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -260,7 +244,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Unexpected <strong>crashes or freezes playing Overwatch 2</strong> on Linux (CachyOS, Arch, Ubuntu, Fedora) or Steam Deck via Proton are primarily triggered by synchronous DXVK shader compilation, incompatible performance overlays like MangoHud, or missing codecs in standard Proton builds.</p>
+          <p>Unexpected crashes to desktop, black-screen freezes during hero selection, or severe frame-time spikes in <strong>Overwatch 2</strong> on Linux (Arch, CachyOS, Fedora, Ubuntu) and SteamOS are rarely hardware failures. Under Proton, the game relies on real-time DirectX-to-Vulkan translation, which can collide with Vulkan overlay layers like MangoHud, corrupt shader state caches, or missing Windows Media Foundation codecs in Valve&#39;s default Proton builds.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -277,25 +261,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>MangoHud overlay incompatibility with DXVK/VKD3D compiler</strong></div>
+            <div class="diag-value"><strong>MangoHud Vulkan layer crashing DXVK swapchain</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Disable <code>MANGOHUD=1</code> or update MangoHud to latest version</div>
+            <div class="diag-value">Disable overlay with <code>MANGOHUD=0 %command%</code> or update MangoHud</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Screen capture conflict or Proton overlay incompatibility</strong></div>
+            <div class="diag-value"><strong>Freeze during Battle.net / intro cinematics</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Use <code>MANGOHUD_CONFIG=no_display %command%</code> launch options</div>
+            <div class="diag-value">Switch compatibility tool to latest <code>GE-Proton</code> via ProtonUp-Qt</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Crash upon loading maps or mid-match stutter</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Purge shader cache: <code>rm -rf ~/.steam/steam/steamapps/shadercache/2357570</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Out-of-memory / descriptor crash on Steam Deck</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Increase UMA frame buffer or verify <code>gamemoderun</code> isn&#39;t double-hooking</div>
           </div></div></div>
       </div>
     </section>
@@ -336,36 +344,50 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-disable-mangohud-overlay" class="toc-sublink">
+            <a href="#1-isolate-or-disable-mangohud-in-steam-launch-options" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Disable MangoHud Overlay</span>
+              <span class="toc-subtext">1. Isolate or Disable MangoHud in Steam Launch Options</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-use-ge-proton-gloriouseggroll" class="toc-sublink">
+            <a href="#2-switch-to-ge-proton-for-media-codecs-and-battlenet-patches" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Use GE-Proton (GloriousEggroll)</span>
+              <span class="toc-subtext">2. Switch to GE-Proton for Media Codecs and Battle.net Patches</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-clear-corrupted-dxvk-shader-cache" class="toc-sublink">
+            <a href="#3-purge-corrupted-shader-caches-and-verify-prefix-integrity" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Clear Corrupted DXVK Shader Cache</span>
+              <span class="toc-subtext">3. Purge Corrupted Shader Caches and Verify Prefix Integrity</span>
             </a>
           </li>
         
         </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -373,12 +395,41 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-disable-mangohud-overlay">Step 1: Disable MangoHud Overlay</h3>
-<p>Performance metric overlays can interfere with anti-cheat hooks and DXVK window initialization.</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Overwatch 2 uses Blizzard&#39;s proprietary engine running on DirectX 11/12. On Linux and Steam Deck, Steam Play translates those API calls to Vulkan via <strong>DXVK</strong> (for DX11) or <strong>VKD3D-Proton</strong> (for DX12). Three distinct technical bottlenecks trigger instability:</p>
 <ol>
-<li>Open Steam -&gt; Library -&gt; Right-click <strong>Overwatch 2</strong> -&gt; <strong>Properties</strong>.</li>
-<li>Under <strong>General</strong>, navigate to <strong>Launch Options</strong> and enter:</li>
+<li><strong>Implicit Vulkan Layer Collisions:</strong> Performance overlays such as MangoHud, Steam&#39;s built-in GameScope HUD, and vkBasalt inject themselves as <code>VK_LAYER_*</code> hooks between the game&#39;s DXVK translation layer and the GPU driver (<code>RADV</code> on Steam Deck/AMD, <code>nvidia_icd</code> on NVIDIA). When Blizzard&#39;s anti-tamper initialization or multi-threaded rendering thread recreates the Vulkan swapchain during alt-tabbing or resolution scaling, older MangoHud versions (<code>&lt;0.7.1</code>) dereference invalidated swapchain handles and segfault the Wine process.</li>
+<li><strong>Synchronous Shader Compilation &amp; Cache Corruption:</strong> Every hero ability and particle effect compiles a SPIR-V shader pipeline. If a previous crash or driver update left behind mismatched <code>dxvk-cache</code> or Mesa <code>fossilize</code> shader binaries under Steam App ID <code>2357570</code>, loading a match triggers either an immediate <code>VK_ERROR_DEVICE_LOST</code> or multi-second thread stalls that Blizzard&#39;s watchdog interprets as a hang.</li>
+<li><strong>Missing Proprietary Codecs:</strong> Standard Proton excludes patented <code>H.264</code>/<code>WMV</code> Media Foundation decoders used in Overwatch 2&#39;s main menu background videos and seasonal event trailers, causing Wine&#39;s <code>mfplat</code> stub to crash the UI thread.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+
+<h3 id="1-isolate-or-disable-mangohud-in-steam-launch-options">1. Isolate or Disable MangoHud in Steam Launch Options</h3>
+<p>Test whether the Vulkan overlay layer is causing the crash by explicitly disabling MangoHud for Overwatch 2:</p>
+<ol class="steps-list">
+
+        <li class="step-item" id="step-1">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="step-1-heading">Step 1</h4>
+            Open <strong>Steam</strong> -&gt; <strong>Library</strong> -&gt; Right-click <strong>Overwatch 2</strong> -&gt; <strong>Properties</strong>.
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="step-2">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="step-2-heading">Step 2</h4>
+            In <strong>General</strong> -&gt; <strong>Launch Options</strong>, set:
+          </div>
+        </li>
+        
 </ol>
 
     <div class="code-container">
@@ -403,16 +454,16 @@
 </code></pre>
     </div>
     
-<h3 id="step-2-use-ge-proton-gloriouseggroll">Step 2: Use GE-Proton (GloriousEggroll)</h3>
-<p>Standard Proton releases may crash during Battle.net media/video playback.</p>
+<p>If you need frame telemetry on desktop Linux, use <code>MANGOHUD_CONFIG=no_display %command%</code> or update MangoHud to <code>0.7.2+</code> and ensure you are not stacking both <code>gamemoderun</code> and Steam Deck&#39;s native Performance Overlay simultaneously.</p>
+<h3 id="2-switch-to-ge-proton-for-media-codecs-and-battlenet-patches">2. Switch to GE-Proton for Media Codecs and Battle.net Patches</h3>
+<p>Install <strong>GE-Proton</strong> (GloriousEggroll), which bundles <code>wine-staging</code> patches and full Media Foundation video decoding:</p>
 <ol>
-<li>Launch <strong>ProtonUp-Qt</strong> (available via Discover store on Steam Deck or package managers).</li>
-<li>Download the latest <strong>GE-Proton</strong> build (e.g., <code>GE-Proton9-10</code>).</li>
-<li>In Steam, go to Overwatch 2 Properties -&gt; <strong>Compatibility</strong> -&gt; Check &quot;Force the use of a specific Steam Play compatibility tool&quot; -&gt; Select <code>GE-Proton</code>.</li>
+<li>Open <strong>ProtonUp-Qt</strong> (install via Discover on Steam Deck or <code>flatpak install flathub net.davidotek.pupgui2</code>).</li>
+<li>Click <strong>Add version</strong>, select <strong>GE-Proton</strong>, and download the latest <code>GE-Proton9-*</code> release.</li>
+<li>In Steam, open <strong>Overwatch 2</strong> -&gt; <strong>Properties</strong> -&gt; <strong>Compatibility</strong>, check <strong>Force the use of a specific Steam Play compatibility tool</strong>, and select your installed <code>GE-Proton</code> version.</li>
 </ol>
-<h3 id="step-3-clear-corrupted-dxvk-shader-cache">Step 3: Clear Corrupted DXVK Shader Cache</h3>
-<p>If crashes occur immediately upon joining a match:</p>
-<p>Purge the cached shaders directory for Overwatch 2:</p>
+<h3 id="3-purge-corrupted-shader-caches-and-verify-prefix-integrity">3. Purge Corrupted Shader Caches and Verify Prefix Integrity</h3>
+<p>Remove stale <code>fossilize</code> and DXVK shader caches for Overwatch 2 (<code>App ID 2357570</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -436,7 +487,62 @@
 </code></pre>
     </div>
     
-<p><em>(App ID <code>2357570</code> corresponds to Overwatch 2 on Steam).</em></p>
+<p>If you are on Steam Deck or using an SD card, also check for a secondary cache folder on removable media:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">ls</span> <span class="tok-prop">-la</span> /run/media/mmcblk0p1/steamapps/shadercache/<span class="tok-num">2357570</span> <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
+    
+<p>Verify your Vulkan driver is healthy before relaunching:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>vulkaninfo <span class="tok-prop">--summary</span> | <span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;deviceName|driverVersion&quot;</span>
+</code></pre>
+    </div>
+    
+<p>Allow the game to sit at the main menu for 2–3 minutes on first launch after clearing the cache so background shader pre-caching completes cleanly.</p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Will using GE-Proton or disabling MangoHud trigger a Blizzard anti-cheat ban?</strong>
+No. Valve&#39;s Proton and GE-Proton are widely used by Steam Deck players on Overwatch 2&#39;s official Steam release. Avoid injecting unauthorized memory hooks or custom DLL overrides beyond standard Proton layers.</p>
+<p><strong>Why does Overwatch 2 stutter heavily for the first 10 minutes after a GPU driver update?</strong>
+Updating Mesa or NVIDIA drivers invalidates the compiled GPU shader cache. Without Steam&#39;s pre-compiled <code>fossilize</code> cache, DXVK must compile shaders on the fly during gameplay until the local cache rebuilds.</p>
+<p><strong>Should I run Overwatch 2 in DX11 or DX12 mode on Linux?</strong>
+Stick with the default <strong>DirectX 11 (DXVK)</strong> path in-game. DXVK is significantly more mature and has lower overhead on AMD RADV and NVIDIA Linux drivers than Overwatch 2&#39;s experimental DX12 mode.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -451,49 +557,11 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li>Avoid stacking multiple Vulkan overlays (such as MangoHud + vkBasalt + Steam Overlay FPS counter) on the same game launch command.</li>
+<li>Wait for Steam&#39;s &quot;Processing Vulkan Shaders&quot; dialog to finish before clicking Play after major Overwatch 2 seasonal patches.</li>
+<li>Keep your Mesa (<code>vulkan-radeon</code>) or NVIDIA driver packages updated alongside <code>GE-Proton</code> to receive upstream <code>VK_EXT_graphics_pipeline_library</code> optimizations.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -567,7 +635,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Gaming</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>
@@ -584,7 +652,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">NVIDIA</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

@@ -194,22 +194,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -243,7 +227,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -259,8 +243,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The <strong><code>502 Bad Gateway</code></strong> error on Nginx web servers using PHP-FPM occurs when Nginx acts as a reverse proxy but fails to establish a socket connection with the PHP backend process. The error log at <code>/var/log/nginx/error.log</code> usually states:
-<code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code> or <code>Connection refused</code>.</p>
+          <p>An HTTP <strong><code>502 Bad Gateway</code></strong> error on an Nginx + PHP-FPM stack occurs when Nginx successfully accepts the client&#39;s HTTP request and forwards it via FastCGI, but the PHP-FPM upstream either fails to answer, drops the socket connection, or denies access to its Unix socket file.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,27 +258,51 @@
         <div class="diagnostic-cards"><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>php-fpm daemon service stopped or not started</strong></div>
+            <div class="diag-value"><strong><code>connect() to unix:/run/php/php8.2-fpm.sock failed (2: No such file or directory)</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Start PHP daemon: <code>sudo systemctl start php-fpm</code> (or <code>php8.2-fpm</code>)</div>
+            <div class="diag-value">Start <code>php8.2-fpm</code> or update <code>fastcgi_pass</code> to the installed PHP version</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-cause">CAUSA</span>
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
             </div>
-            <div class="diag-value"><strong>Insufficient permissions on UNIX socket /var/run/php/php-fpm.sock</strong></div>
+            <div class="diag-value"><strong><code>failed (13: Permission denied)</code> on <code>.sock</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Change socket owner to <code>www-data:www-data</code> in <code>/etc/php/fpm/pool.d/www.conf</code></div>
+            <div class="diag-value">Match <code>listen.owner</code> / <code>listen.group</code> in <code>www.conf</code> to Nginx&#39;s user (<code>www-data</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong><code>recv() failed (104: Connection reset by peer)</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">PHP-FPM worker crashed/OOM&#39;d or <code>pm.max_children</code> is exhausted</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-symptom">SYMPTOM</span>
+            </div>
+            <div class="diag-value"><strong><code>upstream sent too big header</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Increase <code>fastcgi_buffers</code> and <code>fastcgi_buffer_size</code> in Nginx</div>
           </div></div></div>
       </div>
     </section>
@@ -336,36 +343,24 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#step-1-check-php-fpm-daemon-status" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Check PHP-FPM Daemon Status</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-2-verify-exact-socket-sock-path" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Verify Exact Socket (.sock) Path</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#step-3-fix-php-fpm-socket-permissions" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Fix PHP-FPM Socket Permissions</span>
-            </a>
-          </li>
-        
-        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -373,9 +368,27 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes">🚀 Step-by-Step Fixes</h2>
-<h3 id="step-1-check-php-fpm-daemon-status">Step 1: Check PHP-FPM Daemon Status</h3>
-<p>Verify that PHP-FPM is active and running:</p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>In a LEMP stack, Nginx does not execute PHP code itself; it proxies <code>.php</code> requests over the FastCGI binary protocol to a separate <code>php-fpm</code> master process, which manages a pool of worker processes. Communication happens either over a TCP loopback socket (<code>127.0.0.1:9000</code>) or, more commonly on Linux, a filesystem Unix domain socket (<code>/run/php/php8.2-fpm.sock</code>).</p>
+<p>Three specific breakdowns produce a 502:</p>
+<ol>
+<li><strong>Version/path mismatch:</strong> After an OS or PHP upgrade (e.g., PHP 8.1 → 8.3), <code>php8.3-fpm</code> creates <code>/run/php/php8.3-fpm.sock</code>, while the Nginx server block still points <code>fastcgi_pass</code> to the obsolete <code>php8.2-fpm.sock</code> path (<code>ENOENT</code>).</li>
+<li><strong>Socket ownership mismatch:</strong> On Ubuntu/Debian, Nginx workers run as <code>www-data</code>, whereas on RHEL/AlmaLinux Nginx runs as <code>nginx</code> while PHP-FPM pools may default to <code>apache</code> or <code>root:root</code> with <code>0660</code> permissions—blocking Nginx from writing to the socket (<code>EACCES</code>).</li>
+<li><strong>Worker crash or OOM:</strong> A fatal segmentation fault or <code>pm.max_children</code> exhaustion kills the PHP worker mid-response, closing the socket before FastCGI headers are returned.</li>
+</ol>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="read-the-exact-nginx-error-log-and-php-fpm-status">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="read-the-exact-nginx-error-log-and-php-fpm-status-heading">Step 1: Read the exact Nginx error log and PHP-FPM status</h4>
+            <p>Never guess a 502—read the last 20 lines of <code>/var/log/nginx/error.log</code> and check the PHP-FPM systemd unit:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -395,11 +408,12 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> php8.<span class="tok-num">2</span>-fpm
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> tail <span class="tok-prop">-n</span> <span class="tok-num">20</span> /var/log/nginx/error.log
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-cmt">&#39;php*-fpm&#39; --no-pager</span>
 </code></pre>
     </div>
     
-<p>If status reports <code>inactive</code> or <code>failed</code>, enable and start it:</p>
+<p>If the service is inactive or failed, start and enable it:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -422,9 +436,15 @@
       <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> enable <span class="tok-prop">--now</span> php8.<span class="tok-num">2</span>-fpm
 </code></pre>
     </div>
-    
-<h3 id="step-2-verify-exact-socket-sock-path">Step 2: Verify Exact Socket (<code>.sock</code>) Path</h3>
-<p>Check the active socket location created by PHP:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="match-the-exact-sock-path-in-nginx">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="match-the-exact-sock-path-in-nginx-heading">Step 2: Match the exact .sock path in Nginx</h4>
+            <p>List the actual socket files created in <code>/run/php/</code> (or <code>/var/run/php-fpm/</code> on RHEL derivatives):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -448,8 +468,7 @@
 </code></pre>
     </div>
     
-<p>Expected output: <code>php8.2-fpm.sock</code> or <code>php8.3-fpm.sock</code>.</p>
-<p>Open your Nginx site configuration file at <code>/etc/nginx/sites-available/yourdomain.conf</code>:</p>
+<p>Open your Nginx virtual host file (e.g., <code>/etc/nginx/sites-available/yourdomain.conf</code>) and ensure <code>fastcgi_pass</code> matches the exact filename shown by <code>ls</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -471,15 +490,21 @@
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">location</span> ~ \.php$ {
     <span class="tok-kw">include</span> snippets/fastcgi-php.conf;
-   <span class="tok-cmt"> # MUST match your active .sock file path:</span>
     <span class="tok-kw">fastcgi_pass</span> unix:/run/php/php8.<span class="tok-num">2</span>-fpm.sock;
+    fastcgi_buffers <span class="tok-num">16</span> 16k;
+    fastcgi_buffer_size 32k;
 }
 </code></pre>
     </div>
-    
-<h3 id="step-3-fix-php-fpm-socket-permissions">Step 3: Fix PHP-FPM Socket Permissions</h3>
-<p>If the <code>.sock</code> file exists but Nginx returns <code>Permission denied</code> in its logs:</p>
-<p>Edit your PHP-FPM pool configuration:</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="align-socket-ownership-and-permissions-in-wwwconf">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="align-socket-ownership-and-permissions-in-wwwconf-heading">Step 3: Align socket ownership and permissions in www.conf</h4>
+            <p>Check which user Nginx workers run as:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -499,11 +524,11 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">nano</span> /etc/php/<span class="tok-num">8.2</span>/fpm/pool.d/www.conf
+      <pre class="formatted-pre"><code>ps aux | <span class="tok-kw">grep</span> <span class="tok-str">&quot;nginx: worker&quot;</span>
 </code></pre>
     </div>
     
-<p>Ensure the socket owner matches Nginx (<code>www-data</code>):</p>
+<p>Edit <code>/etc/php/8.2/fpm/pool.d/www.conf</code> (adjusting for your PHP version) and confirm <code>listen.owner</code>, <code>listen.group</code>, and <code>listen.mode</code> match that user (<code>www-data</code> on Debian/Ubuntu, <code>nginx</code> on RHEL):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -523,13 +548,14 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>listen.owner = www-data
+      <pre class="formatted-pre"><code>listen = /run/php/php8.<span class="tok-num">2</span>-fpm.sock
+listen.owner = www-data
 listen.group = www-data
 listen.mode = <span class="tok-num">0660</span>
 </code></pre>
     </div>
     
-<p>Restart services:</p>
+<p>Also verify PHP-FPM config syntax, restart both services, and test a PHP endpoint:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -549,11 +575,23 @@ listen.mode = <span class="tok-num">0660</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart php8.<span class="tok-num">2</span>-fpm
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart nginx
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> php-fpm8.<span class="tok-num">2</span> <span class="tok-prop">-t</span>
+<span class="tok-kw">sudo</span> nginx <span class="tok-prop">-t</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart php8.<span class="tok-num">2</span>-fpm nginx
+<span class="tok-kw">curl</span> <span class="tok-prop">-I</span> https://yourdomain.com/index.php
 </code></pre>
     </div>
-    
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Should I use a Unix socket (<code>/run/php/php8.2-fpm.sock</code>) or TCP (<code>127.0.0.1:9000</code>)?</strong>
+Unix sockets avoid TCP/IP stack overhead and are faster when Nginx and PHP-FPM share the same host. Use TCP <code>127.0.0.1:9000</code> (or container service name <code>php:9000</code>) when PHP-FPM runs in a separate Docker container or remote node.</p>
+<p><strong>Why do I get 502 only on heavy WordPress or Laravel admin pages?</strong>
+Your PHP-FPM worker is likely hitting <code>memory_limit</code> or <code>max_execution_time</code>, or <code>fastcgi_buffer_size</code> is too small for large response headers (like huge cookies). Check <code>/var/log/php8.2-fpm.log</code> for <code>SIGSEGV</code> or <code>server reached pm.max_children</code>.</p>
+<p><strong>Why did <code>/run/php/</code> disappear after a reboot?</strong>
+<code>/run</code> is a <code>tmpfs</code> mounted in RAM. If <code>php8.2-fpm</code> is not enabled via <code>systemctl enable php8.2-fpm</code>, it will not boot and recreate <code>/run/php/</code> after a restart.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -568,49 +606,12 @@ listen.mode = <span class="tok-num">0660</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li><strong>Tune <code>pm.max_children</code> to available RAM:</strong> Divide free RAM by average PHP worker footprint (typically 40–80 MB) so traffic spikes do not trigger OOM kills.</li>
+<li><strong>Enable <code>php-fpm</code> slowlog:</strong> Set <code>slowlog = /var/log/php-fpm-slow.log</code> and <code>request_slowlog_timeout = 5s</code> to catch hung scripts before workers saturate.</li>
+<li><strong>Use a symlink or explicit version pinning:</strong> Update Nginx <code>fastcgi_pass</code> paths immediately as part of any <code>apt</code> PHP upgrade checklist.</li>
+<li><strong>Monitor <code>error.log</code>:</strong> Alert on <code>connect() to unix:</code> and <code>upstream prematurely closed connection</code> lines.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -684,7 +685,7 @@ listen.mode = <span class="tok-num">0660</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Certbot</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -701,7 +702,7 @@ listen.mode = <span class="tok-num">0660</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

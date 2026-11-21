@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <strong><code>npm ERR! code EACCES permission denied</code></strong> (or <code>EACCES: permission denied, access &#39;/usr/local/lib/node_modules&#39;</code>) occurs when trying to install global packages via <code>npm install -g &lt;package&gt;</code>. It happens because system Node directories are owned by <code>root</code>, preventing regular users from writing to them.</p>
+          <p>The error <code>npm ERR! code EACCES</code> (<code>EACCES: permission denied, mkdir &#39;/usr/local/lib/node_modules/...&#39;</code>) occurs when <code>npm install -g</code> attempts to write global packages or binaries into root-owned system directories while running under an unprivileged user account.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Running global npm install without write permissions to /usr/local/lib/node_modules</strong></div>
+            <div class="diag-value"><strong><code>EACCES</code> on <code>/usr/local/lib/node_modules</code></strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Change default global npm directory to user home directory</div>
+            <div class="diag-value">Point npm&#39;s <code>prefix</code> to a user-owned folder (<code>~/.npm-global</code>)</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Project directory ownership belonging to root user</strong></div>
+            <div class="diag-value"><strong>Using system-packaged Node.js (<code>apt install nodejs</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Run <code>sudo chown -R $USER:$USER .</code> in project root directory</div>
+            <div class="diag-value">Switch to <strong>nvm</strong> or <strong>fnm</strong> so Node lives inside <code>$HOME</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>EACCES</code> inside a local project&#39;s <code>node_modules</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Reclaim ownership with <code>sudo chown -R $USER:$USER .</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong><code>EACCES</code> on <code>~/.npm</code> cache directory</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Fix cache ownership: <code>sudo chown -R $(id -u):$(id -g) ~/.npm</code></div>
           </div></div></div>
       </div>
     </section>
@@ -334,28 +342,24 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-fixes-without-sudo" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Fixes (Without sudo)</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
           </a>
-        <ul class="toc-sublist">
-
-          <li class="toc-subitem">
-            <a href="#method-1-reconfigure-npm-default-global-directory" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Method 1: Reconfigure NPM Default Global Directory</span>
-            </a>
-          </li>
-        
-
-          <li class="toc-subitem">
-            <a href="#method-2-use-node-version-manager-nvm" class="toc-sublink">
-              <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Method 2: Use Node Version Manager (NVM)</span>
-            </a>
-          </li>
-        
-        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
         </li>
       
         </ul>
@@ -363,11 +367,56 @@
     </nav>
     
     
-<h2 id="step-by-step-fixes-without-sudo">🚀 Step-by-Step Fixes (Without sudo)</h2>
-<h3 id="method-1-reconfigure-npm-default-global-directory">Method 1: Reconfigure NPM Default Global Directory</h3>
-<p>Running <code>sudo npm</code> creates security vulnerabilities and corrupts folder permissions for non-root users.</p>
-<ol>
-<li><p><strong>Create a global package folder in your HOME directory:</strong></p>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>When Node.js is installed via a system package manager (<code>apt</code>, <code>dnf</code>, or the official tarball extracted into <code>/usr/local</code>), npm&#39;s default global <code>prefix</code> resolves to <code>/usr/local</code>. Consequently, <code>npm install -g &lt;pkg&gt;</code> tries to create subdirectories under <code>/usr/local/lib/node_modules</code> and symlinks in <code>/usr/local/bin</code>, both of which are owned by <code>root:root</code> with <code>0755</code> permissions.</p>
+<p>Running <code>sudo npm install -g</code> appears to bypass the error, but it introduces two serious side effects: first, arbitrary <code>postinstall</code> lifecycle scripts inside third-party npm packages execute with full root privileges; second, npm writes root-owned cache files into <code>~/.npm</code> (preserving <code>$HOME</code> under <code>sudo</code>), which subsequently triggers <code>EACCES</code> errors even on local <code>npm install</code> commands.</p>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="check-your-current-npm-prefix-and-cache-ownership">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="check-your-current-npm-prefix-and-cache-ownership-heading">Step 1: Check your current npm prefix and cache ownership</h4>
+            <p>Verify where npm is trying to install global packages and whether your local cache has root-owned files:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> config get prefix
+<span class="tok-kw">ls</span> <span class="tok-prop">-ld</span> /usr/local/lib/node_modules ~/.<span class="tok-kw">npm</span> <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
+    
+<p>If <code>prefix</code> is <code>/usr/local</code> or <code>/usr</code>, do not <code>chmod 777</code> system folders—move the prefix to your home directory or use a Node version manager instead.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="reconfigure-npm39s-global-prefix-to-home-quick-fix">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="reconfigure-npm39s-global-prefix-to-home-quick-fix-heading">Step 2: Reconfigure npm&#39;s global prefix to $HOME (Quick Fix)</h4>
+            <p>Create a dedicated user-writable directory and configure npm to use it:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -388,11 +437,11 @@
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-kw">mkdir</span> <span class="tok-prop">-p</span> ~/.<span class="tok-kw">npm</span>-global
+<span class="tok-kw">npm</span> config <span class="tok-kw">set</span> prefix <span class="tok-cmt">&#39;~/.npm-global&#39;</span>
 </code></pre>
     </div>
     
-</li>
-<li><p><strong>Configure npm to use the new directory:</strong></p>
+<p>Add <code>~/.npm-global/bin</code> to your shell <code>PATH</code>. For Bash (<code>~/.bashrc</code>) or Zsh (<code>~/.zshrc</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -412,38 +461,12 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> config <span class="tok-kw">set</span> prefix <span class="tok-cmt">&#39;~/.npm-global&#39;</span>
-</code></pre>
-    </div>
-    
-</li>
-<li><p><strong>Append the new binary path to environment PATH:</strong>
-For Bash (<code>~/.bashrc</code>):</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-cmt">&#39;export PATH=~/.npm-global/bin:$PATH&#39; &gt;&gt; ~/.bashrc</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-cmt">&#39;export PATH=&quot;$HOME/.npm-global/bin:$PATH&quot;&#39; &gt;&gt; ~/.bashrc</span>
 <span class="tok-kw">source</span> ~/.bashrc
 </code></pre>
     </div>
     
-<p>For Zsh (<code>~/.zshrc</code>):</p>
+<p>If you previously ran <code>sudo npm</code>, repair ownership of your npm cache as well:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -463,13 +486,11 @@ For Bash (<code>~/.bashrc</code>):</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">echo</span> <span class="tok-cmt">&#39;export PATH=~/.npm-global/bin:$PATH&#39; &gt;&gt; ~/.zshrc</span>
-<span class="tok-kw">source</span> ~/.zshrc
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">chown</span> <span class="tok-prop">-R</span> <span class="tok-str">&quot;$(id -u):$(id -g)&quot;</span> <span class="tok-str">&quot;$HOME/.npm&quot;</span>
 </code></pre>
     </div>
     
-</li>
-<li><p><strong>Verify global installation:</strong></p>
+<p>Verify global installation works without <code>sudo</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -489,14 +510,21 @@ For Bash (<code>~/.bashrc</code>):</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> install <span class="tok-prop">-g</span> typescript ts-<span class="tok-kw">node</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">npm</span> install <span class="tok-prop">-g</span> typescript
+<span class="tok-kw">which</span> tsc
 </code></pre>
     </div>
     
-</li>
-</ol>
-<h3 id="method-2-use-node-version-manager-nvm">Method 2: Use Node Version Manager (NVM)</h3>
-<p>NVM is the industry standard for managing Node.js environments. It installs Node versions inside the user&#39;s home directory, completely isolating permissions.</p>
+<p><code>which tsc</code> should return <code>/home/&lt;user&gt;/.npm-global/bin/tsc</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="switch-to-nvm-for-isolated-node-environments-recommended">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="switch-to-nvm-for-isolated-node-environments-recommended-heading">Step 3: Switch to nvm for isolated Node environments (Recommended)</h4>
+            <p>For long-term development, <strong>nvm</strong> (Node Version Manager) installs Node.js, npm, and all global packages entirely inside <code>~/.nvm</code>, eliminating root permission conflicts across Node versions:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -516,17 +544,48 @@ For Bash (<code>~/.bashrc</code>):</p>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Install NVM</span>
-<span class="tok-kw">curl</span> <span class="tok-prop">-o-</span> https://raw.githubusercontent.com/nvm-sh/nvm/v0.<span class="tok-num">39.7</span>/install.sh | bash
-<span class="tok-cmt">
-# Reload terminal</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">curl</span> <span class="tok-prop">-o-</span> https://raw.githubusercontent.com/nvm-sh/nvm/v0.<span class="tok-num">40.1</span>/install.sh | bash
 <span class="tok-kw">source</span> ~/.bashrc
-<span class="tok-cmt">
-# Install Node LTS</span>
 nvm install <span class="tok-prop">--lts</span>
+nvm use <span class="tok-prop">--lts</span>
 </code></pre>
     </div>
     
+<p>Confirm that both <code>node</code> and <code>npm</code> now resolve inside <code>$HOME/.nvm</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">which</span> <span class="tok-kw">node</span>
+<span class="tok-kw">npm</span> config get prefix
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why did <code>npm install</code> fail with <code>EACCES</code> inside my own project folder?</strong>
+If you ran <code>sudo npm install</code> earlier or cloned/extracted files as root, <code>node_modules</code> or <code>package-lock.json</code> is owned by <code>root</code>. Run <code>sudo chown -R &quot;$(id -u):$(id -g)&quot; .</code> inside your project root to restore ownership.</p>
+<p><strong>Is <code>chmod -R 777 /usr/local/lib/node_modules</code> a safe fix?</strong>
+No. Making system directories world-writable allows any local process or unprivileged service user to tamper with global binaries executed by other users or root.</p>
+<p><strong>What if I still get <code>EACCES</code> in CI/CD or Docker containers?</strong>
+In Docker images where the container runs as a non-root user (<code>USER node</code>), ensure <code>ENV NPM_CONFIG_PREFIX=/home/node/.npm-global</code> and <code>PATH</code> are set before running <code>npm install -g</code>, or run <code>chown -R node:node /app</code> after <code>COPY</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -541,49 +600,12 @@ nvm install <span class="tok-prop">--lts</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li><strong>Never run <code>sudo npm install</code>:</strong> Use a user-local prefix (<code>~/.npm-global</code>) or a version manager like <code>nvm</code>, <code>fnm</code>, or <code>volta</code>.</li>
+<li><strong>Use <code>npx</code> for one-off CLI tools:</strong> Running <code>npx create-vite</code> or <code>npx eslint</code> avoids polluting global <code>node_modules</code> altogether.</li>
+<li><strong>Audit <code>.npmrc</code> settings:</strong> Keep <code>prefix=${HOME}/.npm-global</code> in <code>~/.npmrc</code> if you rely on distro-packaged Node.js.</li>
+<li><strong>Set <code>USER</code> cleanly in Dockerfiles:</strong> Match file ownership with <code>COPY --chown=node:node</code> in containerized Node.js builds.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -640,7 +662,7 @@ nvm install <span class="tok-prop">--lts</span>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Python</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>

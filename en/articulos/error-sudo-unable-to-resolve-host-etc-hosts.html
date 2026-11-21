@@ -135,18 +135,26 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does sudo attempt hostname lookups on every execution?",
+      "name": "Why do Ubuntu and Debian use 127.0.1.1 instead of 127.0.0.1?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "sudo consults NSS to check whether the current user is restricted to running commands on specific remote hosts listed in the sudoers ruleset."
+        "text": "127.0.0.1 is reserved for localhost. Debian-based distributions map the machine&#39;s hostname to 127.0.1.1 (still within the 127.0.0.0/8 loopback block) so servers without a permanent static IP—or laptops on DHCP—can always resolve their own hostname locally without breaking services that check localhost separately."
       }
     },
     {
       "@type": "Question",
-      "name": "Why do Ubuntu and Debian utilize 127.0.1.1 instead of 127.0.0.1?",
+      "name": "Does this error mean my DNS server is broken?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "127.0.0.1 is standard localhost. Debian distributions map the host domain/FQDN to 127.0.1.1 so systems with dynamic DHCP IPs can still resolve their own hostnames locally."
+        "text": "No. Your internet DNS resolution for external domains (like apt or curl) is usually fine. The error strictly means your local hostname is missing from /etc/hosts and is not registered in your upstream DNS server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I disable hostname lookups in sudo instead?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In modern sudo versions, you can add Defaults !fqdn in visudo, though this is not recommended—fixing /etc/hosts takes 10 seconds and also prevents similar NSS delays in Postfix, Apache, RabbitMQ, and Java applications."
       }
     }
   ]
@@ -218,22 +226,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -267,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 3 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -283,7 +275,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>Whenever running commands with <code>sudo</code>, the terminal stutters and prints <code>sudo: unable to resolve host &lt;server-name&gt;: Name or service not known</code>. While the requested command often completes, this DNS resolution timeout adds annoying delays to CLI interactions, breaks CI/CD automated runners, and can disrupt daemons dependent on local hostname validation.</p>
+          <p>Whenever you run a command with <code>sudo</code> on Ubuntu or Debian, the terminal pauses for several seconds and prints <code>sudo: unable to resolve host &lt;hostname&gt;: Name or service not known</code> (or <code>Temporary failure in name resolution</code>). Although the underlying command usually still executes, the DNS timeout slows down interactive shells and can break automated scripts or daemons expecting clean <code>stderr</code>.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,25 +292,55 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>System hostname in /etc/hostname is missing from local loopback mapping in /etc/hosts</strong></div>
+            <div class="diag-value">Hostname in <code>/etc/hostname</code> missing from <code>/etc/hosts</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>cat /etc/hostname &amp;&amp; grep 127.0.1.1 /etc/hosts</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Add 127.0.1.1 mapped to the exact system hostname in /etc/hosts</div>
+            <div class="diag-value">Map <code>127.0.1.1 &lt;hostname&gt;</code> in <code>/etc/hosts</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>VPS or cloud instance hostname was changed without updating local hosts resolution</strong></div>
+            <div class="diag-value">Server renamed via <code>hostnamectl</code> without updating <code>/etc/hosts</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>hostnamectl --static</code> vs <code>/etc/hosts</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Sync hostnamectl configuration with /etc/hosts</div>
+            <div class="diag-value">Sync <code>/etc/hosts</code> with exact static hostname</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><code>cloud-init</code> overwriting <code>/etc/hosts</code> on VPS reboot</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>grep manage_etc_hosts /etc/cloud/cloud.cfg</code></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Enable <code>preserve_hostname</code> or update cloud-init template</div>
           </div></div></div>
       </div>
     </section>
@@ -359,31 +381,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#frequently-asked-questions" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">04</span>
             <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#why-does-sudo-attempt-hostname-lookups-on-every-execution" class="toc-sublink">
+            <a href="#why-do-ubuntu-and-debian-use-127011-instead-of-127001" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why does sudo attempt hostname lookups on every execution?</span>
+              <span class="toc-subtext">Why do Ubuntu and Debian use 127.0.1.1 instead of 127.0.0.1?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#why-do-ubuntu-and-debian-utilize-127011-instead-of-127001" class="toc-sublink">
+            <a href="#does-this-error-mean-my-dns-server-is-broken" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Why do Ubuntu and Debian utilize 127.0.1.1 instead of 127.0.0.1?</span>
+              <span class="toc-subtext">Does this error mean my DNS server is broken?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#can-i-disable-hostname-lookups-in-sudo-instead" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Can I disable hostname lookups in sudo instead?</span>
             </a>
           </li>
         
@@ -395,6 +432,33 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Unlike many commands that never query the machine&#39;s own name, <code>sudo</code> supports host-specific rules inside <code>/etc/sudoers</code> (for example, <code>alice web01=(ALL) ALL</code>, allowing <code>alice</code> to run commands only on <code>web01</code>). To evaluate those rules on every invocation, <code>sudo</code> calls <code>gethostname()</code> and then resolves that hostname via <strong>NSS (Name Service Switch)</strong> (<code>getaddrinfo()</code>, governed by <code>/etc/nsswitch.conf</code>).</p>
+<p>By default, <code>/etc/nsswitch.conf</code> specifies:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">PLAINTEXT</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>hosts: files dns
+</code></pre>
+    </div>
+    
+<p>If your current hostname (stored in <code>/etc/hostname</code> and loaded into the kernel at boot) is missing from <code>/etc/hosts</code> (<code>files</code>), <code>sudo</code> falls back to external <strong>DNS</strong> queries. Because local server hostnames like <code>vps-prod-01</code> rarely exist in public DNS, <code>systemd-resolved</code> or your upstream resolver waits through UDP query retries before timing out and returning <code>Name or service not known</code>.</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -403,11 +467,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-current-system-hostname">
+        <li class="step-item" id="check-your-exact-kernel-hostname">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-current-system-hostname-heading">Step 1: Verify Current System Hostname</h4>
-            <p>Check the exact static hostname assigned to your running Linux kernel:</p>
+            <h4 id="check-your-exact-kernel-hostname-heading">Step 1: Check Your Exact Kernel Hostname</h4>
+            <p>Display the current static hostname and compare it with <code>/etc/hosts</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -427,22 +491,22 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>hostname<span class="tok-cmt">
-# Or via systemd</span>
-hostnamectl <span class="tok-prop">--static</span>
+      <pre class="formatted-pre"><code>hostname
+<span class="tok-kw">cat</span> /etc/hostname
+<span class="tok-kw">cat</span> /etc/hosts
 </code></pre>
     </div>
     
-<p>Suppose the terminal outputs <code>vps-prod-01</code>.</p>
+<p>Suppose <code>hostname</code> outputs <code>vps-prod-01</code>, while <code>/etc/hosts</code> still lists an old default name like <code>ubuntu-2204</code> or lacks a <code>127.0.1.1</code> line entirely.</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="update-etchosts-local-ip-mapping">
+        <li class="step-item" id="map-the-hostname-in-etchosts">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="update-etchosts-local-ip-mapping-heading">Step 2: Update /etc/hosts Local IP Mapping</h4>
-            <p>Open your system hosts lookup table with root privileges:</p>
+            <h4 id="map-the-hostname-in-etchosts-heading">Step 2: Map the Hostname in /etc/hosts</h4>
+            <p>Open <code>/etc/hosts</code> with root privileges (note that <code>sudo</code> will print the warning one last time while opening the editor):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -466,7 +530,7 @@ hostnamectl <span class="tok-prop">--static</span>
 </code></pre>
     </div>
     
-<p>Ensure an entry links loopback IP <code>127.0.1.1</code> to your hostname:</p>
+<p>Add or update the <code>127.0.1.1</code> entry so it matches your exact hostname (and optionally your FQDN first):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -487,20 +551,20 @@ hostnamectl <span class="tok-prop">--static</span>
         </button>
       </div>
       <pre class="formatted-pre"><code><span class="tok-num">127.0</span>.<span class="tok-num">0.1</span> localhost
-<span class="tok-num">127.0</span>.<span class="tok-num">1.1</span> vps-prod-<span class="tok-num">01</span>
+<span class="tok-num">127.0</span>.<span class="tok-num">1.1</span> vps-prod-<span class="tok-num">01</span>.example.com vps-prod-<span class="tok-num">01</span>
 </code></pre>
     </div>
     
-<p>Save and exit the editor (<code>Ctrl + O</code>, <code>Ctrl + X</code>).</p>
+<p>Save and exit (<code>Ctrl+O</code>, <code>Enter</code>, <code>Ctrl+X</code>).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="confirm-warning-elimination">
+        <li class="step-item" id="prevent-cloud-init-from-reverting-etchosts-cloud-vps-only">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="confirm-warning-elimination-heading">Step 3: Confirm Warning Elimination</h4>
-            <p>Run an immediate sudo execution to verify resolution latency is zero:</p>
+            <h4 id="prevent-cloud-init-from-reverting-etchosts-cloud-vps-only-heading">Step 3: Prevent cloud-init From Reverting /etc/hosts (Cloud VPS Only)</h4>
+            <p>On AWS, DigitalOcean, Hetzner, or Proxmox cloud-init images, <code>cloud-init</code> can regenerate <code>/etc/hosts</code> from <code>/etc/cloud/templates/hosts.debian.tmpl</code> on reboot. Check <code>/etc/cloud/cloud.cfg</code> if present:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -520,60 +584,56 @@ hostnamectl <span class="tok-prop">--static</span>
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> true
+      <pre class="formatted-pre"><code><span class="tok-kw">grep</span> <span class="tok-prop">-E</span> <span class="tok-str">&quot;preserve_hostname|manage_etc_hosts&quot;</span> /etc/cloud/cloud.cfg <span class="tok-num">2</span>&gt;/dev/null
 </code></pre>
     </div>
     
-<p>The command should return immediately without emitting any host lookup warning.</p>
+<p>If <code>manage_etc_hosts: true</code> is set, either set <code>preserve_hostname: true</code> when using custom hostnames or update the hostname cleanly through your cloud provider metadata / <code>hostnamectl</code>.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="verify-instant-resolution-with-sudo-and-getent">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-instant-resolution-with-sudo-and-getent-heading">Step 4: Verify Instant Resolution With sudo and getent</h4>
+            <p>Test NSS resolution directly and run <code>sudo true</code> to confirm zero delay and zero warnings:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>getent hosts <span class="tok-str">&quot;$(hostname)&quot;</span>
+<span class="tok-kw">sudo</span> true
+</code></pre>
+    </div>
+    
+<p><code>getent hosts</code> should immediately return <code>127.0.1.1 vps-prod-01</code>, and <code>sudo true</code> should exit silently with code <code>0</code> in milliseconds.</p>
           </div>
         </li>
         
 </ol>
-
-  <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-    <div class="sys-tool-bridge-header">
-      <div class="sys-tool-bridge-tag font-mono">ENGINEERING &bull; INTERACTIVE TOOLS</div>
-      <span class="sys-tool-bridge-status"><span class="status-dot"></span> LIVE AT /TOOLS/</span>
-    </div>
-    <h3 class="sys-tool-bridge-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-    </h3>
-    <p class="sys-tool-bridge-desc">
-      At SoporteCero, we resolve systems, cloud, and programming incidents while also delivering interactive decision-making tools for tech freelancers, developers, and businesses. If you are integrating payment gateways, quoting custom software projects, or modeling unit economics, explore our lab-tested calculators with 1-click PDF export:
-    </p>
-    <div class="sys-tool-bridge-grid">
-      <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Calculate PayPal / Wise / Stripe Fees</span>
-          <span class="sys-tool-card-meta font-mono">Reverse mode · Exact net payout</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">Quote Web Project / Hourly Rate in PDF</span>
-          <span class="sys-tool-card-meta font-mono">1-Click downloadable formal proposals</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-      <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-        <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="sys-tool-card-body">
-          <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-          <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-        </div>
-        <span class="sys-tool-card-arrow">&rarr;</span>
-      </a>
-    </div>
-  </section>
-  
 <h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
-<h3 id="why-does-sudo-attempt-hostname-lookups-on-every-execution">Why does sudo attempt hostname lookups on every execution?</h3>
-<p>sudo consults NSS to check whether the current user is restricted to running commands on specific remote hosts listed in the sudoers ruleset.</p>
-<h3 id="why-do-ubuntu-and-debian-utilize-127011-instead-of-127001">Why do Ubuntu and Debian utilize 127.0.1.1 instead of 127.0.0.1?</h3>
-<p>127.0.0.1 is standard localhost. Debian distributions map the host domain/FQDN to 127.0.1.1 so systems with dynamic DHCP IPs can still resolve their own hostnames locally.</p>
+<h3 id="why-do-ubuntu-and-debian-use-127011-instead-of-127001">Why do Ubuntu and Debian use <code>127.0.1.1</code> instead of <code>127.0.0.1</code>?</h3>
+<p><code>127.0.0.1</code> is reserved for <code>localhost</code>. Debian-based distributions map the machine&#39;s hostname to <code>127.0.1.1</code> (still within the <code>127.0.0.0/8</code> loopback block) so servers without a permanent static IP—or laptops on DHCP—can always resolve their own hostname locally without breaking services that check <code>localhost</code> separately.</p>
+<h3 id="does-this-error-mean-my-dns-server-is-broken">Does this error mean my DNS server is broken?</h3>
+<p>No. Your internet DNS resolution for external domains (like <code>apt</code> or <code>curl</code>) is usually fine. The error strictly means your <strong>local hostname</strong> is missing from <code>/etc/hosts</code> and is not registered in your upstream DNS server.</p>
+<h3 id="can-i-disable-hostname-lookups-in-sudo-instead">Can I disable hostname lookups in <code>sudo</code> instead?</h3>
+<p>In modern <code>sudo</code> versions, you can add <code>Defaults !fqdn</code> in <code>visudo</code>, though this is not recommended—fixing <code>/etc/hosts</code> takes 10 seconds and also prevents similar NSS delays in Postfix, Apache, RabbitMQ, and Java applications.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -588,50 +648,12 @@ hostnamectl <span class="tok-prop">--static</span>
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Whenever renaming a server with <code>hostnamectl set-hostname</code>, update <code>/etc/hosts</code> in the same deployment step.</li>
-<li>On cloud VPS instances deploying <code>cloud-init</code>, ensure <code>/etc/cloud/cloud.cfg</code> preserves custom hostname settings across reboots.</li>
+              <li><strong>Update <code>/etc/hosts</code> whenever running <code>hostnamectl set-hostname</code>:</strong> Treat both files as a pair in Ansible, Terraform, or cloud-init provisioning scripts.</li>
+<li><strong>Avoid uppercase or underscores in hostnames:</strong> Stick to lowercase RFC-1123 characters (<code>a-z</code>, <code>0-9</code>, hyphens) so DNS and NSS parsers behave consistently.</li>
+<li><strong>Verify <code>hosts: files dns</code> in <code>/etc/nsswitch.conf</code>:</strong> Ensure <code>files</code> precedes <code>dns</code> so <code>/etc/hosts</code> is always consulted before external resolvers.</li>
+<li><strong>Check <code>getent hosts $(hostname)</code> in health checks:</strong> Add it to post-provisioning smoke tests to catch resolution mismatches early.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">

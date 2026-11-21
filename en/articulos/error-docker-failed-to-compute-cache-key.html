@@ -127,6 +127,38 @@
   ]
 }
   </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why does docker build fail on Linux CI/CD when it worked on my Mac or Windows laptop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "macOS (APFS) and Windows (NTFS) are case-insensitive by default, whereas Linux CI runners (Ubuntu/Alpine) are strictly case-sensitive. A COPY Config.json . instruction will fail on Linux if the file is named config.json in Git."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I see exactly which files Docker is including in the build context?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can inspect the context by running a minimal diagnostic container or checking docker build with a temporary RUN ls -la step, or by testing .dockerignore exclusions with rsync --dry-run / tar."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does COPY ../shared ever work in a Dockerfile?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Docker prohibits COPY or ADD from traversing above the build context root. To share code across services, set the build context to the common parent directory (or use Docker Compose additional_contexts in Buildx)."
+      }
+    }
+  ]
+}
+  </script>
     
   <!-- Google AdSense Verification Code -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
@@ -193,22 +225,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +258,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +274,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>The error <strong><code>failed to compute cache key: failed to walk: lstat ...: no such file or directory</code></strong> during <code>docker build</code> occurs when a <code>COPY</code> or <code>ADD</code> instruction in your <code>Dockerfile</code> references a local file or directory that does not exist within the <strong>Docker build context</strong>.</p>
+          <p>The BuildKit error <code>failed to compute cache key: failed to calculate checksum of ref ...: &quot;/path/to/file&quot;: not found</code> (or <code>failed to walk: lstat ...: no such file or directory</code>) aborts <code>docker build</code> when a <code>COPY</code> or <code>ADD</code> instruction references a file or folder that does not exist inside the build context sent to the Docker daemon.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +291,73 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Source path in Dockerfile COPY/ADD instruction does not exist</strong></div>
+            <div class="diag-value">Build command run from wrong working directory</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>ls -la</code> vs <code>COPY</code> source path in <code>Dockerfile</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Verify exact local file path and check <code>.dockerignore</code> file</div>
+            <div class="diag-value">Run <code>docker build -f path/to/Dockerfile .</code> from project root</div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Docker build context pointing to incorrect working directory</strong></div>
+            <div class="diag-value"><code>.dockerignore</code> excludes a required file or directory</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>cat .dockerignore</code></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUTION</span>
             </div>
-            <div class="diag-value">Run <code>docker build</code> ensuring proper trailing <code>.</code> context syntax</div>
+            <div class="diag-value">Remove the exclusion or add <code>!path/to/file</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Case mismatch on Linux filesystems (<code>App.js</code> vs <code>app.js</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>ls -la</code> inside source directory</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Match exact capitalization in <code>Dockerfile</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value">Broken symlink or file outside build context (<code>../shared</code>)</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">VERIFICATION</span>
+            </div>
+            <div class="diag-value"><code>ls -l</code> on target file</div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Move context up to parent directory or copy files in</div>
           </div></div></div>
       </div>
     </section>
@@ -334,32 +398,46 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-troubleshooting" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
-            <span class="toc-text">Step-by-Step Troubleshooting</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         <ul class="toc-sublist">
 
           <li class="toc-subitem">
-            <a href="#step-1-understand-the-docker-build-context" class="toc-sublink">
+            <a href="#why-does-docker-build-fail-on-linux-cicd-when-it-worked-on-my-mac-or-windows-laptop" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 1: Understand the Docker Build Context</span>
+              <span class="toc-subtext">Why does docker build fail on Linux CI/CD when it worked on my Mac or Windows laptop?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-2-check-dockerignore-exclusions" class="toc-sublink">
+            <a href="#how-can-i-see-exactly-which-files-docker-is-including-in-the-build-context" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 2: Check .dockerignore Exclusions</span>
+              <span class="toc-subtext">How can I see exactly which files Docker is including in the build context?</span>
             </a>
           </li>
         
 
           <li class="toc-subitem">
-            <a href="#step-3-check-file-case-sensitivity-linux" class="toc-sublink">
+            <a href="#does-copy-shared-ever-work-in-a-dockerfile" class="toc-sublink">
               <span class="toc-subicon" aria-hidden="true">↳</span>
-              <span class="toc-subtext">Step 3: Check File Case Sensitivity (Linux)</span>
+              <span class="toc-subtext">Does COPY ../shared ever work in a Dockerfile?</span>
             </a>
           </li>
         
@@ -371,35 +449,29 @@
     </nav>
     
     
-<h2 id="step-by-step-troubleshooting">🚀 Step-by-Step Troubleshooting</h2>
-<h3 id="step-1-understand-the-docker-build-context">Step 1: Understand the Docker Build Context</h3>
-<p>When you execute <code>docker build -t my-image .</code>, the trailing dot <code>.</code> defines the <strong>build context</strong>. Docker packages and sends files in that directory to the Docker daemon.</p>
-<p>If your <code>Dockerfile</code> has:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">DOCKERFILE</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>When Docker builds an image with <strong>BuildKit</strong>, it does not read files arbitrarily from your host filesystem. Instead, the CLI packages only the <strong>build context</strong>—the directory passed as the final argument to <code>docker build</code> (commonly <code>.</code>)—filtered by <code>.dockerignore</code>.</p>
+<p>Before running a <code>COPY</code> or <code>ADD</code> layer, BuildKit computes a content-addressed <strong>cache key</strong> by hashing the metadata and checksums (<code>lstat</code> + digest) of every matched source file in that context snapshot. If the target path is absent, BuildKit aborts with <code>failed to compute cache key ... not found</code>.</p>
+<p>Common culprits include:</p>
+<ul>
+<li>Running <code>docker build .</code> inside a <code>docker/</code> subfolder while <code>COPY package.json .</code> expects the repo root.</li>
+<li>Overly broad <code>.dockerignore</code> rules (<code>*</code>, <code>*.json</code>, <code>build/</code>) stripping files needed by <code>COPY</code>.</li>
+<li>Relative parent paths like <code>COPY ../common .</code>, which BuildKit forbids because <code>../</code> escapes the context root.</li>
+<li>Multi-stage <code>COPY --from=builder</code> referencing a path never generated in the builder stage.</li>
+</ul>
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">COPY</span> package.<span class="tok-prop">json</span> ./
-</code></pre>
-    </div>
-    
-<p>Targeting a file outside the current working folder will cause <code>failed to compute cache key</code>.</p>
-<p><strong>Fix:</strong> Move to your project root or adjust your build command context:</p>
+          Step-by-Step Technical Implementation
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="verify-the-build-context-root-and-f-flag">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="verify-the-build-context-root-and-f-flag-heading">Step 1: Verify the Build Context Root and -f Flag</h4>
+            <p>If your <code>Dockerfile</code> lives in a subdirectory (e.g., <code>deploy/Dockerfile</code>) while your application source lives at the repository root, run <code>docker build</code> from the <strong>root</strong> and pass <code>-f</code> to locate the <code>Dockerfile</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -419,12 +491,67 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> build <span class="tok-prop">-t</span> my-app:latest <span class="tok-prop">-f</span> ./<span class="tok-kw">docker</span>/Dockerfile .
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Run from the repository root, NOT inside deploy/</span>
+<span class="tok-kw">docker</span> build <span class="tok-prop">-t</span> my-app:latest <span class="tok-prop">-f</span> deploy/Dockerfile .
 </code></pre>
     </div>
     
-<h3 id="step-2-check-dockerignore-exclusions">Step 2: Check <code>.dockerignore</code> Exclusions</h3>
-<p>Open the <code>.dockerignore</code> file in your root folder. If an ignored rule matches a file targeted by <code>COPY</code>:</p>
+<p>If you need files from a sibling directory in a monorepo, pass the parent folder as the context:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> build <span class="tok-prop">-t</span> my-<span class="tok-kw">service</span>:latest <span class="tok-prop">-f</span> services/api/Dockerfile .
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="inspect-dockerignore-rules">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h4 id="inspect-dockerignore-rules-heading">Step 2: Inspect .dockerignore Rules</h4>
+            <p>Check whether <code>.dockerignore</code> is filtering out files your <code>Dockerfile</code> explicitly copies:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> .dockerignore
+</code></pre>
+    </div>
+    
+<p>If <code>.dockerignore</code> contains <code>*</code> (an allow-list pattern) or broad ignores like <code>dist/</code>, <code>*.env</code>, or <code>config/</code>, add explicit negated exceptions (<code>!</code>) for files required in the image:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -444,12 +571,23 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>src/config.<span class="tok-prop">json</span>
+      <pre class="formatted-pre"><code>*
+!package.<span class="tok-prop">json</span>
+!package-lock.<span class="tok-prop">json</span>
+!src/
 </code></pre>
     </div>
     
-<p>Docker excludes it from the context, throwing the <code>failed to compute cache key</code> error.</p>
-<p><strong>Fix:</strong> Remove the rule or add an exception prefix <code>!</code>:</p>
+<p>Note that if a parent directory is ignored (e.g., <code>config/</code>), a negated child rule (<code>!config/prod.json</code>) will <strong>not</strong> work unless you un-ignore the parent directory first or avoid ignoring the whole directory.</p>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="check-case-sensitivity-and-multi-stage-paths">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h4 id="check-case-sensitivity-and-multi-stage-paths-heading">Step 3: Check Case Sensitivity and Multi-Stage Paths</h4>
+            <p>Linux containers and BuildKit contexts are strictly case-sensitive (<code>App.js</code> != <code>app.js</code>). Verify exact filenames and inspect multi-stage builder outputs:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -459,7 +597,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">PLAINTEXT</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -469,14 +607,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code>!src/config.<span class="tok-prop">json</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">find</span> . <span class="tok-prop">-maxdepth</span> <span class="tok-num">3</span> <span class="tok-prop">-iname</span> <span class="tok-str">&quot;app.js&quot;</span>
+<span class="tok-kw">docker</span> build <span class="tok-prop">--target</span> builder <span class="tok-prop">-t</span> debug-builder .
+<span class="tok-kw">docker</span> run <span class="tok-prop">--<span class="tok-kw">rm</span></span> debug-builder <span class="tok-kw">ls</span> <span class="tok-prop">-la</span> /app
 </code></pre>
     </div>
-    
-<h3 id="step-3-check-file-case-sensitivity-linux">Step 3: Check File Case Sensitivity (Linux)</h3>
-<p>Linux filesystems are case-sensitive. If your file is named <code>App.js</code> but your <code>Dockerfile</code> has:</p>
+          </div>
+        </li>
+        
 
-    <div class="code-container">
+        <li class="step-item" id="verify-the-clean-build">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h4 id="verify-the-clean-build-heading">Step 4: Verify the Clean Build</h4>
+            <div class="code-container">
       <div class="code-header">
         <div class="code-header-left">
           <div class="code-dots" aria-hidden="true">
@@ -484,7 +628,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">DOCKERFILE</span>
+          <span class="code-lang">BASH</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -494,11 +638,20 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">COPY</span> app.js ./
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> build <span class="tok-prop">--progress</span>=plain <span class="tok-prop">--no-cache</span> <span class="tok-prop">-t</span> my-app:latest .
 </code></pre>
     </div>
-    
-<p>Docker fails to locate <code>app.js</code>. Update the filename to match exact capitalization.</p>
+          </div>
+        </li>
+        
+</ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="why-does-docker-build-fail-on-linux-cicd-when-it-worked-on-my-mac-or-windows-laptop">Why does <code>docker build</code> fail on Linux CI/CD when it worked on my Mac or Windows laptop?</h3>
+<p>macOS (APFS) and Windows (NTFS) are case-insensitive by default, whereas Linux CI runners (Ubuntu/Alpine) are strictly case-sensitive. A <code>COPY Config.json .</code> instruction will fail on Linux if the file is named <code>config.json</code> in Git.</p>
+<h3 id="how-can-i-see-exactly-which-files-docker-is-including-in-the-build-context">How can I see exactly which files Docker is including in the build context?</h3>
+<p>You can inspect the context by running a minimal diagnostic container or checking <code>docker build</code> with a temporary <code>RUN ls -la</code> step, or by testing <code>.dockerignore</code> exclusions with <code>rsync --dry-run</code> / <code>tar</code>.</p>
+<h3 id="does-copy-shared-ever-work-in-a-dockerfile">Does <code>COPY ../shared</code> ever work in a Dockerfile?</h3>
+<p>No. Docker prohibits <code>COPY</code> or <code>ADD</code> from traversing above the build context root. To share code across services, set the build context to the common parent directory (or use Docker Compose <code>additional_contexts</code> in Buildx).</p>
 
 
           <!-- Prevention Callout Card -->
@@ -513,49 +666,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              
+              <li><strong>Standardize <code>docker build</code> from the repo root:</strong> Keep build commands in a <code>Makefile</code>, <code>package.json</code> script, or <code>compose.yaml</code> with <code>context: .</code> and <code>dockerfile: path/to/Dockerfile</code>.</li>
+<li><strong>Use explicit <code>.dockerignore</code> allow-lists carefully:</strong> When ignoring directories, verify with <code>git ls-files</code> that no required build artifacts or lockfiles are masked.</li>
+<li><strong>Avoid symlinks pointing outside the repo:</strong> Docker&#39;s context tar stream does not follow symlinks that resolve outside the context root; copy or vendor shared assets instead.</li>
+<li><strong>Pin <code>WORKDIR</code> explicitly in multi-stage builds:</strong> Always declare <code>WORKDIR /app</code> in every <code>FROM</code> stage so <code>COPY --from=...</code> paths never rely on implicit defaults.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -612,7 +728,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">SSH</span>
-            <span>Read Time: 3 min</span>
+            <span>Read Time: 5 min</span>
           </div>
         </div>
       </article>
@@ -629,7 +745,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Proxmox</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

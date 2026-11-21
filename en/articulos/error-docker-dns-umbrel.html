@@ -193,22 +193,6 @@
     </header>
   </div>
 
-  <!-- Floating Bento Notification / Quick Access Bar to /tools/ -->
-  <aside class="sys-tools-banner" aria-label="Tools Notification">
-    <div class="sys-tools-banner-inner">
-      <div class="sys-tools-banner-content">
-        <span class="sys-tools-badge font-mono">TOOLS</span>
-        <span class="sys-tools-text">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-1px; margin-right:5px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><strong>NEW IN SOPORTECERO:</strong> Freelance Calculators Suite, 1-Click PDF Quote Generator &amp; Financial Simulators
-        </span>
-      </div>
-      <a href="/tools/index.html" class="sys-tools-btn">
-        <span>Open /tools/</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </aside>
-
   <!-- Main Content Layout -->
   <main class="main-content">
     
@@ -242,7 +226,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Read time: 4 min
+            Read time: 5 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -258,7 +242,7 @@
         
         <!-- Main Column -->
         <div class="post-article">
-          <p>A very common critical failure in home servers based on the <strong>Umbrel OS</strong> ecosystem occurs when Docker containers (such as Sonarr or your nodes) suddenly stop downloading updates or lose connection to external servers, throwing <code>Temporary failure in name resolution</code> errors. This happens because the Docker daemon loses the route to the local DNS resolver of the host operating system.</p>
+          <p>A widespread failure on <strong>Umbrel OS</strong> home servers occurs when Docker containers (such as Nextcloud, Sonarr, Home Assistant, or Bitcoin/Lightning nodes) suddenly fail to fetch updates or reach APIs, logging <code>Temporary failure in name resolution</code> or <code>lookup ... on 127.0.0.11:53: read udp ... i/o timeout</code>—even though the host itself has internet access.</p>
 
     <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -275,25 +259,49 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Internal Docker DNS resolver failing on Umbrel OS</strong></div>
+            <div class="diag-value"><strong><code>ping 8.8.8.8</code> works inside container, <code>ping google.com</code> fails</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Set public DNS in <code>/etc/docker/daemon.json</code> (e.g. <code>&quot;dns&quot;: [&quot;1.1.1.1&quot;]</code>)</div>
+            <div class="diag-value">Set explicit public DNS servers in <code>/etc/docker/daemon.json</code></div>
           </div></div><div class="diag-card">
           <div class="diag-row">
             <div class="diag-label">
               <span class="diag-badge diag-badge-cause">CAUSA</span>
             </div>
-            <div class="diag-value"><strong>Port 53 conflict with systemd-resolved service</strong></div>
+            <div class="diag-value"><strong>Host <code>/etc/resolv.conf</code> points to <code>127.0.0.53</code> (<code>systemd-resolved</code>)</strong></div>
           </div>
           <div class="diag-row">
             <div class="diag-label">
-              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
             </div>
-            <div class="diag-value">Set <code>DNSStubListener=no</code> in <code>/etc/systemd/resolved.conf</code></div>
+            <div class="diag-value">Docker skips <code>127.0.0.x</code> loopbacks and falls back to unreachable defaults</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Pi-hole / AdGuard container crashed on the same Umbrel host</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Temporarily bypass local DNS in <code>daemon.json</code> so Umbrel can pull fixes</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>IPv6 DNS unreachable on LAN</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-default">IMMEDIATE ACTION</span>
+            </div>
+            <div class="diag-value">Disable IPv6 inside Docker or use reliable IPv4 resolvers (<code>1.1.1.1</code>, <code>9.9.9.9</code>)</div>
           </div></div></div>
       </div>
     </section>
@@ -334,9 +342,23 @@
         </li>
       
         <li class="toc-item">
-          <a href="#step-by-step-technical-implementation" class="toc-link">
+          <a href="#root-cause-amp-technical-mechanics" class="toc-link">
             <span class="toc-number">02</span>
+            <span class="toc-text">Root Cause &amp; Technical Mechanics</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
             <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
           </a>
         </li>
       
@@ -345,6 +367,9 @@
     </nav>
     
     
+<h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
+<p>Docker containers attached to user-defined bridge networks (which Umbrel OS uses for all apps) receive <code>/etc/resolv.conf</code> pointing to Docker&#39;s embedded DNS server at <code>127.0.0.11</code>. When a container resolves an external domain like <code>registry-1.docker.io</code>, <code>127.0.0.11</code> forwards the query to the upstream nameservers listed in the host&#39;s <code>/etc/resolv.conf</code>.</p>
+<p>Here is where Umbrel OS (Debian/Ubuntu-based) breaks: if the host uses <code>systemd-resolved</code>, <code>/etc/resolv.conf</code> contains <code>nameserver 127.0.0.53</code>. Because <code>127.0.0.53</code> is a loopback address, a container&#39;s network namespace cannot route to it. Docker attempts to strip <code>127.0.0.x</code> entries and read <code>/run/systemd/resolve/resolv.conf</code> instead—or falls back to Google&#39;s <code>8.8.8.8</code>—which fails if <code>systemd-resolved</code> is misconfigured, if your router hands out an IPv6 DNS server that lacks IPv6 routing, or if you pointed your router&#39;s DHCP DNS to a Pi-hole/AdGuard container running on the <em>same</em> Umbrel machine (creating a circular dependency when Docker restarts).</p>
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -353,11 +378,11 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="verify-the-internal-network-block">
+        <li class="step-item" id="isolate-dns-failure-vs-full-routing-loss">
           <div class="step-number">1</div>
           <div class="step-body">
-            <h4 id="verify-the-internal-network-block-heading">Step 1: Verify the internal network block</h4>
-            <p>Access your Umbrel server via SSH and enter the affected container to check if it responds to a direct numerical ping but fails to resolve text names:</p>
+            <h4 id="isolate-dns-failure-vs-full-routing-loss-heading">Step 1: Isolate DNS failure vs. full routing loss</h4>
+            <p>SSH into your Umbrel server and test raw IP connectivity versus DNS resolution from inside an affected container (replace <code>&lt;container_name&gt;</code> with a running app from <code>docker ps</code>):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -377,19 +402,68 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># Test direct Google IP (If it responds, there is internet but no DNS)</span>
-<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> nombre_contenedor ping <span class="tok-prop">-c</span> <span class="tok-num">3</span> <span class="tok-num">8.8</span>.<span class="tok-num">8.8</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> ps <span class="tok-prop">--format</span> <span class="tok-str">&quot;table {{.Names}}\t{{.Status}}&quot;</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> &lt;container_name&gt; ping <span class="tok-prop">-c</span> <span class="tok-num">3</span> <span class="tok-num">1.1</span>.<span class="tok-num">1.1</span>
+<span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> &lt;container_name&gt; nslookup github.com
+</code></pre>
+    </div>
+    
+<p>If <code>ping 1.1.1.1</code> succeeds with 0% packet loss while <code>nslookup github.com</code> times out, your routing and NAT are healthy—only DNS forwarding is broken. Inspect what Docker currently sees as upstream DNS:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> /etc/resolv.conf
 </code></pre>
     </div>
           </div>
         </li>
         
 
-        <li class="step-item" id="force-global-public-dns-in-the-docker-configuration">
+        <li class="step-item" id="configure-static-upstream-dns-in-etcdockerdaemonjson">
           <div class="step-number">2</div>
           <div class="step-body">
-            <h4 id="force-global-public-dns-in-the-docker-configuration-heading">Step 2: Force global public DNS in the Docker configuration</h4>
-            <p>To bypass Umbrel&#39;s routing blocks, we can define static and immutable DNS servers for the entire Docker engine. Edit the global configuration file:</p>
+            <h4 id="configure-static-upstream-dns-in-etcdockerdaemonjson-heading">Step 2: Configure static upstream DNS in /etc/docker/daemon.json</h4>
+            <p>Bypass <code>systemd-resolved</code> stub loopbacks and circular LAN DNS by defining explicit, reliable resolvers in <code>/etc/docker/daemon.json</code>. First check if the file already exists so you do not overwrite Umbrel&#39;s existing daemon settings (such as log rotation):</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">cat</span> /etc/<span class="tok-kw">docker</span>/daemon.<span class="tok-prop">json</span> <span class="tok-num">2</span>&gt;/dev/null
+</code></pre>
+    </div>
+    
+<p>Edit <code>/etc/docker/daemon.json</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -413,7 +487,7 @@
 </code></pre>
     </div>
     
-<p>Add or merge the following lines with the stable DNS of Cloudflare and Google inside the JSON object:</p>
+<p>Merge the <code>&quot;dns&quot;</code> array into the existing JSON object (or create it if empty):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -434,21 +508,19 @@
         </button>
       </div>
       <pre class="formatted-pre"><code>{
-  <span class="tok-str">&quot;dns&quot;</span>: [<span class="tok-str">&quot;1.1.1.1&quot;</span>, <span class="tok-str">&quot;8.8.8.8&quot;</span>]
+  <span class="tok-str">&quot;dns&quot;</span>: [<span class="tok-str">&quot;1.1.1.1&quot;</span>, <span class="tok-str">&quot;9.9.9.9&quot;</span>]
 }
 </code></pre>
     </div>
-    
-<p>Save the file (<code>Ctrl + O</code>, <code>Enter</code>) and close the editor (<code>Ctrl + X</code>).</p>
           </div>
         </li>
         
 
-        <li class="step-item" id="restart-the-docker-service">
+        <li class="step-item" id="restart-docker-and-verify-container-dns-resolution">
           <div class="step-number">3</div>
           <div class="step-body">
-            <h4 id="restart-the-docker-service-heading">Step 3: Restart the Docker service</h4>
-            <p>Apply a forced restart to the system service so it brings up all network interfaces with the new injected DNS:</p>
+            <h4 id="restart-docker-and-verify-container-dns-resolution-heading">Step 3: Restart Docker and verify container DNS resolution</h4>
+            <p>Validate the JSON syntax before restarting Docker (invalid JSON will prevent <code>dockerd</code> from booting):</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -468,13 +540,47 @@
           <span class="copy-text">Copy</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart <span class="tok-kw">docker</span>
+      <pre class="formatted-pre"><code>python3 <span class="tok-prop">-m</span> <span class="tok-prop">json</span>.tool /etc/<span class="tok-kw">docker</span>/daemon.<span class="tok-prop">json</span>
+<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> restart <span class="tok-kw">docker</span>
 </code></pre>
     </div>
+    
+<p>Wait 15–30 seconds for Umbrel&#39;s containers to come back up, then verify DNS resolution inside a container:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">docker</span> exec <span class="tok-prop">-it</span> &lt;container_name&gt; getent hosts hub.<span class="tok-kw">docker</span>.com
+</code></pre>
+    </div>
+    
+<p>It should immediately return valid IPv4 addresses.</p>
           </div>
         </li>
         
 </ol>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<p><strong>Why shouldn&#39;t I just edit <code>/etc/resolv.conf</code> on Umbrel OS?</strong>
+<code>/etc/resolv.conf</code> is dynamically regenerated by <code>systemd-resolved</code>, <code>NetworkManager</code>, or <code>dhcpcd</code> on every DHCP lease renewal and reboot. Any manual <code>nameserver</code> edits there are silently wiped.</p>
+<p><strong>Can I still use Pi-hole or AdGuard Home for my LAN if I set <code>&quot;dns&quot;: [&quot;1.1.1.1&quot;]</code> in <code>daemon.json</code>?</strong>
+Yes. Setting <code>&quot;dns&quot;</code> in <code>daemon.json</code> only controls what <em>Docker containers</em> use for outbound name resolution. Your LAN devices will continue using Pi-hole/AdGuard via your router&#39;s DHCP settings, and you break the circular boot deadlock where Pi-hole needs DNS before it has started.</p>
+<p><strong>What if containers on <code>host</code> network mode still fail DNS?</strong>
+Containers using <code>network_mode: host</code> read the host&#39;s <code>/etc/resolv.conf</code> directly rather than <code>daemon.json</code>. For those, configure <code>DNS=1.1.1.1 9.9.9.9</code> in <code>/etc/systemd/resolved.conf</code> and restart <code>systemd-resolved</code>.</p>
 
 
           <!-- Prevention Callout Card -->
@@ -489,49 +595,12 @@
               Recommended security practices:
             </p>
             <ul class="prevention-list">
-              <li>Avoid manually modifying the <code>/etc/resolv.conf</code> file directly in Umbrel OS, as this file is dynamically managed by the system and will be completely overwritten upon every physical reboot of your Mini PC or Raspberry Pi, erasing your fixes.</li>
+              <li><strong>Avoid circular DNS on your Docker host:</strong> Never point the Umbrel host itself to a DNS sinkhole container running on that same Umbrel node; keep the host on <code>1.1.1.1</code> or <code>9.9.9.9</code>.</li>
+<li><strong>Validate JSON before restarting <code>dockerd</code>:</strong> Always run <code>python3 -m json.tool /etc/docker/daemon.json</code> or <code>jq . /etc/docker/daemon.json</code> after editing.</li>
+<li><strong>Check <code>ufw</code> / <code>iptables</code> after Docker restarts:</strong> If you run a host firewall on Umbrel, ensure <code>ufw</code> allows <code>DOCKER-USER</code> outbound UDP/TCP port <code>53</code> traffic.</li>
+<li><strong>Pin log limits alongside DNS:</strong> Keep <code>&quot;log-driver&quot;: &quot;json-file&quot;</code> with <code>&quot;max-size&quot;: &quot;10m&quot;</code> in <code>daemon.json</code> to prevent SD card or SSD exhaustion on Raspberry Pi / mini PCs.</li>
             </ul>
           </div>
-
-          <!-- Tools for Developers & SysAdmins -->
-          <section class="sys-tool-bridge" aria-label="Tools for Developers &amp; SysAdmins">
-            <div class="sys-tool-bridge-header">
-              <div class="sys-tool-bridge-tag font-mono">TOOLS FOR DEVELOPERS &amp; SYSADMINS</div>
-              <span class="sys-tool-bridge-status"><span class="status-dot"></span> WEB CALCULATORS</span>
-            </div>
-            <h3 class="sys-tool-bridge-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block; vertical-align:-3px; margin-right:6px; color:#22d3ee;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Tools for Developers &amp; SysAdmins
-            </h3>
-            <p class="sys-tool-bridge-desc">
-              At SoporteCero we solve systems and infrastructure incidents, but we also engineer decision-making utilities for tech freelancers, developers, and online businesses. Whether you are setting up international payment processing or estimating project billable hours, use our laboratory-validated tools with 1-click PDF export:
-            </p>
-            <div class="sys-tool-bridge-grid">
-              <a href="/tools/comisiones-pasarelas-pago.html?amount=1000&amp;mode=inverse" class="sys-tool-card" title="Calculate exact processing commissions on Stripe, PayPal and gateways">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Payment Gateway Fee Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Stripe · PayPal · Wise · Reverse mode</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/tarifa-hora-freelance.html" class="sys-tool-card" title="Quote dev project and export 1-click client proposal in PDF">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">Freelance Hourly Rate Calculator</span>
-                  <span class="sys-tool-card-meta font-mono">Fixed costs · Target margin · PDF quotes</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-              <a href="/tools/calculadora-roas-ecommerce.html" class="sys-tool-card" title="Simulate advertising ROAS break-even and margins">
-                <div class="sys-tool-card-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-                <div class="sys-tool-card-body">
-                  <span class="sys-tool-card-name">E-commerce ROAS &amp; Financial Simulator</span>
-                  <span class="sys-tool-card-meta font-mono">Break-Even · Markup · Amortization</span>
-                </div>
-                <span class="sys-tool-card-arrow">&rarr;</span>
-              </a>
-            </div>
-          </section>
 
           <!-- Author Bio & Editorial Transparency Card -->
           <div class="author-card" id="author">
@@ -605,7 +674,7 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Read Time: 4 min</span>
+            <span>Read Time: 6 min</span>
           </div>
         </div>
       </article>

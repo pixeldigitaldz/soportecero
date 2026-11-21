@@ -3,40 +3,60 @@ title: 'How to fix and understand active (exited) or failed services in Systemd'
 description: 'Step-by-step guide to diagnose why a Linux service ends in active (exited) or failed state when launched with systemctl.'
 category: 'Systems & Servers'
 date: '2026-08-20'
-readTime: '3 min'
+readTime: '5 min'
 tags: ['Linux', 'Systemd', 'DevOps']
 ---
 
-The `active (exited)` status in Systemd indicates that the command configured under `ExecStart` successfully completed its execution and finished, while a `failed` or `activating (auto-restart)` status indicates that the binary crashed due to configuration syntax errors, missing paths, or insufficient permissions.
-
-Understanding the difference between `Type=oneshot` and `Type=simple` service definitions is essential to know whether your application is running as expected or silently dropping connections.
+When inspecting a Linux service with `systemctl status`, seeing `active (exited)` or `failed` (with `Result: exit-code`) indicates two very different behaviors in `systemd`. `active (exited)` means the process launched by `ExecStart=` terminated with exit code `0` and `systemd` considers the unit healthy—which is normal for initialization scripts, but a bug if you expected a persistent daemon. Conversely, `failed` means the binary crashed or returned a non-zero exit status.
 
 ## Quick Diagnostics
-| Cause | Solution |
-|---|---|
-| **Service configured as `Type=oneshot`** | Expected behavior for single-run provisioning scripts or cron alternatives |
-| **Configuration file error or missing env vars** | Inspect runtime logs with `journalctl -u service-name -e --no-pager` |
-| **Permission denied on binary or working directory** | Ensure the user configured under `User=` has access to `WorkingDirectory=` |
+
+| Symptom / Cause | Verification | Immediate Fix |
+|---|---|---|
+| Persistent app shows `active (exited)` | `systemctl show -p Type,RemainAfterExit <unit>` | Change `Type=oneshot` to `Type=simple` (or `exec`) |
+| `status=203/EXEC` (binary not found or not executable) | `journalctl -u <unit> -n 30 --no-pager` | Use absolute path in `ExecStart=` and `chmod +x` |
+| `status=200/CHDIR` or permission denied | `ls -ld <WorkingDirectory>` | Fix `User=` / `Group=` ownership or directory path |
+| Daemon forks to background then gets killed | `systemctl show -p Type <unit>` | Use `Type=forking` with `PIDFile=`, or run in foreground |
+
+## Root Cause & Technical Mechanics
+
+`systemd` tracks a service's lifecycle based on its `Type=` directive in the `[Service]` section:
+
+- **`Type=simple` (default):** `systemd` expects the process spawned by `ExecStart=` to stay in the foreground as the main service PID. If that process forks into the background and exits `0`, `systemd` assumes the service finished and tears down any remaining cgroup child processes.
+- **`Type=oneshot` + `RemainAfterExit=yes`:** Designed for setup tasks (e.g., applying `iptables` rules or running a migration). Once `ExecStart=` exits `0`, `systemd` marks the unit `active (exited)` and keeps it marked active without supervising any running process.
+- **`Type=forking`:** Used for legacy daemons that daemonize (`fork()` + parent exit). If `PIDFile=` is missing or wrong, `systemd` loses track of the child PID and marks the unit `failed`.
+
+When a unit enters **`failed`**, `systemd` logs numeric exit codes (`status=203/EXEC`, `status=217/USER`, `status=1/FAILURE`) or signals (`SIGKILL`/`OOM`). Additionally, `systemd` does **not** load your interactive `~/.bashrc` or `$PATH`, so relative commands like `node server.js` fail immediately with `203/EXEC`.
 
 ## Step-by-Step Solution
 
-**Inspect detailed service logs**
-When a service crashes or produces unexpected exit codes, standard `systemctl status` only shows truncated lines. Use `journalctl` to view the full stderr stream:
+### Step 1: Read the Full Journal and Exit Status
+
+Never rely solely on the truncated output of `systemctl status`. Query `journalctl` and `systemctl show` for the exact exit code and stderr output:
+
 ```bash
-sudo journalctl -u my-service.service -n 50 --no-pager
+sudo journalctl -u my-app.service -n 50 --no-pager
+systemctl show my-app.service -p ActiveState,SubState,ExecMainStatus,Result
 ```
 
-**Verify the service type in the unit file**
-Open the Systemd unit file located at `/etc/systemd/system/my-service.service`. If your app is a persistent background worker (like a Node, Python, or Go daemon) but has `Type=oneshot`, Systemd will not supervise it as an ongoing daemon:
+Match `ExecMainStatus` against common `systemd` codes (`203` = exec path/permissions, `200` = bad `WorkingDirectory`, `1`–`255` = application-level error).
+
+### Step 2: Fix the Unit Definition (`Type=` and Absolute Paths)
+
+Open the unit file (e.g., `/etc/systemd/system/my-app.service`) and ensure it uses `Type=simple` (or `Type=exec`) for foreground daemons, an absolute binary path, and explicit `User=`/`WorkingDirectory=` settings:
+
 ```ini
 [Unit]
-Description=My Background Daemon
-After=network.target
+Description=My Node.js API Service
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=simple
 User=www-data
+Group=www-data
 WorkingDirectory=/var/www/my-app
+EnvironmentFile=/var/www/my-app/.env
 ExecStart=/usr/bin/node /var/www/my-app/server.js
 Restart=on-failure
 RestartSec=5s
@@ -45,21 +65,46 @@ RestartSec=5s
 WantedBy=multi-user.target
 ```
 
-**Reload the Systemd daemon and restart the unit**
-Whenever you modify a `.service` configuration file, inform the Linux init system before restarting the service:
+Find exact binary paths with `command -v node` or `which python3`.
+
+### Step 3: Validate Syntax, Reload Daemon, and Restart
+
+Before starting the service, run `systemd-analyze verify` to catch typos, missing paths, or invalid unit directives:
+
+```bash
+sudo systemd-analyze verify /etc/systemd/system/my-app.service
+```
+
+Reload `systemd` so it parses the updated unit file, reset any `failed` latch, and restart:
+
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl restart my-service.service
-sudo systemctl status my-service.service
+sudo systemctl reset-failed my-app.service
+sudo systemctl restart my-app.service
 ```
 
-**Use absolute paths for all executables**
-Systemd does not inherit your personal shell's `$PATH` variable. Always provide the full absolute path to binaries (e.g., `/usr/bin/python3` instead of `python3`). Find absolute paths using:
+### Step 4: Verify `active (running)` State
+
+Confirm the unit now reports `active (running)` with a live `Main PID`:
+
 ```bash
-which node
-which python3
+sudo systemctl status my-app.service --no-pager
 ```
 
-## Prevention Tips
-- **Syntax validation:** Run `systemd-analyze verify /etc/systemd/system/my-service.service` to catch syntax and path warnings prior to deploying.
-- **Restart throttle limits:** Always declare `RestartSec=5s` and `StartLimitBurst=5` to prevent broken binaries from entering aggressive CPU-hogging restart loops.
+## Frequently Asked Questions
+
+### When is `active (exited)` actually the intended, healthy state?
+For one-time configuration units (`Type=oneshot` with `RemainAfterExit=yes`), such as `ufw.service`, `netfilter-persistent.service`, or `systemd-sysctl.service`. They apply kernel settings at boot and exit cleanly, leaving no daemon running in memory.
+
+### Why does my service work when I run it manually in the terminal, but fail under `systemd`?
+Interactive shells load `/etc/profile`, `~/.bashrc`, and custom `$PATH` or environment variables (like `NVM` paths or `DATABASE_URL`). `systemd` runs in a minimal, clean environment; you must pass variables via `Environment=` or `EnvironmentFile=` and specify full binary paths.
+
+### What causes `Start request repeated too quickly` (`start-limit-hit`)?
+If a broken service crashes multiple times within `StartLimitIntervalSec` (default 10s, 5 restarts), `systemd` stops retrying and locks the unit in `failed`. Fix the underlying crash, then run `sudo systemctl reset-failed <unit>` before starting it again.
+
+## Prevention Advice
+
+- **Always run `systemd-analyze verify`:** Catch invalid directives and missing `ExecStart` binaries prior to reloading.
+- **Configure `Restart=on-failure` with `RestartSec=5s`:** Avoid tight crash loops that exhaust CPU and hit `start-limit-hit`.
+- **Keep daemons in the foreground:** Modern apps (Node, Go, Python, Gunicorn) should not daemonize themselves; run them in foreground mode with `Type=simple` or `Type=exec`.
+- **Isolate secrets in `EnvironmentFile=`:** Store API keys and DB strings in a `0600` file rather than hardcoding them in world-readable `/etc/systemd/system/*.service` files.

@@ -3004,3 +3004,107 @@ td :not(pre) > code {
   box-shadow: 0 0 6px #22d3ee;
 }
 
+/* ==========================================================================
+   Google AdSense Containers (Responsive, Strict Containment & Zero-Overflow)
+   ========================================================================== */
+.ad-slot-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: var(--diagnostic-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.75rem 1rem 1rem;
+  margin: 2.25rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.ad-slot-wrapper--in-article {
+  margin: 2.5rem 0;
+  padding: 0.75rem 0.85rem 1rem;
+}
+
+.ad-slot-wrapper--post-bottom {
+  max-width: 860px;
+  margin: 2rem auto 0;
+}
+
+.ad-slot-wrapper--home {
+  max-width: 970px;
+  margin: 0 auto 2.5rem;
+}
+
+.ad-slot-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.75;
+  line-height: 1;
+  user-select: none;
+}
+
+.ad-slot-inner {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  min-height: 100px;
+}
+
+.ad-slot-wrapper--in-article .ad-slot-inner {
+  min-height: 120px;
+}
+
+.ad-slot-inner ins.adsbygoogle {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 auto !important;
+  overflow: hidden !important;
+}
+
+/* Protect AdSense iframes from global `iframe { height: auto }` reset */
+.ad-slot-inner ins.adsbygoogle iframe {
+  max-width: 100% !important;
+  height: revert;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Collapse empty containers cleanly when AdSense has no fill */
+.ad-slot-wrapper:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .ad-slot-wrapper {
+    padding: 0.65rem 0.5rem 0.85rem;
+    margin: 1.75rem auto;
+    border-radius: 10px;
+  }
+
+  .ad-slot-wrapper--in-article {
+    margin: 1.75rem 0;
+    padding: 0.65rem 0.45rem 0.85rem;
+  }
+
+  .ad-slot-wrapper--post-bottom {
+    margin: 1.5rem auto 0;
+  }
+
+  .ad-slot-wrapper--home {
+    margin: 0 auto 2rem;
+  }
+}
+
+

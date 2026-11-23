@@ -452,6 +452,22 @@
 <h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
 <p>In Nginx, the <code>ngx_http_core_module</code> inspects the incoming <code>Content-Length</code> header (or accumulates streamed chunks for <code>Transfer-Encoding: chunked</code>) against <code>client_max_body_size</code> before forwarding the request to an upstream proxy or FastCGI worker. If the payload exceeds the configured threshold—which defaults to <code>1m</code> if omitted—Nginx immediately terminates the request and returns <code>413</code>. Even after raising Nginx&#39;s limit, backends such as PHP-FPM (<code>post_max_size</code>) or Express (<code>body-parser</code>) enforce independent limits that can reject the same upload downstream.</p>
 <p>For <strong>403 Forbidden</strong>, Nginx worker processes run as an unprivileged user (typically <code>www-data</code> on Debian/Ubuntu or <code>nginx</code> on RHEL/Rocky). At the Linux VFS layer, the worker needs read (<code>r</code>) permission on the served file <em>and</em> execute/search (<code>x</code>) permission on <strong>every parent directory</strong> from <code>/</code> down to the web root. If a site lives under <code>/home/deploy/app/dist</code> and <code>/home/deploy</code> has mode <code>700</code>, Nginx cannot traverse into it and logs <code>Permission denied</code> alongside a <code>403</code> response. A <code>403</code> also occurs when a client requests a directory URL without a matching <code>index</code> file while <code>autoindex</code> is <code>off</code>.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -709,6 +725,20 @@ memory_limit = 256M
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

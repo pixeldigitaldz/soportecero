@@ -370,6 +370,22 @@
 <h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
 <p>Docker containers attached to user-defined bridge networks (which Umbrel OS uses for all apps) receive <code>/etc/resolv.conf</code> pointing to Docker&#39;s embedded DNS server at <code>127.0.0.11</code>. When a container resolves an external domain like <code>registry-1.docker.io</code>, <code>127.0.0.11</code> forwards the query to the upstream nameservers listed in the host&#39;s <code>/etc/resolv.conf</code>.</p>
 <p>Here is where Umbrel OS (Debian/Ubuntu-based) breaks: if the host uses <code>systemd-resolved</code>, <code>/etc/resolv.conf</code> contains <code>nameserver 127.0.0.53</code>. Because <code>127.0.0.53</code> is a loopback address, a container&#39;s network namespace cannot route to it. Docker attempts to strip <code>127.0.0.x</code> entries and read <code>/run/systemd/resolve/resolv.conf</code> instead—or falls back to Google&#39;s <code>8.8.8.8</code>—which fails if <code>systemd-resolved</code> is misconfigured, if your router hands out an IPv6 DNS server that lacks IPv6 routing, or if you pointed your router&#39;s DHCP DNS to a Pi-hole/AdGuard container running on the <em>same</em> Umbrel machine (creating a circular dependency when Docker restarts).</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -633,6 +649,20 @@ Containers using <code>network_mode: host</code> read the host&#39;s <code>/etc/
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

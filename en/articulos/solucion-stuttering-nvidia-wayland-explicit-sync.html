@@ -372,6 +372,22 @@
 <p>On Linux, open-source Mesa drivers (AMD and Intel) traditionally used <strong>implicit synchronization</strong>, where the kernel tracks buffer dependencies internally via <code>dma_buf</code> reservations. When an application submits a frame to the Wayland compositor, the kernel automatically blocks scanout until the GPU signals completion.</p>
 <p>NVIDIA&#39;s proprietary kernel module (<code>nvidia-drm.ko</code>), however, is architected around <strong>explicit synchronization</strong>. Under explicit sync, the client and compositor exchange explicit timeline sync objects (<code>drm_syncobj</code>) via the Wayland <code>linux-drm-syncobj-v1</code> protocol. Prior to NVIDIA driver <code>555.58</code> and XWayland <code>24.1</code>, the Wayland protocol stack lacked standardized explicit sync primitives for X11-bridged games. As a result, XWayland submitted buffers to the compositor without waiting for NVIDIA&#39;s GPU command queue to flush, causing the compositor to display incomplete or previous backbuffers—producing severe frame-order jitter, black flashes, and tearing in DXVK/VKD3D titles.</p>
 <p>Additionally, if <code>nvidia-drm.modeset=1</code> is omitted from the kernel command line, <code>nvidia-drm</code> refuses to expose atomic modesetting and PRIME display offload capabilities, forcing compositors into slow software-copy fallbacks.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -665,6 +681,20 @@ Only temporarily for testing. With <code>nvidia-drm.modeset=1</code> and driver 
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

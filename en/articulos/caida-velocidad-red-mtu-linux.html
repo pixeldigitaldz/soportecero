@@ -370,6 +370,22 @@
 <h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
 <p>Standard Ethernet frames carry a 1500-byte L3 MTU (20 bytes IPv4 header + 20 bytes TCP header + 1460 bytes MSS payload). However, encapsulation protocols shrink the available payload space: <strong>PPPoE</strong> consumes 8 bytes (max MTU <code>1492</code>), <strong>WireGuard</strong> over IPv4 consumes 60 bytes (<code>1420</code> recommended), and <strong>VXLAN</strong> in cloud overlays consumes 50 bytes (<code>1450</code>).</p>
 <p>Normally, <strong>Path MTU Discovery (PMTUD)</strong> prevents oversized packets by setting the IP <code>Don&#39;t Fragment</code> (DF) bit; any router with a smaller egress MTU returns an <code>ICMP Type 3 Code 4 (Fragmentation Needed)</code> message so the sender shrinks its TCP segment size. Unfortunately, misconfigured firewalls frequently drop all ICMP traffic—creating a <strong>PMTUD black hole</strong>. Small packets like DNS queries and SSH keystrokes pass normally, while bulk data transfers and TLS certificates exceed the hidden bottleneck and silently time out.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -665,6 +681,20 @@ IPv6 headers are 40 bytes plus 8 bytes for ICMPv6 (48 bytes total). Use <code>pi
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

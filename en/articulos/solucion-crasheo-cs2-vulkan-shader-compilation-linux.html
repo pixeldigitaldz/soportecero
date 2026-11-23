@@ -404,6 +404,22 @@
 <h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
 <p>CS2 runs natively on Linux using <strong>Source 2&#39;s Vulkan renderer</strong> (via SDL3/SDL2). Unlike OpenGL or older DX9 titles, Vulkan requires explicit compilation of Graphics Pipeline Objects (PSO) combining shaders, blend states, and render-pass attachments. Whenever a new particle effect—such as volumetric smoke interacting with HE grenade blasts—renders for the first time, the GPU driver must compile that pipeline synchronously unless it was pre-cached or split using <strong><code>VK_EXT_graphics_pipeline_library</code> (GPL)</strong>.</p>
 <p>On AMD GPUs running <strong>Mesa RADV</strong> older than 23.1, GPL is disabled or incomplete, causing 50–300 ms frametime spikes mid-duel. Meanwhile, Source 2&#39;s asset streaming and Vulkan memory allocator allocate tens of thousands of virtual memory areas (<code>mmap</code> calls). Distributions that ship with the default Linux kernel limit (<code>vm.max_map_count = 65530</code>) exhaust available map descriptors during heavy maps like Ancient or Train, triggering an immediate <code>ENOMEM</code> segfault.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -627,6 +643,20 @@ Occasionally, outdated <code>libgamemode</code> or overlay hooks (<code>LD_PRELO
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

@@ -639,6 +639,51 @@ ${itemsHtml}
     }
   }
 
+  // 7. Strategic In-Article AdSense Injection (SC-InArticle - slot 5381801020)
+  // Placed cleanly before major H2 transitions (never above the fold or inside code blocks)
+  const adLabel = isEn ? 'Advertisement' : 'Publicidad';
+  const inArticleAdHtml = `
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="${adLabel}">
+    <span class="ad-slot-label">${adLabel}</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  `;
+
+  const h2Matches = [...html.matchAll(/<h2\b[^>]*>/gi)];
+  const countPlainWords = (str) => str.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+  const totalWords = countPlainWords(html);
+  const insertionOffsets = [];
+
+  if (h2Matches.length >= 3) {
+    // Primary slot: right before the 3rd H2 (Step-by-Step Implementation, after Diagnostics & ToC)
+    insertionOffsets.push(h2Matches[2].index);
+    // Optional second slot ONLY on long guides (>= 1200 words) with substantial content between H2 #3 and H2 #4
+    if (h2Matches.length >= 4 && totalWords >= 1200) {
+      const wordsBetween = countPlainWords(html.slice(h2Matches[2].index, h2Matches[3].index));
+      if (wordsBetween >= 350) {
+        insertionOffsets.push(h2Matches[3].index);
+      }
+    }
+  } else if (h2Matches.length === 2) {
+    // Shorter 2-section articles: place cleanly before the 2nd H2
+    insertionOffsets.push(h2Matches[1].index);
+  }
+
+  // Insert from back to front so earlier indices stay valid
+  for (let i = insertionOffsets.length - 1; i >= 0; i--) {
+    const pos = insertionOffsets[i];
+    html = html.slice(0, pos) + '\n' + inArticleAdHtml + '\n' + html.slice(pos);
+  }
+
   return {
     contentHtml: html,
     preventionHtml: preventionListHtml,

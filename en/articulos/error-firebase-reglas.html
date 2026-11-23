@@ -432,6 +432,22 @@
 <li><strong>Rules Are Not Filters:</strong> Firestore does not filter out unauthorized documents from a collection query. If your rule states <code>allow read: if resource.data.ownerId == request.auth.uid;</code>, calling <code>getDocs(collection(db, &#39;orders&#39;))</code> without a matching <code>.where(&#39;ownerId&#39;, &#39;==&#39;, user.uid)</code> fails completely—even if every document in the collection happens to belong to that user.</li>
 <li><strong>Auth Hydration Race Conditions:</strong> On initial page load, <code>firebase/auth</code> restores the session asynchronously from IndexedDB. Firing a <code>getDoc()</code> or <code>onSnapshot()</code> call before <code>onAuthStateChanged</code> resolves sends <code>request.auth == null</code> to the server.</li>
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -658,6 +674,20 @@ onAuthStateChanged(auth, <span class="tok-kw">async</span> (user) =&gt; {
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

@@ -56,6 +56,7 @@ if (!fs.existsSync(TEMPLATE_PATH)) {
 const rawTemplate = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
 const baseTemplate = rawTemplate
   .replace(/\s*<!-- Structured Data JSON-LD -->[\s\S]*?<\/style>/i, '')
+  .replace(/\s*<!-- SC-Tools Ad Block -->[\s\S]*?<!-- \/SC-Tools Ad Block -->/gi, '')
   .replace(/<article[^>]*class="[^"]*seo-static-content"[\s\S]*?<\/article>/i, '');
 
 // 6 Tools definitions with rich SEO guides (+800 words each), formulas, tables, and FAQs
@@ -1525,8 +1526,116 @@ const SEO_ARTICLE_CSS = `
       font-size: 1.2rem;
     }
   }
+  /* SC-Tools AdSense Containers (Responsive & Strictly Contained) */
+  .sc-tools-ad-outer {
+    width: 100%;
+    max-width: 80rem;
+    margin: 2rem auto 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  .sc-tools-ad-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: rgba(16, 19, 28, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+    padding: 0.75rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .sc-tools-ad-wrapper--inner {
+    margin-top: 2.5rem;
+    background: #11141f;
+  }
+  .sc-tools-ad-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #64748b;
+    line-height: 1;
+    user-select: none;
+  }
+  .sc-tools-ad-inner {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-align: center;
+    min-height: 100px;
+  }
+  .sc-tools-ad-inner ins.adsbygoogle {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+  }
+  .sc-tools-ad-inner ins.adsbygoogle iframe {
+    max-width: 100% !important;
+    display: block;
+    margin: 0 auto;
+  }
+  .sc-tools-ad-outer:has(ins.adsbygoogle[data-ad-status="unfilled"]),
+  .sc-tools-ad-wrapper:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+    display: none !important;
+  }
+  @media (max-width: 768px) {
+    .sc-tools-ad-outer {
+      margin-top: 1.25rem;
+      padding: 0 0.75rem;
+    }
+    .sc-tools-ad-wrapper {
+      padding: 0.65rem 0.5rem 0.85rem;
+      border-radius: 0.85rem;
+    }
+    .sc-tools-ad-wrapper--inner {
+      margin-top: 1.75rem;
+    }
+  }
 </style>
 `;
+
+const TOOLS_AD_TOP_HTML = `
+    <!-- SC-Tools Ad Block -->
+    <div class="sc-tools-ad-outer">
+      <aside class="sc-tools-ad-wrapper" aria-label="Publicidad">
+        <span class="sc-tools-ad-label">Publicidad</span>
+        <div class="sc-tools-ad-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="9866559682"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
+    </div>
+    <!-- /SC-Tools Ad Block -->`;
+
+const TOOLS_AD_BOTTOM_HTML = `
+      <!-- SC-Tools Bottom Ad Block -->
+      <aside class="sc-tools-ad-wrapper sc-tools-ad-wrapper--inner" aria-label="Publicidad">
+        <span class="sc-tools-ad-label">Publicidad</span>
+        <div class="sc-tools-ad-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="9866559682"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>`;
 
 let generatedCount = 0;
 
@@ -1552,10 +1661,11 @@ for (const tool of TOOLS_CONFIG) {
   </head>`;
   html = html.replace('</head>', headInjection);
 
-  // 4. Inject Initial Tool ID and Rich Static SEO Content below #root
+  // 4. Inject Initial Tool ID, SC-Tools Ad Slots and Rich Static SEO Content below #root
   const articleBlock = `
     <script>window.__INITIAL_TOOL_ID__ = "${tool.toolId}";</script>
     <div id="root"></div>
+    ${TOOLS_AD_TOP_HTML}
     <article class="max-w-5xl mx-auto px-4 py-12 text-slate-300 seo-static-content" role="article" aria-label="${tool.title}">
       <header class="seo-header">
         <span class="seo-header-tag">${tool.badge}</span>
@@ -1565,6 +1675,7 @@ for (const tool of TOOLS_CONFIG) {
         </div>
       </header>
       ${tool.articleHtml}
+      ${TOOLS_AD_BOTTOM_HTML}
     </article>
   `;
 
@@ -1626,6 +1737,7 @@ hubHtml = hubHtml.replace('</head>', hubHeadInjection);
 
 const hubArticleBlock = `
     <div id="root"></div>
+    ${TOOLS_AD_TOP_HTML}
     <article class="max-w-5xl mx-auto px-4 py-12 text-slate-300 seo-static-content" role="article" aria-label="Directorio de Calculadoras Financieras SoporteCero">
       <header class="seo-header">
         <span class="seo-header-tag">Finanzas Pro Hub &bull; Suite Interactiva</span>

@@ -458,6 +458,22 @@
 <li><strong>Extended Inode Flags (<code>FS_IMMUTABLE_FL</code> / <code>FS_APPEND_FL</code>):</strong> Native Linux filesystems—including <code>ext4</code>, <code>XFS</code>, and <code>Btrfs</code>—store extra attribute bits directly in the inode structure. When the immutable bit (<code>i</code>) is set, the kernel explicitly returns <code>-EPERM</code> (<code>Operation not permitted</code>) for any attempt to modify data, rename, unlink, or alter permissions/ownership—even for <code>root</code>. Only a process holding <code>CAP_LINUX_IMMUTABLE</code> calling <code>chattr -i</code> (via the <code>FS_IOC_SETFLAGS</code> ioctl) can clear it.</li>
 <li><strong>Filesystem State and Mount Options:</strong> If a storage device encounters hardware I/O errors or journal corruption, <code>errors=remount-ro</code> flips the superblock to read-only (<code>EROFS</code>). Likewise, Windows filesystems (<code>NTFS</code>, <code>vfat</code>/<code>FAT32</code>) lack POSIX inode ownership tables, and NFS shares with <code>root_squash</code> (the default) translate client UID 0 to <code>nfsnobody</code>, causing <code>EPERM</code> on metadata changes.</li>
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -709,6 +725,20 @@ dmesg <span class="tok-prop">-T</span> | <span class="tok-kw">grep</span> <span 
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

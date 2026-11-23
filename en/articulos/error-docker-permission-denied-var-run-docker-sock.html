@@ -371,6 +371,22 @@
 <p>The Docker Engine uses a client-server architecture. The <code>docker</code> CLI binary does not start containers directly; instead, it serializes commands into HTTP requests sent over the UNIX socket <code>/var/run/docker.sock</code>. By default, <code>systemd</code> socket activation (<code>docker.socket</code>) creates <code>/var/run/docker.sock</code> with mode <code>0660</code> (<code>srw-rw----</code>) and ownership <code>root:docker</code>.</p>
 <p>Under POSIX discretionary access control (DAC), read and write permissions on a UNIX domain socket are required to open a connection. While <code>root</code> always passes this check (which is why <code>sudo docker ps</code> succeeds), an ordinary user&#39;s process credentials only pass if their supplementary group list (<code>groups</code>) includes the GID of <code>docker</code>.</p>
 <p>A second, frequently overlooked cause occurs when a developer previously ran <code>sudo docker login</code> or <code>sudo docker buildx</code>. That creates <code>~/.docker/</code> owned by <code>root:root</code>, causing subsequent non-root Docker commands to fail when reading <code>config.json</code> or Buildx state.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -602,6 +618,20 @@ Run <code>env | grep DOCKER_HOST</code>. If it points to <code>/run/user/1000/do
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

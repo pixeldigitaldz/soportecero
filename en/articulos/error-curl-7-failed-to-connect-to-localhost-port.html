@@ -371,6 +371,22 @@
 <h2 id="root-cause-amp-technical-mechanics">Root Cause &amp; Technical Mechanics</h2>
 <p>On modern Linux, macOS, and Windows systems, <code>/etc/hosts</code> maps <code>localhost</code> to both <code>127.0.0.1</code> (IPv4) and <code>::1</code> (IPv6). When <code>curl</code> resolves <code>localhost</code> via <code>getaddrinfo()</code>, it often attempts <code>::1</code> first (or races IPv6/IPv4 via Happy Eyeballs depending on build flags). If your Node.js, Python, or Go server explicitly bound only to <code>127.0.0.1:3000</code>—or if Node.js v17+ flipped DNS resolution order to <code>verbatim</code>—the <code>::1</code> socket has no listener and returns <code>ECONNREFUSED</code>.</p>
 <p>A second major cause is <strong>container loopback isolation</strong>. Inside a Docker container, <code>127.0.0.1</code> refers to the container&#39;s own private network namespace—not the host&#39;s loopback. If Vite, Flask, or Express binds to <code>127.0.0.1:3000</code> inside the container, Docker&#39;s <code>docker-proxy</code> on the host cannot forward traffic into it, resulting in <code>curl: (7)</code> or <code>Empty reply from server</code> on the host.</p>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="step-by-step-technical-implementation">
           <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -620,6 +636,20 @@ Inside a container, <code>localhost</code> is the container itself, not the host
           </div>
         </div>
       </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
       
     </article>
 

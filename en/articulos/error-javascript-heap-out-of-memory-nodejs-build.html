@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js | SoporteCero</title>
+  <meta name="description" content="How to fix FATAL ERROR Reached heap limit Allocation failed - JavaScript heap out of memory in Node.js, Next.js, Vite, TypeScript, and Docker builds.">
+  <meta name="keywords" content="Node.js, Next.js, Vite, Docker">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.html">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/articulos/error-javascript-heap-out-of-memory-nodejs-build.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/articulos/error-javascript-heap-out-of-memory-nodejs-build.html" />
+  
+  <link rel="alternate" type="text/markdown" href="https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.md" title="Markdown version for AI Agents">
+  <link rel="llms-txt" href="https://soportecero.com/llms.txt">
+  
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js">
+  <meta property="og:description" content="How to fix FATAL ERROR Reached heap limit Allocation failed - JavaScript heap out of memory in Node.js, Next.js, Vite, TypeScript, and Docker builds.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.html">
+  <meta property="og:site_name" content="SoporteCero">
+  <meta property="og:image" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:secure_url" content="https://soportecero.com/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="SoporteCero - Cero Errores">
+  <meta property="article:published_time" content="2026-11-23">
+  <meta property="article:section" content="Web & Code">
+  <meta property="article:tag" content="Node.js">
+  <meta property="article:tag" content="Next.js">
+  <meta property="article:tag" content="Vite">
+  <meta property="article:tag" content="Docker">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js">
+  <meta name="twitter:description" content="How to fix FATAL ERROR Reached heap limit Allocation failed - JavaScript heap out of memory in Node.js, Next.js, Vite, TypeScript, and Docker builds.">
+  <meta name="twitter:image" content="https://soportecero.com/og-image.png">
+  
+  <!-- Google Fonts (Inter & JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+  
+  <!-- Anti-FOUC Theme Script -->
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+  
+  <!-- JSON-LD Schema Markup -->
+  
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js",
+  "description": "How to fix FATAL ERROR Reached heap limit Allocation failed - JavaScript heap out of memory in Node.js, Next.js, Vite, TypeScript, and Docker builds.",
+  "image": "https://soportecero.com/og-image.png",
+  "inLanguage": "en",
+  "category": "Web & Code",
+  "articleSection": "Web & Code",
+  "keywords": "Node.js, Next.js, Vite, Docker",
+  "proficiencyLevel": "Intermediate",
+  "datePublished": "2026-11-23",
+  "dateModified": "2026-11-23",
+  "author": {
+    "@type": "Person",
+    "@id": "https://soportecero.com/en/about.html#rodolfo-castro",
+    "name": "Rodolfo Castro",
+    "jobTitle": "Founder, Full-Stack Developer & Systems Administrator",
+    "url": "https://soportecero.com/en/about.html",
+    "sameAs": [
+      "https://soportecero.com/en/about.html",
+      "https://soportecero.com/en/nosotros.html#rodolfo-castro",
+      "https://www.pixeldigitaldz.online/links"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://soportecero.com/#organization",
+    "name": "SoporteCero",
+    "url": "https://soportecero.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://soportecero.com/favicon.svg"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.html"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://soportecero.com/en/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js",
+      "item": "https://soportecero.com/en/articulos/error-javascript-heap-out-of-memory-nodejs-build.html"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What value should I set for --max-old-space-size?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set it to 70%–75% of the available physical RAM on the machine or container (e.g., 3072 on a 4 GB server, 4096 or 6144 on an 8 GB machine). Setting it higher than available RAM without swap will cause the Linux kernel to kill the process with SIGKILL."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does this happen on npm run build but not npm run dev?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Development servers compile routes and dependencies lazily on demand, whereas production build commands parse, type-check, tree-shake, and minify the entire dependency graph at once."
+      }
+    }
+  ]
+}
+  </script>
+    
+  <!-- Google AdSense Verification Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header-wrapper">
+    <header>
+      <!-- Logo Soporte Cero - Edición Ingeniería -->
+      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <!-- Isotipo Cero Técnico -->
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <!-- Cero Técnico Cortado '0' Centrado -->
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <!-- Punto de telemetría esquina superior derecha -->
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+
+        <!-- Logotipo Tipográfico -->
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">
+            Soporte
+          </span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">
+            Cero
+          </span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">
+            ENGINEERING
+          </span>
+        </div>
+      </a>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculators</span></a></li>
+          <li><a href="../index.html?cat=sistemas">Systems &amp; Servers</a></li>
+          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
+          <li><a href="../index.html?cat=web">Web &amp; Code</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      
+    <div class="lang-selector">
+      <a href="../../articulos/error-javascript-heap-out-of-memory-nodejs-build.html" class="lang-inactive">ES</a>
+      <span class="lang-separator">|</span>
+      <span class="lang-active">EN</span>
+    </div>
+    
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme" title="Toggle Theme">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/>
+        </svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/>
+        </svg>
+      </button>
+    </header>
+  </div>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+    
+    <!-- Article Header -->
+    <article class="post-container">
+      <nav class="post-breadcrumbs" aria-label="Breadcrumb navigation">
+        <a href="../index.html">HOME</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span>Web & Code</span>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span style="color: var(--text-secondary);">JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js</span>
+      </nav>
+
+      <header class="post-header">
+        <span class="card-category">Web & Code</span>
+        <h1 id="post-title">JavaScript Heap Out of Memory Error in Node.js, Vite, and Next.js</h1>
+        <div class="post-meta">
+          <span class="post-author">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            By <a href="../about.html" class="author-link">Rodolfo Castro</a>
+          </span>
+          <span class="post-verified" title="Replicated and tested in laboratory environment">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+            Lab Verified
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Read time: 7 min
+          </span>
+          <span>
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" />
+            </svg>
+            Updated: 2026-11-23
+          </span>
+        </div>
+      </header>
+
+      <!-- Main Layout: Content and Sidebar Grid -->
+      <div class="post-layout">
+        
+        <!-- Main Column -->
+        <div class="post-article">
+          <p>The <strong><code>FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory</code></strong> crash occurs when Node.js&#39;s V8 engine exceeds its maximum dynamic memory (<em>heap</em>) ceiling during heavy builds (<code>next build</code>, <code>vite build</code>, <code>tsc</code>) or a runtime memory leak. When the Garbage Collector can no longer free enough space, V8 aborts the process with exit code <code>134</code>.</p>
+
+    <h2 id="lab-environment-amp-diagnostics">Lab Environment &amp; Diagnostics</h2>
+    <section class="diagnostic-console" aria-labelledby="diag-heading">
+      <div class="diagnostic-console-header">
+        <div class="diag-console-title-group">
+          <span class="diag-pulse-dot" aria-hidden="true"></span>
+          <h3 id="technical-diagnostics-amp-root-cause-analysis">Technical Diagnostics &amp; Root Cause Analysis</h3>
+        </div>
+        <span class="diag-console-badge">Lab Environment</span>
+      </div>
+      <div class="diagnostic-console-body">
+        <div class="diagnostic-cards"><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Default V8 heap limit (~2 GB–4 GB) is too low</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Raise the ceiling with <code>NODE_OPTIONS=&quot;--max-old-space-size=4096&quot;</code> (or <code>8192</code>)</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Production source maps inflating bundler RAM (<code>vite</code> / <code>webpack</code>)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Set <code>sourcemap: false</code> in production builds</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Docker container or CI runner hitting cgroup RAM limits</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Cap <code>NODE_OPTIONS</code> at ~75% of container RAM and limit build workers</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Heavy barrel files (<code>index.ts</code>) or <code>tsc</code> scanning <code>node_modules</code></strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUTION</span>
+            </div>
+            <div class="diag-value">Enable <code>skipLibCheck: true</code> in <code>tsconfig.json</code> and avoid mega-barrels</div>
+          </div></div></div>
+      </div>
+    </section>
+
+    <nav class="toc-container" aria-label="Table of contents">
+      <div class="toc-header">
+        <div class="toc-header-left">
+          <svg class="toc-header-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="toc-header-title">TABLE OF CONTENTS</span>
+        </div>
+        <span class="toc-header-badge">Technical Index</span>
+      </div>
+      <div class="toc-body">
+        <ul class="toc-list">
+
+        <li class="toc-item">
+          <a href="#lab-environment-amp-diagnostics" class="toc-link">
+            <span class="toc-number">01</span>
+            <span class="toc-text">Lab Environment &amp; Diagnostics</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#technical-diagnostics-amp-root-cause-analysis" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Technical Diagnostics &amp; Root Cause Analysis</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#v8-heap-mechanics-and-root-causes" class="toc-link">
+            <span class="toc-number">02</span>
+            <span class="toc-text">V8 Heap Mechanics and Root Causes</span>
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#step-by-step-technical-implementation" class="toc-link">
+            <span class="toc-number">03</span>
+            <span class="toc-text">Step-by-Step Technical Implementation</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#step-1-inspect-the-current-v8-heap-limit" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 1: Inspect the Current V8 Heap Limit</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-2-set-nodeoptions-consistently-in-packagejson" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 2: Set NODE_OPTIONS Consistently in package.json</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-3-reduce-real-memory-footprint-in-vite-nextjs-and-typescript" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 3: Reduce Real Memory Footprint in Vite, Next.js, and TypeScript</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#step-4-configure-heap-limits-inside-a-multi-stage-dockerfile" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Step 4: Configure Heap Limits Inside a Multi-Stage Dockerfile</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        <li class="toc-item">
+          <a href="#frequently-asked-questions" class="toc-link">
+            <span class="toc-number">04</span>
+            <span class="toc-text">Frequently Asked Questions</span>
+          </a>
+        <ul class="toc-sublist">
+
+          <li class="toc-subitem">
+            <a href="#what-value-should-i-set-for-max-old-space-size" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">What value should I set for --max-old-space-size?</span>
+            </a>
+          </li>
+        
+
+          <li class="toc-subitem">
+            <a href="#why-does-this-happen-on-npm-run-build-but-not-npm-run-dev" class="toc-sublink">
+              <span class="toc-subicon" aria-hidden="true">↳</span>
+              <span class="toc-subtext">Why does this happen on npm run build but not npm run dev?</span>
+            </a>
+          </li>
+        
+        </ul>
+        </li>
+      
+        </ul>
+      </div>
+    </nav>
+    
+    
+<hr>
+<h2 id="v8-heap-mechanics-and-root-causes">V8 Heap Mechanics and Root Causes</h2>
+<p>Node.js stores long-lived objects inside V8&#39;s <strong>Old Space</strong> segment—including TypeScript ASTs, Vite/Rollup module graphs, Webpack caches, and Next.js static generation payloads.</p>
+<p>On 64-bit systems, V8 caps this heap automatically (typically between 2 GB and 4 GB depending on Node.js version and host RAM). Builds usually hit this ceiling for three reasons:</p>
+<ol>
+<li><strong>Bundling and minification spikes:</strong> Tools like Terser, SWC, PostCSS, and <code>tsc</code> hold thousands of parsed ASTs in memory simultaneously during production builds.</li>
+<li><strong>Docker / CI cgroup mismatches:</strong> Inside containers with strict memory limits (e.g., 2 GB RAM), V8 may either exhaust its internal heap limit early or trigger a Linux <code>OOMKilled</code> termination.</li>
+<li><strong>Barrel files and circular imports:</strong> Importing icon packs (<code>lucide-react</code>, <code>@mui/icons-material</code>) through top-level barrel files forces the compiler to parse thousands of unused modules in memory.</li>
+</ol>
+<hr>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Advertisement">
+    <span class="ad-slot-label">Advertisement</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
+<h2 id="step-by-step-technical-implementation">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Step-by-Step Technical Implementation
+        </h2>
+
+<h3 id="step-1-inspect-the-current-v8-heap-limit">Step 1: Inspect the Current V8 Heap Limit</h3>
+<p>Check how much heap memory Node.js allocates by default in your environment:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">node</span> <span class="tok-prop">-e</span> &quot;console.<span class="tok-prop">log</span>(<span class="tok-cmt">&#39;Heap limit (MB):&#39;, Math.round(require(&#39;v8&#39;).getHeapStatistics().heap_size_limit / 1024 / 1024))&quot;</span>
+</code></pre>
+    </div>
+    
+<p>If the output sits around <code>2048</code> or <code>4096</code> MB and your build crashes at peak load, increase the heap limit safely.</p>
+<h3 id="step-2-set-nodeoptions-consistently-in-packagejson">Step 2: Set <code>NODE_OPTIONS</code> Consistently in <code>package.json</code></h3>
+<p>Test the build with an increased Old Space allocation first:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Immediate test on Linux / macOS</span>
+NODE_OPTIONS=<span class="tok-str">&quot;--max-old-space-size=4096&quot;</span> <span class="tok-kw">npm</span> run build
+</code></pre>
+    </div>
+    
+<p>Persist it inside <code>package.json</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JSON</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>{
+  <span class="tok-str">&quot;scripts&quot;</span>: {
+    <span class="tok-str">&quot;build&quot;</span>: <span class="tok-str">&quot;NODE_OPTIONS=\&quot;</span>--max-old-space-size=<span class="tok-num">4096</span>\<span class="tok-str">&quot; next build&quot;</span>
+  }
+}
+</code></pre>
+    </div>
+    
+<p>For cross-platform teams (Windows + Linux/macOS), use <code>cross-env</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JSON</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>{
+  <span class="tok-str">&quot;scripts&quot;</span>: {
+    <span class="tok-str">&quot;build&quot;</span>: <span class="tok-str">&quot;cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build&quot;</span>
+  }
+}
+</code></pre>
+    </div>
+    
+<h3 id="step-3-reduce-real-memory-footprint-in-vite-nextjs-and-typescript">Step 3: Reduce Real Memory Footprint in Vite, Next.js, and TypeScript</h3>
+<p>Raising the memory limit buys headroom, while trimming bundler overhead prevents future regressions:</p>
+<ol class="steps-list">
+
+        <li class="step-item" id="disable-heavy-production-source-maps-viteconfigts">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="disable-heavy-production-source-maps-viteconfigts-heading">Disable heavy production source maps (<code>vite.config.ts</code>):</h4>
+            
+          </div>
+        </li>
+        
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">TS</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">import</span> { defineConfig } <span class="tok-kw">from</span> <span class="tok-str">&#39;vite&#39;</span>;
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> defineConfig({
+  build: {
+    sourcemap: <span class="tok-kw">false</span>,
+    chunkSizeWarningLimit: <span class="tok-num">1000</span>
+  }
+});
+</code></pre>
+    </div>
+    
+<ol start="2">
+<li><strong>Speed up TypeScript type checking (<code>tsconfig.json</code>):</strong></li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JSON</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>{
+  <span class="tok-str">&quot;compilerOptions&quot;</span>: {
+    <span class="tok-str">&quot;skipLibCheck&quot;</span>: <span class="tok-kw">true</span>,
+    <span class="tok-str">&quot;incremental&quot;</span>: <span class="tok-kw">true</span>
+  },
+  <span class="tok-str">&quot;exclude&quot;</span>: [<span class="tok-str">&quot;node_modules&quot;</span>, <span class="tok-str">&quot;dist&quot;</span>, <span class="tok-str">&quot;.next&quot;</span>]
+}
+</code></pre>
+    </div>
+    
+<ol start="3">
+<li><strong>Limit Next.js worker concurrency on low-RAM runners (<code>next.config.mjs</code>):</strong></li>
+</ol>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">JS</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt">/** @type {import(&#39;next&#39;).NextConfig} */</span>
+<span class="tok-kw">const</span> nextConfig = {
+  productionBrowserSourceMaps: <span class="tok-kw">false</span>,
+  experimental: {
+    workerThreads: <span class="tok-kw">false</span>,
+    cpus: <span class="tok-num">2</span>
+  }
+};
+
+<span class="tok-kw">export</span> <span class="tok-kw">default</span> nextConfig;
+</code></pre>
+    </div>
+    
+<h3 id="step-4-configure-heap-limits-inside-a-multi-stage-dockerfile">Step 4: Configure Heap Limits Inside a Multi-Stage <code>Dockerfile</code></h3>
+<p>On small VPS instances or CI runners, reserve ~25% of total RAM for the OS and Docker daemon so the container isn&#39;t <code>OOMKilled</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">DOCKERFILE</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copy code to clipboard" data-copy-label="Copy" data-copied-label="Copied">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">FROM</span> node:<span class="tok-num">22</span>-alpine AS builder
+<span class="tok-kw">WORKDIR</span> /app
+<span class="tok-kw">COPY</span> package*.<span class="tok-prop">json</span> ./
+<span class="tok-kw">RUN</span> npm ci
+
+<span class="tok-kw">COPY</span> . .<span class="tok-cmt">
+# On a 4 GB RAM runner, allocate 3072 MB to V8</span>
+<span class="tok-kw">ENV</span> NODE_OPTIONS=<span class="tok-str">&quot;--max-old-space-size=3072&quot;</span>
+<span class="tok-kw">RUN</span> npm run build
+</code></pre>
+    </div>
+    
+<hr>
+<h2 id="frequently-asked-questions">Frequently Asked Questions</h2>
+<h3 id="what-value-should-i-set-for-max-old-space-size">What value should I set for <code>--max-old-space-size</code>?</h3>
+<p>Set it to <strong>70%–75% of the available physical RAM</strong> on the machine or container (e.g., <code>3072</code> on a 4 GB server, <code>4096</code> or <code>6144</code> on an 8 GB machine). Setting it higher than available RAM without swap will cause the Linux kernel to kill the process with <code>SIGKILL</code>.</p>
+<h3 id="why-does-this-happen-on-npm-run-build-but-not-npm-run-dev">Why does this happen on <code>npm run build</code> but not <code>npm run dev</code>?</h3>
+<p>Development servers compile routes and dependencies lazily on demand, whereas production <code>build</code> commands parse, type-check, tree-shake, and minify the entire dependency graph at once.</p>
+<hr>
+
+
+          <!-- Prevention Callout Card -->
+          <div class="prevention-callout-card">
+            <h3 id="prev-heading">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--accent-color);">
+                <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3z"/>
+              </svg>
+              Prevention Advice
+            </h3>
+            <p style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--text-secondary); font-weight: 500;">
+              Recommended security practices:
+            </p>
+            <ul class="prevention-list">
+              <li>Avoid importing from massive barrel files (<code>index.ts</code>) in UI or icon libraries; import specific subpaths when supported.</li>
+<li>Provision at least a 2 GB swap file on small build VPS instances to absorb temporary bundling spikes safely.</li>
+<li>Use <code>node --heapsnapshot-signal=SIGUSR2</code> on long-running Node.js services if the crash happens in production runtime rather than during build time.</li>
+            </ul>
+          </div>
+
+          <!-- Author Bio & Editorial Transparency Card -->
+          <div class="author-card" id="author">
+            <div class="author-avatar" aria-hidden="true">RC</div>
+            <div class="author-info">
+              <div class="author-header">
+                <span class="author-role">Author • Web Designer & App Creator</span>
+                <h4 class="author-name"><a href="../about.html">Rodolfo Castro</a></h4>
+              </div>
+              <p class="author-bio">
+                Web designer, app developer, and founder of SoporteCero. Specializing in UI/UX architecture, digital products, and modern web environments (<a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: underline;">Pixel Digital Dz</a>). Every tutorial and guide on SoporteCero is thoroughly tested and verified in our technical lab to ensure reliable, up-to-date solutions.
+              </p>
+              <div class="author-footer">
+                <a href="../nosotros.html#metodologia" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  Editorial Methodology
+                </a>
+                <span class="author-sep">•</span>
+                <a href="../contact.html" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                  Report an issue
+                </a>
+                <span class="author-sep">•</span>
+                <a href="https://www.pixeldigitaldz.online/links" target="_blank" rel="noopener noreferrer" class="author-action-link">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  Links & Portfolio
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SC-PostBottom (Display Horizontal / Responsive, Strictly Contained) -->
+      <aside class="ad-slot-wrapper ad-slot-wrapper--post-bottom" aria-label="Advertisement">
+        <span class="ad-slot-label">Advertisement</span>
+        <div class="ad-slot-inner">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6956525438386645"
+               data-ad-slot="6471521412"
+               data-ad-format="auto"
+               data-full-width-responsive="false"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
+      
+    </article>
+
+    <!-- Related Solutions Section -->
+    <section class="related-solutions-section" aria-labelledby="related-heading">
+      <h2 id="related-heading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        Related Solutions
+      </h2>
+      <div class="related-grid">
+        
+      <!-- Related Card: PrismaClientInitializationError: Query engine binary could not be found -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-prisma-client-initialization-query-engine-binary.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">PrismaClientInitializationError: Query engine binary could not be found</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Prisma</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: TypeScript Error TS2339: Property does not exist on type -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-typescript-ts2339-property-does-not-exist-on-type.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">TypeScript Error TS2339: Property does not exist on type</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">TypeScript</span>
+            <span>Read Time: 5 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: TypeScript Error TS2339: Property does not exist on type -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web & Code</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-typescript-ts2339-property-does-not-exist-on-type.sync-conflict-20261123-133718-6JDMCWM.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">TypeScript Error TS2339: Property does not exist on type</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">TypeScript</span>
+            <span>Read Time: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="../servicios.html">Services</a></li>
+        <li><a href="../legal/privacidad.html">Privacy Policy</a></li>
+        <li><a href="../legal/terminos.html">Terms of Service</a></li>
+        <li><a href="../legal/cookies.html">Cookie Policy</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero is an independent technical documentation portal delivering actionable troubleshooting steps, verified commands, and systems support for developers, sysadmins, and gamers.
+      </p>
+      <p class="footer-copyright">
+        &copy; 2026 SoporteCero. All rights reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="../../js/main.js"></script>
+</body>
+</html>

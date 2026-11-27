@@ -98,7 +98,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -121,6 +121,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/categorias/sistemas.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Error de arranque en Linux por configuración incorrecta en /etc/fstab",
       "item": "https://soportecero.com/articulos/error-invalid-fstab-linux.html"
     }
@@ -138,7 +144,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -167,19 +173,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-invalid-fstab-linux.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-invalid-fstab-linux.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -199,9 +205,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Sistemas y Servidores</span>
+        <a href="/categorias/sistemas.html">Sistemas y Servidores</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Error de arranque en Linux por configuración incorrecta en /etc/fstab</span>
       </nav>
@@ -226,7 +232,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -243,14 +249,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>Modificar el archivo <code>/etc/fstab</code> para montar discos duros secundarios o memorias de intercambio (SWAP) es común, pero un solo carácter mal escrito, un espacio de más o un UUID de disco inexistente hará que tu distribución Linux falle al arrancar, enviándote directamente a una pantalla negra con el mensaje de error <code>Welcome to emergency mode!</code>.</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>El sistema de control de versiones <strong>Git</strong> opera como una base de datos de objetos direccionables por contenido criptográfico (hashes SHA-1 / SHA-256) respaldada por un grafo acíclico dirigido (DAG). La integridad del repositorio descansa en el directorio interno <code>.git/</code>, donde se almacenan cuatro tipos de objetos atómicos: <strong>blobs</strong> (contenido puro de archivos), <strong>trees</strong> (representación de directorios y permisos POSIX), <strong>commits</strong> (metadatos del autor, mensaje y puntero al árbol raíz) y <strong>annotated tags</strong>.</p>
-<p>La causa raíz de esta incidencia se produce por una alteración en los punteros de referencia o en el mecanismo de bloqueo transaccional del árbol de trabajo:</p>
-<ol>
-<li><strong>Mecanismo de Lockfiles atómicos (<code>.git/*.lock</code>):</strong> Para garantizar la atomicidad en operaciones concurrentes y evitar condiciones de carrera (<em>race conditions</em>), Git genera archivos efímeros de bloqueo (ej. <code>.git/refs/heads/main.lock</code> o <code>.git/index.lock</code>) antes de mutar cualquier puntero o actualizar el área de preparación (<em>staging index</em>). Si un proceso de Git finaliza inesperadamente (por apagado forzado, corte de IDE o fallo de memoria), el lockfile permanece huérfano en el sistema de archivos, impidiendo cualquier operación de lectura/escritura posterior con un error de bloqueo crítico.</li>
-<li><strong>Desincronización del grafo DAG y divergencia de ramas:</strong> Durante procesos de <code>rebase</code> o <code>cherry-pick</code>, Git reescribe la historia aplicando commits de forma secuencial sobre un nuevo commit base. Si se detectan cambios incompatibles en los mismos bloques de código sin un ancestro común directo (o si se fuerza la unión de árboles de commits independientes creados desde cero), el algoritmo de merge trifásico (<em>three-way merge</em>) detiene la ejecución para proteger la integridad del historial, dejando al repositorio en un estado transicional (<code>REBASE-i</code>, <code>MERGING</code> o <code>DETACHED HEAD</code>).</li>
-<li><strong>Capa de transporte SSL/TLS y validación de certificados:</strong> Al interactuar con remotos a través de HTTPS, el cliente Git delega la autenticación en la librería local <code>libcurl</code> y el almacén de certificados CA del sistema operativo. Si la cadena de certificación intermedia no se resuelve o existen desajustes en el reloj del sistema, el handshake criptográfico se cancela de inmediato.</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -273,7 +271,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Boot into rescue mode and fix broken entry in <code>/etc/fstab</code></div>
+            <div class="diag-value">Iniciar en modo rescate y corregir la línea defectuosa en <code>/etc/fstab</code></div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Partición no disponible en el arranque impidiendo iniciar el sistema</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Agregar la opción <code>nofail</code> a la partición secundaria en el archivo <code>/etc/fstab</code></div>
           </div></div></div>
       </div>
     </section>
@@ -297,15 +307,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -322,7 +325,7 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
@@ -332,41 +335,6 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
-
-    <div class="code-container">
-      <div class="code-header">
-        <div class="code-header-left">
-          <div class="code-dots" aria-hidden="true">
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-            <span class="code-dot"></span>
-          </div>
-          <span class="code-lang">BASH</span>
-        </div>
-        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
-          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span class="copy-text">Copiar</span>
-        </button>
-      </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> systemd-fstab-generator
-<span class="tok-cmt">
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> systemd-fstab-generator <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
-<span class="tok-cmt">
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
-</code></pre>
-    </div>
-    
-<ul>
-<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
-<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
-</ul>
 
 
   <!-- SC-InArticle -->
@@ -391,8 +359,39 @@
         </h2>
 <ol class="steps-list">
 
-        <li class="step-item" id="editar-el-archivo-con-precaucion">
+        <li class="step-item" id="acceder-con-permisos-de-escritura">
           <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="acceder-con-permisos-de-escritura-heading">Paso 1: Acceder con permisos de escritura</h4>
+            <p>En el modo de emergencia, el sistema de archivos suele estar bloqueado en modo &quot;Solo Lectura&quot;, por lo que no podrás guardar ninguna corrección. Ejecuta este comando para desbloquearlo:</p>
+
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-kw">mount</span> <span class="tok-prop">-o</span> remount,rw /
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
+
+        <li class="step-item" id="editar-el-archivo-con-precaucion">
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="editar-el-archivo-con-precaucion-heading">Paso 2: Editar el archivo con precaución</h4>
             <p>Abre el configurador utilizando el editor de texto integrado de la consola:</p>
@@ -423,7 +422,7 @@
         
 
         <li class="step-item" id="comentar-o-reparar-la-linea-corrupta">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="comentar-o-reparar-la-linea-corrupta-heading">Paso 3: Comentar o reparar la línea corrupta</h4>
             <p>Busca la última línea que agregaste (la del disco nuevo o la SWAP). Si no estás seguro de cuál es el error en la sintaxis, coloca un símbolo de almohadilla # al principio de esa línea entera. Esto le dice a Linux que ignore esa instrucción durante el arranque:</p>
@@ -456,7 +455,7 @@
         
 
         <li class="step-item" id="probar-y-reiniciar">
-          <div class="step-number">3</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h4 id="probar-y-reiniciar-heading">Paso 4: Probar y reiniciar</h4>
             <p>Antes de reiniciar a ciegas, dile al sistema que compruebe si la sintaxis del archivo fstab es correcta:</p>
@@ -586,40 +585,6 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Cómo solucionar el error SSH Connection Refused (Puerto 22) en Linux -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-ssh.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error SSH Connection Refused (Puerto 22) en Linux</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">SSH</span>
-            <span>Lectura: 6 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers privados -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-timeout-prowlarr.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers privados</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Prowlarr</span>
-            <span>Lectura: 6 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker -->
       <article class="related-card">
         <div class="related-card-content">
@@ -631,6 +596,91 @@
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error bind: address already in use al iniciar contenedores en Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-bind-address-already-in-use.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error bind: address already in use al iniciar contenedores en Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error chmod: Operation not permitted (Incluso como Root) en Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-linux-chmod-operation-not-permitted-chattr.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error chmod: Operation not permitted (Incluso como Root) en Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-systemd-failed-to-start-network-name-resolution.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">systemd</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/limpiar-cache-pacman-cachyos.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">CachyOS</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error Out of Memory OOM Killer en Linux y Systemd Cómo Diagnosticar y Evitar Caídas -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-systemd-oom-killer-memory-leak-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error Out of Memory OOM Killer en Linux y Systemd Cómo Diagnosticar y Evitar Caídas</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
             <span>Lectura: 7 min</span>
           </div>
         </div>
@@ -644,14 +694,14 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

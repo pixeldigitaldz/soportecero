@@ -101,7 +101,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -124,6 +124,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/categorias/sistemas.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved",
       "item": "https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html"
     }
@@ -165,7 +171,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -194,19 +200,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-systemd-failed-to-start-network-name-resolution.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-systemd-failed-to-start-network-name-resolution.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -226,9 +232,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Sistemas y Servidores</span>
+        <a href="/categorias/sistemas.html">Sistemas y Servidores</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved</span>
       </nav>
@@ -253,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -270,14 +276,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>El fallo generalizado <code>Temporary failure in name resolution</code>, <code>Could not resolve host: google.com</code> o <code>Failed to start Network Name Resolution</code> en Linux ocurre cuando el subsistema de resolución DNS local (systemd-resolved o el archivo <code>/etc/resolv.conf</code>) pierde la configuración de servidores de nombres, bloqueando todas las conexiones a internet que utilicen nombres de dominio.</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En la arquitectura del sistema operativo <strong>Linux</strong>, las aplicaciones de usuario operan en espacio no privilegiado (<em>User Space</em>) y dependen de llamadas al sistema (<em>syscalls</em>) para interactuar con los recursos físicos de hardware a través del <strong>Kernel de Linux</strong>. El subsistema del kernel arbitra el acceso a la memoria virtual, los descriptores de archivos, la pila de protocolos de red TCP/IP y los dispositivos de almacenamiento en bloque a través de la capa de abstracción <strong>VFS (Virtual File System)</strong>.</p>
-<p>La anomalía técnica identificada en esta incidencia proviene de una restricción o condición de fallo en los mecanismos de control del sistema:</p>
-<ol>
-<li><strong>Límites de descriptores de archivos y cuotas de inodos:</strong> Cada archivo, socket de red o tubería (<em>pipe</em>) abierto por un proceso consume un descriptor de archivo en la tabla del kernel. Si el proceso alcanza el límite de descriptores asignado por el subsistema <code>ulimit</code> o si el sistema de archivos agota su tabla de inodos libres (incluso cuando resta espacio en gigabytes en disco), el kernel rechaza cualquier operación de escritura con el código de error <code>ENOSPC (No space left on device)</code> o <code>EMFILE (Too many open files)</code>.</li>
-<li><strong>Jerarquía de permisos POSIX y atributos inmutables del sistema:</strong> Las llamadas al sistema como <code>open()</code>, <code>unlink()</code> o <code>chmod()</code> evalúan los bits de permiso estándar (Lectura <code>r</code>, Escritura <code>w</code>, Ejecución <code>x</code>) junto con el UID/GID del proceso ejecutor. Si el archivo posee atributos extendidos inmutables fijados a nivel del sistema de archivos mediante <code>chattr +i</code>, el kernel bloquea cualquier mutación incluso ante el usuario privilegiado <code>root</code>, retornando el error <code>EPERM (Operation not permitted)</code>.</li>
-<li><strong>Administración de memoria virtual y Swapping:</strong> Cuando el sistema experimenta presión de memoria y la memoria física disponible es insuficiente para satisfacer las solicitudes del gestor de páginas, el kernel recurre a la memoria swap. Si los umbrales de agresividad (<code>vm.swappiness</code>) están desajustados o el espacio de intercambio está fragmentado, el sistema entra en un estado de congestión (<em>thrashing</em>), degradando el rendimiento general hasta que el subsistema OOM Killer termina procesos para preservar la estabilidad del kernel.</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,7 +298,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Recreate symlink pointing to <code>/run/systemd/resolve/stub-resolv.conf</code> or apply static nameservers</div>
+            <div class="diag-value">Recrear el enlace simbólico a <code>/run/systemd/resolve/stub-resolv.conf</code> o restaurar archivo estático</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Daemon systemd-resolved caído con estado failed (status=failed)</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Reiniciar el servicio con <code>sudo systemctl restart systemd-resolved</code> y configurar DNS públicos</div>
           </div></div></div>
       </div>
     </section>
@@ -324,15 +334,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -349,14 +352,14 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#preguntas-frecuentes-faq" class="toc-link">
-            <span class="toc-number">04</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Preguntas Frecuentes (FAQ)</span>
           </a>
         <ul class="toc-sublist">
@@ -384,7 +387,19 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="restablecer-temporalmente-la-conectividad-mediante-nameservers-estaticos">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="restablecer-temporalmente-la-conectividad-mediante-nameservers-estaticos-heading">Paso 1: Restablecer temporalmente la conectividad mediante nameservers estáticos</h4>
+            <p>Si tu servidor no puede descargar paquetes por falta de DNS, añade manualmente un resolvedor temporal:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -404,47 +419,40 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> systemd-resolved
-<span class="tok-cmt">
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> systemd-resolved <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
-<span class="tok-cmt">
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Configurar DNS públicos directos de Cloudflare y Google</span>
+<span class="tok-kw">echo</span> <span class="tok-prop">-e</span> <span class="tok-str">&quot;nameserver 1.1.1.1\nnameserver 8.8.8.8&quot;</span> | <span class="tok-kw">sudo</span> tee /etc/resolv.conf
 </code></pre>
     </div>
     
-<ul>
-<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
-<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
-</ul>
+<p>Comprueba de inmediato si puedes resolver dominios:</p>
 
-
-  <!-- SC-InArticle -->
-  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
-    <span class="ad-slot-label">Publicidad</span>
-    <div class="ad-slot-inner">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-6956525438386645"
-           data-ad-slot="5381801020"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
-  
-<h2 id="implementacion-tecnica-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
-          Implementación Técnica Paso a Paso
-        </h2>
-<ol class="steps-list">
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code>ping <span class="tok-prop">-c</span> <span class="tok-num">3</span> google.com
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
 
         <li class="step-item" id="reparar-el-enlace-simbolico-oficial-de-systemd-resolved">
-          <div class="step-number">1</div>
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="reparar-el-enlace-simbolico-oficial-de-systemd-resolved-heading">Paso 2: Reparar el enlace simbólico oficial de systemd-resolved</h4>
             <p>En Ubuntu y distribuciones modernas con systemd, <code>/etc/resolv.conf</code> debe ser un enlace simbólico al stub del resolvedor:</p>
@@ -483,7 +491,7 @@
         
 
         <li class="step-item" id="configurar-servidores-dns-estables-en-resolvedconf">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="configurar-servidores-dns-estables-en-resolvedconf-heading">Paso 3: Configurar servidores DNS estables en resolved.conf</h4>
             <p>Abre el archivo de configuración principal de resolución (<code>/etc/systemd/resolved.conf</code>):</p>
@@ -542,7 +550,7 @@ DNSSEC=allow-downgrade
         
 
         <li class="step-item" id="validar-el-estado-con-resolvectl">
-          <div class="step-number">3</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h4 id="validar-el-estado-con-resolvectl-heading">Paso 4: Validar el estado con resolvectl</h4>
             <p>Comprueba que el resolvedor tiene asignados servidores DNS en cada interfaz de red activa:</p>
@@ -573,6 +581,22 @@ resolvectl <span class="tok-prop">status</span>
         </li>
         
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
+    <span class="ad-slot-label">Publicidad</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
 <h3 id="por-que-ping-8888-funciona-pero-ping-googlecom-falla">¿Por qué ping 8.8.8.8 funciona pero ping google.com falla?</h3>
 <p>Porque la conectividad IP a nivel de enrutamiento funciona correctamente, pero el subsistema de traducción de nombres (DNS) está caído.</p>
@@ -655,40 +679,6 @@ resolvectl <span class="tok-prop">status</span>
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/limpiar-cache-pacman-cachyos.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">CachyOS</span>
-            <span>Lectura: 7 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Error 522 Cloudflare Connection Timed Out en Nginx y UFW -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 522 Cloudflare Connection Timed Out en Nginx y UFW</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Cloudflare</span>
-            <span>Lectura: 7 min</span>
-          </div>
-        </div>
-      </article>
-      
-
       <!-- Related Card: Error Out of Memory OOM Killer en Linux y Systemd Cómo Diagnosticar y Evitar Caídas -->
       <article class="related-card">
         <div class="related-card-content">
@@ -705,6 +695,91 @@ resolvectl <span class="tok-prop">status</span>
         </div>
       </article>
       
+
+      <!-- Related Card: Error: sudo: unable to resolve host en Ubuntu y Debian -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo aumentar y optimizar la Memoria Virtual (Swap) en Linux sin reiniciar -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/optimizar-memoria-swap-linux.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo aumentar y optimizar la Memoria Virtual (Swap) en Linux sin reiniciar</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error chmod: Operation not permitted (Incluso como Root) en Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-linux-chmod-operation-not-permitted-chattr.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error chmod: Operation not permitted (Incluso como Root) en Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/limpiar-cache-pacman-cachyos.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">CachyOS</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/arquitectura-homelab-docker-compose-redes-aisladas-reverse-proxy.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 9 min</span>
+          </div>
+        </div>
+      </article>
+      
       </div>
     </section>
   </main>
@@ -713,14 +788,14 @@ resolvectl <span class="tok-prop">status</span>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

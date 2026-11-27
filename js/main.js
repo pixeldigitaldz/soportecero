@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalItems = matchingCards.length;
     const paginationControls = document.querySelector('.pagination-controls');
 
+    if (!paginationControls && !searchInput) {
+      return;
+    }
+
     if (totalItems === 0) {
       if (articlesGrid) {
         const msgDiv = document.createElement('div');
@@ -309,8 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!linkHref) return;
     
     // Tools suite highlight
-    if (linkHref === '/tools/' && currentPath.startsWith('/tools')) {
+    if ((linkHref === '/tools/' || linkHref === '/tools/index.html') && currentPath.startsWith('/tools')) {
       link.classList.add('active');
+    } else if (linkHref.startsWith('/categorias/') || linkHref.startsWith('/en/categories/')) {
+      if (currentPath === linkHref) {
+        link.classList.add('active');
+      }
     }
   });
 

@@ -99,7 +99,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -122,6 +122,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/categorias/sistemas.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)",
       "item": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html"
     }
@@ -163,7 +169,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -192,19 +198,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -224,9 +230,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Sistemas y Servidores</span>
+        <a href="/categorias/sistemas.html">Sistemas y Servidores</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</span>
       </nav>
@@ -251,7 +257,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -268,14 +274,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>El error <code>No space left on device</code> en Linux no solo ocurre cuando los gigabytes del disco duro se llenan. Cada archivo, enlace simbólico y directorio requiere una estructura de metadatos llamada <strong>inodo</strong>. Si tu sistema crea millones de archivos diminutos (como sesiones de PHP, logs o ficheros de caché), la tabla de inodos se agota al 100% aunque <code>df -h</code> muestre gigabytes de espacio disponible.</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En la arquitectura del sistema operativo <strong>Linux</strong>, las aplicaciones de usuario operan en espacio no privilegiado (<em>User Space</em>) y dependen de llamadas al sistema (<em>syscalls</em>) para interactuar con los recursos físicos de hardware a través del <strong>Kernel de Linux</strong>. El subsistema del kernel arbitra el acceso a la memoria virtual, los descriptores de archivos, la pila de protocolos de red TCP/IP y los dispositivos de almacenamiento en bloque a través de la capa de abstracción <strong>VFS (Virtual File System)</strong>.</p>
-<p>La anomalía técnica identificada en esta incidencia proviene de una restricción o condición de fallo en los mecanismos de control del sistema:</p>
-<ol>
-<li><strong>Límites de descriptores de archivos y cuotas de inodos:</strong> Cada archivo, socket de red o tubería (<em>pipe</em>) abierto por un proceso consume un descriptor de archivo en la tabla del kernel. Si el proceso alcanza el límite de descriptores asignado por el subsistema <code>ulimit</code> o si el sistema de archivos agota su tabla de inodos libres (incluso cuando resta espacio en gigabytes en disco), el kernel rechaza cualquier operación de escritura con el código de error <code>ENOSPC (No space left on device)</code> o <code>EMFILE (Too many open files)</code>.</li>
-<li><strong>Jerarquía de permisos POSIX y atributos inmutables del sistema:</strong> Las llamadas al sistema como <code>open()</code>, <code>unlink()</code> o <code>chmod()</code> evalúan los bits de permiso estándar (Lectura <code>r</code>, Escritura <code>w</code>, Ejecución <code>x</code>) junto con el UID/GID del proceso ejecutor. Si el archivo posee atributos extendidos inmutables fijados a nivel del sistema de archivos mediante <code>chattr +i</code>, el kernel bloquea cualquier mutación incluso ante el usuario privilegiado <code>root</code>, retornando el error <code>EPERM (Operation not permitted)</code>.</li>
-<li><strong>Administración de memoria virtual y Swapping:</strong> Cuando el sistema experimenta presión de memoria y la memoria física disponible es insuficiente para satisfacer las solicitudes del gestor de páginas, el kernel recurre a la memoria swap. Si los umbrales de agresividad (<code>vm.swappiness</code>) están desajustados o el espacio de intercambio está fragmentado, el sistema entra en un estado de congestión (<em>thrashing</em>), degradando el rendimiento general hasta que el subsistema OOM Killer termina procesos para preservar la estabilidad del kernel.</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -298,7 +296,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Find directories with the highest inode count via find and delete them</div>
+            <div class="diag-value">Buscar directorios con más inodos mediante find y eliminarlos</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Archivos eliminados que siguen retenidos por procesos en ejecución</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Identificar descriptores con lsof +L1 y reiniciar los servicios responsables</div>
           </div></div></div>
       </div>
     </section>
@@ -322,15 +332,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -347,14 +350,14 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#preguntas-frecuentes" class="toc-link">
-            <span class="toc-number">04</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Preguntas Frecuentes</span>
           </a>
         <ul class="toc-sublist">
@@ -382,7 +385,19 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="comprobar-el-consumo-real-de-inodos-en-las-particiones">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="comprobar-el-consumo-real-de-inodos-en-las-particiones-heading">Paso 1: Comprobar el consumo real de inodos en las particiones</h4>
+            <p>Ejecuta el comando <code>df -ih</code> para inspeccionar el porcentaje de uso de inodos (campo <em>IUse%</em>) en lugar del espacio de almacenamiento en bytes:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -402,47 +417,17 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> systemd-journald
-<span class="tok-cmt">
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> systemd-journald <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
-<span class="tok-cmt">
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
 </code></pre>
     </div>
     
-<ul>
-<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
-<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
-</ul>
-
-
-  <!-- SC-InArticle -->
-  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
-    <span class="ad-slot-label">Publicidad</span>
-    <div class="ad-slot-inner">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-6956525438386645"
-           data-ad-slot="5381801020"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
-  
-<h2 id="implementacion-tecnica-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          Implementación Técnica Paso a Paso
-        </h2>
-<ol class="steps-list">
+<p>Si la partición raíz (<code>/</code>) o <code>/var</code> muestra un 100% en <em>IUse%</em>, has confirmado que el problema es el agotamiento de inodos.</p>
+          </div>
+        </li>
+        
 
         <li class="step-item" id="localizar-el-directorio-que-satura-los-inodos">
-          <div class="step-number">1</div>
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="localizar-el-directorio-que-satura-los-inodos-heading">Paso 2: Localizar el directorio que satura los inodos</h4>
             <p>Para encontrar qué subdirectorio dentro de <code>/var</code> contiene una cantidad astronómica de ficheros diminutos, ejecuta este análisis rápido:</p>
@@ -480,7 +465,7 @@
         
 
         <li class="step-item" id="eliminar-los-ficheros-masivos-sin-bloquear-la-terminal">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="eliminar-los-ficheros-masivos-sin-bloquear-la-terminal-heading">Paso 3: Eliminar los ficheros masivos sin bloquear la terminal</h4>
             <p>No utilices <code>rm -rf *</code> en una carpeta con millones de archivos porque la shell arrojará el error <code>Argument list too long</code>. Utiliza <code>find</code> con la directiva <code>-delete</code>:</p>
@@ -516,6 +501,22 @@
         </li>
         
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
+    <span class="ad-slot-label">Publicidad</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
 <h3 id="se-puede-ampliar-el-numero-de-inodos-de-una-particion-ext4-existente">¿Se puede ampliar el número de inodos de una partición ext4 existente?</h3>
 <p>En sistemas de archivos ext4, el número total de inodos se define al formatear la partición (con mkfs.ext4 -N). Para aumentarlo es necesario reformatear o migrar a sistemas con inodos dinámicos como XFS o Btrfs.</p>
@@ -598,52 +599,103 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled) -->
+      <!-- Related Card: Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-docker-exit-code-137-oomkiller.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
+              <a href="../articulos/docker-space-clean-cache.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 7 min</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Error 521 Web Server Is Down en Cloudflare -->
+      <!-- Related Card: Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 521 Web Server Is Down en Cloudflare</a>
+              <a href="../articulos/limpiar-cache-pacman-cachyos.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Cloudflare</span>
-            <span>Lectura: 7 min</span>
+            <span class="card-tag">CachyOS</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Error kex_exchange_identification: Connection closed by remote host en SSH -->
+      <!-- Related Card: Error: sudo: unable to resolve host en Ubuntu y Debian -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-ssh-kex-exchange-identification-connection-closed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error kex_exchange_identification: Connection closed by remote host en SSH</a>
+              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: sudo: unable to resolve host en Ubuntu y Debian</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">SSH</span>
-            <span>Lectura: 7 min</span>
+            <span class="card-tag">Linux</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 'invalid reference format' en Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-invalid-reference-format.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 'invalid reference format' en Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 502 Bad Gateway en Nginx con PHP-FPM -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nginx-502-bad-gateway-php-fpm-sock.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 502 Bad Gateway en Nginx con PHP-FPM</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nginx</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-arch-linux-keyring-out-of-date-pacman.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Arch Linux</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
@@ -656,14 +708,14 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

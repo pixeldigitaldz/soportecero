@@ -27,12 +27,85 @@ const CATEGORY_MAP_EN = {
   'Web & Code': 'web'
 };
 
+const CATEGORY_HUBS = [
+  {
+    key: 'sistemas',
+    es: {
+      name: 'Sistemas y Servidores',
+      slug: 'sistemas',
+      path: '/categorias/sistemas.html',
+      url: 'https://soportecero.com/categorias/sistemas.html',
+      title: 'Sistemas y Servidores: Linux, Docker, Nginx, SSH y Cloudflare | SoporteCero',
+      description: 'Archivo completo de guías técnicas verificadas para administradores de sistemas: errores en Linux, Docker, Proxmox, Nginx, SSH, systemd, bases de datos y Cloudflare.',
+      intro: 'Soluciones prácticas y comandos listos para producción sobre administración Linux, contenedores Docker, servidores web Nginx/Apache, túneles Cloudflare, Proxmox, bases de datos y seguridad SSH.'
+    },
+    en: {
+      name: 'Systems & Servers',
+      slug: 'systems',
+      path: '/en/categories/systems.html',
+      url: 'https://soportecero.com/en/categories/systems.html',
+      title: 'Systems & Servers: Linux, Docker, Nginx, SSH & Cloudflare | SoporteCero',
+      description: 'Complete archive of verified troubleshooting guides for sysadmins and DevOps: Linux kernel, Docker containers, Nginx reverse proxies, SSH, systemd, and Cloudflare.',
+      intro: 'Production-tested commands and root-cause fixes covering Linux server administration, Docker networking and storage, Nginx/Apache tuning, Cloudflare edge errors, Proxmox, and SSH.'
+    }
+  },
+  {
+    key: 'gaming',
+    es: {
+      name: 'Gaming Tech',
+      slug: 'gaming',
+      path: '/categorias/gaming.html',
+      url: 'https://soportecero.com/categorias/gaming.html',
+      title: 'Gaming Tech: Proton, Vulkan, Linux Gaming, Drivers GPU y FPS | SoporteCero',
+      description: 'Guías técnicas para optimizar rendimiento en PC y Linux Gaming: eliminación de stuttering DXVK/VKD3D, Steam Deck, Gamescope, PipeWire, drivers NVIDIA/AMD y errores DirectX.',
+      intro: 'Diagnósticos y optimizaciones de bajo nivel para gaming en Linux y Windows: compilación de shaders Vulkan/DXVK, VKD3D-Proton, latencia de audio PipeWire, controladores NVIDIA/AMD y Steam Deck.'
+    },
+    en: {
+      name: 'Gaming Tech',
+      slug: 'gaming',
+      path: '/en/categories/gaming.html',
+      url: 'https://soportecero.com/en/categories/gaming.html',
+      title: 'Gaming Tech: Proton, Vulkan, Linux Gaming, GPU Drivers & FPS | SoporteCero',
+      description: 'Technical guides to fix stuttering, shader compilation lag, DirectX/Vulkan crashes, Proton compatibility, Steam Deck Gamescope, and GPU driver issues.',
+      intro: 'Low-level performance tuning and crash troubleshooting for Linux and PC gaming: DXVK/VKD3D-Proton shader pipelines, Wayland explicit sync, PipeWire audio, and NVIDIA/AMD driver fixes.'
+    }
+  },
+  {
+    key: 'web',
+    es: {
+      name: 'Web y Código',
+      slug: 'web',
+      path: '/categorias/web.html',
+      url: 'https://soportecero.com/categorias/web.html',
+      title: 'Web y Código: Node.js, Next.js, Vite, TypeScript, Git y CORS | SoporteCero',
+      description: 'Soluciones de desarrollo web Full-Stack: errores de compilación en Node.js, Next.js SSR, Vite, TypeScript, dependencias npm, Git, Firebase y CORS.',
+      intro: 'Resolución directa de fallos en desarrollo web moderno: Node.js V8 heap, Next.js App Router y SSR, Vite, conflictos de dependencias npm, TypeScript, Git, Firebase y cabeceras CORS.'
+    },
+    en: {
+      name: 'Web & Code',
+      slug: 'web',
+      path: '/en/categories/web.html',
+      url: 'https://soportecero.com/en/categories/web.html',
+      title: 'Web & Code: Node.js, Next.js, Vite, TypeScript, Git & CORS | SoporteCero',
+      description: 'Full-stack web development troubleshooting: Node.js build errors, Next.js SSR exceptions, Vite bundling, TypeScript, npm dependency trees, Git, and CORS.',
+      intro: 'Actionable engineering fixes for web developers: Node.js memory and npm errors, Next.js SSR/hydration mismatches, Vite builds, TypeScript AST errors, Git recovery, and CORS.'
+    }
+  }
+];
+
+function getCategoryHubMeta(categoryName, lang = 'es') {
+  const key = lang === 'en' ? (CATEGORY_MAP_EN[categoryName] || CATEGORY_MAP_ES[categoryName]) : (CATEGORY_MAP_ES[categoryName] || CATEGORY_MAP_EN[categoryName]);
+  const hub = CATEGORY_HUBS.find(h => h.key === key);
+  return hub ? hub[lang] : null;
+}
+
 // Helper function to copy directories recursively
 function copyDirSync(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
   const entries = fs.readdirSync(src, { withFileTypes: true });
 
   for (let entry of entries) {
+    if (entry.name.includes('sync-conflict')) continue;
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
@@ -57,24 +130,30 @@ function slugify(text) {
     .replace(/-+/g, '-');
 }
 
-// Circular Round-Robin related posts algorithm
-function getRelatedPosts(currentPost, allPosts) {
-  const categoryPosts = allPosts.filter(p => p.category === currentPost.category);
-  const currentIndex = categoryPosts.findIndex(p => p.filename === currentPost.filename);
-  const selected = [];
+// Circular + Tag-weighted related posts algorithm (6 internal links per article)
+function getRelatedPosts(currentPost, allPosts, count = 6) {
+  const categoryPosts = allPosts.filter(p => p.category === currentPost.category && p.filename !== currentPost.filename);
+  const currentTags = new Set((currentPost.tags || []).map(t => String(t).toLowerCase()));
 
-  if (categoryPosts.length > 1 && currentIndex !== -1) {
-    const countToTake = Math.min(3, categoryPosts.length - 1);
-    for (let i = 1; i <= countToTake; i++) {
-      const nextIdx = (currentIndex + i) % categoryPosts.length;
-      selected.push(categoryPosts[nextIdx]);
-    }
-  }
+  const scored = categoryPosts.map((p, idx) => {
+    const overlap = (p.tags || []).reduce((acc, t) => acc + (currentTags.has(String(t).toLowerCase()) ? 1 : 0), 0);
+    return { post: p, overlap, idx };
+  });
 
-  // Si una categoría tiene menos de 4 artículos, completar con los siguientes del array general
-  if (selected.length < 3 && allPosts.length > 1) {
+  const allInCategory = allPosts.filter(p => p.category === currentPost.category);
+  const currentIdxInCat = Math.max(0, allInCategory.findIndex(p => p.filename === currentPost.filename));
+  scored.sort((a, b) => {
+    if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+    const distA = (a.idx - currentIdxInCat + categoryPosts.length) % Math.max(1, categoryPosts.length);
+    const distB = (b.idx - currentIdxInCat + categoryPosts.length) % Math.max(1, categoryPosts.length);
+    return distA - distB;
+  });
+
+  const selected = scored.slice(0, count).map(s => s.post);
+
+  if (selected.length < count && allPosts.length > 1) {
     const globalIndex = allPosts.findIndex(p => p.filename === currentPost.filename);
-    for (let i = 1; i < allPosts.length && selected.length < 3; i++) {
+    for (let i = 1; i < allPosts.length && selected.length < count; i++) {
       const candidateIdx = (globalIndex + i) % allPosts.length;
       const candidate = allPosts[candidateIdx];
       if (candidate.filename !== currentPost.filename && !selected.some(s => s.filename === candidate.filename)) {
@@ -777,7 +856,7 @@ function build() {
   today.setHours(23, 59, 59, 999);
 
   for (let file of filesEs) {
-    if (!file.endsWith('.md')) continue;
+    if (!file.endsWith('.md') || file.includes('sync-conflict')) continue;
 
     const filePath = path.join(CONTENT_DIR, file);
     const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -808,7 +887,7 @@ function build() {
   if (fs.existsSync(contentDirEn)) {
     const filesEn = fs.readdirSync(contentDirEn);
     for (let file of filesEn) {
-      if (!file.endsWith('.md')) continue;
+      if (!file.endsWith('.md') || file.includes('sync-conflict')) continue;
 
       const filePath = path.join(contentDirEn, file);
       const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -908,7 +987,7 @@ function build() {
         "url": "https://soportecero.com/",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://soportecero.com/favicon.svg"
+          "url": "https://soportecero.com/favicon.png"
         }
       },
       "mainEntityOfPage": {
@@ -917,24 +996,38 @@ function build() {
       }
     };
 
-    // BreadcrumbList Schema (2 levels: Home and Current Article)
+    const catMetaEs = getCategoryHubMeta(post.category, 'es');
+    const categoryLinkHtml = catMetaEs
+      ? `<a href="${catMetaEs.path}">${post.category}</a>`
+      : `<span>${post.category}</span>`;
+
+    // BreadcrumbList Schema (3 levels: Home -> Category -> Current Article)
+    const breadcrumbElementsEs = [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://soportecero.com/"
+      }
+    ];
+    if (catMetaEs) {
+      breadcrumbElementsEs.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": post.category,
+        "item": catMetaEs.url
+      });
+    }
+    breadcrumbElementsEs.push({
+      "@type": "ListItem",
+      "position": breadcrumbElementsEs.length + 1,
+      "name": post.title,
+      "item": pageUrl
+    });
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Inicio",
-          "item": "https://soportecero.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": post.title,
-          "item": pageUrl
-        }
-      ]
+      "itemListElement": breadcrumbElementsEs
     };
 
     let faqSchemaScript = '';
@@ -964,8 +1057,8 @@ function build() {
     `;
 
     const langSelectorLink = hasEnTranslation 
-      ? `../en/articulos/${post.filename}.html`
-      : `../en/index.html`;
+      ? `/en/articulos/${post.filename}.html`
+      : `/en/`;
     const langSelector = `
     <div class="lang-selector">
       <span class="lang-active">ES</span>
@@ -980,6 +1073,7 @@ function build() {
     const postHtml = postTemplateEs
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
+      .replace(/\{\{category_link\}\}/g, categoryLinkHtml)
       .replace(/\{\{category\}\}/g, post.category)
       .replace(/\{\{readTime\}\}/g, post.readTime)
       .replace(/\{\{date\}\}/g, post.date)
@@ -1071,7 +1165,7 @@ function build() {
         "url": "https://soportecero.com/",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://soportecero.com/favicon.svg"
+          "url": "https://soportecero.com/favicon.png"
         }
       },
       "mainEntityOfPage": {
@@ -1080,24 +1174,38 @@ function build() {
       }
     };
 
-    // BreadcrumbList Schema (2 levels: Home and Current Article)
+    const catMetaEn = getCategoryHubMeta(post.category, 'en');
+    const categoryLinkHtml = catMetaEn
+      ? `<a href="${catMetaEn.path}">${post.category}</a>`
+      : `<span>${post.category}</span>`;
+
+    // BreadcrumbList Schema (3 levels: Home -> Category -> Current Article)
+    const breadcrumbElementsEn = [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://soportecero.com/en/"
+      }
+    ];
+    if (catMetaEn) {
+      breadcrumbElementsEn.push({
+        "@type": "ListItem",
+        "position": 2,
+        "name": post.category,
+        "item": catMetaEn.url
+      });
+    }
+    breadcrumbElementsEn.push({
+      "@type": "ListItem",
+      "position": breadcrumbElementsEn.length + 1,
+      "name": post.title,
+      "item": pageUrl
+    });
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://soportecero.com/en/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": post.title,
-          "item": pageUrl
-        }
-      ]
+      "itemListElement": breadcrumbElementsEn
     };
 
     let faqSchemaScript = '';
@@ -1127,8 +1235,8 @@ function build() {
     `;
 
     const langSelectorLink = hasEsCounterpart
-      ? `../../articulos/${post.filename}.html`
-      : `../../index.html`;
+      ? `/articulos/${post.filename}.html`
+      : `/`;
     const langSelector = `
     <div class="lang-selector">
       <a href="${langSelectorLink}" class="lang-inactive">ES</a>
@@ -1143,6 +1251,7 @@ function build() {
     const postHtml = postTemplateEn
       .replace(/\{\{title\}\}/g, post.title)
       .replace(/\{\{description\}\}/g, post.description)
+      .replace(/\{\{category_link\}\}/g, categoryLinkHtml)
       .replace(/\{\{category\}\}/g, post.category)
       .replace(/\{\{readTime\}\}/g, post.readTime)
       .replace(/\{\{date\}\}/g, post.date)
@@ -1200,14 +1309,14 @@ function build() {
   const indexTemplateEs = fs.readFileSync(path.join(SRC_DIR, 'index-template.html'), 'utf-8');
   const indexHreflangEs = `
   <link rel="alternate" hreflang="es" href="https://soportecero.com/" />
-  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
   <link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
   `;
   const indexLangSelectorEs = `
   <div class="lang-selector">
     <span class="lang-active">ES</span>
     <span class="lang-separator">|</span>
-    <a href="en/index.html" class="lang-inactive">EN</a>
+    <a href="/en/" class="lang-inactive">EN</a>
   </div>
   `;
   const directoryIndexEs = generateDirectoryIndex(postsEs, 'es');
@@ -1238,7 +1347,7 @@ function build() {
       <div class="card-content">
         <span class="card-category">${post.category}</span>
         <h3 class="card-title">
-          <a href="articulos/${post.filename}.html">${post.title}</a>
+          <a href="/en/articulos/${post.filename}.html">${post.title}</a>
         </h3>
         <p class="card-excerpt">
           ${excerpt}
@@ -1257,7 +1366,7 @@ function build() {
   const indexTemplateEn = fs.readFileSync(path.join(SRC_DIR, 'en', 'index-template.html'), 'utf-8');
   const indexLangSelectorEn = `
   <div class="lang-selector">
-    <a href="../index.html" class="lang-inactive">ES</a>
+    <a href="/" class="lang-inactive">ES</a>
     <span class="lang-separator">|</span>
     <span class="lang-active">EN</span>
   </div>
@@ -1273,8 +1382,245 @@ function build() {
   fs.writeFileSync(path.join(DIST_DIR, 'en', 'index.html'), indexHtmlEn, 'utf-8');
   console.log('[INDEX EN] Compilado: en/index.html');
 
+  // 10B. Generate 6 Static Indexable Category Hub Pages (3 ES + 3 EN)
+  const categoriasDirEs = path.join(DIST_DIR, 'categorias');
+  if (fs.existsSync(categoriasDirEs)) fs.rmSync(categoriasDirEs, { recursive: true, force: true });
+  fs.mkdirSync(categoriasDirEs, { recursive: true });
+
+  const categoriesDirEn = path.join(DIST_DIR, 'en', 'categories');
+  if (fs.existsSync(categoriesDirEn)) fs.rmSync(categoriesDirEn, { recursive: true, force: true });
+  fs.mkdirSync(categoriesDirEn, { recursive: true });
+
+  const categoryLastmods = {};
+  for (const hub of CATEGORY_HUBS) {
+    for (const lang of ['es', 'en']) {
+      const isEn = lang === 'en';
+      const meta = hub[lang];
+      const otherMeta = hub[isEn ? 'es' : 'en'];
+      const allLangPosts = isEn ? postsEn : postsEs;
+      const catMap = isEn ? CATEGORY_MAP_EN : CATEGORY_MAP_ES;
+      const catPosts = allLangPosts.filter(p => (catMap[p.category] || CATEGORY_MAP_ES[p.category]) === hub.key);
+
+      categoryLastmods[`${hub.key}_${lang}`] = (catPosts.length > 0 && (catPosts[0].dateModified || catPosts[0].date))
+        ? (catPosts[0].dateModified || catPosts[0].date)
+        : '2026-11-26';
+
+      const cardsHtml = catPosts.map(post => {
+        const tagsList = post.tags || [];
+        const firstThreeTags = tagsList.slice(0, 3).map(tag => `<span class="card-tag">${tag}</span>`).join('\n');
+        const excerpt = post.description.length > 150 ? post.description.substring(0, 147) + '...' : post.description;
+        const postHref = isEn ? `/en/articulos/${post.filename}.html` : `/articulos/${post.filename}.html`;
+        return `
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">${post.category}</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="${postHref}">${post.title}</a>
+            </h2>
+            <p class="card-excerpt">${excerpt}</p>
+            <div class="card-footer">
+              <div class="card-tags">${firstThreeTags}</div>
+              <span>${isEn ? 'Read Time' : 'Lectura'}: ${post.readTime}</span>
+            </div>
+          </div>
+        </article>`;
+      }).join('\n');
+
+      const siblingLinks = CATEGORY_HUBS
+        .filter(h => h.key !== hub.key)
+        .map(h => `<a href="${h[lang].path}" class="quick-access-link">${h[lang].name}</a>`)
+        .join(' <span class="quick-access-sep" aria-hidden="true">/</span> ');
+
+      const collectionSchema = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "@id": `${meta.url}#collection`,
+            "url": meta.url,
+            "name": meta.title,
+            "description": meta.description,
+            "inLanguage": lang,
+            "isPartOf": {
+              "@type": "WebSite",
+              "@id": isEn ? "https://soportecero.com/en/#website" : "https://soportecero.com/#website"
+            },
+            "mainEntity": {
+              "@type": "ItemList",
+              "numberOfItems": catPosts.length,
+              "itemListElement": catPosts.map((p, idx) => ({
+                "@type": "ListItem",
+                "position": idx + 1,
+                "url": isEn ? `https://soportecero.com/en/articulos/${p.filename}.html` : `https://soportecero.com/articulos/${p.filename}.html`,
+                "name": p.title
+              }))
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Inicio", "item": isEn ? "https://soportecero.com/en/" : "https://soportecero.com/" },
+              { "@type": "ListItem", "position": 2, "name": meta.name, "item": meta.url }
+            ]
+          }
+        ]
+      };
+
+      const adLabel = isEn ? 'Advertisement' : 'Publicidad';
+      const cssPath = isEn ? '../../css/style.css' : '../css/style.css';
+      const jsPath = isEn ? '../../js/main.js' : '../js/main.js';
+      const homePath = isEn ? '/en/' : '/';
+
+      const categoryHtml = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>${meta.title}</title>
+  <meta name="description" content="${meta.description}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="${meta.url}">
+  <link rel="alternate" hreflang="${lang}" href="${meta.url}" />
+  <link rel="alternate" hreflang="${isEn ? 'es' : 'en'}" href="${otherMeta.url}" />
+  <link rel="alternate" hreflang="x-default" href="${hub.es.url}" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="${cssPath}">
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else if (savedTheme === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+  <script type="application/ld+json">
+  ${JSON.stringify(collectionSchema, null, 2)}
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="header-wrapper">
+    <header>
+      <a href="${homePath}" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">Soporte</span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">Cero</span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">${isEn ? 'ENGINEERING' : 'INGENIERÍA'}</span>
+        </div>
+      </a>
+      <nav aria-label="${isEn ? 'Main navigation' : 'Navegación principal'}">
+        <ul>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>${isEn ? 'Calculators' : 'Calculadoras'}</span></a></li>
+          <li><a href="${CATEGORY_HUBS[0][lang].path}"${hub.key === 'sistemas' ? ' class="active"' : ''}>${CATEGORY_HUBS[0][lang].name}</a></li>
+          <li><a href="${CATEGORY_HUBS[1][lang].path}"${hub.key === 'gaming' ? ' class="active"' : ''}>${CATEGORY_HUBS[1][lang].name}</a></li>
+          <li><a href="${CATEGORY_HUBS[2][lang].path}"${hub.key === 'web' ? ' class="active"' : ''}>${CATEGORY_HUBS[2][lang].name}</a></li>
+          <li><a href="${isEn ? '/en/about.html' : '/sobre-mi.html'}">${isEn ? 'About' : 'Sobre Mí'}</a></li>
+          <li><a href="${isEn ? '/en/contact.html' : '/contacto.html'}">${isEn ? 'Contact' : 'Contacto'}</a></li>
+        </ul>
+      </nav>
+      <div class="lang-selector">
+        ${isEn ? `<a href="${otherMeta.path}" class="lang-inactive">ES</a><span class="lang-separator">|</span><span class="lang-active">EN</span>` : `<span class="lang-active">ES</span><span class="lang-separator">|</span><a href="${otherMeta.path}" class="lang-inactive">EN</a>`}
+      </div>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="${isEn ? 'Toggle theme' : 'Cambiar tema visual'}" title="${isEn ? 'Toggle theme' : 'Cambiar tema visual'}">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/></svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/></svg>
+      </button>
+    </header>
+  </div>
+
+  <main class="main-content" style="padding-top: 2rem;">
+    <nav class="post-breadcrumbs" aria-label="${isEn ? 'Breadcrumb navigation' : 'Ruta de navegación'}">
+      <a href="${homePath}">${isEn ? 'HOME' : 'INICIO'}</a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span style="color: var(--text-secondary);">${meta.name}</span>
+    </nav>
+
+    <section class="hero" style="padding: 1.5rem 0 2rem; text-align: left;" aria-label="${meta.name}">
+      <span class="card-category" style="margin-bottom: 0.75rem; display: inline-block;">${catPosts.length} ${isEn ? 'VERIFIED GUIDES' : 'GUÍAS VERIFICADAS'}</span>
+      <h1 style="text-align: left; margin-bottom: 0.75rem;">${meta.name}</h1>
+      <p style="margin: 0; max-width: 780px;">${meta.intro}</p>
+    </section>
+
+    <div class="quick-access-box" aria-label="${isEn ? 'Other Categories and Tools' : 'Otras Categorías y Herramientas'}">
+      <div class="quick-access-header">
+        <span class="led-dot" aria-hidden="true"></span>
+        <span class="quick-access-badge">${isEn ? 'EXPLORE:' : 'EXPLORAR:'}</span>
+      </div>
+      <div class="quick-access-links">
+        ${siblingLinks}
+        <span class="quick-access-sep" aria-hidden="true">/</span>
+        <a href="/tools/" class="quick-access-link">${isEn ? 'Interactive Calculators (/tools/)' : 'Calculadoras Interactivas (/tools/)'}</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="cat-grid-title">
+      <h2 class="section-title" id="cat-grid-title">${isEn ? `All ${meta.name} Guides (${catPosts.length})` : `Todas las guías de ${meta.name} (${catPosts.length})`}</h2>
+      <div class="articles-grid">
+        ${cardsHtml}
+      </div>
+    </section>
+
+    <aside class="ad-slot-wrapper ad-slot-wrapper--home" style="margin-top: 2.5rem;" aria-label="${adLabel}">
+      <span class="ad-slot-label">${adLabel}</span>
+      <div class="ad-slot-inner">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6956525438386645"
+             data-ad-slot="6471521412"
+             data-ad-format="auto"
+             data-full-width-responsive="false"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </aside>
+  </main>
+
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="${homePath}">${isEn ? 'Home' : 'Inicio'}</a></li>
+        <li><a href="${isEn ? '/en/about.html' : '/sobre-mi.html'}">${isEn ? 'About' : 'Sobre Mí'}</a></li>
+        <li><a href="${isEn ? '/en/nosotros.html' : '/nosotros.html'}">${isEn ? 'Editorial Methodology' : 'Sobre Nosotros'}</a></li>
+        <li><a href="${isEn ? '/en/contact.html' : '/contacto.html'}">${isEn ? 'Contact' : 'Contacto'}</a></li>
+        <li><a href="${isEn ? '/en/servicios.html' : '/servicios.html'}">${isEn ? 'Services' : 'Servicios'}</a></li>
+        <li><a href="/tools/">${isEn ? 'Tools' : 'Calculadoras'}</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        ${isEn
+          ? 'SoporteCero is an independent technical portal delivering practical solutions, commands, and verified troubleshooting guides for developers, sysadmins, and gamers.'
+          : 'SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers.'}
+      </p>
+      <p class="footer-copyright">&copy; 2026 SoporteCero. ${isEn ? 'All rights reserved.' : 'Todos los derechos reservados.'}</p>
+    </footer>
+  </div>
+  <script src="${jsPath}"></script>
+</body>
+</html>`;
+
+      const destFile = isEn
+        ? path.join(categoriesDirEn, `${meta.slug}.html`)
+        : path.join(categoriasDirEs, `${meta.slug}.html`);
+      fs.writeFileSync(destFile, categoryHtml, 'utf-8');
+      console.log(`[CATEGORY ${lang.toUpperCase()}] Compilado: ${meta.path} (${catPosts.length} artículos)`);
+    }
+  }
+
   // 11. Generate Multilingual sitemap.xml
-  const staticLastmod = '2026-07-15';
+  const staticLastmod = '2026-11-26';
+  const toolsLastmod = '2026-11-26';
   const homeLastmodEs = (postsEs.length > 0 && postsEs[0].date) ? postsEs[0].date : staticLastmod;
   const homeLastmodEn = (postsEn.length > 0 && postsEn[0].date) ? postsEn[0].date : homeLastmodEs;
 
@@ -1284,26 +1630,50 @@ function build() {
   <url>
     <loc>https://soportecero.com/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
     <lastmod>${homeLastmodEs}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://soportecero.com/en/index.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/index.html" />
+    <loc>https://soportecero.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://soportecero.com/en/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/" />
     <lastmod>${homeLastmodEn}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+  </url>`;
+
+  for (const hub of CATEGORY_HUBS) {
+    sitemapXml += `
+  <url>
+    <loc>${hub.es.url}</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="${hub.es.url}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${hub.en.url}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${hub.es.url}" />
+    <lastmod>${categoryLastmods[`${hub.key}_es`]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://soportecero.com/tools/index.html</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/index.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/index.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <loc>${hub.en.url}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="${hub.en.url}" />
+    <xhtml:link rel="alternate" hreflang="es" href="${hub.es.url}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${hub.es.url}" />
+    <lastmod>${categoryLastmods[`${hub.key}_en`]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>`;
+  }
+
+  sitemapXml += `
+  <url>
+    <loc>https://soportecero.com/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/" />
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1312,7 +1682,7 @@ function build() {
     <loc>https://soportecero.com/tools/comisiones-pasarelas-pago.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/comisiones-pasarelas-pago.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1320,7 +1690,7 @@ function build() {
     <loc>https://soportecero.com/tools/tarifa-hora-freelance.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/tarifa-hora-freelance.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/tarifa-hora-freelance.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1328,7 +1698,7 @@ function build() {
     <loc>https://soportecero.com/tools/calculadora-roas-ecommerce.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/calculadora-roas-ecommerce.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1336,7 +1706,7 @@ function build() {
     <loc>https://soportecero.com/tools/margen-descuentos-ecommerce.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/margen-descuentos-ecommerce.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1344,7 +1714,7 @@ function build() {
     <loc>https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/amortizacion-hipotecas-prestamos.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1352,7 +1722,7 @@ function build() {
     <loc>https://soportecero.com/tools/interes-compuesto-ahorro.html</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://soportecero.com/tools/interes-compuesto-ahorro.html" />
-    <lastmod>${staticLastmod}</lastmod>
+    <lastmod>${toolsLastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1479,7 +1849,7 @@ function build() {
   let llmsFullContent = `# SoporteCero - Directorio Extendido de Soluciones Técnicas y Herramientas\n\n`;
   llmsFullContent += `> Base de conocimiento completa con tutoriales, soluciones paso a paso, comandos listos para copiar y suite de calculadoras financieras interactivas.\n\n`;
   llmsFullContent += `## Calculadoras Interactivas y Simuladores (/tools/)\n\n`;
-  llmsFullContent += `- [Finanzas Pro Hub — Suite de Calculadoras](https://soportecero.com/tools/index.html): Portal central de herramientas financieras y cotizadores interactivos para desarrolladores, freelancers y e-commerce.\n`;
+  llmsFullContent += `- [Finanzas Pro Hub — Suite de Calculadoras](https://soportecero.com/tools/): Portal central de herramientas financieras y cotizadores interactivos para desarrolladores, freelancers y e-commerce.\n`;
   llmsFullContent += `- [Calculadora de Comisiones PayPal, Stripe, Wise y Binance](https://soportecero.com/tools/comisiones-pasarelas-pago.html): Cálculo directo e inverso de retenciones y spread cambiario en pasarelas de pago internacionales.\n`;
   llmsFullContent += `- [Calculadora de Tarifa por Hora Freelance y Cotizador PDF](https://soportecero.com/tools/tarifa-hora-freelance.html): Cálculo de tarifa horaria mínima rentable y generación de propuestas formales en PDF en 1 clic.\n`;
   llmsFullContent += `- [Calculadora de ROAS de Punto de Equilibrio y Max CPA](https://soportecero.com/tools/calculadora-roas-ecommerce.html): Simulador de rentabilidad publicitaria para Meta Ads, Google Ads y TikTok Ads descontando COGS y logística.\n`;

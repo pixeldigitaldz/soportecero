@@ -99,7 +99,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -122,6 +122,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Sistemas y Servidores",
+      "item": "https://soportecero.com/categorias/sistemas.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Nginx connect() failed (111: Connection refused) while connecting to upstream",
       "item": "https://soportecero.com/articulos/error-nginx-111-connection-refused-upstream.html"
     }
@@ -163,7 +169,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -192,19 +198,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-nginx-111-connection-refused-upstream.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-nginx-111-connection-refused-upstream.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -224,9 +230,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Sistemas y Servidores</span>
+        <a href="/categorias/sistemas.html">Sistemas y Servidores</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Nginx connect() failed (111: Connection refused) while connecting to upstream</span>
       </nav>
@@ -251,7 +257,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -268,14 +274,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>Al configurar Nginx como proxy inverso hacia aplicaciones web (Next.js, Express, Django, Laravel), es muy común ver el error HTTP 502 Bad Gateway en el navegador y la siguiente línea en el archivo de registro <code>/var/log/nginx/error.log</code>: <code>connect() failed (111: Connection refused) while connecting to upstream, client: ..., server: ..., request: ..., upstream: &quot;http://127.0.1:3000/...&quot;</code>. Esto significa que Nginx intentó transferir la petición al backend, pero no encontró ningún proceso escuchando en ese puerto o socket.</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En entornos contenerizados, el motor de <strong>Docker</strong> se apoya en primitivas fundamentales del kernel de Linux: <strong>Namespaces</strong> (PID, NET, MNT, IPC, UTS) para el aislamiento lógico de procesos y <strong>Control Groups (cgroups v1/v2)</strong> para el límite estricto de recursos de hardware (memoria RAM, ciclos de CPU y cuotas de I/O de disco).</p>
-<p>Cuando se produce este fallo, la anomalía suele situarse en la frontera entre el demonio <code>dockerd</code>, el runtime OCI (<code>containerd</code> / <code>runc</code>) y el subsistema de red del host:</p>
-<ol>
-<li><strong>Comunicación con el socket IPC (<code>/var/run/docker.sock</code>):</strong> El cliente de Docker interactúa con la API REST local mediante llamadas al sistema sobre un socket de dominio UNIX. Si los permisos de usuario en el socket no pertenecen al grupo <code>docker</code> o si el demonio ha quedado bloqueado por un hilo zombie, la llamada al sistema devuelve inmediatamente un descriptor de error <code>EACCES</code> o <code>ECONNREFUSED</code>.</li>
-<li><strong>Ciclo de vida del contenedor y estados OCI:</strong> Durante la creación del contenedor (<code>container create / start</code>), <code>runc</code> solicita al kernel la creación de los namespaces y el montaje del sistema de archivos en capas mediante el driver de almacenamiento <strong>Overlay2</strong> (<code>lowerdir</code>, <code>upperdir</code> y <code>merged</code>). Si existe corrupción en las capas de imagen, agotamiento de inodos en <code>/var/lib/docker</code>, o incompatibilidad con la arquitectura del binario, el runtime aborta con códigos de salida específicos (ej. Exit Code 137 por OOM Killer o Exit Code 126/127 por permisos o dependencias ausentes).</li>
-<li><strong>Pila de red virtual y cadenas de iptables:</strong> Para exponer puertos (<code>-p</code>), Docker manipula directamente las tablas <code>nat</code> y <code>filter</code> del subsistema Netfilter mediante cadenas personalizadas (<code>DOCKER</code>, <code>DOCKER-USER</code>). Reinicios no sincronizados del firewall (<code>ufw</code> o <code>firewalld</code>) eliminan estas cadenas en memoria del kernel, provocando que los paquetes TCP entrantes sean descartados silenciosamente con paquetes TCP RST.</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -298,7 +296,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Inspect backend daemon status via systemctl status or docker ps</div>
+            <div class="diag-value">Comprobar el estado del proceso backend con systemctl status o docker ps</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Discordancia de puerto o socket UNIX en la directiva proxy_pass de Nginx</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Corregir el puerto de escucha (ej. 3000, 8000) o los permisos del socket .sock</div>
           </div></div></div>
       </div>
     </section>
@@ -322,15 +332,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -347,14 +350,14 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#preguntas-frecuentes" class="toc-link">
-            <span class="toc-number">04</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Preguntas Frecuentes</span>
           </a>
         <ul class="toc-sublist">
@@ -382,7 +385,19 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="comprobar-si-el-backend-esta-escuchando-en-el-puerto-correcto">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="comprobar-si-el-backend-esta-escuchando-en-el-puerto-correcto-heading">Paso 1: Comprobar si el backend está escuchando en el puerto correcto</h4>
+            <p>Utiliza <code>ss</code> o <code>netstat</code> para verificar si tu servidor backend realmente tiene el puerto abierto:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -402,47 +417,17 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado general del demonio Docker</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-kw">docker</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span>
-<span class="tok-cmt">
-# 2. Inspeccionar los últimos logs del contenedor afectado</span>
-<span class="tok-kw">docker</span> logs <span class="tok-prop">--tail</span> <span class="tok-num">50</span> <span class="tok-prop">--timestamps</span> nginx-proxy
-<span class="tok-cmt">
-# 3. Verificar el uso de recursos y memoria en tiempo real</span>
-<span class="tok-kw">docker</span> stats <span class="tok-prop">--no-stream</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">sudo</span> <span class="tok-kw">ss</span> <span class="tok-prop">-tulpn</span> | <span class="tok-kw">grep</span> LISTEN
 </code></pre>
     </div>
     
-<ul>
-<li>El comando <code>docker logs</code> con el parámetro <code>--tail 50</code> extrae únicamente las últimas 50 líneas emitidas en <code>stdout</code> y <code>stderr</code>, mientras que <code>--timestamps</code> permite correlacionar el segundo exacto del fallo con los registros del sistema operativo.</li>
-<li>El flag <code>--no-stream</code> en <code>docker stats</code> realiza un muestreo único del consumo de CPU y memoria de todos los contenedores en ejecución, evitando bloquear la terminal interactiva.</li>
-</ul>
-
-
-  <!-- SC-InArticle -->
-  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
-    <span class="ad-slot-label">Publicidad</span>
-    <div class="ad-slot-inner">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-6956525438386645"
-           data-ad-slot="5381801020"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
-  
-<h2 id="implementacion-tecnica-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          Implementación Técnica Paso a Paso
-        </h2>
-<ol class="steps-list">
+<p>Si tu directiva en Nginx es <code>proxy_pass http://127.0.0.1:3000;</code> pero en la lista de puertos no aparece ningún proceso en el puerto 3000, tu aplicación backend no está corriendo o falló durante el arranque.</p>
+          </div>
+        </li>
+        
 
         <li class="step-item" id="comprobar-conflicto-entre-127001-y-localhost-ipv4-vs-ipv6">
-          <div class="step-number">1</div>
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="comprobar-conflicto-entre-127001-y-localhost-ipv4-vs-ipv6-heading">Paso 2: Comprobar conflicto entre 127.0.0.1 y localhost (IPv4 vs IPv6)</h4>
             <p>En sistemas modernos, <code>localhost</code> puede resolverse a la dirección IPv6 <code>[::1]</code>. Si tu servidor Node.js o Python solo escucha en IPv4 (<code>127.0.0.1</code>), Nginx intentará conectar a IPv6 y arrojará el error 111:</p>
@@ -482,7 +467,7 @@
         
 
         <li class="step-item" id="verificar-permisos-en-sockets-unix-php-fpm-o-gunicorn">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="verificar-permisos-en-sockets-unix-php-fpm-o-gunicorn-heading">Paso 3: Verificar permisos en sockets UNIX (PHP-FPM o Gunicorn)</h4>
             <p>Si utilizas sockets UNIX en lugar de puertos TCP (<code>unix:/run/php/php-fpm.sock</code>), verifica los permisos del archivo socket:</p>
@@ -538,6 +523,22 @@
         </li>
         
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
+    <span class="ad-slot-label">Publicidad</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
 <h3 id="por-que-el-error-111-solo-ocurre-tras-reiniciar-el-servidor">¿Por qué el error 111 solo ocurre tras reiniciar el servidor?</h3>
 <p>Ocurre cuando Nginx arranca antes de que el servicio upstream (Node.js o Docker) esté listo. Añade <code>After=docker.service</code> en la unidad de systemd de tu aplicación para controlar el orden de inicio.</p>
@@ -620,52 +621,103 @@
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed -->
+      <!-- Related Card: Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-rsync-connection-unexpectedly-closed-code-12.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">rsync</span>
-            <span>Lectura: 7 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Error: sudo: unable to resolve host en Ubuntu y Debian -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-sudo-unable-to-resolve-host-etc-hosts.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: sudo: unable to resolve host en Ubuntu y Debian</a>
-            </h4>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Linux</span>
-            <span>Lectura: 7 min</span>
-          </div>
-        </div>
-      </article>
-      
-
-      <!-- Related Card: Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux -->
-      <article class="related-card">
-        <div class="related-card-content">
-          <div>
-            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
-            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-failed-to-mount-cgroup-systemd-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux</a>
+              <a href="../articulos/arquitectura-homelab-docker-compose-redes-aisladas-reverse-proxy.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Docker</span>
-            <span>Lectura: 7 min</span>
+            <span>Lectura: 9 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 521 Web Server Is Down en Cloudflare -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cloudflare-521-web-server-is-down.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 521 Web Server Is Down en Cloudflare</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Cloudflare</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 'invalid reference format' en Docker -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-invalid-reference-format.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 'invalid reference format' en Docker</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 502 Bad Gateway en Nginx con PHP-FPM -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nginx-502-bad-gateway-php-fpm-sock.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 502 Bad Gateway en Nginx con PHP-FPM</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nginx</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error Certbot 'Failed authorization procedure (http-01)' -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-certbot-failed-authorization-procedure-http-01.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error Certbot 'Failed authorization procedure (http-01)'</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Certbot</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 'failed to compute cache key' en Docker Build -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Sistemas y Servidores</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-docker-failed-to-compute-cache-key.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 'failed to compute cache key' en Docker Build</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Docker</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
@@ -678,14 +730,14 @@
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

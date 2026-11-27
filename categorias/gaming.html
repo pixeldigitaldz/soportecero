@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Gaming Tech: Proton, Vulkan, Linux Gaming, Drivers GPU y FPS | SoporteCero</title>
+  <meta name="description" content="Guías técnicas para optimizar rendimiento en PC y Linux Gaming: eliminación de stuttering DXVK/VKD3D, Steam Deck, Gamescope, PipeWire, drivers NVIDIA/AMD y errores DirectX.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/categorias/gaming.html">
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/categorias/gaming.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/categories/gaming.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/categorias/gaming.html" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else if (savedTheme === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://soportecero.com/categorias/gaming.html#collection",
+      "url": "https://soportecero.com/categorias/gaming.html",
+      "name": "Gaming Tech: Proton, Vulkan, Linux Gaming, Drivers GPU y FPS | SoporteCero",
+      "description": "Guías técnicas para optimizar rendimiento en PC y Linux Gaming: eliminación de stuttering DXVK/VKD3D, Steam Deck, Gamescope, PipeWire, drivers NVIDIA/AMD y errores DirectX.",
+      "inLanguage": "es",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://soportecero.com/#website"
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": 34,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://soportecero.com/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html",
+            "name": "Optimización Profunda de Latencia y Frametime en Linux: Configuración de Parámetros del Kernel (sysctl), ZRAM con Zstd y Variables Proton/Vulkan"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://soportecero.com/articulos/solucion-pantalla-congelada-vkd3d-geforce-linux.html",
+            "name": "Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://soportecero.com/articulos/solucion-mando-bluetooth-desconexion-steam-linux.html",
+            "name": "Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "https://soportecero.com/articulos/solucion-error-anti-cheat-easyanticheat-untrusted-system-file.html",
+            "name": "Error Easy Anti-Cheat: Untrusted system file en Windows y Linux Proton"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "https://soportecero.com/articulos/solucion-audio-crackling-pipewire-gamescope-steam-deck.html",
+            "name": "Chasquidos y cortes de audio en PipeWire y Gamescope en Steam Deck y Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "https://soportecero.com/articulos/solucion-game-crash-dxgi-error-device-hung-proton.html",
+            "name": "Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "https://soportecero.com/articulos/solucion-stuttering-shader-cache-cemu-ryujinx-linux.html",
+            "name": "Solución a tirones y stuttering por Shader Cache en Cemu y Ryujinx en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "https://soportecero.com/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html",
+            "name": "Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "https://soportecero.com/articulos/solucion-lag-packet-loss-steam-gamescope-linux.html",
+            "name": "Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y Steam Deck"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "https://soportecero.com/articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html",
+            "name": "Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "https://soportecero.com/articulos/solucion-crasheo-cs2-vulkan-shader-compilation-linux.html",
+            "name": "Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "https://soportecero.com/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html",
+            "name": "Crasheo de Overwatch 2 en Linux / Steam Deck"
+          },
+          {
+            "@type": "ListItem",
+            "position": 13,
+            "url": "https://soportecero.com/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html",
+            "name": "Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland"
+          },
+          {
+            "@type": "ListItem",
+            "position": 14,
+            "url": "https://soportecero.com/articulos/solucion-pantalla-negra-gamescope-steam-deck-linux.html",
+            "name": "Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck"
+          },
+          {
+            "@type": "ListItem",
+            "position": 15,
+            "url": "https://soportecero.com/articulos/solucion-stuttering-nvidia-wayland-explicit-sync.html",
+            "name": "Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 16,
+            "url": "https://soportecero.com/articulos/error-wayland-obs-studio-screen-black-pipewire.html",
+            "name": "Cómo solucionar la pantalla negra en OBS Studio bajo Wayland y PipeWire"
+          },
+          {
+            "@type": "ListItem",
+            "position": 17,
+            "url": "https://soportecero.com/articulos/error-game-crash-vk-error-device-lost-vulkan.html",
+            "name": "Cómo solucionar el crasheo VK_ERROR_DEVICE_LOST en juegos Vulkan y Proton"
+          },
+          {
+            "@type": "ListItem",
+            "position": 18,
+            "url": "https://soportecero.com/articulos/error-gamemode-not-working-mangohud-linux.html",
+            "name": "Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 19,
+            "url": "https://soportecero.com/articulos/optimizar-proton-vulkan-shader-precompilation.html",
+            "name": "Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton"
+          },
+          {
+            "@type": "ListItem",
+            "position": 20,
+            "url": "https://soportecero.com/articulos/optimizar-input-lag-juegos-linux.html",
+            "name": "Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 21,
+            "url": "https://soportecero.com/articulos/caida-fps-proton-ge-wow.html",
+            "name": "Cómo solucionar micro-tirones en World of Warcraft usando Proton-GE en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 22,
+            "url": "https://soportecero.com/articulos/error-directx-midnight-wow.html",
+            "name": "Cómo solucionar el error de inicialización 3D en World of Warcraft al cambiar de expansión"
+          },
+          {
+            "@type": "ListItem",
+            "position": 23,
+            "url": "https://soportecero.com/articulos/error-proton-dxvk-cache-stutter.html",
+            "name": "Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK"
+          },
+          {
+            "@type": "ListItem",
+            "position": 24,
+            "url": "https://soportecero.com/articulos/error-vram-allocation-diablo4.html",
+            "name": "Caídas de FPS y crasheos por asignación de VRAM en Diablo IV"
+          },
+          {
+            "@type": "ListItem",
+            "position": 25,
+            "url": "https://soportecero.com/articulos/stuttering-juegos-proton-dxvk-cache.html",
+            "name": "Cómo eliminar los tirones (stuttering) de gráficos en juegos de Linux usando caché de DXVK"
+          },
+          {
+            "@type": "ListItem",
+            "position": 26,
+            "url": "https://soportecero.com/articulos/activar-optiscaler-juegos-pc.html",
+            "name": "Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS"
+          },
+          {
+            "@type": "ListItem",
+            "position": 27,
+            "url": "https://soportecero.com/articulos/crasheo-memoria-swap-linux.html",
+            "name": "Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 28,
+            "url": "https://soportecero.com/articulos/error-direct3d.html",
+            "name": "Error Direct3D Could Not Create Device en Windows"
+          },
+          {
+            "@type": "ListItem",
+            "position": 29,
+            "url": "https://soportecero.com/articulos/caida-fps-drivers-video.html",
+            "name": "Cómo solucionar la caída de FPS en juegos online tras la última actualización del driver de video"
+          },
+          {
+            "@type": "ListItem",
+            "position": 30,
+            "url": "https://soportecero.com/articulos/crasheo-texturas-diablo4-proton.html",
+            "name": "Solución al crasheo por carga de texturas en Diablo IV bajo Linux (Proton)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 31,
+            "url": "https://soportecero.com/articulos/error-audio-hdmi-pipewire.html",
+            "name": "Cómo reparar la pérdida de audio por HDMI en Linux usando PipeWire"
+          },
+          {
+            "@type": "ListItem",
+            "position": 32,
+            "url": "https://soportecero.com/articulos/error-audio-proton-warframe.html",
+            "name": "Audio distorsionado o sin sonido en Warframe bajo Proton Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 33,
+            "url": "https://soportecero.com/articulos/error-dx11-feature-level-10-proton-linux.html",
+            "name": "Error DX11 feature level 10.0 is required to run the engine en Linux (Proton)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 34,
+            "url": "https://soportecero.com/articulos/solucion-lag-flyff-universe.html",
+            "name": "Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://soportecero.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gaming Tech",
+          "item": "https://soportecero.com/categorias/gaming.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="header-wrapper">
+    <header>
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">Soporte</span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">Cero</span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">INGENIERÍA</span>
+        </div>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html" class="active">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="lang-selector">
+        <span class="lang-active">ES</span><span class="lang-separator">|</span><a href="/en/categories/gaming.html" class="lang-inactive">EN</a>
+      </div>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/></svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/></svg>
+      </button>
+    </header>
+  </div>
+
+  <main class="main-content" style="padding-top: 2rem;">
+    <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/">INICIO</a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span style="color: var(--text-secondary);">Gaming Tech</span>
+    </nav>
+
+    <section class="hero" style="padding: 1.5rem 0 2rem; text-align: left;" aria-label="Gaming Tech">
+      <span class="card-category" style="margin-bottom: 0.75rem; display: inline-block;">34 GUÍAS VERIFICADAS</span>
+      <h1 style="text-align: left; margin-bottom: 0.75rem;">Gaming Tech</h1>
+      <p style="margin: 0; max-width: 780px;">Diagnósticos y optimizaciones de bajo nivel para gaming en Linux y Windows: compilación de shaders Vulkan/DXVK, VKD3D-Proton, latencia de audio PipeWire, controladores NVIDIA/AMD y Steam Deck.</p>
+    </section>
+
+    <div class="quick-access-box" aria-label="Otras Categorías y Herramientas">
+      <div class="quick-access-header">
+        <span class="led-dot" aria-hidden="true"></span>
+        <span class="quick-access-badge">EXPLORAR:</span>
+      </div>
+      <div class="quick-access-links">
+        <a href="/categorias/sistemas.html" class="quick-access-link">Sistemas y Servidores</a> <span class="quick-access-sep" aria-hidden="true">/</span> <a href="/categorias/web.html" class="quick-access-link">Web y Código</a>
+        <span class="quick-access-sep" aria-hidden="true">/</span>
+        <a href="/tools/" class="quick-access-link">Calculadoras Interactivas (/tools/)</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="cat-grid-title">
+      <h2 class="section-title" id="cat-grid-title">Todas las guías de Gaming Tech (34)</h2>
+      <div class="articles-grid">
+        
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/optimizacion-avanzada-linux-gaming-frametime-kernel-gamemode-zram.html">Optimización Profunda de Latencia y Frametime en Linux: Configuración de Parámetros del Kernel (sysctl), ZRAM con Zstd y Variables Proton/Vulkan</a>
+            </h2>
+            <p class="card-excerpt">Guía maestra de optimización de latencia y consistencia de frametime para gaming en Linux. Configura ZRAM con compresión zstd, desactiva split_lock...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Proton</span></div>
+              <span>Lectura: 9 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-pantalla-congelada-vkd3d-geforce-linux.html">Pantalla congelada o cuelgue en juegos DirectX 12 con NVIDIA en Linux</a>
+            </h2>
+            <p class="card-excerpt">Soluciona los congelamientos y caídas a escritorio en juegos DirectX 12 que utilizan VKD3D-Proton con tarjetas gráficas NVIDIA GeForce en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">NVIDIA</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-mando-bluetooth-desconexion-steam-linux.html">Desconexión de mandos Bluetooth (Xbox / PS5) en Steam y Linux</a>
+            </h2>
+            <p class="card-excerpt">Elimina los cortes de conexión, retraso de entrada y desvinculaciones aleatorias de mandos Xbox y DualSense en Steam sobre distribuciones Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Bluetooth</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-error-anti-cheat-easyanticheat-untrusted-system-file.html">Error Easy Anti-Cheat: Untrusted system file en Windows y Linux Proton</a>
+            </h2>
+            <p class="card-excerpt">Cómo reparar el bloqueo Untrusted system file de Easy Anti-Cheat al jugar a Apex Legends, Fortnite o Elden Ring.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">AntiCheat</span>
+<span class="card-tag">Steam</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-audio-crackling-pipewire-gamescope-steam-deck.html">Chasquidos y cortes de audio en PipeWire y Gamescope en Steam Deck y Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el audio crackling, chasquidos y retrasos de sonido al jugar con PipeWire, Gamescope y Proton en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">PipeWire</span>
+<span class="card-tag">Audio</span>
+<span class="card-tag">SteamDeck</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-game-crash-dxgi-error-device-hung-proton.html">Error DXGI_ERROR_DEVICE_HUNG en juegos con Proton y Steam en Linux</a>
+            </h2>
+            <p class="card-excerpt">Guía para reparar el crasheo fatal DXGI_ERROR_DEVICE_HUNG al jugar títulos DirectX 11 y 12 a través de Proton y VKD3D en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proton</span>
+<span class="card-tag">Steam</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-stuttering-shader-cache-cemu-ryujinx-linux.html">Solución a tirones y stuttering por Shader Cache en Cemu y Ryujinx en Linux</a>
+            </h2>
+            <p class="card-excerpt">Elimina los microtirones y congelamientos al compilar shaders en emuladores como Ryujinx, Cemu y RPCS3 en Linux con controladores Mesa y Vulkan.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Vulkan</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-crasheo-gpu-hang-amdgpu-linux.html">Cómo solucionar el error [drm:amdgpu_job_timedout] y congelamientos de GPU en Linux</a>
+            </h2>
+            <p class="card-excerpt">¿Tu juego se congela en Linux y el log dmesg muestra [drm:amdgpu_job_timedout] ring gfx_0.0.0 timeout? Aprende a estabilizar drivers AMDGPU, Mesa y...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux Gaming</span>
+<span class="card-tag">AMDGPU</span>
+<span class="card-tag">Mesa</span></div>
+              <span>Lectura: 5 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-lag-packet-loss-steam-gamescope-linux.html">Cómo solucionar Lag, Pérdida de Paquetes y Micro-Stuttering en Gamescope y Steam Deck</a>
+            </h2>
+            <p class="card-excerpt">Guía para optimizar el compositor Gamescope, resolver bufferbloat y reducir el lag en juegos bajo Linux y SteamOS.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Steam Deck</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-stuttering-vkd3d-proton-elden-ring-linux.html">Stuttering y Caída de FPS en Elden Ring con VKD3D en Linux: Solución Completa</a>
+            </h2>
+            <p class="card-excerpt">Aprende a eliminar los tirones y congelamientos en Elden Ring en Linux usando GE-Proton, VKD3D-Proton, Vulkan GPL y RADV.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Elden Ring</span>
+<span class="card-tag">Proton</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-crasheo-cs2-vulkan-shader-compilation-linux.html">Reparar crasheos y tartamudeo de FPS en Counter-Strike 2 en Linux (Vulkan)</a>
+            </h2>
+            <p class="card-excerpt">Cómo solucionar las caídas de fotogramas, microstuttering y cierres repentinos de Counter-Strike 2 en Linux con drivers Mesa, RADV y NVIDIA.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux Gaming</span>
+<span class="card-tag">Vulkan</span>
+<span class="card-tag">Steam</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-crasheo-overwatch-2-mangohud-proton.html">Crasheo de Overwatch 2 en Linux / Steam Deck</a>
+            </h2>
+            <p class="card-excerpt">¿Overwatch 2 se cierra inesperadamente o se congela en Linux/Steam Deck al usar Proton? Solución paso a paso para DXVK y compilación de shaders.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Steam Deck</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-proton-wayland-fractional-scaling-mouse-cursor.html">Cómo solucionar problemas de cursor desalineado y escalado en juegos con Proton en Wayland</a>
+            </h2>
+            <p class="card-excerpt">Guía para reparar la desalineación del cursor del ratón, clics fuera de objetivo y desenfoque por escalado fraccional en juegos ejecutados con Stea...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proton</span>
+<span class="card-tag">Wayland</span>
+<span class="card-tag">Gaming</span></div>
+              <span>Lectura: 4 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-pantalla-negra-gamescope-steam-deck-linux.html">Pantalla Negra al Iniciar Juegos en Gamescope / Steam Deck</a>
+            </h2>
+            <p class="card-excerpt">¿Tus juegos muestran pantalla negra o se congelan en Gamescope o Steam Deck con Proton? Guía de solución paso a paso para Wayland y Vulkan.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Steam Deck</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-stuttering-nvidia-wayland-explicit-sync.html">Parpadeo y Stuttering con NVIDIA en Wayland (Linux Gaming)</a>
+            </h2>
+            <p class="card-excerpt">¿Tus juegos sufren parpadeos (flickering) o lag en KDE, Hyprland o GNOME con tarjetas NVIDIA en Wayland? Activa Explicit Sync y optimiza controlado...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">NVIDIA</span>
+<span class="card-tag">Wayland</span>
+<span class="card-tag">Gaming</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-wayland-obs-studio-screen-black-pipewire.html">Cómo solucionar la pantalla negra en OBS Studio bajo Wayland y PipeWire</a>
+            </h2>
+            <p class="card-excerpt">Guía completa para reparar la pantalla negra al capturar pantalla o ventanas en OBS Studio usando Wayland, PipeWire y XDG Desktop Portal en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">OBS</span>
+<span class="card-tag">Wayland</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-game-crash-vk-error-device-lost-vulkan.html">Cómo solucionar el crasheo VK_ERROR_DEVICE_LOST en juegos Vulkan y Proton</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para corregir el error VK_ERROR_DEVICE_LOST en juegos que usan Vulkan, DXVK o Steam Proton en Linux y Windows.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Vulkan</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">Proton</span></div>
+              <span>Lectura: 4 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-gamemode-not-working-mangohud-linux.html">Cómo activar y solucionar fallos en GameMode y MangoHud para juegos en Linux</a>
+            </h2>
+            <p class="card-excerpt">Soluciona problemas de integración donde Feral GameMode o MangoHud no se activan ni muestran la superposición FPS en juegos de Linux o Steam.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">Performance</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/optimizar-proton-vulkan-shader-precompilation.html">Cómo optimizar la precompilación de shaders de Vulkan en Steam Proton</a>
+            </h2>
+            <p class="card-excerpt">Elimina el stuttering y acelera la carga de shaders en juegos DirectX 11 y 12 usando Proton, DXVK y RADV/Nvidia en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Proton</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/optimizar-input-lag-juegos-linux.html">Cómo reducir el retraso de entrada (input lag) para gaming competitivo en Linux</a>
+            </h2>
+            <p class="card-excerpt">Optimiza la latencia y la respuesta de tus periféricos configurando el servidor gráfico Wayland o X11 y los perfiles de energía del sistema.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Performance</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/caida-fps-proton-ge-wow.html">Cómo solucionar micro-tirones en World of Warcraft usando Proton-GE en Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a optimizar el rendimiento y eliminar los micro-tirones de imagen en WoW configurando Proton-GE y activando la compilación asíncrona de sha...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">World of Warcraft</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-directx-midnight-wow.html">Cómo solucionar el error de inicialización 3D en World of Warcraft al cambiar de expansión</a>
+            </h2>
+            <p class="card-excerpt">Guía rápida para resolver el bloqueo del motor gráfico de WoW al intentar cargar librerías avanzadas de DirectX en sistemas de tarjetas gráficas de...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">World of Warcraft</span>
+<span class="card-tag">DirectX</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-proton-dxvk-cache-stutter.html">Cómo eliminar los tirones al jugar títulos DirectX en Linux optimizando la caché de DXVK</a>
+            </h2>
+            <p class="card-excerpt">Aprende a configurar las variables de entorno de traducción gráfica para compilar shaders en segundo plano y estabilizar tus fotogramas.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">DXVK</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-vram-allocation-diablo4.html">Caídas de FPS y crasheos por asignación de VRAM en Diablo IV</a>
+            </h2>
+            <p class="card-excerpt">Aprende a mitigar el error 'Out of Video Memory' y las caídas drásticas de rendimiento optimizando la gestión de texturas y el archivo de paginació...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Gaming</span>
+<span class="card-tag">Diablo IV</span>
+<span class="card-tag">VRAM</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/stuttering-juegos-proton-dxvk-cache.html">Cómo eliminar los tirones (stuttering) de gráficos en juegos de Linux usando caché de DXVK</a>
+            </h2>
+            <p class="card-excerpt">Aprende a mitigar el tartamudeo gráfico al traducir DirectX a Vulkan configurando la compilación asíncrona de shaders en tus juegos de PC.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">DXVK</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/activar-optiscaler-juegos-pc.html">Cómo activar OptiScaler en juegos de PC sin soporte nativo de DLSS</a>
+            </h2>
+            <p class="card-excerpt">Aprende a forzar el escalado de imagen moderno y mejorar tus FPS en tarjetas gráficas antiguas utilizando OptiScaler mediante configuraciones manua...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">OptiScaler</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">Proton</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/crasheo-memoria-swap-linux.html">Solución al crasheo por falta de memoria virtual (SWAP) en Linux (CachyOS / Bazzite)</a>
+            </h2>
+            <p class="card-excerpt">Evita que tus juegos pesados e instancias de Docker se cierren solos configurando o expandiendo el espacio de memoria SWAP en distribuciones modern...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Optimización</span>
+<span class="card-tag">Gaming</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-direct3d.html">Error Direct3D Could Not Create Device en Windows</a>
+            </h2>
+            <p class="card-excerpt">¿Tu juego retro o clásico favorito falla al iniciar en Windows 10 u 11? Resuelve este mítico error instalando los componentes heredados de DirectX.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">DirectX</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">Windows</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/caida-fps-drivers-video.html">Cómo solucionar la caída de FPS en juegos online tras la última actualización del driver de video</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y revertir controladores gráficos corruptos, limpiar cachés de shaders y restablecer el rendimiento de tus juegos en Windows...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">GPU</span>
+<span class="card-tag">Drivers</span>
+<span class="card-tag">Nvidia</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/crasheo-texturas-diablo4-proton.html">Solución al crasheo por carga de texturas en Diablo IV bajo Linux (Proton)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error Out of Memory y los cierres al cargar texturas en Diablo IV jugando en Linux con Steam Proton y Battle.net.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Diablo 4</span>
+<span class="card-tag">Proton</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-audio-hdmi-pipewire.html">Cómo reparar la pérdida de audio por HDMI en Linux usando PipeWire</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar la falta de sonido o perfil ausente por HDMI/DisplayPort en Linux usando PipeWire y WirePlumber paso a paso.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">PipeWire</span>
+<span class="card-tag">Audio</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-audio-proton-warframe.html">Audio distorsionado o sin sonido en Warframe bajo Proton Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el audio entrecortado, crujidos (crackling) y falta de sonido en Warframe con Proton, FAudio y PipeWire.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Warframe</span>
+<span class="card-tag">Proton</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-dx11-feature-level-10-proton-linux.html">Error DX11 feature level 10.0 is required to run the engine en Linux (Proton)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error DX11 feature level 10.0 en juegos Unreal Engine y Unity en Linux con DXVK, Vulkan y drivers Mesa/Nvidia.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proton</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Vulkan</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Gaming Tech</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-lag-flyff-universe.html">Cómo eliminar los tirones y lag gráfico en Flyff Universe (Navegador y Cliente)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a optimizar el rendimiento y eliminar el lag en Flyff Universe activando aceleración por hardware en Chrome, WebGL 2.0 y ANGLE.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Flyff Universe</span>
+<span class="card-tag">Gaming</span>
+<span class="card-tag">WebGL</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="ad-slot-wrapper ad-slot-wrapper--home" style="margin-top: 2.5rem;" aria-label="Publicidad">
+      <span class="ad-slot-label">Publicidad</span>
+      <div class="ad-slot-inner">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6956525438386645"
+             data-ad-slot="6471521412"
+             data-ad-format="auto"
+             data-full-width-responsive="false"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </aside>
+  </main>
+
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
+        <li><a href="/tools/">Calculadoras</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers.
+      </p>
+      <p class="footer-copyright">&copy; 2026 SoporteCero. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>

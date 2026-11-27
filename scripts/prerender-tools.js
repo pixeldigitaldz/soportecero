@@ -1637,6 +1637,18 @@ const TOOLS_AD_BOTTOM_HTML = `
         </div>
       </aside>`;
 
+const TOOLS_NAV_FOOTER_HTML = `
+      <nav class="seo-section" aria-label="Navegación interna SoporteCero" style="margin-top:2.5rem; padding-top:1.75rem; border-top:1px solid rgba(255,255,255,0.1);">
+        <h2 class="seo-h2" style="margin-top:0;">Explora más recursos técnicos de SoporteCero</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:1rem;">
+          <a href="/" style="padding:0.55rem 0.95rem; border-radius:0.65rem; border:1px solid rgba(56,189,248,0.3); color:#38bdf8; text-decoration:none; font-size:0.88rem; font-weight:600;">Inicio SoporteCero</a>
+          <a href="/tools/" style="padding:0.55rem 0.95rem; border-radius:0.65rem; border:1px solid rgba(56,189,248,0.3); color:#38bdf8; text-decoration:none; font-size:0.88rem; font-weight:600;">Hub de Calculadoras (/tools/)</a>
+          <a href="/categorias/sistemas.html" style="padding:0.55rem 0.95rem; border-radius:0.65rem; border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; text-decoration:none; font-size:0.88rem;">Guías Sistemas y Servidores</a>
+          <a href="/categorias/web.html" style="padding:0.55rem 0.95rem; border-radius:0.65rem; border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; text-decoration:none; font-size:0.88rem;">Guías Web y Código</a>
+          <a href="/categorias/gaming.html" style="padding:0.55rem 0.95rem; border-radius:0.65rem; border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; text-decoration:none; font-size:0.88rem;">Guías Gaming Tech</a>
+        </div>
+      </nav>`;
+
 let generatedCount = 0;
 
 for (const tool of TOOLS_CONFIG) {
@@ -1675,6 +1687,7 @@ for (const tool of TOOLS_CONFIG) {
         </div>
       </header>
       ${tool.articleHtml}
+      ${TOOLS_NAV_FOOTER_HTML}
       ${TOOLS_AD_BOTTOM_HTML}
     </article>
   `;
@@ -1687,13 +1700,14 @@ for (const tool of TOOLS_CONFIG) {
   generatedCount++;
 }
 
-// 5. Prerender the Hub Index (tools/index.html) with CollectionPage JSON-LD and crawlable links to all 6 tools
+// 5. Prerender the Hub Index (tools/index.html -> canonical /tools/) with CollectionPage JSON-LD and crawlable links to all 6 tools
+const hubCanonical = "https://soportecero.com/tools/";
 const hubSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "@id": "https://soportecero.com/tools/index.html#collection",
+  "@id": "https://soportecero.com/tools/#collection",
   "name": "Finanzas Pro Hub | Suite de Calculadoras Financieras e Ingeniería Freelance | SoporteCero",
-  "url": "https://soportecero.com/tools/index.html",
+  "url": hubCanonical,
   "description": "Súper-Hub de calculadoras interactivas verificadas en laboratorio: comisiones de pasarelas internacionales, tarifas por hora freelance con exportación PDF, ROAS e-commerce, pricing, hipotecas e interés compuesto.",
   "inLanguage": "es",
   "isPartOf": {
@@ -1725,7 +1739,10 @@ const hubCardsHtml = TOOLS_CONFIG.map(t => `
   </div>
 `).join('\n');
 
-let hubHtml = baseTemplate;
+let hubHtml = baseTemplate
+  .replace(/<link rel="canonical" href="[\s\S]*?"\s*\/?>/i, `<link rel="canonical" href="${hubCanonical}" />`)
+  .replace(/<link rel="alternate" hreflang="es" href="[\s\S]*?"\s*\/?>/i, `<link rel="alternate" hreflang="es" href="${hubCanonical}" />`)
+  .replace(/<link rel="alternate" hreflang="x-default" href="[\s\S]*?"\s*\/?>/i, `<link rel="alternate" hreflang="x-default" href="${hubCanonical}" />`);
 const hubHeadInjection = `
     <!-- Structured Data JSON-LD -->
     <script type="application/ld+json">
@@ -1743,7 +1760,7 @@ const hubArticleBlock = `
         <span class="seo-header-tag">Finanzas Pro Hub &bull; Suite Interactiva</span>
         <h1 class="seo-h1">Suite de Calculadoras Financieras y Simulación para Freelancers, Desarrolladores y E-commerce</h1>
         <div class="seo-meta-audit">
-          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-15 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Acceso Gratuito</span>
+          <span>Publicado: Febrero 2026 &bull; Última revisión: 2026-11-26 &bull; Auditoría E-E-A-T: Equipo Técnico SoporteCero &bull; Acceso Gratuito</span>
         </div>
       </header>
       <section class="seo-section">
@@ -1757,10 +1774,11 @@ const hubArticleBlock = `
           ${hubCardsHtml}
         </div>
       </section>
+      ${TOOLS_NAV_FOOTER_HTML}
     </article>
 `;
 hubHtml = hubHtml.replace('<div id="root"></div>', hubArticleBlock);
 fs.writeFileSync(TEMPLATE_PATH, hubHtml, 'utf-8');
-console.log('[PRERENDER] Generado exitosamente Hub pre-renderizado: tools/index.html');
+console.log('[PRERENDER] Generado exitosamente Hub pre-renderizado: tools/index.html (canonical /tools/)');
 
 console.log(`[PRERENDER] Total de páginas generadas: ${generatedCount} calculadoras + 1 Hub principal.`);

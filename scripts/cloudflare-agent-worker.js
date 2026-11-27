@@ -32,7 +32,16 @@ export default {
     const acceptHeader = request.headers.get('accept') || '';
     const wantsMarkdown = acceptHeader.includes('text/markdown');
 
-    // Redirect legacy duplicate contact URL in English to canonical /en/contact.html
+    // Canonical 301 redirects (eliminate duplicate index.html / trailing-slash / legacy paths)
+    if (url.pathname === '/index.html') {
+      return Response.redirect(`https://soportecero.com/${url.search}`, 301);
+    }
+    if (url.pathname === '/en/index.html' || url.pathname === '/en') {
+      return Response.redirect(`https://soportecero.com/en/${url.search}`, 301);
+    }
+    if (url.pathname === '/tools/index.html' || url.pathname === '/tools') {
+      return Response.redirect(`https://soportecero.com/tools/${url.search}`, 301);
+    }
     if (url.pathname === '/en/contacto.html') {
       return Response.redirect('https://soportecero.com/en/contact.html', 301);
     }
@@ -187,8 +196,8 @@ export default {
       newHeaders.set(k, v);
     }
 
-    // Ensure Vary includes Accept for content negotiation discovery
-    newHeaders.set('Vary', 'Accept, Accept-Encoding');
+    // Keep Vary clean on standard HTML/asset responses to avoid CDN/Googlebot cache fragmentation
+    newHeaders.set('Vary', 'Accept-Encoding');
 
     // RFC 9727: Fix Content-Type for /.well-known/api-catalog
     if (url.pathname === '/.well-known/api-catalog') {
@@ -209,19 +218,6 @@ export default {
     if (url.pathname.startsWith('/.well-known/') || url.pathname === '/auth.md' || url.pathname.startsWith('/llms')) {
       newHeaders.set('Access-Control-Allow-Origin', '*');
       newHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
-    }
-
-    // Fallback markdown conversion if requested for other HTML pages
-    const contentType = newHeaders.get('content-type') || '';
-    if (wantsMarkdown && contentType.includes('text/html')) {
-      const htmlText = await response.text();
-      const tokenEstimate = Math.round(htmlText.length / 4);
-      newHeaders.set('Content-Type', 'text/markdown; charset=utf-8');
-      newHeaders.set('x-markdown-tokens', tokenEstimate.toString());
-      return new Response(htmlText, {
-        status: response.status,
-        headers: newHeaders
-      });
     }
 
     return new Response(response.body, {

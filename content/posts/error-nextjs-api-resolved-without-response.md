@@ -5,7 +5,7 @@ description: >-
   Pages y App Router al manejar llamadas asíncronas o callbacks.
 category: Web y Código
 date: '2026-08-21'
-readTime: 7 min
+readTime: 3 min
 tags:
   - Next.js
   - Node.js
@@ -15,42 +15,14 @@ El error y advertencia `API resolved without sending a response for /api/...` en
 
 Este fallo provoca que el servidor de Node.js cierre prematuramente el contexto de la solicitud o genere fugas de memoria y respuestas colgadas (timeouts) en el cliente.
 
-## Análisis de Arquitectura y Causa Raíz
-
-En el ecosistema de **Node.js** y compiladores modernos de **JavaScript / TypeScript** (como `tsc`, `esbuild` o `swc`), la ejecución del código transcurre sobre el motor **V8** de Google acoplado a la librería de abstracción de E/S **libuv**, la cual gestiona el bucle de eventos (*Event Loop*) y el pool de hilos para operaciones asíncronas de red y sistema de archivos.
-
-La causa raíz de esta incidencia proviene de desalineaciones en la resolución de módulos, el árbol de tipado AST o la frontera de renderizado:
-1. **Árbol de resolución de dependencias y conflictos de pares (`peerDependencies`):** El gestor de paquetes (`npm` v7+) implementa un algoritmo determinista para construir el árbol de módulos en `node_modules`. Cuando dos paquetes requieren versiones mayores distintas de una misma librería compartida como dependencia de pares, el algoritmo de resolución rechaza forzar la instalación para prevenir colisiones en tiempo de ejecución, lanzando el error de conflicto de pares (`ERESOLVE`).
-2. **Fase de hidratación y renderizado isomórfico (SSR vs Client):** En frameworks como Next.js o Remix, el código se ejecuta inicialmente en el servidor (entorno Node.js sin interfaz gráfica) antes de compilarse y enviarse al navegador. Si el código fuente intenta acceder a objetos globales del DOM como `window`, `document` o `localStorage` antes del montaje del componente en el cliente (`useEffect`), el motor lanza de inmediato una excepción crítica `ReferenceError: document is not defined` durante el Server-Side Rendering.
-3. **Mapeo del Sistema de Tipos AST en TypeScript:** El compilador de TypeScript (`tsc`) genera un árbol de sintaxis abstracta (*Abstract Syntax Tree*) y valida la correspondencia de tipos en tiempo de transpilación. Si una interfaz carece de una definición de propiedad explícita o se utiliza una librería de JavaScript que no expone declaraciones de tipos (`@types/*`), el verificador de tipos emite el error TS2339 para salvaguardar la seguridad de tipos (*type safety*), bloqueando la compilación del proyecto.
-
-## Entorno de Laboratorio y Diagnóstico
-
-Antes de aplicar cualquier cambio destructivo o reiniciar servicios en un entorno de producción, es fundamental ejecutar una matriz de diagnóstico preliminar para identificar la capa exacta donde ocurre el fallo:
-
+## Diagnóstico Rápido
 | Causa | Solución |
 |---|---|
-| **Promesa asíncrona no esperada (`missing await`)** | Prefix all database queries and external fetch requests with `await` |
+| **Promesa asíncrona no esperada (`missing await`)** | Asegurarse de anteponer `await` a todas las llamadas a base de datos y APIs |
+| **Uso de callbacks tradicionales (como Stripe webhooks o JWT)** | Envolver el callback en un objeto `new Promise((resolve, reject) => ...)` |
+| **Falta de `return res.status(...)` en ramas condicionales** | Verificar que todas las rutas de código envíen una respuesta HTTP válida |
 
-Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:
-
-```bash
-# 1. Comprobar el estado del servicio en el gestor de inicialización systemd
-sudo systemctl status --no-pager -l node-app
-
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad
-sudo journalctl -u node-app -n 50 --no-pager
-
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados
-df -Th && df -ih
-```
-
-- El flag `--no-pager` en `systemctl` y `journalctl` evita invocar el paginador interactivo (`less`), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.
-- El comando `df` con los modificadores `-T` (tipo de sistema de archivos ext4/xfs/btrfs) y `-h` (formato legible en gigabytes/megabytes), combinado con `-i` (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.
-
-## Implementación Técnica Paso a Paso
-
-Sigue esta secuencia de ingeniería técnica para aislar y resolver definitivamente la causa raíz del fallo:
+## La Solución Paso a Paso
 
 **Asegura el uso de async/await en tu controlador**
 Si estás usando el Pages Router (`pages/api/...`), cada promesa ejecutada dentro del handler debe ser esperada antes de invocar `res.json()` o `res.send()`:
@@ -96,7 +68,6 @@ export async function GET(request) {
 }
 ```
 
-## 🛡️ Consejos de Prevención
-
+## Prevención
 - **Linter de promesas:** Habilita la regla `@typescript-eslint/no-floating-promises` en ESLint para advertir automáticamente sobre promesas no resueltas en tiempo de desarrollo.
 - **Manejo de timeouts:** Configura tiempos límite de respuesta en tus clientes de base de datos para evitar que un bloqueo de red deje las solicitudes colgadas indefinidamente.

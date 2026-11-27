@@ -101,7 +101,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -124,6 +124,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/categorias/web.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python",
       "item": "https://soportecero.com/articulos/error-ssl-certificate-verify-failed-python-requests.html"
     }
@@ -165,7 +171,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -194,19 +200,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-ssl-certificate-verify-failed-python-requests.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-ssl-certificate-verify-failed-python-requests.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -226,9 +232,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Web y Código</span>
+        <a href="/categorias/web.html">Web y Código</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Cómo solucionar SSLCertVerificationError / CERTIFICATE_VERIFY_FAILED en Python</span>
       </nav>
@@ -253,7 +259,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -270,14 +276,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>El error ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate en Python (requests, urllib3, aiohttp o pip) ocurre cuando la librería no puede validar la cadena de confianza del certificado SSL/TLS del servidor remoto contra el almacén local de Autoridades de Certificación (CA).</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>El protocolo <strong>SSH (Secure Shell)</strong>, estandarizado en RFC 4251-4254, provee un canal de comunicación criptográficamente seguro sobre redes no confiables, operando en la capa de aplicación sobre el protocolo de transporte TCP (puerto estándar 22). Su arquitectura comprende tres componentes desacoplados: la capa de transporte (autenticación del servidor, cifrado simétrico y verificación de integridad), el protocolo de autenticación de usuario, y el protocolo de conexión para multiplexar múltiples canales lógicos.</p>
-<p>La causa raíz de esta incidencia radica en fallos de negociación criptográfica o restricciones en la capa de filtrado de paquetes del kernel:</p>
-<ol>
-<li><strong>Algoritmos de Intercambio de Claves (KEX) y obsolescencia criptográfica:</strong> Durante el saludo inicial (<em>handshake</em>), el cliente y el demonio <code>sshd</code> negocian un algoritmo de intercambio de claves seguro (ej. <code>curve25519-sha256</code> o <code>diffie-hellman-group14-sha256</code>). Si el cliente o el servidor tienen deshabilitados algoritmos heredados (por ejemplo tras una actualización de OpenSSH que desactiva claves SHA-1 o algoritmos RSA débiles), la negociación aborta de inmediato con el error <code>kex_exchange_identification: read: Connection reset by peer</code>.</li>
-<li><strong>Verificación de huella digital y archivos <code>known_hosts</code>:</strong> El cliente SSH protege al usuario contra ataques de intermediario (<em>Man-in-the-Middle</em>) cotejando la clave pública del servidor con el registro histórico almacenado en <code>~/.ssh/known_hosts</code>. Si el servidor remoto ha sido reinstalado, ha cambiado su par de claves o se ha reasignado la dirección IP en un entorno dinámico de nube, la huella digital criptográfica no coincidirá, activando un bloqueo de seguridad estricto por advertencia de ataque de spoofing.</li>
-<li><strong>Bloqueo a nivel de Netfilter y saturación de conexiones:</strong> Si se producen múltiples intentos de conexión fallidos o peticiones de autenticación concurrentes, módulos de seguridad como <code>fail2ban</code> o reglas en <code>iptables</code> / <code>nftables</code> descartan los paquetes entrantes (<code>DROP</code>), provocando que el cliente permanezca a la espera hasta agotar el tiempo límite (<code>Connection timed out</code>).</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -300,7 +298,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Run Install Certificates.command located in Applications Python directory</div>
+            <div class="diag-value">Ejecutar el script Install Certificates.command en la carpeta de Python en Aplicaciones</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Paquete certifi desactualizado o certificado CA corporativo/intermedio no reconocido</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Actualizar certifi con <code>pip install --upgrade certifi</code> o pasar la ruta del certificado CA en verify=&#39;/ruta/ca.crt&#39;</div>
           </div></div></div>
       </div>
     </section>
@@ -324,15 +334,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -349,14 +352,14 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#preguntas-frecuentes-faq" class="toc-link">
-            <span class="toc-number">04</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Preguntas Frecuentes (FAQ)</span>
           </a>
         <ul class="toc-sublist">
@@ -384,7 +387,19 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="solucion-para-macos-instalacion-de-certificados-openssl">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="solucion-para-macos-instalacion-de-certificados-openssl-heading">Paso 1: Solución para macOS (Instalación de certificados OpenSSL)</h4>
+            <p>Las versiones oficiales de Python para macOS no utilizan por defecto el llavero del sistema (Keychain), sino su propio almacén OpenSSL que viene vacío tras la instalación:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -404,47 +419,41 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> python-app
-<span class="tok-cmt">
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> python-app <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
-<span class="tok-cmt">
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Ejecutar el script oficial de instalación de certificados para Python 3</span>
+/Applications/Python\ <span class="tok-num">3</span>.*/Install\ Certificates.command
 </code></pre>
     </div>
     
-<ul>
-<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
-<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
-</ul>
+<p>O mediante terminal si utilizas Homebrew o pyenv:</p>
 
-
-  <!-- SC-InArticle -->
-  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
-    <span class="ad-slot-label">Publicidad</span>
-    <div class="ad-slot-inner">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-6956525438386645"
-           data-ad-slot="5381801020"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
-  
-<h2 id="implementacion-tecnica-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-header-left">
+          <div class="code-dots" aria-hidden="true">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+          </div>
+          <span class="code-lang">BASH</span>
+        </div>
+        <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
+          <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
-          Implementación Técnica Paso a Paso
-        </h2>
-<ol class="steps-list">
+          <span class="copy-text">Copiar</span>
+        </button>
+      </div>
+      <pre class="formatted-pre"><code><span class="tok-cmt"># Instalar y enlazar certificados en el entorno</span>
+pip install <span class="tok-prop">--upgrade</span> certifi
+</code></pre>
+    </div>
+          </div>
+        </li>
+        
 
         <li class="step-item" id="actualizar-el-paquete-certifi-y-los-certificados-del-sistema-operativo">
-          <div class="step-number">1</div>
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="actualizar-el-paquete-certifi-y-los-certificados-del-sistema-operativo-heading">Paso 2: Actualizar el paquete certifi y los certificados del sistema operativo</h4>
             <p>Asegúrate de que tu entorno virtual y tu sistema operativo dispongan del bundle de certificados raíz más reciente:</p>
@@ -480,7 +489,7 @@ pip install <span class="tok-prop">--upgrade</span> certifi urllib3 requests
         
 
         <li class="step-item" id="especificar-un-certificado-ca-personalizado-en-requests">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="especificar-un-certificado-ca-personalizado-en-requests-heading">Paso 3: Especificar un certificado CA personalizado en Requests</h4>
             <p>Si estás consumiendo una API interna, un proxy corporativo o un servidor con certificado autofirmado, especifica la ruta de tu CA:</p>
@@ -518,7 +527,7 @@ response = requests.<span class="tok-prop">get</span>(<span class="tok-cmt">&#39
         
 
         <li class="step-item" id="configurar-variables-de-entorno-globales-sslcertfile-requestscabundle">
-          <div class="step-number">3</div>
+          <div class="step-number">4</div>
           <div class="step-body">
             <h4 id="configurar-variables-de-entorno-globales-sslcertfile-requestscabundle-heading">Paso 4: Configurar variables de entorno globales (SSL_CERT_FILE / REQUESTS_CA_BUNDLE)</h4>
             <p>Para que todas las librerías de Python reconozcan el almacén de certificados sin modificar cada script individual:</p>
@@ -550,6 +559,22 @@ response = requests.<span class="tok-prop">get</span>(<span class="tok-cmt">&#39
         </li>
         
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
+    <span class="ad-slot-label">Publicidad</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="preguntas-frecuentes-faq">❓ Preguntas Frecuentes (FAQ)</h2>
 <h3 id="por-que-mi-navegador-abre-la-pagina-sin-error-pero-python-falla">¿Por qué mi navegador abre la página sin error pero Python falla?</h3>
 <p>Los navegadores web utilizan el almacén de certificados del sistema operativo y admiten mecanismos automáticos como AIA (Authority Information Access) para descargar certificados intermedios faltantes, algo que Python no hace automáticamente por motivos de rendimiento y seguridad estricta.</p>
@@ -632,52 +657,103 @@ response = requests.<span class="tok-prop">get</span>(<span class="tok-cmt">&#39
       </h2>
       <div class="related-grid">
         
-      <!-- Related Card: Cómo solucionar el error ENOENT 'no such file or directory' en npm e npx -->
+      <!-- Related Card: Error server certificate verification failed en Git -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-npm-err-code-enoent-file-not-found.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error ENOENT 'no such file or directory' en npm e npx</a>
+              <a href="../articulos/error-git-server-certificate-verification-failed.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error server certificate verification failed en Git</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Nodejs</span>
-            <span>Lectura: 7 min</span>
+            <span class="card-tag">Git</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker -->
+      <!-- Related Card: La guía definitiva de permisos de archivos y carpetas para asegurar WordPress -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-conexion-prowlarr-qbittorrent-docker.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Solución al error de conexión rechazada entre Prowlarr y qBittorrent en Docker</a>
+              <a href="../articulos/permisos-correctos-wordpress-seguridad.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">La guía definitiva de permisos de archivos y carpetas para asegurar WordPress</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Prowlarr</span>
-            <span>Lectura: 8 min</span>
+            <span class="card-tag">WordPress</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Cómo solucionar el error CORS 'No Access-Control-Allow-Origin' en Express y Node.js -->
+      <!-- Related Card: fatal: unable to access: SSL certificate problem: unable to get local issuer certificate en Git -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-cors-express-nodejs-header.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error CORS 'No Access-Control-Allow-Origin' en Express y Node.js</a>
+              <a href="../articulos/error-git-ssl-certificate-problem-unable-to-get-local-issuer-certificate.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">fatal: unable to access: SSL certificate problem: unable to get local issuer certificate en Git</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Nodejs</span>
-            <span>Lectura: 7 min</span>
+            <span class="card-tag">Git</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Error 'externally-managed-environment' al usar pip en Linux -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-pip-externally-managed-environment.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Error 'externally-managed-environment' al usar pip en Linux</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Python</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar el error ModuleNotFoundError en Python dentro de Virtualenv -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-python-module-not-found-venv.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error ModuleNotFoundError en Python dentro de Virtualenv</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Python</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar el bucle de redirecciones ERR_TOO_MANY_REDIRECTS en WordPress con Cloudflare -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-too-many-redirects-wordpress-cloudflare.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el bucle de redirecciones ERR_TOO_MANY_REDIRECTS en WordPress con Cloudflare</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">WordPress</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
@@ -690,14 +766,14 @@ response = requests.<span class="tok-prop">get</span>(<span class="tok-cmt">&#39
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

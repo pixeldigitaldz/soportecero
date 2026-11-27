@@ -99,7 +99,7 @@
     "url": "https://soportecero.com/",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://soportecero.com/favicon.svg"
+      "url": "https://soportecero.com/favicon.png"
     }
   },
   "mainEntityOfPage": {
@@ -122,6 +122,12 @@
     {
       "@type": "ListItem",
       "position": 2,
+      "name": "Web y Código",
+      "item": "https://soportecero.com/categorias/web.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
       "name": "Cross-Origin Request Blocked en Route Handlers y API Routes de Next.js",
       "item": "https://soportecero.com/articulos/error-nextjs-cross-origin-request-blocked-api-routes.html"
     }
@@ -163,7 +169,7 @@
   <div class="header-wrapper">
     <header>
       <!-- Logo Soporte Cero - Edición Ingeniería -->
-      <a href="../index.html" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
         <!-- Isotipo Cero Técnico -->
         <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -192,19 +198,19 @@
       </a>
       <nav aria-label="Navegación principal">
         <ul>
-          <li><a href="/tools/index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
-          <li><a href="../index.html?cat=sistemas">Sistemas y Servidores</a></li>
-          <li><a href="../index.html?cat=gaming">Gaming Tech</a></li>
-          <li><a href="../index.html?cat=web">Web y Código</a></li>
-          <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-          <li><a href="../contacto.html">Contacto</a></li>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
         </ul>
       </nav>
       
     <div class="lang-selector">
       <span class="lang-active">ES</span>
       <span class="lang-separator">|</span>
-      <a href="../en/articulos/error-nextjs-cross-origin-request-blocked-api-routes.html" class="lang-inactive">EN</a>
+      <a href="/en/articulos/error-nextjs-cross-origin-request-blocked-api-routes.html" class="lang-inactive">EN</a>
     </div>
     
       <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
@@ -224,9 +230,9 @@
     <!-- Article Header -->
     <article class="post-container">
       <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
-        <a href="../index.html">INICIO</a>
+        <a href="/">INICIO</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
-        <span>Web y Código</span>
+        <a href="/categorias/web.html">Web y Código</a>
         <span class="breadcrumb-sep" aria-hidden="true">/</span>
         <span style="color: var(--text-secondary);">Cross-Origin Request Blocked en Route Handlers y API Routes de Next.js</span>
       </nav>
@@ -251,7 +257,7 @@
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Lectura: 7 min
+            Lectura: 3 min
           </span>
           <span>
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
@@ -268,14 +274,6 @@
         <!-- Main Column -->
         <div class="post-article">
           <p>Al consumir una API creada en Next.js (utilizando el directorio App Router <code>app/api/.../route.ts</code> o Pages Router <code>pages/api/...</code>) desde una aplicación frontend externa (como una app de React Native, Flutter o un subdominio diferente), el navegador bloquea la llamada con: <code>Access to fetch at ... from origin ... has been blocked by CORS policy: Response to preflight request doesn&#39;t pass access control check</code>.</p>
-<h2 id="analisis-de-arquitectura-y-causa-raiz">Análisis de Arquitectura y Causa Raíz</h2>
-<p>En el ecosistema de <strong>Node.js</strong> y compiladores modernos de <strong>JavaScript / TypeScript</strong> (como <code>tsc</code>, <code>esbuild</code> o <code>swc</code>), la ejecución del código transcurre sobre el motor <strong>V8</strong> de Google acoplado a la librería de abstracción de E/S <strong>libuv</strong>, la cual gestiona el bucle de eventos (<em>Event Loop</em>) y el pool de hilos para operaciones asíncronas de red y sistema de archivos.</p>
-<p>La causa raíz de esta incidencia proviene de desalineaciones en la resolución de módulos, el árbol de tipado AST o la frontera de renderizado:</p>
-<ol>
-<li><strong>Árbol de resolución de dependencias y conflictos de pares (<code>peerDependencies</code>):</strong> El gestor de paquetes (<code>npm</code> v7+) implementa un algoritmo determinista para construir el árbol de módulos en <code>node_modules</code>. Cuando dos paquetes requieren versiones mayores distintas de una misma librería compartida como dependencia de pares, el algoritmo de resolución rechaza forzar la instalación para prevenir colisiones en tiempo de ejecución, lanzando el error de conflicto de pares (<code>ERESOLVE</code>).</li>
-<li><strong>Fase de hidratación y renderizado isomórfico (SSR vs Client):</strong> En frameworks como Next.js o Remix, el código se ejecuta inicialmente en el servidor (entorno Node.js sin interfaz gráfica) antes de compilarse y enviarse al navegador. Si el código fuente intenta acceder a objetos globales del DOM como <code>window</code>, <code>document</code> o <code>localStorage</code> antes del montaje del componente en el cliente (<code>useEffect</code>), el motor lanza de inmediato una excepción crítica <code>ReferenceError: document is not defined</code> durante el Server-Side Rendering.</li>
-<li><strong>Mapeo del Sistema de Tipos AST en TypeScript:</strong> El compilador de TypeScript (<code>tsc</code>) genera un árbol de sintaxis abstracta (<em>Abstract Syntax Tree</em>) y valida la correspondencia de tipos en tiempo de transpilación. Si una interfaz carece de una definición de propiedad explícita o se utiliza una librería de JavaScript que no expone declaraciones de tipos (<code>@types/*</code>), el verificador de tipos emite el error TS2339 para salvaguardar la seguridad de tipos (<em>type safety</em>), bloqueando la compilación del proyecto.</li>
-</ol>
 
     <h2 id="entorno-de-laboratorio-y-diagnostico">Entorno de Laboratorio y Diagnóstico</h2>
     <section class="diagnostic-console" aria-labelledby="diag-heading">
@@ -298,7 +296,19 @@
             <div class="diag-label">
               <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
             </div>
-            <div class="diag-value">Define global headers in next.config.js or implement CORS response middleware</div>
+            <div class="diag-value">Configurar cabeceras de respuesta en next.config.js o añadir un middleware de CORS</div>
+          </div></div><div class="diag-card">
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-cause">CAUSA</span>
+            </div>
+            <div class="diag-value"><strong>Navegadores bloqueando la petición previa (Preflight OPTIONS request) no manejada en route.js</strong></div>
+          </div>
+          <div class="diag-row">
+            <div class="diag-label">
+              <span class="diag-badge diag-badge-solution">SOLUCIÓN</span>
+            </div>
+            <div class="diag-value">Exportar una función OPTIONS en app/api/.../route.js con las cabeceras permitidas</div>
           </div></div></div>
       </div>
     </section>
@@ -322,15 +332,8 @@
         <ul class="toc-list">
 
         <li class="toc-item">
-          <a href="#analisis-de-arquitectura-y-causa-raiz" class="toc-link">
-            <span class="toc-number">01</span>
-            <span class="toc-text">Análisis de Arquitectura y Causa Raíz</span>
-          </a>
-        </li>
-      
-        <li class="toc-item">
           <a href="#entorno-de-laboratorio-y-diagnostico" class="toc-link">
-            <span class="toc-number">02</span>
+            <span class="toc-number">01</span>
             <span class="toc-text">Entorno de Laboratorio y Diagnóstico</span>
           </a>
         <ul class="toc-sublist">
@@ -347,14 +350,14 @@
       
         <li class="toc-item">
           <a href="#implementacion-tecnica-paso-a-paso" class="toc-link">
-            <span class="toc-number">03</span>
+            <span class="toc-number">02</span>
             <span class="toc-text">Implementación Técnica Paso a Paso</span>
           </a>
         </li>
       
         <li class="toc-item">
           <a href="#preguntas-frecuentes" class="toc-link">
-            <span class="toc-number">04</span>
+            <span class="toc-number">03</span>
             <span class="toc-text">Preguntas Frecuentes</span>
           </a>
         <ul class="toc-sublist">
@@ -382,7 +385,19 @@
     </nav>
     
     
-<p>Para validar el estado en consola sin alterar el sistema, ejecuta los siguientes comandos de inspección:</p>
+<h2 id="implementacion-tecnica-paso-a-paso">
+          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Implementación Técnica Paso a Paso
+        </h2>
+<ol class="steps-list">
+
+        <li class="step-item" id="manejar-la-peticion-previa-options-en-nextjs-app-router">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h4 id="manejar-la-peticion-previa-options-en-nextjs-app-router-heading">Paso 1: Manejar la petición previa OPTIONS en Next.js App Router</h4>
+            <p>Los navegadores envían una petición preliminar <code>OPTIONS</code> antes de cualquier <code>POST</code>, <code>PUT</code> o petición con cabeceras personalizadas. En tu archivo <code>app/api/tu-ruta/route.js</code>:</p>
 
     <div class="code-container">
       <div class="code-header">
@@ -392,7 +407,7 @@
             <span class="code-dot"></span>
             <span class="code-dot"></span>
           </div>
-          <span class="code-lang">BASH</span>
+          <span class="code-lang">JAVASCRIPT</span>
         </div>
         <button class="copy-btn" type="button" aria-label="Copiar código al portapapeles" data-copy-label="Copiar" data-copied-label="Copiado">
           <svg class="copy-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -402,47 +417,30 @@
           <span class="copy-text">Copiar</span>
         </button>
       </div>
-      <pre class="formatted-pre"><code><span class="tok-cmt"># 1. Comprobar el estado del servicio en el gestor de inicialización systemd</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">systemctl</span> <span class="tok-prop">status</span> <span class="tok-prop">--no-pager</span> <span class="tok-prop">-l</span> <span class="tok-kw">node</span>-app
-<span class="tok-cmt">
-# 2. Inspeccionar los registros del diario del sistema filtrando por unidad</span>
-<span class="tok-kw">sudo</span> <span class="tok-kw">journalctl</span> <span class="tok-prop">-u</span> <span class="tok-kw">node</span>-app <span class="tok-prop">-n</span> <span class="tok-num">50</span> <span class="tok-prop">--no-pager</span>
-<span class="tok-cmt">
-# 3. Auditar el espacio y tabla de inodos en todos los sistemas de archivos montados</span>
-<span class="tok-kw">df</span> <span class="tok-prop">-Th</span> &amp;&amp; <span class="tok-kw">df</span> <span class="tok-prop">-ih</span>
+      <pre class="formatted-pre"><code><span class="tok-kw">const</span> corsHeaders = {
+  <span class="tok-str">&#39;Access-Control-Allow-Origin&#39;</span>: <span class="tok-str">&#39;*&#39;</span>,
+  <span class="tok-str">&#39;Access-Control-Allow-Methods&#39;</span>: <span class="tok-str">&#39;GET, POST, PUT, DELETE, OPTIONS&#39;</span>,
+  <span class="tok-str">&#39;Access-Control-Allow-Headers&#39;</span>: <span class="tok-str">&#39;Content-Type, Authorization&#39;</span>,
+};
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-prop">OPTIONS</span>() {
+  <span class="tok-kw">return</span> <span class="tok-kw">new</span> Response(<span class="tok-kw">null</span>, {
+    <span class="tok-prop">status</span>: <span class="tok-num">204</span>,
+    <span class="tok-prop">headers</span>: corsHeaders,
+  });
+}
+
+<span class="tok-kw">export</span> <span class="tok-kw">async</span> <span class="tok-kw">function</span> <span class="tok-prop">GET</span>(request) {
+  <span class="tok-kw">return</span> Response.<span class="tok-prop">json</span>({ mensaje: <span class="tok-str">&quot;Éxito&quot;</span> }, { <span class="tok-prop">headers</span>: corsHeaders });
+}
 </code></pre>
     </div>
-    
-<ul>
-<li>El flag <code>--no-pager</code> en <code>systemctl</code> y <code>journalctl</code> evita invocar el paginador interactivo (<code>less</code>), permitiendo redirigir la salida o analizar los registros sin interrumpir flujos de automatización.</li>
-<li>El comando <code>df</code> con los modificadores <code>-T</code> (tipo de sistema de archivos ext4/xfs/btrfs) y <code>-h</code> (formato legible en gigabytes/megabytes), combinado con <code>-i</code> (tabla de inodos disponibles), permite descartar si el disco está lleno por bytes reales o saturado por millones de archivos pequeños huérfanos.</li>
-</ul>
-
-
-  <!-- SC-InArticle -->
-  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
-    <span class="ad-slot-label">Publicidad</span>
-    <div class="ad-slot-inner">
-      <ins class="adsbygoogle"
-           style="display:block; text-align:center;"
-           data-ad-layout="in-article"
-           data-ad-format="fluid"
-           data-ad-client="ca-pub-6956525438386645"
-           data-ad-slot="5381801020"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-  </aside>
-  
-<h2 id="implementacion-tecnica-paso-a-paso">
-          <svg class="step-solution-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          Implementación Técnica Paso a Paso
-        </h2>
-<ol class="steps-list">
+          </div>
+        </li>
+        
 
         <li class="step-item" id="configurar-cabeceras-cors-globales-en-nextconfigjs">
-          <div class="step-number">1</div>
+          <div class="step-number">2</div>
           <div class="step-body">
             <h4 id="configurar-cabeceras-cors-globales-en-nextconfigjs-heading">Paso 2: Configurar cabeceras CORS globales en next.config.js</h4>
             <p>Si tienes muchas rutas API, es más limpio aplicar las cabeceras en <code>next.config.js</code> o <code>next.config.mjs</code>:</p>
@@ -490,7 +488,7 @@ module.exports = nextConfig;
         
 
         <li class="step-item" id="manejo-de-credenciales-cookies-y-authorization">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-body">
             <h4 id="manejo-de-credenciales-cookies-y-authorization-heading">Paso 3: Manejo de credenciales (Cookies y Authorization)</h4>
             <p>Si tu aplicación envía cookies de sesión o tokens de autenticación con <code>credentials: &#39;include&#39;</code>, el comodín <code>Access-Control-Allow-Origin: *</code> será rechazado por los navegadores por seguridad.
@@ -522,6 +520,22 @@ Debes especificar el dominio exacto:</p>
         </li>
         
 </ol>
+
+
+  <!-- SC-InArticle -->
+  <aside class="ad-slot-wrapper ad-slot-wrapper--in-article" aria-label="Publicidad">
+    <span class="ad-slot-label">Publicidad</span>
+    <div class="ad-slot-inner">
+      <ins class="adsbygoogle"
+           style="display:block; text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-6956525438386645"
+           data-ad-slot="5381801020"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+  
 <h2 id="preguntas-frecuentes">Preguntas Frecuentes</h2>
 <h3 id="por-que-ocurre-este-error-en-produccion-pero-funcionaba-en-localhost">¿Por qué ocurre este error en producción pero funcionaba en localhost?</h3>
 <p>Porque en desarrollo local ambos proyectos compartían el puerto o se originaban en localhost, lo que relaja las políticas en ciertos navegadores, mientras que en producción los dominios son completamente distintos.</p>
@@ -604,6 +618,23 @@ Debes especificar el dominio exacto:</p>
       </h2>
       <div class="related-grid">
         
+      <!-- Related Card: Cómo solucionar el error Hydration Mismatch en aplicaciones de Next.js -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-nextjs-hydration-mismatch-dynamic-content.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error Hydration Mismatch en aplicaciones de Next.js</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">NextJS</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
       <!-- Related Card: Error Vite: Failed to load url / Dynamic import cannot load CommonJS module -->
       <article class="related-card">
         <div class="related-card-content">
@@ -615,41 +646,75 @@ Debes especificar el dominio exacto:</p>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
             <span class="card-tag">Vite</span>
-            <span>Lectura: 7 min</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: fatal: unable to access: SSL certificate problem: unable to get local issuer certificate en Git -->
+      <!-- Related Card: Advertencia API resolved without sending a response en Next.js -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-git-ssl-certificate-problem-unable-to-get-local-issuer-certificate.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">fatal: unable to access: SSL certificate problem: unable to get local issuer certificate en Git</a>
+              <a href="../articulos/error-nextjs-api-resolved-without-response.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Advertencia API resolved without sending a response en Next.js</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Git</span>
-            <span>Lectura: 7 min</span>
+            <span class="card-tag">Next.js</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
       
 
-      <!-- Related Card: Cancelar un Rebase en Git o Error 'No rebase in progress' -->
+      <!-- Related Card: Cómo solucionar el error Unhandled Promise Rejection en React y Async/Await -->
       <article class="related-card">
         <div class="related-card-content">
           <div>
             <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
             <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
-              <a href="../articulos/error-git-fatal-rebase-in-progress.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cancelar un Rebase en Git o Error 'No rebase in progress'</a>
+              <a href="../articulos/error-react-unhandled-rejection-async-await.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error Unhandled Promise Rejection en React y Async/Await</a>
             </h4>
           </div>
           <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
-            <span class="card-tag">Git</span>
-            <span>Lectura: 6 min</span>
+            <span class="card-tag">React</span>
+            <span>Lectura: 4 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar el error CORS 'No Access-Control-Allow-Origin' en Express y Node.js -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cors-express-nodejs-header.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error CORS 'No Access-Control-Allow-Origin' en Express y Node.js</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Nodejs</span>
+            <span>Lectura: 3 min</span>
+          </div>
+        </div>
+      </article>
+      
+
+      <!-- Related Card: Cómo solucionar el error CORS en Shopify (Allow CORS Policy en Storefront y APIs) -->
+      <article class="related-card">
+        <div class="related-card-content">
+          <div>
+            <span class="card-category" style="font-size: 0.7rem; margin-bottom: 0.5rem;">Web y Código</span>
+            <h4 class="related-card-title" style="font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3;">
+              <a href="../articulos/error-cors-shopify-liquid.html" style="color: var(--text-primary); transition: color var(--transition-speed); font-weight: 700;">Cómo solucionar el error CORS en Shopify (Allow CORS Policy en Storefront y APIs)</a>
+            </h4>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
+            <span class="card-tag">Shopify</span>
+            <span>Lectura: 3 min</span>
           </div>
         </div>
       </article>
@@ -662,14 +727,14 @@ Debes especificar el dominio exacto:</p>
   <div class="footer-wrapper">
     <footer>
       <ul class="footer-nav">
-        <li><a href="../index.html">Inicio</a></li>
-        <li><a href="../sobre-mi.html">Sobre Mí</a></li>
-        <li><a href="../nosotros.html">Sobre Nosotros</a></li>
-        <li><a href="../legal/privacidad.html">Política de Privacidad</a></li>
-        <li><a href="../legal/terminos.html">Términos de Servicio</a></li>
-        <li><a href="../legal/cookies.html">Política de Cookies</a></li>
-        <li><a href="../contacto.html">Contacto</a></li>
-        <li><a href="../servicios.html">Servicios</a></li>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/legal/privacidad.html">Política de Privacidad</a></li>
+        <li><a href="/legal/terminos.html">Términos de Servicio</a></li>
+        <li><a href="/legal/cookies.html">Política de Cookies</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
       </ul>
       <p class="footer-disclaimer">
         SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers. Las marcas comerciales y de software mencionadas son propiedad exclusiva de sus respectivos dueños. Las soluciones propuestas se ofrecen de forma informativa y gratuita.

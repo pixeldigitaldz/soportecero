@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>Sistemas y Servidores: Linux, Docker, Nginx, SSH y Cloudflare | SoporteCero</title>
+  <meta name="description" content="Archivo completo de guías técnicas verificadas para administradores de sistemas: errores en Linux, Docker, Proxmox, Nginx, SSH, systemd, bases de datos y Cloudflare.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://soportecero.com/categorias/sistemas.html">
+  <link rel="alternate" hreflang="es" href="https://soportecero.com/categorias/sistemas.html" />
+  <link rel="alternate" hreflang="en" href="https://soportecero.com/en/categories/systems.html" />
+  <link rel="alternate" hreflang="x-default" href="https://soportecero.com/categorias/sistemas.html" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else if (savedTheme === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://soportecero.com/categorias/sistemas.html#collection",
+      "url": "https://soportecero.com/categorias/sistemas.html",
+      "name": "Sistemas y Servidores: Linux, Docker, Nginx, SSH y Cloudflare | SoporteCero",
+      "description": "Archivo completo de guías técnicas verificadas para administradores de sistemas: errores en Linux, Docker, Proxmox, Nginx, SSH, systemd, bases de datos y Cloudflare.",
+      "inLanguage": "es",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://soportecero.com/#website"
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": 68,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "url": "https://soportecero.com/articulos/error-502-bad-gateway-cloudflare-tunnel-cloudflared.html",
+            "name": "Error 502 Bad Gateway en Cloudflare Tunnel (cloudflared)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "url": "https://soportecero.com/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html",
+            "name": "Error 522 Cloudflare Connection Timed Out en Nginx y UFW"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "url": "https://soportecero.com/articulos/error-systemd-oom-killer-memory-leak-linux.html",
+            "name": "Error Out of Memory OOM Killer en Linux y Systemd Cómo Diagnosticar y Evitar Caídas"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "url": "https://soportecero.com/articulos/arquitectura-homelab-docker-compose-redes-aisladas-reverse-proxy.html",
+            "name": "Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "url": "https://soportecero.com/articulos/error-nvidia-nvml-driver-library-version-mismatch.html",
+            "name": "Solución Error Nvidia NVML: Driver/library version mismatch en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "url": "https://soportecero.com/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html",
+            "name": "Error 'failed to solve: process did not complete successfully' en Docker Build"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "url": "https://soportecero.com/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html",
+            "name": "Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "url": "https://soportecero.com/articulos/error-tailscale-derp-relay-direct-connection.html",
+            "name": "Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 9,
+            "url": "https://soportecero.com/articulos/error-unattended-upgrades-dpkg-lock-frontend.html",
+            "name": "Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian"
+          },
+          {
+            "@type": "ListItem",
+            "position": 10,
+            "url": "https://soportecero.com/articulos/error-nginx-111-connection-refused-upstream.html",
+            "name": "Nginx connect() failed (111: Connection refused) while connecting to upstream"
+          },
+          {
+            "@type": "ListItem",
+            "position": 11,
+            "url": "https://soportecero.com/articulos/error-rsync-connection-unexpectedly-closed-code-12.html",
+            "name": "rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed"
+          },
+          {
+            "@type": "ListItem",
+            "position": 12,
+            "url": "https://soportecero.com/articulos/error-sudo-unable-to-resolve-host-etc-hosts.html",
+            "name": "Error: sudo: unable to resolve host en Ubuntu y Debian"
+          },
+          {
+            "@type": "ListItem",
+            "position": 13,
+            "url": "https://soportecero.com/articulos/error-failed-to-mount-cgroup-systemd-docker.html",
+            "name": "Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 14,
+            "url": "https://soportecero.com/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html",
+            "name": "Error Docker: failed to create shim task: OCI runtime create failed"
+          },
+          {
+            "@type": "ListItem",
+            "position": 15,
+            "url": "https://soportecero.com/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html",
+            "name": "Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 16,
+            "url": "https://soportecero.com/articulos/error-docker-exit-code-137-oomkiller.html",
+            "name": "Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 17,
+            "url": "https://soportecero.com/articulos/error-cloudflare-521-web-server-is-down.html",
+            "name": "Error 521 Web Server Is Down en Cloudflare"
+          },
+          {
+            "@type": "ListItem",
+            "position": 18,
+            "url": "https://soportecero.com/articulos/error-ssh-kex-exchange-identification-connection-closed.html",
+            "name": "Error kex_exchange_identification: Connection closed by remote host en SSH"
+          },
+          {
+            "@type": "ListItem",
+            "position": 19,
+            "url": "https://soportecero.com/articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html",
+            "name": "Error iptables failed: No chain/target/match by that name en Docker"
+          },
+          {
+            "@type": "ListItem",
+            "position": 20,
+            "url": "https://soportecero.com/articulos/error-systemctl-status-active-exited-failed.html",
+            "name": "Cómo entender y reparar el estado active (exited) o failed en Systemd"
+          },
+          {
+            "@type": "ListItem",
+            "position": 21,
+            "url": "https://soportecero.com/articulos/error-docker-invalid-reference-format.html",
+            "name": "Error 'invalid reference format' en Docker"
+          },
+          {
+            "@type": "ListItem",
+            "position": 22,
+            "url": "https://soportecero.com/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html",
+            "name": "Error 502 Bad Gateway en Nginx con PHP-FPM"
+          },
+          {
+            "@type": "ListItem",
+            "position": 23,
+            "url": "https://soportecero.com/articulos/error-arch-linux-keyring-out-of-date-pacman.html",
+            "name": "Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes"
+          },
+          {
+            "@type": "ListItem",
+            "position": 24,
+            "url": "https://soportecero.com/articulos/error-certbot-failed-authorization-procedure-http-01.html",
+            "name": "Error Certbot 'Failed authorization procedure (http-01)'"
+          },
+          {
+            "@type": "ListItem",
+            "position": 25,
+            "url": "https://soportecero.com/articulos/error-docker-failed-to-compute-cache-key.html",
+            "name": "Error 'failed to compute cache key' en Docker Build"
+          },
+          {
+            "@type": "ListItem",
+            "position": 26,
+            "url": "https://soportecero.com/articulos/error-ssh-host-key-verification-failed.html",
+            "name": "Error 'Host key verification failed' en SSH"
+          },
+          {
+            "@type": "ListItem",
+            "position": 27,
+            "url": "https://soportecero.com/articulos/solucion-cloud-init-slow-boot-proxmox-ubuntu.html",
+            "name": "cloud-init Retarda el Arranque en Proxmox / Ubuntu Server"
+          },
+          {
+            "@type": "ListItem",
+            "position": 28,
+            "url": "https://soportecero.com/articulos/error-flatpak-permission-denied-override-setup.html",
+            "name": "Cómo solucionar errores de permisos en aplicaciones Flatpak con Flatseal"
+          },
+          {
+            "@type": "ListItem",
+            "position": 29,
+            "url": "https://soportecero.com/articulos/error-postgresql-fatal-password-authentication-failed.html",
+            "name": "Cómo solucionar el error FATAL: password authentication failed for user en PostgreSQL"
+          },
+          {
+            "@type": "ListItem",
+            "position": 30,
+            "url": "https://soportecero.com/articulos/error-500-internal-server-error-htaccess-apache.html",
+            "name": "Cómo solucionar el error 500 Internal Server Error por conflicto en .htaccess"
+          },
+          {
+            "@type": "ListItem",
+            "position": 31,
+            "url": "https://soportecero.com/articulos/error-kubernetes-crashloopbackoff-pod-fix.html",
+            "name": "Cómo solucionar el estado CrashLoopBackOff en Pods de Kubernetes"
+          },
+          {
+            "@type": "ListItem",
+            "position": 32,
+            "url": "https://soportecero.com/articulos/error-port-already-in-use-kill-process.html",
+            "name": "Cómo solucionar el error 'Port Already in Use' y liberar puertos en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 33,
+            "url": "https://soportecero.com/articulos/error-proxmox-disk-no-space-clean-local.html",
+            "name": "Cómo liberar espacio en disco en Proxmox VE limpiando cachés y plantillas LXC"
+          },
+          {
+            "@type": "ListItem",
+            "position": 34,
+            "url": "https://soportecero.com/articulos/error-puertos-conflictivos-umbrel-docker.html",
+            "name": "Cómo solucionar conflictos de puertos ocupados en Docker dentro de Umbrel OS"
+          },
+          {
+            "@type": "ListItem",
+            "position": 35,
+            "url": "https://soportecero.com/articulos/error-redis-maxmemory-eviction-policy.html",
+            "name": "Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima"
+          },
+          {
+            "@type": "ListItem",
+            "position": 36,
+            "url": "https://soportecero.com/articulos/error-504-gateway-timeout-nginx-php-fpm.html",
+            "name": "Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 37,
+            "url": "https://soportecero.com/articulos/error-docker-permission-denied-var-run-docker-sock.html",
+            "name": "Cómo solucionar el error 'Permission Denied' en /var/run/docker.sock sin Sudo"
+          },
+          {
+            "@type": "ListItem",
+            "position": 38,
+            "url": "https://soportecero.com/articulos/error-ssh-connection-timeout-iptables.html",
+            "name": "Cómo solucionar el error Connection Timeout en conexiones SSH por reglas de firewall"
+          },
+          {
+            "@type": "ListItem",
+            "position": 39,
+            "url": "https://soportecero.com/articulos/thermal-throttling-raspberry-pi-5.html",
+            "name": "Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5"
+          },
+          {
+            "@type": "ListItem",
+            "position": 40,
+            "url": "https://soportecero.com/articulos/error-firmas-pgp-pacman-cachyos.html",
+            "name": "Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS"
+          },
+          {
+            "@type": "ListItem",
+            "position": 41,
+            "url": "https://soportecero.com/articulos/error-disk-space-full-lvm-resize.html",
+            "name": "Cómo redimensionar un volumen LVM en Linux cuando el disco se queda sin espacio"
+          },
+          {
+            "@type": "ListItem",
+            "position": 42,
+            "url": "https://soportecero.com/articulos/error-nginx-client-max-body-size.html",
+            "name": "Cómo solucionar el error 413 Request Entity Too Large y 403 Forbidden en Nginx"
+          },
+          {
+            "@type": "ListItem",
+            "position": 43,
+            "url": "https://soportecero.com/articulos/automatizar-respaldos-tar-cron.html",
+            "name": "Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron"
+          },
+          {
+            "@type": "ListItem",
+            "position": 44,
+            "url": "https://soportecero.com/articulos/caida-velocidad-red-mtu-linux.html",
+            "name": "Cómo diagnosticar y solucionar problemas de velocidad de red ajustando el tamaño de MTU"
+          },
+          {
+            "@type": "ListItem",
+            "position": 45,
+            "url": "https://soportecero.com/articulos/error-403-forbidden-nginx-docker.html",
+            "name": "Cómo solucionar el error 403 Forbidden en Nginx y Docker (Permisos de Archivos)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 46,
+            "url": "https://soportecero.com/articulos/error-bad-gateway-502-nginx-upstream.html",
+            "name": "Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy"
+          },
+          {
+            "@type": "ListItem",
+            "position": 47,
+            "url": "https://soportecero.com/articulos/error-btrfs-read-only-umbrel.html",
+            "name": "Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor"
+          },
+          {
+            "@type": "ListItem",
+            "position": 48,
+            "url": "https://soportecero.com/articulos/error-cron-job-not-running.html",
+            "name": "¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso"
+          },
+          {
+            "@type": "ListItem",
+            "position": 49,
+            "url": "https://soportecero.com/articulos/error-docker-dns-umbrel.html",
+            "name": "Reparar: Pérdida de conexión a internet por fallo de DNS en Docker (Umbrel OS)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 50,
+            "url": "https://soportecero.com/articulos/error-flare-solverr-cloudflare.html",
+            "name": "Reparar: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare"
+          },
+          {
+            "@type": "ListItem",
+            "position": 51,
+            "url": "https://soportecero.com/articulos/error-nfs-mount-timeout-linux.html",
+            "name": "Solución al retraso en el arranque de Linux por error de timeout en montajes de red NFS"
+          },
+          {
+            "@type": "ListItem",
+            "position": 52,
+            "url": "https://soportecero.com/articulos/error-sqlite-corrupt-sonarr.html",
+            "name": "Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr"
+          },
+          {
+            "@type": "ListItem",
+            "position": 53,
+            "url": "https://soportecero.com/articulos/error-ssh-permission-denied-key.html",
+            "name": "Cómo solucionar el error Permission Denied (publickey) en conexiones SSH"
+          },
+          {
+            "@type": "ListItem",
+            "position": 54,
+            "url": "https://soportecero.com/articulos/error-ssl-expired-certbot-letsencrypt.html",
+            "name": "Cómo forzar la renovación de un certificado SSL de Let's Encrypt expirado con Certbot"
+          },
+          {
+            "@type": "ListItem",
+            "position": 55,
+            "url": "https://soportecero.com/articulos/limpiar-registro-wordpress-banahosting.html",
+            "name": "Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting"
+          },
+          {
+            "@type": "ListItem",
+            "position": 56,
+            "url": "https://soportecero.com/articulos/optimizar-memoria-swap-linux.html",
+            "name": "Cómo aumentar y optimizar la Memoria Virtual (Swap) en Linux sin reiniciar"
+          },
+          {
+            "@type": "ListItem",
+            "position": 57,
+            "url": "https://soportecero.com/articulos/reparar-grub-boot-linux.html",
+            "name": "Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 58,
+            "url": "https://soportecero.com/articulos/restaurar-contrasenia-root-linux.html",
+            "name": "Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)"
+          },
+          {
+            "@type": "ListItem",
+            "position": 59,
+            "url": "https://soportecero.com/articulos/configurar-active-cooler-raspberry.html",
+            "name": "Cómo configurar la velocidad del ventilador (Active Cooler) mediante consola de comandos"
+          },
+          {
+            "@type": "ListItem",
+            "position": 60,
+            "url": "https://soportecero.com/articulos/error-dockge-permisos-volumen.html",
+            "name": "Error de permisos (Permission Denied) en volúmenes de Docker Compose"
+          },
+          {
+            "@type": "ListItem",
+            "position": 61,
+            "url": "https://soportecero.com/articulos/error-invalid-fstab-linux.html",
+            "name": "Error de arranque en Linux por configuración incorrecta en /etc/fstab"
+          },
+          {
+            "@type": "ListItem",
+            "position": 62,
+            "url": "https://soportecero.com/articulos/error-ssh.html",
+            "name": "Cómo solucionar el error SSH Connection Refused (Puerto 22) en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 63,
+            "url": "https://soportecero.com/articulos/error-timeout-prowlarr.html",
+            "name": "Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers privados"
+          },
+          {
+            "@type": "ListItem",
+            "position": 64,
+            "url": "https://soportecero.com/articulos/docker-space-clean-cache.html",
+            "name": "Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker"
+          },
+          {
+            "@type": "ListItem",
+            "position": 65,
+            "url": "https://soportecero.com/articulos/error-docker-bind-address-already-in-use.html",
+            "name": "Error bind: address already in use al iniciar contenedores en Docker"
+          },
+          {
+            "@type": "ListItem",
+            "position": 66,
+            "url": "https://soportecero.com/articulos/error-linux-chmod-operation-not-permitted-chattr.html",
+            "name": "Error chmod: Operation not permitted (Incluso como Root) en Linux"
+          },
+          {
+            "@type": "ListItem",
+            "position": 67,
+            "url": "https://soportecero.com/articulos/error-systemd-failed-to-start-network-name-resolution.html",
+            "name": "Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved"
+          },
+          {
+            "@type": "ListItem",
+            "position": 68,
+            "url": "https://soportecero.com/articulos/limpiar-cache-pacman-cachyos.html",
+            "name": "Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://soportecero.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Sistemas y Servidores",
+          "item": "https://soportecero.com/categorias/sistemas.html"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6956525438386645" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="header-wrapper">
+    <header>
+      <a href="/" class="logo group flex items-center gap-3 focus:outline-none" id="header-logo">
+        <div class="logo-box relative flex h-9 w-9 items-center justify-center rounded-lg bg-[#10131C] border border-white/10 group-hover:border-cyan-500/50 transition-colors shadow-inner">
+          <svg class="logo-svg w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="6.5" y="4.5" width="11" height="15" rx="3.5"></rect>
+            <line x1="8.5" y1="16" x2="15.5" y2="8" stroke-width="1.5"></line>
+          </svg>
+          <span class="logo-telemetry-dot absolute -top-0.5 -right-0.5 flex h-2 w-2" aria-hidden="true">
+            <span class="logo-telemetry-dot-inner relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+          </span>
+        </div>
+        <div class="logo-text-group flex items-baseline tracking-tight">
+          <span class="logo-text font-sans text-lg font-bold text-slate-100 group-hover:text-white transition-colors">Soporte</span>
+          <span class="logo-cero font-mono text-lg font-medium text-cyan-400 ml-0.5">Cero</span>
+          <span class="logo-badge ml-2 hidden sm:inline-block font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-500 bg-white/[0.03] border border-white/10 px-1.5 py-0.5 rounded">INGENIERÍA</span>
+        </div>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="/tools/"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></svg><span>Calculadoras</span></a></li>
+          <li><a href="/categorias/sistemas.html" class="active">Sistemas y Servidores</a></li>
+          <li><a href="/categorias/gaming.html">Gaming Tech</a></li>
+          <li><a href="/categorias/web.html">Web y Código</a></li>
+          <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+          <li><a href="/contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="lang-selector">
+        <span class="lang-active">ES</span><span class="lang-separator">|</span><a href="/en/categories/systems.html" class="lang-inactive">EN</a>
+      </div>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar tema visual" title="Cambiar tema visual">
+        <svg class="moon-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .2 1.1.7.1.5-.2 1-.7 1.1-3.6.7-6.2 3.9-6.2 7.7 0 4.4 3.6 8 8 8 3.8 0 7-2.6 7.7-6.2.1-.5.6-.8 1.1-.7.5.1.8.6.7 1.1-.9 4.7-5 8.2-9.8 8.2z"/></svg>
+        <svg class="sun-icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/></svg>
+      </button>
+    </header>
+  </div>
+
+  <main class="main-content" style="padding-top: 2rem;">
+    <nav class="post-breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/">INICIO</a>
+      <span class="breadcrumb-sep" aria-hidden="true">/</span>
+      <span style="color: var(--text-secondary);">Sistemas y Servidores</span>
+    </nav>
+
+    <section class="hero" style="padding: 1.5rem 0 2rem; text-align: left;" aria-label="Sistemas y Servidores">
+      <span class="card-category" style="margin-bottom: 0.75rem; display: inline-block;">68 GUÍAS VERIFICADAS</span>
+      <h1 style="text-align: left; margin-bottom: 0.75rem;">Sistemas y Servidores</h1>
+      <p style="margin: 0; max-width: 780px;">Soluciones prácticas y comandos listos para producción sobre administración Linux, contenedores Docker, servidores web Nginx/Apache, túneles Cloudflare, Proxmox, bases de datos y seguridad SSH.</p>
+    </section>
+
+    <div class="quick-access-box" aria-label="Otras Categorías y Herramientas">
+      <div class="quick-access-header">
+        <span class="led-dot" aria-hidden="true"></span>
+        <span class="quick-access-badge">EXPLORAR:</span>
+      </div>
+      <div class="quick-access-links">
+        <a href="/categorias/gaming.html" class="quick-access-link">Gaming Tech</a> <span class="quick-access-sep" aria-hidden="true">/</span> <a href="/categorias/web.html" class="quick-access-link">Web y Código</a>
+        <span class="quick-access-sep" aria-hidden="true">/</span>
+        <a href="/tools/" class="quick-access-link">Calculadoras Interactivas (/tools/)</a>
+      </div>
+    </div>
+
+    <section aria-labelledby="cat-grid-title">
+      <h2 class="section-title" id="cat-grid-title">Todas las guías de Sistemas y Servidores (68)</h2>
+      <div class="articles-grid">
+        
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-502-bad-gateway-cloudflare-tunnel-cloudflared.html">Error 502 Bad Gateway en Cloudflare Tunnel (cloudflared)</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para resolver el Error 502 Bad Gateway y Unable to reach the origin service en Cloudflare Tunnel (cloudflared) con Docker, HTTPS local...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Cloudflare</span>
+<span class="card-tag">Cloudflared</span>
+<span class="card-tag">Docker</span></div>
+              <span>Lectura: 7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-cloudflare-522-connection-timed-out-nginx-ufw.html">Error 522 Cloudflare Connection Timed Out en Nginx y UFW</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para diagnosticar y resolver el Error 522 (Connection Timed Out) de Cloudflare en servidores Linux con Nginx, UFW, iptables y keepaliv...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Cloudflare</span>
+<span class="card-tag">Nginx</span>
+<span class="card-tag">UFW</span></div>
+              <span>Lectura: 7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-systemd-oom-killer-memory-leak-linux.html">Error Out of Memory OOM Killer en Linux y Systemd Cómo Diagnosticar y Evitar Caídas</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar procesos terminados por el OOM Killer (Exit 137 / Out of memory) en Linux usando dmesg, journalctl, systemd-oomd y límites c...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Systemd</span>
+<span class="card-tag">Memoria</span></div>
+              <span>Lectura: 7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/arquitectura-homelab-docker-compose-redes-aisladas-reverse-proxy.html">Guía de Arquitectura en Producción: Cómo Aislar Contenedores en Docker Compose con Redes Internas, Límites de Recursos y Reverse Proxy Seguro</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diseñar una arquitectura de red multicapa segura en Docker Compose. Aísla bases de datos sin acceso a Internet con redes internas, config...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 9 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-nvidia-nvml-driver-library-version-mismatch.html">Solución Error Nvidia NVML: Driver/library version mismatch en Linux</a>
+            </h2>
+            <p class="card-excerpt">Soluciona el error 'Failed to initialize NVML: Driver/library version mismatch' al ejecutar nvidia-smi en Linux sin necesidad de reiniciar el servi...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nvidia</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">GPU</span></div>
+              <span>Lectura: 4 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-failed-to-solve-process-did-not-complete-successfully.html">Error 'failed to solve: process did not complete successfully' en Docker Build</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y solucionar el error 'failed to solve: process did not complete successfully: exit code' en Dockerfile con Buildx paso a paso.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 4 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-error-proxmox-vm-is-locked-backup-snapshot.html">Cómo solucionar el error 'VM is locked (backup/snapshot)' en Proxmox VE</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para desbloquear máquinas virtuales y contenedores LXC bloqueados en Proxmox VE con qm unlock y pct unlock tras fallos de backup.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proxmox</span>
+<span class="card-tag">Virtualización</span>
+<span class="card-tag">SysAdmin</span></div>
+              <span>Lectura: 4 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-tailscale-derp-relay-direct-connection.html">Cómo solucionar la alta latencia y forzar conexión directa en Tailscale (evitar DERP)</a>
+            </h2>
+            <p class="card-excerpt">¿Tus conexiones en Tailscale son lentas o tienen pings de más de 200 ms? Aprende a solucionar el bloqueo de DERP relay y restablecer conexiones dir...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Tailscale</span>
+<span class="card-tag">WireGuard</span>
+<span class="card-tag">VPN</span></div>
+              <span>Lectura: 5 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-unattended-upgrades-dpkg-lock-frontend.html">Could not get lock /var/lib/dpkg/lock-frontend en Ubuntu y Debian</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el bloqueo Could not get lock /var/lib/dpkg/lock-frontend causado por unattended-upgrades o apt bloqueado.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Ubuntu</span>
+<span class="card-tag">Debian</span>
+<span class="card-tag">apt</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-nginx-111-connection-refused-upstream.html">Nginx connect() failed (111: Connection refused) while connecting to upstream</a>
+            </h2>
+            <p class="card-excerpt">Soluciona el error de Nginx 111: Connection refused en proxy_pass hacia Node.js, PHP-FPM, Docker o Python Gunicorn.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Nodejs</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-rsync-connection-unexpectedly-closed-code-12.html">rsync error: error in rsync protocol data stream (code 12) connection unexpectedly closed</a>
+            </h2>
+            <p class="card-excerpt">Soluciona el fallo rsync error code 12 connection unexpectedly closed al transferir archivos grandes o copias de seguridad por SSH.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">rsync</span>
+<span class="card-tag">SSH</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-sudo-unable-to-resolve-host-etc-hosts.html">Error: sudo: unable to resolve host en Ubuntu y Debian</a>
+            </h2>
+            <p class="card-excerpt">Elimina el molesto mensaje sudo: unable to resolve host al ejecutar comandos en Linux. Guía rápida para corregir /etc/hostname y /etc/hosts.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Ubuntu</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-failed-to-mount-cgroup-systemd-docker.html">Error: Failed to mount cgroup cgroup2 o systemd en Docker y Linux</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para solucionar fallos de montaje de cgroups v1 y cgroup2 en Docker, runc y contenedores LXC/Proxmox en distribuciones Linux modernas.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">systemd</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-failed-to-create-shim-task-oci-runtime-create-failed.html">Error Docker: failed to create shim task: OCI runtime create failed</a>
+            </h2>
+            <p class="card-excerpt">Guía definitiva para solucionar el error 'failed to create shim task: OCI runtime create failed: executable file not found' en Docker, containerd y...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Contenedores</span></div>
+              <span>Lectura: 8 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-linux-no-space-left-on-device-inodes-exhausted.html">Error No Space Left on Device con Espacio Libre (Inodos Agotados en Linux)</a>
+            </h2>
+            <p class="card-excerpt">¿Tu servidor Linux muestra No Space Left on Device pero df -h indica espacio disponible? Aprende a detectar y liberar inodos agotados paso a paso.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Almacenamiento</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-exit-code-137-oomkiller.html">Cómo solucionar Error Docker Exit Code 137 y Container Killed (OOMKilled)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y solucionar el error 137 en Docker provocado por el OOM Killer de Linux y límites de memoria en Docker Compose.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">DevOps</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-cloudflare-521-web-server-is-down.html">Error 521 Web Server Is Down en Cloudflare</a>
+            </h2>
+            <p class="card-excerpt">¿Tus usuarios ven el Error 521 de Cloudflare al entrar a tu sitio web? Solución paso a paso para Nginx, Apache y reglas de Firewall de origen.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Cloudflare</span>
+<span class="card-tag">Nginx</span>
+<span class="card-tag">Apache</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssh-kex-exchange-identification-connection-closed.html">Error kex_exchange_identification: Connection closed by remote host en SSH</a>
+            </h2>
+            <p class="card-excerpt">Cómo solucionar el error de conexión SSH kex_exchange_identification Connection closed by remote host provocado por Fail2ban, límites de MaxStartup...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSH</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Seguridad</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-iptables-failed-no-chain-target-match-by-that-name.html">Error iptables failed: No chain/target/match by that name en Docker</a>
+            </h2>
+            <p class="card-excerpt">Cómo solucionar el error de red iptables failed No chain target match by that name al iniciar contenedores de Docker tras reiniciar el firewall o UFW.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Redes</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-systemctl-status-active-exited-failed.html">Cómo entender y reparar el estado active (exited) o failed en Systemd</a>
+            </h2>
+            <p class="card-excerpt">Guía paso a paso para diagnosticar por qué un servicio de Linux finaliza en active (exited) o failed al iniciarse con systemctl.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Systemd</span>
+<span class="card-tag">DevOps</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-invalid-reference-format.html">Error 'invalid reference format' en Docker</a>
+            </h2>
+            <p class="card-excerpt">¿Recibes el error 'docker: invalid reference format' al ejecutar docker run o docker build? Aprende a corregir sintaxis de comillas y rutas.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-nginx-502-bad-gateway-php-fpm-sock.html">Error 502 Bad Gateway en Nginx con PHP-FPM</a>
+            </h2>
+            <p class="card-excerpt">¿Nginx devuelve error 502 Bad Gateway al procesar scripts PHP? Aprende a corregir el socket de comunicación de PHP-FPM en 3 pasos.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">PHP-FPM</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-arch-linux-keyring-out-of-date-pacman.html">Cómo actualizar el llavero archlinux-keyring cuando Pacman falla al instalar paquetes</a>
+            </h2>
+            <p class="card-excerpt">Guía completa para solucionar errores de claves desactualizadas en Arch Linux, Manjaro y CachyOS con pacman-key y repositorios oficiales.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Arch Linux</span>
+<span class="card-tag">Pacman</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-certbot-failed-authorization-procedure-http-01.html">Error Certbot 'Failed authorization procedure (http-01)'</a>
+            </h2>
+            <p class="card-excerpt">¿Let's Encrypt / Certbot no puede generar tu certificado SSL por fallo en la prueba HTTP-01? Aprende a solucionar los bloqueos de puerto y Nginx.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Certbot</span>
+<span class="card-tag">SSL</span>
+<span class="card-tag">Nginx</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-failed-to-compute-cache-key.html">Error 'failed to compute cache key' en Docker Build</a>
+            </h2>
+            <p class="card-excerpt">¿Recibes el error 'failed to compute cache key' al construir una imagen con docker build? Solución paso a paso para corregir rutas y Dockerfile.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssh-host-key-verification-failed.html">Error 'Host key verification failed' en SSH</a>
+            </h2>
+            <p class="card-excerpt">¿Te sale el error 'Host key verification failed' o 'WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED' al conectar por SSH? Solución en 1 minuto.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSH</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/solucion-cloud-init-slow-boot-proxmox-ubuntu.html">cloud-init Retarda el Arranque en Proxmox / Ubuntu Server</a>
+            </h2>
+            <p class="card-excerpt">¿Tu máquina virtual Proxmox o Ubuntu Server tarda minutos en arrancar por 'cloud-init waiting for network config'? Solución paso a paso.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proxmox</span>
+<span class="card-tag">Cloud-Init</span>
+<span class="card-tag">Ubuntu</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-flatpak-permission-denied-override-setup.html">Cómo solucionar errores de permisos en aplicaciones Flatpak con Flatseal</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y otorgar permisos de archivos, red y dispositivos a aplicaciones sandbox de Flatpak utilizando comandos de CLI y Flatseal.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Flatpak</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Permissions</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-postgresql-fatal-password-authentication-failed.html">Cómo solucionar el error FATAL: password authentication failed for user en PostgreSQL</a>
+            </h2>
+            <p class="card-excerpt">Aprende a resolver la falla de autenticación por contraseña en PostgreSQL actualizando las contraseñas de usuario y ajustando el archivo pg_hba.conf.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">PostgreSQL</span>
+<span class="card-tag">Databases</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-500-internal-server-error-htaccess-apache.html">Cómo solucionar el error 500 Internal Server Error por conflicto en .htaccess</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y solucionar el error HTTP 500 en servidores Apache causado por sintaxis incorrecta o módulos faltantes en el archivo .htacc...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Apache</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Web</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-kubernetes-crashloopbackoff-pod-fix.html">Cómo solucionar el estado CrashLoopBackOff en Pods de Kubernetes</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar y solucionar el error CrashLoopBackOff en Kubernetes analizando logs, memoria OOMKilled, fallos en liveness probes y variabl...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Kubernetes</span>
+<span class="card-tag">DevOps</span>
+<span class="card-tag">Docker</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-port-already-in-use-kill-process.html">Cómo solucionar el error 'Port Already in Use' y liberar puertos en Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a identificar qué proceso está ocupando un puerto de red en Linux y macOS (EADDRINUSE) y cómo liberarlo de forma segura.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Networking</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-proxmox-disk-no-space-clean-local.html">Cómo liberar espacio en disco en Proxmox VE limpiando cachés y plantillas LXC</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error de espacio de disco agotado en Proxmox VE eliminando ISOs duplicadas y copias de seguridad huérfanas de forma segura.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Proxmox</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-puertos-conflictivos-umbrel-docker.html">Cómo solucionar conflictos de puertos ocupados en Docker dentro de Umbrel OS</a>
+            </h2>
+            <p class="card-excerpt">Aprende a resolver el error de puerto ocupado al instalar contenedores o servicios personalizados que colisionan con el proxy web de Umbrel.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Umbrel</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-redis-maxmemory-eviction-policy.html">Cómo solucionar el error OOM command not allowed cuando Redis alcanza la memoria máxima</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica para solucionar el error OOM (Out Of Memory) en Redis configurando políticas de desalojo (maxmemory-policy) y optimizando el uso de RAM.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Redis</span>
+<span class="card-tag">Databases</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-504-gateway-timeout-nginx-php-fpm.html">Cómo solucionar el error 504 Gateway Timeout en Nginx con PHP-FPM (Rápido)</a>
+            </h2>
+            <p class="card-excerpt">Guía paso a paso para corregir el error 504 Gateway Timeout en Nginx y PHP-FPM aumentando timeouts y optimizando procesos.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">PHP-FPM</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-permission-denied-var-run-docker-sock.html">Cómo solucionar el error 'Permission Denied' en /var/run/docker.sock sin Sudo</a>
+            </h2>
+            <p class="card-excerpt">Aprende a resolver el fallo de permisos al ejecutar comandos de Docker sin anteponer sudo agregando tu usuario al grupo docker de Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Permissions</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssh-connection-timeout-iptables.html">Cómo solucionar el error Connection Timeout en conexiones SSH por reglas de firewall</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar bloqueos de conexión en el puerto 22 y configura correctamente las reglas de IPTables o UFW para permitir el acceso remoto s...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSH</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Firewall</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/thermal-throttling-raspberry-pi-5.html">Cómo evitar el estrangulamiento térmico (thermal throttling) en Raspberry Pi 5</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar caídas de rendimiento por temperatura y configura los umbrales de enfriamiento en tu mini PC Raspberry Pi 5.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Raspberry Pi</span>
+<span class="card-tag">Hardware</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-firmas-pgp-pacman-cachyos.html">Cómo solucionar errores de firmas PGP corruptas y llaves inválidas en CachyOS</a>
+            </h2>
+            <p class="card-excerpt">Aprende a restablecer y actualizar las claves del llavero de Pacman para corregir fallos de firma inválida en CachyOS y Arch Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">CachyOS</span>
+<span class="card-tag">Arch Linux</span>
+<span class="card-tag">Pacman</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-disk-space-full-lvm-resize.html">Cómo redimensionar un volumen LVM en Linux cuando el disco se queda sin espacio</a>
+            </h2>
+            <p class="card-excerpt">Aprende a extender de forma segura un volumen lógico LVM y su sistema de archivos EXT4 o XFS sin perder datos y sin apagar el servidor.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">LVM</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-nginx-client-max-body-size.html">Cómo solucionar el error 413 Request Entity Too Large y 403 Forbidden en Nginx</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error 413 request entity too large y 403 forbidden nginx. Configura client_max_body_size y corrige permisos de archivos www...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Web</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/automatizar-respaldos-tar-cron.html">Cómo crear un script de respaldos automatizados comprimidos en Linux con Tar y Cron</a>
+            </h2>
+            <p class="card-excerpt">Aprende a empaquetar directorios de configuración de forma automática utilizando scripts en Bash comprimidos y programando su ejecución con Cron.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Cron</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/caida-velocidad-red-mtu-linux.html">Cómo diagnosticar y solucionar problemas de velocidad de red ajustando el tamaño de MTU</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar la fragmentación de paquetes y optimiza el tamaño de la Unidad de Transmisión Máxima (MTU) de tu tarjeta de red.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Network</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-403-forbidden-nginx-docker.html">Cómo solucionar el error 403 Forbidden en Nginx y Docker (Permisos de Archivos)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error 403 forbidden nginx en Docker. Corrige permisos de montaje de volúmenes, usuario UID 101/82 y configuración de index....</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-bad-gateway-502-nginx-upstream.html">Cómo diagnosticar y reparar el error 502 Bad Gateway en Nginx reverse proxy</a>
+            </h2>
+            <p class="card-excerpt">Guía técnica completa para diagnosticar y solucionar el error 502 Bad Gateway en Nginx proxy inverso analizando sockets UNIX, puertos TCP, permisos...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Nginx</span>
+<span class="card-tag">Docker</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 7 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-btrfs-read-only-umbrel.html">Cómo reparar un sistema de archivos BTRFS bloqueado en Solo Lectura (Read-Only) en tu servidor</a>
+            </h2>
+            <p class="card-excerpt">Guía paso a paso para recuperar el acceso de escritura en discos duros de servidores domésticos que se bloquean para proteger tus datos de corrupción.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">BTRFS</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Storage</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-cron-job-not-running.html">¿Por qué no se ejecuta mi tarea de Cron? Diagnóstico paso a paso</a>
+            </h2>
+            <p class="card-excerpt">Aprende a diagnosticar por qué tus tareas programadas en Cron no se ejecutan y cómo depurar fallos en scripts de automatización en segundo plano.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Cron</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-dns-umbrel.html">Reparar: Pérdida de conexión a internet por fallo de DNS en Docker (Umbrel OS)</a>
+            </h2>
+            <p class="card-excerpt">Aprende a resolver el bloqueo de red donde tus contenedores en Umbrel pierden el acceso al exterior debido a conflictos con el resolvedor DNS interno.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Umbrel</span>
+<span class="card-tag">Docker</span>
+<span class="card-tag">DNS</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-flare-solverr-cloudflare.html">Reparar: Error de timeout en FlareSolverr al evadir desafíos de Cloudflare</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar los fallos de timeout y desafíos no resueltos al configurar FlareSolverr con gestores de descargas y automatizadores.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Cloudflare</span>
+<span class="card-tag">FlareSolverr</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-nfs-mount-timeout-linux.html">Solución al retraso en el arranque de Linux por error de timeout en montajes de red NFS</a>
+            </h2>
+            <p class="card-excerpt">Evita que tu sistema operativo se quede congelado por 90 segundos al encenderse cuando tu servidor de almacenamiento NAS o local está apagado.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">NFS</span>
+<span class="card-tag">Network</span>
+<span class="card-tag">Sysadmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-sqlite-corrupt-sonarr.html">Cómo reparar una base de datos SQLite corrupta en Sonarr o Radarr</a>
+            </h2>
+            <p class="card-excerpt">Aprende a recuperar tus series y configuraciones reparando el error 'database disk image is malformed' de SQLite mediante herramientas de consola e...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Sonarr</span>
+<span class="card-tag">Radarr</span>
+<span class="card-tag">Database</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssh-permission-denied-key.html">Cómo solucionar el error Permission Denied (publickey) en conexiones SSH</a>
+            </h2>
+            <p class="card-excerpt">Aprende a reparar los fallos de autenticación por clave pública en SSH ajustando los permisos de directorios y del archivo authorized_keys.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSH</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Seguridad</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssl-expired-certbot-letsencrypt.html">Cómo forzar la renovación de un certificado SSL de Let's Encrypt expirado con Certbot</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar los fallos de autenticación de Certbot y renueva tus certificados SSL expirados liberando los puertos necesarios.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSL</span>
+<span class="card-tag">Let's Encrypt</span>
+<span class="card-tag">Certbot</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/limpiar-registro-wordpress-banahosting.html">Cómo limpiar y optimizar la base de datos de WordPress saturada en BanaHosting</a>
+            </h2>
+            <p class="card-excerpt">Guía práctica para eliminar transitorios, revisiones huérfanas y reducir el consumo de disco MySQL en cPanel BanaHosting.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">WordPress</span>
+<span class="card-tag">BanaHosting</span>
+<span class="card-tag">MySQL</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/optimizar-memoria-swap-linux.html">Cómo aumentar y optimizar la Memoria Virtual (Swap) en Linux sin reiniciar</a>
+            </h2>
+            <p class="card-excerpt">Descubre cómo aumentar y optimizar la memoria virtual en Linux (Swap) sin reiniciar el servidor. Guía paso a paso para crear swapfile, ajustar swap...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">SysAdmin</span>
+<span class="card-tag">Swap</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/reparar-grub-boot-linux.html">Guía rápida para recuperar el cargador de arranque GRUB corrupto en Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a restablecer el cargador de arranque GRUB en sistemas UEFI y BIOS utilizando una distribución Live USB y la herramienta chroot.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">GRUB</span>
+<span class="card-tag">Bootloader</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/restaurar-contrasenia-root-linux.html">Recuperar o Cambiar Contraseña de Root en Linux (Sin Formatear)</a>
+            </h2>
+            <p class="card-excerpt">¿Olvidaste la contraseña de root en Linux? Aprende a restablecer la clave del usuario root en menos de 3 minutos modificando GRUB.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Seguridad</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/configurar-active-cooler-raspberry.html">Cómo configurar la velocidad del ventilador (Active Cooler) mediante consola de comandos</a>
+            </h2>
+            <p class="card-excerpt">Aprende a controlar los umbrales de temperatura y ajustar la velocidad del ventilador en Mini PCs y placas de desarrollo mediante la terminal para ...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Hardware</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Raspberry Pi</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-dockge-permisos-volumen.html">Error de permisos (Permission Denied) en volúmenes de Docker Compose</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar errores EACCES y Permission Denied en carpetas compartidas y volúmenes de Docker Compose y Dockge.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Dockge</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-invalid-fstab-linux.html">Error de arranque en Linux por configuración incorrecta en /etc/fstab</a>
+            </h2>
+            <p class="card-excerpt">Aprende a reparar tu sistema Linux si no inicia y se queda congelado en la consola de emergencia (Emergency Mode) debido a un error en el archivo f...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Sysadmin</span>
+<span class="card-tag">Terminal</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-ssh.html">Cómo solucionar el error SSH Connection Refused (Puerto 22) en Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende cómo solucionar el error SSH connection refused en el puerto 22 en Linux. Diagnóstico rápido de sshd caído, reglas de firewall ufw/iptables...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">SSH</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Firewall</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-timeout-prowlarr.html">Cómo resolver el fallo de timeout al conectar Prowlarr o Radarr con indexers privados</a>
+            </h2>
+            <p class="card-excerpt">Solución definitiva al error de conexión y tiempo de espera agotado (Timeout) entre gestores multimedia automatizados e indexers privados de torren...</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Prowlarr</span>
+<span class="card-tag">Radarr</span>
+<span class="card-tag">Docker</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/docker-space-clean-cache.html">Cómo liberar espacio en disco eliminando caché y contenedores huérfanos en Docker</a>
+            </h2>
+            <p class="card-excerpt">Guía completa para recuperar gigabytes en /var/lib/docker limpiando capas BuildKit, imágenes no utilizadas y volúmenes huérfanos.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">DevOps</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-docker-bind-address-already-in-use.html">Error bind: address already in use al iniciar contenedores en Docker</a>
+            </h2>
+            <p class="card-excerpt">Aprende a identificar y terminar procesos que ocupan puertos en conflicto (80, 443, 3000, 8080) en Linux y Docker Compose.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Docker</span>
+<span class="card-tag">Linux</span>
+<span class="card-tag">Puertos</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-linux-chmod-operation-not-permitted-chattr.html">Error chmod: Operation not permitted (Incluso como Root) en Linux</a>
+            </h2>
+            <p class="card-excerpt">Aprende a solucionar el error chmod / chown: Operation not permitted usando lsattr y chattr para desbloquear archivos inmutables en Linux.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">Linux</span>
+<span class="card-tag">Permisos</span>
+<span class="card-tag">SysAdmin</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/error-systemd-failed-to-start-network-name-resolution.html">Fallo de DNS en Linux: 'Could not resolve host' / systemd-resolved</a>
+            </h2>
+            <p class="card-excerpt">Aprende a reparar el fallo de resolución DNS y el servicio systemd-resolved en Ubuntu, Debian y Arch Linux paso a paso.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">systemd</span>
+<span class="card-tag">DNS</span>
+<span class="card-tag">Linux</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-card">
+          <div class="card-content">
+            <span class="card-category">Sistemas y Servidores</span>
+            <h2 class="card-title" style="font-size: 1.05rem;">
+              <a href="/articulos/limpiar-cache-pacman-cachyos.html">Cómo liberar espacio en disco limpiando correctamente la caché de Pacman en CachyOS</a>
+            </h2>
+            <p class="card-excerpt">Aprende a limpiar la caché de paquetes de Pacman y Yay en CachyOS y Arch Linux usando paccache, pacman -Sc y automatización por systemd.</p>
+            <div class="card-footer">
+              <div class="card-tags"><span class="card-tag">CachyOS</span>
+<span class="card-tag">Arch Linux</span>
+<span class="card-tag">Pacman</span></div>
+              <span>Lectura: 3 min</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="ad-slot-wrapper ad-slot-wrapper--home" style="margin-top: 2.5rem;" aria-label="Publicidad">
+      <span class="ad-slot-label">Publicidad</span>
+      <div class="ad-slot-inner">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6956525438386645"
+             data-ad-slot="6471521412"
+             data-ad-format="auto"
+             data-full-width-responsive="false"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </aside>
+  </main>
+
+  <div class="footer-wrapper">
+    <footer>
+      <ul class="footer-nav">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="/nosotros.html">Sobre Nosotros</a></li>
+        <li><a href="/contacto.html">Contacto</a></li>
+        <li><a href="/servicios.html">Servicios</a></li>
+        <li><a href="/tools/">Calculadoras</a></li>
+      </ul>
+      <p class="footer-disclaimer">
+        SoporteCero es un portal técnico independiente dedicado a documentar soluciones prácticas, comandos y guías de soporte para desarrolladores, administradores de sistemas y gamers.
+      </p>
+      <p class="footer-copyright">&copy; 2026 SoporteCero. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+  <script src="../js/main.js"></script>
+</body>
+</html>
